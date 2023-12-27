@@ -1,4 +1,6 @@
 rootProject.name = 'poker.clock'
 include 'app'
 include 'lib'
+include 'mobile'
+
 
