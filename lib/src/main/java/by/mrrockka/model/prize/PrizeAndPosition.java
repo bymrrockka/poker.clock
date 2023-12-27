@@ -1,4 +1,4 @@
-package by.mrrockka.model;
+package by.mrrockka.model.prize;
 
 import lombok.Builder;
 

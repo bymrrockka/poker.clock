@@ -1,7 +1,12 @@
 package by.mrrockka.account;
 
-import by.mrrockka.model.*;
-import lombok.Builder;
+import by.mrrockka.model.Debt;
+import by.mrrockka.model.Payout;
+import by.mrrockka.model.Person;
+import by.mrrockka.model.Player;
+import by.mrrockka.model.payments.NoPaymentsException;
+import by.mrrockka.model.payments.Payments;
+import by.mrrockka.model.prize.PrizeAndPosition;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -15,45 +20,12 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class AccountingTest {
-
-
-  /* Scenarios:
-   *  1. all player buy in equally and prize pull has only first position
-   *  - should calculate total money pot
-   *  - should create list of debtors related to creditor
-   *
-   *  2. two players did re-entries and prize pull has only first position and they payments dispersed by largest
-   *  - should calculate total money pot
-   *  - should create list of debtors related to creditor
-   *  - should calculate players with larger debts and make them debtors of the larger prize
-   *
-   *  3. two players buy in equally and prize pull has multiple positions and they payments dispersed by largest
-   *  - should calculate total money pot
-   *  - should create list of debtors related to creditor
-   *  - should calculate players with larger debts and make them debtors of the larger prize
-   *
-   * ? 4. two players did re-entries and they payments dispersed by largest
-   *  - should calculate total money pot
-   *  - should create list of debtors related to creditor
-   *  - should calculate players with larger debts and make them debtors of the larger prize
-   *
-   *  5. two players did re-entries and they payments split from first to last
-   *  - should calculate total money pot
-   *  - should create list of debtors related to creditor
-   *  - should calculate players with larger debts and make them debtors of the larger prize
-   *  - if someone's debt is not fit to prize amount then should be split
-   *
-   * */
-
   private static final BigDecimal BUY_IN = BigDecimal.valueOf(20);
 
   private final Accounting accounting = new Accounting();
-
-  @Builder
-  private record AccountingArg(int playersSize) {
-  }
 
   private static Stream<Arguments> playerSize() {
     return Stream.of(
@@ -69,9 +41,9 @@ class AccountingTest {
   @MethodSource("playerSize")
   void givenPlayerBuyInEqually_thenShouldCreateListOfDebtorsRelatedToCreditor(int size) {
     final var players = players(size);
-    final var prizePool = prizePool();
+    final var prizeAndPositions = List.of(prizeAndPosition(BigDecimal.valueOf(100), 1));
 
-    final var actual = accounting.calculate(players, prizePool);
+    final var actual = accounting.calculate(players, prizeAndPositions);
     final var expect = payouts(players.get(0), players);
 
     assertThat(actual).containsExactlyInAnyOrderElementsOf(expect);
@@ -83,25 +55,27 @@ class AccountingTest {
     final var players = new ArrayList<>(players(size));
     players.add(player(List.of(BUY_IN, BUY_IN, BUY_IN), size + 1));
     players.add(player(List.of(BUY_IN, BUY_IN, BUY_IN, BUY_IN), size + 2));
-    final var prizePool = prizePool();
+    final var prizeAndPositions = List.of(prizeAndPosition(BigDecimal.valueOf(100), 1));
 
-    final var actual = accounting.calculate(players, prizePool);
-    final var expect = payouts(players.get(0), players.stream().sorted().toList());
+    final var actual = accounting.calculate(players, prizeAndPositions);
+    final var expect = payouts(players.get(0), players.stream()
+      .sorted((o1, o2) -> o2.payments().total().compareTo(o1.payments().total()))
+      .toList());
 
     assertThat(actual).containsExactlyInAnyOrderElementsOf(expect);
   }
 
   @Test
-  void givenPlayerBuyInEquallyAndPrizePoolHasMutiplePositions_thenShouldCreateListOfDebtorsOrderedByTheAmount() {
+  void givenPlayerBuyInEquallyAndPrizePoolHasMultiplePositions_thenShouldCreateListOfDebtorsOrderedByTheAmount() {
     int size = 10;
     final var players = new ArrayList<>(players(size));
-    final var prizePool = prizePool(List.of(
+    final var prizeAndPositions = List.of(
       prizeAndPosition(BigDecimal.valueOf(60), 1),
       prizeAndPosition(BigDecimal.valueOf(30), 2),
       prizeAndPosition(BigDecimal.valueOf(10), 3)
-    ));
+    );
 
-    final var actual = accounting.calculate(players, prizePool);
+    final var actual = accounting.calculate(players, prizeAndPositions);
     final var expect = List.of(
       payout(getByPosition(players, 1), List.of(
         debt(getByPosition(players, 4), BUY_IN),
@@ -121,18 +95,108 @@ class AccountingTest {
   }
 
   @Test
-  void givenPlayerBuyInNotEquallyAndPrizePoolHasMutiplePositions_thenShouldCreateListOfDebtorsOrderedByTheAmount() {
+  void givenPlayerBuyInNotEquallyAndPrizePoolHasMultiplePositions_thenShouldCreateListOfDebtorsOrderedByTheAmount() {
     int size = 10;
     final var players = new ArrayList<>(players(size));
-    players.add(player(List.of(BUY_IN, BUY_IN, BUY_IN), size + 1));
-    players.add(player(List.of(BUY_IN, BUY_IN, BUY_IN, BUY_IN), size + 2));
-    final var prizePool = prizePool();
 
-    final var actual = accounting.calculate(players, prizePool);
-    final var expect = payouts(players.get(0), players.stream().sorted().toList());
+    final var firstPlace = player(List.of(BUY_IN, BUY_IN, BUY_IN), 0);
+    final var secondPlace = player(List.of(BUY_IN, BUY_IN), 1);
+
+    players.set(0, firstPlace);
+    players.set(1, secondPlace);
+
+    final var prizeAndPositions = List.of(
+      prizeAndPosition(BigDecimal.valueOf(60), 1),
+      prizeAndPosition(BigDecimal.valueOf(30), 2),
+      prizeAndPosition(BigDecimal.valueOf(10), 3)
+    );
+
+    final var actual = accounting.calculate(players, prizeAndPositions);
+    final var expect = List.of(
+      payout(getByPosition(players, 1), List.of(
+        debt(getByPosition(players, 4), BUY_IN),
+        debt(getByPosition(players, 5), BUY_IN),
+        debt(getByPosition(players, 6), BUY_IN),
+        debt(getByPosition(players, 7), BUY_IN),
+        debt(getByPosition(players, 8), BigDecimal.valueOf(16))
+      )),
+      payout(getByPosition(players, 2), List.of(
+        debt(getByPosition(players, 9), BUY_IN),
+        debt(getByPosition(players, 10), BigDecimal.valueOf(18))
+      )),
+      payout(getByPosition(players, 3), List.of(
+        debt(getByPosition(players, 8), BigDecimal.valueOf(4)),
+        debt(getByPosition(players, 10), BigDecimal.valueOf(2))
+      ))
+    );
 
     assertThat(actual).containsExactlyInAnyOrderElementsOf(expect);
   }
+
+  @Test
+  void givenPlayerBuyInNotEquallyAndPrizePoolHasMultiplePositionsAndPrizePositionStillHasDebt_thenShouldCreateListOfDebtorsOrderedByTheAmount() {
+    int size = 10;
+    final var players = new ArrayList<>(players(size));
+
+    final var firstPlace = player(List.of(BUY_IN, BUY_IN, BUY_IN), 0);
+    final var secondPlace = player(List.of(BUY_IN, BUY_IN), 1);
+    final var thirdPlace = player(List.of(BUY_IN, BUY_IN, BUY_IN), 2);
+
+    players.set(0, firstPlace);
+    players.set(1, secondPlace);
+    players.set(2, thirdPlace);
+
+    final var prizeAndPositions = List.of(
+      prizeAndPosition(BigDecimal.valueOf(60), 1),
+      prizeAndPosition(BigDecimal.valueOf(30), 2),
+      prizeAndPosition(BigDecimal.valueOf(10), 3)
+    );
+
+    final var actual = accounting.calculate(players, prizeAndPositions);
+    final var expect = List.of(
+      payout(getByPosition(players, 1), List.of(
+        debt(getByPosition(players, 3), BigDecimal.valueOf(30)),
+        debt(getByPosition(players, 4), BUY_IN),
+        debt(getByPosition(players, 5), BUY_IN),
+        debt(getByPosition(players, 6), BUY_IN),
+        debt(getByPosition(players, 7), BUY_IN),
+        debt(getByPosition(players, 8), BigDecimal.valueOf(10))
+      )),
+      payout(getByPosition(players, 2), List.of(
+        debt(getByPosition(players, 9), BUY_IN),
+        debt(getByPosition(players, 10), BUY_IN),
+        debt(getByPosition(players, 8), BigDecimal.valueOf(10))
+      ))
+    );
+
+    assertThat(actual).containsExactlyInAnyOrderElementsOf(expect);
+  }
+
+  @Test
+  void givenPlayersPositionOverlap_thenShouldCreateListOfDebtorsRelatedToCreditorWithNoDuplicates() {
+    final var players = new ArrayList<>(players(2));
+    players.add(player(List.of(BUY_IN, BUY_IN), 0));
+
+    final var prizeAndPositions = List.of(prizeAndPosition(BigDecimal.valueOf(100), 1));
+
+    final var actual = accounting.calculate(players, prizeAndPositions);
+    final var expect = payouts(players.get(0), players(2));
+
+    assertThat(actual).containsExactlyInAnyOrderElementsOf(expect);
+  }
+
+
+  @Test
+  void givenPlayersAndOnePlayerDoesntHavePayments_thenShouldThrowException() {
+    final var players = new ArrayList<>(players(2));
+    players.add(player(null, 2));
+
+    final var prizeAndPositions = List.of(prizeAndPosition(BigDecimal.valueOf(100), 1));
+
+    assertThatThrownBy(() -> accounting.calculate(players, prizeAndPositions))
+      .isInstanceOf(NoPaymentsException.class);
+  }
+
 
   private List<Player> players(int size) {
     return IntStream.range(0, size)
@@ -151,18 +215,6 @@ class AccountingTest {
         .build())
       .position(position + 1)
       .person(Person.builder().build())
-      .build();
-  }
-
-  private PrizePool prizePool() {
-    final var prizes = List.of(prizeAndPosition(BigDecimal.valueOf(100), 1));
-
-    return prizePool(prizes);
-  }
-
-  private PrizePool prizePool(List<PrizeAndPosition> prizeAndPositionList) {
-    return PrizePool.builder()
-      .prizeAndPositionList(prizeAndPositionList)
       .build();
   }
 

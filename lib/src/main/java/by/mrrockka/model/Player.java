@@ -1,11 +1,22 @@
 package by.mrrockka.model;
 
+import by.mrrockka.model.payments.Payments;
 import lombok.Builder;
 
+import java.util.Objects;
+
 @Builder
-public record Player(Payments payments, int position, Person person) implements Comparable<Player>{
+public record Player(Payments payments, int position, Person person) {
+
   @Override
-  public int compareTo(Player pl) {
-    return pl.payments().total().compareTo(this.payments().total());
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof Player player)) return false;
+    return position == player.position && Objects.equals(person, player.person);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(position, person);
   }
 }

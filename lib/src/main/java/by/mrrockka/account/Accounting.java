@@ -1,101 +1,90 @@
 package by.mrrockka.account;
 
-import by.mrrockka.model.Debt;
-import by.mrrockka.model.Payout;
-import by.mrrockka.model.Player;
-import by.mrrockka.model.PrizePool;
+import by.mrrockka.model.*;
+import by.mrrockka.model.prize.PrizeAndPosition;
+import by.mrrockka.model.prize.PrizePool;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 public class Accounting {
 
-
-  public List<Payout> calculate(final List<Player> players, final PrizePool prizePool) {
+  public List<Payout> calculate(final List<Player> players, final List<PrizeAndPosition> prizeAndPositions) {
     final var totalEntries = totalEntriesAmount(players);
-    var payouts = new ArrayList<Payout>();
-    var position = 1;
-    var creditor = getByPosition(players, position).orElseThrow(() -> new RuntimeException("Players list is empty"));
-    var debtors = players.stream()
-      .filter(player -> !player.equals(creditor))
-      .sorted()
+    final var prizePool = new PrizePool(prizeAndPositions, totalEntries);
+
+    final var playerSummaries = players.stream()
+      .distinct()
+      .map(player -> PlayerSummary.of(player, prizePool))
+      .sorted(Comparator.comparingInt(o -> o.getPlayer().position()))
       .toList();
 
-    do {
+    return playerSummaries.stream()
+      .filter(ps -> !ps.getTransferType().equals(TransferType.DEBIT))
+      .map(creditorSummary -> {
+        final var debtorSummaries = playerSummaries.stream()
+          .filter(ps -> ps.getTransferType().equals(TransferType.DEBIT))
+          .filter(ps -> !ps.getTransferAmount().equals(BigDecimal.ZERO))
+          .sorted()
+          .toList();
 
-      var debts = new ArrayList<Debt>();
+        return calculatePayouts(creditorSummary, debtorSummaries);
+      }).toList();
+  }
 
-      var prizeAmountOpt = prizePool.getPrizeFor(position, totalEntries);
+  private Payout calculatePayouts(final PlayerSummary creditorSummary, final List<PlayerSummary> debtorSummaries) {
+    var debts = new ArrayList<Debt>();
+    var leftToPay = creditorSummary.getTransferAmount();
+    final var payoutbuilder = Payout.builder()
+      .creditor(creditorSummary.getPlayer());
 
-      if (prizeAmountOpt.isEmpty()) break;
+    if (creditorSummary.getTransferType().equals(TransferType.EQUAL)) {
+      return payoutbuilder.debts(Collections.emptyList()).build();
+    }
 
-      var prizeAmount = prizeAmountOpt.get();
+    for (final PlayerSummary debtorSummary : debtorSummaries) {
+      final var debtAmount = debtorSummary.getTransferAmount();
+      final var debtBuilder = Debt.builder()
+        .debtor(debtorSummary.getPlayer());
 
-      for (final Player debtor : debtors) {
-        final var debtAmount = debtor.payments().total();
-        final var debt = Debt.builder()
-          .debtor(debtor)
+      final var debtComparison = debtAmount.compareTo(leftToPay);
+
+      if (debtComparison == 0) {
+        debtorSummary.subtractCalculated(debtAmount);
+        debts.add(debtBuilder
           .amount(debtAmount)
-          .build();
-
-        final var debtComparison = debtAmount.compareTo(prizeAmount);
-
-        if (debtComparison == 0) {
-          debts.add(debt);
-          break;
-        }
-
-        if (debtComparison < 0) {
-          debts.add(debt);
-          prizeAmount = prizeAmount.subtract(debtAmount);
-        }
-
-        if (debtComparison > 0) {
-          debts.add(debt.withAmount(debtAmount.subtract(prizeAmount)));
-//          add debtor as one of not fulfiled
-          break;
-        }
-
+          .build());
+        break;
       }
 
-      payouts.add(
-        Payout.builder()
-          .debts(debts)
-          .creditor(creditor)
-          .build()
-      );
+      if (debtComparison < 0) {
+        debtorSummary.subtractCalculated(debtAmount);
+        debts.add(debtBuilder
+          .amount(debtAmount)
+          .build());
+        leftToPay = leftToPay.subtract(debtAmount);
+      }
 
-      debtors = debtors.stream()
-        .filter(player -> !debtsContains(debts, player))
-        .sorted()
-        .toList();
+      if (debtComparison > 0) {
+        debtorSummary.subtractCalculated(leftToPay);
+        debts.add(debtBuilder
+          .amount(leftToPay)
+          .build());
+        break;
+      }
+    }
 
-
-    } while (prizePool.prizeAndPositionList().size() > position++);
-
-
-    return payouts;
+    return payoutbuilder.debts(debts).build();
   }
 
   private BigDecimal totalEntriesAmount(final List<Player> players) {
     return players.stream()
       .map(player -> player.payments().total())
       .reduce(BigDecimal::add)
-      .orElseThrow(() -> new NullPointerException("No payments for player"));
-  }
-
-  private Optional<Player> getByPosition(final List<Player> players, int position) {
-    return players.stream()
-      .filter(player -> player.position() == position)
-      .findFirst();
-  }
-
-  private boolean debtsContains(List<Debt> debts, Player player) {
-    return debts.stream()
-      .map(Debt::debtor)
-      .anyMatch(debtor -> debtor.equals(player));
+      .orElseThrow(() -> new RuntimeException("No players specified"));
   }
 
 }
