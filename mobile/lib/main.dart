@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:horizontal_data_table/horizontal_data_table.dart';
+
+import 'model/player.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,13 +34,13 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(players: <Player>[]),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key, required this.players});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -48,25 +51,41 @@ class MyHomePage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-  final String title;
+  final List<Player> players;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MyHomePage> createState() => _PlayersTableState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class AddPlayerNotification extends Notification {
+  final Player player;
 
-  void _incrementCounter() {
+  const AddPlayerNotification({required this.player});
+}
+
+class _PlayersTableState extends State<MyHomePage> {
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    playerInputControllers.forEach((key, value) {
+      value.dispose();
+    });
+    super.dispose();
+  }
+
+  void addPlayer(Player player) {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      widget.players.add(player);
     });
   }
+
+  final Map<String, TextEditingController> playerInputControllers = {
+    'nickname': TextEditingController(),
+    'firstname': TextEditingController(),
+    'lastname': TextEditingController(),
+    'position': TextEditingController(),
+    'entry': TextEditingController(),
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -84,42 +103,207 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        // title: Text(widget.title),
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+          // Center is a layout widget. It takes a single child and positions it
+          // in the middle of the parent.
+          child: HorizontalDataTable(
+        leftHandSideColumnWidth: 100,
+        rightHandSideColumnWidth: 300,
+        isFixedHeader: true,
+        headerWidgets: _createTitleWidget(),
+        footerWidgets: _createFooterWidget(),
+        isFixedFooter: true,
+        rowSeparatorWidget: const Divider(
+          color: Colors.black38,
+          height: 1.0,
+          thickness: 0.0,
         ),
-      ),
+        itemExtent: 55,
+        leftSideItemBuilder: _generateFirstColumnRow,
+        rightSideItemBuilder: _generateRightHandSideColumnRow,
+        itemCount: widget.players.length,
+      )),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
+        onPressed: () =>
+            _displayPlayerInputDialog(playerInputControllers, context),
+        tooltip: 'Add player',
         child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
+
+  List<Widget> _createTitleWidget() {
+    return [
+      _getTitleItemWidget('nickname', 100),
+      _getTitleItemWidget('entries', 50),
+      _getTitleItemWidget('position', 50),
+      _getTitleItemWidget('firstname', 100),
+      _getTitleItemWidget('lastname', 100),
+    ];
+  }
+
+  List<Widget> _createFooterWidget() {
+    return [
+      Container(
+        width: 100,
+        height: 0,
+        padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+        alignment: Alignment.centerLeft,
+      ),
+      Container(
+        width: 50,
+        height: 0,
+        padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+        alignment: Alignment.centerLeft,
+      ),
+      Container(
+        width: 50,
+        height: 0,
+        padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+        alignment: Alignment.centerLeft,
+      ),
+      Container(
+        width: 100,
+        height: 0,
+        padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+        alignment: Alignment.centerLeft,
+      ),
+      Container(
+        width: 100,
+        height: 0,
+        padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+        alignment: Alignment.centerLeft,
+      ),
+    ];
+  }
+
+  Widget _getTitleItemWidget(String label, double width) {
+    return Container(
+      width: width,
+      height: 56,
+      padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+      alignment: Alignment.centerLeft,
+      child: Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
+    );
+  }
+
+  Widget _generateFirstColumnRow(BuildContext context, int index) {
+    return Container(
+      width: 100,
+      height: 52,
+      padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+      alignment: Alignment.centerLeft,
+      child: Text(widget.players[index].nickname),
+    );
+  }
+
+  Widget _generateRightHandSideColumnRow(BuildContext context, int index) {
+    return Row(
+      children: <Widget>[
+        Container(
+          width: 200,
+          height: 52,
+          padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+          alignment: Alignment.centerLeft,
+          child: Text(widget.players[index].entry as String),
+        ),
+        Container(
+          width: 100,
+          height: 52,
+          padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+          alignment: Alignment.centerLeft,
+          child: Text(widget.players[index].position as String),
+        ),
+        Container(
+          width: 200,
+          height: 52,
+          padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+          alignment: Alignment.centerLeft,
+          child: Text(widget.players[index].firstname),
+        ),
+        Container(
+          width: 200,
+          height: 52,
+          padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+          alignment: Alignment.centerLeft,
+          child: Text(widget.players[index].lastname),
+        ),
+      ],
+    );
+  }
+}
+
+Future<void> _displayPlayerInputDialog(
+    Map<String, TextEditingController> playerInputControllers,
+    BuildContext context) {
+  Padding _createInput(String labelText,
+      Map<String, TextEditingController> playerInputControllers) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      child: TextFormField(
+        controller: playerInputControllers[labelText],
+        decoration: InputDecoration(
+          border: UnderlineInputBorder(),
+          labelText: labelText,
+        ),
+      ),
+    );
+  }
+
+  Player _mapInputToPlayer(
+      Map<String, TextEditingController> playerInputControllers) {
+    return Player(
+      1, 2,
+      // playerInputControllers['entry']!.value.text as int,
+      // playerInputControllers['position']!.value.text as int,
+      playerInputControllers['firstname']!.value.text,
+      playerInputControllers['lastname']!.value.text,
+      playerInputControllers['nickname']!.value.text,
+    );
+  }
+
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Player data'),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            _createInput('nickname', playerInputControllers),
+            _createInput('firstname', playerInputControllers),
+            _createInput('lastname', playerInputControllers),
+            _createInput('entry', playerInputControllers),
+            _createInput('position', playerInputControllers),
+          ],
+        ),
+        actions: <Widget>[
+          TextButton(
+            style: TextButton.styleFrom(
+              textStyle: Theme.of(context).textTheme.labelLarge,
+            ),
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            style: TextButton.styleFrom(
+              textStyle: Theme.of(context).textTheme.labelLarge,
+            ),
+            child: const Text('Add'),
+            onPressed: () {
+              playerInputControllers;
+              AddPlayerNotification(
+                  player: _mapInputToPlayer(playerInputControllers))
+                ..dispatch(context);
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }
