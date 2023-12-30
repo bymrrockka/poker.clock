@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:horizontal_data_table/horizontal_data_table.dart';
 
@@ -73,10 +75,12 @@ class _PlayersTableState extends State<MyHomePage> {
     super.dispose();
   }
 
-  void addPlayer(Player player) {
+  bool addPlayer(AddPlayerNotification addPlayerNotification) {
+    log('#VR: Add player notification processed. $addPlayerNotification.player');
     setState(() {
-      widget.players.add(player);
+      widget.players.add(addPlayerNotification.player);
     });
+    return true;
   }
 
   final Map<String, TextEditingController> playerInputControllers = {
@@ -103,28 +107,30 @@ class _PlayersTableState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        // title: Text(widget.title),
+        title: Text('Calculator'),
       ),
-      body: Center(
-          // Center is a layout widget. It takes a single child and positions it
-          // in the middle of the parent.
-          child: HorizontalDataTable(
-        leftHandSideColumnWidth: 100,
-        rightHandSideColumnWidth: 300,
-        isFixedHeader: true,
-        headerWidgets: _createTitleWidget(),
-        footerWidgets: _createFooterWidget(),
-        isFixedFooter: true,
-        rowSeparatorWidget: const Divider(
-          color: Colors.black38,
-          height: 1.0,
-          thickness: 0.0,
-        ),
-        itemExtent: 55,
-        leftSideItemBuilder: _generateFirstColumnRow,
-        rightSideItemBuilder: _generateRightHandSideColumnRow,
-        itemCount: widget.players.length,
-      )),
+      body: NotificationListener<AddPlayerNotification>(
+          onNotification: addPlayer,
+          child: Center(
+              // Center is a layout widget. It takes a single child and positions it
+              // in the middle of the parent.
+              child: HorizontalDataTable(
+            leftHandSideColumnWidth: 100,
+            rightHandSideColumnWidth: 300,
+            isFixedHeader: true,
+            headerWidgets: _createTitleWidget(),
+            footerWidgets: _createFooterWidget(),
+            isFixedFooter: true,
+            rowSeparatorWidget: const Divider(
+              color: Colors.black38,
+              height: 1.0,
+              thickness: 0.0,
+            ),
+            itemExtent: 55,
+            leftSideItemBuilder: _generateFirstColumnRow,
+            rightSideItemBuilder: _generateRightHandSideColumnRow,
+            itemCount: widget.players.length,
+          ))),
       floatingActionButton: FloatingActionButton(
         onPressed: () =>
             _displayPlayerInputDialog(playerInputControllers, context),
@@ -238,11 +244,12 @@ class _PlayersTableState extends State<MyHomePage> {
 Future<void> _displayPlayerInputDialog(
     Map<String, TextEditingController> playerInputControllers,
     BuildContext context) {
-  Padding _createInput(String labelText,
+  Padding _createInput(String labelText, TextInputType textInputType,
       Map<String, TextEditingController> playerInputControllers) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       child: TextFormField(
+        keyboardType: textInputType,
         controller: playerInputControllers[labelText],
         decoration: InputDecoration(
           border: UnderlineInputBorder(),
@@ -255,9 +262,10 @@ Future<void> _displayPlayerInputDialog(
   Player _mapInputToPlayer(
       Map<String, TextEditingController> playerInputControllers) {
     return Player(
-      1, 2,
-      // playerInputControllers['entry']!.value.text as int,
-      // playerInputControllers['position']!.value.text as int,
+      // 1,
+      // 2,
+      int.parse(playerInputControllers['entry']!.value.text),
+      int.parse(playerInputControllers['position']!.value.text),
       playerInputControllers['firstname']!.value.text,
       playerInputControllers['lastname']!.value.text,
       playerInputControllers['nickname']!.value.text,
@@ -269,16 +277,22 @@ Future<void> _displayPlayerInputDialog(
     builder: (BuildContext context) {
       return AlertDialog(
         title: const Text('Player data'),
-        content: Column(
+        content: Container(
+            child: SingleChildScrollView(
+                child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            _createInput('nickname', playerInputControllers),
-            _createInput('firstname', playerInputControllers),
-            _createInput('lastname', playerInputControllers),
-            _createInput('entry', playerInputControllers),
-            _createInput('position', playerInputControllers),
+            _createInput(
+                'nickname', TextInputType.name, playerInputControllers),
+            _createInput(
+                'firstname', TextInputType.name, playerInputControllers),
+            _createInput(
+                'lastname', TextInputType.name, playerInputControllers),
+            _createInput('entry', TextInputType.number, playerInputControllers),
+            _createInput(
+                'position', TextInputType.number, playerInputControllers),
           ],
-        ),
+        ))),
         actions: <Widget>[
           TextButton(
             style: TextButton.styleFrom(
@@ -295,7 +309,8 @@ Future<void> _displayPlayerInputDialog(
             ),
             child: const Text('Add'),
             onPressed: () {
-              playerInputControllers;
+              var player = _mapInputToPlayer(playerInputControllers).nickname;
+              log('#VR: Add player notification dispatched. $player');
               AddPlayerNotification(
                   player: _mapInputToPlayer(playerInputControllers))
                 ..dispatch(context);
