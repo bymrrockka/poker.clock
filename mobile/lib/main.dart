@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:horizontal_data_table/horizontal_data_table.dart';
+import 'package:mobile/model/players_list.dart';
+import 'package:provider/provider.dart';
 
 import 'model/player.dart';
 
@@ -15,34 +17,39 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<PlayersList>(create: (context) => PlayersList()),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          // This is the theme of your application.
+          //
+          // TRY THIS: Try running your application with "flutter run". You'll see
+          // the application has a purple toolbar. Then, without quitting the app,
+          // try changing the seedColor in the colorScheme below to Colors.green
+          // and then invoke "hot reload" (save your changes or press the "hot
+          // reload" button in a Flutter-supported IDE, or press "r" if you used
+          // the command line to start the app).
+          //
+          // Notice that the counter didn't reset back to zero; the application
+          // state is not lost during the reload. To reset the state, use hot
+          // restart instead.
+          //
+          // This works for code too, not just values: Most code changes can be
+          // tested with just a hot reload.
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: const MyHomePage(),
       ),
-      home: const MyHomePage(players: <Player>[]),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.players});
+  const MyHomePage({super.key});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -53,7 +60,7 @@ class MyHomePage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-  final List<Player> players;
+  // final List<Player> players;
 
   @override
   State<MyHomePage> createState() => _PlayersTableState();
@@ -73,14 +80,6 @@ class _PlayersTableState extends State<MyHomePage> {
       value.dispose();
     });
     super.dispose();
-  }
-
-  bool addPlayer(AddPlayerNotification addPlayerNotification) {
-    log('#VR: Add player notification processed. $addPlayerNotification.player');
-    setState(() {
-      widget.players.add(addPlayerNotification.player);
-    });
-    return true;
   }
 
   final Map<String, TextEditingController> playerInputControllers = {
@@ -109,28 +108,31 @@ class _PlayersTableState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text('Calculator'),
       ),
-      body: NotificationListener<AddPlayerNotification>(
-          onNotification: addPlayer,
-          child: Center(
-              // Center is a layout widget. It takes a single child and positions it
-              // in the middle of the parent.
-              child: HorizontalDataTable(
+      body: Consumer<PlayersList>(
+        builder: (context, players, child) => Center(
+          // Center is a layout widget. It takes a single child and positions it
+          // in the middle of the parent.
+          child: HorizontalDataTable(
             leftHandSideColumnWidth: 100,
-            rightHandSideColumnWidth: 300,
+            rightHandSideColumnWidth: 400,
             isFixedHeader: true,
             headerWidgets: _createTitleWidget(),
             footerWidgets: _createFooterWidget(),
-            isFixedFooter: true,
+            isFixedFooter: false,
             rowSeparatorWidget: const Divider(
               color: Colors.black38,
               height: 1.0,
               thickness: 0.0,
             ),
             itemExtent: 55,
-            leftSideItemBuilder: _generateFirstColumnRow,
-            rightSideItemBuilder: _generateRightHandSideColumnRow,
-            itemCount: widget.players.length,
-          ))),
+            leftSideItemBuilder: (BuildContext context, int index) =>
+                _generateFirstColumnRow(context, index, players),
+            rightSideItemBuilder: (BuildContext context, int index) =>
+                _generateRightHandSideColumnRow(context, index, players),
+            itemCount: players.items.length,
+          ),
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () =>
             _displayPlayerInputDialog(playerInputControllers, context),
@@ -143,8 +145,8 @@ class _PlayersTableState extends State<MyHomePage> {
   List<Widget> _createTitleWidget() {
     return [
       _getTitleItemWidget('nickname', 100),
-      _getTitleItemWidget('entries', 50),
-      _getTitleItemWidget('position', 50),
+      _getTitleItemWidget('entries', 100),
+      _getTitleItemWidget('position', 100),
       _getTitleItemWidget('firstname', 100),
       _getTitleItemWidget('lastname', 100),
     ];
@@ -195,46 +197,48 @@ class _PlayersTableState extends State<MyHomePage> {
     );
   }
 
-  Widget _generateFirstColumnRow(BuildContext context, int index) {
+  Widget _generateFirstColumnRow(
+      BuildContext context, int index, PlayersList players) {
     return Container(
       width: 100,
       height: 52,
       padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
       alignment: Alignment.centerLeft,
-      child: Text(widget.players[index].nickname),
+      child: Text(players.items[index].nickname),
     );
   }
 
-  Widget _generateRightHandSideColumnRow(BuildContext context, int index) {
+  Widget _generateRightHandSideColumnRow(
+      BuildContext context, int index, PlayersList players) {
     return Row(
       children: <Widget>[
         Container(
-          width: 200,
+          width: 100,
           height: 52,
           padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
           alignment: Alignment.centerLeft,
-          child: Text(widget.players[index].entry as String),
+          child: Text(players.items[index].entry.toString()),
         ),
         Container(
           width: 100,
           height: 52,
           padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
           alignment: Alignment.centerLeft,
-          child: Text(widget.players[index].position as String),
+          child: Text(players.items[index].position.toString()),
         ),
         Container(
-          width: 200,
+          width: 100,
           height: 52,
           padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
           alignment: Alignment.centerLeft,
-          child: Text(widget.players[index].firstname),
+          child: Text(players.items[index].firstname),
         ),
         Container(
-          width: 200,
+          width: 100,
           height: 52,
           padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
           alignment: Alignment.centerLeft,
-          child: Text(widget.players[index].lastname),
+          child: Text(players.items[index].lastname),
         ),
       ],
     );
@@ -309,11 +313,11 @@ Future<void> _displayPlayerInputDialog(
             ),
             child: const Text('Add'),
             onPressed: () {
-              var player = _mapInputToPlayer(playerInputControllers).nickname;
-              log('#VR: Add player notification dispatched. $player');
-              AddPlayerNotification(
-                  player: _mapInputToPlayer(playerInputControllers))
-                ..dispatch(context);
+              var players = context.read<PlayersList>();
+              var player = _mapInputToPlayer(playerInputControllers);
+              log('#VR: Add player notification dispatched.');
+              players.add(player);
+
               Navigator.of(context).pop();
             },
           ),
