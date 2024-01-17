@@ -5,10 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan({"by.mrrockka.listener", "org.telegram.telegrambots"})
-public class TelegramApiBotApp {
+@ComponentScan({"by.mrrockka", "org.telegram.telegrambots"})
+public class TelegramApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(TelegramApiBotApp.class, args);
+    SpringApplication.run(TelegramApplication.class, args);
   }
 }

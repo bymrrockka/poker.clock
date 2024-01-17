@@ -1,6 +1,5 @@
 plugins {
     id 'java'
-    id 'maven-publish'
 }
 
 group = 'by.mrrockka'
@@ -16,8 +15,15 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web:3.2.1'
     implementation 'org.telegram:telegrambots-spring-boot-starter:6.8.0'
     implementation project(":lib")
+
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.30'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.assertj:assertj-core:3.21.0'
 }
 
 test {
