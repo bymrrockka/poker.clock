@@ -31,11 +31,12 @@ public class GameMapper {
     return Arrays.stream(strings)
       .filter(str -> telegramPattern.matcher(str).matches())
       .map(str -> Person.builder().telegram(str).build())
+      .distinct()
       .toList();
   }
 
   private BigDecimal mapBuyIn(String[] strings) {
-    final var buyInPattern = Pattern.compile("^(buyin|buy-in):([\\d]+)");
+    final var buyInPattern = Pattern.compile("^(buyin|buy-in):([\\d]+)(([\\w]+)|)$");
     return Arrays.stream(strings)
       .map(buyInPattern::matcher)
       .filter(Matcher::matches)
@@ -46,14 +47,14 @@ public class GameMapper {
   }
 
   private BigDecimal mapStack(String[] strings) {
-    final var stackPattern = Pattern.compile("^stack:([\\d]+)(k|)");
+    final var stackPattern = Pattern.compile("^stack:([\\.\\d]+)(k|)");
     return Arrays.stream(strings)
       .map(stackPattern::matcher)
       .filter(Matcher::matches)
       .map(matcher -> extractStack(matcher.group(1), StringUtils.isNotBlank(matcher.group(2))))
       .map(BigDecimal::new)
       .findFirst()
-      .orElseThrow(() -> new RuntimeException("No buy-in specified."));
+      .orElseThrow(() -> new RuntimeException("No stack specified."));
   }
 
   private Double extractStack(String value, boolean shouldMultiply) {

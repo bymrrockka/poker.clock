@@ -69,6 +69,33 @@ class GameMapperTest {
             ))
             .build())
           .build()
+      ),
+      Arguments.of(
+        GameArgument.builder()
+          .message("""
+                      /tournament 
+                      buyin:    15zl    
+                      stack: 1.5k 
+                      players: 
+                        @mrrockka
+                      @ivan 
+                       @andrei 
+                      @ivan 
+                       @andrei 
+                      @me   
+            """)
+          .game(Game.builder()
+            .gameType(GameType.TOURNAMENT)
+            .stack(BigDecimal.valueOf(1500))
+            .buyIn(BigDecimal.valueOf(15))
+            .persons(List.of(
+              person("@mrrockka"),
+              person("@ivan"),
+              person("@andrei"),
+              person("@me")
+            ))
+            .build())
+          .build()
       )
     );
   }
