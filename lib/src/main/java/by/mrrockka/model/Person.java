@@ -2,17 +2,29 @@ package by.mrrockka.model;
 
 import lombok.Builder;
 
-@Builder
-public record Person(String firstName, String lastName, String telegram, String phone) {
+import static java.util.Objects.nonNull;
 
-  public String fullname(){
-    return firstName + " " + lastName ;
+@Builder
+public record Person(String firstName, String lastName, String telegram) {
+
+  public String fullname() {
+    return firstName + ' ' + lastName;
   }
 
   @Override
   public String toString() {
-    return firstName + " " + lastName +
-      ", telegram='" + telegram + '\'' +
-      ", phone='" + phone + '\'';
+    final var output = new StringBuilder();
+    output.append('{');
+    if (nonNull(firstName) && nonNull(lastName)) {
+      output.append(firstName).append(' ').append(lastName).append(',');
+    } else if (nonNull(firstName)) {
+      output.append(firstName).append(',');
+    }
+
+    if (nonNull(telegram)) {
+      output.append("telegram=").append(telegram);
+    }
+
+    return output.append('}').toString();
   }
 }
