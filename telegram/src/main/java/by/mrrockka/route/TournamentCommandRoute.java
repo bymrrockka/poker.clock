@@ -1,6 +1,6 @@
 package by.mrrockka.route;
 
-import by.mrrockka.mapper.GameMapper;
+import by.mrrockka.mapper.game.GameMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;

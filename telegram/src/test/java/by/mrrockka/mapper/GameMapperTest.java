@@ -1,9 +1,14 @@
 package by.mrrockka.mapper;
 
+import by.mrrockka.mapper.game.GameMapper;
+import by.mrrockka.mapper.game.NoBuyInException;
+import by.mrrockka.mapper.game.NoPlayersException;
+import by.mrrockka.mapper.game.NoStackException;
 import by.mrrockka.model.Game;
 import by.mrrockka.model.GameType;
 import by.mrrockka.model.Person;
 import lombok.Builder;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -13,6 +18,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class GameMapperTest {
 
@@ -75,8 +81,7 @@ class GameMapperTest {
           .message("""
                       /tournament 
                       buyin:    15zl    
-                      stack: 1.5k 
-                      players: 
+                      stack: 1.5k
                         @mrrockka
                       @ivan 
                        @andrei 
@@ -104,6 +109,62 @@ class GameMapperTest {
   @MethodSource("tournamentMessages")
   void givenTournamentMessage_whenMapExecuted_thenShouldCreateGame(GameArgument argument) {
     assertThat(gameMapper.map(argument.message())).isEqualTo(argument.game());
+  }
+
+  private static Stream<Arguments> noPlayersMessages() {
+    return Stream.of(
+      Arguments.of(
+        """
+            /tournament 
+            buyin:      100  
+            stack:50000
+          """
+      ),
+      Arguments.of(
+        """
+            /tournament 
+            buyin:      100  
+            stack:50000 
+            players: 
+              @mrrockka
+          """
+      )
+    );
+  }
+
+  @ParameterizedTest
+  @MethodSource("noPlayersMessages")
+  void givenMessage_whenNoPlayers_thenThrowException(String message) {
+    assertThatThrownBy(() -> gameMapper.map(message))
+      .isInstanceOf(NoPlayersException.class);
+  }
+
+  @Test
+  void givenMessage_whenNoStack_thenThrowException() {
+    final var message =
+      """
+        /tournament 
+        buyin:    15zl
+        players: 
+          @mrrockka
+          @me
+        """;
+    assertThatThrownBy(() -> gameMapper.map(message))
+      .isInstanceOf(NoStackException.class);
+  }
+
+  @Test
+  void givenMessage_whenNoBuyIn_thenThrowException() {
+    final var message =
+      """
+        /tournament   
+        stack: 1.5k 
+        players: 
+          @mrrockka
+          @me
+        """;
+    assertThatThrownBy(() -> gameMapper.map(message))
+      .isInstanceOf(NoBuyInException.class);
   }
 
   private static Person person(String telegram) {

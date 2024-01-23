@@ -1,4 +1,4 @@
-package by.mrrockka.mapper;
+package by.mrrockka.mapper.game;
 
 import by.mrrockka.model.Game;
 import by.mrrockka.model.GameType;
@@ -28,11 +28,15 @@ public class GameMapper {
 
   private List<Person> mapPersons(String[] strings) {
     final var telegramPattern = Pattern.compile("^@([\\w]+)");
-    return Arrays.stream(strings)
+    final var players = Arrays.stream(strings)
       .filter(str -> telegramPattern.matcher(str).matches())
       .map(str -> Person.builder().telegram(str).build())
       .distinct()
       .toList();
+    if (players.isEmpty() || players.size() == 1) {
+      throw new NoPlayersException();
+    }
+    return players;
   }
 
   private BigDecimal mapBuyIn(String[] strings) {
@@ -43,7 +47,7 @@ public class GameMapper {
       .map(matcher -> matcher.group(2))
       .map(BigDecimal::new)
       .findFirst()
-      .orElseThrow(() -> new RuntimeException("No buy-in specified."));
+      .orElseThrow(NoBuyInException::new);
   }
 
   private BigDecimal mapStack(String[] strings) {
@@ -54,7 +58,7 @@ public class GameMapper {
       .map(matcher -> extractStack(matcher.group(1), StringUtils.isNotBlank(matcher.group(2))))
       .map(BigDecimal::new)
       .findFirst()
-      .orElseThrow(() -> new RuntimeException("No stack specified."));
+      .orElseThrow(NoStackException::new);
   }
 
   private Double extractStack(String value, boolean shouldMultiply) {

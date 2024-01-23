@@ -1,6 +1,6 @@
 package by.mrrockka.route;
 
-import by.mrrockka.mapper.GameMapper;
+import by.mrrockka.mapper.game.GameMapper;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
