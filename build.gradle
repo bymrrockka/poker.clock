@@ -1,21 +1,23 @@
 plugins {
     id 'java'
-    id 'maven-publish'
 }
 
 group = 'by.mrrockka'
 version = '1.0-SNAPSHOT'
 
-repositories {
-    mavenCentral()
-    mavenLocal()
+subprojects {
+    java {
+        sourceCompatibility = 17
+        targetCompatibility = 17
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+    }
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+
 }
 
-dependencies {
-    testImplementation platform('org.junit:junit-bom:5.9.1')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-}
-
-test {
-    useJUnitPlatform()
-}

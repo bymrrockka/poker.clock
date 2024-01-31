@@ -1,5 +1,8 @@
 package by.mrrockka.model.prize;
 
+import by.mrrockka.domain.prize.NoPrizeForPositionException;
+import by.mrrockka.domain.prize.PrizeAndPosition;
+import by.mrrockka.domain.prize.PrizePool;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;

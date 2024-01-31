@@ -1,0 +1,40 @@
+[versions]
+#plugins
+springBootVersion = "3.2.2"
+springDepManagementVersion = "1.1.4"
+
+#libs
+postgresqlVersion = "42.7.1"
+lombockVersion = "1.18.30"
+jupiterVersion = "5.9.1"
+assertjCoreVersion = "3.21.0"
+testContainerVersion = "1.19.3"
+springBootTelegrambotsVersion = "6.8.0"
+apacheCommonsLang3Version = "3.14.0"
+mockitoVersion = "5.9.0"
+liquibaseVersion = "4.25.1"
+
+[plugins]
+springBootPlugin = { id = "org.springframework.boot", version.ref = "springBootVersion" }
+springDepManagementPlugin = { id = "io.spring.dependency-management", version.ref = "springDepManagementVersion" }
+
+[libraries]
+springBootJdbc = { module = 'org.springframework.boot:spring-boot-starter-jdbc' }
+postgresql = { module = 'org.postgresql:postgresql', version.ref = "postgresqlVersion" }
+lombok = { module = 'org.projectlombok:lombok', version.ref = "lombockVersion" }
+jupiter = { module = 'org.junit.jupiter:junit-jupiter', version.ref = "jupiterVersion" }
+assertjCore = { module = 'org.assertj:assertj-core', version.ref = "assertjCoreVersion" }
+testContainerPostgresql = { module = "org.testcontainers:postgresql", version.ref = "testContainerVersion" }
+testContainerJupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "testContainerVersion" }
+
+springBootWeb = { module = 'org.springframework.boot:spring-boot-starter-web' }
+springBootTelegrambots = { module = 'org.telegram:telegrambots-spring-boot-starter', version.ref = "springBootTelegrambotsVersion" }
+apacheCommonsLang3 = { module = "org.apache.commons:commons-lang3", version.ref = "apacheCommonsLang3Version" }
+mockitoCore = { module = 'org.mockito:mockito-core', version.ref = "mockitoVersion" }
+mockitoJupiter = { module = 'org.mockito:mockito-junit-jupiter', version.ref = "mockitoVersion" }
+
+liquibase = { module = 'org.liquibase:liquibase-core', version.ref = "liquibaseVersion" }
+springBootTest = { module = 'org.springframework.boot:spring-boot-starter-test' }
+
+
+

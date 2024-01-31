@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/pokerclock?sslmode=disable
+    driver-class-name: org.postgresql.Driver
+    username: root
+  liquibase:
+    change-log: db/changelog/db.changelog-master.yml
+    enabled: true
+
+

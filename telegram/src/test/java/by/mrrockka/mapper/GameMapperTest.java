@@ -1,12 +1,12 @@
 package by.mrrockka.mapper;
 
+import by.mrrockka.domain.Person;
+import by.mrrockka.domain.game.Game;
+import by.mrrockka.domain.game.GameType;
 import by.mrrockka.mapper.game.GameMapper;
 import by.mrrockka.mapper.game.NoBuyInException;
 import by.mrrockka.mapper.game.NoPlayersException;
 import by.mrrockka.mapper.game.NoStackException;
-import by.mrrockka.model.Game;
-import by.mrrockka.model.GameType;
-import by.mrrockka.model.Person;
 import lombok.Builder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -108,7 +108,10 @@ class GameMapperTest {
   @ParameterizedTest
   @MethodSource("tournamentMessages")
   void givenTournamentMessage_whenMapExecuted_thenShouldCreateGame(GameArgument argument) {
-    assertThat(gameMapper.map(argument.message())).isEqualTo(argument.game());
+    assertThat(gameMapper.map(argument.message()))
+      .usingRecursiveComparison()
+      .ignoringFields("id")
+      .isEqualTo(argument.game());
   }
 
   private static Stream<Arguments> noPlayersMessages() {

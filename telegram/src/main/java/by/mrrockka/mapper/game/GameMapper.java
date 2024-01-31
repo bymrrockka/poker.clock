@@ -1,14 +1,15 @@
 package by.mrrockka.mapper.game;
 
-import by.mrrockka.model.Game;
-import by.mrrockka.model.GameType;
-import by.mrrockka.model.Person;
+import by.mrrockka.domain.Person;
+import by.mrrockka.domain.game.Game;
+import by.mrrockka.domain.game.GameType;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,6 +20,7 @@ public class GameMapper {
     final var strings = command.toLowerCase().replaceAll(" ", "").split("\n");
 
     return Game.builder()
+               .id(UUID.randomUUID())
       .gameType(GameType.TOURNAMENT)
       .buyIn(mapBuyIn(strings))
       .stack(mapStack(strings))
