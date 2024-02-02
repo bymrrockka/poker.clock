@@ -5,8 +5,8 @@ import java.util.UUID;
 
 public record BountyEntity(
   UUID gameId,
-  PersonEntity from,
-  PersonEntity to,
+  PersonEntity fromEntity,
+  PersonEntity toEntity,
   BigDecimal amount
 ) {
 }

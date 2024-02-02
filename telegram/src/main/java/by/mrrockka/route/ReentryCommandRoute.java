@@ -5,7 +5,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class ReentryCommandRoute implements CommandRoute {
 
-  private static final String COMMAND = "/reentry";
+  private static final String COMMAND = "/entry";
 
   @Override
   public BotApiMethodMessage process(Update update) {
