@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS game (
     buy_in bigint NOT NULL,
     bounty bigint,
     game_type varchar(10) NOT NULL,
-    is_deleted boolean
+    is_deleted boolean,
+    UNIQUE(id, chat_id)
 );
 
 CREATE TABLE IF NOT EXISTS person (
@@ -18,7 +19,8 @@ CREATE TABLE IF NOT EXISTS person (
 	chat_id varchar(50) NOT NULL,
 	telegram varchar(100) NOT NULL,
 	first_name varchar(100),
-	last_name varchar(100)
+	last_name varchar(100),
+    UNIQUE(id, chat_id)
 );
 
 CREATE TABLE IF NOT EXISTS prize_pool (
@@ -37,11 +39,10 @@ CREATE TABLE IF NOT EXISTS bounty (
 	game_id uuid REFERENCES game(id),
 	from_person uuid REFERENCES person(id),
 	to_person uuid REFERENCES person(id),
-	amount bigint,
     created_at timestamp with time zone NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS final_places (
-	game_id uuid REFERENCES game(id),
+	game_id uuid UNIQUE REFERENCES game(id),
 	places jsonb NOT NULL
 );
