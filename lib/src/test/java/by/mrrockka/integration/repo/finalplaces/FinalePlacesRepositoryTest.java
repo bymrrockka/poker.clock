@@ -45,7 +45,7 @@ class FinalePlacesRepositoryTest {
       .build();
 
     assertThat(finalePlacesRepository.findByGameId(gameId))
-      .isEqualTo(expected);
+      .contains(expected);
   }
 
   @Test
@@ -72,6 +72,12 @@ class FinalePlacesRepositoryTest {
     finalePlacesRepository.save(expected);
 
     assertThat(finalePlacesRepository.findByGameId(gameId))
-      .isEqualTo(expected);
+      .contains(expected);
+  }
+
+  @Test
+  void givenGameId_whenNoDataInTable_shouldReturnEmpty() {
+    assertThat(finalePlacesRepository.findByGameId(UUID.randomUUID()))
+      .isEmpty();
   }
 }

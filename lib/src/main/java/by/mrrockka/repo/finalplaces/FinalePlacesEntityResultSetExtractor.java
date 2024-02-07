@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import static by.mrrockka.repo.finalplaces.FinaleColumnNames.GAME_ID;
@@ -18,19 +19,21 @@ import static by.mrrockka.repo.finalplaces.FinaleColumnNames.PLACE;
 
 @Component
 @RequiredArgsConstructor
-public class FinalePlacesEntityResultSetExtractor implements ResultSetExtractor<FinalePlacesEntity> {
+public class FinalePlacesEntityResultSetExtractor implements ResultSetExtractor<Optional<FinalePlacesEntity>> {
 
   private final PersonEntityRowMapper personEntityRowMapper;
 
   @Override
   @SneakyThrows
-  public FinalePlacesEntity extractData(ResultSet rs) throws DataAccessException {
-    rs.next();
-    final var gameId = UUID.fromString(rs.getString(GAME_ID));
-    return FinalePlacesEntity.builder()
-      .gameId(gameId)
-      .places(extractPlaces(rs, gameId))
-      .build();
+  public Optional<FinalePlacesEntity> extractData(ResultSet rs) throws DataAccessException {
+    if (rs.next()) {
+      final var gameId = UUID.fromString(rs.getString(GAME_ID));
+      return Optional.of(FinalePlacesEntity.builder()
+                           .gameId(gameId)
+                           .places(extractPlaces(rs, gameId))
+                           .build());
+    }
+    return Optional.empty();
   }
 
 
@@ -40,8 +43,7 @@ public class FinalePlacesEntityResultSetExtractor implements ResultSetExtractor<
 
     do {
       places.put(rs.getInt(PLACE), personEntityRowMapper.mapRow(rs, rs.getRow()));
-      rs.next();
-    } while (!rs.isAfterLast() && gameId.equals(UUID.fromString(rs.getString(GAME_ID))));
+    } while (rs.next() && gameId.equals(UUID.fromString(rs.getString(GAME_ID))));
 
     return places;
   }

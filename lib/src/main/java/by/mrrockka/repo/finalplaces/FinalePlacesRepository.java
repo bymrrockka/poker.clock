@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.AbstractMap;
+import java.util.Optional;
 import java.util.UUID;
 
 import static by.mrrockka.repo.finalplaces.FinaleColumnNames.*;
@@ -50,7 +51,7 @@ public class FinalePlacesRepository {
       f.game_id = :game_id;
     """;
 
-  public FinalePlacesEntity findByGameId(UUID gameId) {
+  public Optional<FinalePlacesEntity> findByGameId(UUID gameId) {
     final var params = new MapSqlParameterSource()
       .addValue(GAME_ID, gameId);
 
