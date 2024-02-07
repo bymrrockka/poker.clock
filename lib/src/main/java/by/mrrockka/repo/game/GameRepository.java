@@ -1,6 +1,5 @@
 package by.mrrockka.repo.game;
 
-import by.mrrockka.domain.game.GameType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -10,19 +9,14 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static by.mrrockka.repo.game.GameColumnNames.*;
+
 @Repository
 @RequiredArgsConstructor
 public class GameRepository {
 
-  private static final String ID = "id";
-  private static final String CHAT_ID = "chat_id";
-  private static final String GAME_TYPE = "game_type";
-  private static final String BUY_IN = "buy_in";
-  private static final String STACK = "stack";
-  private static final String BOUNTY = "bounty";
-  private static final String CREATED_AT = "created_at";
-
   private final NamedParameterJdbcTemplate jdbcTemplate;
+  private final GameEntityRowMapper gameEntityRowMapper;
 
   private static final String SAVE_SQL = """
     INSERT INTO game
@@ -58,15 +52,7 @@ public class GameRepository {
       .addValue(ID, id)
       .addValue(CHAT_ID, chatId);
 
-    return jdbcTemplate.queryForObject(FIND_BY_ID_SQL, params, (rs, rowNum) ->
-      GameEntity.builder()
-                .id(UUID.fromString(rs.getString(ID)))
-                .chatId(rs.getString(CHAT_ID))
-                .gameType(GameType.valueOf(rs.getString(GAME_TYPE)))
-                .stack(rs.getBigDecimal(STACK))
-                .buyIn(rs.getBigDecimal(BUY_IN))
-                .bounty(rs.getBigDecimal(BOUNTY))
-                .build());
+    return jdbcTemplate.queryForObject(FIND_BY_ID_SQL, params, gameEntityRowMapper);
   }
 
 }

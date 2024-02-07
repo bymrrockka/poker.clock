@@ -5,22 +5,17 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
+
+import static by.mrrockka.repo.person.PersonColumnNames.*;
 
 @Repository
 @RequiredArgsConstructor
 public class PersonRepository {
 
-  private static final String ID = "id";
-  private static final String CHAT_ID = "chat_id";
-  private static final String TELEGRAM = "telegram";
-  private static final String FIRST_NAME = "first_name";
-  private static final String LAST_NAME = "last_name";
-
   private final NamedParameterJdbcTemplate jdbcTemplate;
+  private final PersonEntityRowMapper personEntityRowMapper;
 
   private static final String SAVE_SQL = """
     INSERT INTO person (id, chat_id, telegram, first_name, last_name)
@@ -54,14 +49,12 @@ public class PersonRepository {
         id, chat_id, telegram, first_name, last_name
       FROM person
       WHERE
-        id = :id
-        AND chat_id = :chat_id;
+        id = :id;
     """;
 
-  public PersonEntity findById(UUID id, String chatId) {
+  public PersonEntity findById(UUID id) {
     final var params = new MapSqlParameterSource()
-      .addValue(ID, id)
-      .addValue(CHAT_ID, chatId);
+      .addValue(ID, id);
 
     return jdbcTemplate.queryForObject(FIND_BY_ID_SQL, params, (rs, rowNum) ->
       PersonEntity.builder()
@@ -87,7 +80,7 @@ public class PersonRepository {
       .addValue(TELEGRAM, telegram)
       .addValue(CHAT_ID, chatId);
 
-    return jdbcTemplate.queryForObject(FIND_BY_TELEGRAM_SQL, params, this::rowMapper);
+    return jdbcTemplate.queryForObject(FIND_BY_TELEGRAM_SQL, params, personEntityRowMapper);
   }
 
   private static final String FIND_ALL_BY_TELEGRAM_SQL = """
@@ -104,17 +97,8 @@ public class PersonRepository {
       .addValue(TELEGRAM, telegrams)
       .addValue(CHAT_ID, chatId);
 
-    return jdbcTemplate.query(FIND_ALL_BY_TELEGRAM_SQL, params, this::rowMapper);
+    return jdbcTemplate.query(FIND_ALL_BY_TELEGRAM_SQL, params, personEntityRowMapper);
   }
 
-  private PersonEntity rowMapper(ResultSet rs, int rowNum) throws SQLException {
-    return PersonEntity.builder()
-      .id(UUID.fromString(rs.getString(ID)))
-      .chatId(rs.getString(CHAT_ID))
-      .telegram(rs.getString(TELEGRAM))
-      .firstname(rs.getString(FIRST_NAME))
-      .lastname(rs.getString(LAST_NAME))
-      .build();
-  }
 
 }

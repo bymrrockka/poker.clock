@@ -42,7 +42,10 @@ CREATE TABLE IF NOT EXISTS bounty (
     created_at timestamp with time zone NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS final_places (
-	game_id uuid UNIQUE REFERENCES game(id),
-	places jsonb NOT NULL
+CREATE TABLE IF NOT EXISTS finale_places (
+	game_id uuid REFERENCES game(id),
+	person_id uuid REFERENCES person(id),
+	place int NOT NULL,
+	UNIQUE(game_id, person_id),
+	UNIQUE(game_id, place)
 );

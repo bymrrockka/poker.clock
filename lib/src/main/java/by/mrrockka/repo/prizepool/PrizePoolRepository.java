@@ -1,6 +1,5 @@
 package by.mrrockka.repo.prizepool;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -8,20 +7,18 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.math.BigDecimal;
-import java.sql.ResultSet;
-import java.util.Map;
 import java.util.UUID;
+
+import static by.mrrockka.repo.prizepool.PrizePoolColumnNames.GAME_ID;
+import static by.mrrockka.repo.prizepool.PrizePoolColumnNames.SCHEMA;
 
 @Repository
 @RequiredArgsConstructor
 public class PrizePoolRepository {
 
-  private static final String GAME_ID = "game_id";
-  private static final String SCHEMA = "schema";
-
   private final NamedParameterJdbcTemplate jdbcTemplate;
   private final ObjectMapper objectMapper;
+  private final PrizePoolRowMapper prizePoolRowMapper;
 
   private static final String SAVE_SQL = """
     INSERT INTO prize_pool
@@ -53,16 +50,7 @@ public class PrizePoolRepository {
     final var params = new MapSqlParameterSource()
       .addValue(GAME_ID, gameId);
 
-    return jdbcTemplate.queryForObject(FIND_BY_GAME_ID_SQL, params, this::mapRows);
-  }
-
-  @SneakyThrows
-  private PrizePoolEntity mapRows(ResultSet rs, int rowNum) {
-    final var typeRef = new TypeReference<Map<Integer, BigDecimal>>() {};
-    return PrizePoolEntity.builder()
-      .gameId(UUID.fromString(rs.getString(GAME_ID)))
-      .schema(objectMapper.readValue(rs.getString(SCHEMA), typeRef))
-      .build();
+    return jdbcTemplate.queryForObject(FIND_BY_GAME_ID_SQL, params, prizePoolRowMapper);
   }
 
 }
