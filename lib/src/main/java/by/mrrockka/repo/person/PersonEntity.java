@@ -1,4 +1,4 @@
-package by.mrrockka.repo.entities;
+package by.mrrockka.repo.person;
 
 import lombok.Builder;
 import lombok.NonNull;

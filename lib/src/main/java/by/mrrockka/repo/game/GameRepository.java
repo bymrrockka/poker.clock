@@ -1,7 +1,6 @@
-package by.mrrockka.repo;
+package by.mrrockka.repo.game;
 
 import by.mrrockka.domain.game.GameType;
-import by.mrrockka.repo.entities.GameEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -26,8 +25,10 @@ public class GameRepository {
   private final NamedParameterJdbcTemplate jdbcTemplate;
 
   private static final String SAVE_SQL = """
-    INSERT INTO game (id, chat_id, game_type, buy_in, stack, bounty, created_at)
-    VALUES (:id, :chat_id, :game_type, :buy_in, :stack, :bounty, :created_at);
+    INSERT INTO game
+      (id, chat_id, game_type, buy_in, stack, bounty, created_at)
+    VALUES
+      (:id, :chat_id, :game_type, :buy_in, :stack, :bounty, :created_at);
     """;
 
   public void save(GameEntity gameEntity) {

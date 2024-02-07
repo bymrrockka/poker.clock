@@ -1,6 +1,5 @@
-package by.mrrockka.repo;
+package by.mrrockka.repo.person;
 
-import by.mrrockka.repo.entities.PersonEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -25,7 +24,7 @@ public class PersonRepository {
 
   private static final String SAVE_SQL = """
     INSERT INTO person (id, chat_id, telegram, first_name, last_name)
-      VALUES (:id, :chatId, :telegram, :firstName, :lastName)
+      VALUES (:id, :chat_id, :telegram, :first_name, :last_name)
     """;
 
   public void save(PersonEntity personEntity) {
@@ -66,12 +65,29 @@ public class PersonRepository {
 
     return jdbcTemplate.queryForObject(FIND_BY_ID_SQL, params, (rs, rowNum) ->
       PersonEntity.builder()
-                  .id(UUID.fromString(rs.getString(ID)))
-                  .chatId(rs.getString(CHAT_ID))
-                  .telegram(rs.getString(TELEGRAM))
-                  .firstname(rs.getString(FIRST_NAME))
-                  .lastname(rs.getString(LAST_NAME))
-                  .build());
+        .id(UUID.fromString(rs.getString(ID)))
+        .chatId(rs.getString(CHAT_ID))
+        .telegram(rs.getString(TELEGRAM))
+        .firstname(rs.getString(FIRST_NAME))
+        .lastname(rs.getString(LAST_NAME))
+        .build());
+  }
+
+  private static final String FIND_BY_TELEGRAM_SQL = """
+      SELECT
+        id, chat_id, telegram, first_name, last_name
+      FROM person
+      WHERE
+        chat_id = :chat_id AND
+        telegram = :telegram
+    """;
+
+  public PersonEntity findByTelegram(String telegram, String chatId) {
+    final var params = new MapSqlParameterSource()
+      .addValue(TELEGRAM, telegram)
+      .addValue(CHAT_ID, chatId);
+
+    return jdbcTemplate.queryForObject(FIND_BY_TELEGRAM_SQL, params, this::rowMapper);
   }
 
   private static final String FIND_ALL_BY_TELEGRAM_SQL = """
@@ -83,9 +99,9 @@ public class PersonRepository {
         telegram IN (:telegram)
     """;
 
-  public List<PersonEntity> findAllByIds(List<String> telegrams, String chatId) {
+  public List<PersonEntity> findAllByTelegrams(List<String> telegrams, String chatId) {
     final var params = new MapSqlParameterSource()
-      .addValue(TELEGRAM, telegrams.stream().reduce((telegram1, telegram2) -> telegram1 + "," + telegram2))
+      .addValue(TELEGRAM, telegrams)
       .addValue(CHAT_ID, chatId);
 
     return jdbcTemplate.query(FIND_ALL_BY_TELEGRAM_SQL, params, this::rowMapper);
@@ -93,12 +109,12 @@ public class PersonRepository {
 
   private PersonEntity rowMapper(ResultSet rs, int rowNum) throws SQLException {
     return PersonEntity.builder()
-                       .id(UUID.fromString(rs.getString(ID)))
-                       .chatId(rs.getString(CHAT_ID))
-                       .telegram(rs.getString(TELEGRAM))
-                       .firstname(rs.getString(FIRST_NAME))
-                       .lastname(rs.getString(LAST_NAME))
-                       .build();
+      .id(UUID.fromString(rs.getString(ID)))
+      .chatId(rs.getString(CHAT_ID))
+      .telegram(rs.getString(TELEGRAM))
+      .firstname(rs.getString(FIRST_NAME))
+      .lastname(rs.getString(LAST_NAME))
+      .build();
   }
 
 }

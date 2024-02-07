@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS person (
 	telegram varchar(100) NOT NULL,
 	first_name varchar(100),
 	last_name varchar(100),
-    UNIQUE(id, chat_id)
+    UNIQUE(chat_id, telegram)
 );
 
 CREATE TABLE IF NOT EXISTS prize_pool (

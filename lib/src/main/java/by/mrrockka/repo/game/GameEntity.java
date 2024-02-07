@@ -1,4 +1,4 @@
-package by.mrrockka.repo.entities;
+package by.mrrockka.repo.game;
 
 import by.mrrockka.domain.game.GameType;
 import lombok.Builder;

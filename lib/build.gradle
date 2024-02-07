@@ -16,6 +16,7 @@ dependencies {
     implementation libs.springBootJdbc
     implementation libs.postgresql
     implementation libs.liquibase
+    implementation libs.jacksonDataformat
 
     compileOnly libs.lombok
     annotationProcessor libs.lombok
@@ -27,8 +28,10 @@ dependencies {
     testImplementation libs.assertjCore
     testImplementation libs.testContainerPostgresql
     testImplementation libs.testContainerJupiter
-    testImplementation libs.liquibase
     testImplementation libs.springBootTest
+    testImplementation(libs.javaFaker) {
+        exclude group: 'org.yaml'
+    }
 }
 
 test {

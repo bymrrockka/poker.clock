@@ -1,8 +1,8 @@
-package by.mrrockka.integration.repo;
+package by.mrrockka.integration.repo.game;
 
 import by.mrrockka.integration.repo.config.PostgreSQLExtension;
 import by.mrrockka.integration.repo.creator.GameCreator;
-import by.mrrockka.repo.GameRepository;
+import by.mrrockka.repo.game.GameRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

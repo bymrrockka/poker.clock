@@ -1,4 +1,4 @@
-package by.mrrockka.repo.entities;
+package by.mrrockka.repo.entry;
 
 import by.mrrockka.domain.Person;
 
