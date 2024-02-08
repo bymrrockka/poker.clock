@@ -17,9 +17,12 @@ dependencies {
     implementation libs.postgresql
     implementation libs.liquibase
     implementation libs.jacksonDataformat
+    implementation libs.mapstructCore
+    implementation libs.lombokMapstructBinding
 
     compileOnly libs.lombok
     annotationProcessor libs.lombok
+    annotationProcessor libs.mapstructProcessor
 
     testCompileOnly libs.lombok
     testAnnotationProcessor libs.lombok

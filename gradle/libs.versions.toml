@@ -15,7 +15,8 @@ mockitoVersion = "5.9.0"
 liquibaseVersion = "4.25.1"
 javaFakerVersion = "1.0.2"
 jacksonDataformatVersion = "2.16.1"
-
+mapstructVersion = "1.5.5.Final"
+lombokMapstructBindingVersion = "0.1.0"
 
 [plugins]
 springBootPlugin = { id = "org.springframework.boot", version.ref = "springBootVersion" }
@@ -29,14 +30,18 @@ jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "jupiterVe
 assertjCore = { module = "org.assertj:assertj-core", version.ref = "assertjCoreVersion" }
 testContainerPostgresql = { module = "org.testcontainers:postgresql", version.ref = "testContainerVersion" }
 testContainerJupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "testContainerVersion" }
-
 springBootWeb = { module = "org.springframework.boot:spring-boot-starter-web" }
 springBootTelegrambots = { module = "org.telegram:telegrambots-spring-boot-starter", version.ref = "springBootTelegrambotsVersion" }
 apacheCommonsLang3 = { module = "org.apache.commons:commons-lang3", version.ref = "apacheCommonsLang3Version" }
 mockitoCore = { module = "org.mockito:mockito-core", version.ref = "mockitoVersion" }
 mockitoJupiter = { module = "org.mockito:mockito-junit-jupiter", version.ref = "mockitoVersion" }
-
-liquibase = { module = "org.liquibase:liquibase-core", version.ref = "liquibaseVersion" }
 springBootTest = { module = "org.springframework.boot:spring-boot-starter-test" }
+liquibase = { module = "org.liquibase:liquibase-core", version.ref = "liquibaseVersion" }
 javaFaker = { module = "com.github.javafaker:javafaker", version.ref = "javaFakerVersion" }
 jacksonDataformat = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml", version.ref = "jacksonDataformatVersion" }
+mapstructCore = { module = "org.mapstruct:mapstruct", version.ref = "mapstructVersion" }
+mapstructProcessor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstructVersion" }
+lombokMapstructBinding = { module = "org.projectlombok:lombok-mapstruct-binding", version.ref = "lombokMapstructBindingVersion" }
+
+
+
