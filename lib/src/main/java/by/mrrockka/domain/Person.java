@@ -2,14 +2,12 @@ package by.mrrockka.domain;
 
 import lombok.Builder;
 
+import java.util.UUID;
+
 import static java.util.Objects.nonNull;
 
 @Builder
-public record Person(String firstName, String lastName, String telegram) {
-
-  public String fullname() {
-    return firstName + ' ' + lastName;
-  }
+public record Person(UUID id, String chatId, String firstName, String lastName, String telegram) {
 
   @Override
   public String toString() {

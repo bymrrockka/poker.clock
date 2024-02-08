@@ -1,7 +1,7 @@
 package by.mrrockka.domain.game;
 
 import by.mrrockka.domain.Bounty;
-import by.mrrockka.domain.FinalPlaces;
+import by.mrrockka.domain.FinalePlaces;
 import by.mrrockka.domain.Person;
 import lombok.Builder;
 
@@ -17,7 +17,7 @@ public record Game(
   BigDecimal buyIn,
   BigDecimal stack,
   List<Person> persons,
-  FinalPlaces finalPlaces,
+  FinalePlaces finalePlaces,
   List<Bounty> bounties
 ) {
 }
