@@ -1,4 +1,4 @@
-package by.mrrockka.integration.repo.creator;
+package by.mrrockka.creator;
 
 import by.mrrockka.repo.prizepool.PrizePoolEntity;
 import com.github.javafaker.Faker;

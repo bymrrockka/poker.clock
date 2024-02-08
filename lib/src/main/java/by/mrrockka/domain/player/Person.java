@@ -8,16 +8,16 @@ import java.util.UUID;
 import static java.util.Objects.nonNull;
 
 @Builder
-public record Person(UUID id, String chatId, String firstName, String lastName, String telegram) {
+public record Person(UUID id, String chatId, String firstname, String lastname, String telegram) {
 
   @Override
   public String toString() {
     final var output = new StringBuilder();
     output.append('{');
-    if (nonNull(firstName) && nonNull(lastName)) {
-      output.append(firstName).append(' ').append(lastName).append(',');
-    } else if (nonNull(firstName)) {
-      output.append(firstName).append(',');
+    if (nonNull(firstname) && nonNull(lastname)) {
+      output.append(firstname).append(' ').append(lastname).append(',');
+    } else if (nonNull(firstname)) {
+      output.append(firstname).append(',');
     }
 
     if (nonNull(telegram)) {

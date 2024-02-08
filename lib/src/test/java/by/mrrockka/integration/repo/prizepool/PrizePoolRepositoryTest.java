@@ -1,7 +1,7 @@
 package by.mrrockka.integration.repo.prizepool;
 
+import by.mrrockka.creator.PrizePoolCreator;
 import by.mrrockka.integration.repo.config.PostgreSQLExtension;
-import by.mrrockka.integration.repo.creator.PrizePoolCreator;
 import by.mrrockka.repo.prizepool.PrizePoolRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

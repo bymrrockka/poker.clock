@@ -1,7 +1,7 @@
 package by.mrrockka.integration.repo.person;
 
+import by.mrrockka.creator.PersonCreator;
 import by.mrrockka.integration.repo.config.PostgreSQLExtension;
-import by.mrrockka.integration.repo.creator.PersonCreator;
 import by.mrrockka.repo.person.PersonEntity;
 import by.mrrockka.repo.person.PersonRepository;
 import com.github.javafaker.Faker;
@@ -32,7 +32,7 @@ class PersonRepositoryTest {
 
   @Test
   void givenPersonEntity_whenSave_thenShouldBeAbleToGet() {
-    final var expected = PersonCreator.personEntity();
+    final var expected = PersonCreator.entity();
 
     personRepository.save(expected);
 
@@ -111,12 +111,12 @@ class PersonRepositoryTest {
     final Consumer<PersonEntity.PersonEntityBuilder> chatIdSetter = builder -> builder.chatId(chatId);
 
     final var listExpected = List.of(
-      PersonCreator.personEntity(chatIdSetter),
-      PersonCreator.personEntity(chatIdSetter),
-      PersonCreator.personEntity(chatIdSetter),
-      PersonCreator.personEntity(chatIdSetter),
-      PersonCreator.personEntity(chatIdSetter),
-      PersonCreator.personEntity(chatIdSetter)
+      PersonCreator.entity(chatIdSetter),
+      PersonCreator.entity(chatIdSetter),
+      PersonCreator.entity(chatIdSetter),
+      PersonCreator.entity(chatIdSetter),
+      PersonCreator.entity(chatIdSetter),
+      PersonCreator.entity(chatIdSetter)
     );
 
     final var telegrams = listExpected.stream()

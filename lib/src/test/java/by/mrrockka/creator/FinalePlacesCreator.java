@@ -1,4 +1,4 @@
-package by.mrrockka.integration.repo.creator;
+package by.mrrockka.creator;
 
 import by.mrrockka.repo.finalplaces.FinalePlacesEntity;
 import by.mrrockka.repo.person.PersonEntity;
@@ -29,9 +29,9 @@ public class FinalePlacesCreator {
 
   private static Map<Integer, PersonEntity> places() {
     return Map.of(
-      1, PersonCreator.personEntity(),
-      2, PersonCreator.personEntity(),
-      3, PersonCreator.personEntity()
+      1, PersonCreator.entity(),
+      2, PersonCreator.entity(),
+      3, PersonCreator.entity()
     );
   }
 }

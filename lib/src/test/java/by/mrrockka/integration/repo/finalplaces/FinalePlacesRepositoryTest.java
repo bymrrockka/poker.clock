@@ -1,7 +1,7 @@
 package by.mrrockka.integration.repo.finalplaces;
 
+import by.mrrockka.creator.PersonCreator;
 import by.mrrockka.integration.repo.config.PostgreSQLExtension;
-import by.mrrockka.integration.repo.creator.PersonCreator;
 import by.mrrockka.repo.finalplaces.FinalePlacesEntity;
 import by.mrrockka.repo.finalplaces.FinalePlacesRepository;
 import by.mrrockka.repo.person.PersonRepository;
@@ -51,13 +51,13 @@ class FinalePlacesRepositoryTest {
   @Test
   void givenFinalePlaces_whenStored_shouldBeAbleToGetByGameId() {
     final var places = Map.of(
-      1, PersonCreator.personEntity(),
-      2, PersonCreator.personEntity(),
-      3, PersonCreator.personEntity(),
-      4, PersonCreator.personEntity(),
-      5, PersonCreator.personEntity(),
-      6, PersonCreator.personEntity(),
-      7, PersonCreator.personEntity()
+      1, PersonCreator.entity(),
+      2, PersonCreator.entity(),
+      3, PersonCreator.entity(),
+      4, PersonCreator.entity(),
+      5, PersonCreator.entity(),
+      6, PersonCreator.entity(),
+      7, PersonCreator.entity()
     );
 
     personRepository.saveAll(places.values()

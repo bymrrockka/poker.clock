@@ -16,7 +16,7 @@ public record GameSummary(@NonNull List<FinaleSummary> finaleSummaries) {
       .stream()
       .map(percentageAndPosition ->
              FinaleSummary.builder()
-               .place(percentageAndPosition.position())
+               .position(percentageAndPosition.position())
                .person(finalePlaces.getByPosition(percentageAndPosition.position()).orElseThrow())
                .amount(prizePool.getPrizeFor(percentageAndPosition.position()))
                .build())
