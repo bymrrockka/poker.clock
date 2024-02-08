@@ -127,26 +127,6 @@ class AccountingTest {
     );
 
     final var actual = accounting.calculate(game);
-/* todo: for verification
-    final var expect = List.of(
-      payout(getByPosition(players, 1), List.of(
-        debt(getByPosition(players, 4), BUY_IN),
-        debt(getByPosition(players, 5), BUY_IN),
-        debt(getByPosition(players, 6), BUY_IN),
-        debt(getByPosition(players, 7), BUY_IN),
-        debt(getByPosition(players, 8), BigDecimal.valueOf(16))
-      )),
-      payout(getByPosition(players, 2), List.of(
-        debt(getByPosition(players, 9), BUY_IN),
-        debt(getByPosition(players, 10), BigDecimal.valueOf(18))
-      )),
-      payout(getByPosition(players, 3), List.of(
-        debt(getByPosition(players, 8), BigDecimal.valueOf(4)),
-        debt(getByPosition(players, 10), BigDecimal.valueOf(2))
-      ))
-    );
-*/
-
     final var expect = List.of(
       payout(players.get(0), List.of(
         debt(players.get(3), BUY_IN),
@@ -187,23 +167,6 @@ class AccountingTest {
     );
 
     final var actual = accounting.calculate(game);
- /* todo: for verification
- final var expect = List.of(
-      payout(getByPosition(players, 1), List.of(
-        debt(getByPosition(players, 3), BigDecimal.valueOf(30)),
-        debt(getByPosition(players, 4), BUY_IN),
-        debt(getByPosition(players, 5), BUY_IN),
-        debt(getByPosition(players, 6), BUY_IN),
-        debt(getByPosition(players, 7), BUY_IN),
-        debt(getByPosition(players, 8), BigDecimal.valueOf(10))
-      )),
-      payout(getByPosition(players, 2), List.of(
-        debt(getByPosition(players, 9), BUY_IN),
-        debt(getByPosition(players, 10), BUY_IN),
-        debt(getByPosition(players, 8), BigDecimal.valueOf(10))
-      ))
-    );
-*/
     final var expect = List.of(
       payout(players.get(0), List.of(
         debt(players.get(2), BigDecimal.valueOf(30)),
