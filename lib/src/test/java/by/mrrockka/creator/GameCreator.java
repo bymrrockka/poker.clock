@@ -1,7 +1,9 @@
 package by.mrrockka.creator;
 
+import by.mrrockka.domain.Bounty;
 import by.mrrockka.domain.game.Game;
 import by.mrrockka.domain.game.GameType;
+import by.mrrockka.domain.player.Player;
 import by.mrrockka.domain.summary.GameSummary;
 import by.mrrockka.repo.game.GameEntity;
 import com.github.javafaker.Faker;
@@ -16,6 +18,15 @@ import static java.util.Objects.nonNull;
 public class GameCreator {
 
   private final static Faker FAKER = new Faker();
+  public static final UUID ID = UUID.randomUUID();
+  public static final String CHAT_ID = FAKER.random().hex();
+  public static final GameType GAME_TYPE = GameType.TOURNAMENT;
+  public static final BigDecimal BUY_IN = BigDecimal.valueOf(FAKER.number().numberBetween(10, 100));
+  public static final BigDecimal STACK = BigDecimal.valueOf(FAKER.number().numberBetween(1500, 30000));
+  public static final BigDecimal BOUNTY = BigDecimal.valueOf(FAKER.number().numberBetween(10, 100));
+  public static final List<Player> PLAYERS = List.of(PlayerCreator.player());
+  public static final List<Bounty> BOUNTIES = List.of(Bounty.builder().build());
+  public static final GameSummary GAME_SUMMARY = new GameSummary(List.of());
 
   public static Game domain() {
     return domain(null);
@@ -23,13 +34,15 @@ public class GameCreator {
 
   public static Game domain(final Consumer<Game.GameBuilder> gameBuilderConsumer) {
     final var gameBuilder = Game.builder()
-      .id(UUID.randomUUID())
-      .chatId(FAKER.random().hex())
-      .gameType(GameType.TOURNAMENT)
-      .buyIn(BigDecimal.valueOf(FAKER.number().numberBetween(10, 100)))
-      .stack(BigDecimal.valueOf(FAKER.number().numberBetween(1500, 30000)))
-      .players(List.of(PlayerCreator.player()))
-      .gameSummary(new GameSummary(List.of()));
+      .id(ID)
+      .chatId(CHAT_ID)
+      .gameType(GAME_TYPE)
+      .buyIn(BUY_IN)
+      .stack(STACK)
+      .bountyAmount(BOUNTY)
+      .players(PLAYERS)
+      .gameSummary(GAME_SUMMARY)
+      .bounties(BOUNTIES);
 
     if (nonNull(gameBuilderConsumer))
       gameBuilderConsumer.accept(gameBuilder);
@@ -43,12 +56,12 @@ public class GameCreator {
 
   public static GameEntity entity(Consumer<GameEntity.GameEntityBuilder> builderConsumer) {
     final var gameEntityBuilder = GameEntity.builder()
-      .id(UUID.randomUUID())
-      .chatId(FAKER.random().hex())
-      .gameType(GameType.TOURNAMENT)
-      .stack(BigDecimal.valueOf(FAKER.number().numberBetween(100, 1000)))
-      .buyIn(BigDecimal.valueOf(FAKER.number().numberBetween(10, 100)))
-      .bounty(BigDecimal.valueOf(FAKER.number().numberBetween(10, 100)));
+      .id(ID)
+      .chatId(CHAT_ID)
+      .gameType(GAME_TYPE)
+      .stack(STACK)
+      .buyIn(BUY_IN)
+      .bounty(BOUNTY);
 
     if (nonNull(builderConsumer))
       builderConsumer.accept(gameEntityBuilder);

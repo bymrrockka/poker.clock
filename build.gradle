@@ -14,6 +14,13 @@ subprojects {
         }
     }
 
+    tasks.withType(JavaCompile) {
+        options.compilerArgs = [
+                '-Amapstruct.suppressGeneratorTimestamp=true',
+                '-Amapstruct.defaultComponentModel=default,spring',
+        ]
+    }
+
     repositories {
         mavenCentral()
         mavenLocal()

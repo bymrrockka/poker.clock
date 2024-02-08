@@ -21,6 +21,7 @@ public record Game(
   GameType gameType,
   BigDecimal buyIn,
   BigDecimal stack,
+  BigDecimal bountyAmount,
   @NonNull
   List<Player> players,
   GameSummary gameSummary,

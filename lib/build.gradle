@@ -26,6 +26,7 @@ dependencies {
 
     testCompileOnly libs.lombok
     testAnnotationProcessor libs.lombok
+    testAnnotationProcessor libs.mapstructProcessor
 
     testImplementation libs.jupiter
     testImplementation libs.assertjCore

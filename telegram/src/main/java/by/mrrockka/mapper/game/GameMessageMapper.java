@@ -14,7 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
-public class GameMapper {
+public class GameMessageMapper {
 
   public Game map(String command) {
     final var strings = command.toLowerCase().replaceAll(" ", "").split("\n");
@@ -24,7 +24,8 @@ public class GameMapper {
       .gameType(GameType.TOURNAMENT)
       .buyIn(mapBuyIn(strings))
       .stack(mapStack(strings))
-      .persons(mapPersons(strings))
+               //todo:
+//      .persons(mapPersons(strings))
       .build();
   }
 

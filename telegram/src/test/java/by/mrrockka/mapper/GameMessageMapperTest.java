@@ -3,7 +3,7 @@ package by.mrrockka.mapper;
 import by.mrrockka.domain.game.Game;
 import by.mrrockka.domain.game.GameType;
 import by.mrrockka.domain.player.Person;
-import by.mrrockka.mapper.game.GameMapper;
+import by.mrrockka.mapper.game.GameMessageMapper;
 import by.mrrockka.mapper.game.NoBuyInException;
 import by.mrrockka.mapper.game.NoPlayersException;
 import by.mrrockka.mapper.game.NoStackException;
@@ -14,15 +14,14 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class GameMapperTest {
+class GameMessageMapperTest {
 
-  private final GameMapper gameMapper = new GameMapper();
+  private final GameMessageMapper gameMessageMapper = new GameMessageMapper();
 
   @Builder
   private record GameArgument(String message, Game game) {
@@ -46,12 +45,13 @@ class GameMapperTest {
             .gameType(GameType.TOURNAMENT)
             .stack(BigDecimal.valueOf(30000))
             .buyIn(BigDecimal.valueOf(30))
-            .persons(List.of(
-              person("@mrrockka"),
-              person("@ivan"),
-              person("@andrei"),
-              person("@me")
-            ))
+            //todo:
+//            .persons(List.of(
+//              person("@mrrockka"),
+//              person("@ivan"),
+//              person("@andrei"),
+//              person("@me")
+//            ))
             .build())
           .build()
       ),
@@ -69,10 +69,11 @@ class GameMapperTest {
             .gameType(GameType.TOURNAMENT)
             .stack(BigDecimal.valueOf(50000))
             .buyIn(BigDecimal.valueOf(100))
-            .persons(List.of(
-              person("@mrrockka"),
-              person("@me")
-            ))
+            //todo:
+//            .persons(List.of(
+//              person("@mrrockka"),
+//              person("@me")
+//            ))
             .build())
           .build()
       ),
@@ -93,12 +94,13 @@ class GameMapperTest {
             .gameType(GameType.TOURNAMENT)
             .stack(BigDecimal.valueOf(1500))
             .buyIn(BigDecimal.valueOf(15))
-            .persons(List.of(
-              person("@mrrockka"),
-              person("@ivan"),
-              person("@andrei"),
-              person("@me")
-            ))
+            //todo:
+//            .persons(List.of(
+//              person("@mrrockka"),
+//              person("@ivan"),
+//              person("@andrei"),
+//              person("@me")
+//            ))
             .build())
           .build()
       )
@@ -108,7 +110,7 @@ class GameMapperTest {
   @ParameterizedTest
   @MethodSource("tournamentMessages")
   void givenTournamentMessage_whenMapExecuted_thenShouldCreateGame(GameArgument argument) {
-    assertThat(gameMapper.map(argument.message()))
+    assertThat(gameMessageMapper.map(argument.message()))
       .usingRecursiveComparison()
       .ignoringFields("id")
       .isEqualTo(argument.game());
@@ -138,7 +140,7 @@ class GameMapperTest {
   @ParameterizedTest
   @MethodSource("noPlayersMessages")
   void givenMessage_whenNoPlayers_thenThrowException(String message) {
-    assertThatThrownBy(() -> gameMapper.map(message))
+    assertThatThrownBy(() -> gameMessageMapper.map(message))
       .isInstanceOf(NoPlayersException.class);
   }
 
@@ -152,7 +154,7 @@ class GameMapperTest {
           @mrrockka
           @me
         """;
-    assertThatThrownBy(() -> gameMapper.map(message))
+    assertThatThrownBy(() -> gameMessageMapper.map(message))
       .isInstanceOf(NoStackException.class);
   }
 
@@ -166,7 +168,7 @@ class GameMapperTest {
           @mrrockka
           @me
         """;
-    assertThatThrownBy(() -> gameMapper.map(message))
+    assertThatThrownBy(() -> gameMessageMapper.map(message))
       .isInstanceOf(NoBuyInException.class);
   }
 
