@@ -1,27 +1,27 @@
 package by.mrrockka.features.accounting;
 
-import by.mrrockka.domain.*;
-import by.mrrockka.domain.prize.PrizeAndPosition;
-import by.mrrockka.domain.prize.PrizePool;
+import by.mrrockka.domain.game.Game;
+import by.mrrockka.domain.payout.Debt;
+import by.mrrockka.domain.payout.Payout;
+import by.mrrockka.domain.payout.TransferType;
+import by.mrrockka.domain.player.Player;
+import by.mrrockka.domain.summary.PlayerSummary;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 @Service
 public class Accounting {
 
-  public List<Payout> calculate(final List<Player> players, final List<PrizeAndPosition> prizeAndPositions) {
-    final var totalEntries = totalEntriesAmount(players);
-    final var prizePool = new PrizePool(prizeAndPositions, totalEntries);
-
-    final var playerSummaries = players.stream()
+  public List<Payout> calculate(final Game game) {
+    final var playerSummaries = game.players()
+      .stream()
       .distinct()
-      .map(player -> PlayerSummary.of(player, prizePool))
-      .sorted(Comparator.comparingInt(o -> o.getPlayer().position()))
+      .map(player -> PlayerSummary.of(player, game.gameSummary()))
+      .sorted()
       .toList();
 
     return playerSummaries.stream()
@@ -57,24 +57,24 @@ public class Accounting {
       if (debtComparison == 0) {
         debtorSummary.subtractCalculated(debtAmount);
         debts.add(debtBuilder
-          .amount(debtAmount)
-          .build());
+                    .amount(debtAmount)
+                    .build());
         break;
       }
 
       if (debtComparison < 0) {
         debtorSummary.subtractCalculated(debtAmount);
         debts.add(debtBuilder
-          .amount(debtAmount)
-          .build());
+                    .amount(debtAmount)
+                    .build());
         leftToPay = leftToPay.subtract(debtAmount);
       }
 
       if (debtComparison > 0) {
         debtorSummary.subtractCalculated(leftToPay);
         debts.add(debtBuilder
-          .amount(leftToPay)
-          .build());
+                    .amount(leftToPay)
+                    .build());
         break;
       }
     }
@@ -86,7 +86,7 @@ public class Accounting {
     return players.stream()
       .map(player -> player.payments().total())
       .reduce(BigDecimal::add)
-      .orElseThrow(() -> new RuntimeException("No players specified"));
+      .orElseThrow(NoPlayerSpecifiedException::new);
   }
 
 }

@@ -1,12 +1,12 @@
 package by.mrrockka.features.accounting;
 
-import by.mrrockka.domain.Debt;
-import by.mrrockka.domain.Payout;
-import by.mrrockka.domain.Person;
-import by.mrrockka.domain.Player;
 import by.mrrockka.domain.payments.NoPaymentsException;
 import by.mrrockka.domain.payments.Payments;
-import by.mrrockka.domain.prize.PrizeAndPosition;
+import by.mrrockka.domain.payout.Debt;
+import by.mrrockka.domain.payout.Payout;
+import by.mrrockka.domain.player.Person;
+import by.mrrockka.domain.player.Player;
+import by.mrrockka.domain.prize.PercentageAndPosition;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -218,8 +218,8 @@ class AccountingTest {
       .build();
   }
 
-  private PrizeAndPosition prizeAndPosition(BigDecimal prize, int position) {
-    return PrizeAndPosition.builder()
+  private PercentageAndPosition prizeAndPosition(BigDecimal prize, int position) {
+    return PercentageAndPosition.builder()
       .prize(prize)
       .place(position)
       .build();

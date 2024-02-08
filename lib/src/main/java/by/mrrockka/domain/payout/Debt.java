@@ -1,5 +1,6 @@
-package by.mrrockka.domain;
+package by.mrrockka.domain.payout;
 
+import by.mrrockka.domain.player.Player;
 import lombok.Builder;
 
 import java.math.BigDecimal;

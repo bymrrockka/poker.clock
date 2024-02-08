@@ -1,8 +1,10 @@
-package by.mrrockka.domain;
+package by.mrrockka.domain.summary;
 
-import by.mrrockka.domain.prize.PrizePool;
+import by.mrrockka.domain.payout.TransferType;
+import by.mrrockka.domain.player.Player;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NonNull;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -11,9 +13,12 @@ import java.util.Objects;
 @Builder
 public class PlayerSummary implements Comparable<PlayerSummary> {
 
+  @NonNull
   private Player player;
+  @NonNull
   @Builder.Default
   private BigDecimal transferAmount = BigDecimal.ZERO;
+  @NonNull
   private TransferType transferType;
 
   public void subtractCalculated(BigDecimal calculated) {
@@ -25,15 +30,17 @@ public class PlayerSummary implements Comparable<PlayerSummary> {
     return ps.getTransferAmount().compareTo(this.getTransferAmount());
   }
 
-  public static PlayerSummary of(Player player, PrizePool prizePool) {
+  //todo: consider refactoring to separate service in case there will be additional implementations
+  public static PlayerSummary of(Player player, GameSummary gameSummary) {
     Objects.requireNonNull(player, "Player cannot be null");
-    Objects.requireNonNull(prizePool, "prizePool cannot be null");
+    Objects.requireNonNull(gameSummary, "GameSummary cannot be null");
 
     final var playerTotal = player.payments().total();
+    final var person = player.person();
     var playerBuilder = PlayerSummary.builder().player(player);
 
-    if (prizePool.isInPrizes(player.position())) {
-      final var prizeAmount = prizePool.getPrizeFor(player.position());
+    if (gameSummary.isInPrizes(person)) {
+      final var prizeAmount = gameSummary.getPrizeFor(person);
       if (prizeAmount.compareTo(playerTotal) > 0) {
         return playerBuilder
           .transferType(TransferType.CREDIT)
@@ -60,8 +67,10 @@ public class PlayerSummary implements Comparable<PlayerSummary> {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof PlayerSummary that)) return false;
+    if (this == o)
+      return true;
+    if (!(o instanceof PlayerSummary that))
+      return false;
     return Objects.equals(player, that.player)
       && Objects.equals(transferAmount, that.transferAmount)
       && transferType == that.transferType;

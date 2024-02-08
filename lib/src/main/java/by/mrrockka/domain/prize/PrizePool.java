@@ -1,35 +1,30 @@
 package by.mrrockka.domain.prize;
 
 import lombok.Builder;
+import lombok.NonNull;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Objects;
 
 import static java.math.RoundingMode.HALF_UP;
 
 @Builder
-public record PrizePool(List<PrizeAndPosition> prizeAndPositionList, BigDecimal totalBuyInsAmount) {
+public record PrizePool(@NonNull List<PercentageAndPosition> percentageAndPositions,
+                        @NonNull BigDecimal totalBuyInsAmount) {
 
   public BigDecimal getPrizeFor(int position) {
-    validate();
-    return prizeAndPositionList().stream()
-      .filter(prizeAndPosition -> position == prizeAndPosition.place())
-      .map(prizeAndPosition -> prizeAndPosition.prize()
-        .multiply(totalBuyInsAmount)
-        .divide(BigDecimal.valueOf(100), 0, HALF_UP))
+    return percentageAndPositions().stream()
+      .filter(percentageAndPosition -> position == percentageAndPosition.position())
+      .map(percentageAndPosition -> percentageAndPosition.percentage()
+                                                         .multiply(totalBuyInsAmount)
+                                                         .divide(BigDecimal.valueOf(100), 0, HALF_UP))
       .findFirst()
       .orElseThrow(() -> new NoPrizeForPositionException(position));
   }
 
   public boolean isInPrizes(int position) {
-    validate();
-    return prizeAndPositionList().stream()
-      .anyMatch(prizeAndPosition -> prizeAndPosition.place() == position);
+    return percentageAndPositions().stream()
+      .anyMatch(percentageAndPosition -> percentageAndPosition.position() == position);
   }
 
-  private void validate() {
-    Objects.requireNonNull(prizeAndPositionList(), "Prize and Position list cannot be null");
-    Objects.requireNonNull(totalBuyInsAmount(), "Total Buy ins cannot be null");
-  }
 }

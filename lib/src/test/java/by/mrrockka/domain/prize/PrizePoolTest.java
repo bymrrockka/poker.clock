@@ -1,8 +1,5 @@
-package by.mrrockka.model.prize;
+package by.mrrockka.domain.prize;
 
-import by.mrrockka.domain.prize.NoPrizeForPositionException;
-import by.mrrockka.domain.prize.PrizeAndPosition;
-import by.mrrockka.domain.prize.PrizePool;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -16,13 +13,14 @@ class PrizePoolTest {
   private static final BigDecimal TOTAL_AMOUNT = BigDecimal.valueOf(100);
   private static final int VALID_POSITION = 1;
   private static final int INVALID_POSITION = 2;
-  private static final List<PrizeAndPosition> PRIZE_AND_POSITION_LIST = List.of(PrizeAndPosition.builder()
-    .place(VALID_POSITION)
-    .prize(BigDecimal.valueOf(100))
-    .build());
+  private static final List<PercentageAndPosition> PERCENTAGE_AND_POSITIONS = List.of(PercentageAndPosition.builder()
+                                                                                        .position(VALID_POSITION)
+                                                                                        .percentage(
+                                                                                          BigDecimal.valueOf(100))
+                                                                                        .build());
 
   private static final PrizePool PRIZE_POOL = PrizePool.builder()
-    .prizeAndPositionList(PRIZE_AND_POSITION_LIST)
+    .percentageAndPositions(PERCENTAGE_AND_POSITIONS)
     .totalBuyInsAmount(TOTAL_AMOUNT)
     .build();
 
@@ -61,7 +59,7 @@ class PrizePoolTest {
 
   @Test
   void givenNullableTotalAmount_whenMethodExecuted_thenShouldThrowNullPointer() {
-    final var prizePool = new PrizePool(PRIZE_AND_POSITION_LIST, null);
+    final var prizePool = new PrizePool(PERCENTAGE_AND_POSITIONS, null);
     assertThatThrownBy(() -> prizePool.getPrizeFor(VALID_POSITION))
       .isInstanceOf(NullPointerException.class)
       .hasMessage("Total Buy ins cannot be null");

@@ -1,7 +1,8 @@
-package by.mrrockka.domain;
+package by.mrrockka.domain.player;
 
 import lombok.Builder;
 
+import java.util.Objects;
 import java.util.UUID;
 
 import static java.util.Objects.nonNull;
@@ -24,5 +25,21 @@ public record Person(UUID id, String chatId, String firstName, String lastName, 
     }
 
     return output.append('}').toString();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (!(o instanceof Person person))
+      return false;
+    return Objects.equals(id, person.id) &&
+      Objects.equals(chatId, person.chatId) &&
+      Objects.equals(telegram, person.telegram);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, chatId, telegram);
   }
 }

@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static by.mrrockka.repo.finalplaces.FinaleColumnNames.GAME_ID;
-import static by.mrrockka.repo.finalplaces.FinaleColumnNames.PLACE;
+import static by.mrrockka.repo.finalplaces.FinaleColumnNames.POSITION;
 
 @Component
 @RequiredArgsConstructor
@@ -41,7 +41,7 @@ public class FinalePlacesEntityResultSetExtractor implements ResultSetExtractor<
   public Map<Integer, PersonEntity> extractPlaces(ResultSet rs) {
     HashMap<Integer, PersonEntity> places = new HashMap<>();
     do {
-      places.put(rs.getInt(PLACE), personEntityRowMapper.mapRow(rs, rs.getRow()));
+      places.put(rs.getInt(POSITION), personEntityRowMapper.mapRow(rs, rs.getRow()));
     } while (rs.next());
 
     return places;

@@ -1,8 +1,8 @@
 package by.mrrockka.mapper.game;
 
-import by.mrrockka.domain.Person;
 import by.mrrockka.domain.game.Game;
 import by.mrrockka.domain.game.GameType;
+import by.mrrockka.domain.player.Person;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 

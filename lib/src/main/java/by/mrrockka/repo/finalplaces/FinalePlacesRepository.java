@@ -21,9 +21,9 @@ public class FinalePlacesRepository {
 
   private static final String SAVE_SQL = """
     INSERT INTO finale_places
-      (game_id, person_id, place)
+      (game_id, person_id, position)
     VALUES
-      (:game_id, :person_id, :place);
+      (:game_id, :person_id, :position);
     """;
 
   @SneakyThrows
@@ -35,7 +35,7 @@ public class FinalePlacesRepository {
         final MapSqlParameterSource params = new MapSqlParameterSource()
           .addValue(GAME_ID, finalePlacesEntity.gameId())
           .addValue(PERSON_ID, entry.getValue())
-          .addValue(PLACE, entry.getKey());
+          .addValue(POSITION, entry.getKey());
 
         jdbcTemplate.update(SAVE_SQL, params);
       });
@@ -43,7 +43,7 @@ public class FinalePlacesRepository {
 
   private static final String FIND_BY_GAME_ID_SQL = """
     SELECT
-      f.game_id, f.place, p.id, p.chat_id, p.telegram, p.first_name, p.last_name
+      f.game_id, f.position, p.id, p.chat_id, p.telegram, p.first_name, p.last_name
     FROM
      finale_places as f
     JOIN person as p ON f.person_id = p.id

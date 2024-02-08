@@ -5,5 +5,5 @@ import lombok.Builder;
 import java.math.BigDecimal;
 
 @Builder
-public record PrizeAndPosition(BigDecimal prize, int place) {
+public record PercentageAndPosition(BigDecimal percentage, int position) {
 }
