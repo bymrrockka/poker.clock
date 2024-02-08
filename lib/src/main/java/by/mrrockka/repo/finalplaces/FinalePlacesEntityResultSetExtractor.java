@@ -30,7 +30,7 @@ public class FinalePlacesEntityResultSetExtractor implements ResultSetExtractor<
       final var gameId = UUID.fromString(rs.getString(GAME_ID));
       return Optional.of(FinalePlacesEntity.builder()
                            .gameId(gameId)
-                           .places(extractPlaces(rs, gameId))
+                           .places(extractPlaces(rs))
                            .build());
     }
     return Optional.empty();
@@ -38,12 +38,11 @@ public class FinalePlacesEntityResultSetExtractor implements ResultSetExtractor<
 
 
   @SneakyThrows
-  public Map<Integer, PersonEntity> extractPlaces(ResultSet rs, UUID gameId) {
+  public Map<Integer, PersonEntity> extractPlaces(ResultSet rs) {
     HashMap<Integer, PersonEntity> places = new HashMap<>();
-
     do {
       places.put(rs.getInt(PLACE), personEntityRowMapper.mapRow(rs, rs.getRow()));
-    } while (rs.next() && gameId.equals(UUID.fromString(rs.getString(GAME_ID))));
+    } while (rs.next());
 
     return places;
   }

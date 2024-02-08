@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS prize_pool (
 	schema jsonb NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS entry (
+CREATE TABLE IF NOT EXISTS entries (
 	game_id uuid REFERENCES game(id),
 	person_id uuid REFERENCES person(id),
 	amount bigint NOT NULL,
