@@ -1,8 +1,8 @@
 package by.mrrockka.integration.repo.entry;
 
 import by.mrrockka.integration.repo.config.PostgreSQLExtension;
-import by.mrrockka.repo.entry.EntriesEntity;
-import by.mrrockka.repo.entry.EntriesRepository;
+import by.mrrockka.repo.entries.EntriesEntity;
+import by.mrrockka.repo.entries.EntriesRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package by.mrrockka.repo.entry;
+package by.mrrockka.repo.entries;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
-import static by.mrrockka.repo.entry.EntryColumnNames.*;
+import static by.mrrockka.repo.entries.EntryColumnNames.*;
 
 @Repository
 @RequiredArgsConstructor

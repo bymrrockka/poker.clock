@@ -1,4 +1,4 @@
-package by.mrrockka.repo.entry;
+package by.mrrockka.repo.entries;
 
 interface EntryColumnNames {
   String GAME_ID = "game_id";

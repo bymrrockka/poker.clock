@@ -1,4 +1,4 @@
-package by.mrrockka.repo.entry;
+package by.mrrockka.repo.entries;
 
 import by.mrrockka.repo.person.PersonEntityRowMapper;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static by.mrrockka.repo.entry.EntryColumnNames.*;
+import static by.mrrockka.repo.entries.EntryColumnNames.*;
 
 @Component
 @RequiredArgsConstructor

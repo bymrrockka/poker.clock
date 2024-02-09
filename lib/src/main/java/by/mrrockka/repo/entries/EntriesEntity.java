@@ -1,4 +1,4 @@
-package by.mrrockka.repo.entry;
+package by.mrrockka.repo.entries;
 
 import lombok.Builder;
 
