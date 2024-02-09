@@ -47,5 +47,5 @@ CREATE TABLE IF NOT EXISTS finale_places (
 	person_id uuid REFERENCES person(id),
 	position int NOT NULL,
 	UNIQUE(game_id, person_id),
-	UNIQUE(game_id, place)
+	UNIQUE(game_id, position)
 );

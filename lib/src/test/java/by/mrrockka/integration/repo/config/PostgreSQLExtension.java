@@ -19,6 +19,6 @@ public class PostgreSQLExtension implements BeforeAllCallback, AfterAllCallback 
 
   @Override
   public void afterAll(ExtensionContext context) {
-    TestPostgreSQLContainer.container.stop();
+//    TestPostgreSQLContainer.container.stop();
   }
 }

@@ -1,8 +1,8 @@
 package by.mrrockka.mapper;
 
+import by.mrrockka.domain.Person;
 import by.mrrockka.domain.game.Game;
 import by.mrrockka.domain.game.GameType;
-import by.mrrockka.domain.player.Person;
 import by.mrrockka.mapper.game.GameMessageMapper;
 import by.mrrockka.mapper.game.NoBuyInException;
 import by.mrrockka.mapper.game.NoPlayersException;

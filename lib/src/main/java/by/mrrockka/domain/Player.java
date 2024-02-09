@@ -1,4 +1,4 @@
-package by.mrrockka.domain.player;
+package by.mrrockka.domain;
 
 import by.mrrockka.domain.payments.Payments;
 import lombok.Builder;

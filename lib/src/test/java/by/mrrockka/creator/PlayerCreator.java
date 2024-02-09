@@ -1,8 +1,9 @@
 package by.mrrockka.creator;
 
+import by.mrrockka.FakerProvider;
+import by.mrrockka.domain.Person;
+import by.mrrockka.domain.Player;
 import by.mrrockka.domain.payments.Payments;
-import by.mrrockka.domain.player.Person;
-import by.mrrockka.domain.player.Player;
 import com.github.javafaker.Faker;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import static java.util.Objects.nonNull;
 
 public class PlayerCreator {
 
-  private static Faker FAKER = new Faker();
+  private static final Faker FAKER = FakerProvider.faker();
 
   public static Player player() {
     return player(null);

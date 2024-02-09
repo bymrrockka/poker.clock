@@ -1,6 +1,5 @@
 package by.mrrockka.domain;
 
-import by.mrrockka.domain.player.Person;
 import lombok.Builder;
 
 import java.math.BigDecimal;

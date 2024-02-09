@@ -5,5 +5,5 @@ import lombok.Builder;
 import java.math.BigDecimal;
 
 @Builder
-public record PercentageAndPosition(BigDecimal percentage, int position) {
+public record PositionAndPercentage(int position, BigDecimal percentage) {
 }

@@ -19,6 +19,7 @@ dependencies {
     implementation libs.jacksonDataformat
     implementation libs.mapstructCore
     implementation libs.lombokMapstructBinding
+    implementation libs.hikariCP
 
     compileOnly libs.lombok
     annotationProcessor libs.lombok

@@ -1,6 +1,6 @@
 package by.mrrockka.domain.summary;
 
-import by.mrrockka.domain.player.Person;
+import by.mrrockka.domain.Person;
 
 class NoPrizeForPersonException extends RuntimeException {
   NoPrizeForPersonException(Person person) {

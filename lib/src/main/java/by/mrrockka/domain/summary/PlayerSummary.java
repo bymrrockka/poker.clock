@@ -1,7 +1,7 @@
 package by.mrrockka.domain.summary;
 
+import by.mrrockka.domain.Player;
 import by.mrrockka.domain.payout.TransferType;
-import by.mrrockka.domain.player.Player;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -31,9 +31,7 @@ public class PlayerSummary implements Comparable<PlayerSummary> {
   }
 
   //todo: consider refactoring to separate service in case there will be additional implementations
-  public static PlayerSummary of(Player player, GameSummary gameSummary) {
-    Objects.requireNonNull(player, "Player cannot be null");
-    Objects.requireNonNull(gameSummary, "GameSummary cannot be null");
+  public static PlayerSummary of(@NonNull Player player, @NonNull GameSummary gameSummary) {
 
     final var playerTotal = player.payments().total();
     final var person = player.person();

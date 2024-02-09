@@ -1,21 +1,20 @@
 package by.mrrockka.creator;
 
+import by.mrrockka.domain.prize.PositionAndPercentage;
+import by.mrrockka.domain.prize.PrizePool;
 import by.mrrockka.repo.prizepool.PrizePoolEntity;
-import com.github.javafaker.Faker;
-import org.assertj.core.data.MapEntry;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static java.util.Objects.nonNull;
 
 public class PrizePoolCreator {
 
-  private final static Faker FAKER = new Faker();
+  public static final UUID GAME_ID = UUID.randomUUID();
 
   public static PrizePoolEntity prizePoolEntity() {
     return prizePoolEntity(null);
@@ -23,7 +22,7 @@ public class PrizePoolCreator {
 
   public static PrizePoolEntity prizePoolEntity(Consumer<PrizePoolEntity.PrizePoolEntityBuilder> builderConsumer) {
     final var prizePoolEntityBuilder = PrizePoolEntity.builder()
-      .gameId(UUID.randomUUID())
+      .gameId(GAME_ID)
       .schema(schema());
 
     if (nonNull(builderConsumer))
@@ -32,9 +31,33 @@ public class PrizePoolCreator {
     return prizePoolEntityBuilder.build();
   }
 
+  public static PrizePool prizePool() {
+    return prizePool(null);
+  }
+
+  public static PrizePool prizePool(Consumer<PrizePool.PrizePoolBuilder> builderConsumer) {
+    final var prizePoolBuilder = PrizePool.builder()
+      .positionAndPercentages(positionsAndPercentage());
+
+    if (nonNull(builderConsumer))
+      builderConsumer.accept(prizePoolBuilder);
+
+    return prizePoolBuilder.build();
+  }
+
   private static Map<Integer, BigDecimal> schema() {
-    return IntStream.range(1, 4)
-                    .mapToObj(key -> MapEntry.entry(key, FAKER.number().numberBetween(10, 100)))
-                    .collect(Collectors.toMap(MapEntry::getKey, entry -> BigDecimal.valueOf(entry.value)));
+    return Map.of(
+      1, BigDecimal.valueOf(60),
+      2, BigDecimal.valueOf(30),
+      3, BigDecimal.valueOf(10)
+    );
+  }
+
+  private static List<PositionAndPercentage> positionsAndPercentage() {
+    return List.of(
+      new PositionAndPercentage(1, BigDecimal.valueOf(60)),
+      new PositionAndPercentage(2, BigDecimal.valueOf(30)),
+      new PositionAndPercentage(3, BigDecimal.valueOf(10))
+    );
   }
 }

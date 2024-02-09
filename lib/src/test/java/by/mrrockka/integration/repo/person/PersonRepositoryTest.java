@@ -1,5 +1,6 @@
 package by.mrrockka.integration.repo.person;
 
+import by.mrrockka.FakerProvider;
 import by.mrrockka.creator.PersonCreator;
 import by.mrrockka.integration.repo.config.PostgreSQLExtension;
 import by.mrrockka.repo.person.PersonEntity;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -108,15 +110,21 @@ class PersonRepositoryTest {
   @Test
   void givenPersonList_whenAllStored_shouldBeAbleToGetAllByTelegrams() {
     final var chatId = new Faker().random().hex();
-    final Consumer<PersonEntity.PersonEntityBuilder> chatIdSetter = builder -> builder.chatId(chatId);
+    final Consumer<PersonEntity.PersonEntityBuilder> personBuilder =
+      builder -> builder
+        .id(UUID.randomUUID())
+        .chatId(chatId)
+        .telegram(FakerProvider.faker().funnyName().name());
+
+
 
     final var listExpected = List.of(
-      PersonCreator.entity(chatIdSetter),
-      PersonCreator.entity(chatIdSetter),
-      PersonCreator.entity(chatIdSetter),
-      PersonCreator.entity(chatIdSetter),
-      PersonCreator.entity(chatIdSetter),
-      PersonCreator.entity(chatIdSetter)
+      PersonCreator.entity(personBuilder),
+      PersonCreator.entity(personBuilder),
+      PersonCreator.entity(personBuilder),
+      PersonCreator.entity(personBuilder),
+      PersonCreator.entity(personBuilder),
+      PersonCreator.entity(personBuilder)
     );
 
     final var telegrams = listExpected.stream()

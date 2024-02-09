@@ -1,9 +1,10 @@
 package by.mrrockka.creator;
 
+import by.mrrockka.FakerProvider;
 import by.mrrockka.domain.Bounty;
+import by.mrrockka.domain.Player;
 import by.mrrockka.domain.game.Game;
 import by.mrrockka.domain.game.GameType;
-import by.mrrockka.domain.player.Player;
 import by.mrrockka.domain.summary.GameSummary;
 import by.mrrockka.repo.game.GameEntity;
 import com.github.javafaker.Faker;
@@ -17,7 +18,7 @@ import static java.util.Objects.nonNull;
 
 public class GameCreator {
 
-  private final static Faker FAKER = new Faker();
+  private static final Faker FAKER = FakerProvider.faker();
   public static final UUID ID = UUID.randomUUID();
   public static final String CHAT_ID = FAKER.random().hex();
   public static final GameType GAME_TYPE = GameType.TOURNAMENT;

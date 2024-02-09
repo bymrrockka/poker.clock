@@ -1,4 +1,4 @@
-package by.mrrockka.domain.player;
+package by.mrrockka.domain;
 
 import lombok.Builder;
 

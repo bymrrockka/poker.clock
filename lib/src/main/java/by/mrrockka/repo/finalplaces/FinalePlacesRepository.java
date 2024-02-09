@@ -1,10 +1,10 @@
 package by.mrrockka.repo.finalplaces;
 
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.AbstractMap;
 import java.util.Optional;
@@ -26,7 +26,7 @@ public class FinalePlacesRepository {
       (:game_id, :person_id, :position);
     """;
 
-  @SneakyThrows
+  @Transactional
   public void save(FinalePlacesEntity finalePlacesEntity) {
     finalePlacesEntity.places().entrySet()
       .stream()

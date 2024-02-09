@@ -1,8 +1,8 @@
 package by.mrrockka.mapper;
 
 import by.mrrockka.domain.Bounty;
+import by.mrrockka.domain.Player;
 import by.mrrockka.domain.game.Game;
-import by.mrrockka.domain.player.Player;
 import by.mrrockka.domain.summary.GameSummary;
 import by.mrrockka.repo.game.GameEntity;
 import org.mapstruct.InheritInverseConfiguration;

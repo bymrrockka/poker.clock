@@ -17,6 +17,7 @@ javaFakerVersion = "1.0.2"
 jacksonDataformatVersion = "2.16.1"
 mapstructVersion = "1.5.5.Final"
 lombokMapstructBindingVersion = "0.1.0"
+hikariCPVersion = "5.1.0"
 
 [plugins]
 springBootPlugin = { id = "org.springframework.boot", version.ref = "springBootVersion" }
@@ -42,6 +43,7 @@ jacksonDataformat = { module = "com.fasterxml.jackson.dataformat:jackson-datafor
 mapstructCore = { module = "org.mapstruct:mapstruct", version.ref = "mapstructVersion" }
 mapstructProcessor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstructVersion" }
 lombokMapstructBinding = { module = "org.projectlombok:lombok-mapstruct-binding", version.ref = "lombokMapstructBindingVersion" }
+hikariCP = { module = "com.zaxxer:HikariCP", version.ref = "hikariCPVersion" }
 
 
 

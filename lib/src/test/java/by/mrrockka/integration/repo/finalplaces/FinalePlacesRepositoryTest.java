@@ -1,9 +1,11 @@
 package by.mrrockka.integration.repo.finalplaces;
 
+import by.mrrockka.FakerProvider;
 import by.mrrockka.creator.PersonCreator;
 import by.mrrockka.integration.repo.config.PostgreSQLExtension;
 import by.mrrockka.repo.finalplaces.FinalePlacesEntity;
 import by.mrrockka.repo.finalplaces.FinalePlacesRepository;
+import by.mrrockka.repo.person.PersonEntity;
 import by.mrrockka.repo.person.PersonRepository;
 import org.assertj.core.data.MapEntry;
 import org.junit.jupiter.api.Test;
@@ -13,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,6 +28,12 @@ class FinalePlacesRepositoryTest {
     1, UUID.fromString("13b4108e-2dfa-4fea-8b7b-277e1c87d2d8"),
     2, UUID.fromString("72775968-3da6-469e-8a61-60104eacdb3a")
   );
+
+  private final Consumer<PersonEntity.PersonEntityBuilder> personBuilder =
+    builder -> builder
+      .id(UUID.randomUUID())
+      .chatId(FakerProvider.faker().random().hex())
+      .telegram(FakerProvider.faker().funnyName().name());
 
   @Autowired
   FinalePlacesRepository finalePlacesRepository;
@@ -51,13 +60,13 @@ class FinalePlacesRepositoryTest {
   @Test
   void givenFinalePlaces_whenStored_shouldBeAbleToGetByGameId() {
     final var places = Map.of(
-      1, PersonCreator.entity(),
-      2, PersonCreator.entity(),
-      3, PersonCreator.entity(),
-      4, PersonCreator.entity(),
-      5, PersonCreator.entity(),
-      6, PersonCreator.entity(),
-      7, PersonCreator.entity()
+      1, PersonCreator.entity(personBuilder),
+      2, PersonCreator.entity(personBuilder),
+      3, PersonCreator.entity(personBuilder),
+      4, PersonCreator.entity(personBuilder),
+      5, PersonCreator.entity(personBuilder),
+      6, PersonCreator.entity(personBuilder),
+      7, PersonCreator.entity(personBuilder)
     );
 
     personRepository.saveAll(places.values()

@@ -2,13 +2,13 @@ package by.mrrockka.features.accounting;
 
 import by.mrrockka.creator.GameCreator;
 import by.mrrockka.creator.PersonCreator;
+import by.mrrockka.domain.Person;
+import by.mrrockka.domain.Player;
 import by.mrrockka.domain.payments.NoPaymentsException;
 import by.mrrockka.domain.payments.Payments;
 import by.mrrockka.domain.payout.Debt;
 import by.mrrockka.domain.payout.Payout;
-import by.mrrockka.domain.player.Person;
-import by.mrrockka.domain.player.Player;
-import by.mrrockka.domain.summary.FinaleSummary;
+import by.mrrockka.domain.summary.FinalePlaceSummary;
 import by.mrrockka.domain.summary.GameSummary;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -217,12 +217,12 @@ class AccountingTest {
       .payments(Payments.builder()
                   .entries(entries)
                   .build())
-      .person(PersonCreator.domain())
+      .person(PersonCreator.domainRandom())
       .build();
   }
 
-  private FinaleSummary finaleSummary(Person person, BigDecimal amount, int position) {
-    return FinaleSummary.builder()
+  private FinalePlaceSummary finaleSummary(Person person, BigDecimal amount, int position) {
+    return FinalePlaceSummary.builder()
       .person(person)
       .position(position)
       .amount(amount)
@@ -266,7 +266,7 @@ class AccountingTest {
     return total.multiply(percentage).divide(BigDecimal.valueOf(100), 0, HALF_UP);
   }
 
-  private List<FinaleSummary> finaleSummaries(List<Player> players) {
+  private List<FinalePlaceSummary> finaleSummaries(List<Player> players) {
     final var totalEntriesAmount = totalEntriesAmount(players);
     return List.of(
       finaleSummary(players.get(0).person(), calculatePrizeAmount(totalEntriesAmount, BigDecimal.valueOf(60)), 1),
