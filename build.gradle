@@ -17,7 +17,7 @@ subprojects {
     tasks.withType(JavaCompile) {
         options.compilerArgs = [
                 '-Amapstruct.suppressGeneratorTimestamp=true',
-                '-Amapstruct.defaultComponentModel=default,spring',
+                '-Amapstruct.defaultComponentModel=spring',
         ]
     }
 

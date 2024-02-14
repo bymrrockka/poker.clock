@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+
+//TODO: strategy to work with different types of games
+
 @Service
 public class Accounting {
 

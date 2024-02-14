@@ -102,5 +102,23 @@ public class PersonRepository {
     return jdbcTemplate.query(FIND_ALL_BY_TELEGRAM_SQL, params, personEntityRowMapper);
   }
 
+  private static final String FIND_ALL_BY_IDS_SQL = """
+      SELECT
+        id, chat_id, telegram, first_name, last_name
+      FROM person
+      WHERE
+        chat_id = :chat_id AND
+        id IN (:id)
+    """;
+
+  //  todo add int tests
+  public List<PersonEntity> findAllByIds(List<UUID> ids, String chatId) {
+    final var params = new MapSqlParameterSource()
+      .addValue(ID, ids)
+      .addValue(CHAT_ID, chatId);
+
+    return jdbcTemplate.query(FIND_ALL_BY_IDS_SQL, params, personEntityRowMapper);
+  }
+
 
 }

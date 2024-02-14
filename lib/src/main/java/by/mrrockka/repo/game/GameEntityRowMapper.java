@@ -11,7 +11,7 @@ import java.util.UUID;
 import static by.mrrockka.repo.game.GameColumnNames.*;
 
 @Component
-public class GameEntityRowMapper implements RowMapper<GameEntity> {
+class GameEntityRowMapper implements RowMapper<GameEntity> {
 
   @Override
   public GameEntity mapRow(ResultSet rs, int rowNum) throws SQLException {

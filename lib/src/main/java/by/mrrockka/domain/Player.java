@@ -6,7 +6,7 @@ import lombok.Builder;
 import java.util.Objects;
 
 @Builder
-public record Player(Payments payments, Person person) {
+public record Player(Person person, Payments payments) {
 
   @Override
   public boolean equals(Object o) {

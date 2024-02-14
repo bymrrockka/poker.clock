@@ -18,7 +18,7 @@ import static by.mrrockka.repo.prizepool.PrizePoolColumnNames.SCHEMA;
 
 @Component
 @RequiredArgsConstructor
-public class PrizePoolRowMapper implements RowMapper<PrizePoolEntity> {
+class PrizePoolRowMapper implements RowMapper<PrizePoolEntity> {
 
   private final ObjectMapper objectMapper;
 

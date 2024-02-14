@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+//todo: add child models for tournament, bounty and cash related data
 @Builder
 public record Game(
 
@@ -21,10 +22,10 @@ public record Game(
   GameType gameType,
   BigDecimal buyIn,
   BigDecimal stack,
-  BigDecimal bountyAmount,
+  BigDecimal bounty,
   @NonNull
   List<Player> players,
   GameSummary gameSummary,
-  List<Bounty> bounties
+  List<Bounty> bountyTransactions
 ) {
 }

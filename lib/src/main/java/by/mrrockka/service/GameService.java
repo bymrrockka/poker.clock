@@ -1,20 +1,45 @@
 package by.mrrockka.service;
 
+import by.mrrockka.domain.Player;
+import by.mrrockka.domain.game.Game;
 import by.mrrockka.mapper.GameMapper;
 import by.mrrockka.repo.game.GameRepository;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.UUID;
+
+
+//todo: add int tests
 @Service
 @RequiredArgsConstructor
 public class GameService {
 
   private final GameMapper gameMapper;
   private final GameRepository gameRepository;
-  private final EntriesService entriesService;
-  private final FinalePlacesService finalePlacesService;
-  private final PersonService personService;
-  private final PrizePoolService prizePoolService;
+  private final GameSummaryService gameSummaryService;
+  private final PlayerService playerService;
 
+  public void storeNewGame(@NonNull Game game) {
+    gameRepository.save(gameMapper.toEntity(game));
+  }
+
+  public Game retrieveGame(@NonNull UUID gameId, @NonNull String chatId) {
+    final var gameEntity = gameRepository.findById(gameId, chatId);
+    final var players = playerService.retrievePlayers(gameId);
+    final var gameSummary = gameSummaryService.assembleGameSummary(gameId, calculateTotalAmount(players));
+
+    return gameMapper.toDomain(gameEntity, players, gameSummary);
+  }
+
+  private BigDecimal calculateTotalAmount(List<Player> players) {
+    return players.stream()
+      .map(player -> player.payments().total())
+      .reduce(BigDecimal::add)
+      .orElseThrow();// todo: add meaningful exception
+  }
 
 }

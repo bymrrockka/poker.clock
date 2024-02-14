@@ -18,28 +18,32 @@ import static by.mrrockka.repo.entries.EntryColumnNames.*;
 
 @Component
 @RequiredArgsConstructor
-public class EntriesEntityResultSetExtractor implements ResultSetExtractor<Optional<EntriesEntity>> {
+class EntriesEntityResultSetExtractor implements ResultSetExtractor<Optional<EntriesEntity>> {
 
   private final PersonEntityRowMapper personEntityRowMapper;
 
   @Override
   public Optional<EntriesEntity> extractData(ResultSet rs) throws SQLException, DataAccessException {
     if (rs.next()) {
-      return Optional.of(
-        EntriesEntity.builder()
-          .gameId(UUID.fromString(rs.getString(GAME_ID)))
-          .personId(UUID.fromString(rs.getString(PERSON_ID)))
-          .amounts(extractAmounts(rs))
-          .build());
+      return Optional.of(assembleEntity(rs));
     }
     return Optional.empty();
   }
 
-  private List<BigDecimal> extractAmounts(ResultSet rs) throws SQLException {
+  public EntriesEntity assembleEntity(ResultSet rs) throws SQLException {
+    final var person = personEntityRowMapper.mapRow(rs, rs.getRow());
+    return EntriesEntity.builder()
+      .gameId(UUID.fromString(rs.getString(GAME_ID)))
+      .person(person)
+      .amounts(extractAmounts(rs, person.id()))
+      .build();
+  }
+
+  private List<BigDecimal> extractAmounts(ResultSet rs, UUID personId) throws SQLException {
     List<BigDecimal> amounts = new ArrayList<>();
     do {
       amounts.add(rs.getBigDecimal(AMOUNT));
-    } while (rs.next());
+    } while (rs.next() && rs.getString(PERSON_ID).equals(personId.toString()));
 
     return amounts;
   }

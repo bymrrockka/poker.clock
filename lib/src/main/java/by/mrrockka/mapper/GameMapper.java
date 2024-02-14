@@ -14,18 +14,17 @@ import java.util.List;
 @Mapper
 public interface GameMapper {
 
-  @Mapping(target = "bounty", source = "bountyAmount")
   GameEntity toEntity(Game game);
 
-  @Mapping(target = "bounties", ignore = true)
+  @Mapping(target = "bountyTransactions", ignore = true)
   @Mapping(target = "gameSummary", ignore = true)
   @InheritInverseConfiguration
   Game toDomain(GameEntity gameEntity, List<Player> players);
 
-  @Mapping(target = "bounties", ignore = true)
+  @Mapping(target = "bountyTransactions", ignore = true)
   @InheritInverseConfiguration
   Game toDomain(GameEntity gameEntity, List<Player> players, GameSummary gameSummary);
 
   @InheritInverseConfiguration
-  Game toDomain(GameEntity gameEntity, List<Player> players, GameSummary gameSummary, List<Bounty> bounties);
+  Game toDomain(GameEntity gameEntity, List<Player> players, GameSummary gameSummary, List<Bounty> bountyTransactions);
 }

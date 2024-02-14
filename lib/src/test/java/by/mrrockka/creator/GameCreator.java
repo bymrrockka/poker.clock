@@ -40,10 +40,10 @@ public class GameCreator {
       .gameType(GAME_TYPE)
       .buyIn(BUY_IN)
       .stack(STACK)
-      .bountyAmount(BOUNTY)
+      .bounty(BOUNTY)
       .players(PLAYERS)
       .gameSummary(GAME_SUMMARY)
-      .bounties(BOUNTIES);
+      .bountyTransactions(BOUNTIES);
 
     if (nonNull(gameBuilderConsumer))
       gameBuilderConsumer.accept(gameBuilder);

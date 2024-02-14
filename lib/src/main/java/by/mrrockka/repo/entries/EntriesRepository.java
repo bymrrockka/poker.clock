@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,6 +20,7 @@ public class EntriesRepository {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
   private final EntriesEntityResultSetExtractor entityResultSetExtractor;
+  private final EntriesEntityListResultSetExtractor entriesEntityListResultSetExtractor;
 
   private static final String SAVE_SQL = """
     INSERT INTO entries
@@ -36,11 +38,13 @@ public class EntriesRepository {
     jdbcTemplate.update(SAVE_SQL, params);
   }
 
-  private static final String FIND_BY_GAME_AND_PERSON_SQL = """
+  private static final String FIND_ALL_BY_GAME_AND_PERSON_SQL = """
     SELECT
-      game_id, amount, person_id
+      e.game_id, e.amount, e.person_id, p.id, p.chat_id, p.telegram, p.first_name, p.last_name
     FROM
-      entries
+      entries as e
+    JOIN
+      person as p on p.id = e.person_id
     WHERE
       game_id = :game_id AND
       person_id = :person_id
@@ -50,7 +54,25 @@ public class EntriesRepository {
     final MapSqlParameterSource params = new MapSqlParameterSource()
       .addValue(GAME_ID, gameId)
       .addValue(PERSON_ID, personId);
-    return jdbcTemplate.query(FIND_BY_GAME_AND_PERSON_SQL, params, entityResultSetExtractor);
+    return jdbcTemplate.query(FIND_ALL_BY_GAME_AND_PERSON_SQL, params, entityResultSetExtractor);
+  }
+
+  private static final String FIND_ALL_BY_GAME_SQL = """
+    SELECT
+      e.game_id, e.amount, e.person_id, p.id, p.chat_id, p.telegram, p.first_name, p.last_name
+    FROM
+      entries as e
+    JOIN
+      person as p on p.id = e.person_id
+    WHERE
+      game_id = :game_id
+    """;
+
+  //  todo: add int test
+  public List<EntriesEntity> findAllByGameId(UUID gameId) {
+    final MapSqlParameterSource params = new MapSqlParameterSource()
+      .addValue(GAME_ID, gameId);
+    return jdbcTemplate.query(FIND_ALL_BY_GAME_SQL, params, entriesEntityListResultSetExtractor);
   }
 
 }

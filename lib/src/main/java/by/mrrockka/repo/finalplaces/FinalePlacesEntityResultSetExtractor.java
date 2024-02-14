@@ -19,7 +19,7 @@ import static by.mrrockka.repo.finalplaces.FinaleColumnNames.POSITION;
 
 @Component
 @RequiredArgsConstructor
-public class FinalePlacesEntityResultSetExtractor implements ResultSetExtractor<Optional<FinalePlacesEntity>> {
+class FinalePlacesEntityResultSetExtractor implements ResultSetExtractor<Optional<FinalePlacesEntity>> {
 
   private final PersonEntityRowMapper personEntityRowMapper;
 
@@ -38,7 +38,7 @@ public class FinalePlacesEntityResultSetExtractor implements ResultSetExtractor<
 
 
   @SneakyThrows
-  public Map<Integer, PersonEntity> extractPlaces(ResultSet rs) {
+  private Map<Integer, PersonEntity> extractPlaces(ResultSet rs) {
     HashMap<Integer, PersonEntity> places = new HashMap<>();
     do {
       places.put(rs.getInt(POSITION), personEntityRowMapper.mapRow(rs, rs.getRow()));
