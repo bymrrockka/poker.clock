@@ -11,7 +11,12 @@ public interface PersonMapper {
 
   PersonEntity toEntity(Person domain, String chatId);
 
-  List<PersonEntity> toEntities(List<Person> domain, String chatId);
+
+  default List<PersonEntity> toEntities(List<Person> domains, String chatId) {
+    return domains.stream()
+      .map(domain -> toEntity(domain, chatId))
+      .toList();
+  }
 
   Person toDomain(PersonEntity entity);
 

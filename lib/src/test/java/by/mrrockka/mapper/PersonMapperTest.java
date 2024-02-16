@@ -18,7 +18,7 @@ class PersonMapperTest {
 
   @Test
   void givenDomain_whenMapExecuted_thenShouldReturnEntity() {
-    assertThat(personMapper.toEntity(PersonCreator.domain()))
+    assertThat(personMapper.toEntity(PersonCreator.domain(), PersonCreator.CHAT_ID))
       .isEqualTo(PersonCreator.entity());
   }
 

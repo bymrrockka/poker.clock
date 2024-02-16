@@ -37,7 +37,7 @@ public interface FinalePlacesMapper {
   default Map<Integer, PersonEntity> finalPlaceListToPlacesMap(List<FinalPlace> finalPlaces) {
     return finalPlaces.stream()
       .map(finalPlace ->
-             new AbstractMap.SimpleEntry<>(finalPlace.position(), personMapper.toEntity(finalPlace.person())))
+             new AbstractMap.SimpleEntry<>(finalPlace.position(), personMapper.toEntity(finalPlace.person(), null)))
       .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
   }
 }
