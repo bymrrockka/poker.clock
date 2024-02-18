@@ -61,7 +61,7 @@ public class PersonRepository {
         .lastname(rs.getString(LAST_NAME))
         .build());
   }
-/*
+/* todo: move to service
 
   private static final String FIND_BY_TELEGRAM_SQL = """
       SELECT
@@ -106,7 +106,6 @@ public class PersonRepository {
         id IN (:id)
     """;
 
-  //  todo add int tests
   public List<PersonEntity> findAllByIds(List<UUID> ids) {
     final var params = new MapSqlParameterSource()
       .addValue(ID, ids);

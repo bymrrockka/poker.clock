@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,8 +18,8 @@ public class EntriesService {
 
   private final EntriesRepository entriesRepository;
 
-  public void storeEntry(UUID gameId, UUID personId, BigDecimal amount) {
-    entriesRepository.save(gameId, personId, amount);
+  public void storeEntry(UUID gameId, UUID personId, BigDecimal amount, LocalDateTime createdAt) {
+    entriesRepository.save(gameId, personId, amount, createdAt);
   }
 
   public List<EntriesEntity> retrieveEntries(UUID gameId) {

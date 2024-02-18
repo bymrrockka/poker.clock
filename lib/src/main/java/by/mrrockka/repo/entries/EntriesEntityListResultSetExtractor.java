@@ -19,7 +19,8 @@ class EntriesEntityListResultSetExtractor implements ResultSetExtractor<List<Ent
   @Override
   public List<EntriesEntity> extractData(ResultSet rs) throws SQLException, DataAccessException {
     List<EntriesEntity> entriesEntities = new ArrayList<>();
-    while (rs.next()) {
+    rs.next();
+    while (!rs.isAfterLast()) {
       entriesEntities.add(entityResultSetExtractor.assembleEntity(rs));
     }
     return entriesEntities;

@@ -174,7 +174,7 @@ class GameMessageMapperTest {
 
   private static Person person(String telegram) {
     return Person.builder()
-      .telegram(telegram)
+//      .telegram(telegram)
       .build();
   }
 }

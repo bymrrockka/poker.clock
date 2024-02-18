@@ -27,12 +27,12 @@ public class EntriesRepository {
       (:game_id, :person_id, :amount, :created_at);
     """;
 
-  public void save(UUID gameId, UUID personId, BigDecimal amount) {
+  public void save(UUID gameId, UUID personId, BigDecimal amount, LocalDateTime createdAt) {
     final MapSqlParameterSource params = new MapSqlParameterSource()
       .addValue(EntryColumnNames.GAME_ID, gameId)
       .addValue(EntryColumnNames.PERSON_ID, personId)
       .addValue(EntryColumnNames.AMOUNT, amount)
-      .addValue(EntryColumnNames.CREATED_AT, Timestamp.valueOf(LocalDateTime.now()));
+      .addValue(EntryColumnNames.CREATED_AT, Timestamp.valueOf(createdAt));
     jdbcTemplate.update(SAVE_SQL, params);
   }
 
@@ -46,6 +46,7 @@ public class EntriesRepository {
     WHERE
       game_id = :game_id AND
       person_id = :person_id
+    ORDER BY created_at ASC
     """;
 
   public Optional<EntriesEntity> findByGameAndPerson(UUID gameId, UUID personId) {
@@ -64,9 +65,9 @@ public class EntriesRepository {
       person as p on p.id = e.person_id
     WHERE
       game_id = :game_id
+    ORDER BY p.id, created_at ASC
     """;
 
-  //  todo: add int test
   public List<EntriesEntity> findAllByGameId(UUID gameId) {
     final MapSqlParameterSource params = new MapSqlParameterSource()
       .addValue(EntryColumnNames.GAME_ID, gameId);

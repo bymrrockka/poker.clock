@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,7 +38,7 @@ class EntriesRepositoryTest {
       .amounts(List.of(amount))
       .build();
 
-    entriesRepository.save(GAME_ID, personId, amount);
+    entriesRepository.save(GAME_ID, personId, amount, LocalDateTime.now());
 
     assertThat(entriesRepository.findByGameAndPerson(GAME_ID, personId))
       .contains(expected);
@@ -60,16 +61,56 @@ class EntriesRepositoryTest {
       .amounts(amounts)
       .build();
 
-    amounts.forEach(amount -> entriesRepository.save(GAME_ID, personId, amount));
+    amounts.forEach(amount -> entriesRepository.save(GAME_ID, personId, amount, LocalDateTime.now()));
 
     assertThat(entriesRepository.findByGameAndPerson(GAME_ID, personId))
       .contains(expected);
   }
 
+  @Test
+  void givenPersonsAndGame_whenEntriesStored_thenShouldReturnFullListByGameId() {
+    final var gameId = UUID.fromString("4a411a12-2386-4dce-b579-d806c91d6d17");
+    final var firstPersonId = UUID.fromString("e2691144-3b1b-4841-9693-fad7af25bba9");
+    final var secondPersonId = UUID.fromString("58ae9984-1ebc-4621-ba0e-a577c69283ef");
+    final var firstPerson = personRepository.findById(firstPersonId);
+    final var secondPerson = personRepository.findById(secondPersonId);
+    final var firstAmounts = List.of(
+      BigDecimal.TEN,
+      BigDecimal.ONE,
+      BigDecimal.valueOf(3),
+      BigDecimal.valueOf(1),
+      BigDecimal.ZERO
+    );
+    final var secondAmounts = List.of(
+      BigDecimal.valueOf(3),
+      BigDecimal.valueOf(1),
+      BigDecimal.ONE
+    );
+
+    final var expected =
+      List.of(
+        EntriesEntity.builder()
+          .person(firstPerson)
+          .gameId(gameId)
+          .amounts(firstAmounts)
+          .build(),
+        EntriesEntity.builder()
+          .person(secondPerson)
+          .gameId(gameId)
+          .amounts(secondAmounts)
+          .build()
+      );
+
+    firstAmounts.forEach(amount -> entriesRepository.save(gameId, firstPersonId, amount, LocalDateTime.now()));
+    secondAmounts.forEach(amount -> entriesRepository.save(gameId, secondPersonId, amount, LocalDateTime.now()));
+
+    assertThat(entriesRepository.findAllByGameId(gameId))
+      .containsExactlyInAnyOrderElementsOf(expected);
+  }
 
   @Test
   void givenPersonAndGame_whenNoEntryStored_thenShouldReturnEmpty() {
-    final var personId = UUID.fromString("e2691144-3b1b-4841-9693-fad7af25bba9");
+    final var personId = UUID.randomUUID();
 
     assertThat(entriesRepository.findByGameAndPerson(GAME_ID, personId))
       .isEmpty();

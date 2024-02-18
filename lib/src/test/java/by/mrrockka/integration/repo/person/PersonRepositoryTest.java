@@ -11,6 +11,8 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,6 +34,15 @@ class PersonRepositoryTest {
     personRepository.save(expected);
 
     assertThat(personRepository.findById(expected.id())).isEqualTo(expected);
+  }
+
+  @Test
+  void givenPersonEntityList_whenSave_thenShouldBeAbleToGet() {
+    final var expected = List.of(PersonCreator.entity(builder -> builder.id(UUID.randomUUID())));
+
+    personRepository.saveAll(expected);
+
+    assertThat(personRepository.findAllByIds(List.of(expected.get(0).id()))).isEqualTo(expected);
   }
 
   static Stream<Arguments> telegramArguments() {
@@ -66,7 +77,7 @@ class PersonRepositoryTest {
       )
     );
   }
-/* todo:
+/* todo: move to service
   @ParameterizedTest
   @MethodSource("telegramArguments")
   void givenTestData_whenFindByTelegramExecuted_thenShouldReturnValidEntities(PersonArgument argument) {

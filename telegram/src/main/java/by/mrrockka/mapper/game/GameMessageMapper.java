@@ -33,7 +33,9 @@ public class GameMessageMapper {
     final var telegramPattern = Pattern.compile("^@([\\w]+)");
     final var persons = Arrays.stream(strings)
       .filter(str -> telegramPattern.matcher(str).matches())
-      .map(str -> TelegramPerson.builder().telegram(str).build())
+      .map(str -> TelegramPerson.builder()
+//        .telegram(str)
+        .build())
       .distinct()
       .toList();
     if (persons.isEmpty() || persons.size() == 1) {
