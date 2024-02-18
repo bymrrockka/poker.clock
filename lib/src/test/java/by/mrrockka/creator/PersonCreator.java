@@ -14,8 +14,6 @@ public class PersonCreator {
 
   private final static Faker FAKER = FakerProvider.faker();
   public static final UUID ID = UUID.randomUUID();
-  public static final String CHAT_ID = FAKER.random().hex();
-  public static final String TELEGRAM = FAKER.funnyName().name();
   public static final String FIRSTNAME = FAKER.name().firstName();
   public static final String LASTNAME = FAKER.name().lastName();
 
@@ -26,8 +24,6 @@ public class PersonCreator {
   public static PersonEntity entityRandom() {
     return entity(builder -> builder
       .id(UUID.randomUUID())
-      .chatId(FAKER.random().hex())
-      .telegram(FAKER.funnyName().name())
       .firstname(FAKER.name().firstName())
       .lastname(FAKER.name().lastName()));
   }
@@ -35,8 +31,6 @@ public class PersonCreator {
   public static PersonEntity entity(Consumer<PersonEntity.PersonEntityBuilder> builderConsumer) {
     final var personEntityBuilder = PersonEntity.builder()
       .id(ID)
-      .chatId(CHAT_ID)
-      .telegram(TELEGRAM)
       .firstname(FIRSTNAME)
       .lastname(LASTNAME);
 
@@ -53,8 +47,6 @@ public class PersonCreator {
   public static Person domainRandom() {
     return domain(builder -> builder
       .id(UUID.randomUUID())
-      .chatId(FAKER.random().hex())
-      .telegram(FAKER.funnyName().name())
       .firstname(FAKER.name().firstName())
       .lastname(FAKER.name().lastName()));
   }
@@ -62,8 +54,6 @@ public class PersonCreator {
   public static Person domain(Consumer<Person.PersonBuilder> builderConsumer) {
     final var personEntityBuilder = Person.builder()
       .id(ID)
-      .chatId(CHAT_ID)
-      .telegram(TELEGRAM)
       .firstname(FIRSTNAME)
       .lastname(LASTNAME);
 

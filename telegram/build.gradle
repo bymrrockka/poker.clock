@@ -13,20 +13,30 @@ repositories {
 }
 
 dependencies {
+    implementation libs.springBootJdbc
     implementation libs.springBootWeb
     implementation libs.springBootTelegrambots
     implementation project(":lib")
     implementation libs.apacheCommonsLang3
+    implementation libs.postgresql
+    implementation libs.liquibase
+    implementation libs.mapstructCore
+    implementation libs.lombokMapstructBinding
 
     compileOnly libs.lombok
     annotationProcessor libs.lombok
+    annotationProcessor libs.mapstructProcessor
     testCompileOnly libs.lombok
     testAnnotationProcessor libs.lombok
+    testAnnotationProcessor libs.mapstructProcessor
 
     testImplementation libs.mockitoCore
     testImplementation libs.mockitoJupiter
     testImplementation libs.jupiter
     testImplementation libs.assertjCore
+    testImplementation libs.testContainerPostgresql
+    testImplementation libs.testContainerJupiter
+    testImplementation libs.springBootTest
 }
 
 test {

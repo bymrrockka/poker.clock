@@ -14,8 +14,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static by.mrrockka.repo.entries.EntryColumnNames.*;
-
 @Component
 @RequiredArgsConstructor
 class EntriesEntityResultSetExtractor implements ResultSetExtractor<Optional<EntriesEntity>> {
@@ -33,7 +31,7 @@ class EntriesEntityResultSetExtractor implements ResultSetExtractor<Optional<Ent
   public EntriesEntity assembleEntity(ResultSet rs) throws SQLException {
     final var person = personEntityRowMapper.mapRow(rs, rs.getRow());
     return EntriesEntity.builder()
-      .gameId(UUID.fromString(rs.getString(GAME_ID)))
+      .gameId(UUID.fromString(rs.getString(EntryColumnNames.GAME_ID)))
       .person(person)
       .amounts(extractAmounts(rs, person.id()))
       .build();
@@ -42,8 +40,8 @@ class EntriesEntityResultSetExtractor implements ResultSetExtractor<Optional<Ent
   private List<BigDecimal> extractAmounts(ResultSet rs, UUID personId) throws SQLException {
     List<BigDecimal> amounts = new ArrayList<>();
     do {
-      amounts.add(rs.getBigDecimal(AMOUNT));
-    } while (rs.next() && rs.getString(PERSON_ID).equals(personId.toString()));
+      amounts.add(rs.getBigDecimal(EntryColumnNames.AMOUNT));
+    } while (rs.next() && rs.getString(EntryColumnNames.PERSON_ID).equals(personId.toString()));
 
     return amounts;
   }

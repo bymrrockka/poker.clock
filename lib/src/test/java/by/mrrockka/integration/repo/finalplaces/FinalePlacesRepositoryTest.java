@@ -1,7 +1,7 @@
 package by.mrrockka.integration.repo.finalplaces;
 
-import by.mrrockka.FakerProvider;
 import by.mrrockka.creator.PersonCreator;
+import by.mrrockka.integration.repo.config.IntegrationTestConfiguration;
 import by.mrrockka.integration.repo.config.PostgreSQLExtension;
 import by.mrrockka.repo.finalplaces.FinalePlacesEntity;
 import by.mrrockka.repo.finalplaces.FinalePlacesRepository;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(PostgreSQLExtension.class)
-@SpringBootTest
+@SpringBootTest(classes = {IntegrationTestConfiguration.class})
 class FinalePlacesRepositoryTest {
 
   private static final Map<Integer, UUID> PLACES = Map.of(
@@ -31,9 +31,7 @@ class FinalePlacesRepositoryTest {
 
   private final Consumer<PersonEntity.PersonEntityBuilder> personBuilder =
     builder -> builder
-      .id(UUID.randomUUID())
-      .chatId(FakerProvider.faker().random().hex())
-      .telegram(FakerProvider.faker().funnyName().name());
+      .id(UUID.randomUUID());
 
   @Autowired
   FinalePlacesRepository finalePlacesRepository;
@@ -46,7 +44,7 @@ class FinalePlacesRepositoryTest {
     final var gameId = UUID.fromString("fa3d03c4-f411-4852-810f-c0cc2f5b8c84");
     final var places = PLACES.entrySet()
       .stream().map(entry -> MapEntry.entry(entry.getKey(), personRepository.findById(entry.getValue())))
-               .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+      .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
     final var expected = FinalePlacesEntity.builder()
       .gameId(gameId)

@@ -1,29 +1,22 @@
 package by.mrrockka.integration.repo.person;
 
-import by.mrrockka.FakerProvider;
 import by.mrrockka.creator.PersonCreator;
+import by.mrrockka.integration.repo.config.IntegrationTestConfiguration;
 import by.mrrockka.integration.repo.config.PostgreSQLExtension;
-import by.mrrockka.repo.person.PersonEntity;
 import by.mrrockka.repo.person.PersonRepository;
-import com.github.javafaker.Faker;
 import lombok.Builder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
-import java.util.UUID;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(PostgreSQLExtension.class)
-@SpringBootTest
+@SpringBootTest(classes = {IntegrationTestConfiguration.class})
 class PersonRepositoryTest {
 
   @Autowired
@@ -73,7 +66,7 @@ class PersonRepositoryTest {
       )
     );
   }
-
+/* todo:
   @ParameterizedTest
   @MethodSource("telegramArguments")
   void givenTestData_whenFindByTelegramExecuted_thenShouldReturnValidEntities(PersonArgument argument) {
@@ -135,5 +128,5 @@ class PersonRepositoryTest {
 
     assertThat(personRepository.findAllByTelegrams(telegrams, chatId))
       .containsExactlyInAnyOrderElementsOf(listExpected);
-  }
+  }*/
 }

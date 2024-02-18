@@ -20,7 +20,6 @@ public class GameCreator {
 
   private static final Faker FAKER = FakerProvider.faker();
   public static final UUID ID = UUID.randomUUID();
-  public static final String CHAT_ID = FAKER.random().hex();
   public static final GameType GAME_TYPE = GameType.TOURNAMENT;
   public static final BigDecimal BUY_IN = BigDecimal.valueOf(FAKER.number().numberBetween(10, 100));
   public static final BigDecimal STACK = BigDecimal.valueOf(FAKER.number().numberBetween(1500, 30000));
@@ -36,7 +35,6 @@ public class GameCreator {
   public static Game domain(final Consumer<Game.GameBuilder> gameBuilderConsumer) {
     final var gameBuilder = Game.builder()
       .id(ID)
-      .chatId(CHAT_ID)
       .gameType(GAME_TYPE)
       .buyIn(BUY_IN)
       .stack(STACK)
@@ -58,7 +56,6 @@ public class GameCreator {
   public static GameEntity entity(Consumer<GameEntity.GameEntityBuilder> builderConsumer) {
     final var gameEntityBuilder = GameEntity.builder()
       .id(ID)
-      .chatId(CHAT_ID)
       .gameType(GAME_TYPE)
       .stack(STACK)
       .buyIn(BUY_IN)

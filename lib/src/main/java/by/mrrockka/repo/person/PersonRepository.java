@@ -19,15 +19,13 @@ public class PersonRepository {
   private final PersonEntityRowMapper personEntityRowMapper;
 
   private static final String SAVE_SQL = """
-    INSERT INTO person (id, chat_id, telegram, first_name, last_name)
-      VALUES (:id, :chat_id, :telegram, :first_name, :last_name)
+    INSERT INTO person (id, first_name, last_name)
+      VALUES (:id, :first_name, :last_name)
     """;
 
   public void save(PersonEntity personEntity) {
     final var params = new MapSqlParameterSource()
       .addValue(ID, personEntity.id())
-      .addValue(CHAT_ID, personEntity.chatId())
-      .addValue(TELEGRAM, personEntity.telegram())
       .addValue(FIRST_NAME, personEntity.firstname())
       .addValue(LAST_NAME, personEntity.lastname());
     jdbcTemplate.update(SAVE_SQL, params);
@@ -38,8 +36,6 @@ public class PersonRepository {
     personEntities.forEach(personEntity -> {
       final var params = new MapSqlParameterSource()
         .addValue(ID, personEntity.id())
-        .addValue(CHAT_ID, personEntity.chatId())
-        .addValue(TELEGRAM, personEntity.telegram())
         .addValue(FIRST_NAME, personEntity.firstname())
         .addValue(LAST_NAME, personEntity.lastname());
       jdbcTemplate.update(SAVE_SQL, params);
@@ -48,7 +44,7 @@ public class PersonRepository {
 
   private static final String FIND_BY_ID_SQL = """
       SELECT
-        id, chat_id, telegram, first_name, last_name
+        id, first_name, last_name
       FROM person
       WHERE
         id = :id;
@@ -61,16 +57,15 @@ public class PersonRepository {
     return jdbcTemplate.queryForObject(FIND_BY_ID_SQL, params, (rs, rowNum) ->
       PersonEntity.builder()
         .id(UUID.fromString(rs.getString(ID)))
-        .chatId(rs.getString(CHAT_ID))
-        .telegram(rs.getString(TELEGRAM))
         .firstname(rs.getString(FIRST_NAME))
         .lastname(rs.getString(LAST_NAME))
         .build());
   }
+/*
 
   private static final String FIND_BY_TELEGRAM_SQL = """
       SELECT
-        id, chat_id, telegram, first_name, last_name
+        id, first_name, last_name
       FROM person
       WHERE
         chat_id = :chat_id AND
@@ -101,21 +96,20 @@ public class PersonRepository {
 
     return jdbcTemplate.query(FIND_ALL_BY_TELEGRAM_SQL, params, personEntityRowMapper);
   }
+*/
 
   private static final String FIND_ALL_BY_IDS_SQL = """
       SELECT
-        id, chat_id, telegram, first_name, last_name
+        id, first_name, last_name
       FROM person
       WHERE
-        chat_id = :chat_id AND
         id IN (:id)
     """;
 
   //  todo add int tests
-  public List<PersonEntity> findAllByIds(List<UUID> ids, String chatId) {
+  public List<PersonEntity> findAllByIds(List<UUID> ids) {
     final var params = new MapSqlParameterSource()
-      .addValue(ID, ids)
-      .addValue(CHAT_ID, chatId);
+      .addValue(ID, ids);
 
     return jdbcTemplate.query(FIND_ALL_BY_IDS_SQL, params, personEntityRowMapper);
   }

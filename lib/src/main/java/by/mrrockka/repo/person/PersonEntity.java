@@ -9,10 +9,6 @@ import java.util.UUID;
 public record PersonEntity(
   @NonNull
   UUID id,
-  @NonNull
-  String chatId,
-  @NonNull
-  String telegram,
   String firstname,
   String lastname
 ) {

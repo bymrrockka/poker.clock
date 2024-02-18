@@ -12,8 +12,6 @@ public record GameEntity(
   @NonNull
   UUID id,
   @NonNull
-  String chatId,
-  @NonNull
   GameType gameType,
   @NonNull
   BigDecimal buyIn,

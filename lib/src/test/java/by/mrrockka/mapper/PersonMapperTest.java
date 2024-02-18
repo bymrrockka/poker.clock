@@ -4,6 +4,8 @@ import by.mrrockka.creator.PersonCreator;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class PersonMapperTest {
@@ -18,8 +20,20 @@ class PersonMapperTest {
 
   @Test
   void givenDomain_whenMapExecuted_thenShouldReturnEntity() {
-    assertThat(personMapper.toEntity(PersonCreator.domain(), PersonCreator.CHAT_ID))
+    assertThat(personMapper.toEntity(PersonCreator.domain()))
       .isEqualTo(PersonCreator.entity());
+  }
+
+  @Test
+  void givenEntityList_whenMapExecuted_thenShouldReturnDomainList() {
+    assertThat(personMapper.toDomains(List.of(PersonCreator.entity())))
+      .isEqualTo(List.of(PersonCreator.domain()));
+  }
+
+  @Test
+  void givenDomainList_whenMapExecuted_thenShouldReturnEntityList() {
+    assertThat(personMapper.toEntities(List.of(PersonCreator.domain())))
+      .isEqualTo(List.of(PersonCreator.entity()));
   }
 
 }

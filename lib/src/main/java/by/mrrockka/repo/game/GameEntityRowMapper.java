@@ -17,7 +17,6 @@ class GameEntityRowMapper implements RowMapper<GameEntity> {
   public GameEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
     return GameEntity.builder()
       .id(UUID.fromString(rs.getString(ID)))
-      .chatId(rs.getString(CHAT_ID))
       .gameType(GameType.valueOf(rs.getString(GAME_TYPE)))
       .stack(rs.getBigDecimal(STACK))
       .buyIn(rs.getBigDecimal(BUY_IN))

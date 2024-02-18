@@ -23,16 +23,16 @@ public class PersonService {
 //  todo: logic to retrieve all persons by telegrams
 //  todo: logic to retrieve one person by telegram
 
-  public List<Person> retrievePersons(List<UUID> personIds, String chatId) {
-    return personMapper.toDomains(personRepository.findAllByIds(personIds, chatId));
+  public List<Person> retrievePersons(List<UUID> personIds) {
+    return personMapper.toDomains(personRepository.findAllByIds(personIds));
   }
 
-  public void storePersons(List<Person> persons, String chatId) {
-    personRepository.saveAll(personMapper.toEntities(persons, chatId));
+  public void storePersons(List<Person> persons) {
+    personRepository.saveAll(personMapper.toEntities(persons));
   }
 
   public void storePerson(Person person, String chatId) {
-    personRepository.save(personMapper.toEntity(person, chatId));
+    personRepository.save(personMapper.toEntity(person));
   }
 
 }

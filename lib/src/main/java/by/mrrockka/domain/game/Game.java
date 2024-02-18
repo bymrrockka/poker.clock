@@ -3,29 +3,37 @@ package by.mrrockka.domain.game;
 import by.mrrockka.domain.Bounty;
 import by.mrrockka.domain.Player;
 import by.mrrockka.domain.summary.GameSummary;
-import lombok.Builder;
-import lombok.NonNull;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
 //todo: add child models for tournament, bounty and cash related data
-@Builder
-public record Game(
+
+@SuperBuilder
+@Getter
+@EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class Game {
 
   @NonNull
-  UUID id,
+  UUID id;
   @NonNull
-  String chatId,
+  GameType gameType;
   @NonNull
-  GameType gameType,
-  BigDecimal buyIn,
-  BigDecimal stack,
-  BigDecimal bounty,
+  BigDecimal buyIn;
   @NonNull
-  List<Player> players,
-  GameSummary gameSummary,
-  List<Bounty> bountyTransactions
-) {
+  BigDecimal stack;
+  BigDecimal bounty;
+  @NonNull
+  List<Player> players;
+  GameSummary gameSummary;
+  List<Bounty> bountyTransactions;
+
 }

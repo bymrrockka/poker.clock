@@ -1,7 +1,4 @@
 spring:
-  datasource:
-  #  profiles:
-  #    active: postgres
   liquibase:
     enabled: true
     change-log: db/changelog/db.changelog-master-test.yml

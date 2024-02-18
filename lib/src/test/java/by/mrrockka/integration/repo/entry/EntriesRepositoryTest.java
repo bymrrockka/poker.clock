@@ -1,5 +1,6 @@
 package by.mrrockka.integration.repo.entry;
 
+import by.mrrockka.integration.repo.config.IntegrationTestConfiguration;
 import by.mrrockka.integration.repo.config.PostgreSQLExtension;
 import by.mrrockka.repo.entries.EntriesEntity;
 import by.mrrockka.repo.entries.EntriesRepository;
@@ -16,7 +17,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(PostgreSQLExtension.class)
-@SpringBootTest
+@SpringBootTest(classes = {IntegrationTestConfiguration.class})
 class EntriesRepositoryTest {
   private static final UUID GAME_ID = UUID.fromString("fa3d03c4-f411-4852-810f-c0cc2f5b8c84");
 

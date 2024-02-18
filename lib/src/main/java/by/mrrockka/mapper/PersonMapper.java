@@ -9,14 +9,9 @@ import java.util.List;
 @Mapper
 public interface PersonMapper {
 
-  PersonEntity toEntity(Person domain, String chatId);
+  PersonEntity toEntity(Person domain);
 
-
-  default List<PersonEntity> toEntities(List<Person> domains, String chatId) {
-    return domains.stream()
-      .map(domain -> toEntity(domain, chatId))
-      .toList();
-  }
+  List<PersonEntity> toEntities(List<Person> domains);
 
   Person toDomain(PersonEntity entity);
 

@@ -20,10 +20,10 @@ import java.util.List;
 public class Accounting {
 
   public List<Payout> calculate(final Game game) {
-    final var playerSummaries = game.players()
+    final var playerSummaries = game.getPlayers()
       .stream()
       .distinct()
-      .map(player -> PlayerSummary.of(player, game.gameSummary()))
+      .map(player -> PlayerSummary.of(player, game.getGameSummary()))
       .sorted()
       .toList();
 

@@ -10,8 +10,6 @@ import java.util.AbstractMap;
 import java.util.Optional;
 import java.util.UUID;
 
-import static by.mrrockka.repo.finalplaces.FinaleColumnNames.*;
-
 @Repository
 @RequiredArgsConstructor
 public class FinalePlacesRepository {
@@ -33,9 +31,9 @@ public class FinalePlacesRepository {
       .map(entry -> new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue().id()))
       .forEach(entry -> {
         final MapSqlParameterSource params = new MapSqlParameterSource()
-          .addValue(GAME_ID, finalePlacesEntity.gameId())
-          .addValue(PERSON_ID, entry.getValue())
-          .addValue(POSITION, entry.getKey());
+          .addValue(FinaleColumnNames.GAME_ID, finalePlacesEntity.gameId())
+          .addValue(FinaleColumnNames.PERSON_ID, entry.getValue())
+          .addValue(FinaleColumnNames.POSITION, entry.getKey());
 
         jdbcTemplate.update(SAVE_SQL, params);
       });
@@ -43,7 +41,7 @@ public class FinalePlacesRepository {
 
   private static final String FIND_BY_GAME_ID_SQL = """
     SELECT
-      f.game_id, f.position, p.id, p.chat_id, p.telegram, p.first_name, p.last_name
+      f.game_id, f.position, p.id, p.first_name, p.last_name
     FROM
      finale_places as f
     JOIN person as p ON f.person_id = p.id
@@ -53,7 +51,7 @@ public class FinalePlacesRepository {
 
   public Optional<FinalePlacesEntity> findByGameId(UUID gameId) {
     final var params = new MapSqlParameterSource()
-      .addValue(GAME_ID, gameId);
+      .addValue(FinaleColumnNames.GAME_ID, gameId);
 
     return jdbcTemplate.query(FIND_BY_GAME_ID_SQL, params, finalePlacesEntityResultSetExtractor);
   }

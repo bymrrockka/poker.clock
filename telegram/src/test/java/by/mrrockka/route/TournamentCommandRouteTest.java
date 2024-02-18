@@ -1,6 +1,7 @@
 package by.mrrockka.route;
 
 import by.mrrockka.mapper.game.GameMessageMapper;
+import by.mrrockka.route.creator.SendCreator;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -12,7 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.stream.Stream;
 
-import static by.mrrockka.route.creator.SendCreator.sendMessage;
 import static by.mrrockka.route.creator.UpdateCreator.message;
 import static by.mrrockka.route.creator.UpdateCreator.update;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -56,7 +56,7 @@ class TournamentCommandRouteTest {
   @MethodSource("tournamentMessages")
   void givenTournamentStartMessage_whenReceived_thenShouldValidateMessageAndStoreDataAndReturnGameId(String text) {
     final var update = update(message(text));
-    final var expected = sendMessage(builder ->
+    final var expected = SendCreator.sendMessage(builder ->
       builder
         .chatId(update.getMessage().getChatId())
         .text(""));

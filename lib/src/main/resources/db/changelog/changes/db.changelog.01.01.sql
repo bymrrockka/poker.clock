@@ -4,23 +4,16 @@
 
 CREATE TABLE IF NOT EXISTS game (
     id uuid PRIMARY KEY,
-    chat_id varchar(50) NOT NULL,
-    created_at timestamp with time zone NOT NULL,
     stack bigint NOT NULL,
     buy_in bigint NOT NULL,
     bounty bigint,
-    game_type varchar(10) NOT NULL,
-    is_deleted boolean,
-    UNIQUE(id, chat_id)
+    game_type varchar(20) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS person (
 	id uuid PRIMARY KEY,
-	chat_id varchar(50) NOT NULL,
-	telegram varchar(100) NOT NULL,
 	first_name varchar(100),
-	last_name varchar(100),
-    UNIQUE(chat_id, telegram)
+	last_name varchar(100)
 );
 
 CREATE TABLE IF NOT EXISTS prize_pool (

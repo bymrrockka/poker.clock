@@ -10,6 +10,7 @@ import by.mrrockka.domain.payout.Debt;
 import by.mrrockka.domain.payout.Payout;
 import by.mrrockka.domain.summary.FinalePlaceSummary;
 import by.mrrockka.domain.summary.GameSummary;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -23,7 +24,6 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static java.math.RoundingMode.HALF_UP;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class AccountingTest {
@@ -56,7 +56,7 @@ class AccountingTest {
     final var actual = accounting.calculate(game);
     final var expect = payouts(players.get(0), players);
 
-    assertThat(actual).containsExactlyInAnyOrderElementsOf(expect);
+    Assertions.assertThat(actual).containsExactlyInAnyOrderElementsOf(expect);
   }
 
   @ParameterizedTest
@@ -78,7 +78,7 @@ class AccountingTest {
       .sorted((o1, o2) -> o2.payments().total().compareTo(o1.payments().total()))
       .toList());
 
-    assertThat(actual).containsExactlyInAnyOrderElementsOf(expect);
+    Assertions.assertThat(actual).containsExactlyInAnyOrderElementsOf(expect);
   }
 
   @Test
@@ -107,7 +107,7 @@ class AccountingTest {
       payout(players.get(2), Collections.emptyList())
     );
 
-    assertThat(actual).containsExactlyInAnyOrderElementsOf(expect);
+    Assertions.assertThat(actual).containsExactlyInAnyOrderElementsOf(expect);
   }
 
   @Test
@@ -145,7 +145,7 @@ class AccountingTest {
       ))
     );
 
-    assertThat(actual).containsExactlyInAnyOrderElementsOf(expect);
+    Assertions.assertThat(actual).containsExactlyInAnyOrderElementsOf(expect);
   }
 
   @Test
@@ -183,7 +183,7 @@ class AccountingTest {
       ))
     );
 
-    assertThat(actual).containsExactlyInAnyOrderElementsOf(expect);
+    Assertions.assertThat(actual).containsExactlyInAnyOrderElementsOf(expect);
   }
 
   @Test

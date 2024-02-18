@@ -1,45 +1,24 @@
 package by.mrrockka.domain;
 
-import lombok.Builder;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 
-import java.util.Objects;
 import java.util.UUID;
 
-import static java.util.Objects.nonNull;
 
-@Builder
-public record Person(UUID id, String chatId, String firstname, String lastname, String telegram) {
+@SuperBuilder
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
+@ToString
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class Person {
 
-  @Override
-  public String toString() {
-    final var output = new StringBuilder();
-    output.append('{');
-    if (nonNull(firstname) && nonNull(lastname)) {
-      output.append(firstname).append(' ').append(lastname).append(',');
-    } else if (nonNull(firstname)) {
-      output.append(firstname).append(',');
-    }
+  @NonNull
+  UUID id;
+  String firstname;
+  String lastname;
 
-    if (nonNull(telegram)) {
-      output.append("telegram=").append(telegram);
-    }
-
-    return output.append('}').toString();
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o)
-      return true;
-    if (!(o instanceof Person person))
-      return false;
-    return Objects.equals(id, person.id) &&
-      Objects.equals(chatId, person.chatId) &&
-      Objects.equals(telegram, person.telegram);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(id, chatId, telegram);
-  }
 }

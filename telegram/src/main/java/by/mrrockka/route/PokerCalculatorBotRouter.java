@@ -1,6 +1,5 @@
-package by.mrrockka;
+package by.mrrockka.route;
 
-import by.mrrockka.route.CommandRoute;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +14,7 @@ import java.util.Objects;
 
 @Component
 @Slf4j
-public class PokerCalculatorBot extends TelegramLongPollingBot {
+public class PokerCalculatorBotRouter extends TelegramLongPollingBot {
   private static final String BOT_NAME = "Poker calculator bot";
   @Value("${telegrambots.token}")
   private String token;

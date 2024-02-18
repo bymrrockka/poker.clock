@@ -1,6 +1,6 @@
 package by.mrrockka.mapper.game;
 
-import by.mrrockka.domain.Person;
+import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.domain.game.Game;
 import by.mrrockka.domain.game.GameType;
 import org.apache.commons.lang3.StringUtils;
@@ -29,17 +29,17 @@ public class GameMessageMapper {
       .build();
   }
 
-  private List<Person> mapPersons(String[] strings) {
+  private List<TelegramPerson> mapPersons(String[] strings) {
     final var telegramPattern = Pattern.compile("^@([\\w]+)");
-    final var players = Arrays.stream(strings)
+    final var persons = Arrays.stream(strings)
       .filter(str -> telegramPattern.matcher(str).matches())
-      .map(str -> Person.builder().telegram(str).build())
+      .map(str -> TelegramPerson.builder().telegram(str).build())
       .distinct()
       .toList();
-    if (players.isEmpty() || players.size() == 1) {
+    if (persons.isEmpty() || persons.size() == 1) {
       throw new NoPlayersException();
     }
-    return players;
+    return (List<TelegramPerson>) persons;
   }
 
   private BigDecimal mapBuyIn(String[] strings) {

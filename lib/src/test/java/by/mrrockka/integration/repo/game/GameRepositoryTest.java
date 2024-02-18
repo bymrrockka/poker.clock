@@ -1,6 +1,7 @@
 package by.mrrockka.integration.repo.game;
 
 import by.mrrockka.creator.GameCreator;
+import by.mrrockka.integration.repo.config.IntegrationTestConfiguration;
 import by.mrrockka.integration.repo.config.PostgreSQLExtension;
 import by.mrrockka.repo.game.GameRepository;
 import org.junit.jupiter.api.Test;
@@ -11,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(PostgreSQLExtension.class)
-@SpringBootTest
+@SpringBootTest(classes = {IntegrationTestConfiguration.class})
 class GameRepositoryTest {
 
   @Autowired
@@ -22,7 +23,7 @@ class GameRepositoryTest {
     final var expected = GameCreator.entity();
     gameRepository.save(expected);
 
-    assertThat(gameRepository.findById(expected.id(), expected.chatId())).isEqualTo(expected);
+    assertThat(gameRepository.findById(expected.id())).isEqualTo(expected);
   }
 
 

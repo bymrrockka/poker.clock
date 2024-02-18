@@ -1,6 +1,7 @@
 package by.mrrockka.integration.repo.prizepool;
 
 import by.mrrockka.creator.PrizePoolCreator;
+import by.mrrockka.integration.repo.config.IntegrationTestConfiguration;
 import by.mrrockka.integration.repo.config.PostgreSQLExtension;
 import by.mrrockka.repo.prizepool.PrizePoolRepository;
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(PostgreSQLExtension.class)
-@SpringBootTest
+@SpringBootTest(classes = {IntegrationTestConfiguration.class})
 class PrizePoolRepositoryTest {
 
   private static final UUID TEST_GAME_ID = UUID.fromString("fa3d03c4-f411-4852-810f-c0cc2f5b8c84");

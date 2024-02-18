@@ -1,3 +1,7 @@
 telegrambots:
   enabled: true
   token: 6602349464:AAHXWR1pnkqmfUj0YRiY1Jy7EmfyMQToYO8
+
+spring:
+  profiles:
+    active: postgres
