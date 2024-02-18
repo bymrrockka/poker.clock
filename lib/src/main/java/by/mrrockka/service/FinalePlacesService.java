@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-//todo: add int tests
 @Service
 @RequiredArgsConstructor
 public class FinalePlacesService {

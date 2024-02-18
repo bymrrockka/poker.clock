@@ -12,8 +12,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-
-//todo: add int tests
 @Service
 @RequiredArgsConstructor
 public class GameService {

@@ -3,6 +3,7 @@ package by.mrrockka.creator;
 import by.mrrockka.domain.Player;
 import by.mrrockka.domain.payments.Payments;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -17,7 +18,7 @@ public class PlayerCreator {
   public static Player player(final Consumer<Player.PlayerBuilder> playerBuilderConsumer) {
     final var playerBuilder = Player.builder()
       .person(PersonCreator.domain())
-      .payments(new Payments(List.of()));
+      .payments(new Payments(List.of(BigDecimal.ONE)));
 
 
     if (nonNull(playerBuilderConsumer))

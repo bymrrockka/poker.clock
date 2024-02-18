@@ -2,6 +2,7 @@ package by.mrrockka.service;
 
 import by.mrrockka.domain.Player;
 import by.mrrockka.mapper.PlayerMapper;
+import by.mrrockka.repo.entries.EntriesRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,11 +16,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PlayerService {
 
-  private final EntriesService entriesService;
+  private final EntriesRepository entriesRepository;
   private final PlayerMapper playerMapper;
 
   public List<Player> retrievePlayers(@NonNull UUID gameId) {
-    final var gameEntries = entriesService.retrieveEntries(gameId);
+    final var gameEntries = entriesRepository.findAllByGameId(gameId);
 
     return gameEntries.stream()
       .map(playerMapper::toPlayer)
