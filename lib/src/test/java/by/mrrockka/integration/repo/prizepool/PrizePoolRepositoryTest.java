@@ -24,7 +24,7 @@ class PrizePoolRepositoryTest {
 
   @Test
   void givenPrizePoolEntity_whenStored_shouldBeAbleToGet() {
-    final var expected = PrizePoolCreator.prizePoolEntity(builder -> builder.gameId(TEST_GAME_ID));
+    final var expected = PrizePoolCreator.entity(builder -> builder.gameId(TEST_GAME_ID));
     prizePoolRepository.save(expected);
     assertThat(prizePoolRepository.findByGameId(TEST_GAME_ID))
       .isEqualTo(expected);

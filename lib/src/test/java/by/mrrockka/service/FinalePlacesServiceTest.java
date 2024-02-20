@@ -33,7 +33,7 @@ class FinalePlacesServiceTest {
     final var mapped = FinalePlacesCreator.finalePlacesEntity();
 
     when(finalePlacesMapper.toEntity(GAME_ID, given)).thenReturn(mapped);
-    finalePlacesService.storeFinalePlaces(GAME_ID, given);
+    finalePlacesService.store(GAME_ID, given);
     verify(finalePlacesRepository).save(mapped);
   }
 
@@ -44,7 +44,7 @@ class FinalePlacesServiceTest {
 
     when(finalePlacesRepository.findByGameId(GAME_ID)).thenReturn(Optional.of(given));
     when(finalePlacesMapper.toDomain(given)).thenReturn(expected);
-    assertThat(finalePlacesService.retrieveFinalePlaces(GAME_ID))
+    assertThat(finalePlacesService.get(GAME_ID))
       .isEqualTo(expected);
   }
 
@@ -52,7 +52,7 @@ class FinalePlacesServiceTest {
   void givenGameId_whenNoFinalePlaces_shouldCallRepoAndReturnNull() {
     when(finalePlacesRepository.findByGameId(GAME_ID)).thenReturn(Optional.empty());
 
-    assertThat(finalePlacesService.retrieveFinalePlaces(GAME_ID))
+    assertThat(finalePlacesService.get(GAME_ID))
       .isNull();
     verifyNoInteractions(finalePlacesMapper);
   }

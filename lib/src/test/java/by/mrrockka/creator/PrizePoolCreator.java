@@ -16,11 +16,11 @@ public class PrizePoolCreator {
 
   public static final UUID GAME_ID = UUID.randomUUID();
 
-  public static PrizePoolEntity prizePoolEntity() {
-    return prizePoolEntity(null);
+  public static PrizePoolEntity entity() {
+    return entity(null);
   }
 
-  public static PrizePoolEntity prizePoolEntity(Consumer<PrizePoolEntity.PrizePoolEntityBuilder> builderConsumer) {
+  public static PrizePoolEntity entity(Consumer<PrizePoolEntity.PrizePoolEntityBuilder> builderConsumer) {
     final var prizePoolEntityBuilder = PrizePoolEntity.builder()
       .gameId(GAME_ID)
       .schema(schema());
@@ -31,11 +31,11 @@ public class PrizePoolCreator {
     return prizePoolEntityBuilder.build();
   }
 
-  public static PrizePool prizePool() {
-    return prizePool(null);
+  public static PrizePool domain() {
+    return domain(null);
   }
 
-  public static PrizePool prizePool(Consumer<PrizePool.PrizePoolBuilder> builderConsumer) {
+  public static PrizePool domain(Consumer<PrizePool.PrizePoolBuilder> builderConsumer) {
     final var prizePoolBuilder = PrizePool.builder()
       .positionAndPercentages(positionsAndPercentage());
 

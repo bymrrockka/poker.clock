@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
-
-//todo: add int tests
 @Service
 @RequiredArgsConstructor
 public class PlayerService {
@@ -19,10 +17,10 @@ public class PlayerService {
   private final EntriesRepository entriesRepository;
   private final PlayerMapper playerMapper;
 
-  public List<Player> retrievePlayers(@NonNull UUID gameId) {
-    final var gameEntries = entriesRepository.findAllByGameId(gameId);
+  public List<Player> getAllForGame(@NonNull UUID gameId) {
+    final var entries = entriesRepository.findAllByGameId(gameId);
 
-    return gameEntries.stream()
+    return entries.stream()
       .map(playerMapper::toPlayer)
       .toList();
   }

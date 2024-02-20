@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-
-//todo: add int tests
 @Service
 @RequiredArgsConstructor
 public class PrizePoolService {
@@ -18,11 +16,11 @@ public class PrizePoolService {
   private final PrizePoolRepository prizePoolRepository;
   private final PrizePoolMapper prizePoolMapper;
 
-  public PrizePool retrievePrizePool(@NonNull UUID gameId) {
+  public PrizePool getPrizePool(@NonNull UUID gameId) {
     return prizePoolMapper.toDomain(prizePoolRepository.findByGameId(gameId));
   }
 
-  public void storePrizePool(@NonNull UUID gameId, @NonNull PrizePool prizePool) {
+  public void store(@NonNull UUID gameId, @NonNull PrizePool prizePool) {
     prizePoolRepository.save(prizePoolMapper.toEntity(gameId, prizePool));
   }
 }

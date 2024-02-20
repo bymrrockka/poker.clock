@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 
-//todo: add int tests
 @Service
 @RequiredArgsConstructor
 public class GameSummaryService {
@@ -17,8 +16,8 @@ public class GameSummaryService {
   private final PrizePoolService prizePoolService;
 
   public GameSummary assembleGameSummary(UUID gameId, BigDecimal totalAmount) {
-    final var finalePlaces = finalePlacesService.retrieveFinalePlaces(gameId);
-    final var prizePool = prizePoolService.retrievePrizePool(gameId);
+    final var finalePlaces = finalePlacesService.get(gameId);
+    final var prizePool = prizePoolService.getPrizePool(gameId);
     return GameSummary.of(prizePool, finalePlaces, totalAmount);
   }
 }

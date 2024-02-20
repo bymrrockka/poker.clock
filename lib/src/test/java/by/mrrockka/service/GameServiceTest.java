@@ -56,7 +56,7 @@ class GameServiceTest {
     final var given = GameCreator.entity();
 
     when(gameRepository.findById(GAME_ID)).thenReturn(given);
-    when(playerService.retrievePlayers(GAME_ID)).thenReturn(players);
+    when(playerService.getAllForGame(GAME_ID)).thenReturn(players);
     when(gameMapper.toDomain(given, players, null)).thenReturn(expected);
     assertThat(gameService.retrieveGame(GAME_ID))
       .isEqualTo(expected);
@@ -76,7 +76,7 @@ class GameServiceTest {
 
     when(gameSummaryService.assembleGameSummary(GAME_ID, BigDecimal.ONE)).thenReturn(gameSummary);
     when(gameRepository.findById(GAME_ID)).thenReturn(given);
-    when(playerService.retrievePlayers(GAME_ID)).thenReturn(players);
+    when(playerService.getAllForGame(GAME_ID)).thenReturn(players);
     when(gameMapper.toDomain(given, players, gameSummary)).thenReturn(expected);
     assertThat(gameService.retrieveGame(GAME_ID))
       .isEqualTo(expected);

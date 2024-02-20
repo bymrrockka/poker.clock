@@ -27,7 +27,7 @@ public class GameService {
 
   public Game retrieveGame(@NonNull UUID gameId) {
     final var gameEntity = gameRepository.findById(gameId);
-    final var players = playerService.retrievePlayers(gameId);
+    final var players = playerService.getAllForGame(gameId);
     final var gameSummary = gameSummaryService.assembleGameSummary(gameId, calculateTotalAmount(players));
 
     return gameMapper.toDomain(gameEntity, players, gameSummary);

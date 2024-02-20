@@ -7,31 +7,25 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
-
-//todo: add int tests
 @Service
 @RequiredArgsConstructor
 public class PersonService {
 
   private final PersonRepository personRepository;
   private final PersonMapper personMapper;
-//  todo: add logic to store list of persons
-//  todo: logic to store one person
-//  todo: logic to retrieve all persons by ids
-//  todo: logic to retrieve all persons by telegrams
-//  todo: logic to retrieve one person by telegram
 
-  public List<Person> retrievePersons(List<UUID> personIds) {
-    return personMapper.toDomains(personRepository.findAllByIds(personIds));
+  public Optional<Person> retrievePerson(UUID personId) {
+    return Optional.ofNullable(personMapper.toDomain(personRepository.findById(personId)));
   }
 
-  public void storePersons(List<Person> persons) {
+  public void storeAll(List<Person> persons) {
     personRepository.saveAll(personMapper.toEntities(persons));
   }
 
-  public void storePerson(Person person, String chatId) {
+  public void store(Person person) {
     personRepository.save(personMapper.toEntity(person));
   }
 
