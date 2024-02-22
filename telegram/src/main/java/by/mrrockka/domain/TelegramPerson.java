@@ -9,12 +9,15 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Accessors(fluent = true)
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TelegramPerson extends Person {
 
   @NonNull
-  String chatId;
+  Long chatId;
+  @NonNull
+  String telegram;
 
 }

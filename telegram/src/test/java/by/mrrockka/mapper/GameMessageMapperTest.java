@@ -1,11 +1,9 @@
 package by.mrrockka.mapper;
 
-import by.mrrockka.domain.Person;
 import by.mrrockka.domain.game.Game;
 import by.mrrockka.domain.game.GameType;
 import by.mrrockka.mapper.game.GameMessageMapper;
 import by.mrrockka.mapper.game.NoBuyInException;
-import by.mrrockka.mapper.game.NoPlayersException;
 import by.mrrockka.mapper.game.NoStackException;
 import lombok.Builder;
 import org.junit.jupiter.api.Test;
@@ -14,6 +12,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,76 +31,60 @@ class GameMessageMapperTest {
       Arguments.of(
         GameArgument.builder()
           .message("""
-                      /tournament 
-                      buy-in: 30  
-                      stack: 30k 
-                      players: 
-                        @mrrockka
-                      @ivan 
-                       @andrei 
-                      @me   
-            """)
+                     /tournament 
+                     buy-in: 30  
+                     stack: 30k 
+                     players: 
+                       @mrrockka
+                     @ivan 
+                      @andrei 
+                     @me   
+                         """)
           .game(Game.builder()
-            .gameType(GameType.TOURNAMENT)
-            .stack(BigDecimal.valueOf(30000))
-            .buyIn(BigDecimal.valueOf(30))
-            //todo:
-//            .persons(List.of(
-//              person("@mrrockka"),
-//              person("@ivan"),
-//              person("@andrei"),
-//              person("@me")
-//            ))
-            .build())
+                  .id(UUID.randomUUID())
+                  .gameType(GameType.TOURNAMENT)
+                  .stack(BigDecimal.valueOf(30000))
+                  .buyIn(BigDecimal.valueOf(30))
+                  .build())
           .build()
       ),
       Arguments.of(
         GameArgument.builder()
           .message("""
-                      /tournament 
-                      buyin:      100  
-                      stack:50000 
-                      players: 
-                        @mrrockka
-                      @me   
-            """)
+                     /tournament 
+                     buyin:      100  
+                     stack:50000 
+                     players: 
+                       @mrrockka
+                     @me   
+                           """)
           .game(Game.builder()
-            .gameType(GameType.TOURNAMENT)
-            .stack(BigDecimal.valueOf(50000))
-            .buyIn(BigDecimal.valueOf(100))
-            //todo:
-//            .persons(List.of(
-//              person("@mrrockka"),
-//              person("@me")
-//            ))
-            .build())
+                  .id(UUID.randomUUID())
+                  .gameType(GameType.TOURNAMENT)
+                  .stack(BigDecimal.valueOf(50000))
+                  .buyIn(BigDecimal.valueOf(100))
+                  .build())
           .build()
       ),
       Arguments.of(
         GameArgument.builder()
           .message("""
-                      /tournament 
-                      buyin:    15zl    
-                      stack: 1.5k
-                        @mrrockka
-                      @ivan 
-                       @andrei 
-                      @ivan 
-                       @andrei 
-                      @me   
-            """)
+                     /tournament 
+                     buyin:    15zl    
+                     stack: 1.5k
+                       @mrrockka
+                     @ivan 
+                      @andrei 
+                     @ivan 
+                      @andrei 
+                     @me   
+                                 """)
           .game(Game.builder()
-            .gameType(GameType.TOURNAMENT)
-            .stack(BigDecimal.valueOf(1500))
-            .buyIn(BigDecimal.valueOf(15))
-            //todo:
-//            .persons(List.of(
-//              person("@mrrockka"),
-//              person("@ivan"),
-//              person("@andrei"),
-//              person("@me")
-//            ))
-            .build())
+                  .id(UUID.randomUUID())
+                  .gameType(GameType.TOURNAMENT)
+                  .stack(BigDecimal.valueOf(1500))
+                  .buyIn(BigDecimal.valueOf(15))
+                  .build())
           .build()
       )
     );
@@ -116,39 +99,11 @@ class GameMessageMapperTest {
       .isEqualTo(argument.game());
   }
 
-  private static Stream<Arguments> noPlayersMessages() {
-    return Stream.of(
-      Arguments.of(
-        """
-            /tournament 
-            buyin:      100  
-            stack:50000
-          """
-      ),
-      Arguments.of(
-        """
-            /tournament 
-            buyin:      100  
-            stack:50000 
-            players: 
-              @mrrockka
-          """
-      )
-    );
-  }
-
-  @ParameterizedTest
-  @MethodSource("noPlayersMessages")
-  void givenMessage_whenNoPlayers_thenThrowException(String message) {
-    assertThatThrownBy(() -> gameMessageMapper.map(message))
-      .isInstanceOf(NoPlayersException.class);
-  }
-
   @Test
   void givenMessage_whenNoStack_thenThrowException() {
     final var message =
       """
-        /tournament 
+        /tournament
         buyin:    15zl
         players: 
           @mrrockka
@@ -170,11 +125,5 @@ class GameMessageMapperTest {
         """;
     assertThatThrownBy(() -> gameMessageMapper.map(message))
       .isInstanceOf(NoBuyInException.class);
-  }
-
-  private static Person person(String telegram) {
-    return Person.builder()
-//      .telegram(telegram)
-      .build();
   }
 }

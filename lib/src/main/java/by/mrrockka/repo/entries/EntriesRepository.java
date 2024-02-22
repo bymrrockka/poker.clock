@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -34,6 +36,11 @@ public class EntriesRepository {
       .addValue(EntryColumnNames.AMOUNT, amount)
       .addValue(EntryColumnNames.CREATED_AT, Timestamp.valueOf(createdAt));
     jdbcTemplate.update(SAVE_SQL, params);
+  }
+
+  @Transactional(propagation = Propagation.REQUIRED)
+  public void saveAll(UUID gameId, List<UUID> personIds, BigDecimal amount, LocalDateTime createdAt) {
+    personIds.forEach(personId -> save(gameId, personId, amount, createdAt));
   }
 
   private static final String FIND_ALL_BY_GAME_AND_PERSON_SQL = """

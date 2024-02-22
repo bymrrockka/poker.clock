@@ -1,4 +1,4 @@
-package by.mrrockka.mapper.game;
+package by.mrrockka.mapper.person;
 
 import by.mrrockka.exception.BusinessException;
 

@@ -33,7 +33,7 @@ public class PlayerSummary implements Comparable<PlayerSummary> {
   //todo: consider refactoring to separate service in case there will be additional implementations
   public static PlayerSummary of(@NonNull Player player, @NonNull GameSummary gameSummary) {
 
-    final var playerTotal = player.payments().total();
+    final var playerTotal = player.entries().total();
     final var person = player.person();
     var playerBuilder = PlayerSummary.builder().player(player);
 

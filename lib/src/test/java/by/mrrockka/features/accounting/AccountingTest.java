@@ -4,8 +4,8 @@ import by.mrrockka.creator.GameCreator;
 import by.mrrockka.creator.PersonCreator;
 import by.mrrockka.domain.Person;
 import by.mrrockka.domain.Player;
+import by.mrrockka.domain.payments.Entries;
 import by.mrrockka.domain.payments.NoPaymentsException;
-import by.mrrockka.domain.payments.Payments;
 import by.mrrockka.domain.payout.Debt;
 import by.mrrockka.domain.payout.Payout;
 import by.mrrockka.domain.summary.FinalePlaceSummary;
@@ -75,7 +75,7 @@ class AccountingTest {
 
     final var actual = accounting.calculate(game);
     final var expect = payouts(players.get(0), players.stream()
-      .sorted((o1, o2) -> o2.payments().total().compareTo(o1.payments().total()))
+      .sorted((o1, o2) -> o2.entries().total().compareTo(o1.entries().total()))
       .toList());
 
     Assertions.assertThat(actual).containsExactlyInAnyOrderElementsOf(expect);
@@ -214,7 +214,7 @@ class AccountingTest {
 
   private Player player(final List<BigDecimal> entries) {
     return Player.builder()
-      .payments(Payments.builder()
+      .payments(Entries.builder()
                   .entries(entries)
                   .build())
       .person(PersonCreator.domainRandom())
@@ -234,7 +234,7 @@ class AccountingTest {
       .filter(player -> !player.equals(creditor))
       .map(player -> Debt.builder()
         .debtor(player)
-        .amount(player.payments().total())
+        .amount(player.entries().total())
         .build())
       .toList();
 
@@ -257,7 +257,7 @@ class AccountingTest {
 
   private BigDecimal totalEntriesAmount(final List<Player> players) {
     return players.stream()
-      .map(player -> player.payments().total())
+      .map(player -> player.entries().total())
       .reduce(BigDecimal::add)
       .orElseThrow();
   }

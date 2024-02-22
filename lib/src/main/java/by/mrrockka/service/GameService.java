@@ -35,7 +35,7 @@ public class GameService {
 
   private BigDecimal calculateTotalAmount(List<Player> players) {
     return players.stream()
-      .map(player -> player.payments().total())
+      .map(player -> player.entries().total())
       .reduce(BigDecimal::add)
       .orElseThrow();// todo: add meaningful exception
   }

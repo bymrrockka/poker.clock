@@ -1,0 +1,53 @@
+package by.mrrockka.service;
+
+import by.mrrockka.domain.Person;
+import by.mrrockka.domain.game.Game;
+import by.mrrockka.mapper.game.GameMessageMapper;
+import by.mrrockka.repo.game.TelegramGameRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
+import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Update;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
+@Service
+@RequiredArgsConstructor
+public class TelegramGameService {
+
+  private final TelegramGameRepository telegramGameRepository;
+  private final TelegramPersonService telegramPersonService;
+  private final GameService gameService;
+  private final EntriesService entriesService;
+  private final GameMessageMapper gameMessageMapper;
+
+  @Transactional(isolation = Isolation.READ_COMMITTED)
+  public BotApiMethodMessage storeGame(final Update update) {
+    final var command = update.getMessage().getText();
+    final var chatId = update.getMessage().getChatId();
+    final var messageTimestamp = LocalDateTime.ofInstant(Instant.ofEpochMilli(update.getMessage().getDate()),
+                                                         ZoneId.systemDefault());
+
+    final var game = gameMessageMapper.map(command);
+    final var persons = telegramPersonService.storePersons(update);
+    gameService.storeNewGame(game);
+    telegramGameRepository.save(game.getId(), chatId, messageTimestamp);
+    entriesService.storeBatch(game.getId(), persons.stream().map(Person::getId).toList(), game.getBuyIn(),
+                              messageTimestamp);
+
+    return SendMessage.builder()
+      .chatId(chatId)
+      .text("Tournament started.")
+      .build();
+  }
+
+  public Game getGame(String chatId, LocalDateTime createAt) {
+    return null;
+  }
+
+}

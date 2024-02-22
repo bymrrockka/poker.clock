@@ -18,6 +18,6 @@ import lombok.experimental.SuperBuilder;
 public class TelegramGame extends Game {
 
   @NonNull
-  String chatId;
+  Long chatId;
 
 }

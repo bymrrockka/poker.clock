@@ -9,8 +9,6 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-//todo: add int tests
-
 @Repository
 @RequiredArgsConstructor
 public class TelegramGameRepository {
@@ -24,7 +22,7 @@ public class TelegramGameRepository {
       (:game_id, :chat_id, :created_at);
     """;
 
-  public void save(UUID gameId, String chatId, LocalDateTime createdAt) {
+  public void save(UUID gameId, Long chatId, LocalDateTime createdAt) {
     final var params = new MapSqlParameterSource()
       .addValue(TelegramGameColumnNames.GAME_ID, gameId)
       .addValue(TelegramGameColumnNames.CHAT_ID, chatId)
@@ -42,7 +40,7 @@ public class TelegramGameRepository {
         created_at = :created_at
     """;
 
-  public UUID findByChatIdAndCreatedAt(String chatId, LocalDateTime createdAt) {
+  public UUID findByChatIdAndCreatedAt(Long chatId, LocalDateTime createdAt) {
     final var params = new MapSqlParameterSource()
       .addValue(TelegramGameColumnNames.CHAT_ID, chatId)
       .addValue(TelegramGameColumnNames.CREATED_AT, Timestamp.valueOf(createdAt));

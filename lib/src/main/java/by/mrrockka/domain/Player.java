@@ -1,12 +1,12 @@
 package by.mrrockka.domain;
 
-import by.mrrockka.domain.payments.Payments;
+import by.mrrockka.domain.payments.Entries;
 import lombok.Builder;
 
 import java.util.Objects;
 
 @Builder
-public record Player(Person person, Payments payments) {
+public record Player(Person person, Entries entries) {
 
   @Override
   public boolean equals(Object o) {

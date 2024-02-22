@@ -31,7 +31,6 @@ public class Game {
   @NonNull
   BigDecimal stack;
   BigDecimal bounty;
-  @NonNull
   List<Player> players;
   GameSummary gameSummary;
   List<Bounty> bountyTransactions;
