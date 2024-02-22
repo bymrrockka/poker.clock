@@ -1,5 +1,6 @@
 package by.mrrockka.route;
 
+import by.mrrockka.creator.MessageCreator;
 import lombok.Builder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -7,8 +8,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-import static by.mrrockka.route.creator.UpdateCreator.message;
-import static by.mrrockka.route.creator.UpdateCreator.update;
+import static by.mrrockka.creator.UpdateCreator.update;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CalculatePaymentsCommandRouteTest {
@@ -77,7 +77,7 @@ class CalculatePaymentsCommandRouteTest {
   @ParameterizedTest
   @MethodSource("messages")
   void givenUpdateContainsMessage_whenEqualsCalculate_thenShouldAssertTrue(MessageArgument arg) {
-    final var update = update(message(message -> message.setText(arg.message())));
+    final var update = update(MessageCreator.message(message -> message.setText(arg.message())));
 
     assertThat(calculatePaymentsRoute.isApplicable(update))
       .isEqualTo(arg.result());

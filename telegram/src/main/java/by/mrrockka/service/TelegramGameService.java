@@ -1,10 +1,10 @@
 package by.mrrockka.service;
 
-import by.mrrockka.domain.Person;
 import by.mrrockka.domain.game.Game;
 import by.mrrockka.mapper.game.GameMessageMapper;
 import by.mrrockka.repo.game.TelegramGameRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +16,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TelegramGameService {
@@ -26,6 +27,7 @@ public class TelegramGameService {
   private final EntriesService entriesService;
   private final GameMessageMapper gameMessageMapper;
 
+  //  todo: change return type to custom or List
   @Transactional(isolation = Isolation.READ_COMMITTED)
   public BotApiMethodMessage storeGame(final Update update) {
     final var command = update.getMessage().getText();
@@ -33,12 +35,13 @@ public class TelegramGameService {
     final var messageTimestamp = LocalDateTime.ofInstant(Instant.ofEpochMilli(update.getMessage().getDate()),
                                                          ZoneId.systemDefault());
 
+    log.debug("Processing {\n%s\n} message from %s chat id. Timestamp %s".formatted(command, chatId, messageTimestamp));
+
     final var game = gameMessageMapper.map(command);
-    final var persons = telegramPersonService.storePersons(update);
+    final var personIds = telegramPersonService.storePersons(update);
     gameService.storeNewGame(game);
     telegramGameRepository.save(game.getId(), chatId, messageTimestamp);
-    entriesService.storeBatch(game.getId(), persons.stream().map(Person::getId).toList(), game.getBuyIn(),
-                              messageTimestamp);
+    entriesService.storeBatch(game.getId(), personIds, game.getBuyIn(), messageTimestamp);
 
     return SendMessage.builder()
       .chatId(chatId)

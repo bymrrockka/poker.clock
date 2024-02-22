@@ -8,8 +8,8 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Getter
 @Accessors(fluent = true)
-@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)

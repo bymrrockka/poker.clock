@@ -84,6 +84,66 @@ class PersonMessageMapperTest {
               .telegram("me")
               .chatId(CHAT_ID)
               .build()))
+          .build()),
+      Arguments.of(
+        PersonsMessageArgument.builder()
+          .message("""
+                     /tournament 
+                     buyin:    15zl    
+                     stack: 1.5k
+                     @mrrockka @ivan @andrei @ivan @andrei @mrrockka @me   
+                             """)
+          .persons(List.of(
+            TelegramPerson.builder()
+              .id(UUID.randomUUID())
+              .telegram("mrrockka")
+              .chatId(CHAT_ID)
+              .build(),
+            TelegramPerson.builder()
+              .id(UUID.randomUUID())
+              .telegram("ivan")
+              .chatId(CHAT_ID)
+              .build(),
+            TelegramPerson.builder()
+              .id(UUID.randomUUID())
+              .telegram("andrei")
+              .chatId(CHAT_ID)
+              .build(),
+            TelegramPerson.builder()
+              .id(UUID.randomUUID())
+              .telegram("me")
+              .chatId(CHAT_ID)
+              .build()))
+          .build()),
+      Arguments.of(
+        PersonsMessageArgument.builder()
+          .message("""
+                     /tournament 
+                     buyin:    15zl    
+                     stack: 1.5k
+                     @mrrockka, @ivan, @andrei, @ivan, @andrei, @mrrockka, @me
+                             """)
+          .persons(List.of(
+            TelegramPerson.builder()
+              .id(UUID.randomUUID())
+              .telegram("mrrockka")
+              .chatId(CHAT_ID)
+              .build(),
+            TelegramPerson.builder()
+              .id(UUID.randomUUID())
+              .telegram("ivan")
+              .chatId(CHAT_ID)
+              .build(),
+            TelegramPerson.builder()
+              .id(UUID.randomUUID())
+              .telegram("andrei")
+              .chatId(CHAT_ID)
+              .build(),
+            TelegramPerson.builder()
+              .id(UUID.randomUUID())
+              .telegram("me")
+              .chatId(CHAT_ID)
+              .build()))
           .build())
     );
   }

@@ -2,6 +2,7 @@ package by.mrrockka.repo.person;
 
 import by.mrrockka.domain.TelegramPerson;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -39,7 +40,7 @@ public class TelegramPersonRepository {
 
   private static final String FIND_BY_CHAT_ID_AND_TELEGRAMS_SQL = """
       SELECT
-        person_id
+        person_id, telegram
       FROM
         chat_persons
       WHERE
@@ -47,12 +48,13 @@ public class TelegramPersonRepository {
         telegram IN (:telegram)
     """;
 
-  public List<UUID> findByChatIdAndTelegrams(Long chatId, List<String> telegrams) {
+  public List<Pair<UUID, String>> findByChatIdAndTelegrams(Long chatId, List<String> telegrams) {
     final var params = new MapSqlParameterSource()
       .addValue(TelegramPersonColumnNames.CHAT_ID, chatId)
       .addValue(TelegramPersonColumnNames.TELEGRAM, telegrams);
 
-    return jdbcTemplate.queryForList(FIND_BY_CHAT_ID_AND_TELEGRAMS_SQL, params, UUID.class);
+    return jdbcTemplate.query(FIND_BY_CHAT_ID_AND_TELEGRAMS_SQL, params, (rs, rowNum) ->
+      Pair.of(rs.getObject(1, UUID.class), rs.getString(2)));
   }
   /* todo: move to service
 
@@ -75,7 +77,7 @@ public class TelegramPersonRepository {
 
   private static final String FIND_ALL_BY_TELEGRAM_SQL = """
       SELECT
-        id, chat_id, telegram, first_name, last_name
+         id, chat_id, telegram, first_name, last_name
       FROM person
       WHERE
         chat_id = :chat_id AND

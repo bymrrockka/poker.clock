@@ -5,6 +5,8 @@ import by.mrrockka.mapper.PersonMapper;
 import by.mrrockka.repo.person.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +23,7 @@ public class PersonService {
     return Optional.ofNullable(personMapper.toDomain(personRepository.findById(personId)));
   }
 
+  @Transactional(propagation = Propagation.REQUIRED)
   public void storeAll(List<Person> persons) {
     personRepository.saveAll(personMapper.toEntities(persons));
   }

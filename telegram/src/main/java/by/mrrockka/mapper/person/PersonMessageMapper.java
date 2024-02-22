@@ -1,6 +1,7 @@
 package by.mrrockka.mapper.person;
 
 import by.mrrockka.domain.TelegramPerson;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -13,11 +14,14 @@ import java.util.regex.Pattern;
 public class PersonMessageMapper {
 
   public List<TelegramPerson> map(String command, Long chatId) {
-    final var strings = command.toLowerCase().replaceAll(" ", "").split("\n");
-    final var telegramPattern = Pattern.compile("^@([\\w]+)");
+    final var strings = command.toLowerCase()
+      .stripTrailing()
+      .split("(, |[\n ])");
+    final var telegramPattern = Pattern.compile("^@([\\w\\.]+)");
 
     final var persons = Arrays.stream(strings)
       .distinct()
+      .filter(StringUtils::isNotBlank)
       .map(telegramPattern::matcher)
       .filter(Matcher::matches)
       .map(matcher -> TelegramPerson.builder()

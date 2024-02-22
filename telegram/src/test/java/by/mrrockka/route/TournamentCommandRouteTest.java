@@ -1,7 +1,8 @@
 package by.mrrockka.route;
 
+import by.mrrockka.creator.MessageCreator;
+import by.mrrockka.creator.SendCreator;
 import by.mrrockka.mapper.game.GameMessageMapper;
-import by.mrrockka.route.creator.SendCreator;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -13,8 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.stream.Stream;
 
-import static by.mrrockka.route.creator.UpdateCreator.message;
-import static by.mrrockka.route.creator.UpdateCreator.update;
+import static by.mrrockka.creator.UpdateCreator.update;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
@@ -55,11 +55,10 @@ class TournamentCommandRouteTest {
   @ParameterizedTest
   @MethodSource("tournamentMessages")
   void givenTournamentStartMessage_whenReceived_thenShouldValidateMessageAndStoreDataAndReturnGameId(String text) {
-    final var update = update(message(text));
-    final var expected = SendCreator.sendMessage(builder ->
-      builder
-        .chatId(update.getMessage().getChatId())
-        .text(""));
+    final var update = update(MessageCreator.message(text));
+    final var expected = SendCreator.sendMessage(builder -> builder
+      .chatId(update.getMessage().getChatId())
+      .text(""));
     tournamentCommandRoute.process(update);
   }
 
@@ -71,6 +70,6 @@ class TournamentCommandRouteTest {
     "/tournament 123123"
   })
   void givenTournamentCommand_whenReceived_thenShouldMarkAsApplicable(String text) {
-    assertThat(tournamentCommandRoute.isApplicable(update(message(text)))).isTrue();
+    assertThat(tournamentCommandRoute.isApplicable(update(MessageCreator.message(text)))).isTrue();
   }
 }

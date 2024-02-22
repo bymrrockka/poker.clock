@@ -3,6 +3,7 @@ package by.mrrockka.integration.repo;
 import by.mrrockka.config.PostgreSQLExtension;
 import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.repo.person.TelegramPersonRepository;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,9 @@ class TelegramPersonRepositoryTest {
                             .chatId(CHAT_ID)
                             .telegram(TELEGRAM)
                             .build());
-    assertThat(personRepository.findByChatIdAndTelegrams(CHAT_ID, List.of(TELEGRAM)))
+    assertThat(
+      personRepository.findByChatIdAndTelegrams(CHAT_ID, List.of(TELEGRAM)).stream()
+        .map(Pair::getKey))
       .contains(PERSON_ID);
   }
 }

@@ -37,7 +37,9 @@ dependencies {
     testImplementation libs.testContainerPostgresql
     testImplementation libs.testContainerJupiter
     testImplementation libs.springBootTest
-    testImplementation project(":lib")
+    testImplementation(libs.javaFaker) {
+        exclude group: 'org.yaml'
+    }
 }
 
 test {

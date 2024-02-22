@@ -1,4 +1,4 @@
-package by.mrrockka.route.creator;
+package by.mrrockka.creator;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
