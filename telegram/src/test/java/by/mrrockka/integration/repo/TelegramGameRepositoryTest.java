@@ -22,7 +22,7 @@ public class TelegramGameRepositoryTest {
   private static final LocalDateTime CREATED_AT = LocalDateTime.now();
 
   @Autowired
-  TelegramGameRepository telegramGameRepository;
+  private TelegramGameRepository telegramGameRepository;
 
   @Test
   void givenGame_whenGameStoredInDb_shouldStoreChatIdAndCreationDate() {

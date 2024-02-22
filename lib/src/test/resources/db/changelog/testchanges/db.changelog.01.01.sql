@@ -10,8 +10,8 @@ values  ('13b4108e-2dfa-4fea-8b7b-277e1c87d2d8', 'Grisha', 'Anikii'),
 
 insert into game (id, stack, buy_in, bounty, game_type)
 values  ('fa3d03c4-f411-4852-810f-c0cc2f5b8c84', 1000, 15, null, 'TOURNAMENT'),
-        ('4a411a12-2386-4dce-b579-d806c91d6d17', 1500, 30, null, 'TOURNAMENT'),
-        ('3e255b72-db57-4cc8-9c07-56991a8ab67a', 30000, 30, 30, 'TOURNAMENT'),
+        ('4a411a12-2386-4dce-b579-d806c91d6d17', 1500, 30, null, 'BOUNTY_TOURNAMENT'),
+        ('3e255b72-db57-4cc8-9c07-56991a8ab67a', 30000, 30, 30, 'CASH'),
         ('b759ac52-1496-463f-b0d8-982deeac085c', 10000, 15, 25, 'TOURNAMENT');
 
 insert into finale_places (game_id, position, person_id)

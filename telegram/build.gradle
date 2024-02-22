@@ -37,6 +37,7 @@ dependencies {
     testImplementation libs.testContainerPostgresql
     testImplementation libs.testContainerJupiter
     testImplementation libs.springBootTest
+    testImplementation project(":lib")
 }
 
 test {

@@ -22,7 +22,7 @@ public class TournamentCommandRoute implements CommandRoute {
 // todo: save to db
     return SendMessage.builder()
                       .chatId(update.getMessage().getChatId())
-                      .text("Tournament started. Game id %s".formatted(game.id()))
+      .text("Tournament started. Game id %s".formatted(game.getId()))
                       .build();
   }
 
