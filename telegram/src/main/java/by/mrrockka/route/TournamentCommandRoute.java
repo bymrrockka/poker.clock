@@ -23,5 +23,4 @@ public class TournamentCommandRoute implements CommandRoute {
       update.getMessage().getText().contains(COMMAND);
   }
 
-
 }

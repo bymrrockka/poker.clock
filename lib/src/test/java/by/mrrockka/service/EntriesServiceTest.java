@@ -8,7 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 import static org.mockito.Mockito.verify;
@@ -19,7 +19,7 @@ class EntriesServiceTest {
   private static final UUID GAME_ID = UUID.randomUUID();
   private static final UUID PERSON_ID = UUID.randomUUID();
   private static final BigDecimal AMOUNT = BigDecimal.TEN;
-  private static final LocalDateTime CREATED_AT = LocalDateTime.now();
+  private static final Instant CREATED_AT = Instant.now();
 
   @Mock
   private EntriesRepository entriesRepository;

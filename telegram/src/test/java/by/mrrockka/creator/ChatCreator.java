@@ -8,8 +8,10 @@ import static java.util.Objects.nonNull;
 
 public class ChatCreator {
 
+  public static final Long CHAT_ID = 1 + Double.valueOf(Math.random() * 10).longValue();
+
   public static Chat chat() {
-    return chat(Double.valueOf(Math.random() * 10).longValue());
+    return chat(CHAT_ID);
   }
 
   public static Chat chat(Long chatId) {

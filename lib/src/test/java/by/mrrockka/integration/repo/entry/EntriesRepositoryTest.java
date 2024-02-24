@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,7 +38,7 @@ class EntriesRepositoryTest {
       .amounts(List.of(amount))
       .build();
 
-    entriesRepository.save(GAME_ID, personId, amount, LocalDateTime.now());
+    entriesRepository.save(GAME_ID, personId, amount, Instant.now());
 
     assertThat(entriesRepository.findByGameAndPerson(GAME_ID, personId))
       .contains(expected);
@@ -61,7 +61,7 @@ class EntriesRepositoryTest {
       .amounts(amounts)
       .build();
 
-    amounts.forEach(amount -> entriesRepository.save(GAME_ID, personId, amount, LocalDateTime.now()));
+    amounts.forEach(amount -> entriesRepository.save(GAME_ID, personId, amount, Instant.now()));
 
     assertThat(entriesRepository.findByGameAndPerson(GAME_ID, personId))
       .contains(expected);
@@ -101,8 +101,8 @@ class EntriesRepositoryTest {
           .build()
       );
 
-    firstAmounts.forEach(amount -> entriesRepository.save(gameId, firstPersonId, amount, LocalDateTime.now()));
-    secondAmounts.forEach(amount -> entriesRepository.save(gameId, secondPersonId, amount, LocalDateTime.now()));
+    firstAmounts.forEach(amount -> entriesRepository.save(gameId, firstPersonId, amount, Instant.now()));
+    secondAmounts.forEach(amount -> entriesRepository.save(gameId, secondPersonId, amount, Instant.now()));
 
     assertThat(entriesRepository.findAllByGameId(gameId))
       .containsExactlyInAnyOrderElementsOf(expected);

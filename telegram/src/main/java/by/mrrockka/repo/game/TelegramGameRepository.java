@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 @Repository
@@ -22,11 +22,11 @@ public class TelegramGameRepository {
       (:game_id, :chat_id, :created_at);
     """;
 
-  public void save(UUID gameId, Long chatId, LocalDateTime createdAt) {
+  public void save(UUID gameId, Long chatId, Instant createdAt) {
     final var params = new MapSqlParameterSource()
       .addValue(TelegramGameColumnNames.GAME_ID, gameId)
       .addValue(TelegramGameColumnNames.CHAT_ID, chatId)
-      .addValue(TelegramGameColumnNames.CREATED_AT, Timestamp.valueOf(createdAt));
+      .addValue(TelegramGameColumnNames.CREATED_AT, Timestamp.from(createdAt));
     jdbcTemplate.update(SAVE_SQL, params);
   }
 
@@ -40,10 +40,10 @@ public class TelegramGameRepository {
         created_at = :created_at
     """;
 
-  public UUID findByChatIdAndCreatedAt(Long chatId, LocalDateTime createdAt) {
+  public UUID findByChatIdAndCreatedAt(Long chatId, Instant createdAt) {
     final var params = new MapSqlParameterSource()
       .addValue(TelegramGameColumnNames.CHAT_ID, chatId)
-      .addValue(TelegramGameColumnNames.CREATED_AT, Timestamp.valueOf(createdAt));
+      .addValue(TelegramGameColumnNames.CREATED_AT, Timestamp.from(createdAt));
 
     return jdbcTemplate.queryForObject(FIND_BY_CHAT_ID_AND_CREATED_AT_SQL, params, UUID.class);
   }

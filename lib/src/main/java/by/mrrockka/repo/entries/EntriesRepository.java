@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,17 +29,17 @@ public class EntriesRepository {
       (:game_id, :person_id, :amount, :created_at);
     """;
 
-  public void save(UUID gameId, UUID personId, BigDecimal amount, LocalDateTime createdAt) {
+  public void save(UUID gameId, UUID personId, BigDecimal amount, Instant createdAt) {
     final MapSqlParameterSource params = new MapSqlParameterSource()
       .addValue(EntryColumnNames.GAME_ID, gameId)
       .addValue(EntryColumnNames.PERSON_ID, personId)
       .addValue(EntryColumnNames.AMOUNT, amount)
-      .addValue(EntryColumnNames.CREATED_AT, Timestamp.valueOf(createdAt));
+      .addValue(EntryColumnNames.CREATED_AT, Timestamp.from(createdAt));
     jdbcTemplate.update(SAVE_SQL, params);
   }
 
   @Transactional(propagation = Propagation.REQUIRED)
-  public void saveAll(UUID gameId, List<UUID> personIds, BigDecimal amount, LocalDateTime createdAt) {
+  public void saveAll(UUID gameId, List<UUID> personIds, BigDecimal amount, Instant createdAt) {
     personIds.forEach(personId -> save(gameId, personId, amount, createdAt));
   }
 

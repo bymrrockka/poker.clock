@@ -14,7 +14,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 
 @Slf4j
 @Service
@@ -32,8 +31,7 @@ public class TelegramGameService {
   public BotApiMethodMessage storeGame(final Update update) {
     final var command = update.getMessage().getText();
     final var chatId = update.getMessage().getChatId();
-    final var messageTimestamp = LocalDateTime.ofInstant(Instant.ofEpochMilli(update.getMessage().getDate()),
-                                                         ZoneId.systemDefault());
+    final var messageTimestamp = Instant.ofEpochSecond(update.getMessage().getDate());
 
     log.debug("Processing {\n%s\n} message from %s chat id. Timestamp %s".formatted(command, chatId, messageTimestamp));
 

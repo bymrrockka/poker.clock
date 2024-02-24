@@ -7,7 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,7 +19,7 @@ public class TelegramGameRepositoryTest {
 
   private static final UUID GAME_ID = UUID.fromString("fa3d03c4-f411-4852-810f-c0cc2f5b8c84");
   private static final Long CHAT_ID = 123L;
-  private static final LocalDateTime CREATED_AT = LocalDateTime.now();
+  private static final Instant CREATED_AT = Instant.now();
 
   @Autowired
   private TelegramGameRepository telegramGameRepository;

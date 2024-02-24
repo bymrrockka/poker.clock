@@ -2,7 +2,7 @@ package by.mrrockka.route;
 
 import by.mrrockka.creator.MessageCreator;
 import by.mrrockka.creator.SendCreator;
-import by.mrrockka.mapper.game.GameMessageMapper;
+import by.mrrockka.service.TelegramGameService;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -16,12 +16,13 @@ import java.util.stream.Stream;
 
 import static by.mrrockka.creator.UpdateCreator.update;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class TournamentCommandRouteTest {
 
   @Mock
-  private GameMessageMapper gameMessageMapper;
+  private TelegramGameService telegramGameService;
   @InjectMocks
   private TournamentCommandRoute tournamentCommandRoute;
 
@@ -59,7 +60,10 @@ class TournamentCommandRouteTest {
     final var expected = SendCreator.sendMessage(builder -> builder
       .chatId(update.getMessage().getChatId())
       .text(""));
-    tournamentCommandRoute.process(update);
+
+    when(telegramGameService.storeGame(update)).thenReturn(expected);
+
+    assertThat(tournamentCommandRoute.process(update)).isEqualTo(expected);
   }
 
   @ParameterizedTest

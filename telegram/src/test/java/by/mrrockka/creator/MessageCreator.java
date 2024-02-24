@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.EntityType;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -14,6 +15,7 @@ import static java.util.Objects.nonNull;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MessageCreator {
 
+  public static final Instant MESSAGE_TIMESTAMP = Instant.now();
 
   public static Message message(String text) {
     return message((message) -> message.setText(text));
@@ -28,6 +30,7 @@ public class MessageCreator {
     message.setChat(ChatCreator.chat());
     message.setEntities(List.of(entity));
     message.setFrom(UserCreator.user());
+    message.setDate((int) MESSAGE_TIMESTAMP.getEpochSecond());
 
     if (nonNull(messageConsumer)) {
       messageConsumer.accept(message);

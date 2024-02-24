@@ -18,7 +18,7 @@ public class PlayerCreator {
   public static Player player(final Consumer<Player.PlayerBuilder> playerBuilderConsumer) {
     final var playerBuilder = Player.builder()
       .person(PersonCreator.domain())
-      .payments(new Entries(List.of(BigDecimal.ONE)));
+      .entries(new Entries(List.of(BigDecimal.ONE)));
 
 
     if (nonNull(playerBuilderConsumer))

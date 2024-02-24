@@ -214,7 +214,7 @@ class AccountingTest {
 
   private Player player(final List<BigDecimal> entries) {
     return Player.builder()
-      .payments(Entries.builder()
+      .entries(Entries.builder()
                   .entries(entries)
                   .build())
       .person(PersonCreator.domainRandom())
