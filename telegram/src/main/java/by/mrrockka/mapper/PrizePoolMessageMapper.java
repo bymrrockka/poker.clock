@@ -1,4 +1,4 @@
-package by.mrrockka.mapper.prizepool;
+package by.mrrockka.mapper;
 
 import by.mrrockka.domain.prize.PositionAndPercentage;
 import by.mrrockka.domain.prize.PrizePool;

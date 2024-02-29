@@ -73,7 +73,7 @@ class TelegramPersonServiceTest {
       .toList();
     assertThat(personRepository.findAllByIds(personIds)).hasSize(args.size());
 
-    final var actualIds = telegramPersonRepository.findByChatIdAndTelegrams(CHAT_ID, telegrams).stream()
+    final var actualIds = telegramPersonRepository.findAllByChatIdAndTelegrams(CHAT_ID, telegrams).stream()
       .map(TelegramPersonEntity::getId)
       .toList();
 

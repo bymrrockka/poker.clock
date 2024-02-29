@@ -87,7 +87,7 @@ class TelegramGameServiceTest {
       UserCreator.USER_NAME
     );
 
-    final var telegramPersonEntyties = telegramPersonRepository.findByChatIdAndTelegrams(chatId, telegrams);
+    final var telegramPersonEntyties = telegramPersonRepository.findAllByChatIdAndTelegrams(chatId, telegrams);
 
     assertAll(
       () -> assertThat(telegramPersonEntyties).isNotEmpty(),

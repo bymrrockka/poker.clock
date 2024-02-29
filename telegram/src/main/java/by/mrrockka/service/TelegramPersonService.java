@@ -22,19 +22,25 @@ public class TelegramPersonService {
   private final TelegramPersonMapper telegramPersonMapper;
   private final PersonService personService;
   private final TelegramPersonRepository telegramPersonRepository;
+  private final UsernameReplaceUtil usernameReplaceUtil;
 
   @Transactional(propagation = Propagation.REQUIRED)
   public List<TelegramPerson> storePersons(Update update) {
-    final var command = update.getMessage().getText()
-      .replaceFirst("@me(\b|$)", "@" + update.getMessage().getFrom().getUserName());
+    final var command = usernameReplaceUtil.replaceUsername(update);
     final var chatId = update.getMessage().getChatId();
     final var persons = personMessageMapper.map(command, chatId);
 
     return storeMissed(persons, chatId);
   }
 
-  public List<TelegramPerson> getByTelegramsAndChatId(List<String> telegrams, Long chatId) {
-    return telegramPersonMapper.mapToTelegrams(telegramPersonRepository.findByChatIdAndTelegrams(chatId, telegrams));
+  public TelegramPerson getByTelegramAndChatId(String telegram, Long chatId) {
+    return telegramPersonRepository.findByTelegram(chatId, telegram)
+      .map(telegramPersonMapper::mapToTelegram)
+      .orElseGet(() -> saveNew(telegram, chatId));
+  }
+
+  public List<TelegramPerson> getAllByTelegramsAndChatId(List<String> telegrams, Long chatId) {
+    return telegramPersonMapper.mapToTelegrams(telegramPersonRepository.findAllByChatIdAndTelegrams(chatId, telegrams));
   }
 
   public List<TelegramPerson> getAllByGameId(UUID gameId) {
@@ -44,7 +50,7 @@ public class TelegramPersonService {
   // todo: refactor
   private List<TelegramPerson> storeMissed(List<TelegramPerson> persons, Long chatId) {
     final var stored = telegramPersonMapper
-      .mapToTelegrams(telegramPersonRepository.findByChatIdAndTelegrams(chatId, persons.stream().map(
+      .mapToTelegrams(telegramPersonRepository.findAllByChatIdAndTelegrams(chatId, persons.stream().map(
         TelegramPerson::getTelegram).toList()));
 
     final var storedTelegrams = stored.stream()
@@ -63,6 +69,17 @@ public class TelegramPersonService {
     }
 
     return persons;
+  }
+
+  private TelegramPerson saveNew(String telegram, Long chatId) {
+    final var telegramPerson = TelegramPerson.builder()
+      .id(UUID.randomUUID())
+      .telegram(telegram)
+      .chatId(chatId)
+      .build();
+
+    telegramPersonRepository.save(telegramPerson);
+    return telegramPerson;
   }
 
 }

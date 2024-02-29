@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
+import java.time.Instant;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class TelegramPrizePoolServiceTest {
 
   private static final UUID GAME_ID = UUID.fromString("4a411a12-2386-4dce-b579-d806c91d6d17");
+  private static final Instant GAME_TIMESTAMP = Instant.parse("2024-01-01T00:00:01Z");
   private static final Long CHAT_ID = 123L;
 
   private static final String PRIZE_POOL_COMMAND =
@@ -42,9 +44,10 @@ class TelegramPrizePoolServiceTest {
   @Test
   void givenGameIdAndChatId_whenPrizePoolMessageReceived_shouldStorePrizePoolAgainstGame() {
     final var update = UpdateCreator.update(
-      MessageCreator.message(builder -> {
-        builder.setText(PRIZE_POOL_COMMAND);
-        builder.setChat(ChatCreator.chat(CHAT_ID));
+      MessageCreator.message(message -> {
+        message.setText(PRIZE_POOL_COMMAND);
+        message.setChat(ChatCreator.chat(CHAT_ID));
+        message.setPinnedMessage(MessageCreator.message(msg -> msg.setDate((int) GAME_TIMESTAMP.getEpochSecond())));
       })
     );
 

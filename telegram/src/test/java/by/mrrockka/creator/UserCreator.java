@@ -13,7 +13,11 @@ public class UserCreator {
   public static final String USER_NAME = FAKER.name().username();
 
   public static User user() {
-    return user(null);
+    return user((Consumer<User>) null);
+  }
+
+  public static User user(String username) {
+    return user(user -> user.setUserName(username));
   }
 
   public static User user(Consumer<User> userConsumer) {

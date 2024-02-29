@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,6 +28,7 @@ class TelegramFinalePlacesServiceTest {
 
   private static final Long CHAT_ID = 123L;
   private static final UUID GAME_ID = UUID.fromString("4a411a12-2386-4dce-b579-d806c91d6d17");
+  private static final Instant GAME_TIMESTAMP = Instant.parse("2024-01-01T00:00:01Z");
   private static final String COMMAND = """
     /finaleplaces
     1 @king
@@ -48,6 +50,7 @@ class TelegramFinalePlacesServiceTest {
       MessageCreator.message(message -> {
         message.setText(COMMAND);
         message.setChat(ChatCreator.chat(CHAT_ID));
+        message.setPinnedMessage(MessageCreator.message(msg -> msg.setDate((int) GAME_TIMESTAMP.getEpochSecond())));
       })
     );
 
@@ -60,7 +63,7 @@ class TelegramFinalePlacesServiceTest {
     );
 
     final var telegrams = List.of("king", "queen", "jack");
-    final var telegramPersons = telegramPersonService.getByTelegramsAndChatId(telegrams, CHAT_ID);
+    final var telegramPersons = telegramPersonService.getAllByTelegramsAndChatId(telegrams, CHAT_ID);
     final var expected = new FinalePlaces(
       List.of(
         FinalPlace.builder()

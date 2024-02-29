@@ -37,14 +37,14 @@ class TelegramPersonRepositoryTest {
                                     .telegram(TELEGRAM)
                                     .build());
     assertThat(
-      telegramPersonRepository.findByChatIdAndTelegrams(CHAT_ID, List.of(TELEGRAM)).stream()
+      telegramPersonRepository.findAllByChatIdAndTelegrams(CHAT_ID, List.of(TELEGRAM)).stream()
         .map(TelegramPersonEntity::getId))
       .contains(PERSON_ID);
   }
 
   @Test
   void givenGameIdAndEntries_whenGetByGameIdExecuted_shouldReturnValidTelegramEntities() {
-    final var expected = telegramPersonRepository.findByChatIdAndTelegrams(CHAT_ID, List.of("king", "queen"));
+    final var expected = telegramPersonRepository.findAllByChatIdAndTelegrams(CHAT_ID, List.of("king", "queen"));
     assertThat(telegramPersonRepository.findAllByGameId(GAME_ID))
       .containsExactlyInAnyOrderElementsOf(expected);
   }

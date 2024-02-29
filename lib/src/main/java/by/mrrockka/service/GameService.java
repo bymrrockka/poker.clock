@@ -2,7 +2,6 @@ package by.mrrockka.service;
 
 import by.mrrockka.domain.Player;
 import by.mrrockka.domain.game.Game;
-import by.mrrockka.domain.payments.NoEntriesException;
 import by.mrrockka.mapper.GameMapper;
 import by.mrrockka.repo.game.GameRepository;
 import lombok.NonNull;
@@ -38,7 +37,7 @@ public class GameService {
     return players.stream()
       .map(player -> player.entries().total())
       .reduce(BigDecimal::add)
-      .orElseThrow(NoEntriesException::new);
+      .orElse(BigDecimal.ZERO);
   }
 
 }

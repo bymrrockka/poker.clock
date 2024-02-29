@@ -1,4 +1,4 @@
-package by.mrrockka.mapper.finaleplaces;
+package by.mrrockka.mapper;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Component;

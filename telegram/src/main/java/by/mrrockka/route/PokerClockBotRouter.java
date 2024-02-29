@@ -14,7 +14,7 @@ import java.util.Objects;
 
 @Component
 @Slf4j
-public class PokerCalculatorBotRouter extends TelegramLongPollingBot {
+public class PokerClockBotRouter extends TelegramLongPollingBot {
   private static final String BOT_NAME = "Poker calculator bot";
   @Value("${telegrambots.token}")
   private String token;

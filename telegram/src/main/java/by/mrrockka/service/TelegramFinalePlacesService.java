@@ -3,7 +3,7 @@ package by.mrrockka.service;
 import by.mrrockka.domain.finaleplaces.FinalPlace;
 import by.mrrockka.domain.finaleplaces.FinalePlaces;
 import by.mrrockka.domain.game.Game;
-import by.mrrockka.mapper.finaleplaces.FinalePlacesMessageMapper;
+import by.mrrockka.mapper.FinalePlacesMessageMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
@@ -23,10 +23,10 @@ public class TelegramFinalePlacesService {
   private final FinalePlacesMessageMapper finalePlacesMessageMapper;
   private final TelegramGameService telegramGameService;
   private final TelegramPersonService telegramPersonService;
+  private final UsernameReplaceUtil usernameReplaceUtil;
 
   public BotApiMethodMessage storePrizePool(Update update) {
-    final var command = update.getMessage().getText()
-      .replaceFirst("@me(\b|$)", "@" + update.getMessage().getFrom().getUserName());
+    final var command = usernameReplaceUtil.replaceUsername(update);
     final var chatId = update.getMessage().getChatId();
     final var pinnedMessageTimestamp = Optional.ofNullable(update.getMessage().getPinnedMessage())
       .map(Message::getDate)
@@ -35,7 +35,7 @@ public class TelegramFinalePlacesService {
 
     final var places = finalePlacesMessageMapper.map(command);
     final var persons = telegramPersonService
-      .getByTelegramsAndChatId(places.stream().map(Pair::getValue).toList(), chatId);
+      .getAllByTelegramsAndChatId(places.stream().map(Pair::getValue).toList(), chatId);
 
     final var finalePlaces = new FinalePlaces(
       places.stream()

@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
+import java.time.Instant;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(PostgreSQLExtension.class)
@@ -18,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class TelegramCalculationServiceTest {
 
   private static final Long CHAT_ID = 123L;
+  private static final Instant GAME_TIMESTAMP = Instant.parse("2024-01-02T00:00:01Z");
 
   @Autowired
   private TelegramCalculationService telegramCalculationService;
@@ -29,6 +32,7 @@ class TelegramCalculationServiceTest {
         message -> {
           message.setText("/calculate");
           message.setChat(ChatCreator.chat(CHAT_ID));
+          message.setPinnedMessage(MessageCreator.message(msg -> msg.setDate((int) GAME_TIMESTAMP.getEpochSecond())));
         }));
 
     final var expected = """

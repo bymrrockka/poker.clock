@@ -1,7 +1,7 @@
 package by.mrrockka.service;
 
 import by.mrrockka.domain.game.Game;
-import by.mrrockka.mapper.prizepool.PrizePoolMessageMapper;
+import by.mrrockka.mapper.PrizePoolMessageMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
