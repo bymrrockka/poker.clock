@@ -2,6 +2,7 @@ package by.mrrockka.integration.repo;
 
 import by.mrrockka.config.PostgreSQLExtension;
 import by.mrrockka.domain.TelegramPerson;
+import by.mrrockka.repo.person.PersonRepository;
 import by.mrrockka.repo.person.TelegramPersonEntity;
 import by.mrrockka.repo.person.TelegramPersonRepository;
 import org.junit.jupiter.api.Test;
@@ -18,23 +19,33 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 class TelegramPersonRepositoryTest {
 
-  private static final UUID PERSON_ID = UUID.fromString("13b4108e-2dfa-4fea-8b7b-277e1c87d2d8");
+  private static final UUID PERSON_ID = UUID.fromString("e2691144-3b1b-4841-9693-fad7af25bba9");
+  private static final UUID GAME_ID = UUID.fromString("4a411a12-2386-4dce-b579-d806c91d6d17");
   private static final Long CHAT_ID = 123L;
   private static final String TELEGRAM = "nickname";
 
   @Autowired
-  private TelegramPersonRepository personRepository;
+  private TelegramPersonRepository telegramPersonRepository;
+  @Autowired
+  private PersonRepository personRepository;
 
   @Test
-  void givenPersonIdAndChatIdAndTelegram_whenSaveExecuted_shouldReturnValidIds() {
-    personRepository.save(TelegramPerson.builder()
-                            .id(PERSON_ID)
-                            .chatId(CHAT_ID)
-                            .telegram(TELEGRAM)
-                            .build());
+  void givenPersonIdAndChatIdAndTelegram_whenSaveExecuted_shouldReturnValidEntities() {
+    telegramPersonRepository.save(TelegramPerson.builder()
+                                    .id(PERSON_ID)
+                                    .chatId(CHAT_ID)
+                                    .telegram(TELEGRAM)
+                                    .build());
     assertThat(
-      personRepository.findByChatIdAndTelegrams(CHAT_ID, List.of(TELEGRAM)).stream()
+      telegramPersonRepository.findByChatIdAndTelegrams(CHAT_ID, List.of(TELEGRAM)).stream()
         .map(TelegramPersonEntity::getId))
       .contains(PERSON_ID);
+  }
+
+  @Test
+  void givenGameIdAndEntries_whenGetByGameIdExecuted_shouldReturnValidTelegramEntities() {
+    final var expected = telegramPersonRepository.findByChatIdAndTelegrams(CHAT_ID, List.of("king", "queen"));
+    assertThat(telegramPersonRepository.findAllByGameId(GAME_ID))
+      .containsExactlyInAnyOrderElementsOf(expected);
   }
 }

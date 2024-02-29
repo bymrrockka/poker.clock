@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
@@ -56,6 +57,27 @@ public class TelegramPersonRepository {
       .addValue(TelegramPersonColumnNames.TELEGRAM, telegrams);
 
     return jdbcTemplate.query(FIND_BY_CHAT_ID_AND_TELEGRAMS_SQL, params, telegramPersonEntityRowMapper);
+  }
+
+  private static final String FIND_ALL_BY_GAME_ID = """
+      SELECT
+        cp.telegram, cp.chat_id, p.id, p.first_name, p.last_name
+      FROM
+        entries as e
+      JOIN
+        person as p on p.id = e.person_id
+      JOIN
+        chat_persons as cp on cp.person_id = e.person_id
+      WHERE
+        e.game_id = :game_id
+    """;
+
+  //  todo: probably rewrite repo to return telegram persons
+  public List<TelegramPersonEntity> findAllByGameId(UUID gameId) {
+    final var params = new MapSqlParameterSource()
+      .addValue(TelegramPersonColumnNames.GAME_ID, gameId);
+
+    return jdbcTemplate.query(FIND_ALL_BY_GAME_ID, params, telegramPersonEntityRowMapper);
   }
   /* todo: move to service
 

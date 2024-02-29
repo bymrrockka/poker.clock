@@ -1,19 +1,26 @@
 package by.mrrockka.route;
 
+import by.mrrockka.config.PostgreSQLExtension;
 import by.mrrockka.creator.MessageCreator;
 import lombok.Builder;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.stream.Stream;
 
 import static by.mrrockka.creator.UpdateCreator.update;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CalculatePaymentsCommandRouteTest {
+@ExtendWith(PostgreSQLExtension.class)
+@SpringBootTest
+class CalculateCommandRouteTest {
 
-  private final CalculatePaymentsCommandRoute calculatePaymentsRoute = new CalculatePaymentsCommandRoute();
+  @Autowired
+  private CalculateCommandRoute calculatePaymentsRoute;
 
   @Builder
   private record MessageArgument(String message, boolean result, boolean isCommand) {

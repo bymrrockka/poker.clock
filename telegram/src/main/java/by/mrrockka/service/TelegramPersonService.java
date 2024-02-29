@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 @Service
@@ -34,6 +35,10 @@ public class TelegramPersonService {
 
   public List<TelegramPerson> getByTelegramsAndChatId(List<String> telegrams, Long chatId) {
     return telegramPersonMapper.mapToTelegrams(telegramPersonRepository.findByChatIdAndTelegrams(chatId, telegrams));
+  }
+
+  public List<TelegramPerson> getAllByGameId(UUID gameId) {
+    return telegramPersonMapper.mapToTelegrams(telegramPersonRepository.findAllByGameId(gameId));
   }
 
   // todo: refactor

@@ -1,20 +1,21 @@
 package by.mrrockka.route;
 
+import by.mrrockka.service.TelegramCalculationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
-public class CalculatePaymentsCommandRoute implements CommandRoute {
+@RequiredArgsConstructor
+public class CalculateCommandRoute implements CommandRoute {
   private static final String COMMAND = "/calculate";
+
+  private final TelegramCalculationService telegramCalculationService;
 
   @Override
   public BotApiMethodMessage process(final Update update) {
-    return SendMessage.builder()
-      .chatId(update.getMessage().getChatId())
-      .text(update.getMessage().getText())
-      .build();
+    return telegramCalculationService.calculatePayments(update);
   }
 
   @Override
