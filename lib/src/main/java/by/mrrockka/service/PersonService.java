@@ -23,6 +23,10 @@ public class PersonService {
     return Optional.ofNullable(personMapper.toDomain(personRepository.findById(personId)));
   }
 
+  public List<Person> retrievePersons(List<UUID> personIds) {
+    return personMapper.toDomains(personRepository.findAllByIds(personIds));
+  }
+
   @Transactional(propagation = Propagation.REQUIRED)
   public void storeAll(List<Person> persons) {
     personRepository.saveAll(personMapper.toEntities(persons));

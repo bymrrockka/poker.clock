@@ -2,7 +2,6 @@ package by.mrrockka.repo.person;
 
 import by.mrrockka.domain.TelegramPerson;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -10,13 +9,13 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
 public class TelegramPersonRepository {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
+  private final TelegramPersonEntityRowMapper telegramPersonEntityRowMapper;
 
   private static final String SAVE_SQL = """
     INSERT INTO chat_persons
@@ -28,8 +27,8 @@ public class TelegramPersonRepository {
   public void save(TelegramPerson person) {
     final var params = new MapSqlParameterSource()
       .addValue(TelegramPersonColumnNames.PERSON_ID, person.getId())
-      .addValue(TelegramPersonColumnNames.CHAT_ID, person.chatId())
-      .addValue(TelegramPersonColumnNames.TELEGRAM, person.telegram());
+      .addValue(TelegramPersonColumnNames.CHAT_ID, person.getChatId())
+      .addValue(TelegramPersonColumnNames.TELEGRAM, person.getTelegram());
     jdbcTemplate.update(SAVE_SQL, params);
   }
 
@@ -40,21 +39,23 @@ public class TelegramPersonRepository {
 
   private static final String FIND_BY_CHAT_ID_AND_TELEGRAMS_SQL = """
       SELECT
-        person_id, telegram
+        cp.telegram, cp.chat_id, p.id, p.first_name, p.last_name
       FROM
-        chat_persons
+        chat_persons as cp
+      JOIN
+        person as p on p.id = person_id
       WHERE
         chat_id = :chat_id AND
         telegram IN (:telegram)
     """;
 
-  public List<Pair<UUID, String>> findByChatIdAndTelegrams(Long chatId, List<String> telegrams) {
+  //  todo: probably rewrite repo to return telegram persons
+  public List<TelegramPersonEntity> findByChatIdAndTelegrams(Long chatId, List<String> telegrams) {
     final var params = new MapSqlParameterSource()
       .addValue(TelegramPersonColumnNames.CHAT_ID, chatId)
       .addValue(TelegramPersonColumnNames.TELEGRAM, telegrams);
 
-    return jdbcTemplate.query(FIND_BY_CHAT_ID_AND_TELEGRAMS_SQL, params, (rs, rowNum) ->
-      Pair.of(rs.getObject(1, UUID.class), rs.getString(2)));
+    return jdbcTemplate.query(FIND_BY_CHAT_ID_AND_TELEGRAMS_SQL, params, telegramPersonEntityRowMapper);
   }
   /* todo: move to service
 

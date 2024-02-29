@@ -28,7 +28,7 @@ public class FinalePlacesRepository {
   public void save(FinalePlacesEntity finalePlacesEntity) {
     finalePlacesEntity.places().entrySet()
       .stream()
-      .map(entry -> new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue().id()))
+      .map(entry -> new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue().getId()))
       .forEach(entry -> {
         final MapSqlParameterSource params = new MapSqlParameterSource()
           .addValue(FinaleColumnNames.GAME_ID, finalePlacesEntity.gameId())

@@ -5,10 +5,11 @@ import by.mrrockka.creator.ChatCreator;
 import by.mrrockka.creator.MessageCreator;
 import by.mrrockka.creator.UpdateCreator;
 import by.mrrockka.creator.UserCreator;
+import by.mrrockka.domain.Person;
 import by.mrrockka.repo.person.PersonRepository;
+import by.mrrockka.repo.person.TelegramPersonEntity;
 import by.mrrockka.repo.person.TelegramPersonRepository;
 import by.mrrockka.service.TelegramPersonService;
-import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -67,11 +68,13 @@ class TelegramPersonServiceTest {
       telegrams.set(3, UserCreator.USER_NAME);
     }
 
-    final var personIds = telegramPersonService.storePersons(update);
+    final var personIds = telegramPersonService.storePersons(update).stream()
+      .map(Person::getId)
+      .toList();
     assertThat(personRepository.findAllByIds(personIds)).hasSize(args.size());
 
-    final var actualIds = telegramPersonRepository.findByChatIdAndTelegrams(CHAT_ID, telegrams)
-      .stream().map(Pair::getKey)
+    final var actualIds = telegramPersonRepository.findByChatIdAndTelegrams(CHAT_ID, telegrams).stream()
+      .map(TelegramPersonEntity::getId)
       .toList();
 
     assertThat(actualIds).containsAll(personIds);

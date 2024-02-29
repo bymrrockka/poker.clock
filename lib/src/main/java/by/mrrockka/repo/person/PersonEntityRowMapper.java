@@ -18,9 +18,7 @@ public class PersonEntityRowMapper implements RowMapper<PersonEntity> {
       .firstname(rs.getString(FIRST_NAME))
       .lastname(rs.getString(LAST_NAME))
       .build();
-
   }
-
 }
 
 

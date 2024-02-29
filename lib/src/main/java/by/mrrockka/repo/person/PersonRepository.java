@@ -26,9 +26,9 @@ public class PersonRepository {
 
   public void save(PersonEntity personEntity) {
     final var params = new MapSqlParameterSource()
-      .addValue(ID, personEntity.id())
-      .addValue(FIRST_NAME, personEntity.firstname())
-      .addValue(LAST_NAME, personEntity.lastname());
+      .addValue(ID, personEntity.getId())
+      .addValue(FIRST_NAME, personEntity.getFirstname())
+      .addValue(LAST_NAME, personEntity.getLastname());
     jdbcTemplate.update(SAVE_SQL, params);
   }
 

@@ -33,7 +33,7 @@ class EntriesEntityResultSetExtractor implements ResultSetExtractor<Optional<Ent
     return EntriesEntity.builder()
       .gameId(UUID.fromString(rs.getString(EntryColumnNames.GAME_ID)))
       .person(person)
-      .amounts(extractAmounts(rs, person.id()))
+      .amounts(extractAmounts(rs, person.getId()))
       .build();
   }
 

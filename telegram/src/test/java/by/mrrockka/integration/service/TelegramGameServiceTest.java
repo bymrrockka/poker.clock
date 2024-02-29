@@ -12,9 +12,9 @@ import by.mrrockka.repo.game.GameRepository;
 import by.mrrockka.repo.game.TelegramGameRepository;
 import by.mrrockka.repo.person.PersonEntity;
 import by.mrrockka.repo.person.PersonRepository;
+import by.mrrockka.repo.person.TelegramPersonEntity;
 import by.mrrockka.repo.person.TelegramPersonRepository;
 import by.mrrockka.service.TelegramGameService;
-import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,20 +87,21 @@ class TelegramGameServiceTest {
       UserCreator.USER_NAME
     );
 
-    final var personIdTelegramPair = telegramPersonRepository.findByChatIdAndTelegrams(chatId, telegrams);
+    final var telegramPersonEntyties = telegramPersonRepository.findByChatIdAndTelegrams(chatId, telegrams);
 
     assertAll(
-      () -> assertThat(personIdTelegramPair).isNotEmpty(),
-      () -> assertThat(personIdTelegramPair.stream().map(Pair::getValue).toList())
+      () -> assertThat(telegramPersonEntyties).isNotEmpty(),
+      () -> assertThat(telegramPersonEntyties.stream().map(TelegramPersonEntity::getTelegram).toList())
         .containsExactlyInAnyOrderElementsOf(telegrams)
     );
 
-    final var personEntities = personRepository.findAllByIds(personIdTelegramPair.stream().map(Pair::getKey).toList());
+    final var personEntities = personRepository.findAllByIds(
+      telegramPersonEntyties.stream().map(TelegramPersonEntity::getId).toList());
 
     assertAll(
       () -> assertThat(personEntities).isNotEmpty(),
-      () -> assertThat(personIdTelegramPair.stream().map(Pair::getKey).toList())
-        .containsExactlyInAnyOrderElementsOf(personEntities.stream().map(PersonEntity::id).toList())
+      () -> assertThat(telegramPersonEntyties.stream().map(TelegramPersonEntity::getId).toList())
+        .containsExactlyInAnyOrderElementsOf(personEntities.stream().map(PersonEntity::getId).toList())
     );
 
     final var entriesEntities = entriesRepository.findAllByGameId(gameId.get());

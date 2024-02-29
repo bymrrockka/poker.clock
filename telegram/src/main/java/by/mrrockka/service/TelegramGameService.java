@@ -1,5 +1,6 @@
 package by.mrrockka.service;
 
+import by.mrrockka.domain.Person;
 import by.mrrockka.domain.game.Game;
 import by.mrrockka.mapper.game.GameMessageMapper;
 import by.mrrockka.repo.game.TelegramGameRepository;
@@ -36,7 +37,9 @@ public class TelegramGameService {
     log.debug("Processing {\n%s\n} message from %s chat id. Timestamp %s".formatted(command, chatId, messageTimestamp));
 
     final var game = gameMessageMapper.map(command);
-    final var personIds = telegramPersonService.storePersons(update);
+    final var personIds = telegramPersonService.storePersons(update).stream()
+      .map(Person::getId)
+      .toList();
     gameService.storeNewGame(game);
     telegramGameRepository.save(game.getId(), chatId, messageTimestamp);
     entriesService.storeBatch(game.getId(), personIds, game.getBuyIn(), messageTimestamp);

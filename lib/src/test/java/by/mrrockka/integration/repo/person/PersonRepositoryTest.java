@@ -33,7 +33,7 @@ class PersonRepositoryTest {
 
     personRepository.save(expected);
 
-    assertThat(personRepository.findById(expected.id())).isEqualTo(expected);
+    assertThat(personRepository.findById(expected.getId())).isEqualTo(expected);
   }
 
   @Test
@@ -42,7 +42,7 @@ class PersonRepositoryTest {
 
     personRepository.saveAll(expected);
 
-    assertThat(personRepository.findAllByIds(List.of(expected.get(0).id()))).isEqualTo(expected);
+    assertThat(personRepository.findAllByIds(List.of(expected.get(0).getId()))).isEqualTo(expected);
   }
 
   static Stream<Arguments> telegramArguments() {

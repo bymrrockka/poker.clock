@@ -1,15 +1,21 @@
 package by.mrrockka.repo.person;
 
-import lombok.Builder;
-import lombok.NonNull;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 
 import java.util.UUID;
 
-@Builder
-public record PersonEntity(
+@SuperBuilder
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
+@ToString
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class PersonEntity {
   @NonNull
-  UUID id,
-  String firstname,
-  String lastname
-) {
+  UUID id;
+  String firstname;
+  String lastname;
 }

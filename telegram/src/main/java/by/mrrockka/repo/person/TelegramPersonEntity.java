@@ -1,4 +1,5 @@
-package by.mrrockka.domain;
+package by.mrrockka.repo.person;
+
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -11,11 +12,10 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TelegramPerson extends Person {
+public class TelegramPersonEntity extends PersonEntity {
 
   @NonNull
   Long chatId;
   @NonNull
   String telegram;
-
 }
