@@ -1,0 +1,14 @@
+services:
+  telegram:
+    build:
+      dockerfile: Dockerfile-telegram
+    depends_on:
+      - postgres
+  postgres:
+    image: 'postgres:16.1'
+    ports:
+      - '5432:5432'
+    environment:
+      - 'POSTGRES_USER=psuser'
+      - 'POSTGRES_DB=pokerclock'
+      - 'POSTGRES_PASSWORD=r8E6&r3>'
