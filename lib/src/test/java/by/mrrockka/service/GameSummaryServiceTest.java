@@ -37,10 +37,10 @@ class GameSummaryServiceTest {
     final var prizePool = PrizePoolCreator.domain();
     final var expected = gameSummary();
 
-    when(finalePlacesService.get(GAME_ID))
+    when(finalePlacesService.getByGameId(GAME_ID))
       .thenReturn(finalePlaces);
 
-    when(prizePoolService.getPrizePool(GAME_ID))
+    when(prizePoolService.getByGameId(GAME_ID))
       .thenReturn(prizePool);
 
 

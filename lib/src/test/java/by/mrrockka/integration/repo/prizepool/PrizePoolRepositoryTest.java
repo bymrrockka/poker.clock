@@ -1,8 +1,8 @@
 package by.mrrockka.integration.repo.prizepool;
 
+import by.mrrockka.IntegrationTestConfiguration;
+import by.mrrockka.config.PostgreSQLExtension;
 import by.mrrockka.creator.PrizePoolCreator;
-import by.mrrockka.integration.repo.config.IntegrationTestConfiguration;
-import by.mrrockka.integration.repo.config.PostgreSQLExtension;
 import by.mrrockka.repo.prizepool.PrizePoolRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,6 +27,6 @@ class PrizePoolRepositoryTest {
     final var expected = PrizePoolCreator.entity(builder -> builder.gameId(TEST_GAME_ID));
     prizePoolRepository.save(expected);
     assertThat(prizePoolRepository.findByGameId(TEST_GAME_ID))
-      .isEqualTo(expected);
+      .contains(expected);
   }
 }

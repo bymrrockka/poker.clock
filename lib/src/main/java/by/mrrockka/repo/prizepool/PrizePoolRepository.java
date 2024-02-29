@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static by.mrrockka.repo.prizepool.PrizePoolColumnNames.GAME_ID;
@@ -46,11 +47,12 @@ public class PrizePoolRepository {
       game_id = :game_id;
     """;
 
-  public PrizePoolEntity findByGameId(UUID gameId) {
+  public Optional<PrizePoolEntity> findByGameId(UUID gameId) {
     final var params = new MapSqlParameterSource()
       .addValue(GAME_ID, gameId);
 
-    return jdbcTemplate.queryForObject(FIND_BY_GAME_ID_SQL, params, prizePoolRowMapper);
+    return jdbcTemplate.query(FIND_BY_GAME_ID_SQL, params, rs -> rs.next() ?
+      Optional.ofNullable(prizePoolRowMapper.mapRow(rs, rs.getRow())) : Optional.empty());
   }
 
 }

@@ -15,7 +15,7 @@ public record Entries(List<BigDecimal> entries) {
       .orElse(Collections.emptyList())
       .stream()
       .reduce(BigDecimal::add)
-      .orElseThrow(NoPaymentsException::new);
+      .orElseThrow(NoEntriesException::new);
   }
 
 }

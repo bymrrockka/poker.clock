@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,6 +29,6 @@ public class TelegramGameRepositoryTest {
   void givenGame_whenGameStoredInDb_shouldStoreChatIdAndCreationDate() {
     telegramGameRepository.save(GAME_ID, CHAT_ID, CREATED_AT);
     assertThat(telegramGameRepository.findByChatIdAndCreatedAt(CHAT_ID, CREATED_AT))
-      .isEqualTo(GAME_ID);
+      .isEqualTo(Optional.of(GAME_ID));
   }
 }

@@ -1,8 +1,8 @@
 package by.mrrockka.integration.repo.finalplaces;
 
+import by.mrrockka.IntegrationTestConfiguration;
+import by.mrrockka.config.PostgreSQLExtension;
 import by.mrrockka.creator.PersonCreator;
-import by.mrrockka.integration.repo.config.IntegrationTestConfiguration;
-import by.mrrockka.integration.repo.config.PostgreSQLExtension;
 import by.mrrockka.repo.finalplaces.FinalePlacesEntity;
 import by.mrrockka.repo.finalplaces.FinalePlacesRepository;
 import by.mrrockka.repo.person.PersonEntity;

@@ -1,4 +1,4 @@
-package by.mrrockka.integration.repo.config;
+package by.mrrockka;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;

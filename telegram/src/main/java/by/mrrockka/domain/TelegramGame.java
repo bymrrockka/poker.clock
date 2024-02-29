@@ -6,7 +6,7 @@ import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
-
+//todo: verify if it's needed
 @SuperBuilder
 @Getter
 @Accessors(fluent = true)

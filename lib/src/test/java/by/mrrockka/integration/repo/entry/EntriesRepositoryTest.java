@@ -1,7 +1,7 @@
 package by.mrrockka.integration.repo.entry;
 
-import by.mrrockka.integration.repo.config.IntegrationTestConfiguration;
-import by.mrrockka.integration.repo.config.PostgreSQLExtension;
+import by.mrrockka.IntegrationTestConfiguration;
+import by.mrrockka.config.PostgreSQLExtension;
 import by.mrrockka.repo.entries.EntriesEntity;
 import by.mrrockka.repo.entries.EntriesRepository;
 import by.mrrockka.repo.person.PersonRepository;

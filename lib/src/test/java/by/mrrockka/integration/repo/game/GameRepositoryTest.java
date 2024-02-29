@@ -1,8 +1,8 @@
 package by.mrrockka.integration.repo.game;
 
+import by.mrrockka.IntegrationTestConfiguration;
+import by.mrrockka.config.PostgreSQLExtension;
 import by.mrrockka.creator.GameCreator;
-import by.mrrockka.integration.repo.config.IntegrationTestConfiguration;
-import by.mrrockka.integration.repo.config.PostgreSQLExtension;
 import by.mrrockka.repo.game.GameRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

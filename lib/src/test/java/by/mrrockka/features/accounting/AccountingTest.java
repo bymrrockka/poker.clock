@@ -5,7 +5,7 @@ import by.mrrockka.creator.PersonCreator;
 import by.mrrockka.domain.Person;
 import by.mrrockka.domain.Player;
 import by.mrrockka.domain.payments.Entries;
-import by.mrrockka.domain.payments.NoPaymentsException;
+import by.mrrockka.domain.payments.NoEntriesException;
 import by.mrrockka.domain.payout.Debt;
 import by.mrrockka.domain.payout.Payout;
 import by.mrrockka.domain.summary.FinalePlaceSummary;
@@ -198,7 +198,7 @@ class AccountingTest {
     );
 
     assertThatThrownBy(() -> accounting.calculate(game))
-      .isInstanceOf(NoPaymentsException.class);
+      .isInstanceOf(NoEntriesException.class);
   }
 
 

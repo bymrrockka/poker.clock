@@ -16,8 +16,10 @@ public class PrizePoolService {
   private final PrizePoolRepository prizePoolRepository;
   private final PrizePoolMapper prizePoolMapper;
 
-  public PrizePool getPrizePool(@NonNull UUID gameId) {
-    return prizePoolMapper.toDomain(prizePoolRepository.findByGameId(gameId));
+  public PrizePool getByGameId(@NonNull UUID gameId) {
+    return prizePoolRepository.findByGameId(gameId)
+      .map(prizePoolMapper::toDomain)
+      .orElse(null);
   }
 
   public void store(@NonNull UUID gameId, @NonNull PrizePool prizePool) {

@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'maven-publish'
+    id 'java-test-fixtures'
     alias(libs.plugins.springBootPlugin)
     alias(libs.plugins.springDepManagementPlugin)
 }
@@ -29,12 +30,17 @@ dependencies {
     testAnnotationProcessor libs.lombok
     testAnnotationProcessor libs.mapstructProcessor
 
-    testImplementation libs.jupiter
+    testFixturesCompileOnly libs.lombok
+    testFixturesAnnotationProcessor libs.lombok
+    testFixturesAnnotationProcessor libs.mapstructProcessor
+
     testImplementation libs.assertjCore
-    testImplementation libs.testContainerPostgresql
-    testImplementation libs.testContainerJupiter
     testImplementation libs.springBootTest
-    testImplementation(libs.javaFaker) {
+
+    testFixturesApi libs.testContainerPostgresql
+    testFixturesApi libs.testContainerJupiter
+    testFixturesApi libs.jupiter
+    testFixturesApi(libs.javaFaker) {
         exclude group: 'org.yaml'
     }
 }

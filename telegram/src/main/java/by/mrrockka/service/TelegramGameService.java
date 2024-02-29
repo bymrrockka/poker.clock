@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -47,8 +47,10 @@ public class TelegramGameService {
       .build();
   }
 
-  public Game getGame(String chatId, LocalDateTime createAt) {
-    return null;
+  public Optional<Game> getGameByTimestampOrLatest(Long chatId, Instant createAt) {
+    return Optional.ofNullable(createAt)
+      .map(instant -> telegramGameRepository.findByChatIdAndCreatedAt(chatId, instant))
+      .orElseGet(() -> telegramGameRepository.findLatestByChatId(chatId))
+      .map(gameService::retrieveGame);
   }
-
 }

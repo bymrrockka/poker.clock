@@ -44,7 +44,7 @@ class FinalePlacesServiceTest {
 
     when(finalePlacesRepository.findByGameId(GAME_ID)).thenReturn(Optional.of(given));
     when(finalePlacesMapper.toDomain(given)).thenReturn(expected);
-    assertThat(finalePlacesService.get(GAME_ID))
+    assertThat(finalePlacesService.getByGameId(GAME_ID))
       .isEqualTo(expected);
   }
 
@@ -52,7 +52,7 @@ class FinalePlacesServiceTest {
   void givenGameId_whenNoFinalePlaces_shouldCallRepoAndReturnNull() {
     when(finalePlacesRepository.findByGameId(GAME_ID)).thenReturn(Optional.empty());
 
-    assertThat(finalePlacesService.get(GAME_ID))
+    assertThat(finalePlacesService.getByGameId(GAME_ID))
       .isNull();
     verifyNoInteractions(finalePlacesMapper);
   }

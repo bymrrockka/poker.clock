@@ -1,8 +1,8 @@
 package by.mrrockka.integration.repo.person;
 
+import by.mrrockka.IntegrationTestConfiguration;
+import by.mrrockka.config.PostgreSQLExtension;
 import by.mrrockka.creator.PersonCreator;
-import by.mrrockka.integration.repo.config.IntegrationTestConfiguration;
-import by.mrrockka.integration.repo.config.PostgreSQLExtension;
 import by.mrrockka.repo.person.PersonRepository;
 import lombok.Builder;
 import org.junit.jupiter.api.Test;

@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,9 +36,9 @@ class PrizePoolServiceTest {
     when(prizePoolMapper.toDomain(entity))
       .thenReturn(expected);
     when(prizePoolRepository.findByGameId(GAME_ID))
-      .thenReturn(entity);
+      .thenReturn(Optional.of(entity));
 
-    final var actual = prizePoolService.getPrizePool(GAME_ID);
+    final var actual = prizePoolService.getByGameId(GAME_ID);
     assertThat(actual).isEqualTo(expected);
   }
 
