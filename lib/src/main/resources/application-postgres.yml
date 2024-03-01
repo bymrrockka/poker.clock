@@ -1,10 +1,10 @@
 spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://postgres:5432/pokerclock?sslmode=disable
+    url: ${DB_URL:jdbc:postgresql://postgres:5432/pokerclock?sslmode=disable}
     driver-class-name: org.postgresql.Driver
-    username: "psuser"
-    password: "r8E6&r3>"
+    username: ${DB_USER:root}
+    password: ${DB_PASSWORD:root}
     hikari:
       connectionTimeout: 3000
       idleTimeout: 3000
