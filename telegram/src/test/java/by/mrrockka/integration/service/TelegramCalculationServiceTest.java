@@ -11,16 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-import java.time.Instant;
-
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest
 class TelegramCalculationServiceTest {
 
   private static final Long CHAT_ID = 123L;
-  private static final Instant GAME_TIMESTAMP = Instant.parse("2024-01-02T00:00:01Z");
+  private static final Integer REPLY_TO_ID = 3;
 
   @Autowired
   private TelegramCalculationService telegramCalculationService;
@@ -32,7 +31,7 @@ class TelegramCalculationServiceTest {
         message -> {
           message.setText("/calculate");
           message.setChat(ChatCreator.chat(CHAT_ID));
-          message.setPinnedMessage(MessageCreator.message(msg -> msg.setDate((int) GAME_TIMESTAMP.getEpochSecond())));
+          message.setReplyToMessage(MessageCreator.message(msg -> msg.setMessageId(REPLY_TO_ID)));
         }));
 
     final var expected = """
@@ -49,8 +48,11 @@ class TelegramCalculationServiceTest {
       """;
     final var response = (SendMessage) telegramCalculationService.calculatePayments(update);
 
-    assertThat(response.getText())
-      .isEqualTo(expected);
+    assertAll(
+      () -> assertThat(response).isNotNull(),
+      () -> assertThat(response.getText()).isEqualTo(expected),
+      () -> assertThat(response.getReplyToMessageId()).isEqualTo(REPLY_TO_ID)
+    );
   }
 
 }

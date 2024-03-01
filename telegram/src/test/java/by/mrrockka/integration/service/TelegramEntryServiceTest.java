@@ -17,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -29,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class TelegramEntryServiceTest {
 
   private static final UUID GAME_ID = UUID.fromString("b759ac52-1496-463f-b0d8-982deeac085c");
-  private static final Instant GAME_TIMESTAMP = Instant.parse("2024-01-01T00:02:01Z");
+  private static final Integer REPLY_TO_ID = 2;
   private static final Long CHAT_ID = 123L;
 
   @Autowired
@@ -54,8 +53,7 @@ class TelegramEntryServiceTest {
       MessageCreator.message(message -> {
         message.setChat(ChatCreator.chat(CHAT_ID));
         message.setText(text);
-        message.setPinnedMessage(
-          MessageCreator.message(pinned -> pinned.setDate((int) GAME_TIMESTAMP.getEpochSecond())));
+        message.setReplyToMessage(MessageCreator.message(msg -> msg.setMessageId(REPLY_TO_ID)));
         message.setFrom(UserCreator.user(telegram));
       })
     );
@@ -65,7 +63,7 @@ class TelegramEntryServiceTest {
       () -> assertThat(response).isNotNull(),
       () -> assertThat(response.getChatId()).isEqualTo(String.valueOf(CHAT_ID)),
       () -> assertThat(response.getText()).isEqualTo(
-        "%s enters the game with %s amount".formatted(telegram, expectedAmount))
+        "%s enters the game. Entry amount is %s".formatted(telegram, expectedAmount))
     );
 
     final var telegramPerson = telegramPersonService.getByTelegramAndChatId(telegram, CHAT_ID);

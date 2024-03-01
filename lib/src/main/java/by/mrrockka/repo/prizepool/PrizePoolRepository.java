@@ -25,7 +25,9 @@ public class PrizePoolRepository {
     INSERT INTO prize_pool
       (game_id, schema)
     VALUES
-      (:game_id, :schema::jsonb);
+      (:game_id, :schema::jsonb)
+    ON CONFLICT (game_id) DO UPDATE
+    SET schema = :schema::jsonb;
     """;
 
   @SneakyThrows

@@ -5,8 +5,10 @@
 CREATE TABLE IF NOT EXISTS chat_games (
     game_id uuid REFERENCES game(id),
     chat_id bigint NOT NULL,
+    message_id int NOT NULL,
     created_at timestamp with time zone NOT NULL,
-	UNIQUE(game_id, chat_id)
+	UNIQUE(game_id, chat_id),
+	UNIQUE(message_id, chat_id)
 );
 
 CREATE TABLE IF NOT EXISTS chat_persons (

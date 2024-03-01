@@ -1,5 +1,6 @@
 package by.mrrockka.creator;
 
+import by.mrrockka.FakerProvider;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.telegram.telegrambots.meta.api.objects.EntityType;
@@ -16,6 +17,12 @@ import static java.util.Objects.nonNull;
 public class MessageCreator {
 
   public static final Instant MESSAGE_TIMESTAMP = Instant.now();
+  public static final Integer MESSAGE_ID = Double.valueOf(100 + Math.random() * 100).intValue();
+  public static final String MESSAGE_TEXT = FakerProvider.faker().chuckNorris().fact();
+
+  public static Message message() {
+    return message((Consumer<Message>) null);
+  }
 
   public static Message message(String text) {
     return message((message) -> message.setText(text));
@@ -27,6 +34,8 @@ public class MessageCreator {
     entity.setType(EntityType.BOTCOMMAND);
 
     final var message = new Message();
+    message.setMessageId(MESSAGE_ID);
+    message.setText(MESSAGE_TEXT);
     message.setChat(ChatCreator.chat());
     message.setEntities(List.of(entity));
     message.setFrom(UserCreator.user());

@@ -13,7 +13,7 @@ public record MessageMetadata(
   @NonNull
   Instant createdAt,
   @NonNull
-  Integer messageId,
+  Integer id,
   String command,
   MessageMetadata replyTo
 ) {

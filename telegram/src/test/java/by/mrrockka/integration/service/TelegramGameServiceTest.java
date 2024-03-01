@@ -66,6 +66,7 @@ class TelegramGameServiceTest {
 
     assertAll(
       () -> assertThat(response.getChatId()).isEqualTo(String.valueOf(chatId)),
+      () -> assertThat(response.getReplyToMessageId()).isEqualTo(MessageCreator.MESSAGE_ID),
       () -> assertThat(response.getText()).isEqualTo("Tournament started.")
     );
 

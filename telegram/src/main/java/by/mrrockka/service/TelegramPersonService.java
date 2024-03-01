@@ -1,6 +1,7 @@
 package by.mrrockka.service;
 
 import by.mrrockka.domain.TelegramPerson;
+import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.mapper.person.PersonMessageMapper;
 import by.mrrockka.mapper.person.TelegramPersonMapper;
 import by.mrrockka.repo.person.TelegramPersonRepository;
@@ -22,15 +23,14 @@ public class TelegramPersonService {
   private final TelegramPersonMapper telegramPersonMapper;
   private final PersonService personService;
   private final TelegramPersonRepository telegramPersonRepository;
-  private final UsernameReplaceUtil usernameReplaceUtil;
+  private final MessageMetadataMapper messageMetadataMapper;
 
   @Transactional(propagation = Propagation.REQUIRED)
   public List<TelegramPerson> storePersons(Update update) {
-    final var command = usernameReplaceUtil.replaceUsername(update);
-    final var chatId = update.getMessage().getChatId();
-    final var persons = personMessageMapper.map(command, chatId);
+    final var messageMetadata = messageMetadataMapper.map(update.getMessage());
+    final var persons = personMessageMapper.map(messageMetadata.command(), messageMetadata.chatId());
 
-    return storeMissed(persons, chatId);
+    return storeMissed(persons, messageMetadata.chatId());
   }
 
   public TelegramPerson getByTelegramAndChatId(String telegram, Long chatId) {

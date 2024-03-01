@@ -1,6 +1,8 @@
 package by.mrrockka.integration.repo;
 
 import by.mrrockka.config.PostgreSQLExtension;
+import by.mrrockka.creator.MessageCreator;
+import by.mrrockka.repo.game.TelegramGameEntity;
 import by.mrrockka.repo.game.TelegramGameRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,7 +29,13 @@ public class TelegramGameRepositoryTest {
 
   @Test
   void givenGame_whenGameStoredInDb_shouldStoreChatIdAndCreationDate() {
-    telegramGameRepository.save(GAME_ID, CHAT_ID, CREATED_AT);
+    final var telegramGameEntity = TelegramGameEntity.builder()
+      .gameId(GAME_ID)
+      .chatId(CHAT_ID)
+      .createdAt(CREATED_AT)
+      .messageId(MessageCreator.MESSAGE_ID)
+      .build();
+    telegramGameRepository.save(telegramGameEntity);
     assertThat(telegramGameRepository.findByChatIdAndCreatedAt(CHAT_ID, CREATED_AT))
       .isEqualTo(Optional.of(GAME_ID));
   }

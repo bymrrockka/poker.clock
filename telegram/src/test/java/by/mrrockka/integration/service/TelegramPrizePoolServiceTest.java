@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-import java.time.Instant;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,8 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class TelegramPrizePoolServiceTest {
 
   private static final UUID GAME_ID = UUID.fromString("4a411a12-2386-4dce-b579-d806c91d6d17");
-  private static final Instant GAME_TIMESTAMP = Instant.parse("2024-01-01T00:00:01Z");
   private static final Long CHAT_ID = 123L;
+  private static final Integer REPLY_TO_ID = 1;
 
   private static final String PRIZE_POOL_COMMAND =
     """
@@ -47,14 +46,21 @@ class TelegramPrizePoolServiceTest {
       MessageCreator.message(message -> {
         message.setText(PRIZE_POOL_COMMAND);
         message.setChat(ChatCreator.chat(CHAT_ID));
-        message.setPinnedMessage(MessageCreator.message(msg -> msg.setDate((int) GAME_TIMESTAMP.getEpochSecond())));
+        message.setReplyToMessage(MessageCreator.message(msg -> msg.setMessageId(REPLY_TO_ID)));
       })
     );
 
     final var message = telegramPrizePoolService.storePrizePool(update);
+    final var expectedMessage = """
+      Prize Pool:
+      	position: 1, percentage: 60
+      	position: 2, percentage: 30
+      	position: 3, percentage: 10
+      	""";
     assertAll(
       () -> assertThat(((SendMessage) message).getChatId()).isEqualTo(String.valueOf(CHAT_ID)),
-      () -> assertThat(((SendMessage) message).getText()).isEqualTo("Prize pool for game %s stored.".formatted(GAME_ID))
+      () -> assertThat(((SendMessage) message).getText()).isEqualTo(expectedMessage),
+      () -> assertThat(((SendMessage) message).getReplyToMessageId()).isEqualTo(REPLY_TO_ID)
     );
 
     final var expected = PrizePoolCreator.domain();

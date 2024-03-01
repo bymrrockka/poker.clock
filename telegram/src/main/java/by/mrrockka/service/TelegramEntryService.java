@@ -1,15 +1,12 @@
 package by.mrrockka.service;
 
 import by.mrrockka.mapper.EntryMessageMapper;
+import by.mrrockka.mapper.MessageMetadataMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-
-import java.time.Instant;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,32 +16,29 @@ public class TelegramEntryService {
   private final EntryMessageMapper entryMessageMapper;
   private final TelegramGameService telegramGameService;
   private final TelegramPersonService telegramPersonService;
-  private final UsernameReplaceUtil usernameReplaceUtil;
+  private final MessageMetadataMapper messageMetadataMapper;
 
   public BotApiMethodMessage storeEntry(Update update) {
-    final var command = usernameReplaceUtil.replaceUsername(update);
-    final var message = update.getMessage();
-    final var chatId = message.getChatId();
-    final var messageTimestamp = Instant.ofEpochSecond(message.getDate());
-    final var pinnedMessageTimestamp = Optional.ofNullable(message.getPinnedMessage())
-      .map(Message::getDate)
-      .map(Instant::ofEpochSecond)
-      .orElse(null);
+    final var messageMetadata = messageMetadataMapper.map(update.getMessage());
+    final var telegramAndAmount = entryMessageMapper.map(messageMetadata.command());
 
-    final var telegramAndAmount = entryMessageMapper.map(command);
-
-    final var game = telegramGameService.getGameByTimestampOrLatest(chatId, pinnedMessageTimestamp)
+    //todo: refactor to find by message id
+    final var telegramGame = telegramGameService
+      .getGameByMessageMetadata(messageMetadata)
       .orElseThrow(); //todo: add meaningful exception
 
-    final var person = telegramPersonService.getByTelegramAndChatId(telegramAndAmount.getKey(), chatId);
+    final var game = telegramGame.game();
+    final var person = telegramPersonService.getByTelegramAndChatId(telegramAndAmount.getKey(),
+                                                                    messageMetadata.chatId());
 
-    entriesService
-      .storeEntry(game.getId(), person.getId(), telegramAndAmount.getValue().orElse(game.getBuyIn()), messageTimestamp);
+    entriesService.storeEntry(game.getId(), person.getId(), telegramAndAmount.getValue().orElse(game.getBuyIn()),
+                              messageMetadata.createdAt());
 
     return SendMessage.builder()
-      .chatId(chatId)
-      .text("%s enters the game with %s amount"
+      .chatId(messageMetadata.chatId())
+      .text("%s enters the game. Entry amount is %s"
               .formatted(telegramAndAmount.getKey(), telegramAndAmount.getValue().orElse(game.getBuyIn())))
+      .replyToMessageId(telegramGame.messageMetadata().id())
       .build();
   }
 }

@@ -5,18 +5,16 @@ import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.domain.game.Game;
 import by.mrrockka.domain.payout.Payout;
 import by.mrrockka.features.accounting.Accounting;
+import by.mrrockka.mapper.MessageMetadataMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 
 import static java.util.Objects.isNull;
 
@@ -28,31 +26,30 @@ public class TelegramCalculationService {
   private final Accounting accounting;
   private final TelegramGameService telegramGameService;
   private final TelegramPersonService telegramPersonService;
+  private final MessageMetadataMapper messageMetadataMapper;
 
   public BotApiMethodMessage calculatePayments(Update update) {
-    final var command = update.getMessage().getText();
-    final var chatId = update.getMessage().getChatId();
-    final var pinnedMessageTimestamp = Optional.ofNullable(update.getMessage().getPinnedMessage())
-      .map(Message::getDate)
-      .map(Instant::ofEpochSecond)
-      .orElse(null);
+    final var messageMetadata = messageMetadataMapper.map(update.getMessage());
 
-    log.debug("Processing {\n%s\n} message from %s chat id.".formatted(command, chatId));
+    log.debug("Processing {\n%s\n} message from %s chat id.".
+                formatted(messageMetadata.command(), messageMetadata.chatId()));
 
-    final var game = telegramGameService.getGameByTimestampOrLatest(chatId, pinnedMessageTimestamp)
+    final var telegramGame = telegramGameService
+      .getGameByMessageMetadata(messageMetadata)
       .orElseThrow(); //todo: add meaningful exception
 
-    validateGame(game);
-    final var telegramPersons = telegramPersonService.getAllByGameId(game.getId());
-    final var payoutResponse = accounting.calculate(game)
+    validateGame(telegramGame.game());
+    final var telegramPersons = telegramPersonService.getAllByGameId(telegramGame.game().getId());
+    final var payoutResponse = accounting.calculate(telegramGame.game())
       .stream()
       .map(payout -> prettyPrintPayout(payout, telegramPersons))
       .reduce("%s\n%s"::formatted)
       .orElseThrow();
 
     return SendMessage.builder()
-      .chatId(chatId)
+      .chatId(messageMetadata.chatId())
       .text(payoutResponse)
+      .replyToMessageId(telegramGame.messageMetadata().id())
       .build();
   }
 
