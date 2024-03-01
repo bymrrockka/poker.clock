@@ -12,10 +12,10 @@ public class EntryMessageMapper {
 
   public Pair<String, Optional<BigDecimal>> map(String command) {
     final var str = command.toLowerCase().strip();
-    final var matcher = Pattern.compile("^/entry @([A-z]+)(([ :\\-=]{1,3})([\\d]+)|)$").matcher(str);
+    final var matcher = Pattern.compile("^/(entry|reentry) @([A-z]+)(([ :\\-=]{1,3})([\\d]+)|)$").matcher(str);
     if (matcher.matches()) {
-      final var amount = matcher.groupCount() > 3 ? matcher.group(4) : null;
-      return Pair.of(matcher.group(1), Optional.ofNullable(amount).map(BigDecimal::new));
+      final var amount = matcher.groupCount() > 4 ? matcher.group(5) : null;
+      return Pair.of(matcher.group(2), Optional.ofNullable(amount).map(BigDecimal::new));
     }
 
     throw new RuntimeException(

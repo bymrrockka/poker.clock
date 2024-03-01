@@ -19,7 +19,9 @@ class EntryMessageMapperTest {
   private static Stream<Arguments> entryMessage() {
     return Stream.of(
       Arguments.of("/entry @king 60", Optional.of(BigDecimal.valueOf(60))),
-      Arguments.of("/entry @king", Optional.<BigDecimal>empty())
+      Arguments.of("/entry @king", Optional.<BigDecimal>empty()),
+      Arguments.of("/reentry @king 60", Optional.of(BigDecimal.valueOf(60))),
+      Arguments.of("/reentry @king", Optional.<BigDecimal>empty())
     );
   }
 
