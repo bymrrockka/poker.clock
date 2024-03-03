@@ -1,6 +1,5 @@
 package by.mrrockka.features.accounting;
 
-import by.mrrockka.domain.Player;
 import by.mrrockka.domain.game.Game;
 import by.mrrockka.domain.payout.Debt;
 import by.mrrockka.domain.payout.Payout;
@@ -82,13 +81,6 @@ public class Accounting {
     }
 
     return payoutbuilder.debts(debts).build();
-  }
-
-  private BigDecimal totalEntriesAmount(final List<Player> players) {
-    return players.stream()
-      .map(player -> player.entries().total())
-      .reduce(BigDecimal::add)
-      .orElseThrow(NoPlayerSpecifiedException::new);
   }
 
 }

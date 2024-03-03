@@ -37,15 +37,21 @@ class TelegramCalculationServiceTest {
     final var expected = """
       -----------------------------
       Payout to: @king
+      	Entries: 30
+      	Prize: 84
+      	Total: 54
       From
       	@ten -> 30
       	@jack -> 24
-            
+
       -----------------------------
       Payout to: @queen
+      	Entries: 30
+      	Prize: 36
+      	Total: 6
       From
       	@jack -> 6
-      """;
+      	""";
     final var response = (SendMessage) telegramCalculationService.calculatePayments(update);
 
     assertAll(

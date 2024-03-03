@@ -62,15 +62,20 @@ public class TelegramCalculationService {
   private String prettyPrintPayout(Payout payout, List<TelegramPerson> telegramPersons) {
     final var strBuilder = new StringBuilder("-----------------------------\n");
     strBuilder.append("Payout to: %s\n".formatted(getPlayerTelegram(payout.creditor().person(), telegramPersons)));
-    strBuilder.append("From\n");
-    final var strDebts = payout.debts().stream()
+    strBuilder.append("\tEntries: %s\n".formatted(payout.creditor().entries().total()));
+    strBuilder.append("\tPrize: %s\n".formatted(payout.creditor().entries().total().add(payout.totalDebts())));
+    strBuilder.append("\tTotal: %s\n".formatted(payout.totalDebts()));
+
+    final var strDebtsOpt = payout.debts().stream()
       .map(debt -> Pair.of(getPlayerTelegram(debt.debtor().person(), telegramPersons), debt.amount().toString()))
       .map(pair -> "\t%s -> %s".formatted(pair.getKey(), pair.getValue()))
-      .reduce("%s\n%s"::formatted)
-      .orElseThrow();
+      .reduce("%s\n%s"::formatted);
 
-    strBuilder.append(strDebts);
-    strBuilder.append('\n');
+    if (strDebtsOpt.isPresent()) {
+      strBuilder.append("From\n");
+      strBuilder.append(strDebtsOpt.get());
+      strBuilder.append('\n');
+    }
 
     return strBuilder.toString();
   }
