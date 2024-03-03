@@ -21,5 +21,8 @@ public interface MessageMetadataMapper {
   @Mapping(source = "createdAt", target = "createdAt")
   @Mapping(source = "chatId", target = "chatId")
   @Mapping(source = "messageId", target = "id")
+  @Mapping(target = "replyTo", ignore = true)
+  @Mapping(target = "command", ignore = true)
   MessageMetadata map(TelegramGameEntity entity);
+
 }
