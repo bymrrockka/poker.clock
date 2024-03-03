@@ -50,7 +50,7 @@ public class PersonRepository {
       .addValue(ID, id);
 
     return jdbcTemplate.queryForObject(FIND_BY_ID_SQL, params, (rs, rowNum) ->
-      PersonEntity.builder()
+      PersonEntity.personBuilder()
         .id(UUID.fromString(rs.getString(ID)))
         .firstname(rs.getString(FIRST_NAME))
         .lastname(rs.getString(LAST_NAME))

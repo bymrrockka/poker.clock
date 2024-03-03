@@ -29,7 +29,7 @@ public class PersonCreator {
   }
 
   public static PersonEntity entity(Consumer<PersonEntity.PersonEntityBuilder> builderConsumer) {
-    final var personEntityBuilder = PersonEntity.builder()
+    final var personEntityBuilder = PersonEntity.personBuilder()
       .id(ID)
       .firstname(FIRSTNAME)
       .lastname(LASTNAME);

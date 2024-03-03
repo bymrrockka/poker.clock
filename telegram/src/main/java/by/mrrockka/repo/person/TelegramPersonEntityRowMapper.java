@@ -20,7 +20,7 @@ public class TelegramPersonEntityRowMapper implements RowMapper<TelegramPersonEn
   public TelegramPersonEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
     final var personEntity = personEntityRowMapper.mapRow(rs, rowNum);
 
-    return TelegramPersonEntity.builder()
+    return TelegramPersonEntity.telegramPersonBuilder()
       .id(personEntity.getId())
       .firstname(personEntity.getFirstname())
       .lastname(personEntity.getLastname())
