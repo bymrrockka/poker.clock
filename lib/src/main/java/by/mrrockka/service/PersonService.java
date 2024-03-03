@@ -19,10 +19,12 @@ public class PersonService {
   private final PersonRepository personRepository;
   private final PersonMapper personMapper;
 
+  //  TODO: verify if needed
   public Optional<Person> retrievePerson(UUID personId) {
     return Optional.ofNullable(personMapper.toDomain(personRepository.findById(personId)));
   }
 
+  //  TODO: verify if needed
   public List<Person> retrievePersons(List<UUID> personIds) {
     return personMapper.toDomains(personRepository.findAllByIds(personIds));
   }
@@ -32,6 +34,8 @@ public class PersonService {
     personRepository.saveAll(personMapper.toEntities(persons));
   }
 
+
+  //  TODO: verify if needed
   public void store(Person person) {
     personRepository.save(personMapper.toEntity(person));
   }

@@ -46,6 +46,7 @@ public class TelegramGameRepository {
         created_at = :created_at
     """;
 
+  @Deprecated(forRemoval = true, since = "1.0")
   public Optional<UUID> findByChatIdAndCreatedAt(Long chatId, Instant createdAt) {
     final var params = new MapSqlParameterSource()
       .addValue(CHAT_ID, chatId)

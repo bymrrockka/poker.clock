@@ -88,20 +88,20 @@ class TelegramGameServiceTest {
       UserCreator.USER_NAME
     );
 
-    final var telegramPersonEntyties = telegramPersonRepository.findAllByChatIdAndTelegrams(chatId, telegrams);
+    final var telegramPersonEntities = telegramPersonRepository.findAllByChatIdAndTelegrams(chatId, telegrams);
 
     assertAll(
-      () -> assertThat(telegramPersonEntyties).isNotEmpty(),
-      () -> assertThat(telegramPersonEntyties.stream().map(TelegramPersonEntity::getTelegram).toList())
+      () -> assertThat(telegramPersonEntities).isNotEmpty(),
+      () -> assertThat(telegramPersonEntities.stream().map(TelegramPersonEntity::getTelegram).toList())
         .containsExactlyInAnyOrderElementsOf(telegrams)
     );
 
     final var personEntities = personRepository.findAllByIds(
-      telegramPersonEntyties.stream().map(TelegramPersonEntity::getId).toList());
+      telegramPersonEntities.stream().map(TelegramPersonEntity::getId).toList());
 
     assertAll(
       () -> assertThat(personEntities).isNotEmpty(),
-      () -> assertThat(telegramPersonEntyties.stream().map(TelegramPersonEntity::getId).toList())
+      () -> assertThat(telegramPersonEntities.stream().map(TelegramPersonEntity::getId).toList())
         .containsExactlyInAnyOrderElementsOf(personEntities.stream().map(PersonEntity::getId).toList())
     );
 

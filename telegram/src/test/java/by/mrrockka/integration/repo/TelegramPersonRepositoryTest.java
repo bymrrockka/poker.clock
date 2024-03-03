@@ -2,7 +2,6 @@ package by.mrrockka.integration.repo;
 
 import by.mrrockka.config.PostgreSQLExtension;
 import by.mrrockka.domain.TelegramPerson;
-import by.mrrockka.repo.person.PersonRepository;
 import by.mrrockka.repo.person.TelegramPersonEntity;
 import by.mrrockka.repo.person.TelegramPersonRepository;
 import org.junit.jupiter.api.Test;
@@ -26,8 +25,6 @@ class TelegramPersonRepositoryTest {
 
   @Autowired
   private TelegramPersonRepository telegramPersonRepository;
-  @Autowired
-  private PersonRepository personRepository;
 
   @Test
   void givenPersonIdAndChatIdAndTelegram_whenSaveExecuted_shouldReturnValidEntities() {

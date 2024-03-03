@@ -1,7 +1,7 @@
 package by.mrrockka.route;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -14,12 +14,12 @@ import java.util.Objects;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class PokerClockBotRouter extends TelegramLongPollingBot {
   private static final String BOT_NAME = "Poker calculator bot";
   @Value("${telegrambots.token}")
   private String token;
-  @Autowired
-  private List<CommandRoute> commandRoutes;
+  private final List<CommandRoute> commandRoutes;
 
   @Override
   public void onUpdateReceived(Update update) {

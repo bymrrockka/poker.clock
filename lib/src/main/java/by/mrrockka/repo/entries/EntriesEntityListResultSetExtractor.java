@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("ALL")
 @Component
 @RequiredArgsConstructor
 class EntriesEntityListResultSetExtractor implements ResultSetExtractor<List<EntriesEntity>> {

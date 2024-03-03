@@ -11,6 +11,7 @@ import org.mapstruct.Mapping;
 @Mapper(uses = {MessageMetadataMapper.class})
 public interface TelegramGameMapper {
 
+  //  TODO: verify if needed
   TelegramGame toDomain(Game game, MessageMetadata messageMetadata);
 
   TelegramGame toDomain(Game game, TelegramGameEntity messageMetadata);

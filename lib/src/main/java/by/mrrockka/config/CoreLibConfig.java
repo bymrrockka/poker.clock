@@ -7,7 +7,6 @@ import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
-//todo: probably make it auto configuration
 @SpringBootConfiguration
 @ComponentScan({"by.mrrockka"})
 public class CoreLibConfig {
