@@ -17,14 +17,14 @@ public class PersonMessageMapper {
     final var strings = command.toLowerCase()
       .stripTrailing()
       .split("(, |[\n ])");
-    final var telegramPattern = Pattern.compile("^@([\\w\\.]+)");
+    final var telegramPattern = Pattern.compile("^@([\\w.]+)");
 
     final var persons = Arrays.stream(strings)
       .distinct()
       .filter(StringUtils::isNotBlank)
       .map(telegramPattern::matcher)
       .filter(Matcher::matches)
-      .map(matcher -> TelegramPerson.builder()
+      .map(matcher -> TelegramPerson.telegramPersonBuilder()
         .id(UUID.randomUUID())
         .telegram(matcher.group(1))
         .chatId(chatId)
@@ -35,7 +35,7 @@ public class PersonMessageMapper {
       throw new NoPlayersException();
     }
 
-    return (List<TelegramPerson>) persons;
+    return persons;
   }
 
 }

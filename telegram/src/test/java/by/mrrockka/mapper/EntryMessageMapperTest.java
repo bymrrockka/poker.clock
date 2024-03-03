@@ -3,12 +3,11 @@ package by.mrrockka.mapper;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.testcontainers.shaded.org.apache.commons.lang3.tuple.Pair;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 import java.util.stream.Stream;
 
+import static java.util.Objects.nonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class EntryMessageMapperTest {
@@ -18,18 +17,22 @@ class EntryMessageMapperTest {
 
   private static Stream<Arguments> entryMessage() {
     return Stream.of(
-      Arguments.of("/entry @king 60", Optional.of(BigDecimal.valueOf(60))),
-      Arguments.of("/entry @king", Optional.<BigDecimal>empty()),
-      Arguments.of("/reentry @king 60", Optional.of(BigDecimal.valueOf(60))),
-      Arguments.of("/reentry @king", Optional.<BigDecimal>empty())
+      Arguments.of("/entry @king 60", BigDecimal.valueOf(60)),
+      Arguments.of("/entry @king", null),
+      Arguments.of("/reentry @king 60", BigDecimal.valueOf(60)),
+      Arguments.of("/reentry @king", null)
     );
   }
 
   @ParameterizedTest
   @MethodSource("entryMessage")
-  void givenEntryMessage_whenMapAttempt_shouldParseToPair(String command, Optional<BigDecimal> amount) {
+  void givenEntryMessage_whenMapAttempt_shouldParseToPair(String command, BigDecimal amount) {
     final var actual = entryMessageMapper.map(command);
-    final var expected = Pair.of("king", amount);
-    assertThat(actual).isEqualTo(expected);
+    assertThat(actual.getKey()).isEqualTo("king");
+    if (nonNull(amount)) {
+      assertThat(actual.getValue()).contains(amount);
+    } else {
+      assertThat(actual.getValue()).isEmpty();
+    }
   }
 }

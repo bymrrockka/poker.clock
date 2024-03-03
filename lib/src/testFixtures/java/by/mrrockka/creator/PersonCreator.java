@@ -52,7 +52,7 @@ public class PersonCreator {
   }
 
   public static Person domain(Consumer<Person.PersonBuilder> builderConsumer) {
-    final var personEntityBuilder = Person.builder()
+    final var personEntityBuilder = Person.personBuilder()
       .id(ID)
       .firstname(FIRSTNAME)
       .lastname(LASTNAME);

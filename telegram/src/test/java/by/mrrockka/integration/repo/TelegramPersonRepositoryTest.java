@@ -31,7 +31,7 @@ class TelegramPersonRepositoryTest {
 
   @Test
   void givenPersonIdAndChatIdAndTelegram_whenSaveExecuted_shouldReturnValidEntities() {
-    telegramPersonRepository.save(TelegramPerson.builder()
+    telegramPersonRepository.save(TelegramPerson.telegramPersonBuilder()
                                     .id(PERSON_ID)
                                     .chatId(CHAT_ID)
                                     .telegram(TELEGRAM)

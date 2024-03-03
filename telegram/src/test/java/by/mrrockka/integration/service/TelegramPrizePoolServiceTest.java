@@ -5,7 +5,6 @@ import by.mrrockka.creator.ChatCreator;
 import by.mrrockka.creator.MessageCreator;
 import by.mrrockka.creator.PrizePoolCreator;
 import by.mrrockka.creator.UpdateCreator;
-import by.mrrockka.service.GameService;
 import by.mrrockka.service.PrizePoolService;
 import by.mrrockka.service.TelegramPrizePoolService;
 import org.junit.jupiter.api.Test;
@@ -35,8 +34,6 @@ class TelegramPrizePoolServiceTest {
 
   @Autowired
   private TelegramPrizePoolService telegramPrizePoolService;
-  @Autowired
-  private GameService gameService;
   @Autowired
   private PrizePoolService prizePoolService;
 

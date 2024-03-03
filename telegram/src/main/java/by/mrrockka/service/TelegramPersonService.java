@@ -72,7 +72,7 @@ public class TelegramPersonService {
   }
 
   private TelegramPerson saveNew(String telegram, Long chatId) {
-    final var telegramPerson = TelegramPerson.builder()
+    final var telegramPerson = TelegramPerson.telegramPersonBuilder()
       .id(UUID.randomUUID())
       .telegram(telegram)
       .chatId(chatId)

@@ -37,12 +37,12 @@ class PersonMessageMapperTest {
                      @me   
                              """)
           .persons(List.of(
-            TelegramPerson.builder()
+            TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
               .telegram("mrrockka")
               .chatId(CHAT_ID)
               .build(),
-            TelegramPerson.builder()
+            TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
               .telegram("me")
               .chatId(CHAT_ID)
@@ -64,22 +64,22 @@ class PersonMessageMapperTest {
                      @me   
                              """)
           .persons(List.of(
-            TelegramPerson.builder()
+            TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
               .telegram("mrrockka")
               .chatId(CHAT_ID)
               .build(),
-            TelegramPerson.builder()
+            TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
               .telegram("ivan")
               .chatId(CHAT_ID)
               .build(),
-            TelegramPerson.builder()
+            TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
               .telegram("andrei")
               .chatId(CHAT_ID)
               .build(),
-            TelegramPerson.builder()
+            TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
               .telegram("me")
               .chatId(CHAT_ID)
@@ -94,22 +94,22 @@ class PersonMessageMapperTest {
                      @mrrockka @ivan @andrei @ivan @andrei @mrrockka @me   
                              """)
           .persons(List.of(
-            TelegramPerson.builder()
+            TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
               .telegram("mrrockka")
               .chatId(CHAT_ID)
               .build(),
-            TelegramPerson.builder()
+            TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
               .telegram("ivan")
               .chatId(CHAT_ID)
               .build(),
-            TelegramPerson.builder()
+            TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
               .telegram("andrei")
               .chatId(CHAT_ID)
               .build(),
-            TelegramPerson.builder()
+            TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
               .telegram("me")
               .chatId(CHAT_ID)
@@ -124,22 +124,22 @@ class PersonMessageMapperTest {
                      @mrrockka, @ivan, @andrei, @ivan, @andrei, @mrrockka, @me
                              """)
           .persons(List.of(
-            TelegramPerson.builder()
+            TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
               .telegram("mrrockka")
               .chatId(CHAT_ID)
               .build(),
-            TelegramPerson.builder()
+            TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
               .telegram("ivan")
               .chatId(CHAT_ID)
               .build(),
-            TelegramPerson.builder()
+            TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
               .telegram("andrei")
               .chatId(CHAT_ID)
               .build(),
-            TelegramPerson.builder()
+            TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
               .telegram("me")
               .chatId(CHAT_ID)

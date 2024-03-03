@@ -52,7 +52,6 @@ class AccountingTest {
       .gameSummary(new GameSummary(finaleSummary))
     );
 
-
     final var actual = accounting.calculate(game);
     final var expect = payouts(players.get(0), players);
 
@@ -204,8 +203,8 @@ class AccountingTest {
 
   private List<Player> players(int size) {
     return IntStream.range(0, size)
-                    .mapToObj(i -> player())
-                    .toList();
+      .mapToObj(i -> player())
+      .toList();
   }
 
   private Player player() {
@@ -215,8 +214,8 @@ class AccountingTest {
   private Player player(final List<BigDecimal> entries) {
     return Player.builder()
       .entries(Entries.builder()
-                  .entries(entries)
-                  .build())
+                 .entries(entries)
+                 .build())
       .person(PersonCreator.domainRandom())
       .build();
   }
