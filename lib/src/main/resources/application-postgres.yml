@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: ${DB_URL:jdbc:postgresql://postgres:5432/pokerclock?sslmode=disable}
+    driver-class-name: org.postgresql.Driver
+    username: ${DB_USER:root}
+    password: ${DB_PASSWORD:root}
+    hikari:
+      connectionTimeout: 3000
+      idleTimeout: 3000
+      maxLifetime: 20000
+      maximumPoolSize: 10
+      minimumIdle: 1
+  liquibase:
+    change-log: db/changelog/db.changelog-master.yml
+    enabled: true

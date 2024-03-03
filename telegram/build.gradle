@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'maven-publish'
-    id 'java-test-fixtures'
+    id 'application'
     alias(libs.plugins.springBootPlugin)
     alias(libs.plugins.springDepManagementPlugin)
 }
@@ -10,41 +10,45 @@ group = 'by.mrrockka'
 version = '1.0-SNAPSHOT'
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
     implementation libs.springBootJdbc
+    implementation libs.springBootWeb
+    implementation libs.springBootTelegrambots
+    implementation project(":lib")
+    implementation libs.apacheCommonsLang3
     implementation libs.postgresql
     implementation libs.liquibase
-    implementation libs.jacksonDataformat
     implementation libs.mapstructCore
     implementation libs.lombokMapstructBinding
-    implementation libs.hikariCP
 
     compileOnly libs.lombok
     annotationProcessor libs.lombok
     annotationProcessor libs.mapstructProcessor
-
     testCompileOnly libs.lombok
     testAnnotationProcessor libs.lombok
     testAnnotationProcessor libs.mapstructProcessor
 
-    testFixturesCompileOnly libs.lombok
-    testFixturesAnnotationProcessor libs.lombok
-    testFixturesAnnotationProcessor libs.mapstructProcessor
-
+    testImplementation libs.mockitoCore
+    testImplementation libs.mockitoJupiter
+    testImplementation libs.jupiter
     testImplementation libs.assertjCore
+    testImplementation libs.testContainerPostgresql
+    testImplementation libs.testContainerJupiter
     testImplementation libs.springBootTest
-
-    testFixturesApi libs.testContainerPostgresql
-    testFixturesApi libs.testContainerJupiter
-    testFixturesApi libs.jupiter
-    testFixturesApi(libs.javaFaker) {
+    testImplementation(libs.javaFaker) {
         exclude group: 'org.yaml'
     }
+    testImplementation(testFixtures(project(":lib")))
 }
 
 test {
     useJUnitPlatform()
+}
+
+application {
+    mainClass = 'by.mrrockka.TelegramApplication'
 }
