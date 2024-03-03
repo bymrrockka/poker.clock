@@ -17,7 +17,7 @@ public class GameMessageMapper {
   public Game map(String command) {
     final var strings = command.toLowerCase().replaceAll(" ", "").split("\n");
 
-    return Game.builder()
+    return Game.gameBuilder()
       .id(UUID.randomUUID())
       .gameType(GameType.TOURNAMENT)
       .buyIn(mapBuyIn(strings))

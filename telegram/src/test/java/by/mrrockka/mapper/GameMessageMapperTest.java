@@ -40,7 +40,7 @@ class GameMessageMapperTest {
                       @andrei 
                      @me   
                          """)
-          .game(Game.builder()
+          .game(Game.gameBuilder()
                   .id(UUID.randomUUID())
                   .gameType(GameType.TOURNAMENT)
                   .stack(BigDecimal.valueOf(30000))
@@ -58,7 +58,7 @@ class GameMessageMapperTest {
                        @mrrockka
                      @me   
                            """)
-          .game(Game.builder()
+          .game(Game.gameBuilder()
                   .id(UUID.randomUUID())
                   .gameType(GameType.TOURNAMENT)
                   .stack(BigDecimal.valueOf(50000))
@@ -79,7 +79,7 @@ class GameMessageMapperTest {
                       @andrei 
                      @me   
                                  """)
-          .game(Game.builder()
+          .game(Game.gameBuilder()
                   .id(UUID.randomUUID())
                   .gameType(GameType.TOURNAMENT)
                   .stack(BigDecimal.valueOf(1500))

@@ -33,7 +33,7 @@ public class GameCreator {
   }
 
   public static Game domain(final Consumer<Game.GameBuilder> gameBuilderConsumer) {
-    final var gameBuilder = Game.builder()
+    final var gameBuilder = Game.gameBuilder()
       .id(ID)
       .gameType(GAME_TYPE)
       .buyIn(BUY_IN)
