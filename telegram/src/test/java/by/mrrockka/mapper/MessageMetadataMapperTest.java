@@ -31,9 +31,7 @@ class MessageMetadataMapperTest {
 
   @Test
   void givenMessageWithReplyTo_whenAttemptToMap_shouldReturnMetadata() {
-    final var message = MessageCreator.message(msg -> {
-      msg.setReplyToMessage(MessageCreator.message());
-    });
+    final var message = MessageCreator.message(msg -> msg.setReplyToMessage(MessageCreator.message()));
 
     final var replyTo = MessageMetadataCreator.domain();
     final var root = MessageMetadataCreator.domain(builder -> builder.replyTo(replyTo));
