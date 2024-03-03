@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Map;
 import java.util.UUID;
 
@@ -24,7 +23,7 @@ class PrizePoolRowMapper implements RowMapper<PrizePoolEntity> {
 
   @Override
   @SneakyThrows
-  public PrizePoolEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
+  public PrizePoolEntity mapRow(ResultSet rs, int rowNum) {
     final var typeRef = new TypeReference<Map<Integer, BigDecimal>>() {};
     return PrizePoolEntity.builder()
       .gameId(UUID.fromString(rs.getString(GAME_ID)))

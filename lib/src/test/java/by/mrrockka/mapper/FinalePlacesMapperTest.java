@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class FinalePlacesMapperTest {
 
-  FinalePlacesMapper finalePlacesMapper = Mappers.getMapper(FinalePlacesMapper.class);
+  private final FinalePlacesMapper finalePlacesMapper = Mappers.getMapper(FinalePlacesMapper.class);
 
   @Test
   void givenEntity_whenMapExecuted_shouldReturnDomain() {

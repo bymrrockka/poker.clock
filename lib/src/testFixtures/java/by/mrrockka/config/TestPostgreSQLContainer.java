@@ -9,7 +9,7 @@ class TestPostgreSQLContainer extends PostgreSQLContainer<TestPostgreSQLContaine
   private static final String USERNAME = "itest";
   private static final String PASSWORD = "itest123";
 
-  static TestPostgreSQLContainer container = new TestPostgreSQLContainer()
+  final static TestPostgreSQLContainer container = new TestPostgreSQLContainer()
     .withDatabaseName(DB_NAME)
     .withUsername(USERNAME)
     .withPassword(PASSWORD);

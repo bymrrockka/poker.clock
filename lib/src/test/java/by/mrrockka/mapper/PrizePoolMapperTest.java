@@ -7,7 +7,7 @@ import org.mapstruct.factory.Mappers;
 
 class PrizePoolMapperTest {
 
-  PrizePoolMapper prizePoolMapper = Mappers.getMapper(PrizePoolMapper.class);
+  private final PrizePoolMapper prizePoolMapper = Mappers.getMapper(PrizePoolMapper.class);
 
   @Test
   void givenEntity_whenMapExecuted_shouldReturnDomain() {

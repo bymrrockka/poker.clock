@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class GameMapperTest {
 
-  GameMapper gameMapper = Mappers.getMapper(GameMapper.class);
+  private final GameMapper gameMapper = Mappers.getMapper(GameMapper.class);
 
   @Test
   void givenEntityAndPlayers_whenMapExecuted_shouldReturnDomain() {

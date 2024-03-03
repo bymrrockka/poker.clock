@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class PersonMapperTest {
 
-  PersonMapper personMapper = Mappers.getMapper(PersonMapper.class);
+  private final PersonMapper personMapper = Mappers.getMapper(PersonMapper.class);
 
   @Test
   void givenEntity_whenMapExecuted_thenShouldReturnDomain() {
