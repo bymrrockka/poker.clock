@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootConfiguration
-@ComponentScan({"by.mrrockka"})
+@ComponentScan("by.mrrockka")
 public class CoreLibConfig {
 
   @Bean

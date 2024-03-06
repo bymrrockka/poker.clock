@@ -54,7 +54,6 @@ public class TelegramPersonRepository {
         telegram IN (:telegram)
     """;
 
-  //  todo: probably rewrite repo to return telegram persons
   public List<TelegramPersonEntity> findAllByChatIdAndTelegrams(Long chatId, List<String> telegrams) {
     final var params = new MapSqlParameterSource()
       .addValue(CHAT_ID, chatId)
@@ -85,7 +84,6 @@ public class TelegramPersonRepository {
       : Optional.empty());
   }
 
-
   private static final String FIND_ALL_BY_GAME_ID = """
       SELECT
         cp.telegram, cp.chat_id, p.id, p.first_name, p.last_name
@@ -99,16 +97,14 @@ public class TelegramPersonRepository {
         e.game_id = :game_id
     """;
 
-  //  todo: probably rewrite repo to return telegram persons
   public List<TelegramPersonEntity> findAllByGameId(UUID gameId) {
     final var params = new MapSqlParameterSource()
       .addValue(TelegramPersonColumnNames.GAME_ID, gameId);
 
     return jdbcTemplate.query(FIND_ALL_BY_GAME_ID, params, telegramPersonEntityRowMapper);
   }
+
   /* todo: move to service
-
-
   private static final String FIND_ALL_BY_TELEGRAM_SQL = """
       SELECT
          id, chat_id, telegram, first_name, last_name

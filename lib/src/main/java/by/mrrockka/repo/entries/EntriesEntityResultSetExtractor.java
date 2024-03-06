@@ -21,14 +21,14 @@ class EntriesEntityResultSetExtractor implements ResultSetExtractor<Optional<Ent
   private final PersonEntityRowMapper personEntityRowMapper;
 
   @Override
-  public Optional<EntriesEntity> extractData(ResultSet rs) throws SQLException, DataAccessException {
+  public Optional<EntriesEntity> extractData(final ResultSet rs) throws SQLException, DataAccessException {
     if (rs.next()) {
       return Optional.of(assembleEntity(rs));
     }
     return Optional.empty();
   }
 
-  public EntriesEntity assembleEntity(ResultSet rs) throws SQLException {
+  public EntriesEntity assembleEntity(final ResultSet rs) throws SQLException {
     final var person = personEntityRowMapper.mapRow(rs, rs.getRow());
     return EntriesEntity.builder()
       .gameId(UUID.fromString(rs.getString(EntryColumnNames.GAME_ID)))
@@ -37,8 +37,8 @@ class EntriesEntityResultSetExtractor implements ResultSetExtractor<Optional<Ent
       .build();
   }
 
-  private List<BigDecimal> extractAmounts(ResultSet rs, UUID personId) throws SQLException {
-    List<BigDecimal> amounts = new ArrayList<>();
+  private List<BigDecimal> extractAmounts(final ResultSet rs, final UUID personId) throws SQLException {
+    final List<BigDecimal> amounts = new ArrayList<>();
     do {
       amounts.add(rs.getBigDecimal(EntryColumnNames.AMOUNT));
     } while (rs.next() && rs.getString(EntryColumnNames.PERSON_ID).equals(personId.toString()));

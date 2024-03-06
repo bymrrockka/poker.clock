@@ -21,8 +21,6 @@ public class TelegramEntryService {
   public BotApiMethodMessage storeEntry(Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
     final var telegramAndAmount = entryMessageMapper.map(messageMetadata.command());
-
-    //todo: refactor to find by message id
     final var telegramGame = telegramGameService
       .getGameByMessageMetadata(messageMetadata)
       .orElseThrow(); //todo: add meaningful exception

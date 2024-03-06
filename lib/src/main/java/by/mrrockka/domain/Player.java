@@ -9,10 +9,12 @@ import java.util.Objects;
 public record Player(Person person, Entries entries) {
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof Player player)) return false;
-    return Objects.equals(person, player.person);
+  public boolean equals(final Object obj) {
+    if (this == obj)
+      return true;
+    if (!(obj instanceof final Player player))
+      return false;
+    return Objects.equals(person, player.person());
   }
 
   @Override

@@ -11,7 +11,8 @@ import java.util.List;
 public record GameSummary(@NonNull List<FinalePlaceSummary> finaleSummaries) {
 
   //todo: consider refactoring to separate service in case there will be additional implementations
-  public static GameSummary of(final PrizePool prizePool, final FinalePlaces finalePlaces, BigDecimal totalAmount) {
+  public static GameSummary of(final PrizePool prizePool, final FinalePlaces finalePlaces,
+                               final BigDecimal totalAmount) {
     final var finaleSummaries = prizePool.positionAndPercentages()
       .stream()
       .map(percentageAndPosition ->
@@ -25,13 +26,13 @@ public record GameSummary(@NonNull List<FinalePlaceSummary> finaleSummaries) {
     return new GameSummary(finaleSummaries);
   }
 
-  public boolean isInPrizes(Person person) {
+  public boolean isInPrizes(final Person person) {
     return finaleSummaries().stream()
       .map(FinalePlaceSummary::person)
-      .anyMatch(p -> p.equals(person));
+      .anyMatch(pers -> pers.equals(person));
   }
 
-  public BigDecimal getPrizeFor(Person person) {
+  public BigDecimal getPrizeFor(final Person person) {
     return finaleSummaries().stream()
       .filter(finalePlaceSummary -> finalePlaceSummary.person().equals(person))
       .map(FinalePlaceSummary::amount)

@@ -29,7 +29,6 @@ public class TelegramPrizePoolService {
       .getGameByMessageMetadata(messageMetadata)
       .orElseThrow(); //todo: add meaningful exception
 
-//    todo: add pinned message referring to game
     prizePoolService.store(telegramGame.game().getId(), prizePool);
     return SendMessage.builder()
       .chatId(messageMetadata.chatId())

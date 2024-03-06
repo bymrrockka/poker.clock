@@ -7,6 +7,7 @@ import by.mrrockka.mapper.person.TelegramPersonMapper;
 import by.mrrockka.repo.person.TelegramPersonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -25,7 +26,7 @@ public class TelegramPersonService {
   private final TelegramPersonRepository telegramPersonRepository;
   private final MessageMetadataMapper messageMetadataMapper;
 
-  @Transactional(propagation = Propagation.REQUIRED)
+  @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
   public List<TelegramPerson> storePersons(Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
     final var persons = personMessageMapper.map(messageMetadata.command(), messageMetadata.chatId());

@@ -16,13 +16,13 @@ public class FinalePlacesService {
   private final FinalePlacesRepository finalePlacesRepository;
   private final FinalePlacesMapper finalePlacesMapper;
 
-  public FinalePlaces getByGameId(@NonNull UUID gameId) {
+  public FinalePlaces getByGameId(@NonNull final UUID gameId) {
     return finalePlacesRepository.findByGameId(gameId)
       .map(finalePlacesMapper::toDomain)
       .orElse(null);
   }
 
-  public void store(@NonNull UUID gameId, @NonNull FinalePlaces finalePlaces) {
+  public void store(@NonNull final UUID gameId, @NonNull final FinalePlaces finalePlaces) {
     finalePlacesRepository.save(finalePlacesMapper.toEntity(gameId, finalePlaces));
   }
 }

@@ -16,7 +16,7 @@ public class PersonEntity {
   String lastname;
 
   @Builder(builderMethodName = "personBuilder")
-  public PersonEntity(@NonNull UUID id, String firstname, String lastname) {
+  public PersonEntity(@NonNull final UUID id, final String firstname, final String lastname) {
     this.id = id;
     this.firstname = firstname;
     this.lastname = lastname;

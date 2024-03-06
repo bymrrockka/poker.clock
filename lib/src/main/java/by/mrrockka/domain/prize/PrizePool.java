@@ -12,7 +12,7 @@ import static java.math.RoundingMode.HALF_UP;
 @Builder
 public record PrizePool(@NonNull List<PositionAndPercentage> positionAndPercentages) {
 
-  public BigDecimal calculatePrizeAmountFor(int position, @NonNull BigDecimal totalBuyInsAmount) {
+  public BigDecimal calculatePrizeAmountFor(final int position, @NonNull final BigDecimal totalBuyInsAmount) {
     return positionAndPercentages().stream()
       .filter(positionAndPercentage -> position == positionAndPercentage.position())
       .map(positionAndPercentage -> positionAndPercentage
@@ -23,7 +23,7 @@ public record PrizePool(@NonNull List<PositionAndPercentage> positionAndPercenta
       .orElseThrow(() -> new NoPrizeForPositionException(position));
   }
 
-  public boolean isInPrizes(int position) {
+  public boolean isInPrizes(final int position) {
     return positionAndPercentages().stream()
       .anyMatch(positionAndPercentage -> positionAndPercentage.position() == position);
   }

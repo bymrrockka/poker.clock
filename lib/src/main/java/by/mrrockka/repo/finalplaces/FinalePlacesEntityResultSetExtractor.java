@@ -25,7 +25,7 @@ class FinalePlacesEntityResultSetExtractor implements ResultSetExtractor<Optiona
 
   @Override
   @SneakyThrows
-  public Optional<FinalePlacesEntity> extractData(ResultSet rs) throws DataAccessException {
+  public Optional<FinalePlacesEntity> extractData(final ResultSet rs) throws DataAccessException {
     if (rs.next()) {
       final var gameId = UUID.fromString(rs.getString(GAME_ID));
       return Optional.of(FinalePlacesEntity.builder()
@@ -38,8 +38,8 @@ class FinalePlacesEntityResultSetExtractor implements ResultSetExtractor<Optiona
 
 
   @SneakyThrows
-  private Map<Integer, PersonEntity> extractPlaces(ResultSet rs) {
-    HashMap<Integer, PersonEntity> places = new HashMap<>();
+  private Map<Integer, PersonEntity> extractPlaces(final ResultSet rs) {
+    final var places = new HashMap<Integer, PersonEntity>();
     do {
       places.put(rs.getInt(POSITION), personEntityRowMapper.mapRow(rs, rs.getRow()));
     } while (rs.next());

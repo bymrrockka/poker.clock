@@ -49,6 +49,8 @@ class GameSummaryServiceTest {
       .isEqualTo(expected);
   }
 
+//  todo: test exception
+
   private GameSummary gameSummary() {
     return new GameSummary(List.of(
       FinalePlaceSummary.builder()

@@ -29,7 +29,7 @@ public class EntriesRepository {
       (:game_id, :person_id, :amount, :created_at);
     """;
 
-  public void save(UUID gameId, UUID personId, BigDecimal amount, Instant createdAt) {
+  public void save(final UUID gameId, final UUID personId, final BigDecimal amount, final Instant createdAt) {
     final MapSqlParameterSource params = new MapSqlParameterSource()
       .addValue(EntryColumnNames.GAME_ID, gameId)
       .addValue(EntryColumnNames.PERSON_ID, personId)
@@ -39,7 +39,7 @@ public class EntriesRepository {
   }
 
   @Transactional(propagation = Propagation.REQUIRED)
-  public void saveAll(UUID gameId, List<UUID> personIds, BigDecimal amount, Instant createdAt) {
+  public void saveAll(final UUID gameId, final List<UUID> personIds, final BigDecimal amount, final Instant createdAt) {
     personIds.forEach(personId -> save(gameId, personId, amount, createdAt));
   }
 
@@ -56,7 +56,7 @@ public class EntriesRepository {
     ORDER BY created_at ASC
     """;
 
-  public Optional<EntriesEntity> findByGameAndPerson(UUID gameId, UUID personId) {
+  public Optional<EntriesEntity> findByGameAndPerson(final UUID gameId, final UUID personId) {
     final MapSqlParameterSource params = new MapSqlParameterSource()
       .addValue(EntryColumnNames.GAME_ID, gameId)
       .addValue(EntryColumnNames.PERSON_ID, personId);
@@ -75,7 +75,7 @@ public class EntriesRepository {
     ORDER BY p.id, created_at ASC
     """;
 
-  public List<EntriesEntity> findAllByGameId(UUID gameId) {
+  public List<EntriesEntity> findAllByGameId(final UUID gameId) {
     final MapSqlParameterSource params = new MapSqlParameterSource()
       .addValue(EntryColumnNames.GAME_ID, gameId);
     return jdbcTemplate.query(FIND_ALL_BY_GAME_SQL, params, entriesEntityListResultSetExtractor);

@@ -17,8 +17,10 @@ public class Person {
   String firstname;
   String lastname;
 
+//  todo: add nickname field and refactor
+
   @Builder(builderMethodName = "personBuilder")
-  public Person(@NonNull UUID id, String firstname, String lastname) {
+  public Person(@NonNull final UUID id, final String firstname, final String lastname) {
     this.id = id;
     this.firstname = firstname;
     this.lastname = lastname;

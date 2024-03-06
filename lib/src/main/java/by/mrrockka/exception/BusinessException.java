@@ -1,9 +1,32 @@
 package by.mrrockka.exception;
 
-//todo: inherit all exception from this
-public abstract class BusinessException extends RuntimeException {
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.experimental.FieldDefaults;
 
-  public BusinessException(String message) {
+@Getter
+@Builder
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+public class BusinessException extends RuntimeException {
+
+  @NonNull
+  String message;
+  String code;
+  String humanReadableCode;
+
+  public BusinessException(@NonNull final String message, final String humanReadableCode) {
     super(message);
+    this.message = message;
+    this.humanReadableCode = humanReadableCode;
+    this.code = null;
+  }
+
+  public BusinessException(@NonNull final String message, final String code, final String humanReadableCode) {
+    super(message);
+    this.message = message;
+    this.code = code;
+    this.humanReadableCode = humanReadableCode;
   }
 }

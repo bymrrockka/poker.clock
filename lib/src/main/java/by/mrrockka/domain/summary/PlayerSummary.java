@@ -21,21 +21,21 @@ public class PlayerSummary implements Comparable<PlayerSummary> {
   @NonNull
   private TransferType transferType;
 
-  public void subtractCalculated(BigDecimal calculated) {
+  public void subtractCalculated(final BigDecimal calculated) {
     this.transferAmount = this.transferAmount.subtract(calculated);
   }
 
   @Override
-  public int compareTo(PlayerSummary ps) {
+  public int compareTo(final PlayerSummary ps) {
     return ps.getTransferAmount().compareTo(this.getTransferAmount());
   }
 
   //todo: consider refactoring to separate service in case there will be additional implementations
-  public static PlayerSummary of(@NonNull Player player, @NonNull GameSummary gameSummary) {
+  public static PlayerSummary of(@NonNull final Player player, @NonNull final GameSummary gameSummary) {
 
     final var playerTotal = player.entries().total();
     final var person = player.person();
-    var playerBuilder = PlayerSummary.builder().player(player);
+    final var playerBuilder = builder().player(player);
 
     if (gameSummary.isInPrizes(person)) {
       final var prizeAmount = gameSummary.getPrizeFor(person);
@@ -64,14 +64,14 @@ public class PlayerSummary implements Comparable<PlayerSummary> {
   }
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o)
+  public boolean equals(final Object obj) {
+    if (this == obj)
       return true;
-    if (!(o instanceof PlayerSummary that))
+    if (!(obj instanceof final PlayerSummary that))
       return false;
-    return Objects.equals(player, that.player)
-      && Objects.equals(transferAmount, that.transferAmount)
-      && transferType == that.transferType;
+    return Objects.equals(player, that.getPlayer())
+      && transferAmount.compareTo(that.getTransferAmount()) == 0
+      && transferType == that.getTransferType();
   }
 
   @Override

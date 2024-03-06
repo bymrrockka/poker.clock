@@ -17,7 +17,7 @@ public class GameSummaryService {
   private final FinalePlacesService finalePlacesService;
   private final PrizePoolService prizePoolService;
 
-  public GameSummary assembleGameSummary(UUID gameId, BigDecimal totalAmount) {
+  public GameSummary assembleGameSummary(final UUID gameId, final BigDecimal totalAmount) {
     final var finalePlaces = finalePlacesService.getByGameId(gameId);
     final var prizePool = prizePoolService.getByGameId(gameId);
 

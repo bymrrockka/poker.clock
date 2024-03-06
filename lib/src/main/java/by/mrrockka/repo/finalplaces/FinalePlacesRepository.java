@@ -25,7 +25,7 @@ public class FinalePlacesRepository {
     """;
 
   @Transactional
-  public void save(FinalePlacesEntity finalePlacesEntity) {
+  public void save(final FinalePlacesEntity finalePlacesEntity) {
     finalePlacesEntity.places().entrySet()
       .stream()
       .map(entry -> new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue().getId()))
@@ -49,7 +49,7 @@ public class FinalePlacesRepository {
       f.game_id = :game_id;
     """;
 
-  public Optional<FinalePlacesEntity> findByGameId(UUID gameId) {
+  public Optional<FinalePlacesEntity> findByGameId(final UUID gameId) {
     final var params = new MapSqlParameterSource()
       .addValue(FinaleColumnNames.GAME_ID, gameId);
 

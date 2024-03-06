@@ -17,7 +17,7 @@ public class PlayerService {
   private final EntriesRepository entriesRepository;
   private final PlayerMapper playerMapper;
 
-  public List<Player> getAllForGame(@NonNull UUID gameId) {
+  public List<Player> getAllForGame(@NonNull final UUID gameId) {
     final var entries = entriesRepository.findAllByGameId(gameId);
 
     return entries.stream()

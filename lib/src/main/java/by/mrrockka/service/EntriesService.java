@@ -15,11 +15,12 @@ public class EntriesService {
 
   private final EntriesRepository entriesRepository;
 
-  public void storeEntry(UUID gameId, UUID personId, BigDecimal amount, Instant createdAt) {
+  public void storeEntry(final UUID gameId, final UUID personId, final BigDecimal amount, final Instant createdAt) {
     entriesRepository.save(gameId, personId, amount, createdAt);
   }
 
-  public void storeBatch(UUID gameId, List<UUID> personIds, BigDecimal amount, Instant createdAt) {
+  public void storeBatch(final UUID gameId, final List<UUID> personIds, final BigDecimal amount,
+                         final Instant createdAt) {
     entriesRepository.saveAll(gameId, personIds, amount, createdAt);
   }
 
