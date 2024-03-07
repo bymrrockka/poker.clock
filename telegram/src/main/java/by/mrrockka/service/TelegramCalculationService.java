@@ -7,6 +7,9 @@ import by.mrrockka.domain.payout.Payout;
 import by.mrrockka.features.accounting.Accounting;
 import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
+import by.mrrockka.service.exception.GameSummaryNotFoundException;
+import by.mrrockka.service.exception.PayoutsAreNotCalculatedException;
+import by.mrrockka.service.exception.PersonHasNoTelegramException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
@@ -45,7 +48,7 @@ public class TelegramCalculationService {
       .stream()
       .map(payout -> prettyPrintPayout(payout, telegramPersons))
       .reduce("%s\n%s"::formatted)
-      .orElseThrow();//todo: add meaningful exception
+      .orElseThrow(PayoutsAreNotCalculatedException::new);
 
     return SendMessage.builder()
       .chatId(messageMetadata.chatId())
@@ -54,13 +57,14 @@ public class TelegramCalculationService {
       .build();
   }
 
+  //   todo: add validation service
   private void validateGame(final Game game) {
     if (isNull(game.getGameSummary())) {
-      throw new RuntimeException(
-        "No finale places or prize pool specified, can't calculate"); //todo: add meaningful exception
+      throw new GameSummaryNotFoundException();
     }
   }
 
+  //  todo: move to some service
   private String prettyPrintPayout(final Payout payout, final List<TelegramPerson> telegramPersons) {
     final var strBuilder = new StringBuilder("-----------------------------\n");
     strBuilder.append("Payout to: %s\n".formatted(getPlayerTelegram(payout.creditor().person(), telegramPersons)));
@@ -87,7 +91,6 @@ public class TelegramCalculationService {
       .filter(telegramPerson -> telegramPerson.getId().equals(person.getId()))
       .map(TelegramPerson::getTelegram)
       .findFirst()
-      .orElseThrow(() -> new RuntimeException(
-        "Person %s does not have telegram".formatted(person.getId())));//todo: add meaningful exception
+      .orElseThrow(() -> new PersonHasNoTelegramException(person.getId()));
   }
 }

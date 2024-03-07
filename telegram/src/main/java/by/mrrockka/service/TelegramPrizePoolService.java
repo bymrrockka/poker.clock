@@ -22,10 +22,6 @@ public class TelegramPrizePoolService {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
     final var prizePool = prizePoolMessageMapper.map(messageMetadata.command());
 
-    if (prizePool.positionAndPercentages().isEmpty()) {
-      throw new RuntimeException("No position and percentage list.");//todo: add meaningful exception
-    }
-
     final var telegramGame = telegramGameService
       .getGameByMessageMetadata(messageMetadata)
       .orElseThrow(ChatGameNotFoundException::new);

@@ -2,6 +2,7 @@ package by.mrrockka.mapper;
 
 import by.mrrockka.domain.prize.PositionAndPercentage;
 import by.mrrockka.domain.prize.PrizePool;
+import by.mrrockka.service.exception.ModelIsEmptyException;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -12,10 +13,12 @@ import java.util.regex.Pattern;
 @Component
 public class PrizePoolMessageMapper {
 
+  private static final String PRIZE_POOL_REGEX = "^(\\d)([. :\\-=]{1,3})([\\d]{1,3})$";
+
   public PrizePool map(final String command) {
     final var strings = command.toLowerCase().strip().replaceFirst("/prizepool", "").split("[\n,;%]");
-    final var prizePattern = Pattern.compile("^(\\d)([. :\\-=]{1,3})([\\d]{1,3})$");
-    return new PrizePool(
+    final var prizePattern = Pattern.compile(PRIZE_POOL_REGEX);
+    final var result = new PrizePool(
       Arrays.stream(strings)
         .map(String::strip)
         .map(prizePattern::matcher)
@@ -26,5 +29,11 @@ public class PrizePoolMessageMapper {
           .build())
         .toList()
     );
+
+    if (result.positionAndPercentages().isEmpty()) {
+      throw new ModelIsEmptyException("Position and percentage list");
+    }
+
+    return result;
   }
 }

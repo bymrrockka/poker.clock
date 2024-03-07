@@ -6,6 +6,7 @@ import by.mrrockka.domain.finaleplaces.FinalePlaces;
 import by.mrrockka.mapper.FinalePlacesMessageMapper;
 import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
+import by.mrrockka.service.exception.FinalPlaceContainsTelegramOfNotExistingPlayerException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -38,7 +39,8 @@ public class TelegramFinalePlacesService {
           .position(place.getKey())
           .person(telegramPersons.stream()
                     .filter(person -> person.getTelegram().equals(place.getValue()))
-                    .findAny().orElseThrow())//todo: added meaningful exception
+                    .findAny()
+                    .orElseThrow(() -> new FinalPlaceContainsTelegramOfNotExistingPlayerException(place.getValue())))
           .build())
         .toList());
 
