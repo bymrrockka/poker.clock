@@ -8,7 +8,7 @@ import by.mrrockka.repo.game.TelegramGameEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(uses = {MessageMetadataMapper.class})
+@Mapper(uses = MessageMetadataMapper.class)
 public interface TelegramGameMapper {
 
   TelegramGame toDomain(Game game, TelegramGameEntity messageMetadata);

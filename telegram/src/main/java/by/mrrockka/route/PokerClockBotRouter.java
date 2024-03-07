@@ -22,7 +22,7 @@ public class PokerClockBotRouter extends TelegramLongPollingBot {
   private final List<CommandRoute> commandRoutes;
 
   @Override
-  public void onUpdateReceived(Update update) {
+  public void onUpdateReceived(final Update update) {
     if (!commandRoutes.isEmpty()) {
       commandRoutes.stream()
         .filter(commandRoute -> commandRoute.isApplicable(update))
@@ -30,9 +30,9 @@ public class PokerClockBotRouter extends TelegramLongPollingBot {
         .filter(Objects::nonNull)
         .forEach(this::executeMessage);
     } else {
+//      todo: add error manager
       log.error("No routes found for ${}", update.getMessage());
     }
-
   }
 
   @Override
@@ -45,11 +45,12 @@ public class PokerClockBotRouter extends TelegramLongPollingBot {
     return token;
   }
 
-  private void executeMessage(BotApiMethodMessage message) {
+  private void executeMessage(final BotApiMethodMessage message) {
     try {
       execute(message);
-    } catch (TelegramApiException e) {
-      log.error("Failed to execute ${} with error ${}", message, e.getMessage());
+    } catch (final TelegramApiException telegramApiException) {
+//      todo: add error manager
+      log.error("Failed to execute ${} with error ${}", message, telegramApiException.getMessage());
     }
   }
 }

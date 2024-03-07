@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 @Component
 public class PersonMessageMapper {
 
-  public List<TelegramPerson> map(String command, Long chatId) {
+  public List<TelegramPerson> map(final String command, final Long chatId) {
     final var strings = command.toLowerCase()
       .stripTrailing()
       .split("(, |[\n ])");

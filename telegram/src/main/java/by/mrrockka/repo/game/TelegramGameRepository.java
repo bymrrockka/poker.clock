@@ -27,11 +27,11 @@ public class TelegramGameRepository {
       (:game_id, :chat_id, :created_at, :message_id);
     """;
 
-  public void save(TelegramGameEntity telegramGameEntity) {
+  public void save(final TelegramGameEntity telegramGameEntity) {
     final var params = new MapSqlParameterSource()
-      .addValue(TelegramGameColumnNames.GAME_ID, telegramGameEntity.gameId())
+      .addValue(GAME_ID, telegramGameEntity.gameId())
       .addValue(CHAT_ID, telegramGameEntity.chatId())
-      .addValue(TelegramGameColumnNames.MESSAGE_ID, telegramGameEntity.messageId())
+      .addValue(MESSAGE_ID, telegramGameEntity.messageId())
       .addValue(CREATED_AT, Timestamp.from(telegramGameEntity.createdAt()));
     jdbcTemplate.update(SAVE_SQL, params);
   }
@@ -47,7 +47,7 @@ public class TelegramGameRepository {
     """;
 
   @Deprecated(forRemoval = true, since = "1.0")
-  public Optional<UUID> findByChatIdAndCreatedAt(Long chatId, Instant createdAt) {
+  public Optional<UUID> findByChatIdAndCreatedAt(final Long chatId, final Instant createdAt) {
     final var params = new MapSqlParameterSource()
       .addValue(CHAT_ID, chatId)
       .addValue(CREATED_AT, Timestamp.from(createdAt));
@@ -65,7 +65,7 @@ public class TelegramGameRepository {
         message_id = :message_id
     """;
 
-  public Optional<TelegramGameEntity> findByChatAndMessageId(Long chatId, Integer messageId) {
+  public Optional<TelegramGameEntity> findByChatAndMessageId(final Long chatId, final Integer messageId) {
     final var params = new MapSqlParameterSource()
       .addValue(CHAT_ID, chatId)
       .addValue(MESSAGE_ID, messageId);
@@ -84,7 +84,7 @@ public class TelegramGameRepository {
       limit 1;
     """;
 
-  public Optional<TelegramGameEntity> findLatestByChatId(Long chatId) {
+  public Optional<TelegramGameEntity> findLatestByChatId(final Long chatId) {
     final var params = new MapSqlParameterSource()
       .addValue(CHAT_ID, chatId);
 

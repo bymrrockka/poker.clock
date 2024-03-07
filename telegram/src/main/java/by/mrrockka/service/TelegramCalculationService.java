@@ -28,7 +28,7 @@ public class TelegramCalculationService {
   private final TelegramPersonService telegramPersonService;
   private final MessageMetadataMapper messageMetadataMapper;
 
-  public BotApiMethodMessage calculatePayments(Update update) {
+  public BotApiMethodMessage calculatePayments(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
 
     log.debug("Processing {\n%s\n} message from %s chat id.".
@@ -53,13 +53,13 @@ public class TelegramCalculationService {
       .build();
   }
 
-  private void validateGame(Game game) {
+  private void validateGame(final Game game) {
     if (isNull(game.getGameSummary())) {
       throw new RuntimeException("No finale places or prize pool specified, can't calculate"); //todo:
     }
   }
 
-  private String prettyPrintPayout(Payout payout, List<TelegramPerson> telegramPersons) {
+  private String prettyPrintPayout(final Payout payout, final List<TelegramPerson> telegramPersons) {
     final var strBuilder = new StringBuilder("-----------------------------\n");
     strBuilder.append("Payout to: %s\n".formatted(getPlayerTelegram(payout.creditor().person(), telegramPersons)));
     strBuilder.append("\tEntries: %s\n".formatted(payout.creditor().entries().total()));
@@ -80,7 +80,7 @@ public class TelegramCalculationService {
     return strBuilder.toString();
   }
 
-  private String getPlayerTelegram(Person person, List<TelegramPerson> telegramPersons) {
+  private String getPlayerTelegram(final Person person, final List<TelegramPerson> telegramPersons) {
     return '@' + telegramPersons.stream()
       .filter(telegramPerson -> telegramPerson.getId().equals(person.getId()))
       .map(TelegramPerson::getTelegram)

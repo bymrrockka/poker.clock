@@ -18,7 +18,7 @@ public class TelegramEntryService {
   private final TelegramPersonService telegramPersonService;
   private final MessageMetadataMapper messageMetadataMapper;
 
-  public BotApiMethodMessage storeEntry(Update update) {
+  public BotApiMethodMessage storeEntry(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
     final var telegramAndAmount = entryMessageMapper.map(messageMetadata.command());
     final var telegramGame = telegramGameService

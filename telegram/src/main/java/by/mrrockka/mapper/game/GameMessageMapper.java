@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 @Component
 public class GameMessageMapper {
 
-  public Game map(String command) {
+  public Game map(final String command) {
     final var strings = command.toLowerCase().replaceAll(" ", "").split("\n");
 
     return Game.gameBuilder()
@@ -25,7 +25,7 @@ public class GameMessageMapper {
       .build();
   }
 
-  private BigDecimal mapBuyIn(String[] strings) {
+  private BigDecimal mapBuyIn(final String[] strings) {
     final var buyInPattern = Pattern.compile("^(buyin|buy-in):([\\d]+)(([\\w]+)|)$");
     return Arrays.stream(strings)
       .map(buyInPattern::matcher)
@@ -36,7 +36,7 @@ public class GameMessageMapper {
       .orElseThrow(NoBuyInException::new);
   }
 
-  private BigDecimal mapStack(String[] strings) {
+  private BigDecimal mapStack(final String[] strings) {
     final var stackPattern = Pattern.compile("^stack:([\\.\\d]+)(k|)");
     return Arrays.stream(strings)
       .map(stackPattern::matcher)
@@ -47,7 +47,7 @@ public class GameMessageMapper {
       .orElseThrow(NoStackException::new);
   }
 
-  private Double extractStack(String value, boolean shouldMultiply) {
+  private Double extractStack(final String value, final boolean shouldMultiply) {
     final var val = Double.parseDouble(value);
     return shouldMultiply ? val * 1000 : val;
   }

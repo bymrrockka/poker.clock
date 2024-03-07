@@ -16,12 +16,12 @@ public class EntryCommandRoute implements CommandRoute {
   private final TelegramEntryService telegramEntryService;
 
   @Override
-  public BotApiMethodMessage process(Update update) {
+  public BotApiMethodMessage process(final Update update) {
     return telegramEntryService.storeEntry(update);
   }
 
   @Override
-  public boolean isApplicable(Update update) {
+  public boolean isApplicable(final Update update) {
     return CommandRoute.super.isApplicable(update)
       && COMMANDS.stream().anyMatch(command -> update.getMessage().getText().contains(command));
   }

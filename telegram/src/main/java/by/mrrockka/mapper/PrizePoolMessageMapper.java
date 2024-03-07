@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 @Component
 public class PrizePoolMessageMapper {
 
-  public PrizePool map(String command) {
+  public PrizePool map(final String command) {
     final var strings = command.toLowerCase().strip().replaceFirst("/prizepool", "").split("[\n,;%]");
     final var prizePattern = Pattern.compile("^(\\d)([. :\\-=]{1,3})([\\d]{1,3})$");
     return new PrizePool(

@@ -27,29 +27,29 @@ public class TelegramPersonService {
   private final MessageMetadataMapper messageMetadataMapper;
 
   @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
-  public List<TelegramPerson> storePersons(Update update) {
+  public List<TelegramPerson> storePersons(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
     final var persons = personMessageMapper.map(messageMetadata.command(), messageMetadata.chatId());
 
     return storeMissed(persons, messageMetadata.chatId());
   }
 
-  public TelegramPerson getByTelegramAndChatId(String telegram, Long chatId) {
+  public TelegramPerson getByTelegramAndChatId(final String telegram, final Long chatId) {
     return telegramPersonRepository.findByTelegram(chatId, telegram)
       .map(telegramPersonMapper::mapToTelegram)
       .orElseGet(() -> saveNew(telegram, chatId));
   }
 
-  public List<TelegramPerson> getAllByTelegramsAndChatId(List<String> telegrams, Long chatId) {
+  public List<TelegramPerson> getAllByTelegramsAndChatId(final List<String> telegrams, final Long chatId) {
     return telegramPersonMapper.mapToTelegrams(telegramPersonRepository.findAllByChatIdAndTelegrams(chatId, telegrams));
   }
 
-  public List<TelegramPerson> getAllByGameId(UUID gameId) {
+  public List<TelegramPerson> getAllByGameId(final UUID gameId) {
     return telegramPersonMapper.mapToTelegrams(telegramPersonRepository.findAllByGameId(gameId));
   }
 
   // todo: refactor
-  private List<TelegramPerson> storeMissed(List<TelegramPerson> persons, Long chatId) {
+  private List<TelegramPerson> storeMissed(final List<TelegramPerson> persons, final Long chatId) {
     final var stored = telegramPersonMapper
       .mapToTelegrams(telegramPersonRepository.findAllByChatIdAndTelegrams(chatId, persons.stream().map(
         TelegramPerson::getTelegram).toList()));
@@ -72,7 +72,7 @@ public class TelegramPersonService {
     return persons;
   }
 
-  private TelegramPerson saveNew(String telegram, Long chatId) {
+  private TelegramPerson saveNew(final String telegram, final Long chatId) {
     final var telegramPerson = TelegramPerson.telegramPersonBuilder()
       .id(UUID.randomUUID())
       .telegram(telegram)

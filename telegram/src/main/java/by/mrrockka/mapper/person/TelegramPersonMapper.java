@@ -8,7 +8,7 @@ import org.mapstruct.Mapper;
 
 import java.util.List;
 
-@Mapper(uses = {PersonMapper.class})
+@Mapper(uses = PersonMapper.class)
 public interface TelegramPersonMapper {
 
   Person mapToPerson(TelegramPerson telegramPerson);

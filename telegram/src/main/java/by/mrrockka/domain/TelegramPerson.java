@@ -17,8 +17,8 @@ public class TelegramPerson extends Person {
   String telegram;
 
   @Builder(builderMethodName = "telegramPersonBuilder")
-  public TelegramPerson(@NonNull UUID id, String firstname, String lastname, @NonNull Long chatId,
-                        @NonNull String telegram) {
+  public TelegramPerson(@NonNull final UUID id, final String firstname, final String lastname,
+                        @NonNull final Long chatId, @NonNull final String telegram) {
     super(id, firstname, lastname);
     this.chatId = chatId;
     this.telegram = telegram;

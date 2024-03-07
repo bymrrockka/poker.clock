@@ -18,8 +18,8 @@ public class TelegramPersonEntity extends PersonEntity {
   String telegram;
 
   @Builder(builderMethodName = "telegramPersonBuilder")
-  public TelegramPersonEntity(@NonNull UUID id, String firstname, String lastname, @NonNull Long chatId,
-                              @NonNull String telegram) {
+  public TelegramPersonEntity(@NonNull final UUID id, final String firstname, final String lastname,
+                              @NonNull final Long chatId, @NonNull final String telegram) {
     super(id, firstname, lastname);
     this.chatId = chatId;
     this.telegram = telegram;

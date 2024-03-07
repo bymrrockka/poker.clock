@@ -14,7 +14,7 @@ import static by.mrrockka.repo.game.TelegramGameColumnNames.*;
 @Component
 public class TelegramGameEntityResultSetExtractor implements ResultSetExtractor<Optional<TelegramGameEntity>> {
   @Override
-  public Optional<TelegramGameEntity> extractData(ResultSet rs) throws SQLException, DataAccessException {
+  public Optional<TelegramGameEntity> extractData(final ResultSet rs) throws SQLException, DataAccessException {
     if (rs.next()) {
       return Optional.of(
         TelegramGameEntity.builder()

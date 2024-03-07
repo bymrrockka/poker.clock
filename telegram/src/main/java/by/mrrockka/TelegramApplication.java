@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan({"by.mrrockka", "org.telegram.telegrambots"})
 public class TelegramApplication {
 
-  public static void main(String[] args) {
+  public static void main(final String[] args) {
     SpringApplication.run(TelegramApplication.class, args);
   }
 }

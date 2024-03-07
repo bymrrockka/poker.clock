@@ -17,7 +17,7 @@ public class TelegramPrizePoolService {
   private final TelegramGameService telegramGameService;
   private final MessageMetadataMapper messageMetadataMapper;
 
-  public BotApiMethodMessage storePrizePool(Update update) {
+  public BotApiMethodMessage storePrizePool(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
     final var prizePool = prizePoolMessageMapper.map(messageMetadata.command());
 

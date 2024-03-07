@@ -54,7 +54,7 @@ public class TelegramGameService {
       .build();
   }
 
-  public Optional<TelegramGame> getGameByMessageMetadata(MessageMetadata messageMetadata) {
+  public Optional<TelegramGame> getGameByMessageMetadata(final MessageMetadata messageMetadata) {
     return messageMetadata.optReplyTo()
       .map(replyTo -> telegramGameRepository.findByChatAndMessageId(messageMetadata.chatId(), replyTo.id()))
       .orElseGet(() -> telegramGameRepository.findLatestByChatId(messageMetadata.chatId()))

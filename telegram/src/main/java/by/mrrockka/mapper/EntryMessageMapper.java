@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 @Component
 public class EntryMessageMapper {
 
-  public Pair<String, Optional<BigDecimal>> map(String command) {
+  public Pair<String, Optional<BigDecimal>> map(final String command) {
     final var str = command.toLowerCase().strip();
     final var matcher = Pattern.compile("^/(entry|reentry) @([A-z]+)(([ :\\-=]{1,3})([\\d]+)|)$").matcher(str);
     if (matcher.matches()) {

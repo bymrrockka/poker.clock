@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Component
 public class FinalePlacesMessageMapper {
 
-  public List<Pair<Integer, String>> map(String command) {
+  public List<Pair<Integer, String>> map(final String command) {
     final var strings = command.toLowerCase().strip().split("[\n,;]");
     final var placesPattern = Pattern.compile("^(\\d)([. :\\-=]{1,3})@([A-z]+)$");
     return Arrays.stream(strings)
