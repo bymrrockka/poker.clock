@@ -1,9 +1,13 @@
 package by.mrrockka.domain.summary;
 
 import by.mrrockka.domain.Person;
+import by.mrrockka.exception.BusinessException;
 
-class NoPrizeForPersonException extends RuntimeException {
-  NoPrizeForPersonException(Person person) {
-    super("No prize found for %s person".formatted(person.toString()));
+import static by.mrrockka.exception.ErrorCodes.CANT_FIND_PERSON_IN_FINALE_PLACES;
+
+class NoPrizeForPersonException extends BusinessException {
+
+  NoPrizeForPersonException(final Person person) {
+    super("Can't find %s person in finale places.".formatted(person.toString()), CANT_FIND_PERSON_IN_FINALE_PLACES);
   }
 }
