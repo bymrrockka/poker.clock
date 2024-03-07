@@ -18,6 +18,7 @@ public class EntryMessageMapper {
       return Pair.of(matcher.group(2), Optional.ofNullable(amount).map(BigDecimal::new));
     }
 
+//    todo: add meaningful exception
     throw new RuntimeException(
       "Message is not applicable. Format of the message is ^/entry @([A-z]+)([ :\\-=]{0,3})([\\d]+)$");
   }

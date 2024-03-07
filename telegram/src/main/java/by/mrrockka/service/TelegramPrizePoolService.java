@@ -2,6 +2,7 @@ package by.mrrockka.service;
 
 import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.mapper.PrizePoolMessageMapper;
+import by.mrrockka.service.exception.ChatGameNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
@@ -22,12 +23,12 @@ public class TelegramPrizePoolService {
     final var prizePool = prizePoolMessageMapper.map(messageMetadata.command());
 
     if (prizePool.positionAndPercentages().isEmpty()) {
-      throw new RuntimeException("No position and percentage list.");
+      throw new RuntimeException("No position and percentage list.");//todo: add meaningful exception
     }
 
     final var telegramGame = telegramGameService
       .getGameByMessageMetadata(messageMetadata)
-      .orElseThrow(); //todo: add meaningful exception
+      .orElseThrow(ChatGameNotFoundException::new);
 
     prizePoolService.store(telegramGame.game().getId(), prizePool);
     return SendMessage.builder()

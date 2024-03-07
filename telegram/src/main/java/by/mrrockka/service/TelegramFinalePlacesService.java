@@ -5,6 +5,7 @@ import by.mrrockka.domain.finaleplaces.FinalPlace;
 import by.mrrockka.domain.finaleplaces.FinalePlaces;
 import by.mrrockka.mapper.FinalePlacesMessageMapper;
 import by.mrrockka.mapper.MessageMetadataMapper;
+import by.mrrockka.service.exception.ChatGameNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -43,7 +44,7 @@ public class TelegramFinalePlacesService {
 
     final var telegramGame = telegramGameService
       .getGameByMessageMetadata(messageMetadata)
-      .orElseThrow(); //todo: add meaningful exception
+      .orElseThrow(ChatGameNotFoundException::new);
 
     finalePlacesService.store(telegramGame.game().getId(), finalePlaces);
     return SendMessage.builder()
