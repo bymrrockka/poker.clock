@@ -1,16 +1,18 @@
 package by.mrrockka.route;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.List;
 import java.util.Objects;
+
+import static java.util.Objects.nonNull;
 
 @Component
 @Slf4j
@@ -29,9 +31,10 @@ public class PokerClockBotRouter extends TelegramLongPollingBot {
         .map(commandRoute -> commandRoute.process(update))
         .filter(Objects::nonNull)
         .forEach(this::executeMessage);
-    } else {
-//      todo: add error manager
-      log.error("No routes found for ${}", update.getMessage());
+    }
+    if (nonNull(update.getMessage())) {
+      log.error("No routes found for \"${}\"", update.getMessage());
+      throw new NoRoutesFoundException(update.getMessage().getText());
     }
   }
 
@@ -45,12 +48,9 @@ public class PokerClockBotRouter extends TelegramLongPollingBot {
     return token;
   }
 
+  @SneakyThrows
   private void executeMessage(final BotApiMethodMessage message) {
-    try {
-      execute(message);
-    } catch (final TelegramApiException telegramApiException) {
-//      todo: add error manager
-      log.error("Failed to execute ${} with error ${}", message, telegramApiException.getMessage());
-    }
+    execute(message);
   }
+
 }

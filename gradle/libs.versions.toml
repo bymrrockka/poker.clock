@@ -25,6 +25,7 @@ springDepManagementPlugin = { id = "io.spring.dependency-management", version.re
 
 [libraries]
 springBootJdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc" }
+springBootAop = { module = "org.springframework.boot:spring-boot-starter-aop" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresqlVersion" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombockVersion" }
 jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "jupiterVersion" }

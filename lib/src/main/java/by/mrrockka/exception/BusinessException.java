@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
+import org.apache.commons.lang3.StringUtils;
 
 @Getter
 @Builder
@@ -28,5 +29,19 @@ public class BusinessException extends RuntimeException {
     this.message = message;
     this.code = code;
     this.humanReadableCode = humanReadableCode;
+  }
+
+  @Override
+  public String toString() {
+    final var strBuilder = new StringBuilder();
+
+    strBuilder.append("ERROR\n");
+    strBuilder.append("Message: %s\n".formatted(message));
+    strBuilder.append("Readable code: %s\n".formatted(humanReadableCode));
+    if (StringUtils.isNoneBlank(code)) {
+      strBuilder.append("Code: %s\n".formatted(code));
+    }
+
+    return strBuilder.toString();
   }
 }

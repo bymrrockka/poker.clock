@@ -3,8 +3,10 @@ package by.mrrockka;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 @SpringBootApplication
+@EnableAspectJAutoProxy
 @ComponentScan({"by.mrrockka", "org.telegram.telegrambots"})
 public class TelegramApplication {
 

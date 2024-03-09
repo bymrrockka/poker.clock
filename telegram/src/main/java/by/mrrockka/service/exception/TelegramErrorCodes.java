@@ -15,4 +15,5 @@ public final class TelegramErrorCodes {
   public static final String PERSON_HAS_NO_TELEGRAM = "person.has.no.telegram";
   public static final String FINAL_PLACE_CONTAINS_TELEGRAM_OF_NON_EXISTING_PLAYER = "invalid.final.place";
   public static final String MODEL_IS_EMPTY = "model.is.empty";
+  public static final String ROUTE_NOT_FOUND = "route.not.found";
 }
