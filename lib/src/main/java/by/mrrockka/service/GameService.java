@@ -21,11 +21,11 @@ public class GameService {
   private final GameSummaryService gameSummaryService;
   private final PlayerService playerService;
 
-  public void storeNewGame(@NonNull Game game) {
+  public void storeNewGame(@NonNull final Game game) {
     gameRepository.save(gameMapper.toEntity(game));
   }
 
-  public Game retrieveGame(@NonNull UUID gameId) {
+  public Game retrieveGame(@NonNull final UUID gameId) {
     final var gameEntity = gameRepository.findById(gameId);
     final var players = playerService.getAllForGame(gameId);
     final var gameSummary = gameSummaryService.assembleGameSummary(gameId, calculateTotalAmount(players));
@@ -33,7 +33,7 @@ public class GameService {
     return gameMapper.toDomain(gameEntity, players, gameSummary);
   }
 
-  private BigDecimal calculateTotalAmount(List<Player> players) {
+  private BigDecimal calculateTotalAmount(final List<Player> players) {
     return players.stream()
       .map(player -> player.entries().total())
       .reduce(BigDecimal::add)

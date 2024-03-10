@@ -14,7 +14,10 @@ import java.util.regex.Pattern;
 @Component
 public class GameMessageMapper {
 
-  public Game map(String command) {
+  public static final String BUY_IN_REGEX = "^buy([-_ ]*)in:([\\d]+)([A-z]*)$";
+  public static final String STACK_REGEX = "^stack:([.\\d]+)([A-z]|)";
+
+  public Game map(final String command) {
     final var strings = command.toLowerCase().replaceAll(" ", "").split("\n");
 
     return Game.gameBuilder()
@@ -25,29 +28,29 @@ public class GameMessageMapper {
       .build();
   }
 
-  private BigDecimal mapBuyIn(String[] strings) {
-    final var buyInPattern = Pattern.compile("^(buyin|buy-in):([\\d]+)(([\\w]+)|)$");
+  private BigDecimal mapBuyIn(final String[] strings) {
+    final var buyInPattern = Pattern.compile(BUY_IN_REGEX);
     return Arrays.stream(strings)
       .map(buyInPattern::matcher)
       .filter(Matcher::matches)
       .map(matcher -> matcher.group(2))
       .map(BigDecimal::new)
       .findFirst()
-      .orElseThrow(NoBuyInException::new);
+      .orElseThrow(() -> new NoBuyInException(BUY_IN_REGEX));
   }
 
-  private BigDecimal mapStack(String[] strings) {
-    final var stackPattern = Pattern.compile("^stack:([\\.\\d]+)(k|)");
+  private BigDecimal mapStack(final String[] strings) {
+    final var stackPattern = Pattern.compile(STACK_REGEX);
     return Arrays.stream(strings)
       .map(stackPattern::matcher)
       .filter(Matcher::matches)
       .map(matcher -> extractStack(matcher.group(1), StringUtils.isNotBlank(matcher.group(2))))
       .map(BigDecimal::new)
       .findFirst()
-      .orElseThrow(NoStackException::new);
+      .orElseThrow(() -> new NoStackException(STACK_REGEX));
   }
 
-  private Double extractStack(String value, boolean shouldMultiply) {
+  private Double extractStack(final String value, final boolean shouldMultiply) {
     final var val = Double.parseDouble(value);
     return shouldMultiply ? val * 1000 : val;
   }

@@ -6,6 +6,10 @@ import by.mrrockka.domain.game.Game;
 import by.mrrockka.domain.payout.Payout;
 import by.mrrockka.features.accounting.Accounting;
 import by.mrrockka.mapper.MessageMetadataMapper;
+import by.mrrockka.service.exception.ChatGameNotFoundException;
+import by.mrrockka.service.exception.GameSummaryNotFoundException;
+import by.mrrockka.service.exception.PayoutsAreNotCalculatedException;
+import by.mrrockka.service.exception.PersonHasNoTelegramException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
@@ -28,7 +32,7 @@ public class TelegramCalculationService {
   private final TelegramPersonService telegramPersonService;
   private final MessageMetadataMapper messageMetadataMapper;
 
-  public BotApiMethodMessage calculatePayments(Update update) {
+  public BotApiMethodMessage calculatePayments(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
 
     log.debug("Processing {\n%s\n} message from %s chat id.".
@@ -36,7 +40,7 @@ public class TelegramCalculationService {
 
     final var telegramGame = telegramGameService
       .getGameByMessageMetadata(messageMetadata)
-      .orElseThrow(); //todo: add meaningful exception
+      .orElseThrow(ChatGameNotFoundException::new);
 
     validateGame(telegramGame.game());
     final var telegramPersons = telegramPersonService.getAllByGameId(telegramGame.game().getId());
@@ -44,7 +48,7 @@ public class TelegramCalculationService {
       .stream()
       .map(payout -> prettyPrintPayout(payout, telegramPersons))
       .reduce("%s\n%s"::formatted)
-      .orElseThrow();
+      .orElseThrow(PayoutsAreNotCalculatedException::new);
 
     return SendMessage.builder()
       .chatId(messageMetadata.chatId())
@@ -53,13 +57,15 @@ public class TelegramCalculationService {
       .build();
   }
 
-  private void validateGame(Game game) {
+  //   todo: add validation service
+  private void validateGame(final Game game) {
     if (isNull(game.getGameSummary())) {
-      throw new RuntimeException("No finale places or prize pool specified, can't calculate"); //todo:
+      throw new GameSummaryNotFoundException();
     }
   }
 
-  private String prettyPrintPayout(Payout payout, List<TelegramPerson> telegramPersons) {
+  //  todo: move to some service
+  private String prettyPrintPayout(final Payout payout, final List<TelegramPerson> telegramPersons) {
     final var strBuilder = new StringBuilder("-----------------------------\n");
     strBuilder.append("Payout to: %s\n".formatted(getPlayerTelegram(payout.creditor().person(), telegramPersons)));
     strBuilder.append("\tEntries: %s\n".formatted(payout.creditor().entries().total()));
@@ -80,11 +86,11 @@ public class TelegramCalculationService {
     return strBuilder.toString();
   }
 
-  private String getPlayerTelegram(Person person, List<TelegramPerson> telegramPersons) {
+  private String getPlayerTelegram(final Person person, final List<TelegramPerson> telegramPersons) {
     return '@' + telegramPersons.stream()
       .filter(telegramPerson -> telegramPerson.getId().equals(person.getId()))
       .map(TelegramPerson::getTelegram)
       .findFirst()
-      .orElseThrow(() -> new RuntimeException("Person %s does not have telegram".formatted(person.getId())));
+      .orElseThrow(() -> new PersonHasNoTelegramException(person.getId()));
   }
 }

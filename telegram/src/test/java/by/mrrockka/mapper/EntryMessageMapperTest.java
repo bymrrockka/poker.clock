@@ -17,18 +17,18 @@ class EntryMessageMapperTest {
 
   private static Stream<Arguments> entryMessage() {
     return Stream.of(
-      Arguments.of("/entry @king 60", BigDecimal.valueOf(60)),
-      Arguments.of("/entry @king", null),
-      Arguments.of("/reentry @king 60", BigDecimal.valueOf(60)),
-      Arguments.of("/reentry @king", null)
+      Arguments.of("/entry @kinger 60", BigDecimal.valueOf(60)),
+      Arguments.of("/entry @kinger", null),
+      Arguments.of("/reentry @kinger 60", BigDecimal.valueOf(60)),
+      Arguments.of("/reentry @kinger", null)
     );
   }
 
   @ParameterizedTest
   @MethodSource("entryMessage")
-  void givenEntryMessage_whenMapAttempt_shouldParseToPair(String command, BigDecimal amount) {
+  void givenEntryMessage_whenMapAttempt_shouldParseToPair(final String command, final BigDecimal amount) {
     final var actual = entryMessageMapper.map(command);
-    assertThat(actual.getKey()).isEqualTo("king");
+    assertThat(actual.getKey()).isEqualTo("kinger");
     if (nonNull(amount)) {
       assertThat(actual.getValue()).contains(amount);
     } else {

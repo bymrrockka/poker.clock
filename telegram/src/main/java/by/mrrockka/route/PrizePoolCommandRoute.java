@@ -14,12 +14,12 @@ public class PrizePoolCommandRoute implements CommandRoute {
   private final TelegramPrizePoolService prizePoolService;
 
   @Override
-  public BotApiMethodMessage process(Update update) {
+  public BotApiMethodMessage process(final Update update) {
     return prizePoolService.storePrizePool(update);
   }
 
   @Override
-  public boolean isApplicable(Update update) {
+  public boolean isApplicable(final Update update) {
     return CommandRoute.super.isApplicable(update)
       && update.getMessage().getText().contains(COMMAND);
   }

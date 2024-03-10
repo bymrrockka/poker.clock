@@ -10,14 +10,16 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static by.mrrockka.mapper.CommandRegexConstants.TELEGRAM_NAME_REGEX;
+
 @Component
 public class PersonMessageMapper {
 
-  public List<TelegramPerson> map(String command, Long chatId) {
+  public List<TelegramPerson> map(final String command, final Long chatId) {
     final var strings = command.toLowerCase()
       .stripTrailing()
       .split("(, |[\n ])");
-    final var telegramPattern = Pattern.compile("^@([\\w.]+)");
+    final var telegramPattern = Pattern.compile(TELEGRAM_NAME_REGEX);
 
     final var persons = Arrays.stream(strings)
       .distinct()

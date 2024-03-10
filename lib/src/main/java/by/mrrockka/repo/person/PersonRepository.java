@@ -24,7 +24,7 @@ public class PersonRepository {
       VALUES (:id, :first_name, :last_name)
     """;
 
-  public void save(PersonEntity personEntity) {
+  public void save(final PersonEntity personEntity) {
     final var params = new MapSqlParameterSource()
       .addValue(ID, personEntity.getId())
       .addValue(FIRST_NAME, personEntity.getFirstname())
@@ -33,7 +33,7 @@ public class PersonRepository {
   }
 
   @Transactional(propagation = Propagation.REQUIRED)
-  public void saveAll(List<PersonEntity> personEntities) {
+  public void saveAll(final List<PersonEntity> personEntities) {
     personEntities.forEach(this::save);
   }
 
@@ -45,7 +45,7 @@ public class PersonRepository {
         id = :id;
     """;
 
-  public PersonEntity findById(UUID id) {
+  public PersonEntity findById(final UUID id) {
     final var params = new MapSqlParameterSource()
       .addValue(ID, id);
 
@@ -65,7 +65,7 @@ public class PersonRepository {
         id IN (:id)
     """;
 
-  public List<PersonEntity> findAllByIds(List<UUID> ids) {
+  public List<PersonEntity> findAllByIds(final List<UUID> ids) {
     final var params = new MapSqlParameterSource()
       .addValue(ID, ids);
 

@@ -1,19 +1,21 @@
 package by.mrrockka.route;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.List;
 import java.util.Objects;
 
-@Component
+import static java.util.Objects.nonNull;
+
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public class PokerClockBotRouter extends TelegramLongPollingBot {
   private static final String BOT_NAME = "Poker calculator bot";
@@ -22,17 +24,17 @@ public class PokerClockBotRouter extends TelegramLongPollingBot {
   private final List<CommandRoute> commandRoutes;
 
   @Override
-  public void onUpdateReceived(Update update) {
+  public void onUpdateReceived(final Update update) {
     if (!commandRoutes.isEmpty()) {
       commandRoutes.stream()
         .filter(commandRoute -> commandRoute.isApplicable(update))
         .map(commandRoute -> commandRoute.process(update))
         .filter(Objects::nonNull)
         .forEach(this::executeMessage);
-    } else {
-      log.error("No routes found for ${}", update.getMessage());
+    } else if (nonNull(update.getMessage())) {
+      log.error("No routes found for \"${}\"", update.getMessage().getText());
+      throw new NoRoutesFoundException(update.getMessage().getText());
     }
-
   }
 
   @Override
@@ -45,11 +47,9 @@ public class PokerClockBotRouter extends TelegramLongPollingBot {
     return token;
   }
 
-  private void executeMessage(BotApiMethodMessage message) {
-    try {
-      execute(message);
-    } catch (TelegramApiException e) {
-      log.error("Failed to execute ${} with error ${}", message, e.getMessage());
-    }
+  @SneakyThrows
+  private void executeMessage(final BotApiMethodMessage message) {
+    execute(message);
   }
+
 }

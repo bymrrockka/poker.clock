@@ -30,7 +30,7 @@ public class Accounting {
       .map(creditorSummary -> {
         final var debtorSummaries = playerSummaries.stream()
           .filter(ps -> ps.getTransferType().equals(TransferType.DEBIT))
-          .filter(ps -> !ps.getTransferAmount().equals(BigDecimal.ZERO))
+          .filter(ps -> (ps.getTransferAmount().compareTo(BigDecimal.ZERO) != 0))
           .sorted()
           .toList();
 
@@ -39,7 +39,7 @@ public class Accounting {
   }
 
   private Payout calculatePayouts(final PlayerSummary creditorSummary, final List<PlayerSummary> debtorSummaries) {
-    var debts = new ArrayList<Debt>();
+    final var debts = new ArrayList<Debt>();
     var leftToPay = creditorSummary.getTransferAmount();
     final var payoutbuilder = Payout.builder()
       .creditor(creditorSummary.getPlayer());
@@ -48,7 +48,7 @@ public class Accounting {
       return payoutbuilder.debts(Collections.emptyList()).build();
     }
 
-    for (final PlayerSummary debtorSummary : debtorSummaries) {
+    for (final var debtorSummary : debtorSummaries) {
       final var debtAmount = debtorSummary.getTransferAmount();
       final var debtBuilder = Debt.builder()
         .debtor(debtorSummary.getPlayer());

@@ -1,11 +1,18 @@
 package by.mrrockka.mapper;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-public class UsernameReplaceUtil {
+import static by.mrrockka.mapper.CommandRegexConstants.BOT_NAME_REPLACE_REGEX;
+import static by.mrrockka.mapper.CommandRegexConstants.USERNAME_REPLACE_REGEX;
 
-  public static String replaceUsername(Message message) {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+final class UsernameReplaceUtil {
+
+  public static String replaceUsername(final Message message) {
     return message.getText()
-      .replaceFirst("@me([\n \t\r\b]*)", "@%s$1".formatted(message.getFrom().getUserName()));
+      .replaceFirst(USERNAME_REPLACE_REGEX, "@%s$1".formatted(message.getFrom().getUserName()))
+      .replaceAll(BOT_NAME_REPLACE_REGEX, "");
   }
 }

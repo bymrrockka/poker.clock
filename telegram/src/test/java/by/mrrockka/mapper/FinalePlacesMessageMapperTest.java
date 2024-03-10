@@ -20,7 +20,7 @@ class FinalePlacesMessageMapperTest {
         """
           /finaleplaces
           1 @mrrockka
-          2 @ara
+          2 @ararat
           3 @andrei
           """
       ),
@@ -28,7 +28,7 @@ class FinalePlacesMessageMapperTest {
         """
           /finaleplaces
           1. @mrrockka
-          2. @ara
+          2. @ararat
           3. @andrei
           """
       ),
@@ -36,20 +36,20 @@ class FinalePlacesMessageMapperTest {
         """
           /finaleplaces
           1 - @mrrockka
-          2 -@ara
+          2 -@ararat
           3-@andrei
           """
       ),
       Arguments.of(
         """
           /finaleplaces
-          1 @mrrockka, 2. @ara,3- @andrei
+          1 @mrrockka, 2. @ararat,3- @andrei
           """
       ),
       Arguments.of(
         """
           /finaleplaces
-          1= @mrrockka, 2. @ara,
+          1= @mrrockka, 2. @ararat,
           3: @andrei
           """
       )
@@ -61,7 +61,7 @@ class FinalePlacesMessageMapperTest {
   void givenFinalePlacesCommand_whenAttemptToMap_shouldReturnPositionAndTelegram(String command) {
     final var expected = List.of(
       Pair.of(1, "mrrockka"),
-      Pair.of(2, "ara"),
+      Pair.of(2, "ararat"),
       Pair.of(3, "andrei")
     );
 

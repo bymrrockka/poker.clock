@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest
+@ActiveProfiles("integration")
 class TelegramCalculationServiceTest {
 
   private static final Long CHAT_ID = 123L;
@@ -36,13 +38,13 @@ class TelegramCalculationServiceTest {
 
     final var expected = """
       -----------------------------
-      Payout to: @king
+      Payout to: @kinger
       	Entries: 30
       	Prize: 84
       	Total: 54
       From
-      	@ten -> 30
-      	@jack -> 24
+      	@tenten -> 30
+      	@jackas -> 24
 
       -----------------------------
       Payout to: @queen
@@ -50,7 +52,7 @@ class TelegramCalculationServiceTest {
       	Prize: 36
       	Total: 6
       From
-      	@jack -> 6
+      	@jackas -> 6
       	""";
     final var response = (SendMessage) telegramCalculationService.calculatePayments(update);
 

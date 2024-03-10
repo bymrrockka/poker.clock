@@ -29,7 +29,7 @@ public class TelegramPersonRepository {
       (:person_id, :chat_id, :telegram);
     """;
 
-  public void save(TelegramPerson person) {
+  public void save(final TelegramPerson person) {
     final var params = new MapSqlParameterSource()
       .addValue(TelegramPersonColumnNames.PERSON_ID, person.getId())
       .addValue(CHAT_ID, person.getChatId())
@@ -38,7 +38,7 @@ public class TelegramPersonRepository {
   }
 
   @Transactional(propagation = Propagation.REQUIRED)
-  public void saveAll(List<TelegramPerson> telegramPersons) {
+  public void saveAll(final List<TelegramPerson> telegramPersons) {
     telegramPersons.forEach(this::save);
   }
 
@@ -54,8 +54,7 @@ public class TelegramPersonRepository {
         telegram IN (:telegram)
     """;
 
-  //  todo: probably rewrite repo to return telegram persons
-  public List<TelegramPersonEntity> findAllByChatIdAndTelegrams(Long chatId, List<String> telegrams) {
+  public List<TelegramPersonEntity> findAllByChatIdAndTelegrams(final Long chatId, final List<String> telegrams) {
     final var params = new MapSqlParameterSource()
       .addValue(CHAT_ID, chatId)
       .addValue(TELEGRAM, telegrams);
@@ -75,7 +74,7 @@ public class TelegramPersonRepository {
         telegram = :telegram
     """;
 
-  public Optional<TelegramPersonEntity> findByTelegram(Long chatId, String telegram) {
+  public Optional<TelegramPersonEntity> findByTelegram(final Long chatId, final String telegram) {
     final var params = new MapSqlParameterSource()
       .addValue(TELEGRAM, telegram)
       .addValue(CHAT_ID, chatId);
@@ -84,7 +83,6 @@ public class TelegramPersonRepository {
       ? Optional.ofNullable(telegramPersonEntityRowMapper.mapRow(rs, rs.getRow()))
       : Optional.empty());
   }
-
 
   private static final String FIND_ALL_BY_GAME_ID = """
       SELECT
@@ -99,16 +97,14 @@ public class TelegramPersonRepository {
         e.game_id = :game_id
     """;
 
-  //  todo: probably rewrite repo to return telegram persons
-  public List<TelegramPersonEntity> findAllByGameId(UUID gameId) {
+  public List<TelegramPersonEntity> findAllByGameId(final UUID gameId) {
     final var params = new MapSqlParameterSource()
       .addValue(TelegramPersonColumnNames.GAME_ID, gameId);
 
     return jdbcTemplate.query(FIND_ALL_BY_GAME_ID, params, telegramPersonEntityRowMapper);
   }
+
   /* todo: move to service
-
-
   private static final String FIND_ALL_BY_TELEGRAM_SQL = """
       SELECT
          id, chat_id, telegram, first_name, last_name

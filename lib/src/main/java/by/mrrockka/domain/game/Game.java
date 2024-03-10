@@ -33,8 +33,9 @@ public class Game {
   List<Bounty> bountyTransactions;
 
   @Builder(builderMethodName = "gameBuilder")
-  public Game(@NonNull UUID id, @NonNull GameType gameType, @NonNull BigDecimal buyIn, @NonNull BigDecimal stack,
-              BigDecimal bounty, List<Player> players, GameSummary gameSummary, List<Bounty> bountyTransactions) {
+  public Game(@NonNull final UUID id, @NonNull final GameType gameType, @NonNull final BigDecimal buyIn,
+              @NonNull final BigDecimal stack, final BigDecimal bounty, final List<Player> players,
+              final GameSummary gameSummary, final List<Bounty> bountyTransactions) {
     this.id = id;
     this.gameType = gameType;
     this.buyIn = buyIn;

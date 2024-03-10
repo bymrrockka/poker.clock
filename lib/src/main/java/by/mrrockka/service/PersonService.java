@@ -20,23 +20,23 @@ public class PersonService {
   private final PersonMapper personMapper;
 
   //  TODO: verify if needed
-  public Optional<Person> retrievePerson(UUID personId) {
+  public Optional<Person> retrievePerson(final UUID personId) {
     return Optional.ofNullable(personMapper.toDomain(personRepository.findById(personId)));
   }
 
   //  TODO: verify if needed
-  public List<Person> retrievePersons(List<UUID> personIds) {
+  public List<Person> retrievePersons(final List<UUID> personIds) {
     return personMapper.toDomains(personRepository.findAllByIds(personIds));
   }
 
   @Transactional(propagation = Propagation.REQUIRED)
-  public void storeAll(List<Person> persons) {
+  public void storeAll(final List<Person> persons) {
     personRepository.saveAll(personMapper.toEntities(persons));
   }
 
 
   //  TODO: verify if needed
-  public void store(Person person) {
+  public void store(final Person person) {
     personRepository.save(personMapper.toEntity(person));
   }
 

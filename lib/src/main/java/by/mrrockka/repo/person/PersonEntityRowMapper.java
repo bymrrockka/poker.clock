@@ -12,7 +12,7 @@ import static by.mrrockka.repo.person.PersonColumnNames.*;
 @Component
 public class PersonEntityRowMapper implements RowMapper<PersonEntity> {
   @Override
-  public PersonEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
+  public PersonEntity mapRow(final ResultSet rs, final int rowNum) throws SQLException {
     return PersonEntity.personBuilder()
       .id(UUID.fromString(rs.getString(ID)))
       .firstname(rs.getString(FIRST_NAME))

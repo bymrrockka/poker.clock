@@ -31,7 +31,7 @@ public class PrizePoolRepository {
     """;
 
   @SneakyThrows
-  public void save(PrizePoolEntity prizePoolEntity) {
+  public void save(final PrizePoolEntity prizePoolEntity) {
     final MapSqlParameterSource params;
     params = new MapSqlParameterSource()
       .addValue(GAME_ID, prizePoolEntity.gameId())
@@ -49,7 +49,7 @@ public class PrizePoolRepository {
       game_id = :game_id;
     """;
 
-  public Optional<PrizePoolEntity> findByGameId(UUID gameId) {
+  public Optional<PrizePoolEntity> findByGameId(final UUID gameId) {
     final var params = new MapSqlParameterSource()
       .addValue(GAME_ID, gameId);
 

@@ -17,7 +17,7 @@ public interface PlayerMapper {
   Player toPlayer(EntriesEntity entriesEntity);
 
   @Named("amountListToPayments")
-  default Entries amountListToPayments(List<BigDecimal> amount) {
+  default Entries amountListToPayments(final List<BigDecimal> amount) {
     return new Entries(amount);
   }
 }

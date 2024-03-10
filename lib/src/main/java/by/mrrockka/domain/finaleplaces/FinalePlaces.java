@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public record FinalePlaces(List<FinalPlace> finalPlaces) {
 
-  public Optional<Person> getByPosition(int position) {
+  public Optional<Person> getByPosition(final int position) {
     return finalPlaces().stream()
       .filter(finalPlace -> finalPlace.position() == position)
       .map(FinalPlace::person)

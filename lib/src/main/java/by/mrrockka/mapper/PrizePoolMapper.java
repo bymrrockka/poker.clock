@@ -21,14 +21,14 @@ public interface PrizePoolMapper {
   PrizePool toDomain(PrizePoolEntity entity);
 
   @Named("mapToSchema")
-  default Map<Integer, BigDecimal> mapToSchema(List<PositionAndPercentage> positionAndPercentages) {
+  default Map<Integer, BigDecimal> mapToSchema(final List<PositionAndPercentage> positionAndPercentages) {
     return positionAndPercentages.stream()
       .map(pp -> new AbstractMap.SimpleEntry<>(pp.position(), pp.percentage()))
       .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
   }
 
   @Named("mapToPositionAndPercentages")
-  default List<PositionAndPercentage> mapToPositionAndPercentages(Map<Integer, BigDecimal> schema) {
+  default List<PositionAndPercentage> mapToPositionAndPercentages(final Map<Integer, BigDecimal> schema) {
     return schema.entrySet()
       .stream()
       .map(entry -> PositionAndPercentage.builder()

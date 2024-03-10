@@ -2,6 +2,7 @@ package by.mrrockka.service;
 
 import by.mrrockka.mapper.EntryMessageMapper;
 import by.mrrockka.mapper.MessageMetadataMapper;
+import by.mrrockka.service.exception.ChatGameNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
@@ -18,14 +19,12 @@ public class TelegramEntryService {
   private final TelegramPersonService telegramPersonService;
   private final MessageMetadataMapper messageMetadataMapper;
 
-  public BotApiMethodMessage storeEntry(Update update) {
+  public BotApiMethodMessage storeEntry(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
     final var telegramAndAmount = entryMessageMapper.map(messageMetadata.command());
-
-    //todo: refactor to find by message id
     final var telegramGame = telegramGameService
       .getGameByMessageMetadata(messageMetadata)
-      .orElseThrow(); //todo: add meaningful exception
+      .orElseThrow(ChatGameNotFoundException::new);
 
     final var game = telegramGame.game();
     final var person = telegramPersonService.getByTelegramAndChatId(telegramAndAmount.getKey(),

@@ -14,7 +14,7 @@ import static by.mrrockka.repo.game.GameColumnNames.*;
 class GameEntityRowMapper implements RowMapper<GameEntity> {
 
   @Override
-  public GameEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
+  public GameEntity mapRow(final ResultSet rs, final int rowNum) throws SQLException {
     return GameEntity.builder()
       .id(UUID.fromString(rs.getString(ID)))
       .gameType(GameType.valueOf(rs.getString(GAME_TYPE)))

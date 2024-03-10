@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest
+@ActiveProfiles("integration")
 class TelegramPersonRepositoryTest {
 
   private static final UUID PERSON_ID = UUID.fromString("e2691144-3b1b-4841-9693-fad7af25bba9");
@@ -41,7 +43,7 @@ class TelegramPersonRepositoryTest {
 
   @Test
   void givenGameIdAndEntries_whenGetByGameIdExecuted_shouldReturnValidTelegramEntities() {
-    final var expected = telegramPersonRepository.findAllByChatIdAndTelegrams(CHAT_ID, List.of("king", "queen"));
+    final var expected = telegramPersonRepository.findAllByChatIdAndTelegrams(CHAT_ID, List.of("kinger", "queen"));
     assertThat(telegramPersonRepository.findAllByGameId(GAME_ID))
       .containsExactlyInAnyOrderElementsOf(expected);
   }

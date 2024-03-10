@@ -23,7 +23,7 @@ class PrizePoolRowMapper implements RowMapper<PrizePoolEntity> {
 
   @Override
   @SneakyThrows
-  public PrizePoolEntity mapRow(ResultSet rs, int rowNum) {
+  public PrizePoolEntity mapRow(final ResultSet rs, final int rowNum) {
     final var typeRef = new TypeReference<Map<Integer, BigDecimal>>() {};
     return PrizePoolEntity.builder()
       .gameId(UUID.fromString(rs.getString(GAME_ID)))

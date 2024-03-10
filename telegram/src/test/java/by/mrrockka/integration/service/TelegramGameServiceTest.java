@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.math.BigDecimal;
@@ -30,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest
+@ActiveProfiles("integration")
 class TelegramGameServiceTest {
 
   private static final String TOURNAMENT_MESSAGE = """

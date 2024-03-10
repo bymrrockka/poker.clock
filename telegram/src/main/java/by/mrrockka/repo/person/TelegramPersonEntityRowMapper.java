@@ -17,7 +17,7 @@ public class TelegramPersonEntityRowMapper implements RowMapper<TelegramPersonEn
   private final PersonEntityRowMapper personEntityRowMapper;
 
   @Override
-  public TelegramPersonEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
+  public TelegramPersonEntity mapRow(final ResultSet rs, final int rowNum) throws SQLException {
     final var personEntity = personEntityRowMapper.mapRow(rs, rowNum);
 
     return TelegramPersonEntity.telegramPersonBuilder()

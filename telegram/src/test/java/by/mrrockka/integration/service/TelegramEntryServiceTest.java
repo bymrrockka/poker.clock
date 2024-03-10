@@ -14,6 +14,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.math.BigDecimal;
@@ -25,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest
+@ActiveProfiles("integration")
 class TelegramEntryServiceTest {
 
   private static final UUID GAME_ID = UUID.fromString("b759ac52-1496-463f-b0d8-982deeac085c");
@@ -40,9 +42,9 @@ class TelegramEntryServiceTest {
 
   private static Stream<Arguments> entryMessage() {
     return Stream.of(
-      Arguments.of("/entry @king 60", "king", BigDecimal.valueOf(60)),
+      Arguments.of("/entry @kinger 60", "kinger", BigDecimal.valueOf(60)),
       Arguments.of("/entry @queen", "queen", BigDecimal.valueOf(15)),
-      Arguments.of("/entry @me", "jack", BigDecimal.valueOf(15))
+      Arguments.of("/entry @me", "jackas", BigDecimal.valueOf(15))
     );
   }
 

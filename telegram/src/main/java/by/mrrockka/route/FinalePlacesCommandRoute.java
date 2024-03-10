@@ -14,12 +14,12 @@ public class FinalePlacesCommandRoute implements CommandRoute {
   private final TelegramFinalePlacesService telegramFinalePlacesService;
 
   @Override
-  public BotApiMethodMessage process(Update update) {
+  public BotApiMethodMessage process(final Update update) {
     return telegramFinalePlacesService.storePrizePool(update);
   }
 
   @Override
-  public boolean isApplicable(Update update) {
+  public boolean isApplicable(final Update update) {
     return CommandRoute.super.isApplicable(update)
       && update.getMessage().getText().contains(COMMAND);
   }

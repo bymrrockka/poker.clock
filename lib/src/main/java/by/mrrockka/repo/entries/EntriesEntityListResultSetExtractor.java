@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("ALL")
 @Component
 @RequiredArgsConstructor
 class EntriesEntityListResultSetExtractor implements ResultSetExtractor<List<EntriesEntity>> {
@@ -18,8 +17,8 @@ class EntriesEntityListResultSetExtractor implements ResultSetExtractor<List<Ent
   private final EntriesEntityResultSetExtractor entityResultSetExtractor;
 
   @Override
-  public List<EntriesEntity> extractData(ResultSet rs) throws SQLException, DataAccessException {
-    List<EntriesEntity> entriesEntities = new ArrayList<>();
+  public List<EntriesEntity> extractData(final ResultSet rs) throws SQLException, DataAccessException {
+    final List<EntriesEntity> entriesEntities = new ArrayList<>();
     final var hasNext = rs.next();
     while (hasNext && !rs.isAfterLast()) {
       entriesEntities.add(entityResultSetExtractor.assembleEntity(rs));

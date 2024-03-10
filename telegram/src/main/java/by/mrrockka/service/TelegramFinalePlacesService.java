@@ -5,6 +5,8 @@ import by.mrrockka.domain.finaleplaces.FinalPlace;
 import by.mrrockka.domain.finaleplaces.FinalePlaces;
 import by.mrrockka.mapper.FinalePlacesMessageMapper;
 import by.mrrockka.mapper.MessageMetadataMapper;
+import by.mrrockka.service.exception.ChatGameNotFoundException;
+import by.mrrockka.service.exception.FinalPlaceContainsTelegramOfNotExistingPlayerException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -25,7 +27,7 @@ public class TelegramFinalePlacesService {
   private final TelegramPersonService telegramPersonService;
   private final MessageMetadataMapper messageMetadataMapper;
 
-  public BotApiMethodMessage storePrizePool(Update update) {
+  public BotApiMethodMessage storePrizePool(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
     final var places = finalePlacesMessageMapper.map(messageMetadata.command());
     final var telegramPersons = telegramPersonService
@@ -37,13 +39,14 @@ public class TelegramFinalePlacesService {
           .position(place.getKey())
           .person(telegramPersons.stream()
                     .filter(person -> person.getTelegram().equals(place.getValue()))
-                    .findAny().orElseThrow())//todo: added meaningful exception
+                    .findAny()
+                    .orElseThrow(() -> new FinalPlaceContainsTelegramOfNotExistingPlayerException(place.getValue())))
           .build())
         .toList());
 
     final var telegramGame = telegramGameService
       .getGameByMessageMetadata(messageMetadata)
-      .orElseThrow(); //todo: add meaningful exception
+      .orElseThrow(ChatGameNotFoundException::new);
 
     finalePlacesService.store(telegramGame.game().getId(), finalePlaces);
     return SendMessage.builder()
@@ -53,7 +56,7 @@ public class TelegramFinalePlacesService {
       .build();
   }
 
-  private String prettyPrint(FinalePlaces finalePlaces, List<TelegramPerson> telegramPersons) {
+  private String prettyPrint(final FinalePlaces finalePlaces, final List<TelegramPerson> telegramPersons) {
     return """
       Finale places:
       %s

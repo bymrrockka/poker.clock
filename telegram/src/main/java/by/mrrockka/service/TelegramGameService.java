@@ -31,7 +31,7 @@ public class TelegramGameService {
   private final MessageMetadataMapper messageMetadataMapper;
   private final TelegramGameMapper telegramGameMapper;
 
-  //  todo: change return type to custom or List
+  //  todo: change return type to custom or List to support multiple commands in a message
   @Transactional(isolation = Isolation.READ_COMMITTED)
   public BotApiMethodMessage storeGame(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
@@ -54,7 +54,7 @@ public class TelegramGameService {
       .build();
   }
 
-  public Optional<TelegramGame> getGameByMessageMetadata(MessageMetadata messageMetadata) {
+  public Optional<TelegramGame> getGameByMessageMetadata(final MessageMetadata messageMetadata) {
     return messageMetadata.optReplyTo()
       .map(replyTo -> telegramGameRepository.findByChatAndMessageId(messageMetadata.chatId(), replyTo.id()))
       .orElseGet(() -> telegramGameRepository.findLatestByChatId(messageMetadata.chatId()))

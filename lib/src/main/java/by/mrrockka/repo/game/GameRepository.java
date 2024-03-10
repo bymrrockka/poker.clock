@@ -23,7 +23,7 @@ public class GameRepository {
       (:id, :game_type, :buy_in, :stack, :bounty);
     """;
 
-  public void save(GameEntity gameEntity) {
+  public void save(final GameEntity gameEntity) {
     final var params = new MapSqlParameterSource()
       .addValue(ID, gameEntity.id())
       .addValue(GAME_TYPE, gameEntity.gameType().name())
@@ -42,7 +42,7 @@ public class GameRepository {
         id = :id;
     """;
 
-  public GameEntity findById(UUID id) {
+  public GameEntity findById(final UUID id) {
     final var params = new MapSqlParameterSource()
       .addValue(ID, id);
 
