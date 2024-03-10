@@ -14,8 +14,8 @@ import java.util.Objects;
 
 import static java.util.Objects.nonNull;
 
-@Component
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public class PokerClockBotRouter extends TelegramLongPollingBot {
   private static final String BOT_NAME = "Poker calculator bot";
@@ -33,7 +33,7 @@ public class PokerClockBotRouter extends TelegramLongPollingBot {
         .forEach(this::executeMessage);
     }
     if (nonNull(update.getMessage())) {
-      log.error("No routes found for \"${}\"", update.getMessage());
+      log.error("No routes found for \"${}\"", update.getMessage().getText());
       throw new NoRoutesFoundException(update.getMessage().getText());
     }
   }

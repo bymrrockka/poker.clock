@@ -26,6 +26,8 @@ dependencies {
     implementation libs.mapstructCore
     implementation libs.lombokMapstructBinding
 
+    runtimeOnly libs.aspectjWeaver
+
     compileOnly libs.lombok
     annotationProcessor libs.lombok
     annotationProcessor libs.mapstructProcessor
@@ -33,6 +35,7 @@ dependencies {
     testAnnotationProcessor libs.lombok
     testAnnotationProcessor libs.mapstructProcessor
 
+    testRuntimeOnly libs.aspectjWeaver
     testImplementation libs.mockitoCore
     testImplementation libs.mockitoJupiter
     testImplementation libs.jupiter

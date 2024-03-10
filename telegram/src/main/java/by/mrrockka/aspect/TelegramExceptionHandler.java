@@ -1,39 +1,40 @@
 package by.mrrockka.aspect;
 
 import by.mrrockka.exception.BusinessException;
-import by.mrrockka.route.PokerClockBotRouter;
-import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.bots.AbsSender;
+
+import java.util.List;
 
 @Aspect
 @Component
-@RequiredArgsConstructor
 public class TelegramExceptionHandler {
 
-  private final PokerClockBotRouter pokerClockBotRouter;
-
-  @Pointcut("execution(* *..PokerClockBotRouter.onUpdateReceived(org.telegram.telegrambots.meta.api.objects.Update))")
-  public void onUpdateReceived() {}
-
-  @AfterThrowing(pointcut = "onUpdateReceived() && args(update,..)", throwing = "exception")
-  public void handleExceptions(final Exception exception, final Update update) throws Throwable {
-
+  @SneakyThrows
+  @AfterThrowing(pointcut = "execution(* *.onUpdatesReceived(..)) && target(router) && args(updates)", throwing = "exception")
+  public void handleExceptions(final Throwable exception, final AbsSender router, final List<Update> updates) {
     String message = exception.getMessage();
     if (exception instanceof BusinessException) {
       message = exception.toString();
     }
 
     final var sendMessage = SendMessage.builder()
-      .chatId(update.getMessage().getChatId())
+      .chatId(getCatId(updates))
       .text(message)
       .build();
 
-    pokerClockBotRouter.execute(sendMessage);
+    router.execute(sendMessage);
   }
 
+  private Long getCatId(final List<Update> updates) {
+    return updates.stream()
+      .map(update -> update.getMessage().getChatId())
+      .findFirst()
+      .orElseThrow(ChatIdNotFoundException::new);
+  }
 }
