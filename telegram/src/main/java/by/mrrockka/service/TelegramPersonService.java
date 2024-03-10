@@ -79,6 +79,7 @@ public class TelegramPersonService {
       .chatId(chatId)
       .build();
 
+    personService.store(telegramPerson);
     telegramPersonRepository.save(telegramPerson);
     return telegramPerson;
   }

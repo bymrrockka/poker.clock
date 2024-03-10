@@ -50,7 +50,45 @@ class TelegramEntryServiceTest {
 
   @ParameterizedTest
   @MethodSource("entryMessage")
-  void givenGameAndPerson_whenEntryAttempt_shouldStoreEntry(String text, String telegram, BigDecimal expectedAmount) {
+  void givenGameAndPerson_whenEntryAttempt_shouldStoreEntry(final String text, final String telegram,
+                                                            final BigDecimal expectedAmount) {
+    final var update = UpdateCreator.update(
+      MessageCreator.message(message -> {
+        message.setChat(ChatCreator.chat(CHAT_ID));
+        message.setText(text);
+        message.setReplyToMessage(MessageCreator.message(msg -> msg.setMessageId(REPLY_TO_ID)));
+        message.setFrom(UserCreator.user(telegram));
+      })
+    );
+
+    final var response = (SendMessage) telegramEntryService.storeEntry(update);
+    assertAll(
+      () -> assertThat(response).isNotNull(),
+      () -> assertThat(response.getChatId()).isEqualTo(String.valueOf(CHAT_ID)),
+      () -> assertThat(response.getText()).isEqualTo(
+        "%s enters the game. Entry amount is %s".formatted(telegram, expectedAmount))
+    );
+
+    final var telegramPerson = telegramPersonService.getByTelegramAndChatId(telegram, CHAT_ID);
+    final var actual = entriesRepository.findByGameAndPerson(GAME_ID, telegramPerson.getId());
+    assertAll(
+      () -> assertThat(actual).isNotEmpty(),
+      () -> assertThat(actual.get().amounts()).hasSize(1),
+      () -> assertThat(actual.get().amounts().get(0)).isEqualTo(expectedAmount)
+    );
+  }
+
+  private static Stream<Arguments> newPersonTelegramsMessage() {
+    return Stream.of(
+      Arguments.of("/entry @asdfasf 60", "asdfasf", BigDecimal.valueOf(60)),
+      Arguments.of("/entry @omoekrngoen", "omoekrngoen", BigDecimal.valueOf(15))
+    );
+  }
+
+  @ParameterizedTest
+  @MethodSource("newPersonTelegramsMessage")
+  void givenGameAndNewPerson_whenEntryAttempt_shouldStorePlayerAndEntry(final String text, final String telegram,
+                                                                        final BigDecimal expectedAmount) {
     final var update = UpdateCreator.update(
       MessageCreator.message(message -> {
         message.setChat(ChatCreator.chat(CHAT_ID));
