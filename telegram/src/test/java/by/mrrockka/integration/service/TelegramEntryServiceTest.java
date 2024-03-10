@@ -42,9 +42,9 @@ class TelegramEntryServiceTest {
 
   private static Stream<Arguments> entryMessage() {
     return Stream.of(
-      Arguments.of("/entry @king 60", "king", BigDecimal.valueOf(60)),
+      Arguments.of("/entry @kinger 60", "kinger", BigDecimal.valueOf(60)),
       Arguments.of("/entry @queen", "queen", BigDecimal.valueOf(15)),
-      Arguments.of("/entry @me", "jack", BigDecimal.valueOf(15))
+      Arguments.of("/entry @me", "jackas", BigDecimal.valueOf(15))
     );
   }
 

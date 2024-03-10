@@ -43,7 +43,7 @@ class TelegramPersonServiceTest {
         List.of("mrrocka", "andrei", "marks")
       ),
       Arguments.of(
-        List.of("mrrocka", "king", "queen", "me")
+        List.of("mrrocka", "kinger", "queen", "me")
       )
     );
   }

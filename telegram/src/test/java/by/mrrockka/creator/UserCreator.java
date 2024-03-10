@@ -10,7 +10,7 @@ import static java.util.Objects.nonNull;
 public class UserCreator {
 
   private static final Faker FAKER = new Faker();
-  public static final String USER_NAME = FAKER.name().username();
+  public static final String USER_NAME = FAKER.name().username().replaceAll("\\.", "_");
 
   public static User user() {
     return user((Consumer<User>) null);

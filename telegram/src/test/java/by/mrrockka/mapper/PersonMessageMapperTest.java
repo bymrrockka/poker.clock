@@ -34,7 +34,7 @@ class PersonMessageMapperTest {
                      stack: 30k 
                      players: 
                        @mrrockka
-                     @me   
+                     @miscusi   
                              """)
           .persons(List.of(
             TelegramPerson.telegramPersonBuilder()
@@ -44,7 +44,7 @@ class PersonMessageMapperTest {
               .build(),
             TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
-              .telegram("me")
+              .telegram("miscusi")
               .chatId(CHAT_ID)
               .build()
           ))
@@ -56,12 +56,12 @@ class PersonMessageMapperTest {
                      buyin:    15zl    
                      stack: 1.5k
                        @mrrockka
-                     @ivan 
+                     @ivano 
                       @andrei 
-                     @ivan 
+                     @ivano 
                       @andrei 
                      @mrrockka
-                     @me   
+                     @miscusi   
                              """)
           .persons(List.of(
             TelegramPerson.telegramPersonBuilder()
@@ -71,7 +71,7 @@ class PersonMessageMapperTest {
               .build(),
             TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
-              .telegram("ivan")
+              .telegram("ivano")
               .chatId(CHAT_ID)
               .build(),
             TelegramPerson.telegramPersonBuilder()
@@ -81,7 +81,7 @@ class PersonMessageMapperTest {
               .build(),
             TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
-              .telegram("me")
+              .telegram("miscusi")
               .chatId(CHAT_ID)
               .build()))
           .build()),
@@ -91,7 +91,7 @@ class PersonMessageMapperTest {
                      /tournament 
                      buyin:    15zl    
                      stack: 1.5k
-                     @mrrockka @ivan @andrei @ivan @andrei @mrrockka @me   
+                     @mrrockka @ivano @andrei @ivano @andrei @mrrockka @miscusi   
                              """)
           .persons(List.of(
             TelegramPerson.telegramPersonBuilder()
@@ -101,7 +101,7 @@ class PersonMessageMapperTest {
               .build(),
             TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
-              .telegram("ivan")
+              .telegram("ivano")
               .chatId(CHAT_ID)
               .build(),
             TelegramPerson.telegramPersonBuilder()
@@ -111,7 +111,7 @@ class PersonMessageMapperTest {
               .build(),
             TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
-              .telegram("me")
+              .telegram("miscusi")
               .chatId(CHAT_ID)
               .build()))
           .build()),
@@ -121,7 +121,7 @@ class PersonMessageMapperTest {
                      /tournament 
                      buyin:    15zl    
                      stack: 1.5k
-                     @mrrockka, @ivan, @andrei, @ivan, @andrei, @mrrockka, @me
+                     @mrrockka, @ivano, @andrei, @ivano, @andrei, @mrrockka, @miscusi
                              """)
           .persons(List.of(
             TelegramPerson.telegramPersonBuilder()
@@ -131,7 +131,7 @@ class PersonMessageMapperTest {
               .build(),
             TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
-              .telegram("ivan")
+              .telegram("ivano")
               .chatId(CHAT_ID)
               .build(),
             TelegramPerson.telegramPersonBuilder()
@@ -141,7 +141,7 @@ class PersonMessageMapperTest {
               .build(),
             TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
-              .telegram("me")
+              .telegram("miscusi")
               .chatId(CHAT_ID)
               .build()))
           .build())

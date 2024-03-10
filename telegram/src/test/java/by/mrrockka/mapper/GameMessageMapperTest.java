@@ -36,7 +36,7 @@ class GameMessageMapperTest {
                      stack: 30k 
                      players: 
                        @mrrockka
-                     @ivan 
+                     @ivano 
                       @andrei 
                      @me   
                          """)
@@ -73,9 +73,9 @@ class GameMessageMapperTest {
                      buyin:    15zl    
                      stack: 1.5k
                        @mrrockka
-                     @ivan 
+                     @ivano 
                       @andrei 
-                     @ivan 
+                     @ivano 
                       @andrei 
                      @me   
                                  """)

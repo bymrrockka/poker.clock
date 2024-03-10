@@ -32,9 +32,9 @@ class TelegramFinalePlacesServiceTest {
   private static final Integer REPLY_TO_ID = 1;
   private static final String COMMAND = """
     /finaleplaces
-    1 @king
+    1 @kinger
     2 @queen
-    3 @jack
+    3 @jackas
     """;
 
   @Autowired
@@ -58,9 +58,9 @@ class TelegramFinalePlacesServiceTest {
     final var response = (SendMessage) telegramFinalePlacesService.storePrizePool(update);
     final var expectedMessage = """
       Finale places:
-      	position: 1, telegram: @king
+      	position: 1, telegram: @kinger
       	position: 2, telegram: @queen
-      	position: 3, telegram: @jack
+      	position: 3, telegram: @jackas
       	""";
 
     assertAll(
@@ -69,12 +69,13 @@ class TelegramFinalePlacesServiceTest {
       () -> assertThat(response.getText()).isEqualTo(expectedMessage)
     );
 
-    final var telegrams = List.of("king", "queen", "jack");
+    final var telegrams = List.of("kinger", "queen", "jackas");
     final var telegramPersons = telegramPersonService.getAllByTelegramsAndChatId(telegrams, CHAT_ID);
     final var expected = new FinalePlaces(
       List.of(
         FinalPlace.builder()
-          .person(telegramPersons.stream().filter(pers -> pers.getTelegram().equals("king")).findFirst().orElseThrow())
+          .person(
+            telegramPersons.stream().filter(pers -> pers.getTelegram().equals("kinger")).findFirst().orElseThrow())
           .position(1)
           .build(),
         FinalPlace.builder()
@@ -82,7 +83,8 @@ class TelegramFinalePlacesServiceTest {
           .position(2)
           .build(),
         FinalPlace.builder()
-          .person(telegramPersons.stream().filter(pers -> pers.getTelegram().equals("jack")).findFirst().orElseThrow())
+          .person(
+            telegramPersons.stream().filter(pers -> pers.getTelegram().equals("jackas")).findFirst().orElseThrow())
           .position(3)
           .build()
       ));

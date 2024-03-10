@@ -2,7 +2,7 @@ package by.mrrockka.mapper;
 
 import by.mrrockka.domain.prize.PositionAndPercentage;
 import by.mrrockka.domain.prize.PrizePool;
-import by.mrrockka.service.exception.ModelIsEmptyException;
+import by.mrrockka.mapper.exception.InvalidMessageFormatException;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -31,7 +31,7 @@ public class PrizePoolMessageMapper {
     );
 
     if (result.positionAndPercentages().isEmpty()) {
-      throw new ModelIsEmptyException("Position and percentage list");
+      throw new InvalidMessageFormatException(PRIZE_POOL_REGEX);
     }
 
     return result;

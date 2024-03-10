@@ -15,10 +15,10 @@ values  ('fa3d03c4-f411-4852-810f-c0cc2f5b8c84', 1000, 15, null, 'TOURNAMENT'),
         ('b759ac52-1496-463f-b0d8-982deeac085c', 10000, 15, 25, 'TOURNAMENT');
 
 insert into chat_persons (person_id, chat_id, telegram)
-values  ('13b4108e-2dfa-4fea-8b7b-277e1c87d2d8', 123, 'king'),
+values  ('13b4108e-2dfa-4fea-8b7b-277e1c87d2d8', 123, 'kinger'),
         ('72775968-3da6-469e-8a61-60104eacdb3a', 123, 'queen'),
-        ('e2691144-3b1b-4841-9693-fad7af25bba9', 123, 'jack'),
-        ('58ae9984-1ebc-4621-ba0e-a577c69283ef', 123, 'ten');
+        ('e2691144-3b1b-4841-9693-fad7af25bba9', 123, 'jackas'),
+        ('58ae9984-1ebc-4621-ba0e-a577c69283ef', 123, 'tenten');
 
 insert into chat_games (game_id, chat_id, created_at, message_id)
 values  ('4a411a12-2386-4dce-b579-d806c91d6d17', 123, '2024-01-01 00:00:01 +00:00', 1),

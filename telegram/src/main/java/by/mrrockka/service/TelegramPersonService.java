@@ -69,7 +69,7 @@ public class TelegramPersonService {
       return Stream.concat(stored.stream(), toStore.stream()).toList();
     }
 
-    return persons;
+    return stored;
   }
 
   private TelegramPerson saveNew(final String telegram, final Long chatId) {

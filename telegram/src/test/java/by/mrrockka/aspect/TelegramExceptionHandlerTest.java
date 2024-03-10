@@ -3,7 +3,7 @@ package by.mrrockka.aspect;
 import by.mrrockka.creator.ChatCreator;
 import by.mrrockka.creator.MessageCreator;
 import by.mrrockka.creator.UpdateCreator;
-import by.mrrockka.mapper.game.NoStackException;
+import by.mrrockka.exception.BusinessException;
 import by.mrrockka.route.PokerClockBotRouter;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -33,7 +33,7 @@ class TelegramExceptionHandlerTest {
   @Autowired
   private TelegramExceptionHandler telegramExceptionHandler;
 
-  private static Stream<Arguments> exeptions() {
+  private static Stream<Arguments> exceptions() {
     return Stream.of(
       Arguments.of(
         "Message",
@@ -45,13 +45,13 @@ class TelegramExceptionHandlerTest {
           Message: No stack specified.
           Readable code: validation.error
           """,
-        new NoStackException()
+        new BusinessException("No stack specified", "validation.error")
       )
     );
   }
 
   @ParameterizedTest
-  @MethodSource("exeptions")
+  @MethodSource("exceptions")
   void whenRouterThrowsException_shouldSendMessageWithExceptionMessage(final String text,
                                                                        final Throwable ex) throws TelegramApiException {
     final var updates = List.of(UpdateCreator.update(MessageCreator.message("")));

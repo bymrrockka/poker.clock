@@ -4,11 +4,11 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import static by.mrrockka.mapper.CommandRegexConstants.BOT_NAME_REPLACE_REGEX;
+import static by.mrrockka.mapper.CommandRegexConstants.USERNAME_REPLACE_REGEX;
+
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class UsernameReplaceUtil {
-
-  private static final String USERNAME_REPLACE_REGEX = "@me([\n \t\r\b]*)";
-  private static final String BOT_NAME_REPLACE_REGEX = "@pokerclc_bot";
 
   public static String replaceUsername(final Message message) {
     return message.getText()

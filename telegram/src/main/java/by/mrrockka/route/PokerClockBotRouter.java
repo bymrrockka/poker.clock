@@ -31,8 +31,7 @@ public class PokerClockBotRouter extends TelegramLongPollingBot {
         .map(commandRoute -> commandRoute.process(update))
         .filter(Objects::nonNull)
         .forEach(this::executeMessage);
-    }
-    if (nonNull(update.getMessage())) {
+    } else if (nonNull(update.getMessage())) {
       log.error("No routes found for \"${}\"", update.getMessage().getText());
       throw new NoRoutesFoundException(update.getMessage().getText());
     }

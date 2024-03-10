@@ -1,11 +1,12 @@
 package by.mrrockka.domain.payments;
 
 import by.mrrockka.exception.BusinessException;
-import by.mrrockka.exception.ErrorCodes;
+
+import static by.mrrockka.exception.ErrorCodes.ENTRIES_NOT_FOUND;
 
 public class NoEntriesException extends BusinessException {
 
   public NoEntriesException() {
-    super("No entries for player", ErrorCodes.ENTRIES_NOT_FOUND);
+    super("No entries for player", ENTRIES_NOT_FOUND);
   }
 }

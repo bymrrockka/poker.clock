@@ -43,7 +43,7 @@ class TelegramPersonRepositoryTest {
 
   @Test
   void givenGameIdAndEntries_whenGetByGameIdExecuted_shouldReturnValidTelegramEntities() {
-    final var expected = telegramPersonRepository.findAllByChatIdAndTelegrams(CHAT_ID, List.of("king", "queen"));
+    final var expected = telegramPersonRepository.findAllByChatIdAndTelegrams(CHAT_ID, List.of("kinger", "queen"));
     assertThat(telegramPersonRepository.findAllByGameId(GAME_ID))
       .containsExactlyInAnyOrderElementsOf(expected);
   }
