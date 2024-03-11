@@ -2,7 +2,7 @@ package by.mrrockka.route;
 
 import by.mrrockka.creator.MessageCreator;
 import by.mrrockka.creator.SendCreator;
-import by.mrrockka.service.TelegramGameService;
+import by.mrrockka.service.game.TelegramGameService;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -61,7 +61,7 @@ class TournamentCommandRouteTest {
       .chatId(update.getMessage().getChatId())
       .text(""));
 
-    when(telegramGameService.storeGame(update)).thenReturn(expected);
+    when(telegramGameService.storeTournament(update)).thenReturn(expected);
 
     assertThat(tournamentCommandRoute.process(update)).isEqualTo(expected);
   }

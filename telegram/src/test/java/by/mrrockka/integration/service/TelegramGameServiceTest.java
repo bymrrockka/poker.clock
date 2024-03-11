@@ -14,7 +14,7 @@ import by.mrrockka.repo.person.PersonEntity;
 import by.mrrockka.repo.person.PersonRepository;
 import by.mrrockka.repo.person.TelegramPersonEntity;
 import by.mrrockka.repo.person.TelegramPersonRepository;
-import by.mrrockka.service.TelegramGameService;
+import by.mrrockka.service.game.TelegramGameService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +64,7 @@ class TelegramGameServiceTest {
     final var createAt = MessageCreator.MESSAGE_TIMESTAMP.truncatedTo(ChronoUnit.SECONDS);
     final var chatId = ChatCreator.CHAT_ID;
 
-    final var response = (SendMessage) telegramGameService.storeGame(update);
+    final var response = (SendMessage) telegramGameService.storeTournament(update);
 
     assertAll(
       () -> assertThat(response.getChatId()).isEqualTo(String.valueOf(chatId)),

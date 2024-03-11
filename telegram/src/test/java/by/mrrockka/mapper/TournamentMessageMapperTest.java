@@ -90,7 +90,7 @@ class TournamentMessageMapperTest {
   @ParameterizedTest
   @MethodSource("tournamentMessages")
   void givenTournamentMessage_whenMapExecuted_thenShouldCreateGame(GameArgument argument) {
-    assertThat(tournamentMessageMapper.map(argument.message()))
+    assertThat(tournamentMessageMapper.mapTournament(argument.message()))
       .usingRecursiveComparison()
       .ignoringFields("id")
       .isEqualTo(argument.game());
@@ -106,7 +106,7 @@ class TournamentMessageMapperTest {
           @mrrockka
           @me
         """;
-    assertThatThrownBy(() -> tournamentMessageMapper.map(message))
+    assertThatThrownBy(() -> tournamentMessageMapper.mapTournament(message))
       .isInstanceOf(NoStackException.class);
   }
 
@@ -120,7 +120,7 @@ class TournamentMessageMapperTest {
           @mrrockka
           @me
         """;
-    assertThatThrownBy(() -> tournamentMessageMapper.map(message))
+    assertThatThrownBy(() -> tournamentMessageMapper.mapTournament(message))
       .isInstanceOf(NoBuyInException.class);
   }
 }

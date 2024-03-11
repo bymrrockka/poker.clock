@@ -2,7 +2,6 @@ package by.mrrockka.domain.prize;
 
 import lombok.Builder;
 import lombok.NonNull;
-import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -26,18 +25,5 @@ public record PrizePool(@NonNull List<PositionAndPercentage> positionAndPercenta
   public boolean isInPrizes(final int position) {
     return positionAndPercentages().stream()
       .anyMatch(positionAndPercentage -> positionAndPercentage.position() == position);
-  }
-
-  @Override
-  public String toString() {
-    return """
-      Prize Pool:
-      %s
-      """.formatted(
-      positionAndPercentages().stream()
-        .map(pp -> "\tposition: %s, percentage: %s".formatted(pp.position(), pp.percentage()))
-        .reduce("%s\n%s"::formatted)
-        .orElse(StringUtils.EMPTY)
-    );
   }
 }

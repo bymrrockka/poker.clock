@@ -1,12 +1,15 @@
 package by.mrrockka.service;
 
-import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.domain.finaleplaces.FinalPlace;
 import by.mrrockka.domain.finaleplaces.FinalePlaces;
+import by.mrrockka.domain.game.GameType;
+import by.mrrockka.domain.game.TournamentGame;
 import by.mrrockka.mapper.FinalePlacesMessageMapper;
 import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
 import by.mrrockka.service.exception.FinalPlaceContainsTelegramOfNotExistingPlayerException;
+import by.mrrockka.service.exception.ProcessingRestrictedException;
+import by.mrrockka.service.game.TelegramGameService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -14,8 +17,6 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -48,24 +49,25 @@ public class TelegramFinalePlacesService {
       .getGameByMessageMetadata(messageMetadata)
       .orElseThrow(ChatGameNotFoundException::new);
 
+    if (!(telegramGame.game() instanceof TournamentGame)) {
+      throw new ProcessingRestrictedException(GameType.TOURNAMENT);
+    }
+
     finalePlacesService.store(telegramGame.game().getId(), finalePlaces);
     return SendMessage.builder()
       .chatId(messageMetadata.chatId())
-      .text(prettyPrint(finalePlaces, telegramPersons))
+      .text(prettyPrint(finalePlaces))
       .replyToMessageId(telegramGame.messageMetadata().id())
       .build();
   }
 
-  private String prettyPrint(final FinalePlaces finalePlaces, final List<TelegramPerson> telegramPersons) {
+  private String prettyPrint(final FinalePlaces finalePlaces) {
     return """
-      Finale places:
+      Finale places stored:
       %s
       """.formatted(
       finalePlaces.finalPlaces().stream()
-        .map(fp -> "\tposition: %s, telegram: @%s".formatted(fp.position(), telegramPersons.stream()
-          .filter(person -> person.getId().equals(fp.person().getId()))
-          .map(TelegramPerson::getNickname)
-          .findAny().orElseThrow()))
+        .map(fp -> "\tposition: %s, telegram: @%s".formatted(fp.position(), fp.person().getNickname()))
         .reduce("%s\n%s"::formatted)
         .orElse(StringUtils.EMPTY)
     );

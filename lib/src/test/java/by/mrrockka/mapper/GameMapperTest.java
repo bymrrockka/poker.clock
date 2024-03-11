@@ -14,7 +14,7 @@ class GameMapperTest {
 
   @Test
   void givenEntityAndPlayers_whenMapExecuted_shouldReturnDomain() {
-    assertThat(gameMapper.toDomain(GameCreator.entity(), GameCreator.ENTRIES))
+    assertThat(gameMapper.toTournament(GameCreator.entity(), GameCreator.ENTRIES))
       .usingRecursiveComparison()
       .ignoringActualNullFields()
       .isEqualTo(GameCreator.tournament());
@@ -22,7 +22,7 @@ class GameMapperTest {
 
   @Test
   void givenEntityAndPlayersAndGameSummary_whenMapExecuted_shouldReturnDomain() {
-    assertThat(gameMapper.toDomain(GameCreator.entity(), GameCreator.ENTRIES, GameCreator.GAME_SUMMARY))
+    assertThat(gameMapper.toTournament(GameCreator.entity(), GameCreator.ENTRIES, GameCreator.GAME_SUMMARY))
       .usingRecursiveComparison()
       .ignoringActualNullFields()
       .isEqualTo(GameCreator.tournament());

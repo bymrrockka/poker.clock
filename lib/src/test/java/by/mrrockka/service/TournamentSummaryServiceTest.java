@@ -4,7 +4,7 @@ import by.mrrockka.creator.FinalePlacesCreator;
 import by.mrrockka.creator.PersonCreator;
 import by.mrrockka.creator.PrizePoolCreator;
 import by.mrrockka.domain.summary.FinalePlaceSummary;
-import by.mrrockka.domain.summary.TournamentGameSummary;
+import by.mrrockka.domain.summary.TournamentSummary;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class GameSummaryServiceTest {
+class TournamentSummaryServiceTest {
 
   private static final UUID GAME_ID = UUID.randomUUID();
   private static final BigDecimal TOTAL_AMOUNT = BigDecimal.valueOf(100);
@@ -29,7 +29,7 @@ class GameSummaryServiceTest {
   private PrizePoolService prizePoolService;
 
   @InjectMocks
-  private GameSummaryService gameSummaryService;
+  private TournamentSummaryService tournamentSummaryService;
 
   @Test
   void givenFinalePlacesAndPrizePool_whenAssembleExecuted_shouldReturnValidData() {
@@ -44,15 +44,15 @@ class GameSummaryServiceTest {
       .thenReturn(prizePool);
 
 
-    final var actual = gameSummaryService.assembleGameSummary(GAME_ID, TOTAL_AMOUNT);
+    final var actual = tournamentSummaryService.assembleTournamentSummary(GAME_ID, TOTAL_AMOUNT);
     assertThat(actual)
       .isEqualTo(expected);
   }
 
 //  todo: test exception
 
-  private TournamentGameSummary gameSummary() {
-    return new TournamentGameSummary(List.of(
+  private TournamentSummary gameSummary() {
+    return new TournamentSummary(List.of(
       FinalePlaceSummary.builder()
         .amount(BigDecimal.valueOf(60))
         .position(1)

@@ -7,7 +7,6 @@ import lombok.NonNull;
 import java.math.BigDecimal;
 import java.util.List;
 
-//todo: probably entries should contain person data and player model is not needed
 @Builder
 public record Entries(@NonNull Person person, @NonNull List<BigDecimal> entries) {
 

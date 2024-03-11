@@ -1,4 +1,4 @@
-package by.mrrockka.features.accounting;
+package by.mrrockka.features.calculation;
 
 import by.mrrockka.domain.game.Game;
 import by.mrrockka.domain.payout.Payout;
@@ -8,10 +8,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 
-//TODO: strategy to work with different types of games
 @Service
 @RequiredArgsConstructor
-public class Accounting {
+public class CalculationService {
 
   private final List<CalculationStrategy> strategies;
 

@@ -66,7 +66,7 @@ class TelegramEntryServiceTest {
       () -> assertThat(response).isNotNull(),
       () -> assertThat(response.getChatId()).isEqualTo(String.valueOf(CHAT_ID)),
       () -> assertThat(response.getText()).isEqualTo(
-        "%s enters the game. Entry amount is %s".formatted(telegram, expectedAmount))
+        "%s enters the game with %s amount".formatted(telegram, expectedAmount))
     );
 
     final var telegramPerson = telegramPersonService.getByTelegramAndChatId(telegram, CHAT_ID);
@@ -103,7 +103,7 @@ class TelegramEntryServiceTest {
       () -> assertThat(response).isNotNull(),
       () -> assertThat(response.getChatId()).isEqualTo(String.valueOf(CHAT_ID)),
       () -> assertThat(response.getText()).isEqualTo(
-        "%s enters the game. Entry amount is %s".formatted(telegram, expectedAmount))
+        "%s enters the game with %s amount".formatted(telegram, expectedAmount))
     );
 
     final var telegramPerson = telegramPersonService.getByTelegramAndChatId(telegram, CHAT_ID);

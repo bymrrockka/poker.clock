@@ -1,5 +1,6 @@
 package by.mrrockka.mapper.game;
 
+import by.mrrockka.domain.game.CashGame;
 import by.mrrockka.domain.game.TournamentGame;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -17,10 +18,20 @@ public class TournamentMessageMapper {
   public static final String BUY_IN_REGEX = "^buy([-_ ]*)in:([\\d]+)([A-z]*)$";
   public static final String STACK_REGEX = "^stack:([.\\d]+)([A-z]|)";
 
-  public TournamentGame map(final String command) {
+  public TournamentGame mapTournament(final String command) {
     final var strings = command.toLowerCase().replaceAll(" ", "").split("\n");
 
     return TournamentGame.tournamentBuilder()
+      .id(UUID.randomUUID())
+      .buyIn(mapBuyIn(strings))
+      .stack(mapStack(strings))
+      .build();
+  }
+
+  public CashGame mapCash(final String command) {
+    final var strings = command.toLowerCase().replaceAll(" ", "").split("\n");
+
+    return CashGame.cashBuilder()
       .id(UUID.randomUUID())
       .buyIn(mapBuyIn(strings))
       .stack(mapStack(strings))

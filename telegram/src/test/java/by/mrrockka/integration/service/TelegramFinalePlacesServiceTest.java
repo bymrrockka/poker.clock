@@ -57,7 +57,7 @@ class TelegramFinalePlacesServiceTest {
 
     final var response = (SendMessage) telegramFinalePlacesService.storePrizePool(update);
     final var expectedMessage = """
-      Finale places:
+      Finale places stored:
       	position: 1, telegram: @kinger
       	position: 2, telegram: @queen
       	position: 3, telegram: @jackas

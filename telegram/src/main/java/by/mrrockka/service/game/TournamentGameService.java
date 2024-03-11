@@ -1,12 +1,13 @@
-package by.mrrockka.service;
+package by.mrrockka.service.game;
 
-import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.Person;
-import by.mrrockka.domain.TelegramGame;
 import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.mapper.game.TelegramGameMapper;
 import by.mrrockka.mapper.game.TournamentMessageMapper;
 import by.mrrockka.repo.game.TelegramGameRepository;
+import by.mrrockka.service.EntriesService;
+import by.mrrockka.service.GameService;
+import by.mrrockka.service.TelegramPersonService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,12 +17,10 @@ import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMess
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.util.Optional;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class TelegramGameService {
+class TournamentGameService {
 
   private final TelegramGameRepository telegramGameRepository;
   private final TelegramPersonService telegramPersonService;
@@ -33,17 +32,17 @@ public class TelegramGameService {
 
   //  todo: change return type to custom or List to support multiple commands in a message
   @Transactional(isolation = Isolation.READ_COMMITTED)
-  public BotApiMethodMessage storeGame(final Update update) {
+  BotApiMethodMessage storeGame(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
 
     log.debug("Processing {\n%s\n} message from %s chat id. Timestamp %s"
                 .formatted(messageMetadata.command(), messageMetadata.chatId(), messageMetadata.createdAt()));
 
-    final var game = tournamentMessageMapper.map(messageMetadata.command());
+    final var game = tournamentMessageMapper.mapTournament(messageMetadata.command());
     final var personIds = telegramPersonService.storePersons(update).stream()
       .map(Person::getId)
       .toList();
-    gameService.storeNewGame(game);
+    gameService.storeTournamentGame(game);
     telegramGameRepository.save(telegramGameMapper.toEntity(game, messageMetadata));
     entriesService.storeBatch(game.getId(), personIds, game.getBuyIn(), messageMetadata.createdAt());
 
@@ -52,12 +51,5 @@ public class TelegramGameService {
       .text("Tournament started.")
       .replyToMessageId(messageMetadata.id())
       .build();
-  }
-
-  public Optional<TelegramGame> getGameByMessageMetadata(final MessageMetadata messageMetadata) {
-    return messageMetadata.optReplyTo()
-      .map(replyTo -> telegramGameRepository.findByChatAndMessageId(messageMetadata.chatId(), replyTo.id()))
-      .orElseGet(() -> telegramGameRepository.findLatestByChatId(messageMetadata.chatId()))
-      .map(entity -> telegramGameMapper.toDomain(gameService.retrieveGame(entity.gameId()), entity));
   }
 }

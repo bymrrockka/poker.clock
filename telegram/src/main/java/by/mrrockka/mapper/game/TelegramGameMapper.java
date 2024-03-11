@@ -2,6 +2,7 @@ package by.mrrockka.mapper.game;
 
 import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.TelegramGame;
+import by.mrrockka.domain.game.CashGame;
 import by.mrrockka.domain.game.Game;
 import by.mrrockka.domain.game.TournamentGame;
 import by.mrrockka.mapper.MessageMetadataMapper;
@@ -12,7 +13,11 @@ import org.mapstruct.Mapping;
 @Mapper(uses = MessageMetadataMapper.class)
 public interface TelegramGameMapper {
 
-  TelegramGame toDomain(TournamentGame game, TelegramGameEntity messageMetadata);
+  TelegramGame<Game> toGame(Game game, TelegramGameEntity messageMetadata);
+
+  TelegramGame<TournamentGame> toTournament(TournamentGame game, TelegramGameEntity messageMetadata);
+
+  TelegramGame<CashGame> toCash(CashGame game, TelegramGameEntity messageMetadata);
 
   @Mapping(source = "game.id", target = "gameId")
   @Mapping(source = "messageMetadata.id", target = "messageId")

@@ -44,11 +44,6 @@ public class TelegramPersonService {
     return telegramPersonMapper.mapToTelegrams(telegramPersonRepository.findAllByChatIdAndTelegrams(chatId, telegrams));
   }
 
-  public List<TelegramPerson> getAllByGameId(final UUID gameId) {
-    return telegramPersonMapper.mapToTelegrams(telegramPersonRepository.findAllByGameId(gameId));
-  }
-
-  // todo: refactor
   private List<TelegramPerson> storeMissed(final List<TelegramPerson> persons, final Long chatId) {
     final var stored = telegramPersonMapper
       .mapToTelegrams(telegramPersonRepository.findAllByChatIdAndTelegrams(chatId, persons.stream().map(

@@ -1,13 +1,13 @@
-package by.mrrockka.features.accounting;
+package by.mrrockka.features.calculation;
 
+import by.mrrockka.creator.EntriesCreator;
 import by.mrrockka.creator.GameCreator;
-import by.mrrockka.creator.PersonCreator;
 import by.mrrockka.domain.Person;
 import by.mrrockka.domain.entries.Entries;
 import by.mrrockka.domain.payout.Debt;
 import by.mrrockka.domain.payout.Payout;
 import by.mrrockka.domain.summary.FinalePlaceSummary;
-import by.mrrockka.domain.summary.TournamentGameSummary;
+import by.mrrockka.domain.summary.TournamentSummary;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -17,7 +17,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static java.math.RoundingMode.HALF_UP;
@@ -26,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class TournamentCalculationStrategyTest {
   private static final BigDecimal BUY_IN = BigDecimal.valueOf(20);
 
-  private final TournamentCalculationStrategy strategy = new TournamentCalculationStrategy();
+  private final CalculationStrategy strategy = new TournamentCalculationStrategy();
 
   private static Stream<Arguments> playerSize() {
     return Stream.of(
@@ -41,12 +40,12 @@ class TournamentCalculationStrategyTest {
   @ParameterizedTest
   @MethodSource("playerSize")
   void givenPlayerBuyInEqually_thenShouldCreateListOfDebtorsRelatedToCreditor(final int size) {
-    final var entries = entries(size);
+    final var entries = EntriesCreator.entriesList(size, BUY_IN);
     final var totalEntriesAmount = totalEntriesAmount(entries);
     final var finaleSummary = List.of(finaleSummary(entries.get(0).person(), totalEntriesAmount, 1));
     final var game = GameCreator.tournament(builder -> builder
       .entries(entries)
-      .tournamentGameSummary(new TournamentGameSummary(finaleSummary))
+      .tournamentSummary(new TournamentSummary(finaleSummary))
     );
 
     final var actual = strategy.calculate(game);
@@ -58,7 +57,7 @@ class TournamentCalculationStrategyTest {
   @ParameterizedTest
   @MethodSource("playerSize")
   void givenPlayerBuyInNotEqually_thenShouldCreateListOfDebtorsOrderedByTheAmount(final int size) {
-    final var entries = new ArrayList<>(entries(size));
+    final var entries = new ArrayList<>(EntriesCreator.entriesList(size, BUY_IN));
     entries.add(entry(List.of(BUY_IN, BUY_IN, BUY_IN)));
     entries.add(entry(List.of(BUY_IN, BUY_IN, BUY_IN, BUY_IN)));
 
@@ -66,7 +65,7 @@ class TournamentCalculationStrategyTest {
     final var finaleSummary = List.of(finaleSummary(entries.get(0).person(), totalEntriesAmount, 1));
     final var game = GameCreator.tournament(builder -> builder
       .entries(entries)
-      .tournamentGameSummary(new TournamentGameSummary(finaleSummary))
+      .tournamentSummary(new TournamentSummary(finaleSummary))
     );
 
     final var actual = strategy.calculate(game);
@@ -80,11 +79,11 @@ class TournamentCalculationStrategyTest {
   @Test
   void givenPlayerBuyInEquallyAndPrizePoolHasMultiplePositions_thenShouldCreateListOfDebtorsOrderedByTheAmount() {
     final int size = 10;
-    final var entries = entries(size);
+    final var entries = EntriesCreator.entriesList(size, BUY_IN);
 
     final var game = GameCreator.tournament(builder -> builder
       .entries(entries)
-      .tournamentGameSummary(new TournamentGameSummary(finaleSummaries(entries)))
+      .tournamentSummary(new TournamentSummary(finaleSummaries(entries)))
     );
 
     final var actual = strategy.calculate(game);
@@ -109,7 +108,7 @@ class TournamentCalculationStrategyTest {
   @Test
   void givenPlayerBuyInNotEquallyAndPrizePoolHasMultiplePositions_thenShouldCreateListOfDebtorsOrderedByTheAmount() {
     final int size = 10;
-    final var entries = new ArrayList<>(entries(size));
+    final var entries = new ArrayList<>(EntriesCreator.entriesList(size, BUY_IN));
 
     final var firstPlace = entry(List.of(BUY_IN, BUY_IN, BUY_IN));
     final var secondPlace = entry(List.of(BUY_IN, BUY_IN));
@@ -119,7 +118,7 @@ class TournamentCalculationStrategyTest {
 
     final var game = GameCreator.tournament(builder -> builder
       .entries(entries)
-      .tournamentGameSummary(new TournamentGameSummary(finaleSummaries(entries)))
+      .tournamentSummary(new TournamentSummary(finaleSummaries(entries)))
     );
 
     final var actual = strategy.calculate(game);
@@ -147,7 +146,7 @@ class TournamentCalculationStrategyTest {
   @Test
   void givenPlayerBuyInNotEquallyAndPrizePoolHasMultiplePositionsAndPrizePositionStillHasDebt_thenShouldCreateListOfDebtorsOrderedByTheAmount() {
     final int size = 10;
-    final var entries = new ArrayList<>(entries(size));
+    final var entries = new ArrayList<>(EntriesCreator.entriesList(size, BUY_IN));
 
     final var firstPlace = entry(List.of(BUY_IN, BUY_IN, BUY_IN));
     final var secondPlace = entry(List.of(BUY_IN, BUY_IN));
@@ -159,7 +158,7 @@ class TournamentCalculationStrategyTest {
 
     final var game = GameCreator.tournament(builder -> builder
       .entries(entries)
-      .tournamentGameSummary(new TournamentGameSummary(finaleSummaries(entries)))
+      .tournamentSummary(new TournamentSummary(finaleSummaries(entries)))
     );
 
     final var actual = strategy.calculate(game);
@@ -182,21 +181,8 @@ class TournamentCalculationStrategyTest {
     assertThat(actual).containsExactlyInAnyOrderElementsOf(expect);
   }
 
-  private List<Entries> entries(final int size) {
-    return IntStream.range(0, size)
-      .mapToObj(i -> entry())
-      .toList();
-  }
-
-  private Entries entry() {
-    return entry(List.of(BUY_IN));
-  }
-
   private Entries entry(final List<BigDecimal> entries) {
-    return Entries.builder()
-      .person(PersonCreator.domainRandom())
-      .entries(entries)
-      .build();
+    return EntriesCreator.entries(builder -> builder.entries(entries));
   }
 
   private FinalePlaceSummary finaleSummary(final Person person, final BigDecimal amount, final int position) {
@@ -211,7 +197,7 @@ class TournamentCalculationStrategyTest {
     final var debts = debtorsEntries.stream()
       .filter(entries -> !entries.equals(creditorEntries))
       .map(debtEntries -> Debt.builder()
-        .debtorEntries(debtEntries)
+        .entries(debtEntries)
         .amount(debtEntries.total())
         .build())
       .toList();
@@ -221,14 +207,14 @@ class TournamentCalculationStrategyTest {
 
   private Payout payout(final Entries creditorEntries, final List<Debt> debts) {
     return Payout.builder()
-      .creditorEntries(creditorEntries)
+      .entries(creditorEntries)
       .debts(debts)
       .build();
   }
 
   private Debt debt(final Entries entries, final BigDecimal amount) {
     return Debt.builder()
-      .debtorEntries(entries)
+      .entries(entries)
       .amount(amount)
       .build();
   }

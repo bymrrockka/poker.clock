@@ -1,7 +1,7 @@
 package by.mrrockka.domain.game;
 
+import by.mrrockka.domain.Withdrawals;
 import by.mrrockka.domain.entries.Entries;
-import by.mrrockka.domain.withdrawals.Withdrawals;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

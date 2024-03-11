@@ -1,4 +1,4 @@
-package by.mrrockka.features.accounting;
+package by.mrrockka.features.calculation;
 
 import by.mrrockka.creator.GameCreator;
 import by.mrrockka.domain.game.TournamentGame;
@@ -14,14 +14,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class AccountingTest {
+class CalculationServiceTest {
 
   @Mock
   private TournamentCalculationStrategy strategy;
 
   @Test
   void givenStrategy_whenAccountingCalculateExecuted_thenStrategyShouldBeCalled() {
-    final var accounting = new Accounting(List.of(strategy));
+    final var accounting = new CalculationService(List.of(strategy));
     final var game = GameCreator.tournament();
     final var expected = List.of(Payout.builder().build());
 

@@ -28,7 +28,7 @@ class GameServiceTest {
   @Mock
   private GameRepository gameRepository;
   @Mock
-  private GameSummaryService gameSummaryService;
+  private TournamentSummaryService tournamentSummaryService;
   @Mock
   private EntriesService entriesService;
 
@@ -41,7 +41,7 @@ class GameServiceTest {
     final var mapped = GameCreator.entity();
 
     when(gameMapper.toEntity(given)).thenReturn(mapped);
-    gameService.storeNewGame(given);
+    gameService.storeTournamentGame(given);
     verify(gameRepository).save(mapped);
   }
 
@@ -49,15 +49,15 @@ class GameServiceTest {
   void givenGameId_whenOnlyGameAndPlayersStored_shouldCallReposAndReturnOnlyGame() {
     final var entries = List.of(EntriesCreator.entries());
     final var expected = GameCreator.tournament(builder -> builder
-      .tournamentGameSummary(null)
+      .tournamentSummary(null)
       .entries(entries)
     );
     final var given = GameCreator.entity();
 
     when(gameRepository.findById(GAME_ID)).thenReturn(given);
     when(entriesService.getAllForGame(GAME_ID)).thenReturn(entries);
-    when(gameMapper.toDomain(given, entries, null)).thenReturn(expected);
-    assertThat(gameService.retrieveGame(GAME_ID))
+    when(gameMapper.toTournament(given, entries, null)).thenReturn(expected);
+    assertThat(gameService.retrieveTournamentGame(GAME_ID))
       .isEqualTo(expected);
   }
 
@@ -67,16 +67,16 @@ class GameServiceTest {
     final var entries = List.of(EntriesCreator.entries());
     final var gameSummary = GameCreator.GAME_SUMMARY;
     final var expected = GameCreator.tournament(builder -> builder
-      .tournamentGameSummary(gameSummary)
+      .tournamentSummary(gameSummary)
       .entries(entries)
     );
     final var given = GameCreator.entity();
 
-    when(gameSummaryService.assembleGameSummary(GAME_ID, BigDecimal.ONE)).thenReturn(gameSummary);
+    when(tournamentSummaryService.assembleTournamentSummary(GAME_ID, BigDecimal.ONE)).thenReturn(gameSummary);
     when(gameRepository.findById(GAME_ID)).thenReturn(given);
     when(entriesService.getAllForGame(GAME_ID)).thenReturn(entries);
-    when(gameMapper.toDomain(given, entries, gameSummary)).thenReturn(expected);
-    assertThat(gameService.retrieveGame(GAME_ID))
+    when(gameMapper.toTournament(given, entries, gameSummary)).thenReturn(expected);
+    assertThat(gameService.retrieveTournamentGame(GAME_ID))
       .isEqualTo(expected);
   }
 

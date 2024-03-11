@@ -2,10 +2,12 @@ package by.mrrockka.creator;
 
 import by.mrrockka.FakerProvider;
 import by.mrrockka.domain.Bounty;
+import by.mrrockka.domain.Withdrawals;
 import by.mrrockka.domain.entries.Entries;
+import by.mrrockka.domain.game.CashGame;
 import by.mrrockka.domain.game.GameType;
 import by.mrrockka.domain.game.TournamentGame;
-import by.mrrockka.domain.summary.TournamentGameSummary;
+import by.mrrockka.domain.summary.TournamentSummary;
 import by.mrrockka.repo.game.GameEntity;
 import com.github.javafaker.Faker;
 import lombok.AccessLevel;
@@ -28,8 +30,9 @@ public final class GameCreator {
   public static final BigDecimal STACK = BigDecimal.valueOf(FAKER.number().numberBetween(1500, 30000));
   public static final BigDecimal BOUNTY = BigDecimal.valueOf(FAKER.number().numberBetween(10, 100));
   public static final List<Entries> ENTRIES = List.of(EntriesCreator.entries());
+  public static final List<Withdrawals> WITHDRAWALS = List.of(WithdrawalsCreator.withdrawals());
   public static final List<Bounty> BOUNTIES = List.of(Bounty.builder().build());
-  public static final TournamentGameSummary GAME_SUMMARY = new TournamentGameSummary(List.of());
+  public static final TournamentSummary GAME_SUMMARY = new TournamentSummary(List.of());
 
   public static TournamentGame tournament() {
     return tournament(null);
@@ -42,9 +45,27 @@ public final class GameCreator {
       .stack(STACK)
 //      .bounty(BOUNTY)
       .entries(ENTRIES)
-      .tournamentGameSummary(GAME_SUMMARY)
+      .tournamentSummary(GAME_SUMMARY)
 //      .bountyTransactions(BOUNTIES)
       ;
+
+    if (nonNull(gameBuilderConsumer))
+      gameBuilderConsumer.accept(gameBuilder);
+
+    return gameBuilder.build();
+  }
+
+  public static CashGame cash() {
+    return cash(null);
+  }
+
+  public static CashGame cash(final Consumer<CashGame.CashGameBuilder> gameBuilderConsumer) {
+    final var gameBuilder = CashGame.cashBuilder()
+      .id(ID)
+      .buyIn(BUY_IN)
+      .stack(STACK)
+      .entries(ENTRIES)
+      .withdrawals(WITHDRAWALS);
 
     if (nonNull(gameBuilderConsumer))
       gameBuilderConsumer.accept(gameBuilder);
