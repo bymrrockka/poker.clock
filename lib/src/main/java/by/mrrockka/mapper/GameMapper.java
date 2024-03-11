@@ -1,6 +1,5 @@
 package by.mrrockka.mapper;
 
-import by.mrrockka.domain.Player;
 import by.mrrockka.domain.entries.Entries;
 import by.mrrockka.domain.game.TournamentGame;
 import by.mrrockka.domain.summary.TournamentGameSummary;
@@ -17,23 +16,13 @@ import java.util.List;
 public interface GameMapper {
 
   @Mapping(target = "bounty", constant = "0")
+  @Mapping(target = "gameType", constant = "TOURNAMENT")
   GameEntity toEntity(TournamentGame game);
 
   //  @Mapping(target = "bountyTransactions", ignore = true)
   @Mapping(target = "tournamentGameSummary", ignore = true)
   @InheritInverseConfiguration
-  TournamentGame toDomainWithPlayers(GameEntity gameEntity, List<Player> players);
-
-  //  @Mapping(target = "bountyTransactions", ignore = true)
-  @Mapping(target = "tournamentGameSummary", ignore = true)
-  @Mapping(target = "players", ignore = true)
-  @InheritInverseConfiguration
-  TournamentGame toDomain(GameEntity gameEntity, List<Entries> players);
-
-  //  @Mapping(target = "bountyTransactions", ignore = true)
-  @InheritInverseConfiguration
-  TournamentGame toDomainWithPlayers(GameEntity gameEntity, List<Player> players,
-                                     TournamentGameSummary tournamentGameSummary);
+  TournamentGame toDomain(GameEntity gameEntity, List<Entries> entries);
 
   @InheritInverseConfiguration
   TournamentGame toDomain(GameEntity gameEntity, List<Entries> entries, TournamentGameSummary tournamentGameSummary);

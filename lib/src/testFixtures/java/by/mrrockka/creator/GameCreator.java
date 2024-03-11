@@ -38,7 +38,6 @@ public final class GameCreator {
   public static TournamentGame tournament(final Consumer<TournamentGame.TournamentGameBuilder> gameBuilderConsumer) {
     final var gameBuilder = TournamentGame.tournamentBuilder()
       .id(ID)
-      .gameType(GAME_TYPE)
       .buyIn(BUY_IN)
       .stack(STACK)
 //      .bounty(BOUNTY)
