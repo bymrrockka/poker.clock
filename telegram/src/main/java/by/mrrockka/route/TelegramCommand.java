@@ -4,8 +4,9 @@ import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMess
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 //todo: rename to telegram command
-interface CommandRoute {
+interface TelegramCommand {
 
+  //  todo: change return type to custom or List to support multiple commands in a message
   BotApiMethodMessage process(final Update update);
 
   default boolean isApplicable(final Update update) {

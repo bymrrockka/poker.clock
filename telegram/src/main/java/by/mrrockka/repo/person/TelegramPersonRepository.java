@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static by.mrrockka.repo.person.TelegramPersonColumnNames.CHAT_ID;
-import static by.mrrockka.repo.person.TelegramPersonColumnNames.NICKNAME;
+import static by.mrrockka.repo.person.TelegramPersonColumnNames.NICK_NAME;
 
 @Repository
 @RequiredArgsConstructor
@@ -56,7 +56,7 @@ public class TelegramPersonRepository {
   public List<TelegramPersonEntity> findAllByChatIdAndTelegrams(final Long chatId, final List<String> telegrams) {
     final var params = new MapSqlParameterSource()
       .addValue(CHAT_ID, chatId)
-      .addValue(NICKNAME, telegrams);
+      .addValue(NICK_NAME, telegrams);
 
     return jdbcTemplate.query(FIND_BY_CHAT_ID_AND_TELEGRAMS_SQL, params, telegramPersonEntityRowMapper);
   }
@@ -75,7 +75,7 @@ public class TelegramPersonRepository {
 
   public Optional<TelegramPersonEntity> findByTelegram(final Long chatId, final String telegram) {
     final var params = new MapSqlParameterSource()
-      .addValue(NICKNAME, telegram)
+      .addValue(NICK_NAME, telegram)
       .addValue(CHAT_ID, chatId);
 
     return jdbcTemplate.query(FIND_BY_TELEGRAM_SQL, params, rs -> rs.next()

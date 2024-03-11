@@ -19,12 +19,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class TournamentCommandRouteTest {
+class TournamentTelegramCommandTest {
 
   @Mock
   private TelegramGameService telegramGameService;
   @InjectMocks
-  private TournamentCommandRoute tournamentCommandRoute;
+  private TournamentTelegramCommand tournamentCommandRoute;
 
   private static Stream<Arguments> tournamentMessages() {
     return Stream.of(

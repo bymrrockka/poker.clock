@@ -10,7 +10,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class EntryCommandRoute implements CommandRoute {
+public class EntryTelegramCommand implements TelegramCommand {
   private static final List<String> COMMANDS = List.of("/entry", "/reentry");
 
   private final TelegramEntryService telegramEntryService;
@@ -22,7 +22,7 @@ public class EntryCommandRoute implements CommandRoute {
 
   @Override
   public boolean isApplicable(final Update update) {
-    return CommandRoute.super.isApplicable(update)
+    return TelegramCommand.super.isApplicable(update)
       && COMMANDS.stream().anyMatch(command -> update.getMessage().getText().contains(command));
   }
 }

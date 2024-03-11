@@ -19,10 +19,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest
 @ActiveProfiles("integration")
-class CalculateCommandRouteTest {
+class CalculateTelegramCommandTest {
 
   @Autowired
-  private CalculateCommandRoute calculatePaymentsRoute;
+  private CalculateTelegramCommand calculatePaymentsRoute;
 
   @Builder
   private record MessageArgument(String message, boolean result, boolean isCommand) {

@@ -10,6 +10,4 @@ public record TelegramGame(
   Game game,
   @NonNull
   MessageMetadata messageMetadata
-) {
-
-}
+) {}

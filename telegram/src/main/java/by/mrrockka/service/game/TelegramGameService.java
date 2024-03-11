@@ -24,8 +24,6 @@ public class TelegramGameService {
   private final GameService gameService;
   private final TelegramGameMapper telegramGameMapper;
 
-  //  todo: change return type to custom or List to support multiple commands in a message
-
   public BotApiMethodMessage storeTournament(final Update update) {
     return tournamentGameService.storeGame(update);
   }

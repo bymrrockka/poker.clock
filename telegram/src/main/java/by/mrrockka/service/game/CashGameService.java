@@ -30,7 +30,6 @@ class CashGameService {
   private final MessageMetadataMapper messageMetadataMapper;
   private final TelegramGameMapper telegramGameMapper;
 
-  //  todo: change return type to custom or List to support multiple commands in a message
   @Transactional(isolation = Isolation.READ_COMMITTED)
   BotApiMethodMessage storeGame(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());

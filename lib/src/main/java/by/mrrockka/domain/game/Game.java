@@ -16,7 +16,6 @@ public abstract sealed class Game permits TournamentGame, CashGame, BountyGame {
 
   @NonNull
   protected UUID id;
-  //  todo: replace type with game sub types
   @NonNull
   protected BigDecimal buyIn;
   @NonNull
