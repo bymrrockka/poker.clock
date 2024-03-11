@@ -2,6 +2,7 @@ package by.mrrockka.domain.game;
 
 import by.mrrockka.domain.Bounty;
 import by.mrrockka.domain.Player;
+import by.mrrockka.domain.entries.Entries;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -20,11 +21,10 @@ public final class BountyGame extends Game {
   List<Bounty> bountyTransactions;
 
   @Builder(builderMethodName = "bountyBuilder")
-  public BountyGame(@NonNull final UUID id, @NonNull final GameType gameType,
-                    @NonNull final BigDecimal buyIn, @NonNull final BigDecimal stack,
-                    final List<Player> players, @NonNull final BigDecimal bounty,
-                    final List<Bounty> bountyTransactions) {
-    super(id, gameType, buyIn, stack, players);
+  public BountyGame(@NonNull final UUID id, @NonNull final GameType gameType, @NonNull final BigDecimal buyIn,
+                    @NonNull final BigDecimal stack, final List<Player> players, final List<Entries> entries,
+                    @NonNull final BigDecimal bounty, final List<Bounty> bountyTransactions) {
+    super(id, gameType, buyIn, stack, players, entries);
     this.bounty = bounty;
     this.bountyTransactions = bountyTransactions;
   }

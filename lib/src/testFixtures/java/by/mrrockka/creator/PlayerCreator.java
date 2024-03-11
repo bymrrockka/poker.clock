@@ -9,6 +9,8 @@ import java.util.function.Consumer;
 
 import static java.util.Objects.nonNull;
 
+
+@Deprecated(forRemoval = true, since = "1.1")
 public class PlayerCreator {
 
   public static Player player() {
@@ -18,8 +20,7 @@ public class PlayerCreator {
   public static Player player(final Consumer<Player.PlayerBuilder> playerBuilderConsumer) {
     final var playerBuilder = Player.builder()
       .person(PersonCreator.domain())
-      .entries(new Entries(List.of(BigDecimal.ONE)));
-
+      .entries(new Entries(PersonCreator.domain(), List.of(BigDecimal.ONE)));
 
     if (nonNull(playerBuilderConsumer))
       playerBuilderConsumer.accept(playerBuilder);

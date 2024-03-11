@@ -10,7 +10,7 @@ import org.mapstruct.Named;
 import java.math.BigDecimal;
 import java.util.List;
 
-@Mapper
+@Mapper(uses = PersonMapper.class)
 public interface PlayerMapper {
 
   @Mapping(target = "entries", source = "amounts", qualifiedByName = "amountListToPayments")
@@ -18,6 +18,6 @@ public interface PlayerMapper {
 
   @Named("amountListToPayments")
   default Entries amountListToPayments(final List<BigDecimal> amount) {
-    return new Entries(amount);
+    return new Entries(null, amount);
   }
 }

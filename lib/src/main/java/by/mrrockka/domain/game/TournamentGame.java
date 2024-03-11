@@ -1,6 +1,7 @@
 package by.mrrockka.domain.game;
 
 import by.mrrockka.domain.Player;
+import by.mrrockka.domain.entries.Entries;
 import by.mrrockka.domain.summary.TournamentGameSummary;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -18,10 +19,10 @@ public final class TournamentGame extends Game {
   TournamentGameSummary tournamentGameSummary;
 
   @Builder(builderMethodName = "tournamentBuilder")
-  public TournamentGame(@NonNull final UUID id, @NonNull final GameType gameType,
-                        @NonNull final BigDecimal buyIn, @NonNull final BigDecimal stack,
-                        final List<Player> players, final TournamentGameSummary tournamentGameSummary) {
-    super(id, gameType, buyIn, stack, players);
+  public TournamentGame(@NonNull final UUID id, @NonNull final GameType gameType, @NonNull final BigDecimal buyIn,
+                        @NonNull final BigDecimal stack, final List<Player> players, final List<Entries> entries,
+                        final TournamentGameSummary tournamentGameSummary) {
+    super(id, gameType, buyIn, stack, players, entries);
     this.tournamentGameSummary = tournamentGameSummary;
   }
 }
