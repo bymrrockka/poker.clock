@@ -6,9 +6,6 @@ import by.mrrockka.domain.payout.TransferType;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.Optional;
-
-import static java.util.Objects.nonNull;
 
 @Getter
 @EqualsAndHashCode(callSuper = true)
@@ -24,14 +21,13 @@ public final class CashPlayerSummary extends PlayerSummary {
     this.withdrawals = withdrawals;
   }
 
-  public static CashPlayerSummary of(@NonNull final Entries entries, final Withdrawals withdrawals) {
-    if (nonNull(withdrawals) && !entries.person().equals(withdrawals.person())) {
+  public static CashPlayerSummary of(@NonNull final Entries entries, @NonNull final Withdrawals withdrawals) {
+    if (!entries.person().equals(withdrawals.person())) {
       throw new PersonsNotMatchingException(entries.person().getNickname(), withdrawals.person().getNickname());
     }
 
     final var totalEntries = entries.total();
-    final var totalWithdrawals = Optional.ofNullable(withdrawals).map(Withdrawals::total).orElse(BigDecimal.ZERO);
-
+    final var totalWithdrawals = withdrawals.total();
     final var summaryBuilder = cashBuilder()
       .entries(entries)
       .withdrawals(withdrawals);

@@ -82,8 +82,8 @@ public class TelegramCalculationService {
       .reduce(BigDecimal::add)
       .orElse(BigDecimal.ZERO);
 
-    if (totalEntries.compareTo(totalWithdrawals) < 0) {
-      throw new EntriesAndWithdrawalAmountsAreNotEqualException();
+    if (totalEntries.compareTo(totalWithdrawals) != 0) {
+      throw new EntriesAndWithdrawalAmountsAreNotEqualException(totalEntries.subtract(totalWithdrawals));
     }
   }
 

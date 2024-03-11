@@ -19,8 +19,8 @@ public final class CashGame extends Game {
 
   @Builder(builderMethodName = "cashBuilder")
   public CashGame(@NonNull final UUID id, @NonNull final BigDecimal buyIn,
-                  @NonNull final BigDecimal stack, @NonNull final List<Entries> entries,
-                  @NonNull final List<Withdrawals> withdrawals) {
+                  @NonNull final BigDecimal stack, final List<Entries> entries,
+                  final List<Withdrawals> withdrawals) {
     super(id, buyIn, stack, entries);
     this.withdrawals = withdrawals;
   }

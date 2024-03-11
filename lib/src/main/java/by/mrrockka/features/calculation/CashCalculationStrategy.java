@@ -1,5 +1,6 @@
 package by.mrrockka.features.calculation;
 
+import by.mrrockka.domain.Withdrawals;
 import by.mrrockka.domain.game.CashGame;
 import by.mrrockka.domain.game.Game;
 import by.mrrockka.domain.payout.Debt;
@@ -7,6 +8,7 @@ import by.mrrockka.domain.payout.Payout;
 import by.mrrockka.domain.summary.player.CashPlayerSummary;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -25,7 +27,10 @@ public final class CashCalculationStrategy extends AbstractCalculationStrategy<C
         cash.getWithdrawals().stream()
           .filter(withdrawal -> withdrawal.person().equals(entry.person()))
           .findFirst()
-          .orElse(null)))
+          .orElse(Withdrawals.builder()
+                    .person(entry.person())
+                    .withdrawals(Collections.emptyList())
+                    .build())))
       .sorted()
       .toList();
   }
