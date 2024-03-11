@@ -18,7 +18,7 @@ public class WithdrawalMessageMapper {
     final var str = command.toLowerCase().strip();
     final var matcher = Pattern.compile(WITHDRAWAL_REGEX).matcher(str);
     if (matcher.matches()) {
-      return Pair.of(matcher.group(3), new BigDecimal(matcher.group(5)));
+      return Pair.of(matcher.group(2), new BigDecimal(matcher.group(4)));
     }
 
     throw new InvalidMessageFormatException(WITHDRAWAL_REGEX);

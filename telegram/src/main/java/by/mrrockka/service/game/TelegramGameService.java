@@ -2,7 +2,6 @@ package by.mrrockka.service.game;
 
 import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.TelegramGame;
-import by.mrrockka.domain.game.Game;
 import by.mrrockka.mapper.game.TelegramGameMapper;
 import by.mrrockka.repo.game.TelegramGameRepository;
 import by.mrrockka.service.GameService;
@@ -35,7 +34,7 @@ public class TelegramGameService {
     return cashGameService.storeGame(update);
   }
 
-  public Optional<TelegramGame<Game>> getGameByMessageMetadata(final MessageMetadata messageMetadata) {
+  public Optional<TelegramGame> getGameByMessageMetadata(final MessageMetadata messageMetadata) {
     return messageMetadata.optReplyTo()
       .map(replyTo -> telegramGameRepository.findByChatAndMessageId(messageMetadata.chatId(), replyTo.id()))
       .orElseGet(() -> telegramGameRepository.findLatestByChatId(messageMetadata.chatId()))

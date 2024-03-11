@@ -3,10 +3,7 @@ package by.mrrockka.domain.summary.player;
 import by.mrrockka.domain.entries.Entries;
 import by.mrrockka.domain.payout.TransferType;
 import by.mrrockka.domain.summary.TournamentSummary;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NonNull;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -14,7 +11,7 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = true)
 public final class TournamentPlayerSummary extends PlayerSummary {
 
-  @Builder(builderMethodName = "tournamentBuilder")
+  @Builder(builderMethodName = "tournamentBuilder", access = AccessLevel.PRIVATE)
   private TournamentPlayerSummary(@NonNull final Entries entries, final BigDecimal transferAmount,
                                   @NonNull final TransferType transferType) {
     super(entries, transferAmount, transferType);

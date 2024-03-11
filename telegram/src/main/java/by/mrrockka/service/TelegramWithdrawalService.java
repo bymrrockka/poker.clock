@@ -23,7 +23,7 @@ public class TelegramWithdrawalService {
   private final TelegramPersonService telegramPersonService;
   private final MessageMetadataMapper messageMetadataMapper;
 
-  public BotApiMethodMessage storeEntry(final Update update) {
+  public BotApiMethodMessage storeWithdrawal(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
     final var nicknameAndAmount = withdrawalMessageMapper.map(messageMetadata.command());
     final var telegramGame = telegramGameService
@@ -44,7 +44,7 @@ public class TelegramWithdrawalService {
 
     return SendMessage.builder()
       .chatId(messageMetadata.chatId())
-      .text("%s withdrawn %s.".formatted(nicknameAndAmount.getKey(), nicknameAndAmount.getValue()))
+      .text("%s withdrawn %s amount.".formatted(nicknameAndAmount.getKey(), nicknameAndAmount.getValue()))
       .replyToMessageId(telegramGame.messageMetadata().id())
       .build();
   }

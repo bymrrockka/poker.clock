@@ -3,10 +3,7 @@ package by.mrrockka.domain.summary.player;
 import by.mrrockka.domain.Withdrawals;
 import by.mrrockka.domain.entries.Entries;
 import by.mrrockka.domain.payout.TransferType;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NonNull;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -20,7 +17,7 @@ public final class CashPlayerSummary extends PlayerSummary {
   @NonNull
   private final Withdrawals withdrawals;
 
-  @Builder(builderMethodName = "cashBuilder")
+  @Builder(builderMethodName = "cashBuilder", access = AccessLevel.PRIVATE)
   private CashPlayerSummary(@NonNull final Entries entries, final BigDecimal transferAmount,
                             @NonNull final TransferType transferType, @NonNull final Withdrawals withdrawals) {
     super(entries, transferAmount, transferType);
@@ -34,6 +31,7 @@ public final class CashPlayerSummary extends PlayerSummary {
 
     final var totalEntries = entries.total();
     final var totalWithdrawals = Optional.ofNullable(withdrawals).map(Withdrawals::total).orElse(BigDecimal.ZERO);
+
     final var summaryBuilder = cashBuilder()
       .entries(entries)
       .withdrawals(withdrawals);

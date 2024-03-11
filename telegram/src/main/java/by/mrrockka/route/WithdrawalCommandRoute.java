@@ -15,7 +15,7 @@ public class WithdrawalCommandRoute implements CommandRoute {
 
   @Override
   public BotApiMethodMessage process(final Update update) {
-    return telegramWithdrawalService.storeEntry(update);
+    return telegramWithdrawalService.storeWithdrawal(update);
   }
 
   @Override

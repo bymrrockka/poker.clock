@@ -18,7 +18,6 @@ import static by.mrrockka.repo.withdrawals.WithdrawalColumnNames.*;
 public class WithdrawalsRepository {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
-  private final WithdrawalsEntityResultSetExtractor entityResultSetExtractor;
   private final WithdrawalsEntityListResultSetExtractor entriesEntityListResultSetExtractor;
 
   private static final String SAVE_SQL = """

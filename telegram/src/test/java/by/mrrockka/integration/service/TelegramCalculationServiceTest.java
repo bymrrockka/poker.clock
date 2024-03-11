@@ -21,19 +21,20 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class TelegramCalculationServiceTest {
 
   private static final Long CHAT_ID = 123L;
-  private static final Integer REPLY_TO_ID = 3;
+  private static final Integer TOURNAMENT_REPLY_TO_ID = 3;
+  private static final Integer CASH_REPLY_TO_ID = 4;
 
   @Autowired
   private TelegramCalculationService telegramCalculationService;
 
   @Test
-  void givenGameWithPrizePoolAndFinalePlaces_whenCalculateAttempt_shouldCalculateAndPrettyPrintData() {
+  void givenTournament_whenCalculateAttempt_shouldCalculateAndPrettyPrintData() {
     final var update = UpdateCreator.update(
       MessageCreator.message(
         message -> {
           message.setText("/calculate");
           message.setChat(ChatCreator.chat(CHAT_ID));
-          message.setReplyToMessage(MessageCreator.message(msg -> msg.setMessageId(REPLY_TO_ID)));
+          message.setReplyToMessage(MessageCreator.message(msg -> msg.setMessageId(TOURNAMENT_REPLY_TO_ID)));
         }));
 
     final var expected = """
@@ -59,7 +60,43 @@ class TelegramCalculationServiceTest {
     assertAll(
       () -> assertThat(response).isNotNull(),
       () -> assertThat(response.getText()).isEqualTo(expected),
-      () -> assertThat(response.getReplyToMessageId()).isEqualTo(REPLY_TO_ID)
+      () -> assertThat(response.getReplyToMessageId()).isEqualTo(TOURNAMENT_REPLY_TO_ID)
+    );
+  }
+
+  @Test
+  void givenCash_whenCalculateAttempt_shouldCalculateAndPrettyPrintData() {
+    final var update = UpdateCreator.update(
+      MessageCreator.message(
+        message -> {
+          message.setText("/calculate");
+          message.setChat(ChatCreator.chat(CHAT_ID));
+          message.setReplyToMessage(MessageCreator.message(msg -> msg.setMessageId(CASH_REPLY_TO_ID)));
+        }));
+
+    final var expected = """
+      -----------------------------
+      Payout to: @tenten
+      	Entries: 30
+      	Withdrawals: 45
+      	Total: 15
+      From
+      	@jackas -> 15
+            
+      -----------------------------
+      Payout to: @kinger
+      	Entries: 30
+      	Withdrawals: 35
+      	Total: 5
+      From
+      	@queen -> 5
+      	""";
+    final var response = (SendMessage) telegramCalculationService.calculatePayments(update);
+
+    assertAll(
+      () -> assertThat(response).isNotNull(),
+      () -> assertThat(response.getText()).isEqualTo(expected),
+      () -> assertThat(response.getReplyToMessageId()).isEqualTo(CASH_REPLY_TO_ID)
     );
   }
 

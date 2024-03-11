@@ -5,9 +5,11 @@ import by.mrrockka.domain.game.Game;
 import by.mrrockka.domain.payout.Debt;
 import by.mrrockka.domain.payout.Payout;
 import by.mrrockka.domain.summary.player.CashPlayerSummary;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public final class CashCalculationStrategy extends AbstractCalculationStrategy<CashPlayerSummary, CashGame> {
   @Override
   public boolean isApplicable(final Game game) {
