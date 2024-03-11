@@ -23,7 +23,7 @@ class TelegramPersonRepositoryTest {
   private static final UUID PERSON_ID = UUID.fromString("e2691144-3b1b-4841-9693-fad7af25bba9");
   private static final UUID GAME_ID = UUID.fromString("4a411a12-2386-4dce-b579-d806c91d6d17");
   private static final Long CHAT_ID = 123L;
-  private static final String TELEGRAM = "nickname";
+  private static final String TELEGRAM = "jackas";
 
   @Autowired
   private TelegramPersonRepository telegramPersonRepository;
@@ -33,7 +33,7 @@ class TelegramPersonRepositoryTest {
     telegramPersonRepository.save(TelegramPerson.telegramPersonBuilder()
                                     .id(PERSON_ID)
                                     .chatId(CHAT_ID)
-                                    .telegram(TELEGRAM)
+                                    .nickname(TELEGRAM)
                                     .build());
     assertThat(
       telegramPersonRepository.findAllByChatIdAndTelegrams(CHAT_ID, List.of(TELEGRAM)).stream()

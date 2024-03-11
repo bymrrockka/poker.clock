@@ -17,6 +17,7 @@ public record GameEntity(
   BigDecimal buyIn,
   @NonNull
   BigDecimal stack,
+  @NonNull
   BigDecimal bounty
 ) {
 }

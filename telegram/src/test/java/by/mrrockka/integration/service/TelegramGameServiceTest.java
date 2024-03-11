@@ -14,7 +14,7 @@ import by.mrrockka.repo.person.PersonEntity;
 import by.mrrockka.repo.person.PersonRepository;
 import by.mrrockka.repo.person.TelegramPersonEntity;
 import by.mrrockka.repo.person.TelegramPersonRepository;
-import by.mrrockka.service.TelegramGameService;
+import by.mrrockka.service.game.TelegramGameService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +64,7 @@ class TelegramGameServiceTest {
     final var createAt = MessageCreator.MESSAGE_TIMESTAMP.truncatedTo(ChronoUnit.SECONDS);
     final var chatId = ChatCreator.CHAT_ID;
 
-    final var response = (SendMessage) telegramGameService.storeGame(update);
+    final var response = (SendMessage) telegramGameService.storeTournament(update);
 
     assertAll(
       () -> assertThat(response.getChatId()).isEqualTo(String.valueOf(chatId)),
@@ -72,10 +72,10 @@ class TelegramGameServiceTest {
       () -> assertThat(response.getText()).isEqualTo("Tournament started.")
     );
 
-    final var gameId = telegramGameRepository.findByChatIdAndCreatedAt(chatId, createAt);
-    assertThat(gameId).isNotNull();
+    final var telegramGame = telegramGameRepository.findByChatAndMessageId(chatId, MessageCreator.MESSAGE_ID);
+    assertThat(telegramGame).isNotEmpty();
 
-    final var gameEntity = gameRepository.findById(gameId.get());
+    final var gameEntity = gameRepository.findById(telegramGame.get().gameId());
     assertAll(
       () -> assertThat(gameEntity).isNotNull(),
       () -> assertThat(gameEntity.gameType()).isEqualTo(GameType.TOURNAMENT),
@@ -94,7 +94,7 @@ class TelegramGameServiceTest {
 
     assertAll(
       () -> assertThat(telegramPersonEntities).isNotEmpty(),
-      () -> assertThat(telegramPersonEntities.stream().map(TelegramPersonEntity::getTelegram).toList())
+      () -> assertThat(telegramPersonEntities.stream().map(TelegramPersonEntity::getNickname).toList())
         .containsExactlyInAnyOrderElementsOf(telegrams)
     );
 
@@ -107,7 +107,7 @@ class TelegramGameServiceTest {
         .containsExactlyInAnyOrderElementsOf(personEntities.stream().map(PersonEntity::getId).toList())
     );
 
-    final var entriesEntities = entriesRepository.findAllByGameId(gameId.get());
+    final var entriesEntities = entriesRepository.findAllByGameId(telegramGame.get().gameId());
     assertAll(
       () -> assertThat(entriesEntities).isNotEmpty(),
       () -> assertThat(entriesEntities.stream().map(EntriesEntity::person).toList())

@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.Instant;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,7 +23,6 @@ public class TelegramGameRepositoryTest {
 
   private static final UUID GAME_ID = UUID.fromString("fa3d03c4-f411-4852-810f-c0cc2f5b8c84");
   private static final Long CHAT_ID = 123L;
-  private static final Instant CREATED_AT = Instant.now();
 
   @Autowired
   private TelegramGameRepository telegramGameRepository;
@@ -34,11 +32,12 @@ public class TelegramGameRepositoryTest {
     final var telegramGameEntity = TelegramGameEntity.builder()
       .gameId(GAME_ID)
       .chatId(CHAT_ID)
-      .createdAt(CREATED_AT)
+      .createdAt(Instant.now())
       .messageId(MessageCreator.MESSAGE_ID)
       .build();
     telegramGameRepository.save(telegramGameEntity);
-    assertThat(telegramGameRepository.findByChatIdAndCreatedAt(CHAT_ID, CREATED_AT))
-      .isEqualTo(Optional.of(GAME_ID));
+    final var gameOpt = telegramGameRepository.findByChatAndMessageId(CHAT_ID, MessageCreator.MESSAGE_ID);
+    assertThat(gameOpt.map(TelegramGameEntity::gameId))
+      .contains(GAME_ID);
   }
 }

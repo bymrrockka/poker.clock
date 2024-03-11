@@ -57,7 +57,7 @@ class TelegramFinalePlacesServiceTest {
 
     final var response = (SendMessage) telegramFinalePlacesService.storePrizePool(update);
     final var expectedMessage = """
-      Finale places:
+      Finale places stored:
       	position: 1, telegram: @kinger
       	position: 2, telegram: @queen
       	position: 3, telegram: @jackas
@@ -75,16 +75,16 @@ class TelegramFinalePlacesServiceTest {
       List.of(
         FinalPlace.builder()
           .person(
-            telegramPersons.stream().filter(pers -> pers.getTelegram().equals("kinger")).findFirst().orElseThrow())
+            telegramPersons.stream().filter(pers -> pers.getNickname().equals("kinger")).findFirst().orElseThrow())
           .position(1)
           .build(),
         FinalPlace.builder()
-          .person(telegramPersons.stream().filter(pers -> pers.getTelegram().equals("queen")).findFirst().orElseThrow())
+          .person(telegramPersons.stream().filter(pers -> pers.getNickname().equals("queen")).findFirst().orElseThrow())
           .position(2)
           .build(),
         FinalPlace.builder()
           .person(
-            telegramPersons.stream().filter(pers -> pers.getTelegram().equals("jackas")).findFirst().orElseThrow())
+            telegramPersons.stream().filter(pers -> pers.getNickname().equals("jackas")).findFirst().orElseThrow())
           .position(3)
           .build()
       ));

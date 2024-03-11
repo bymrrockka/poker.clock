@@ -16,6 +16,7 @@ public class PersonCreator {
   public static final UUID ID = UUID.randomUUID();
   public static final String FIRSTNAME = FAKER.name().firstName();
   public static final String LASTNAME = FAKER.name().lastName();
+  public static final String NICKNAME = FAKER.name().username().replaceAll("\\.", "_");
 
   public static PersonEntity entity() {
     return entity(null);
@@ -32,7 +33,8 @@ public class PersonCreator {
     final var personEntityBuilder = PersonEntity.personBuilder()
       .id(ID)
       .firstname(FIRSTNAME)
-      .lastname(LASTNAME);
+      .lastname(LASTNAME)
+      .nickname(NICKNAME);
 
     if (nonNull(builderConsumer))
       builderConsumer.accept(personEntityBuilder);
@@ -48,14 +50,16 @@ public class PersonCreator {
     return domain(builder -> builder
       .id(UUID.randomUUID())
       .firstname(FAKER.name().firstName())
-      .lastname(FAKER.name().lastName()));
+      .lastname(FAKER.name().lastName())
+      .nickname(FAKER.name().username().replaceAll("\\.", "_")));
   }
 
   public static Person domain(Consumer<Person.PersonBuilder> builderConsumer) {
     final var personEntityBuilder = Person.personBuilder()
       .id(ID)
       .firstname(FIRSTNAME)
-      .lastname(LASTNAME);
+      .lastname(LASTNAME)
+      .nickname(NICKNAME);
 
     if (nonNull(builderConsumer))
       builderConsumer.accept(personEntityBuilder);

@@ -21,14 +21,14 @@ public class PokerClockBotRouter extends TelegramLongPollingBot {
   private static final String BOT_NAME = "Poker calculator bot";
   @Value("${telegrambots.token}")
   private String token;
-  private final List<CommandRoute> commandRoutes;
+  private final List<TelegramCommand> telegramCommands;
 
   @Override
   public void onUpdateReceived(final Update update) {
-    if (!commandRoutes.isEmpty()) {
-      commandRoutes.stream()
-        .filter(commandRoute -> commandRoute.isApplicable(update))
-        .map(commandRoute -> commandRoute.process(update))
+    if (!telegramCommands.isEmpty()) {
+      telegramCommands.stream()
+        .filter(telegramCommand -> telegramCommand.isApplicable(update))
+        .map(telegramCommand -> telegramCommand.process(update))
         .filter(Objects::nonNull)
         .forEach(this::executeMessage);
     } else if (nonNull(update.getMessage())) {

@@ -2,12 +2,16 @@ package by.mrrockka.creator;
 
 import by.mrrockka.FakerProvider;
 import by.mrrockka.domain.Bounty;
-import by.mrrockka.domain.Player;
-import by.mrrockka.domain.game.Game;
+import by.mrrockka.domain.Withdrawals;
+import by.mrrockka.domain.entries.Entries;
+import by.mrrockka.domain.game.CashGame;
 import by.mrrockka.domain.game.GameType;
-import by.mrrockka.domain.summary.GameSummary;
+import by.mrrockka.domain.game.TournamentGame;
+import by.mrrockka.domain.summary.TournamentSummary;
 import by.mrrockka.repo.game.GameEntity;
 import com.github.javafaker.Faker;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,7 +20,8 @@ import java.util.function.Consumer;
 
 import static java.util.Objects.nonNull;
 
-public class GameCreator {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class GameCreator {
 
   private static final Faker FAKER = FakerProvider.faker();
   public static final UUID ID = UUID.randomUUID();
@@ -24,24 +29,43 @@ public class GameCreator {
   public static final BigDecimal BUY_IN = BigDecimal.valueOf(FAKER.number().numberBetween(10, 100));
   public static final BigDecimal STACK = BigDecimal.valueOf(FAKER.number().numberBetween(1500, 30000));
   public static final BigDecimal BOUNTY = BigDecimal.valueOf(FAKER.number().numberBetween(10, 100));
-  public static final List<Player> PLAYERS = List.of(PlayerCreator.player());
+  public static final List<Entries> ENTRIES = List.of(EntriesCreator.entries());
+  public static final List<Withdrawals> WITHDRAWALS = List.of(WithdrawalsCreator.withdrawals());
   public static final List<Bounty> BOUNTIES = List.of(Bounty.builder().build());
-  public static final GameSummary GAME_SUMMARY = new GameSummary(List.of());
+  public static final TournamentSummary GAME_SUMMARY = new TournamentSummary(List.of());
 
-  public static Game domain() {
-    return domain(null);
+  public static TournamentGame tournament() {
+    return tournament(null);
   }
 
-  public static Game domain(final Consumer<Game.GameBuilder> gameBuilderConsumer) {
-    final var gameBuilder = Game.gameBuilder()
+  public static TournamentGame tournament(final Consumer<TournamentGame.TournamentGameBuilder> gameBuilderConsumer) {
+    final var gameBuilder = TournamentGame.tournamentBuilder()
       .id(ID)
-      .gameType(GAME_TYPE)
       .buyIn(BUY_IN)
       .stack(STACK)
-      .bounty(BOUNTY)
-      .players(PLAYERS)
-      .gameSummary(GAME_SUMMARY)
-      .bountyTransactions(BOUNTIES);
+//      .bounty(BOUNTY)
+      .entries(ENTRIES)
+      .tournamentSummary(GAME_SUMMARY)
+//      .bountyTransactions(BOUNTIES)
+      ;
+
+    if (nonNull(gameBuilderConsumer))
+      gameBuilderConsumer.accept(gameBuilder);
+
+    return gameBuilder.build();
+  }
+
+  public static CashGame cash() {
+    return cash(null);
+  }
+
+  public static CashGame cash(final Consumer<CashGame.CashGameBuilder> gameBuilderConsumer) {
+    final var gameBuilder = CashGame.cashBuilder()
+      .id(ID)
+      .buyIn(BUY_IN)
+      .stack(STACK)
+      .entries(ENTRIES)
+      .withdrawals(WITHDRAWALS);
 
     if (nonNull(gameBuilderConsumer))
       gameBuilderConsumer.accept(gameBuilder);
@@ -53,7 +77,7 @@ public class GameCreator {
     return entity(null);
   }
 
-  public static GameEntity entity(Consumer<GameEntity.GameEntityBuilder> builderConsumer) {
+  public static GameEntity entity(final Consumer<GameEntity.GameEntityBuilder> builderConsumer) {
     final var gameEntityBuilder = GameEntity.builder()
       .id(ID)
       .gameType(GAME_TYPE)

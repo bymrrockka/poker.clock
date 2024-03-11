@@ -67,8 +67,7 @@ class FinalePlacesRepositoryTest {
       7, PersonCreator.entity(personBuilder)
     );
 
-    personRepository.saveAll(places.values()
-                               .stream().toList());
+    personRepository.saveAll(places.values().stream().toList());
 
     final var gameId = UUID.fromString("4a411a12-2386-4dce-b579-d806c91d6d17");
     final var expected = FinalePlacesEntity.builder()

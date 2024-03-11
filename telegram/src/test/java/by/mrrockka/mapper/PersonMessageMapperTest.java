@@ -39,12 +39,12 @@ class PersonMessageMapperTest {
           .persons(List.of(
             TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
-              .telegram("mrrockka")
+              .nickname("mrrockka")
               .chatId(CHAT_ID)
               .build(),
             TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
-              .telegram("miscusi")
+              .nickname("miscusi")
               .chatId(CHAT_ID)
               .build()
           ))
@@ -66,22 +66,22 @@ class PersonMessageMapperTest {
           .persons(List.of(
             TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
-              .telegram("mrrockka")
+              .nickname("mrrockka")
               .chatId(CHAT_ID)
               .build(),
             TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
-              .telegram("ivano")
+              .nickname("ivano")
               .chatId(CHAT_ID)
               .build(),
             TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
-              .telegram("andrei")
+              .nickname("andrei")
               .chatId(CHAT_ID)
               .build(),
             TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
-              .telegram("miscusi")
+              .nickname("miscusi")
               .chatId(CHAT_ID)
               .build()))
           .build()),
@@ -96,22 +96,22 @@ class PersonMessageMapperTest {
           .persons(List.of(
             TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
-              .telegram("mrrockka")
+              .nickname("mrrockka")
               .chatId(CHAT_ID)
               .build(),
             TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
-              .telegram("ivano")
+              .nickname("ivano")
               .chatId(CHAT_ID)
               .build(),
             TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
-              .telegram("andrei")
+              .nickname("andrei")
               .chatId(CHAT_ID)
               .build(),
             TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
-              .telegram("miscusi")
+              .nickname("miscusi")
               .chatId(CHAT_ID)
               .build()))
           .build()),
@@ -126,22 +126,22 @@ class PersonMessageMapperTest {
           .persons(List.of(
             TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
-              .telegram("mrrockka")
+              .nickname("mrrockka")
               .chatId(CHAT_ID)
               .build(),
             TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
-              .telegram("ivano")
+              .nickname("ivano")
               .chatId(CHAT_ID)
               .build(),
             TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
-              .telegram("andrei")
+              .nickname("andrei")
               .chatId(CHAT_ID)
               .build(),
             TelegramPerson.telegramPersonBuilder()
               .id(UUID.randomUUID())
-              .telegram("miscusi")
+              .nickname("miscusi")
               .chatId(CHAT_ID)
               .build()))
           .build())

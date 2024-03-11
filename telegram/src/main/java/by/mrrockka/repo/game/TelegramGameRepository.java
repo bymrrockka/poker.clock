@@ -7,7 +7,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -34,25 +33,6 @@ public class TelegramGameRepository {
       .addValue(MESSAGE_ID, telegramGameEntity.messageId())
       .addValue(CREATED_AT, Timestamp.from(telegramGameEntity.createdAt()));
     jdbcTemplate.update(SAVE_SQL, params);
-  }
-
-  private static final String FIND_BY_CHAT_ID_AND_CREATED_AT_SQL = """
-      SELECT
-        game_id
-      FROM
-        chat_games
-      WHERE
-        chat_id = :chat_id AND
-        created_at = :created_at
-    """;
-
-  @Deprecated(forRemoval = true, since = "1.0")
-  public Optional<UUID> findByChatIdAndCreatedAt(final Long chatId, final Instant createdAt) {
-    final var params = new MapSqlParameterSource()
-      .addValue(CHAT_ID, chatId)
-      .addValue(CREATED_AT, Timestamp.from(createdAt));
-
-    return jdbcTemplate.queryForObject(FIND_BY_CHAT_ID_AND_CREATED_AT_SQL, params, mapOptionalUuid());
   }
 
   private static final String FIND_BY_CHAT_AND_MESSAGE_ID_SQL = """

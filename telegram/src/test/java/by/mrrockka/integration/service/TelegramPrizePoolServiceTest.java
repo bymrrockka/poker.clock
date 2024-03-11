@@ -51,7 +51,7 @@ class TelegramPrizePoolServiceTest {
 
     final var message = telegramPrizePoolService.storePrizePool(update);
     final var expectedMessage = """
-      Prize Pool:
+      Prize Pool stored:
       	position: 1, percentage: 60
       	position: 2, percentage: 30
       	position: 3, percentage: 10
