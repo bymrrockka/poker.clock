@@ -1,7 +1,7 @@
 package by.mrrockka.service;
 
+import by.mrrockka.creator.EntriesCreator;
 import by.mrrockka.creator.GameCreator;
-import by.mrrockka.creator.PlayerCreator;
 import by.mrrockka.mapper.GameMapper;
 import by.mrrockka.repo.game.GameRepository;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ class GameServiceTest {
   @Mock
   private GameSummaryService gameSummaryService;
   @Mock
-  private PlayerService playerService;
+  private EntriesService entriesService;
 
   @InjectMocks
   private GameService gameService;
@@ -47,16 +47,16 @@ class GameServiceTest {
 
   @Test
   void givenGameId_whenOnlyGameAndPlayersStored_shouldCallReposAndReturnOnlyGame() {
-    final var players = List.of(PlayerCreator.player());
+    final var entries = List.of(EntriesCreator.entries());
     final var expected = GameCreator.tournament(builder -> builder
       .tournamentGameSummary(null)
-      .players(players)
+      .entries(entries)
     );
     final var given = GameCreator.entity();
 
     when(gameRepository.findById(GAME_ID)).thenReturn(given);
-    when(playerService.getAllForGame(GAME_ID)).thenReturn(players);
-    when(gameMapper.toDomain(given, players, null)).thenReturn(expected);
+    when(entriesService.getAllForGame(GAME_ID)).thenReturn(entries);
+    when(gameMapper.toDomain(given, entries, null)).thenReturn(expected);
     assertThat(gameService.retrieveGame(GAME_ID))
       .isEqualTo(expected);
   }
@@ -64,18 +64,18 @@ class GameServiceTest {
 
   @Test
   void givenGameId_whenGameAndPlayersStoredAndGameSummaryIsAssemblable_shouldCallReposAndReturnOnlyGame() {
-    final var players = List.of(PlayerCreator.player());
+    final var entries = List.of(EntriesCreator.entries());
     final var gameSummary = GameCreator.GAME_SUMMARY;
     final var expected = GameCreator.tournament(builder -> builder
       .tournamentGameSummary(gameSummary)
-      .players(players)
+      .entries(entries)
     );
     final var given = GameCreator.entity();
 
     when(gameSummaryService.assembleGameSummary(GAME_ID, BigDecimal.ONE)).thenReturn(gameSummary);
     when(gameRepository.findById(GAME_ID)).thenReturn(given);
-    when(playerService.getAllForGame(GAME_ID)).thenReturn(players);
-    when(gameMapper.toDomain(given, players, gameSummary)).thenReturn(expected);
+    when(entriesService.getAllForGame(GAME_ID)).thenReturn(entries);
+    when(gameMapper.toDomain(given, entries, gameSummary)).thenReturn(expected);
     assertThat(gameService.retrieveGame(GAME_ID))
       .isEqualTo(expected);
   }

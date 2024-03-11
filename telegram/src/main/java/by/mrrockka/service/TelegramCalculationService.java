@@ -1,6 +1,5 @@
 package by.mrrockka.service;
 
-import by.mrrockka.domain.Person;
 import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.domain.game.TournamentGame;
 import by.mrrockka.domain.payout.Payout;
@@ -9,7 +8,6 @@ import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
 import by.mrrockka.service.exception.GameSummaryNotFoundException;
 import by.mrrockka.service.exception.PayoutsAreNotCalculatedException;
-import by.mrrockka.service.exception.PersonHasNoTelegramException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
@@ -67,14 +65,14 @@ public class TelegramCalculationService {
   //  todo: move to some service
   private String prettyPrintPayout(final Payout payout, final List<TelegramPerson> telegramPersons) {
     final var strBuilder = new StringBuilder("-----------------------------\n");
-    strBuilder.append("Payout to: %s\n".formatted(getPlayerTelegram(payout.creditor().person(), telegramPersons)));
-    strBuilder.append("\tEntries: %s\n".formatted(payout.creditor().entries().total()));
-    strBuilder.append("\tPrize: %s\n".formatted(payout.creditor().entries().total().add(payout.totalDebts())));
+    strBuilder.append("Payout to: @%s\n".formatted(payout.creditorEntries().person().getNickname()));
+    strBuilder.append("\tEntries: %s\n".formatted(payout.creditorEntries().total()));
+    strBuilder.append("\tPrize: %s\n".formatted(payout.creditorEntries().total().add(payout.totalDebts())));
     strBuilder.append("\tTotal: %s\n".formatted(payout.totalDebts()));
 
     final var strDebtsOpt = payout.debts().stream()
-      .map(debt -> Pair.of(getPlayerTelegram(debt.debtor().person(), telegramPersons), debt.amount().toString()))
-      .map(pair -> "\t%s -> %s".formatted(pair.getKey(), pair.getValue()))
+      .map(debt -> Pair.of(debt.debtorEntries().person().getNickname(), debt.amount().toString()))
+      .map(pair -> "\t@%s -> %s".formatted(pair.getKey(), pair.getValue()))
       .reduce("%s\n%s"::formatted);
 
     if (strDebtsOpt.isPresent()) {
@@ -86,11 +84,4 @@ public class TelegramCalculationService {
     return strBuilder.toString();
   }
 
-  private String getPlayerTelegram(final Person person, final List<TelegramPerson> telegramPersons) {
-    return '@' + telegramPersons.stream()
-      .filter(telegramPerson -> telegramPerson.getId().equals(person.getId()))
-      .map(TelegramPerson::getNickname)
-      .findFirst()
-      .orElseThrow(() -> new PersonHasNoTelegramException(person.getId()));
-  }
 }

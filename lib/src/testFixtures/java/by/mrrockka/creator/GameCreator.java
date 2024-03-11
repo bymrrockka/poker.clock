@@ -2,7 +2,6 @@ package by.mrrockka.creator;
 
 import by.mrrockka.FakerProvider;
 import by.mrrockka.domain.Bounty;
-import by.mrrockka.domain.Player;
 import by.mrrockka.domain.entries.Entries;
 import by.mrrockka.domain.game.GameType;
 import by.mrrockka.domain.game.TournamentGame;
@@ -28,7 +27,6 @@ public final class GameCreator {
   public static final BigDecimal BUY_IN = BigDecimal.valueOf(FAKER.number().numberBetween(10, 100));
   public static final BigDecimal STACK = BigDecimal.valueOf(FAKER.number().numberBetween(1500, 30000));
   public static final BigDecimal BOUNTY = BigDecimal.valueOf(FAKER.number().numberBetween(10, 100));
-  public static final List<Player> PLAYERS = List.of(PlayerCreator.player());
   public static final List<Entries> ENTRIES = List.of(EntriesCreator.entries());
   public static final List<Bounty> BOUNTIES = List.of(Bounty.builder().build());
   public static final TournamentGameSummary GAME_SUMMARY = new TournamentGameSummary(List.of());
@@ -44,7 +42,6 @@ public final class GameCreator {
       .buyIn(BUY_IN)
       .stack(STACK)
 //      .bounty(BOUNTY)
-      .players(PLAYERS)
       .entries(ENTRIES)
       .tournamentGameSummary(GAME_SUMMARY)
 //      .bountyTransactions(BOUNTIES)
@@ -60,7 +57,7 @@ public final class GameCreator {
     return entity(null);
   }
 
-  public static GameEntity entity(Consumer<GameEntity.GameEntityBuilder> builderConsumer) {
+  public static GameEntity entity(final Consumer<GameEntity.GameEntityBuilder> builderConsumer) {
     final var gameEntityBuilder = GameEntity.builder()
       .id(ID)
       .gameType(GAME_TYPE)

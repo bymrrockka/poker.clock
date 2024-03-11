@@ -1,6 +1,6 @@
 package by.mrrockka.service;
 
-import by.mrrockka.domain.Player;
+import by.mrrockka.domain.entries.Entries;
 import by.mrrockka.domain.game.TournamentGame;
 import by.mrrockka.mapper.GameMapper;
 import by.mrrockka.repo.game.GameRepository;
@@ -19,7 +19,7 @@ public class GameService {
   private final GameMapper gameMapper;
   private final GameRepository gameRepository;
   private final GameSummaryService gameSummaryService;
-  private final PlayerService playerService;
+  private final EntriesService entriesService;
 
   public void storeNewGame(@NonNull final TournamentGame game) {
     gameRepository.save(gameMapper.toEntity(game));
@@ -27,15 +27,15 @@ public class GameService {
 
   public TournamentGame retrieveGame(@NonNull final UUID gameId) {
     final var gameEntity = gameRepository.findById(gameId);
-    final var players = playerService.getAllForGame(gameId);
-    final var gameSummary = gameSummaryService.assembleGameSummary(gameId, calculateTotalAmount(players));
+    final var entries = entriesService.getAllForGame(gameId);
+    final var gameSummary = gameSummaryService.assembleGameSummary(gameId, calculateTotalAmount(entries));
 
-    return gameMapper.toDomain(gameEntity, players, gameSummary);
+    return gameMapper.toDomain(gameEntity, entries, gameSummary);
   }
 
-  private BigDecimal calculateTotalAmount(final List<Player> players) {
-    return players.stream()
-      .map(player -> player.entries().total())
+  private BigDecimal calculateTotalAmount(final List<Entries> entries) {
+    return entries.stream()
+      .map(Entries::total)
       .reduce(BigDecimal::add)
       .orElse(BigDecimal.ZERO);
   }

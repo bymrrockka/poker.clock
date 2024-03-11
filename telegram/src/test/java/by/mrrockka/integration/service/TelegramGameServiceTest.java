@@ -72,10 +72,10 @@ class TelegramGameServiceTest {
       () -> assertThat(response.getText()).isEqualTo("Tournament started.")
     );
 
-    final var gameId = telegramGameRepository.findByChatIdAndCreatedAt(chatId, createAt);
-    assertThat(gameId).isNotNull();
+    final var telegramGame = telegramGameRepository.findByChatAndMessageId(chatId, MessageCreator.MESSAGE_ID);
+    assertThat(telegramGame).isNotEmpty();
 
-    final var gameEntity = gameRepository.findById(gameId.get());
+    final var gameEntity = gameRepository.findById(telegramGame.get().gameId());
     assertAll(
       () -> assertThat(gameEntity).isNotNull(),
       () -> assertThat(gameEntity.gameType()).isEqualTo(GameType.TOURNAMENT),
@@ -107,7 +107,7 @@ class TelegramGameServiceTest {
         .containsExactlyInAnyOrderElementsOf(personEntities.stream().map(PersonEntity::getId).toList())
     );
 
-    final var entriesEntities = entriesRepository.findAllByGameId(gameId.get());
+    final var entriesEntities = entriesRepository.findAllByGameId(telegramGame.get().gameId());
     assertAll(
       () -> assertThat(entriesEntities).isNotEmpty(),
       () -> assertThat(entriesEntities.stream().map(EntriesEntity::person).toList())
