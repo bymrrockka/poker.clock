@@ -8,7 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static by.mrrockka.repo.person.TelegramPersonColumnNames.CHAT_ID;
-import static by.mrrockka.repo.person.TelegramPersonColumnNames.TELEGRAM;
 
 @Component
 @RequiredArgsConstructor
@@ -24,7 +23,7 @@ public class TelegramPersonEntityRowMapper implements RowMapper<TelegramPersonEn
       .id(personEntity.getId())
       .firstname(personEntity.getFirstname())
       .lastname(personEntity.getLastname())
-      .telegram(rs.getString(TELEGRAM))
+      .nickname(personEntity.getNickname())
       .chatId(rs.getLong(CHAT_ID))
       .build();
   }

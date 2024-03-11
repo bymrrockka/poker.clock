@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static by.mrrockka.repo.person.TelegramPersonColumnNames.CHAT_ID;
-import static by.mrrockka.repo.person.TelegramPersonColumnNames.TELEGRAM;
+import static by.mrrockka.repo.person.TelegramPersonColumnNames.NICKNAME;
 
 @Repository
 @RequiredArgsConstructor
@@ -24,16 +24,15 @@ public class TelegramPersonRepository {
 
   private static final String SAVE_SQL = """
     INSERT INTO chat_persons
-      (person_id, chat_id, telegram)
+      (person_id, chat_id)
     VALUES
-      (:person_id, :chat_id, :telegram);
+      (:person_id, :chat_id);
     """;
 
   public void save(final TelegramPerson person) {
     final var params = new MapSqlParameterSource()
       .addValue(TelegramPersonColumnNames.PERSON_ID, person.getId())
-      .addValue(CHAT_ID, person.getChatId())
-      .addValue(TELEGRAM, person.getTelegram());
+      .addValue(CHAT_ID, person.getChatId());
     jdbcTemplate.update(SAVE_SQL, params);
   }
 
@@ -44,39 +43,39 @@ public class TelegramPersonRepository {
 
   private static final String FIND_BY_CHAT_ID_AND_TELEGRAMS_SQL = """
       SELECT
-        cp.telegram, cp.chat_id, p.id, p.first_name, p.last_name
+        cp.chat_id, p.id, p.first_name, p.last_name, p.nick_name
       FROM
         chat_persons as cp
       JOIN
         person as p on p.id = person_id
       WHERE
         chat_id = :chat_id AND
-        telegram IN (:telegram)
+        p.nick_name IN (:nick_name)
     """;
 
   public List<TelegramPersonEntity> findAllByChatIdAndTelegrams(final Long chatId, final List<String> telegrams) {
     final var params = new MapSqlParameterSource()
       .addValue(CHAT_ID, chatId)
-      .addValue(TELEGRAM, telegrams);
+      .addValue(NICKNAME, telegrams);
 
     return jdbcTemplate.query(FIND_BY_CHAT_ID_AND_TELEGRAMS_SQL, params, telegramPersonEntityRowMapper);
   }
 
   private static final String FIND_BY_TELEGRAM_SQL = """
       SELECT
-        cp.telegram, cp.chat_id, p.id, p.first_name, p.last_name
+        cp.chat_id, p.id, p.first_name, p.last_name, p.nick_name
       FROM
         chat_persons as cp
       JOIN
         person as p on p.id = person_id
       WHERE
         chat_id = :chat_id AND
-        telegram = :telegram
+        nick_name = :nick_name
     """;
 
   public Optional<TelegramPersonEntity> findByTelegram(final Long chatId, final String telegram) {
     final var params = new MapSqlParameterSource()
-      .addValue(TELEGRAM, telegram)
+      .addValue(NICKNAME, telegram)
       .addValue(CHAT_ID, chatId);
 
     return jdbcTemplate.query(FIND_BY_TELEGRAM_SQL, params, rs -> rs.next()
@@ -86,7 +85,7 @@ public class TelegramPersonRepository {
 
   private static final String FIND_ALL_BY_GAME_ID = """
       SELECT
-        cp.telegram, cp.chat_id, p.id, p.first_name, p.last_name
+        cp.chat_id, p.id, p.first_name, p.last_name, p.nick_name
       FROM
         entries as e
       JOIN

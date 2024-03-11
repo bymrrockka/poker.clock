@@ -45,7 +45,7 @@ public class EntriesRepository {
 
   private static final String FIND_ALL_BY_GAME_AND_PERSON_SQL = """
     SELECT
-      e.game_id, e.amount, e.person_id, p.id, p.first_name, p.last_name
+      e.game_id, e.amount, e.person_id, p.id, p.first_name, p.last_name, p.nick_name
     FROM
       entries as e
     JOIN
@@ -65,7 +65,7 @@ public class EntriesRepository {
 
   private static final String FIND_ALL_BY_GAME_SQL = """
     SELECT
-      e.game_id, e.amount, e.person_id, p.id, p.first_name, p.last_name
+      e.game_id, e.amount, e.person_id, p.id, p.first_name, p.last_name, p.nick_name
     FROM
       entries as e
     JOIN

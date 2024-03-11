@@ -1,7 +1,7 @@
 package by.mrrockka.mapper;
 
 import by.mrrockka.domain.Player;
-import by.mrrockka.domain.payments.Entries;
+import by.mrrockka.domain.entries.Entries;
 import by.mrrockka.repo.entries.EntriesEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

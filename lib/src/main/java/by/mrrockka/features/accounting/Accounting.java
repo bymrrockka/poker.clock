@@ -1,6 +1,6 @@
 package by.mrrockka.features.accounting;
 
-import by.mrrockka.domain.game.Game;
+import by.mrrockka.domain.game.TournamentGame;
 import by.mrrockka.domain.payout.Debt;
 import by.mrrockka.domain.payout.Payout;
 import by.mrrockka.domain.payout.TransferType;
@@ -17,11 +17,11 @@ import java.util.List;
 @Service
 public class Accounting {
 
-  public List<Payout> calculate(final Game game) {
+  public List<Payout> calculate(final TournamentGame game) {
     final var playerSummaries = game.getPlayers()
       .stream()
       .distinct()
-      .map(player -> PlayerSummary.of(player, game.getGameSummary()))
+      .map(player -> PlayerSummary.of(player, game.getTournamentGameSummary()))
       .sorted()
       .toList();
 

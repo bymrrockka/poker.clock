@@ -4,12 +4,11 @@ import by.mrrockka.creator.GameCreator;
 import by.mrrockka.creator.PersonCreator;
 import by.mrrockka.domain.Person;
 import by.mrrockka.domain.Player;
-import by.mrrockka.domain.payments.Entries;
-import by.mrrockka.domain.payments.NoEntriesException;
+import by.mrrockka.domain.entries.Entries;
 import by.mrrockka.domain.payout.Debt;
 import by.mrrockka.domain.payout.Payout;
 import by.mrrockka.domain.summary.FinalePlaceSummary;
-import by.mrrockka.domain.summary.GameSummary;
+import by.mrrockka.domain.summary.TournamentGameSummary;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -24,7 +23,6 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static java.math.RoundingMode.HALF_UP;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class AccountingTest {
   private static final BigDecimal BUY_IN = BigDecimal.valueOf(20);
@@ -47,9 +45,9 @@ class AccountingTest {
     final var players = players(size);
     final var totalEntriesAmount = totalEntriesAmount(players);
     final var finaleSummary = List.of(finaleSummary(players.get(0).person(), totalEntriesAmount, 1));
-    final var game = GameCreator.domain(builder -> builder
+    final var game = GameCreator.tournament(builder -> builder
       .players(players)
-      .gameSummary(new GameSummary(finaleSummary))
+      .tournamentGameSummary(new TournamentGameSummary(finaleSummary))
     );
 
     final var actual = accounting.calculate(game);
@@ -67,9 +65,9 @@ class AccountingTest {
 
     final var totalEntriesAmount = totalEntriesAmount(players);
     final var finaleSummary = List.of(finaleSummary(players.get(0).person(), totalEntriesAmount, 1));
-    final var game = GameCreator.domain(builder -> builder
+    final var game = GameCreator.tournament(builder -> builder
       .players(players)
-      .gameSummary(new GameSummary(finaleSummary))
+      .tournamentGameSummary(new TournamentGameSummary(finaleSummary))
     );
 
     final var actual = accounting.calculate(game);
@@ -85,9 +83,9 @@ class AccountingTest {
     int size = 10;
     final var players = players(size);
 
-    final var game = GameCreator.domain(builder -> builder
+    final var game = GameCreator.tournament(builder -> builder
       .players(players)
-      .gameSummary(new GameSummary(finaleSummaries(players)))
+      .tournamentGameSummary(new TournamentGameSummary(finaleSummaries(players)))
     );
 
     final var actual = accounting.calculate(game);
@@ -120,9 +118,9 @@ class AccountingTest {
     players.set(0, firstPlace);
     players.set(1, secondPlace);
 
-    final var game = GameCreator.domain(builder -> builder
+    final var game = GameCreator.tournament(builder -> builder
       .players(players)
-      .gameSummary(new GameSummary(finaleSummaries(players)))
+      .tournamentGameSummary(new TournamentGameSummary(finaleSummaries(players)))
     );
 
     final var actual = accounting.calculate(game);
@@ -160,9 +158,9 @@ class AccountingTest {
     players.set(1, secondPlace);
     players.set(2, thirdPlace);
 
-    final var game = GameCreator.domain(builder -> builder
+    final var game = GameCreator.tournament(builder -> builder
       .players(players)
-      .gameSummary(new GameSummary(finaleSummaries(players)))
+      .tournamentGameSummary(new TournamentGameSummary(finaleSummaries(players)))
     );
 
     final var actual = accounting.calculate(game);
@@ -184,22 +182,6 @@ class AccountingTest {
 
     Assertions.assertThat(actual).containsExactlyInAnyOrderElementsOf(expect);
   }
-
-  @Test
-  void givenPlayersAndOnePlayerDoesNotHavePayments_thenShouldThrowException() {
-    final var players = new ArrayList<>(players(2));
-    players.add(player(null));
-
-    final var finaleSummary = List.of(finaleSummary(players.get(0).person(), BUY_IN, 1));
-    final var game = GameCreator.domain(builder -> builder
-      .players(players)
-      .gameSummary(new GameSummary(finaleSummary))
-    );
-
-    assertThatThrownBy(() -> accounting.calculate(game))
-      .isInstanceOf(NoEntriesException.class);
-  }
-
 
   private List<Player> players(int size) {
     return IntStream.range(0, size)

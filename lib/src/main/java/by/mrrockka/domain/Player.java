@@ -1,10 +1,11 @@
 package by.mrrockka.domain;
 
-import by.mrrockka.domain.payments.Entries;
+import by.mrrockka.domain.entries.Entries;
 import lombok.Builder;
 
 import java.util.Objects;
 
+//todo: probably entries should contain person data and player model is not needed
 @Builder
 public record Player(Person person, Entries entries) {
 

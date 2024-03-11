@@ -37,7 +37,7 @@ class GameServiceTest {
 
   @Test
   void givenGame_whenAttemptToSave_shouldMapAndCallRepo() {
-    final var given = GameCreator.domain();
+    final var given = GameCreator.tournament();
     final var mapped = GameCreator.entity();
 
     when(gameMapper.toEntity(given)).thenReturn(mapped);
@@ -48,10 +48,9 @@ class GameServiceTest {
   @Test
   void givenGameId_whenOnlyGameAndPlayersStored_shouldCallReposAndReturnOnlyGame() {
     final var players = List.of(PlayerCreator.player());
-    final var expected = GameCreator.domain(builder -> builder
-      .gameSummary(null)
+    final var expected = GameCreator.tournament(builder -> builder
+      .tournamentGameSummary(null)
       .players(players)
-      .bountyTransactions(null)
     );
     final var given = GameCreator.entity();
 
@@ -67,10 +66,9 @@ class GameServiceTest {
   void givenGameId_whenGameAndPlayersStoredAndGameSummaryIsAssemblable_shouldCallReposAndReturnOnlyGame() {
     final var players = List.of(PlayerCreator.player());
     final var gameSummary = GameCreator.GAME_SUMMARY;
-    final var expected = GameCreator.domain(builder -> builder
-      .gameSummary(gameSummary)
+    final var expected = GameCreator.tournament(builder -> builder
+      .tournamentGameSummary(gameSummary)
       .players(players)
-      .bountyTransactions(null)
     );
     final var given = GameCreator.entity();
 

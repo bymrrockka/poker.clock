@@ -94,7 +94,7 @@ class TelegramGameServiceTest {
 
     assertAll(
       () -> assertThat(telegramPersonEntities).isNotEmpty(),
-      () -> assertThat(telegramPersonEntities.stream().map(TelegramPersonEntity::getTelegram).toList())
+      () -> assertThat(telegramPersonEntities.stream().map(TelegramPersonEntity::getNickname).toList())
         .containsExactlyInAnyOrderElementsOf(telegrams)
     );
 

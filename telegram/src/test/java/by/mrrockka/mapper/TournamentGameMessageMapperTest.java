@@ -2,9 +2,10 @@ package by.mrrockka.mapper;
 
 import by.mrrockka.domain.game.Game;
 import by.mrrockka.domain.game.GameType;
-import by.mrrockka.mapper.game.GameMessageMapper;
+import by.mrrockka.domain.game.TournamentGame;
 import by.mrrockka.mapper.game.NoBuyInException;
 import by.mrrockka.mapper.game.NoStackException;
+import by.mrrockka.mapper.game.TournamentGameMessageMapper;
 import lombok.Builder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,9 +19,9 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class GameMessageMapperTest {
+class TournamentGameMessageMapperTest {
 
-  private final GameMessageMapper gameMessageMapper = new GameMessageMapper();
+  private final TournamentGameMessageMapper tournamentGameMessageMapper = new TournamentGameMessageMapper();
 
   @Builder
   private record GameArgument(String message, Game game) {
@@ -40,7 +41,7 @@ class GameMessageMapperTest {
                       @andrei 
                      @me   
                          """)
-          .game(Game.gameBuilder()
+          .game(TournamentGame.tournamentBuilder()
                   .id(UUID.randomUUID())
                   .gameType(GameType.TOURNAMENT)
                   .stack(BigDecimal.valueOf(30000))
@@ -58,7 +59,7 @@ class GameMessageMapperTest {
                        @mrrockka
                      @me   
                            """)
-          .game(Game.gameBuilder()
+          .game(TournamentGame.tournamentBuilder()
                   .id(UUID.randomUUID())
                   .gameType(GameType.TOURNAMENT)
                   .stack(BigDecimal.valueOf(50000))
@@ -79,7 +80,7 @@ class GameMessageMapperTest {
                       @andrei 
                      @me   
                                  """)
-          .game(Game.gameBuilder()
+          .game(TournamentGame.tournamentBuilder()
                   .id(UUID.randomUUID())
                   .gameType(GameType.TOURNAMENT)
                   .stack(BigDecimal.valueOf(1500))
@@ -93,7 +94,7 @@ class GameMessageMapperTest {
   @ParameterizedTest
   @MethodSource("tournamentMessages")
   void givenTournamentMessage_whenMapExecuted_thenShouldCreateGame(GameArgument argument) {
-    assertThat(gameMessageMapper.map(argument.message()))
+    assertThat(tournamentGameMessageMapper.map(argument.message()))
       .usingRecursiveComparison()
       .ignoringFields("id")
       .isEqualTo(argument.game());
@@ -109,7 +110,7 @@ class GameMessageMapperTest {
           @mrrockka
           @me
         """;
-    assertThatThrownBy(() -> gameMessageMapper.map(message))
+    assertThatThrownBy(() -> tournamentGameMessageMapper.map(message))
       .isInstanceOf(NoStackException.class);
   }
 
@@ -123,7 +124,7 @@ class GameMessageMapperTest {
           @mrrockka
           @me
         """;
-    assertThatThrownBy(() -> gameMessageMapper.map(message))
+    assertThatThrownBy(() -> tournamentGameMessageMapper.map(message))
       .isInstanceOf(NoBuyInException.class);
   }
 }

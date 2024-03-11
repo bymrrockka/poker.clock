@@ -20,15 +20,16 @@ public class PersonRepository {
   private final PersonEntityRowMapper personEntityRowMapper;
 
   private static final String SAVE_SQL = """
-    INSERT INTO person (id, first_name, last_name)
-      VALUES (:id, :first_name, :last_name)
+    INSERT INTO person (id, first_name, last_name, nick_name)
+      VALUES (:id, :first_name, :last_name, :nick_name)
     """;
 
   public void save(final PersonEntity personEntity) {
     final var params = new MapSqlParameterSource()
       .addValue(ID, personEntity.getId())
       .addValue(FIRST_NAME, personEntity.getFirstname())
-      .addValue(LAST_NAME, personEntity.getLastname());
+      .addValue(LAST_NAME, personEntity.getLastname())
+      .addValue(NICK_NAME, personEntity.getNickname());
     jdbcTemplate.update(SAVE_SQL, params);
   }
 
@@ -39,7 +40,7 @@ public class PersonRepository {
 
   private static final String FIND_BY_ID_SQL = """
       SELECT
-        id, first_name, last_name
+        id, first_name, last_name, nick_name
       FROM person
       WHERE
         id = :id;
@@ -49,17 +50,12 @@ public class PersonRepository {
     final var params = new MapSqlParameterSource()
       .addValue(ID, id);
 
-    return jdbcTemplate.queryForObject(FIND_BY_ID_SQL, params, (rs, rowNum) ->
-      PersonEntity.personBuilder()
-        .id(UUID.fromString(rs.getString(ID)))
-        .firstname(rs.getString(FIRST_NAME))
-        .lastname(rs.getString(LAST_NAME))
-        .build());
+    return jdbcTemplate.queryForObject(FIND_BY_ID_SQL, params, personEntityRowMapper);
   }
 
   private static final String FIND_ALL_BY_IDS_SQL = """
       SELECT
-        id, first_name, last_name
+        id, first_name, last_name, nick_name
       FROM person
       WHERE
         id IN (:id)

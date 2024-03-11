@@ -1,7 +1,7 @@
 package by.mrrockka.creator;
 
 import by.mrrockka.domain.Player;
-import by.mrrockka.domain.payments.Entries;
+import by.mrrockka.domain.entries.Entries;
 
 import java.math.BigDecimal;
 import java.util.List;

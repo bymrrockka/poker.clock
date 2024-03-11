@@ -2,7 +2,7 @@ package by.mrrockka.service;
 
 import by.mrrockka.domain.Person;
 import by.mrrockka.domain.TelegramPerson;
-import by.mrrockka.domain.game.Game;
+import by.mrrockka.domain.game.TournamentGame;
 import by.mrrockka.domain.payout.Payout;
 import by.mrrockka.features.accounting.Accounting;
 import by.mrrockka.mapper.MessageMetadataMapper;
@@ -58,8 +58,8 @@ public class TelegramCalculationService {
   }
 
   //   todo: add validation service
-  private void validateGame(final Game game) {
-    if (isNull(game.getGameSummary())) {
+  private void validateGame(final TournamentGame game) {
+    if (isNull(game.getTournamentGameSummary())) {
       throw new GameSummaryNotFoundException();
     }
   }
@@ -89,7 +89,7 @@ public class TelegramCalculationService {
   private String getPlayerTelegram(final Person person, final List<TelegramPerson> telegramPersons) {
     return '@' + telegramPersons.stream()
       .filter(telegramPerson -> telegramPerson.getId().equals(person.getId()))
-      .map(TelegramPerson::getTelegram)
+      .map(TelegramPerson::getNickname)
       .findFirst()
       .orElseThrow(() -> new PersonHasNoTelegramException(person.getId()));
   }

@@ -31,14 +31,15 @@ public class PlayerSummary implements Comparable<PlayerSummary> {
   }
 
   //todo: consider refactoring to separate service in case there will be additional implementations
-  public static PlayerSummary of(@NonNull final Player player, @NonNull final GameSummary gameSummary) {
+  public static PlayerSummary of(@NonNull final Player player,
+                                 @NonNull final TournamentGameSummary tournamentGameSummary) {
 
     final var playerTotal = player.entries().total();
     final var person = player.person();
     final var playerBuilder = builder().player(player);
 
-    if (gameSummary.isInPrizes(person)) {
-      final var prizeAmount = gameSummary.getPrizeFor(person);
+    if (tournamentGameSummary.isInPrizes(person)) {
+      final var prizeAmount = tournamentGameSummary.getPrizeFor(person);
       if (prizeAmount.compareTo(playerTotal) > 0) {
         return playerBuilder
           .transferType(TransferType.CREDIT)

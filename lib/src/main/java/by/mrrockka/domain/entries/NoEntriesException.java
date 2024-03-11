@@ -1,4 +1,4 @@
-package by.mrrockka.domain.payments;
+package by.mrrockka.domain.entries;
 
 import by.mrrockka.exception.BusinessException;
 

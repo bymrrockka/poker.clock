@@ -4,7 +4,7 @@ import by.mrrockka.creator.FinalePlacesCreator;
 import by.mrrockka.creator.PersonCreator;
 import by.mrrockka.creator.PrizePoolCreator;
 import by.mrrockka.domain.summary.FinalePlaceSummary;
-import by.mrrockka.domain.summary.GameSummary;
+import by.mrrockka.domain.summary.TournamentGameSummary;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -51,8 +51,8 @@ class GameSummaryServiceTest {
 
 //  todo: test exception
 
-  private GameSummary gameSummary() {
-    return new GameSummary(List.of(
+  private TournamentGameSummary gameSummary() {
+    return new TournamentGameSummary(List.of(
       FinalePlaceSummary.builder()
         .amount(BigDecimal.valueOf(60))
         .position(1)

@@ -8,11 +8,11 @@ import lombok.NonNull;
 import java.math.BigDecimal;
 import java.util.List;
 
-public record GameSummary(@NonNull List<FinalePlaceSummary> finaleSummaries) {
+//todo: move
+public record TournamentGameSummary(@NonNull List<FinalePlaceSummary> finaleSummaries) {
 
-  //todo: consider refactoring to separate service in case there will be additional implementations
-  public static GameSummary of(final PrizePool prizePool, final FinalePlaces finalePlaces,
-                               final BigDecimal totalAmount) {
+  public static TournamentGameSummary of(final PrizePool prizePool, final FinalePlaces finalePlaces,
+                                         final BigDecimal totalAmount) {
     final var finaleSummaries = prizePool.positionAndPercentages()
       .stream()
       .map(percentageAndPosition ->
@@ -23,7 +23,7 @@ public record GameSummary(@NonNull List<FinalePlaceSummary> finaleSummaries) {
                .build())
       .toList();
 
-    return new GameSummary(finaleSummaries);
+    return new TournamentGameSummary(finaleSummaries);
   }
 
   public boolean isInPrizes(final Person person) {

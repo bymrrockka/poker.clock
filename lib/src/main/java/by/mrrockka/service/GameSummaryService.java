@@ -1,6 +1,6 @@
 package by.mrrockka.service;
 
-import by.mrrockka.domain.summary.GameSummary;
+import by.mrrockka.domain.summary.TournamentGameSummary;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +17,12 @@ public class GameSummaryService {
   private final FinalePlacesService finalePlacesService;
   private final PrizePoolService prizePoolService;
 
-  public GameSummary assembleGameSummary(final UUID gameId, final BigDecimal totalAmount) {
+  public TournamentGameSummary assembleGameSummary(final UUID gameId, final BigDecimal totalAmount) {
     final var finalePlaces = finalePlacesService.getByGameId(gameId);
     final var prizePool = prizePoolService.getByGameId(gameId);
 
     if (nonNull(finalePlaces) && nonNull(prizePool)) {
-      return GameSummary.of(prizePool, finalePlaces, totalAmount);
+      return TournamentGameSummary.of(prizePool, finalePlaces, totalAmount);
     } else {
       return null;
     }

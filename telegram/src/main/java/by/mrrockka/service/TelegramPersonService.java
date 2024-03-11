@@ -52,14 +52,14 @@ public class TelegramPersonService {
   private List<TelegramPerson> storeMissed(final List<TelegramPerson> persons, final Long chatId) {
     final var stored = telegramPersonMapper
       .mapToTelegrams(telegramPersonRepository.findAllByChatIdAndTelegrams(chatId, persons.stream().map(
-        TelegramPerson::getTelegram).toList()));
+        TelegramPerson::getNickname).toList()));
 
     final var storedTelegrams = stored.stream()
-      .map(TelegramPerson::getTelegram)
+      .map(TelegramPerson::getNickname)
       .toList();
 
     final var toStore = persons.stream()
-      .filter(person -> !storedTelegrams.contains(person.getTelegram()))
+      .filter(person -> !storedTelegrams.contains(person.getNickname()))
       .toList();
 
     if (!toStore.isEmpty()) {
@@ -75,7 +75,7 @@ public class TelegramPersonService {
   private TelegramPerson saveNew(final String telegram, final Long chatId) {
     final var telegramPerson = TelegramPerson.telegramPersonBuilder()
       .id(UUID.randomUUID())
-      .telegram(telegram)
+      .nickname(telegram)
       .chatId(chatId)
       .build();
 

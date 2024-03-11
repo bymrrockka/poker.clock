@@ -1,8 +1,6 @@
 package by.mrrockka.domain.game;
 
-import by.mrrockka.domain.Bounty;
 import by.mrrockka.domain.Player;
-import by.mrrockka.domain.summary.GameSummary;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -10,39 +8,29 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-//todo: add child models for tournament, bounty and cash related data
-
-
-@Getter
 @EqualsAndHashCode
 @ToString
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class Game {
+@Getter
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+public abstract sealed class Game permits TournamentGame, CashGame, BountyGame {
 
   @NonNull
-  UUID id;
+  protected UUID id;
+  //  todo: replace type with game sub types
   @NonNull
-  GameType gameType;
+  protected GameType gameType;
   @NonNull
-  BigDecimal buyIn;
+  protected BigDecimal buyIn;
   @NonNull
-  BigDecimal stack;
-  BigDecimal bounty;
-  List<Player> players;
-  GameSummary gameSummary;
-  List<Bounty> bountyTransactions;
+  protected BigDecimal stack;
+  protected List<Player> players;
 
-  @Builder(builderMethodName = "gameBuilder")
-  public Game(@NonNull final UUID id, @NonNull final GameType gameType, @NonNull final BigDecimal buyIn,
-              @NonNull final BigDecimal stack, final BigDecimal bounty, final List<Player> players,
-              final GameSummary gameSummary, final List<Bounty> bountyTransactions) {
+  protected Game(@NonNull final UUID id, @NonNull final GameType gameType, @NonNull final BigDecimal buyIn,
+                 @NonNull final BigDecimal stack, final List<Player> players) {
     this.id = id;
     this.gameType = gameType;
     this.buyIn = buyIn;
     this.stack = stack;
-    this.bounty = bounty;
     this.players = players;
-    this.gameSummary = gameSummary;
-    this.bountyTransactions = bountyTransactions;
   }
 }

@@ -41,7 +41,7 @@ public class FinalePlacesRepository {
 
   private static final String FIND_BY_GAME_ID_SQL = """
     SELECT
-      f.game_id, f.position, p.id, p.first_name, p.last_name
+      f.game_id, f.position, p.id, p.first_name, p.last_name, p.nick_name
     FROM
      finale_places as f
     JOIN person as p ON f.person_id = p.id

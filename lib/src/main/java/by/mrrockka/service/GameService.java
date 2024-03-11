@@ -1,7 +1,7 @@
 package by.mrrockka.service;
 
 import by.mrrockka.domain.Player;
-import by.mrrockka.domain.game.Game;
+import by.mrrockka.domain.game.TournamentGame;
 import by.mrrockka.mapper.GameMapper;
 import by.mrrockka.repo.game.GameRepository;
 import lombok.NonNull;
@@ -21,11 +21,11 @@ public class GameService {
   private final GameSummaryService gameSummaryService;
   private final PlayerService playerService;
 
-  public void storeNewGame(@NonNull final Game game) {
+  public void storeNewGame(@NonNull final TournamentGame game) {
     gameRepository.save(gameMapper.toEntity(game));
   }
 
-  public Game retrieveGame(@NonNull final UUID gameId) {
+  public TournamentGame retrieveGame(@NonNull final UUID gameId) {
     final var gameEntity = gameRepository.findById(gameId);
     final var players = playerService.getAllForGame(gameId);
     final var gameSummary = gameSummaryService.assembleGameSummary(gameId, calculateTotalAmount(players));

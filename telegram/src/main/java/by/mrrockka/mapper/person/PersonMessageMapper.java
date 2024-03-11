@@ -28,7 +28,7 @@ public class PersonMessageMapper {
       .filter(Matcher::matches)
       .map(matcher -> TelegramPerson.telegramPersonBuilder()
         .id(UUID.randomUUID())
-        .telegram(matcher.group(1))
+        .nickname(matcher.group(1))
         .chatId(chatId)
         .build())
       .toList();

@@ -17,6 +17,7 @@ public class PersonEntityRowMapper implements RowMapper<PersonEntity> {
       .id(UUID.fromString(rs.getString(ID)))
       .firstname(rs.getString(FIRST_NAME))
       .lastname(rs.getString(LAST_NAME))
+      .nickname(rs.getString(NICK_NAME))
       .build();
   }
 }

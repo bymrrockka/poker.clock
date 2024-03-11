@@ -13,14 +13,11 @@ public class TelegramPerson extends Person {
 
   @NonNull
   Long chatId;
-  @NonNull
-  String telegram;
 
   @Builder(builderMethodName = "telegramPersonBuilder")
   public TelegramPerson(@NonNull final UUID id, final String firstname, final String lastname,
-                        @NonNull final Long chatId, @NonNull final String telegram) {
-    super(id, firstname, lastname);
+                        @NonNull final Long chatId, @NonNull final String nickname) {
+    super(id, firstname, lastname, nickname);
     this.chatId = chatId;
-    this.telegram = telegram;
   }
 }
