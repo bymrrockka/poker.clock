@@ -1,5 +1,6 @@
 package by.mrrockka.mapper;
 
+import by.mrrockka.mapper.exception.InvalidMessageFormatException;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -9,6 +10,7 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.nonNull;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class EntryMessageMapperTest {
 
@@ -34,5 +36,26 @@ class EntryMessageMapperTest {
     } else {
       assertThat(actual.getValue()).isEmpty();
     }
+  }
+
+
+  private static Stream<Arguments> invalidEntryMessage() {
+    return Stream.of(
+      Arguments.of("/entry 60 @kinger"),
+      Arguments.of("/entry@kinger"),
+      Arguments.of("/entry"),
+      Arguments.of("@kinger/entry"),
+      Arguments.of("/reentry 60 @kinger"),
+      Arguments.of("/reentry@kinger"),
+      Arguments.of("@kinger/reentry"),
+      Arguments.of("/reentry")
+    );
+  }
+
+  @ParameterizedTest
+  @MethodSource("invalidEntryMessage")
+  void givenInvalidEntryMessage_whenMapAttempt_shouldThrowException(final String message) {
+    assertThatThrownBy(() -> entryMessageMapper.map(message))
+      .isInstanceOf(InvalidMessageFormatException.class);
   }
 }

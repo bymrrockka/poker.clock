@@ -1,6 +1,6 @@
 package by.mrrockka.creator;
 
-import by.mrrockka.domain.entries.Entries;
+import by.mrrockka.domain.collection.PersonEntries;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -14,18 +14,18 @@ import static java.util.Objects.nonNull;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class EntriesCreator {
 
-  public static List<Entries> entriesList(final int size, BigDecimal buyin) {
+  public static List<PersonEntries> entriesList(final int size, BigDecimal buyin) {
     return IntStream.range(0, size)
       .mapToObj(i -> entries(builder -> builder.entries(List.of(buyin))))
       .toList();
   }
 
-  public static Entries entries() {
+  public static PersonEntries entries() {
     return entries(null);
   }
 
-  public static Entries entries(final Consumer<Entries.EntriesBuilder> entriesBuilderConsumer) {
-    final var entriesBuilder = Entries.builder()
+  public static PersonEntries entries(final Consumer<PersonEntries.PersonEntriesBuilder> entriesBuilderConsumer) {
+    final var entriesBuilder = PersonEntries.builder()
       .person(PersonCreator.domainRandom())
       .entries(List.of(BigDecimal.ONE));
 

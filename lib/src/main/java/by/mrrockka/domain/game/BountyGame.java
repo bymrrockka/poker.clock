@@ -1,7 +1,8 @@
 package by.mrrockka.domain.game;
 
 import by.mrrockka.domain.Bounty;
-import by.mrrockka.domain.entries.Entries;
+import by.mrrockka.domain.collection.PersonEntries;
+import by.mrrockka.domain.summary.finale.FinaleSummary;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -15,16 +16,19 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public final class BountyGame extends Game {
 
+  FinaleSummary finaleSummary;
   @NonNull
-  BigDecimal bounty;
-  List<Bounty> bountyTransactions;
+  BigDecimal bountyAmount;
+  List<Bounty> bountyList;
 
   @Builder(builderMethodName = "bountyBuilder")
   public BountyGame(@NonNull final UUID id, @NonNull final BigDecimal buyIn,
-                    @NonNull final BigDecimal stack, final List<Entries> entries,
-                    @NonNull final BigDecimal bounty, final List<Bounty> bountyTransactions) {
+                    @NonNull final BigDecimal stack, final List<PersonEntries> entries,
+                    @NonNull final BigDecimal bountyAmount, final List<Bounty> bountyList,
+                    final FinaleSummary finaleSummary) {
     super(id, buyIn, stack, entries);
-    this.bounty = bounty;
-    this.bountyTransactions = bountyTransactions;
+    this.bountyAmount = bountyAmount;
+    this.bountyList = bountyList;
+    this.finaleSummary = finaleSummary;
   }
 }

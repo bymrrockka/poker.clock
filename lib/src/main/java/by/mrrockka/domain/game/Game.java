@@ -1,6 +1,6 @@
 package by.mrrockka.domain.game;
 
-import by.mrrockka.domain.entries.Entries;
+import by.mrrockka.domain.collection.PersonEntries;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -20,13 +20,42 @@ public abstract sealed class Game permits TournamentGame, CashGame, BountyGame {
   protected BigDecimal buyIn;
   @NonNull
   protected BigDecimal stack;
-  protected List<Entries> entries;
+  protected List<PersonEntries> entries;
 
   protected Game(@NonNull final UUID id, @NonNull final BigDecimal buyIn,
-                 @NonNull final BigDecimal stack, final List<Entries> entries) {
+                 @NonNull final BigDecimal stack, final List<PersonEntries> entries) {
     this.id = id;
     this.buyIn = buyIn;
     this.stack = stack;
     this.entries = entries;
   }
+
+  public TournamentGame asTournament() {
+    return (TournamentGame) this;
+  }
+
+  public boolean isTournament() {
+    return isType(TournamentGame.class);
+  }
+
+  public CashGame asCash() {
+    return (CashGame) this;
+  }
+
+  public boolean isCash() {
+    return isType(CashGame.class);
+  }
+
+  public boolean isBounty() {
+    return isType(BountyGame.class);
+  }
+
+  public BountyGame asBounty() {
+    return (BountyGame) this;
+  }
+
+  public boolean isType(final Class<? extends Game> clazz) {
+    return clazz.isInstance(this);
+  }
+
 }

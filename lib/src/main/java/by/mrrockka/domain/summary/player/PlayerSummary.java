@@ -1,7 +1,7 @@
 package by.mrrockka.domain.summary.player;
 
 import by.mrrockka.domain.Person;
-import by.mrrockka.domain.entries.Entries;
+import by.mrrockka.domain.collection.PersonEntries;
 import by.mrrockka.domain.payout.TransferType;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -12,18 +12,19 @@ import java.util.Optional;
 
 @Getter
 @EqualsAndHashCode
-public abstract sealed class PlayerSummary implements Comparable<PlayerSummary> permits TournamentPlayerSummary,
-                                                                                        CashPlayerSummary {
+public abstract sealed class PlayerSummary implements Comparable<PlayerSummary>
+  permits TournamentPlayerSummary, CashPlayerSummary, BountyPlayerSummary {
+
   @NonNull
-  private final Entries entries;
+  private final PersonEntries personEntries;
   @NonNull
   private BigDecimal transferAmount;
   @NonNull
   private final TransferType transferType;
 
-  protected PlayerSummary(@NonNull final Entries entries, final BigDecimal transferAmount,
+  protected PlayerSummary(@NonNull final PersonEntries personEntries, final BigDecimal transferAmount,
                           @NonNull final TransferType transferType) {
-    this.entries = entries;
+    this.personEntries = personEntries;
     this.transferAmount = Optional.ofNullable(transferAmount).orElse(BigDecimal.ZERO);
     this.transferType = transferType;
   }
@@ -38,7 +39,7 @@ public abstract sealed class PlayerSummary implements Comparable<PlayerSummary> 
   }
 
   public Person getPerson() {
-    return getEntries().person();
+    return getPersonEntries().person();
   }
 
 }

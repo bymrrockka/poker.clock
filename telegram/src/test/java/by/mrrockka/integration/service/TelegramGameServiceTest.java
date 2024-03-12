@@ -5,10 +5,10 @@ import by.mrrockka.creator.ChatCreator;
 import by.mrrockka.creator.MessageCreator;
 import by.mrrockka.creator.UpdateCreator;
 import by.mrrockka.creator.UserCreator;
-import by.mrrockka.domain.game.GameType;
 import by.mrrockka.repo.entries.EntriesEntity;
 import by.mrrockka.repo.entries.EntriesRepository;
 import by.mrrockka.repo.game.GameRepository;
+import by.mrrockka.repo.game.GameType;
 import by.mrrockka.repo.game.TelegramGameRepository;
 import by.mrrockka.repo.person.PersonEntity;
 import by.mrrockka.repo.person.PersonRepository;
@@ -64,7 +64,7 @@ class TelegramGameServiceTest {
     final var createAt = MessageCreator.MESSAGE_TIMESTAMP.truncatedTo(ChronoUnit.SECONDS);
     final var chatId = ChatCreator.CHAT_ID;
 
-    final var response = (SendMessage) telegramGameService.storeTournament(update);
+    final var response = (SendMessage) telegramGameService.storeTournamentGame(update);
 
     assertAll(
       () -> assertThat(response.getChatId()).isEqualTo(String.valueOf(chatId)),

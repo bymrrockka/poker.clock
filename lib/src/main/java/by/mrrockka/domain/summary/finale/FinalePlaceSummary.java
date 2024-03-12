@@ -1,4 +1,4 @@
-package by.mrrockka.domain.summary;
+package by.mrrockka.domain.summary.finale;
 
 import by.mrrockka.domain.Person;
 import lombok.Builder;

@@ -16,7 +16,7 @@ public class PrizePoolMessageMapper {
   private static final String PRIZE_POOL_REGEX = "^(\\d)([. :\\-=]{1,3})([\\d]{1,3})$";
 
   public PrizePool map(final String command) {
-    final var strings = command.toLowerCase().strip().replaceFirst("/prizepool", "").split("[\n,;%]");
+    final var strings = command.toLowerCase().strip().replaceFirst("/prizepool([ \n]*)", "").split("[\n,;%]");
     final var prizePattern = Pattern.compile(PRIZE_POOL_REGEX);
     final var result = new PrizePool(
       Arrays.stream(strings)

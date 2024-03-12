@@ -1,4 +1,4 @@
-package by.mrrockka.domain.entries;
+package by.mrrockka.domain.collection;
 
 import by.mrrockka.exception.BusinessException;
 

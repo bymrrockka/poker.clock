@@ -19,12 +19,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class TournamentTelegramCommandTest {
+class TournamentGameTelegramCommandTest {
 
   @Mock
   private TelegramGameService telegramGameService;
   @InjectMocks
-  private TournamentTelegramCommand tournamentCommandRoute;
+  private TournamentGameTelegramCommand tournamentCommandRoute;
 
   private static Stream<Arguments> tournamentMessages() {
     return Stream.of(
@@ -61,7 +61,7 @@ class TournamentTelegramCommandTest {
       .chatId(update.getMessage().getChatId())
       .text(""));
 
-    when(telegramGameService.storeTournament(update)).thenReturn(expected);
+    when(telegramGameService.storeTournamentGame(update)).thenReturn(expected);
 
     assertThat(tournamentCommandRoute.process(update)).isEqualTo(expected);
   }

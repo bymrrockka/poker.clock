@@ -1,17 +1,15 @@
 package by.mrrockka.service;
 
-import by.mrrockka.domain.Withdrawals;
-import by.mrrockka.domain.entries.Entries;
+import by.mrrockka.domain.collection.PersonEntries;
+import by.mrrockka.domain.collection.PersonWithdrawals;
+import by.mrrockka.domain.game.BountyGame;
 import by.mrrockka.domain.game.CashGame;
 import by.mrrockka.domain.game.Game;
 import by.mrrockka.domain.game.TournamentGame;
 import by.mrrockka.domain.payout.Payout;
 import by.mrrockka.features.calculation.CalculationService;
 import by.mrrockka.mapper.MessageMetadataMapper;
-import by.mrrockka.service.exception.ChatGameNotFoundException;
-import by.mrrockka.service.exception.EntriesAndWithdrawalAmountsAreNotEqualException;
-import by.mrrockka.service.exception.GameSummaryNotFoundException;
-import by.mrrockka.service.exception.PayoutsAreNotCalculatedException;
+import by.mrrockka.service.exception.*;
 import by.mrrockka.service.game.TelegramGameService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,12 +41,16 @@ public class TelegramCalculationService {
       .getGameByMessageMetadata(messageMetadata)
       .orElseThrow(ChatGameNotFoundException::new);
 
-    if (telegramGame.game() instanceof TournamentGame) {
-      validateTournament((TournamentGame) telegramGame.game());
+    if (telegramGame.game().isTournament()) {
+      validateTournament(telegramGame.game().asTournament());
     }
 
-    if (telegramGame.game() instanceof CashGame) {
-      validateCash((CashGame) telegramGame.game());
+    if (telegramGame.game().isCash()) {
+      validateCash(telegramGame.game().asCash());
+    }
+
+    if (telegramGame.game().isBounty()) {
+      validateBounty(telegramGame.game().asBounty());
     }
 
     final var payoutResponse = calculationService.calculate(telegramGame.game())
@@ -66,19 +68,34 @@ public class TelegramCalculationService {
 
   //   todo: add validation service
   private void validateTournament(final TournamentGame game) {
-    if (isNull(game.getTournamentSummary())) {
-      throw new GameSummaryNotFoundException();
+    if (isNull(game.getFinaleSummary())) {
+      throw new FinaleSummaryNotFoundException();
+    }
+  }
+
+  private void validateBounty(final BountyGame game) {
+    if (isNull(game.getFinaleSummary())) {
+      throw new FinaleSummaryNotFoundException();
+    }
+
+    final var bountiesCount = game.getBountyList().size() + 1;
+    final var entriesCount = game.getEntries().stream()
+      .mapToInt(entry -> entry.entries().size())
+      .sum();
+
+    if (entriesCount != bountiesCount) {
+      throw new BountiesAndEntriesSizeAreNotEqualException(entriesCount - bountiesCount);
     }
   }
 
   private void validateCash(final CashGame game) {
     final var totalEntries = game.getEntries().stream()
-      .map(Entries::total)
+      .map(PersonEntries::total)
       .reduce(BigDecimal::add)
       .orElse(BigDecimal.ZERO);
 
     final var totalWithdrawals = game.getWithdrawals().stream()
-      .map(Withdrawals::total)
+      .map(PersonWithdrawals::total)
       .reduce(BigDecimal::add)
       .orElse(BigDecimal.ZERO);
 
@@ -90,19 +107,25 @@ public class TelegramCalculationService {
   private String prettyPrintPayout(final Payout payout, final Game game) {
     final var strBuilder = new StringBuilder("-----------------------------\n");
     strBuilder.append("Payout to: @%s\n".formatted(payout.person().getNickname()));
-    strBuilder.append("\tEntries: %s\n".formatted(payout.entries().total()));
+    strBuilder.append("\tEntries: %s\n".formatted(payout.personEntries().total().negate()));
 
-    if (game instanceof TournamentGame) {
-      strBuilder.append("\tPrize: %s\n".formatted(payout.entries().total().add(payout.totalDebts())));
+    if (!game.isCash()) {
+      strBuilder.append("\tPrize: %s\n".formatted(payout.personEntries().total().add(payout.totalDebts())));
     }
 
-    if (game instanceof CashGame) {
-      strBuilder.append("\tWithdrawals: %s\n".formatted(payout.withdrawals().total()));
+    if (game.isBounty()) {
+      strBuilder.append("\tBounties:\n");
+      strBuilder.append("\t\tTaken: %s\n".formatted(payout.personBounties().totalTaken()));
+      strBuilder.append("\t\tGiven: %s\n".formatted(payout.personBounties().totalGiven().negate()));
+    }
+
+    if (game.isCash()) {
+      strBuilder.append("\tWithdrawals: %s\n".formatted(payout.personWithdrawals().total()));
     }
 
     strBuilder.append("\tTotal: %s\n".formatted(payout.totalDebts()));
 
-    final var strDebtsOpt = payout.debts().stream()
+    final var strDebtsOpt = payout.payers().stream()
       .map(debt -> "\t@%s -> %s".formatted(debt.person().getNickname(), debt.amount()))
       .reduce("%s\n%s"::formatted);
 

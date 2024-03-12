@@ -2,13 +2,14 @@ package by.mrrockka.creator;
 
 import by.mrrockka.FakerProvider;
 import by.mrrockka.domain.Bounty;
-import by.mrrockka.domain.Withdrawals;
-import by.mrrockka.domain.entries.Entries;
+import by.mrrockka.domain.collection.PersonEntries;
+import by.mrrockka.domain.collection.PersonWithdrawals;
+import by.mrrockka.domain.game.BountyGame;
 import by.mrrockka.domain.game.CashGame;
-import by.mrrockka.domain.game.GameType;
 import by.mrrockka.domain.game.TournamentGame;
-import by.mrrockka.domain.summary.TournamentSummary;
+import by.mrrockka.domain.summary.finale.FinaleSummary;
 import by.mrrockka.repo.game.GameEntity;
+import by.mrrockka.repo.game.GameType;
 import com.github.javafaker.Faker;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -29,10 +30,10 @@ public final class GameCreator {
   public static final BigDecimal BUY_IN = BigDecimal.valueOf(FAKER.number().numberBetween(10, 100));
   public static final BigDecimal STACK = BigDecimal.valueOf(FAKER.number().numberBetween(1500, 30000));
   public static final BigDecimal BOUNTY = BigDecimal.valueOf(FAKER.number().numberBetween(10, 100));
-  public static final List<Entries> ENTRIES = List.of(EntriesCreator.entries());
-  public static final List<Withdrawals> WITHDRAWALS = List.of(WithdrawalsCreator.withdrawals());
-  public static final List<Bounty> BOUNTIES = List.of(Bounty.builder().build());
-  public static final TournamentSummary GAME_SUMMARY = new TournamentSummary(List.of());
+  public static final List<PersonEntries> ENTRIES = List.of(EntriesCreator.entries());
+  public static final List<PersonWithdrawals> WITHDRAWALS = List.of(WithdrawalsCreator.withdrawals());
+  public static final List<Bounty> BOUNTIES = List.of(BountyCreator.bounty());
+  public static final FinaleSummary FINALE_SUMMARY = new FinaleSummary(List.of());
 
   public static TournamentGame tournament() {
     return tournament(null);
@@ -43,11 +44,28 @@ public final class GameCreator {
       .id(ID)
       .buyIn(BUY_IN)
       .stack(STACK)
-//      .bounty(BOUNTY)
       .entries(ENTRIES)
-      .tournamentSummary(GAME_SUMMARY)
-//      .bountyTransactions(BOUNTIES)
-      ;
+      .finaleSummary(FINALE_SUMMARY);
+
+    if (nonNull(gameBuilderConsumer))
+      gameBuilderConsumer.accept(gameBuilder);
+
+    return gameBuilder.build();
+  }
+
+  public static BountyGame bounty() {
+    return bounty(null);
+  }
+
+  public static BountyGame bounty(final Consumer<BountyGame.BountyGameBuilder> gameBuilderConsumer) {
+    final var gameBuilder = BountyGame.bountyBuilder()
+      .id(ID)
+      .buyIn(BUY_IN)
+      .stack(STACK)
+      .bountyAmount(BOUNTY)
+      .entries(ENTRIES)
+      .bountyList(BOUNTIES)
+      .finaleSummary(FINALE_SUMMARY);
 
     if (nonNull(gameBuilderConsumer))
       gameBuilderConsumer.accept(gameBuilder);

@@ -1,7 +1,7 @@
 package by.mrrockka.domain.game;
 
-import by.mrrockka.domain.entries.Entries;
-import by.mrrockka.domain.summary.TournamentSummary;
+import by.mrrockka.domain.collection.PersonEntries;
+import by.mrrockka.domain.summary.finale.FinaleSummary;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -15,13 +15,13 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public final class TournamentGame extends Game {
 
-  TournamentSummary tournamentSummary;
+  FinaleSummary finaleSummary;
 
   @Builder(builderMethodName = "tournamentBuilder")
   public TournamentGame(@NonNull final UUID id, @NonNull final BigDecimal buyIn,
-                        @NonNull final BigDecimal stack, final List<Entries> entries,
-                        final TournamentSummary tournamentSummary) {
+                        @NonNull final BigDecimal stack, final List<PersonEntries> entries,
+                        final FinaleSummary finaleSummary) {
     super(id, buyIn, stack, entries);
-    this.tournamentSummary = tournamentSummary;
+    this.finaleSummary = finaleSummary;
   }
 }

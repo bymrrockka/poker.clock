@@ -1,6 +1,6 @@
 package by.mrrockka.creator;
 
-import by.mrrockka.domain.Withdrawals;
+import by.mrrockka.domain.collection.PersonWithdrawals;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -13,12 +13,13 @@ import static java.util.Objects.nonNull;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class WithdrawalsCreator {
 
-  public static Withdrawals withdrawals() {
+  public static PersonWithdrawals withdrawals() {
     return withdrawals(null);
   }
 
-  public static Withdrawals withdrawals(final Consumer<Withdrawals.WithdrawalsBuilder> withdrawalsBuilderConsumer) {
-    final var withdrawalsBuilder = Withdrawals.builder()
+  public static PersonWithdrawals withdrawals(
+    final Consumer<PersonWithdrawals.PersonWithdrawalsBuilder> withdrawalsBuilderConsumer) {
+    final var withdrawalsBuilder = PersonWithdrawals.builder()
       .person(PersonCreator.domainRandom())
       .withdrawals(List.of(BigDecimal.ONE));
 

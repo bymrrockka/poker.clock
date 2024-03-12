@@ -7,9 +7,9 @@ import by.mrrockka.domain.payout.TransferType;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class CashPlayerSummaryTest {
 
@@ -19,25 +19,17 @@ class CashPlayerSummaryTest {
     final var entries = EntriesCreator.entries(builder -> builder.person(person));
     final var withdrawals = WithdrawalsCreator.withdrawals(builder -> builder.person(person));
 
-    assertThat(CashPlayerSummary.of(entries, withdrawals).getEntries())
+    assertThat(CashPlayerSummary.of(entries, List.of(withdrawals)).getPersonEntries())
       .isEqualTo(entries);
 
-    assertThat(CashPlayerSummary.of(entries, withdrawals).getWithdrawals())
+    assertThat(CashPlayerSummary.of(entries, List.of(withdrawals)).getPersonWithdrawals())
       .isEqualTo(withdrawals);
 
-    assertThat(CashPlayerSummary.of(entries, withdrawals).getTransferType())
+    assertThat(CashPlayerSummary.of(entries, List.of(withdrawals)).getTransferType())
       .isEqualTo(TransferType.EQUAL);
 
-    assertThat(CashPlayerSummary.of(entries, withdrawals).getTransferAmount())
+    assertThat(CashPlayerSummary.of(entries, List.of(withdrawals)).getTransferAmount())
       .isEqualTo(BigDecimal.ZERO);
   }
 
-  @Test
-  void givenEntriesAndWithdrawalsListWithDifferentPersons_whenBuilderCalled_thenExceptionThrown() {
-    final var entries = EntriesCreator.entries(builder -> builder.person(PersonCreator.domainRandom()));
-    final var withdrawals = WithdrawalsCreator.withdrawals(builder -> builder.person(PersonCreator.domainRandom()));
-
-    assertThatThrownBy(() -> CashPlayerSummary.of(entries, withdrawals))
-      .isInstanceOf(PersonsNotMatchingException.class);
-  }
 }
