@@ -13,7 +13,7 @@ import java.util.UUID;
 @ToString(callSuper = true)
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public final class TournamentGame extends Game {
+public class TournamentGame extends Game {
 
   FinaleSummary finaleSummary;
 

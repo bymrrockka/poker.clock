@@ -42,18 +42,28 @@ class CalculateTelegramCommandTest {
           .build()),
       Arguments.of(
         MessageArgument.builder()
-          .message("/calculate something")
+          .message("/calculate\n")
           .result(true)
+          .build()),
+      Arguments.of(
+        MessageArgument.builder()
+          .message("/calculate\t")
+          .result(true)
+          .build()),
+      Arguments.of(
+        MessageArgument.builder()
+          .message("/calculate something")
+          .result(false)
           .build()),
       Arguments.of(
         MessageArgument.builder()
           .message("/calculate 123")
-          .result(true)
+          .result(false)
           .build()),
       Arguments.of(
         MessageArgument.builder()
           .message("/calculate asd123")
-          .result(true)
+          .result(false)
           .build()),
       Arguments.of(
         MessageArgument.builder()
@@ -91,6 +101,4 @@ class CalculateTelegramCommandTest {
     assertThat(calculatePaymentsRoute.isApplicable(update))
       .isEqualTo(arg.result());
   }
-
-
 }

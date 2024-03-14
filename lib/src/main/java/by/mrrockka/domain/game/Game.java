@@ -12,7 +12,7 @@ import java.util.UUID;
 @ToString
 @Getter
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public abstract sealed class Game permits TournamentGame, CashGame, BountyGame {
+public abstract class Game {
 
   @NonNull
   protected UUID id;
@@ -55,7 +55,7 @@ public abstract sealed class Game permits TournamentGame, CashGame, BountyGame {
   }
 
   public boolean isType(final Class<? extends Game> clazz) {
-    return clazz.isInstance(this);
+    return this.getClass().equals(clazz);
   }
 
 }

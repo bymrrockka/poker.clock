@@ -66,15 +66,26 @@ public class TelegramBountyService {
       throw new PersonsCantBeEqualForBountyException(fromAndTo.getKey());
     }
 
-    final var entries = game.getEntries().stream()
+    final var fromEntries = game.getEntries().stream()
       .filter(entry -> entry.person().getNickname().equals(fromAndTo.getKey()))
       .toList();
-    final var bountiesTakenFrom = game.getBountyList().stream()
+    final var fromBounties = game.getBountyList().stream()
       .filter(bounty -> bounty.from().getNickname().equals(fromAndTo.getKey()))
       .toList();
 
-    if (bountiesTakenFrom.size() >= entries.size()) {
-      throw new PlayerHasNoEnoughEntriesException(fromAndTo.getKey());
+    final var toEntries = game.getEntries().stream()
+      .filter(entry -> entry.person().getNickname().equals(fromAndTo.getValue()))
+      .toList();
+    final var toBounties = game.getBountyList().stream()
+      .filter(bounty -> bounty.from().getNickname().equals(fromAndTo.getValue()))
+      .toList();
+
+    if (fromBounties.size() >= fromEntries.size()) {
+      throw new PlayerHasNoEnoughEntriesException(fromAndTo.getValue());
+    }
+
+    if (toBounties.size() == toEntries.size()) {
+      throw new PlayerHasNoEnoughEntriesException(fromAndTo.getValue());
     }
   }
 

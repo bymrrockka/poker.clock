@@ -24,7 +24,7 @@ public class BountyRepository {
     INSERT INTO bounty
       (game_id, to_person, from_person, amount, created_at)
     VALUES
-      (:game_id, :to_person, :from_person :amount, :created_at);
+      (:game_id, :to_person, :from_person, :amount, :created_at);
     """;
 
   public void save(final UUID gameId, final UUID fromPersonId, final UUID toPersonId, final BigDecimal amount,

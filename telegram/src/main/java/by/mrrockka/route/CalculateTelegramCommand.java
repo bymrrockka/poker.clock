@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Component
 @RequiredArgsConstructor
 public class CalculateTelegramCommand implements TelegramCommand {
-  private static final String COMMAND = "/calculate";
+  private static final String COMMAND = "/calculate([\\s]*)";
 
   private final TelegramCalculationService telegramCalculationService;
 
@@ -21,7 +21,7 @@ public class CalculateTelegramCommand implements TelegramCommand {
   @Override
   public boolean isApplicable(final Update update) {
     return TelegramCommand.super.isApplicable(update) &&
-      update.getMessage().getText().contains(COMMAND);
+      update.getMessage().getText().matches(COMMAND);
   }
 
 }
