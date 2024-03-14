@@ -2,7 +2,7 @@ package by.mrrockka.features.calculation;
 
 import by.mrrockka.domain.game.Game;
 import by.mrrockka.domain.game.TournamentGame;
-import by.mrrockka.domain.payout.Debt;
+import by.mrrockka.domain.payout.Payer;
 import by.mrrockka.domain.payout.Payout;
 import by.mrrockka.domain.summary.player.TournamentPlayerSummary;
 import org.springframework.stereotype.Component;
@@ -14,15 +14,15 @@ final class TournamentCalculationStrategy extends AbstractCalculationStrategy<To
 
   @Override
   public boolean isApplicable(final Game game) {
-    return game instanceof TournamentGame;
+    return game.isTournament();
   }
 
   @Override
   protected List<TournamentPlayerSummary> buildPlayerSummary(final Game game) {
-    final var tournament = castToType(game);
+    final var tournament = game.asTournament();
     return tournament.getEntries()
       .stream()
-      .map(entries -> TournamentPlayerSummary.of(entries, tournament.getTournamentSummary()))
+      .map(entries -> TournamentPlayerSummary.of(entries, tournament.getFinaleSummary()))
       .sorted()
       .toList();
   }
@@ -30,14 +30,14 @@ final class TournamentCalculationStrategy extends AbstractCalculationStrategy<To
   @Override
   protected Payout buildPayoutBase(final TournamentPlayerSummary creditorSummary) {
     return Payout.builder()
-      .entries(creditorSummary.getEntries())
+      .personEntries(creditorSummary.getPersonEntries())
       .build();
   }
 
   @Override
-  protected Debt buildDebtBase(TournamentPlayerSummary debtorSummary) {
-    return Debt.builder()
-      .entries(debtorSummary.getEntries())
+  protected Payer buildDebtBase(TournamentPlayerSummary debtorSummary) {
+    return Payer.builder()
+      .personEntries(debtorSummary.getPersonEntries())
       .build();
   }
 

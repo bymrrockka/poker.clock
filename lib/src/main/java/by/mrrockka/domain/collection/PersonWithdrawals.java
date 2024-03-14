@@ -1,5 +1,6 @@
-package by.mrrockka.domain;
+package by.mrrockka.domain.collection;
 
+import by.mrrockka.domain.Person;
 import lombok.Builder;
 import lombok.NonNull;
 
@@ -7,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Builder
-public record Withdrawals(@NonNull Person person, @NonNull List<BigDecimal> withdrawals) {
+public record PersonWithdrawals(@NonNull Person person, @NonNull List<BigDecimal> withdrawals) {
 
   public BigDecimal total() {
     return withdrawals()

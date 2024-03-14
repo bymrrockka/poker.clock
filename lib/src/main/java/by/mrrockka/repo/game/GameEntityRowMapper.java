@@ -1,6 +1,5 @@
 package by.mrrockka.repo.game;
 
-import by.mrrockka.domain.game.GameType;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 

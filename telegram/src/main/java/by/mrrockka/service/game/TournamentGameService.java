@@ -2,8 +2,8 @@ package by.mrrockka.service.game;
 
 import by.mrrockka.domain.Person;
 import by.mrrockka.mapper.MessageMetadataMapper;
+import by.mrrockka.mapper.game.GameMessageMapper;
 import by.mrrockka.mapper.game.TelegramGameMapper;
-import by.mrrockka.mapper.game.TournamentMessageMapper;
 import by.mrrockka.repo.game.TelegramGameRepository;
 import by.mrrockka.service.EntriesService;
 import by.mrrockka.service.GameService;
@@ -26,7 +26,7 @@ class TournamentGameService {
   private final TelegramPersonService telegramPersonService;
   private final GameService gameService;
   private final EntriesService entriesService;
-  private final TournamentMessageMapper tournamentMessageMapper;
+  private final GameMessageMapper gameMessageMapper;
   private final MessageMetadataMapper messageMetadataMapper;
   private final TelegramGameMapper telegramGameMapper;
 
@@ -37,7 +37,7 @@ class TournamentGameService {
     log.debug("Processing {\n%s\n} message from %s chat id. Timestamp %s"
                 .formatted(messageMetadata.command(), messageMetadata.chatId(), messageMetadata.createdAt()));
 
-    final var game = tournamentMessageMapper.mapTournament(messageMetadata.command());
+    final var game = gameMessageMapper.mapTournament(messageMetadata.command());
     final var personIds = telegramPersonService.storePersons(update).stream()
       .map(Person::getId)
       .toList();

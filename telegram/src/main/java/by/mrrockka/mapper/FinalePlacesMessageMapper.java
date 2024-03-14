@@ -19,7 +19,7 @@ public class FinalePlacesMessageMapper {
   private static final String FINALE_PLACES_REGEX = "^(\\d)%s%s$".formatted(DELIMITER_REGEX, TELEGRAM_NAME_REGEX);
 
   public List<Pair<Integer, String>> map(final String command) {
-    final var strings = command.toLowerCase().strip().split("[\n,;]");
+    final var strings = command.toLowerCase().strip().replaceAll("/finaleplaces([ \n]*)", "").split("[\n,;]");
     final var placesPattern = Pattern.compile(FINALE_PLACES_REGEX);
     final var result = Arrays.stream(strings)
       .map(String::strip)

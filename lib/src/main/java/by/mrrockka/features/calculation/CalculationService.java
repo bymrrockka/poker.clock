@@ -18,7 +18,7 @@ public class CalculationService {
     return strategies.stream()
       .filter(strategy -> strategy.isApplicable(game))
       .findFirst()
-      .orElseThrow()
+      .orElseThrow(() -> new NoStrategyFoundToCalculateGameException(game))
       .calculate(game);
   }
 

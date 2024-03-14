@@ -1,9 +1,9 @@
 package by.mrrockka.service;
 
 import by.mrrockka.domain.game.CashGame;
-import by.mrrockka.domain.game.GameType;
 import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.mapper.WithdrawalMessageMapper;
+import by.mrrockka.repo.game.GameType;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
 import by.mrrockka.service.exception.ProcessingRestrictedException;
 import by.mrrockka.service.game.TelegramGameService;

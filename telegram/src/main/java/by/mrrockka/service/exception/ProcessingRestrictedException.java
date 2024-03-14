@@ -1,7 +1,7 @@
 package by.mrrockka.service.exception;
 
-import by.mrrockka.domain.game.GameType;
 import by.mrrockka.exception.BusinessException;
+import by.mrrockka.repo.game.GameType;
 import lombok.NonNull;
 
 import static by.mrrockka.service.exception.TelegramErrorCodes.PROCESSING_RESTRICTED;

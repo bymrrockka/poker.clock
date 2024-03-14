@@ -1,10 +1,10 @@
 package by.mrrockka.service;
 
-import by.mrrockka.domain.game.GameType;
 import by.mrrockka.domain.game.TournamentGame;
 import by.mrrockka.domain.prize.PrizePool;
 import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.mapper.PrizePoolMessageMapper;
+import by.mrrockka.repo.game.GameType;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
 import by.mrrockka.service.exception.ProcessingRestrictedException;
 import by.mrrockka.service.game.TelegramGameService;

@@ -1,6 +1,6 @@
 package by.mrrockka.service;
 
-import by.mrrockka.domain.entries.Entries;
+import by.mrrockka.domain.collection.PersonEntries;
 import by.mrrockka.mapper.EntriesMapper;
 import by.mrrockka.repo.entries.EntriesRepository;
 import lombok.NonNull;
@@ -28,7 +28,7 @@ public class EntriesService {
     entriesRepository.saveAll(gameId, personIds, amount, createdAt);
   }
 
-  public List<Entries> getAllForGame(@NonNull final UUID gameId) {
+  public List<PersonEntries> getAllForGame(@NonNull final UUID gameId) {
     final var entries = entriesRepository.findAllByGameId(gameId);
 
     return entries.stream()

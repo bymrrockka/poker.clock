@@ -1,4 +1,4 @@
-package by.mrrockka.domain.game;
+package by.mrrockka.repo.game;
 
 public enum GameType {
 

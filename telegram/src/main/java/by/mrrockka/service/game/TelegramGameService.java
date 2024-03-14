@@ -21,15 +21,20 @@ public class TelegramGameService {
   private final TelegramGameRepository telegramGameRepository;
   private final TournamentGameService tournamentGameService;
   private final CashGameService cashGameService;
+  private final BountyGameService bountyGameService;
   private final GameService gameService;
   private final TelegramGameMapper telegramGameMapper;
 
-  public BotApiMethodMessage storeTournament(final Update update) {
+  public BotApiMethodMessage storeTournamentGame(final Update update) {
     return tournamentGameService.storeGame(update);
   }
 
-  public BotApiMethodMessage storeCash(final Update update) {
+  public BotApiMethodMessage storeCashGame(final Update update) {
     return cashGameService.storeGame(update);
+  }
+
+  public BotApiMethodMessage storeBountyGame(final Update update) {
+    return bountyGameService.storeGame(update);
   }
 
   public Optional<TelegramGame> getGameByMessageMetadata(final MessageMetadata messageMetadata) {

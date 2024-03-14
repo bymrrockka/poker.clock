@@ -1,9 +1,14 @@
 package by.mrrockka.service;
 
+import by.mrrockka.creator.BountyCreator;
 import by.mrrockka.creator.EntriesCreator;
 import by.mrrockka.creator.GameCreator;
+import by.mrrockka.creator.WithdrawalsCreator;
+import by.mrrockka.domain.Bounty;
+import by.mrrockka.domain.collection.PersonWithdrawals;
 import by.mrrockka.mapper.GameMapper;
 import by.mrrockka.repo.game.GameRepository;
+import by.mrrockka.repo.game.GameType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -11,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,14 +37,18 @@ class GameServiceTest {
   private TournamentSummaryService tournamentSummaryService;
   @Mock
   private EntriesService entriesService;
+  @Mock
+  private WithdrawalsService withdrawalsService;
+  @Mock
+  private BountyService bountyService;
 
   @InjectMocks
   private GameService gameService;
 
   @Test
-  void givenGame_whenAttemptToSave_shouldMapAndCallRepo() {
+  void givenTournamentGame_whenAttemptToSave_shouldMapAndCallRepo() {
     final var given = GameCreator.tournament();
-    final var mapped = GameCreator.entity();
+    final var mapped = GameCreator.entity(builder -> builder.gameType(GameType.TOURNAMENT));
 
     when(gameMapper.toEntity(given)).thenReturn(mapped);
     gameService.storeTournamentGame(given);
@@ -46,38 +56,128 @@ class GameServiceTest {
   }
 
   @Test
-  void givenGameId_whenOnlyGameAndPlayersStored_shouldCallReposAndReturnOnlyGame() {
+  void givenCashGame_whenAttemptToSave_shouldMapAndCallRepo() {
+    final var given = GameCreator.cash();
+    final var mapped = GameCreator.entity(builder -> builder.gameType(GameType.CASH));
+
+    when(gameMapper.toEntity(given)).thenReturn(mapped);
+    gameService.storeCashGame(given);
+    verify(gameRepository).save(mapped);
+  }
+
+  @Test
+  void givenBountyGame_whenAttemptToSave_shouldMapAndCallRepo() {
+    final var given = GameCreator.bounty();
+    final var mapped = GameCreator.entity(builder -> builder.gameType(GameType.TOURNAMENT));
+
+    when(gameMapper.toEntity(given)).thenReturn(mapped);
+    gameService.storeBountyGame(given);
+    verify(gameRepository).save(mapped);
+  }
+
+  @Test
+  void givenTounnamentGameId_whenOnlyGameAndEntriesStored_shouldCallReposAndReturnOnlyGame() {
     final var entries = List.of(EntriesCreator.entries());
     final var expected = GameCreator.tournament(builder -> builder
-      .tournamentSummary(null)
+      .finaleSummary(null)
       .entries(entries)
     );
-    final var given = GameCreator.entity();
+    final var given = GameCreator.entity(builder -> builder.gameType(GameType.TOURNAMENT).id(GAME_ID));
 
     when(gameRepository.findById(GAME_ID)).thenReturn(given);
     when(entriesService.getAllForGame(GAME_ID)).thenReturn(entries);
     when(gameMapper.toTournament(given, entries, null)).thenReturn(expected);
-    assertThat(gameService.retrieveTournamentGame(GAME_ID))
-      .isEqualTo(expected);
+    assertThat(gameService.retrieveGame(GAME_ID)).isEqualTo(expected);
   }
 
 
   @Test
-  void givenGameId_whenGameAndPlayersStoredAndGameSummaryIsAssemblable_shouldCallReposAndReturnOnlyGame() {
+  void givenTounnamentGameId_whenGameAndEntriesStoredAndGameSummaryIsAssemblable_shouldCallReposAndReturnGame() {
     final var entries = List.of(EntriesCreator.entries());
-    final var gameSummary = GameCreator.GAME_SUMMARY;
+    final var finaleSummary = GameCreator.FINALE_SUMMARY;
     final var expected = GameCreator.tournament(builder -> builder
-      .tournamentSummary(gameSummary)
+      .finaleSummary(finaleSummary)
       .entries(entries)
     );
-    final var given = GameCreator.entity();
+    final var given = GameCreator.entity(builder -> builder.gameType(GameType.TOURNAMENT).id(GAME_ID));
 
-    when(tournamentSummaryService.assembleTournamentSummary(GAME_ID, BigDecimal.ONE)).thenReturn(gameSummary);
+    when(tournamentSummaryService.assembleTournamentSummary(GAME_ID, BigDecimal.ONE)).thenReturn(finaleSummary);
     when(gameRepository.findById(GAME_ID)).thenReturn(given);
     when(entriesService.getAllForGame(GAME_ID)).thenReturn(entries);
-    when(gameMapper.toTournament(given, entries, gameSummary)).thenReturn(expected);
-    assertThat(gameService.retrieveTournamentGame(GAME_ID))
-      .isEqualTo(expected);
+    when(gameMapper.toTournament(given, entries, finaleSummary)).thenReturn(expected);
+    assertThat(gameService.retrieveGame(GAME_ID)).isEqualTo(expected);
+  }
+
+  @Test
+  void givenCashGameId_whenOnlyGameAndEntriesStored_shouldCallReposAndReturnOnlyGame() {
+    final var entries = List.of(EntriesCreator.entries());
+    final var withdrawals = Collections.<PersonWithdrawals>emptyList();
+    final var expected = GameCreator.cash(builder -> builder
+      .entries(entries)
+    );
+    final var given = GameCreator.entity(builder -> builder.gameType(GameType.CASH).id(GAME_ID));
+
+    when(gameRepository.findById(GAME_ID)).thenReturn(given);
+    when(entriesService.getAllForGame(GAME_ID)).thenReturn(entries);
+    when(withdrawalsService.getAllForGame(GAME_ID)).thenReturn(withdrawals);
+    when(gameMapper.toCash(given, entries, withdrawals)).thenReturn(expected);
+    assertThat(gameService.retrieveGame(GAME_ID)).isEqualTo(expected);
+  }
+
+  @Test
+  void givenCashGameId_whenGameAndEntriesAndWithdrawalsStored_shouldCallReposAndReturnGame() {
+    final var entries = List.of(EntriesCreator.entries());
+    final var withdrawals = List.of(WithdrawalsCreator.withdrawals());
+    final var expected = GameCreator.cash(builder -> builder
+      .entries(entries)
+      .withdrawals(withdrawals)
+    );
+    final var given = GameCreator.entity(builder -> builder.gameType(GameType.CASH).id(GAME_ID));
+
+    when(gameRepository.findById(GAME_ID)).thenReturn(given);
+    when(entriesService.getAllForGame(GAME_ID)).thenReturn(entries);
+    when(withdrawalsService.getAllForGame(GAME_ID)).thenReturn(withdrawals);
+    when(gameMapper.toCash(given, entries, withdrawals)).thenReturn(expected);
+    assertThat(gameService.retrieveGame(GAME_ID)).isEqualTo(expected);
+  }
+
+  @Test
+  void givenBountyGameId_whenOnlyGameAndEntriesStored_shouldCallReposAndReturnOnlyGame() {
+    final var entries = List.of(EntriesCreator.entries());
+    final var bounties = Collections.<Bounty>emptyList();
+    final var expected = GameCreator.bounty(builder -> builder
+      .entries(entries)
+      .finaleSummary(null)
+    );
+    final var given = GameCreator.entity(builder -> builder.gameType(GameType.BOUNTY).id(GAME_ID));
+
+    when(gameRepository.findById(GAME_ID)).thenReturn(given);
+    when(entriesService.getAllForGame(GAME_ID)).thenReturn(entries);
+    when(bountyService.getAllForGame(GAME_ID)).thenReturn(bounties);
+    when(gameMapper.toBounty(given, entries, bounties, null)).thenReturn(expected);
+    assertThat(gameService.retrieveGame(GAME_ID)).isEqualTo(expected);
+  }
+
+
+  @Test
+  void givenBountyGameId_whenGameAndEntriesAndBountiesStored_shouldCallReposAndReturnGame() {
+    final var entries = List.of(EntriesCreator.entries());
+    final var bounties = List.of(BountyCreator.bounty());
+    final var finaleSummary = GameCreator.FINALE_SUMMARY;
+    final var expected = GameCreator.bounty(builder -> builder
+      .entries(entries)
+      .bountyList(bounties)
+      .finaleSummary(finaleSummary)
+    );
+    final var given = GameCreator.entity(builder -> builder.gameType(GameType.BOUNTY).id(GAME_ID));
+
+
+    when(tournamentSummaryService.assembleTournamentSummary(GAME_ID, BigDecimal.ONE)).thenReturn(finaleSummary);
+    when(gameRepository.findById(GAME_ID)).thenReturn(given);
+    when(entriesService.getAllForGame(GAME_ID)).thenReturn(entries);
+    when(bountyService.getAllForGame(GAME_ID)).thenReturn(bounties);
+    when(gameMapper.toBounty(given, entries, bounties, finaleSummary)).thenReturn(expected);
+    assertThat(gameService.retrieveGame(GAME_ID)).isEqualTo(expected);
   }
 
 }

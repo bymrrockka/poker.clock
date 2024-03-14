@@ -1,7 +1,7 @@
 package by.mrrockka.domain.game;
 
-import by.mrrockka.domain.Withdrawals;
-import by.mrrockka.domain.entries.Entries;
+import by.mrrockka.domain.collection.PersonEntries;
+import by.mrrockka.domain.collection.PersonWithdrawals;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -15,12 +15,12 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public final class CashGame extends Game {
 
-  List<Withdrawals> withdrawals;
+  List<PersonWithdrawals> withdrawals;
 
   @Builder(builderMethodName = "cashBuilder")
   public CashGame(@NonNull final UUID id, @NonNull final BigDecimal buyIn,
-                  @NonNull final BigDecimal stack, final List<Entries> entries,
-                  final List<Withdrawals> withdrawals) {
+                  @NonNull final BigDecimal stack, final List<PersonEntries> entries,
+                  final List<PersonWithdrawals> withdrawals) {
     super(id, buyIn, stack, entries);
     this.withdrawals = withdrawals;
   }

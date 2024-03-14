@@ -21,8 +21,9 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class TelegramCalculationServiceTest {
 
   private static final Long CHAT_ID = 123L;
-  private static final Integer TOURNAMENT_REPLY_TO_ID = 3;
-  private static final Integer CASH_REPLY_TO_ID = 4;
+  private static final Integer TOURNAMENT_GAME_REPLY_TO_ID = 3;
+  private static final Integer CASH_GAME_REPLY_TO_ID = 4;
+  private static final Integer BOUNTY_GAME_REPLY_TO_ID = 6;
 
   @Autowired
   private TelegramCalculationService telegramCalculationService;
@@ -34,13 +35,13 @@ class TelegramCalculationServiceTest {
         message -> {
           message.setText("/calculate");
           message.setChat(ChatCreator.chat(CHAT_ID));
-          message.setReplyToMessage(MessageCreator.message(msg -> msg.setMessageId(TOURNAMENT_REPLY_TO_ID)));
+          message.setReplyToMessage(MessageCreator.message(msg -> msg.setMessageId(TOURNAMENT_GAME_REPLY_TO_ID)));
         }));
 
     final var expected = """
       -----------------------------
       Payout to: @kinger
-      	Entries: 30
+      	Entries: -30
       	Prize: 84
       	Total: 54
       From
@@ -49,7 +50,7 @@ class TelegramCalculationServiceTest {
 
       -----------------------------
       Payout to: @queen
-      	Entries: 30
+      	Entries: -30
       	Prize: 36
       	Total: 6
       From
@@ -60,7 +61,50 @@ class TelegramCalculationServiceTest {
     assertAll(
       () -> assertThat(response).isNotNull(),
       () -> assertThat(response.getText()).isEqualTo(expected),
-      () -> assertThat(response.getReplyToMessageId()).isEqualTo(TOURNAMENT_REPLY_TO_ID)
+      () -> assertThat(response.getReplyToMessageId()).isEqualTo(TOURNAMENT_GAME_REPLY_TO_ID)
+    );
+  }
+
+  @Test
+  void givenBountyGame_whenCalculateAttempt_shouldCalculateAndPrettyPrintData() {
+    final var update = UpdateCreator.update(
+      MessageCreator.message(
+        message -> {
+          message.setText("/calculate");
+          message.setChat(ChatCreator.chat(CHAT_ID));
+          message.setReplyToMessage(MessageCreator.message(msg -> msg.setMessageId(BOUNTY_GAME_REPLY_TO_ID)));
+        }));
+
+    final var expected = """
+      -----------------------------
+      Payout to: @tenten
+      	Entries: -30
+      	Prize: 165
+      	Bounties:
+      		Taken: 60
+      		Given: 0
+      	Total: 135
+      From
+      	@jackas -> 120
+      	@kinger -> 15
+
+      -----------------------------
+      Payout to: @queen
+      	Entries: -30
+      	Prize: 45
+      	Bounties:
+      		Taken: 30
+      		Given: -30
+      	Total: 15
+      From
+      	@kinger -> 15
+            """;
+    final var response = (SendMessage) telegramCalculationService.calculatePayments(update);
+
+    assertAll(
+      () -> assertThat(response).isNotNull(),
+      () -> assertThat(response.getText()).isEqualTo(expected),
+      () -> assertThat(response.getReplyToMessageId()).isEqualTo(BOUNTY_GAME_REPLY_TO_ID)
     );
   }
 
@@ -71,13 +115,13 @@ class TelegramCalculationServiceTest {
         message -> {
           message.setText("/calculate");
           message.setChat(ChatCreator.chat(CHAT_ID));
-          message.setReplyToMessage(MessageCreator.message(msg -> msg.setMessageId(CASH_REPLY_TO_ID)));
+          message.setReplyToMessage(MessageCreator.message(msg -> msg.setMessageId(CASH_GAME_REPLY_TO_ID)));
         }));
 
     final var expected = """
       -----------------------------
       Payout to: @tenten
-      	Entries: 30
+      	Entries: -30
       	Withdrawals: 45
       	Total: 15
       From
@@ -85,7 +129,7 @@ class TelegramCalculationServiceTest {
             
       -----------------------------
       Payout to: @kinger
-      	Entries: 30
+      	Entries: -30
       	Withdrawals: 35
       	Total: 5
       From
@@ -96,7 +140,7 @@ class TelegramCalculationServiceTest {
     assertAll(
       () -> assertThat(response).isNotNull(),
       () -> assertThat(response.getText()).isEqualTo(expected),
-      () -> assertThat(response.getReplyToMessageId()).isEqualTo(CASH_REPLY_TO_ID)
+      () -> assertThat(response.getReplyToMessageId()).isEqualTo(CASH_GAME_REPLY_TO_ID)
     );
   }
 

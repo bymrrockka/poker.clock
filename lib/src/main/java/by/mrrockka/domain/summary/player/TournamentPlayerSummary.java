@@ -1,8 +1,8 @@
 package by.mrrockka.domain.summary.player;
 
-import by.mrrockka.domain.entries.Entries;
+import by.mrrockka.domain.collection.PersonEntries;
 import by.mrrockka.domain.payout.TransferType;
-import by.mrrockka.domain.summary.TournamentSummary;
+import by.mrrockka.domain.summary.finale.FinaleSummary;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -11,42 +11,33 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = true)
 public final class TournamentPlayerSummary extends PlayerSummary {
 
-  @Builder(builderMethodName = "tournamentBuilder", access = AccessLevel.PRIVATE)
-  private TournamentPlayerSummary(@NonNull final Entries entries, final BigDecimal transferAmount,
+  @Builder(builderMethodName = "tournamentSummaryBuilder", access = AccessLevel.PRIVATE)
+  private TournamentPlayerSummary(@NonNull final PersonEntries personEntries, final BigDecimal transferAmount,
                                   @NonNull final TransferType transferType) {
-    super(entries, transferAmount, transferType);
+    super(personEntries, transferAmount, transferType);
   }
 
-  public static TournamentPlayerSummary of(@NonNull final Entries entries,
-                                           @NonNull final TournamentSummary tournamentSummary) {
+  public static TournamentPlayerSummary of(@NonNull final PersonEntries personEntries,
+                                           @NonNull final FinaleSummary finaleSummary) {
 
-    final var playerTotal = entries.total();
-    final var person = entries.person();
-    final var summaryBuilder = tournamentBuilder().entries(entries);
+    final var summaryBuilder = tournamentSummaryBuilder().personEntries(personEntries);
+    final var summaryTotal = finaleSummary.calculateSummaryAmount(personEntries.person(), personEntries.total());
 
-    if (tournamentSummary.isInPrizes(person)) {
-      final var prizeAmount = tournamentSummary.getPrizeFor(person);
-      if (prizeAmount.compareTo(playerTotal) > 0) {
-        return summaryBuilder
-          .transferType(TransferType.CREDIT)
-          .transferAmount(prizeAmount.subtract(playerTotal))
-          .build();
-      }
-      if (prizeAmount.compareTo(playerTotal) < 0) {
-        return summaryBuilder
-          .transferType(TransferType.DEBIT)
-          .transferAmount(playerTotal.subtract(prizeAmount))
-          .build();
-      }
+    if (summaryTotal.compareTo(BigDecimal.ZERO) > 0) {
       return summaryBuilder
-        .transferType(TransferType.EQUAL)
+        .transferType(TransferType.CREDIT)
+        .transferAmount(summaryTotal)
+        .build();
+    }
+    if (summaryTotal.compareTo(BigDecimal.ZERO) < 0) {
+      return summaryBuilder
+        .transferType(TransferType.DEBIT)
+        .transferAmount(summaryTotal.negate())
         .build();
     }
 
     return summaryBuilder
-      .transferType(TransferType.DEBIT)
-      .transferAmount(playerTotal)
+      .transferType(TransferType.EQUAL)
       .build();
   }
-
 }

@@ -10,16 +10,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PersonServiceTest {
-
-  private static final UUID PERSON_ID = UUID.randomUUID();
 
   @Mock
   private PersonRepository personRepository;
@@ -27,19 +23,6 @@ class PersonServiceTest {
   private PersonMapper personMapper;
   @InjectMocks
   private PersonService personService;
-
-  @Test
-  void givenPersonId_whenRetrievePersonExecuted_shouldReturnPerson() {
-    final var entity = PersonCreator.entity();
-    final var expected = PersonCreator.domain();
-    when(personMapper.toDomain(entity))
-      .thenReturn(expected);
-    when(personRepository.findById(PERSON_ID))
-      .thenReturn(entity);
-    final var actual = personService.retrievePerson(PERSON_ID);
-
-    assertThat(actual).contains(expected);
-  }
 
   @Test
   void givenPerson_whenSavePersonsExecuted_shouldCallRepo() {

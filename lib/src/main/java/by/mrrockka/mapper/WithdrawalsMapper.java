@@ -1,6 +1,6 @@
 package by.mrrockka.mapper;
 
-import by.mrrockka.domain.Withdrawals;
+import by.mrrockka.domain.collection.PersonWithdrawals;
 import by.mrrockka.repo.withdrawals.WithdrawalsEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -9,5 +9,5 @@ import org.mapstruct.Mapping;
 public interface WithdrawalsMapper {
 
   @Mapping(target = "withdrawals", source = "amounts")
-  Withdrawals toDomain(WithdrawalsEntity withdrawalsEntity);
+  PersonWithdrawals toDomain(WithdrawalsEntity withdrawalsEntity);
 }

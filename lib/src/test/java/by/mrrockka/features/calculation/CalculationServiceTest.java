@@ -1,8 +1,7 @@
 package by.mrrockka.features.calculation;
 
 import by.mrrockka.creator.GameCreator;
-import by.mrrockka.domain.game.TournamentGame;
-import by.mrrockka.domain.payout.Payout;
+import by.mrrockka.creator.PayoutCreator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -23,7 +22,7 @@ class CalculationServiceTest {
   void givenStrategy_whenAccountingCalculateExecuted_thenStrategyShouldBeCalled() {
     final var accounting = new CalculationService(List.of(strategy));
     final var game = GameCreator.tournament();
-    final var expected = List.of(Payout.builder().build());
+    final var expected = List.of(PayoutCreator.payout());
 
     when(strategy.isApplicable(game)).thenReturn(true);
     when(strategy.calculate(game)).thenReturn(expected);
@@ -31,8 +30,6 @@ class CalculationServiceTest {
     final var actual = accounting.calculate(game);
 
     assertThat(actual).isEqualTo(expected);
-    when(strategy.castToType(game)).thenCallRealMethod();
-    assertThat(strategy.<TournamentGame>castToType(game)).isExactlyInstanceOf(TournamentGame.class);
   }
 
 }

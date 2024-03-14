@@ -1,4 +1,4 @@
-package by.mrrockka.domain.entries;
+package by.mrrockka.domain.collection;
 
 import by.mrrockka.domain.Person;
 import lombok.Builder;
@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Builder
-public record Entries(@NonNull Person person, @NonNull List<BigDecimal> entries) {
+public record PersonEntries(@NonNull Person person, @NonNull List<BigDecimal> entries) {
 
   public BigDecimal total() {
     return entries()
@@ -16,5 +16,4 @@ public record Entries(@NonNull Person person, @NonNull List<BigDecimal> entries)
       .reduce(BigDecimal::add)
       .orElseThrow(NoEntriesException::new);
   }
-
 }

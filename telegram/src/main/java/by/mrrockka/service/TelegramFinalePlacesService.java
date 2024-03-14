@@ -2,10 +2,10 @@ package by.mrrockka.service;
 
 import by.mrrockka.domain.finaleplaces.FinalPlace;
 import by.mrrockka.domain.finaleplaces.FinalePlaces;
-import by.mrrockka.domain.game.GameType;
 import by.mrrockka.domain.game.TournamentGame;
 import by.mrrockka.mapper.FinalePlacesMessageMapper;
 import by.mrrockka.mapper.MessageMetadataMapper;
+import by.mrrockka.repo.game.GameType;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
 import by.mrrockka.service.exception.FinalPlaceContainsTelegramOfNotExistingPlayerException;
 import by.mrrockka.service.exception.ProcessingRestrictedException;

@@ -1,6 +1,6 @@
 package by.mrrockka.service;
 
-import by.mrrockka.domain.Withdrawals;
+import by.mrrockka.domain.collection.PersonWithdrawals;
 import by.mrrockka.mapper.WithdrawalsMapper;
 import by.mrrockka.repo.withdrawals.WithdrawalsRepository;
 import lombok.NonNull;
@@ -24,7 +24,7 @@ public class WithdrawalsService {
     withdrawalsRepository.save(gameId, personId, amount, createdAt);
   }
 
-  public List<Withdrawals> getAllForGame(@NonNull final UUID gameId) {
+  public List<PersonWithdrawals> getAllForGame(@NonNull final UUID gameId) {
     final var entities = withdrawalsRepository.findAllByGameId(gameId);
 
     return entities.stream()

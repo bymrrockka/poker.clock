@@ -1,5 +1,6 @@
 package by.mrrockka.mapper;
 
+import by.mrrockka.mapper.exception.InvalidMessageFormatException;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class FinalePlacesMessageMapperTest {
 
@@ -52,7 +54,8 @@ class FinalePlacesMessageMapperTest {
           1= @mrrockka, 2. @ararat,
           3: @andrei
           """
-      )
+      ),
+      Arguments.of("/finaleplaces 1 @mrrockka, 2. @ararat,3- @andrei")
     );
   }
 
@@ -67,5 +70,20 @@ class FinalePlacesMessageMapperTest {
 
     assertThat(finalePlacesMessageMapper.map(command))
       .isEqualTo(expected);
+  }
+
+  private static Stream<Arguments> invalidMessage() {
+    return Stream.of(
+      Arguments.of("/finaleplaces 1@mrrockka, 2@ararat,3@andrei"),
+      Arguments.of("/finaleplaces\n@mrrockka @ararat"),
+      Arguments.of("/finaleplaces\n")
+    );
+  }
+
+  @ParameterizedTest
+  @MethodSource("invalidMessage")
+  void givenInvalidFinalePlacesMessage_whenMapAttempt_shouldThrowException(final String message) {
+    assertThatThrownBy(() -> finalePlacesMessageMapper.map(message))
+      .isInstanceOf(InvalidMessageFormatException.class);
   }
 }

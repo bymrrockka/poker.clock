@@ -1,6 +1,7 @@
 package by.mrrockka.service;
 
-import by.mrrockka.domain.entries.Entries;
+import by.mrrockka.domain.collection.PersonEntries;
+import by.mrrockka.domain.game.BountyGame;
 import by.mrrockka.domain.game.CashGame;
 import by.mrrockka.domain.game.Game;
 import by.mrrockka.domain.game.TournamentGame;
@@ -24,6 +25,7 @@ public class GameService {
   private final TournamentSummaryService tournamentSummaryService;
   private final EntriesService entriesService;
   private final WithdrawalsService withdrawalsService;
+  private final BountyService bountyService;
 
   public void storeTournamentGame(@NonNull final TournamentGame game) {
     gameRepository.save(gameMapper.toEntity(game));
@@ -33,12 +35,18 @@ public class GameService {
     gameRepository.save(gameMapper.toEntity(game));
   }
 
-  public TournamentGame retrieveTournamentGame(@NonNull final UUID gameId) {
-    final var gameEntity = gameRepository.findById(gameId);
-    final var entries = entriesService.getAllForGame(gameId);
-    final var gameSummary = tournamentSummaryService.assembleTournamentSummary(gameId, calculateTotalAmount(entries));
+  public void storeBountyGame(@NonNull final BountyGame game) {
+    gameRepository.save(gameMapper.toEntity(game));
+  }
 
-    return gameMapper.toTournament(gameEntity, entries, gameSummary);
+  //  todo: idea - inspect the repo for GameMetadata usage
+  public Game retrieveGame(@NonNull final UUID gameId) {
+    final var gameEntity = gameRepository.findById(gameId);
+    return switch (gameEntity.gameType()) {
+      case TOURNAMENT -> assembleTournamentGame(gameEntity);
+      case CASH -> assembleCashGame(gameEntity);
+      case BOUNTY -> assembleBountyGame(gameEntity);
+    };
   }
 
   private TournamentGame assembleTournamentGame(@NonNull final GameEntity gameEntity) {
@@ -48,12 +56,13 @@ public class GameService {
     return gameMapper.toTournament(gameEntity, entries, gameSummary);
   }
 
-  public CashGame retrieveCashGame(@NonNull final UUID gameId) {
-    final var gameEntity = gameRepository.findById(gameId);
-    final var entries = entriesService.getAllForGame(gameId);
-    final var withdrawals = withdrawalsService.getAllForGame(gameId);
+  private BountyGame assembleBountyGame(@NonNull final GameEntity gameEntity) {
+    final var entries = entriesService.getAllForGame(gameEntity.id());
+    final var bountyList = bountyService.getAllForGame(gameEntity.id());
+    final var gameSummary = tournamentSummaryService.assembleTournamentSummary(gameEntity.id(),
+                                                                               calculateTotalAmount(entries));
 
-    return gameMapper.toCash(gameEntity, entries, withdrawals);
+    return gameMapper.toBounty(gameEntity, entries, bountyList, gameSummary);
   }
 
   private CashGame assembleCashGame(@NonNull final GameEntity gameEntity) {
@@ -63,18 +72,9 @@ public class GameService {
     return gameMapper.toCash(gameEntity, entries, withdrawals);
   }
 
-  public Game retrieveGame(@NonNull final UUID gameId) {
-    final var gameEntity = gameRepository.findById(gameId);
-    return switch (gameEntity.gameType()) {
-      case TOURNAMENT -> assembleTournamentGame(gameEntity);
-      case CASH -> assembleCashGame(gameEntity);
-      case BOUNTY -> assembleTournamentGame(gameEntity);
-    };
-  }
-
-  private BigDecimal calculateTotalAmount(final List<Entries> entries) {
+  private BigDecimal calculateTotalAmount(final List<PersonEntries> entries) {
     return entries.stream()
-      .map(Entries::total)
+      .map(PersonEntries::total)
       .reduce(BigDecimal::add)
       .orElse(BigDecimal.ZERO);
   }

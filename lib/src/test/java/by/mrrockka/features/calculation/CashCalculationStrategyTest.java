@@ -2,9 +2,9 @@ package by.mrrockka.features.calculation;
 
 import by.mrrockka.creator.GameCreator;
 import by.mrrockka.creator.PersonCreator;
-import by.mrrockka.domain.Withdrawals;
-import by.mrrockka.domain.entries.Entries;
-import by.mrrockka.domain.payout.Debt;
+import by.mrrockka.domain.collection.PersonEntries;
+import by.mrrockka.domain.collection.PersonWithdrawals;
+import by.mrrockka.domain.payout.Payer;
 import by.mrrockka.domain.payout.Payout;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -52,9 +52,9 @@ class CashCalculationStrategyTest {
     final var actual = strategy.calculate(game);
     final var expected = entryAndWithdrawal.stream()
       .map(entriesWithdrawals -> Payout.builder()
-        .entries(entriesWithdrawals.getKey())
-        .withdrawals(entriesWithdrawals.getValue())
-        .debts(emptyList())
+        .personEntries(entriesWithdrawals.getKey())
+        .personWithdrawals(entriesWithdrawals.getValue())
+        .payers(emptyList())
         .build())
       .toList();
 
@@ -81,9 +81,9 @@ class CashCalculationStrategyTest {
       entryAndWithdrawal.stream()
         .filter(pair -> pair.getKey().entries().size() == 1 && pair.getValue().withdrawals().size() == 1)
         .map(entriesWithdrawals -> Payout.builder()
-          .entries(entriesWithdrawals.getKey())
-          .withdrawals(entriesWithdrawals.getValue())
-          .debts(emptyList())
+          .personEntries(entriesWithdrawals.getKey())
+          .personWithdrawals(entriesWithdrawals.getValue())
+          .payers(emptyList())
           .build())
         .toList());
 
@@ -91,14 +91,14 @@ class CashCalculationStrategyTest {
       payout(
         entryAndWithdrawal.get(size + 1).getKey(),
         entryAndWithdrawal.get(size + 1).getValue(),
-        List.of(debt(entryAndWithdrawal.get(size + 3).getKey(), entryAndWithdrawal.get(size + 3).getValue(),
+        List.of(payer(entryAndWithdrawal.get(size + 3).getKey(), entryAndWithdrawal.get(size + 3).getValue(),
                      BUY_IN.multiply(BigDecimal.valueOf(4)))
         )));
     expected.add(
       payout(
         entryAndWithdrawal.get(size).getKey(),
         entryAndWithdrawal.get(size).getValue(),
-        List.of(debt(entryAndWithdrawal.get(size + 2).getKey(), entryAndWithdrawal.get(size + 2).getValue(),
+        List.of(payer(entryAndWithdrawal.get(size + 2).getKey(), entryAndWithdrawal.get(size + 2).getValue(),
                      BUY_IN.multiply(BigDecimal.valueOf(3)))
         )));
 
@@ -108,7 +108,7 @@ class CashCalculationStrategyTest {
 
   @Test
   void givenPlayersHaveMixedBuyInAndWithdrawal_thenShouldCreateListOfDebtorsOrderedByTheAmount() {
-    final List<Pair<Entries, Withdrawals>> entryAndWithdrawal = new ArrayList<>();
+    final List<Pair<PersonEntries, PersonWithdrawals>> entryAndWithdrawal = new ArrayList<>();
     entryAndWithdrawal.add(entriesWithdrawalsPair(List.of(BUY_IN), List.of(BUY_IN, BUY_IN, BUY_IN, BUY_IN)));
     entryAndWithdrawal.add(entriesWithdrawalsPair(List.of(BUY_IN), List.of(BUY_IN, BUY_IN, BUY_IN, BUY_IN, BUY_IN)));
     entryAndWithdrawal.add(entriesWithdrawalsPair(List.of(BUY_IN, BUY_IN), List.of(BUY_IN)));
@@ -126,16 +126,16 @@ class CashCalculationStrategyTest {
       payout(
         entryAndWithdrawal.get(1).getKey(),
         entryAndWithdrawal.get(1).getValue(),
-        List.of(debt(entryAndWithdrawal.get(5).getKey(), entryAndWithdrawal.get(5).getValue(),
+        List.of(payer(entryAndWithdrawal.get(5).getKey(), entryAndWithdrawal.get(5).getValue(),
                      BUY_IN.multiply(BigDecimal.valueOf(4)))
         )),
       payout(
         entryAndWithdrawal.get(0).getKey(),
         entryAndWithdrawal.get(0).getValue(),
         List.of(
-          debt(entryAndWithdrawal.get(4).getKey(), entryAndWithdrawal.get(4).getValue(),
+          payer(entryAndWithdrawal.get(4).getKey(), entryAndWithdrawal.get(4).getValue(),
                BUY_IN.multiply(BigDecimal.valueOf(2))),
-          debt(entryAndWithdrawal.get(2).getKey(), entryAndWithdrawal.get(2).getValue(), BUY_IN)
+          payer(entryAndWithdrawal.get(2).getKey(), entryAndWithdrawal.get(2).getValue(), BUY_IN)
         )),
       payout(
         entryAndWithdrawal.get(3).getKey(),
@@ -147,30 +147,32 @@ class CashCalculationStrategyTest {
     assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
   }
 
-  private Payout payout(final Entries entries, final Withdrawals withdrawals, final List<Debt> debts) {
+  private Payout payout(final PersonEntries personEntries, final PersonWithdrawals personWithdrawals,
+                        final List<Payer> payers) {
     return Payout.builder()
-      .entries(entries)
-      .withdrawals(withdrawals)
-      .debts(debts)
+      .personEntries(personEntries)
+      .personWithdrawals(personWithdrawals)
+      .payers(payers)
       .build();
   }
 
-  private Debt debt(final Entries entries, final Withdrawals withdrawals, final BigDecimal amount) {
-    return Debt.builder()
-      .entries(entries)
-      .withdrawals(withdrawals)
+  private Payer payer(final PersonEntries personEntries, final PersonWithdrawals personWithdrawals,
+                     final BigDecimal amount) {
+    return Payer.builder()
+      .personEntries(personEntries)
+      .personWithdrawals(personWithdrawals)
       .amount(amount)
       .build();
   }
 
-  private List<Pair<Entries, Withdrawals>> entriesWithdrawalsPairList(final int size) {
+  private List<Pair<PersonEntries, PersonWithdrawals>> entriesWithdrawalsPairList(final int size) {
     return IntStream.range(0, size)
       .mapToObj(i -> entriesWithdrawalsPair(List.of(BUY_IN), List.of(BUY_IN)))
       .toList();
   }
 
-  private Pair<Entries, Withdrawals> entriesWithdrawalsPair(final List<BigDecimal> entriesAmounts,
-                                                            final List<BigDecimal> withdrawalsAmount) {
+  private Pair<PersonEntries, PersonWithdrawals> entriesWithdrawalsPair(final List<BigDecimal> entriesAmounts,
+                                                                        final List<BigDecimal> withdrawalsAmount) {
     final var person = PersonCreator.domainRandom();
     return Pair.of(
       entries(builder -> builder.person(person).entries(entriesAmounts)),

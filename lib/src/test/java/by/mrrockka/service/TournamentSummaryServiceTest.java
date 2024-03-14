@@ -3,8 +3,8 @@ package by.mrrockka.service;
 import by.mrrockka.creator.FinalePlacesCreator;
 import by.mrrockka.creator.PersonCreator;
 import by.mrrockka.creator.PrizePoolCreator;
-import by.mrrockka.domain.summary.FinalePlaceSummary;
-import by.mrrockka.domain.summary.TournamentSummary;
+import by.mrrockka.domain.summary.finale.FinalePlaceSummary;
+import by.mrrockka.domain.summary.finale.FinaleSummary;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -43,16 +43,12 @@ class TournamentSummaryServiceTest {
     when(prizePoolService.getByGameId(GAME_ID))
       .thenReturn(prizePool);
 
-
     final var actual = tournamentSummaryService.assembleTournamentSummary(GAME_ID, TOTAL_AMOUNT);
-    assertThat(actual)
-      .isEqualTo(expected);
+    assertThat(actual).isEqualTo(expected);
   }
 
-//  todo: test exception
-
-  private TournamentSummary gameSummary() {
-    return new TournamentSummary(List.of(
+  private FinaleSummary gameSummary() {
+    return new FinaleSummary(List.of(
       FinalePlaceSummary.builder()
         .amount(BigDecimal.valueOf(60))
         .position(1)
@@ -70,6 +66,4 @@ class TournamentSummaryServiceTest {
         .build()
     ));
   }
-
-
 }
