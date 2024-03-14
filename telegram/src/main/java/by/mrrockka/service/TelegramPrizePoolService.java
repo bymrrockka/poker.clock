@@ -1,6 +1,5 @@
 package by.mrrockka.service;
 
-import by.mrrockka.domain.game.TournamentGame;
 import by.mrrockka.domain.prize.PrizePool;
 import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.mapper.PrizePoolMessageMapper;
@@ -32,8 +31,8 @@ public class TelegramPrizePoolService {
       .getGameByMessageMetadata(messageMetadata)
       .orElseThrow(ChatGameNotFoundException::new);
 
-    if (!(telegramGame.game() instanceof TournamentGame)) {
-      throw new ProcessingRestrictedException(GameType.TOURNAMENT);
+    if (!(telegramGame.game().isBounty() || telegramGame.game().isTournament())) {
+      throw new ProcessingRestrictedException("%s or %s".formatted(GameType.TOURNAMENT, GameType.BOUNTY));
     }
 
     prizePoolService.store(telegramGame.game().getId(), prizePool);

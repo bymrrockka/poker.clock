@@ -6,10 +6,12 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import static by.mrrockka.mapper.CommandRegexConstants.COMMAND_APPENDIX;
+
 @Component
 @RequiredArgsConstructor
 public class BountyTelegramCommand implements TelegramCommand {
-  private static final String COMMAND = "/bounty";
+  private static final String COMMAND = "/bounty([\\s]+)%s".formatted(COMMAND_APPENDIX);
 
   private final TelegramBountyService telegramBountyService;
 
@@ -21,6 +23,6 @@ public class BountyTelegramCommand implements TelegramCommand {
   @Override
   public boolean isApplicable(final Update update) {
     return TelegramCommand.super.isApplicable(update)
-      && update.getMessage().getText().contains(COMMAND);
+      && update.getMessage().getText().matches(COMMAND);
   }
 }

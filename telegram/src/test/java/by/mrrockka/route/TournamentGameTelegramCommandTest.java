@@ -55,7 +55,8 @@ class TournamentGameTelegramCommandTest {
 
   @ParameterizedTest
   @MethodSource("tournamentMessages")
-  void givenTournamentStartMessage_whenReceived_thenShouldValidateMessageAndStoreDataAndReturnGameId(String text) {
+  void givenTournamentStartMessage_whenReceived_thenShouldValidateMessageAndStoreDataAndReturnGameId(
+    final String text) {
     final var update = update(MessageCreator.message(text));
     final var expected = SendCreator.sendMessage(builder -> builder
       .chatId(update.getMessage().getChatId())
@@ -73,7 +74,7 @@ class TournamentGameTelegramCommandTest {
     "/tournament asdasd",
     "/tournament 123123"
   })
-  void givenTournamentCommand_whenReceived_thenShouldMarkAsApplicable(String text) {
+  void givenTournamentCommand_whenReceived_thenShouldMarkAsApplicable(final String text) {
     assertThat(tournamentCommandRoute.isApplicable(update(MessageCreator.message(text)))).isTrue();
   }
 }

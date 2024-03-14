@@ -1,6 +1,5 @@
 package by.mrrockka.service;
 
-import by.mrrockka.domain.game.CashGame;
 import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.mapper.WithdrawalMessageMapper;
 import by.mrrockka.repo.game.GameType;
@@ -30,8 +29,7 @@ public class TelegramWithdrawalService {
       .getGameByMessageMetadata(messageMetadata)
       .orElseThrow(ChatGameNotFoundException::new);
 
-
-    if (!(telegramGame.game() instanceof CashGame)) {
+    if (!telegramGame.game().isCash()) {
       throw new ProcessingRestrictedException(GameType.CASH);
     }
 

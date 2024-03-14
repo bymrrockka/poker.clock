@@ -9,4 +9,5 @@ public final class CommandRegexConstants {
   public static final String DELIMITER_REGEX = "([. :\\-=]{1,3})";
   public static final String USERNAME_REPLACE_REGEX = "@me([\n \t\r\b]*)";
   public static final String BOT_NAME_REPLACE_REGEX = "@pokerclc_bot";
+  public static final String COMMAND_APPENDIX = "([\\W\\w]*)";
 }

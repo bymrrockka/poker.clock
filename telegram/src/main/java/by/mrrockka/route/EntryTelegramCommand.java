@@ -8,6 +8,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
 
+import static by.mrrockka.mapper.CommandRegexConstants.COMMAND_APPENDIX;
+
 @Component
 @RequiredArgsConstructor
 public class EntryTelegramCommand implements TelegramCommand {
@@ -23,6 +25,8 @@ public class EntryTelegramCommand implements TelegramCommand {
   @Override
   public boolean isApplicable(final Update update) {
     return TelegramCommand.super.isApplicable(update)
-      && COMMANDS.stream().anyMatch(command -> update.getMessage().getText().contains(command));
+      && COMMANDS.stream()
+      .map(str -> str + COMMAND_APPENDIX)
+      .anyMatch(command -> update.getMessage().getText().matches(command));
   }
 }

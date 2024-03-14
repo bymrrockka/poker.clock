@@ -2,7 +2,6 @@ package by.mrrockka.service;
 
 import by.mrrockka.domain.finaleplaces.FinalPlace;
 import by.mrrockka.domain.finaleplaces.FinalePlaces;
-import by.mrrockka.domain.game.TournamentGame;
 import by.mrrockka.mapper.FinalePlacesMessageMapper;
 import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.repo.game.GameType;
@@ -49,8 +48,8 @@ public class TelegramFinalePlacesService {
       .getGameByMessageMetadata(messageMetadata)
       .orElseThrow(ChatGameNotFoundException::new);
 
-    if (!(telegramGame.game() instanceof TournamentGame)) {
-      throw new ProcessingRestrictedException(GameType.TOURNAMENT);
+    if (!(telegramGame.game().isBounty() || telegramGame.game().isTournament())) {
+      throw new ProcessingRestrictedException("%s or %s".formatted(GameType.TOURNAMENT, GameType.BOUNTY));
     }
 
     finalePlacesService.store(telegramGame.game().getId(), finalePlaces);

@@ -14,9 +14,8 @@ import java.util.UUID;
 @ToString(callSuper = true)
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public final class BountyGame extends Game {
+public final class BountyGame extends TournamentGame {
 
-  FinaleSummary finaleSummary;
   @NonNull
   BigDecimal bountyAmount;
   List<Bounty> bountyList;
@@ -26,9 +25,8 @@ public final class BountyGame extends Game {
                     @NonNull final BigDecimal stack, final List<PersonEntries> entries,
                     @NonNull final BigDecimal bountyAmount, final List<Bounty> bountyList,
                     final FinaleSummary finaleSummary) {
-    super(id, buyIn, stack, entries);
+    super(id, buyIn, stack, entries, finaleSummary);
     this.bountyAmount = bountyAmount;
     this.bountyList = bountyList;
-    this.finaleSummary = finaleSummary;
   }
 }

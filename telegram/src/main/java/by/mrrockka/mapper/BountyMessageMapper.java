@@ -18,7 +18,7 @@ public class BountyMessageMapper {
     final var str = command.toLowerCase().strip();
     final var matcher = Pattern.compile(BOUNTY_REGEX).matcher(str);
     if (matcher.matches()) {
-      return Pair.of(matcher.group(2), matcher.group(5));
+      return Pair.of(matcher.group(5), matcher.group(2));
     }
 
     throw new InvalidMessageFormatException(BOUNTY_REGEX);
