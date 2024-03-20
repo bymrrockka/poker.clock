@@ -36,4 +36,8 @@ public record PersonBounties(@NonNull Person person, @NonNull List<Bounty> bount
       .reduce(BigDecimal::add)
       .orElse(BigDecimal.ZERO);
   }
+
+  public BigDecimal total() {
+    return totalTaken().subtract(totalGiven());
+  }
 }

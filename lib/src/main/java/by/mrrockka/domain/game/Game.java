@@ -30,6 +30,8 @@ public abstract class Game {
     this.entries = entries;
   }
 
+
+  //  todo: remove because is doesn't make sense if there would be extensions
   public TournamentGame asTournament() {
     return (TournamentGame) this;
   }

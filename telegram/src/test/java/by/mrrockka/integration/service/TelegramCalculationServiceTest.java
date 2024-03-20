@@ -40,19 +40,21 @@ class TelegramCalculationServiceTest {
 
     final var expected = """
       -----------------------------
+      Finale places:
+      1. @kinger won 84
+      2. @queen won 36
+      Total: 120 (4 entries * 30 buy in)
+      -----------------------------
       Payout to: @kinger
-      	Entries: -30
-      	Prize: 84
-      	Total: 54
+      	Entries: 1
+      	Total: 54 (won 84 - entries 30)
       From
       	@tenten -> 30
       	@jackas -> 24
-
       -----------------------------
       Payout to: @queen
-      	Entries: -30
-      	Prize: 36
-      	Total: 6
+      	Entries: 1
+      	Total: 6 (won 36 - entries 30)
       From
       	@jackas -> 6
       	""";
@@ -77,28 +79,26 @@ class TelegramCalculationServiceTest {
 
     final var expected = """
       -----------------------------
+      Finale places:
+      1. @tenten won 105
+      2. @queen won 45
+      Total: 150 (4 entries * 30 buy in)
+      -----------------------------
       Payout to: @tenten
-      	Entries: -30
-      	Prize: 165
-      	Bounties:
-      		Taken: 60
-      		Given: 0
-      	Total: 135
+      	Entries: 1
+      	Bounties: 60 (taken 2)
+      	Total: 135 (won 105 - entries 30 + bounties 60)
       From
       	@jackas -> 120
       	@kinger -> 15
-
       -----------------------------
       Payout to: @queen
-      	Entries: -30
-      	Prize: 45
-      	Bounties:
-      		Taken: 30
-      		Given: -30
-      	Total: 15
+      	Entries: 1
+      	Bounties: 0 (taken 1 - given 1)
+      	Total: 15 (won 45 - entries 30 + bounties 0)
       From
       	@kinger -> 15
-            """;
+      """;
     final var response = (SendMessage) telegramCalculationService.calculatePayments(update);
 
     assertAll(
@@ -121,20 +121,19 @@ class TelegramCalculationServiceTest {
     final var expected = """
       -----------------------------
       Payout to: @tenten
-      	Entries: -30
+      	Entries: 30
       	Withdrawals: 45
-      	Total: 15
+      	Total: 15 (withdrawal 45 - entries 30)
       From
       	@jackas -> 15
-            
       -----------------------------
       Payout to: @kinger
-      	Entries: -30
+      	Entries: 30
       	Withdrawals: 35
-      	Total: 5
+      	Total: 5 (withdrawal 35 - entries 30)
       From
       	@queen -> 5
-      	""";
+      """;
     final var response = (SendMessage) telegramCalculationService.calculatePayments(update);
 
     assertAll(
