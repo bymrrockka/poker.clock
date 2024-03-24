@@ -15,12 +15,11 @@ class BountyMessageMapperTest {
 
   private final BountyMessageMapper bountyMessageMapper = new BountyMessageMapper();
 
-
   private static Stream<Arguments> bountyMessage() {
     return Stream.of(
-      Arguments.of("/bounty @kinger kicked @queen", "kinger", "queen"),
-      Arguments.of("/bounty     @kinger          kicked      @queen", "kinger", "queen"),
-      Arguments.of("/bounty @queen kicked @jackas", "queen", "jackas")
+      Arguments.of("/bounty @kinger kicked @queen", "queen", "kinger"),
+      Arguments.of("/bounty     @kinger          kicked      @queen", "queen", "kinger"),
+      Arguments.of("/bounty @queen kicked @jackas", "jackas", "queen")
     );
   }
 
@@ -29,8 +28,8 @@ class BountyMessageMapperTest {
   void givenBountyMessage_whenMapAttempt_shouldParseToPair(final String command, final String left,
                                                            final String right) {
     final var actual = bountyMessageMapper.map(command);
-    assertThat(actual.getKey()).isEqualTo(left);
-    assertThat(actual.getValue()).isEqualTo(right);
+    assertThat(actual.getLeft()).isEqualTo(left);
+    assertThat(actual.getRight()).isEqualTo(right);
   }
 
   @Test

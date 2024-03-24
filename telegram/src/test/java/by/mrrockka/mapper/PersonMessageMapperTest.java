@@ -4,6 +4,7 @@ import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.mapper.person.NoPlayersException;
 import by.mrrockka.mapper.person.PersonMessageMapper;
 import lombok.Builder;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -23,6 +24,12 @@ class PersonMessageMapperTest {
 
   @Builder
   private record PersonsMessageArgument(String message, List<TelegramPerson> persons) {}
+
+  @BeforeEach
+  void setup() {
+    personMessageMapper.setBotName("pokerbot");
+  }
+
 
   private static Stream<Arguments> personsMessage() {
     return Stream.of(
@@ -52,7 +59,7 @@ class PersonMessageMapperTest {
       Arguments.of(
         PersonsMessageArgument.builder()
           .message("""
-                     /tournament 
+                     /tournament@pokerbot 
                      buyin:    15zl    
                      stack: 1.5k
                        @mrrockka
@@ -91,7 +98,7 @@ class PersonMessageMapperTest {
                      /tournament 
                      buyin:    15zl    
                      stack: 1.5k
-                     @mrrockka @ivano @andrei @ivano @andrei @mrrockka @miscusi   
+                     @mrrockka @ivano @andrei @ivano @andrei @mrrockka @miscusi @pokerbot   
                              """)
           .persons(List.of(
             TelegramPerson.telegramPersonBuilder()
@@ -151,7 +158,6 @@ class PersonMessageMapperTest {
   @ParameterizedTest
   @MethodSource("personsMessage")
   void givenMessage_whenMapExecuted_shouldReturnPersonsList(PersonsMessageArgument argument) {
-
     assertThat(personMessageMapper.map(argument.message(), CHAT_ID))
       .usingRecursiveComparison()
       .ignoringFields("id")
