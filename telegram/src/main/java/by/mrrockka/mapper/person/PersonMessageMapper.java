@@ -1,7 +1,9 @@
 package by.mrrockka.mapper.person;
 
 import by.mrrockka.domain.TelegramPerson;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -15,6 +17,10 @@ import static by.mrrockka.mapper.CommandRegexConstants.TELEGRAM_NAME_REGEX;
 @Component
 public class PersonMessageMapper {
 
+  @Value("telegrambots.name")
+  @Setter
+  private String botName;
+
   public List<TelegramPerson> map(final String command, final Long chatId) {
     final var strings = command.toLowerCase()
       .stripTrailing()
@@ -24,6 +30,7 @@ public class PersonMessageMapper {
     final var persons = Arrays.stream(strings)
       .distinct()
       .filter(StringUtils::isNotBlank)
+      .filter(str -> !str.contains(botName))
       .map(telegramPattern::matcher)
       .filter(Matcher::matches)
       .map(matcher -> TelegramPerson.telegramPersonBuilder()
