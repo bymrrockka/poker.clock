@@ -7,12 +7,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
 import java.util.Objects;
-
-import static java.util.Objects.nonNull;
 
 @Slf4j
 @Component
@@ -25,16 +24,13 @@ public class PokerClockBotRouter extends TelegramLongPollingBot {
 
   @Override
   public void onUpdateReceived(final Update update) {
-    if (!telegramCommands.isEmpty()) {
-      telegramCommands.stream()
-        .filter(telegramCommand -> telegramCommand.isApplicable(update))
-        .map(telegramCommand -> telegramCommand.process(update))
-        .filter(Objects::nonNull)
-        .forEach(this::executeMessage);
-    } else if (nonNull(update.getMessage())) {
-      log.error("No routes found for \"${}\"", update.getMessage().getText());
-      throw new NoRoutesFoundException(update.getMessage().getText());
-    }
+    telegramCommands.stream()
+      .filter(telegramCommand -> telegramCommand.isApplicable(update))
+      .map(telegramCommand -> telegramCommand.process(update))
+      .filter(Objects::nonNull)
+      .findFirst()
+      .map(this::executeMessage)
+      .orElseThrow(() -> new NoRoutesFoundException(update.getMessage().getText()));
   }
 
   @Override
@@ -48,8 +44,8 @@ public class PokerClockBotRouter extends TelegramLongPollingBot {
   }
 
   @SneakyThrows
-  private void executeMessage(final BotApiMethodMessage message) {
-    execute(message);
+  private Message executeMessage(final BotApiMethodMessage message) {
+    return execute(message);
   }
 
 }
