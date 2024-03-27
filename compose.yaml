@@ -6,6 +6,7 @@ services:
       - 'DB_PASSWORD=r8E6&r3>'
       - 'DB_URL=jdbc:postgresql://postgres:5432/pokerclock?sslmode=disable'
       - 'DB_USER=psuser'
+      - 'PROFILES=production,postgres'
     depends_on:
       - postgres
   postgres:
