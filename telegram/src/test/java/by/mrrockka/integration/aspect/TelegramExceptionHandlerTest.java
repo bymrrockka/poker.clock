@@ -1,5 +1,6 @@
-package by.mrrockka.aspect;
+package by.mrrockka.integration.aspect;
 
+import by.mrrockka.aspect.TelegramExceptionHandler;
 import by.mrrockka.creator.ChatCreator;
 import by.mrrockka.creator.MessageCreator;
 import by.mrrockka.creator.UpdateCreator;

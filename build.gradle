@@ -1,4 +1,2 @@
 group = 'by.mrrockka'
 version = '1.0-SNAPSHOT'
-
-tasks.register("integrationTest", Test) {}

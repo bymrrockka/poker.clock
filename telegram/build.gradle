@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'idea'
     id 'maven-publish'
     id 'application'
     alias(libs.plugins.springBootPlugin)
@@ -66,31 +67,37 @@ application {
 
 sourceSets {
     integration {
-//        java.srcDir ['src/test/integration/java']
-//        resources.srcDir 'src/test/resources'
+        java.srcDir "$projectDir/src/test/java"
+        resources.srcDir "$projectDir/src/test/resources"
         compileClasspath += main.output + test.output
         runtimeClasspath += main.output + test.output
     }
 }
 
 configurations {
+    integrationImplementation.extendsFrom testImplementation
     integrationCompile.extendsFrom testCompile
     integrationRuntime.extendsFrom testRuntime
 }
 
 test {
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
     useJUnitPlatform()
     filter.excludeTestsMatching "by.mrrockka.integration.*"
-//    testClassesDirs = sourceSets.test.output.classesDirs
-//    classpath = sourceSets.test.runtimeClasspath
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
 }
 
-task register("integrationTest", Test) {
+task integrationTest(type: Test) {
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
     useJUnitPlatform()
     filter.includeTestsMatching "by.mrrockka.integration.*"
-//    testClassesDirs = sourceSets.integration.output.classesDirs
-//    classpath = sourceSets.integration.runtimeClasspath
-//    mustRunAfter test
+    testClassesDirs = sourceSets.integration.output.classesDirs
+    classpath = sourceSets.integration.runtimeClasspath
 }
 
 check.dependsOn integrationTest
