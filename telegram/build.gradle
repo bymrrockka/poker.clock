@@ -8,10 +8,21 @@ plugins {
 
 group = 'by.mrrockka'
 version = '1.0-SNAPSHOT'
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+defaultTasks "clean", "assemble"
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs = [
+            '-Amapstruct.suppressGeneratorTimestamp=true',
+            '-Amapstruct.defaultComponentModel=spring',
+    ]
+}
 
 repositories {
-    mavenLocal()
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
@@ -49,10 +60,37 @@ dependencies {
     testImplementation(testFixtures(project(":lib")))
 }
 
-test {
-    useJUnitPlatform()
-}
-
 application {
     mainClass = 'by.mrrockka.TelegramApplication'
 }
+
+sourceSets {
+    integration {
+//        java.srcDir ['src/test/integration/java']
+//        resources.srcDir 'src/test/resources'
+        compileClasspath += main.output + test.output
+        runtimeClasspath += main.output + test.output
+    }
+}
+
+configurations {
+    integrationCompile.extendsFrom testCompile
+    integrationRuntime.extendsFrom testRuntime
+}
+
+test {
+    useJUnitPlatform()
+    filter.excludeTestsMatching "by.mrrockka.integration.*"
+//    testClassesDirs = sourceSets.test.output.classesDirs
+//    classpath = sourceSets.test.runtimeClasspath
+}
+
+task register("integrationTest", Test) {
+    useJUnitPlatform()
+    filter.includeTestsMatching "by.mrrockka.integration.*"
+//    testClassesDirs = sourceSets.integration.output.classesDirs
+//    classpath = sourceSets.integration.runtimeClasspath
+//    mustRunAfter test
+}
+
+check.dependsOn integrationTest

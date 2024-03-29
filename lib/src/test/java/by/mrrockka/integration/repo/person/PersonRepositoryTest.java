@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(PostgreSQLExtension.class)
-@SpringBootTest(classes = {IntegrationTestConfiguration.class})
+@SpringBootTest(classes = IntegrationTestConfiguration.class)
 class PersonRepositoryTest {
 
   @Autowired

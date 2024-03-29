@@ -5,7 +5,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ComponentScan({"by.mrrockka"})
+@ComponentScan("by.mrrockka")
 @EnableAutoConfiguration
 public class IntegrationTestConfiguration {
 }

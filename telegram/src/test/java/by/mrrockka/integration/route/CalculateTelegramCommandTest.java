@@ -1,7 +1,8 @@
-package by.mrrockka.route;
+package by.mrrockka.integration.route;
 
 import by.mrrockka.config.PostgreSQLExtension;
 import by.mrrockka.creator.MessageCreator;
+import by.mrrockka.route.CalculateTelegramCommand;
 import lombok.Builder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;

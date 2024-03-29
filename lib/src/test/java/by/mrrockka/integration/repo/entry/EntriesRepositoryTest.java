@@ -18,7 +18,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(PostgreSQLExtension.class)
-@SpringBootTest(classes = {IntegrationTestConfiguration.class})
+@SpringBootTest(classes = IntegrationTestConfiguration.class)
 class EntriesRepositoryTest {
   private static final UUID GAME_ID = UUID.fromString("fa3d03c4-f411-4852-810f-c0cc2f5b8c84");
 

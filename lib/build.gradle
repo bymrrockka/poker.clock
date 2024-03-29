@@ -8,9 +8,21 @@ plugins {
 
 group = 'by.mrrockka'
 version = '1.0-SNAPSHOT'
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+defaultTasks "clean", "assemble"
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs = [
+            '-Amapstruct.suppressGeneratorTimestamp=true',
+            '-Amapstruct.defaultComponentModel=spring',
+    ]
+}
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
@@ -45,6 +57,43 @@ dependencies {
     }
 }
 
+sourceSets {
+    integration {
+//        java.srcDir ['src/test/integration/java']
+//        resources.srcDir 'src/test/resources'
+        compileClasspath += main.output + test.output
+        runtimeClasspath += main.output + test.output
+    }
+}
+
+configurations {
+    integrationCompile.extendsFrom testCompile
+    integrationRuntime.extendsFrom testRuntime
+}
+
 test {
     useJUnitPlatform()
+    filter.excludeTestsMatching "by.mrrockka.integration.*"
+}
+
+tasks.register("integrationTest", Test) {
+    useJUnitPlatform()
+    filter.includeTestsMatching "by.mrrockka.integration.*"
+    testClassesDirs = sourceSets.integration.output.classesDirs
+    classpath = sourceSets.integration.runtimeClasspath
+    mustRunAfter test
+}
+
+check.dependsOn integrationTest
+
+bootJar {
+    enabled = false
+}
+
+bootRun {
+    enabled = false
+}
+
+jar {
+    enabled = true
 }

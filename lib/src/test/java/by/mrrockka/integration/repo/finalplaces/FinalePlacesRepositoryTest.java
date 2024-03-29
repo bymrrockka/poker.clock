@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(PostgreSQLExtension.class)
-@SpringBootTest(classes = {IntegrationTestConfiguration.class})
+@SpringBootTest(classes = IntegrationTestConfiguration.class)
 class FinalePlacesRepositoryTest {
 
   private static final Map<Integer, UUID> PLACES = Map.of(
