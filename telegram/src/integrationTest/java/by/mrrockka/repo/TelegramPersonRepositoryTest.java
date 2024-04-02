@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest
-@ActiveProfiles("integration")
+@ActiveProfiles("repository")
 class TelegramPersonRepositoryTest {
 
   private static final UUID PERSON_ID = UUID.fromString("e2691144-3b1b-4841-9693-fad7af25bba9");

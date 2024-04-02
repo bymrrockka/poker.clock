@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest
-@ActiveProfiles("integration")
+@ActiveProfiles("repository")
 class TelegramFinalePlacesServiceTest {
 
   private static final Long CHAT_ID = 123L;

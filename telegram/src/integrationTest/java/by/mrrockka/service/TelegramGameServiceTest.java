@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest
-@ActiveProfiles("integration")
+@ActiveProfiles("repository")
 class TelegramGameServiceTest {
 
   private static final String TOURNAMENT_MESSAGE = """

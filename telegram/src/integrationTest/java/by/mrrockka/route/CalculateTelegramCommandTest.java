@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest
-@ActiveProfiles("integration")
+@ActiveProfiles("repository")
 class CalculateTelegramCommandTest {
 
   @Autowired

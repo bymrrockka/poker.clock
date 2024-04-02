@@ -65,7 +65,7 @@ testing {
                 all {
                     testTask.configure {
                         testLogging {
-                            events("passed", "skipped", "failed", "standard_out")
+                            events("passed", "failed")
                         }
                     }
                 }

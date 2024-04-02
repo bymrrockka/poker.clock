@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest
-@ActiveProfiles("integration")
+@ActiveProfiles("repository")
 class TelegramWithdrawalServiceTest {
 
   private static final UUID GAME_ID = UUID.fromString("51d973b6-cde3-4bbb-b67b-7555243dbc15");

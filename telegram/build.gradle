@@ -71,7 +71,7 @@ testing {
                 all {
                     testTask.configure {
                         testLogging {
-                            events("passed", "skipped", "failed", "standard_out")
+                            events("passed", "failed")
                         }
                     }
                 }
@@ -95,7 +95,6 @@ testing {
 
                 implementation(project())
                 implementation(testFixtures(project()))
-//                implementation(project(":lib"))
                 implementation(testFixtures(project(":lib")))
             }
         }
