@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'idea'
     id 'maven-publish'
+    id 'jvm-test-suite'
     id 'java-test-fixtures'
     alias(libs.plugins.springBootPlugin)
     alias(libs.plugins.springDepManagementPlugin)
@@ -42,14 +43,12 @@ dependencies {
     testCompileOnly libs.lombok
     testAnnotationProcessor libs.lombok
     testAnnotationProcessor libs.mapstructProcessor
+    testImplementation libs.assertjCore
 
     testFixturesCompileOnly libs.lombok
     testFixturesAnnotationProcessor libs.lombok
     testFixturesAnnotationProcessor libs.mapstructProcessor
-
-    testImplementation libs.assertjCore
-    testImplementation libs.springBootTest
-
+    testFixturesApi libs.springBootTest
     testFixturesApi libs.testContainerPostgresql
     testFixturesApi libs.testContainerJupiter
     testFixturesApi libs.jupiter
@@ -58,41 +57,38 @@ dependencies {
     }
 }
 
-sourceSets {
-    integration {
-        java.srcDir "$projectDir/src/test/java"
-        resources.srcDir "$projectDir/src/test/resources"
-        compileClasspath += main.output + test.output
-        runtimeClasspath += main.output + test.output
+testing {
+    suites {
+        configureEach {
+            useJUnitJupiter()
+            targets {
+                all {
+                    testTask.configure {
+                        testLogging {
+                            events("passed", "skipped", "failed", "standard_out")
+                        }
+                    }
+                }
+            }
+        }
+
+        integrationTest(JvmTestSuite) {
+            dependencies {
+                implementation libs.assertjCore
+                implementation libs.springBootTest
+
+                compileOnly libs.lombok
+                annotationProcessor libs.lombok
+                annotationProcessor libs.mapstructProcessor
+
+                implementation(project())
+                implementation(testFixtures(project()))
+            }
+        }
     }
 }
 
-configurations {
-//    integrationCompile.extendsFrom testCompile
-//    integrationRuntime.extendsFrom testRuntime
-}
-
-test {
-    testLogging {
-        events "passed", "skipped", "failed"
-    }
-    useJUnitPlatform()
-    filter.excludeTestsMatching "by.mrrockka.integration.*"
-//    testClassesDirs = sourceSets.test.output.classesDirs
-//    classpath = sourceSets.test.runtimeClasspath
-}
-
-task integrationTest(type: Test) {
-    testLogging {
-        events "passed", "skipped", "failed"
-    }
-    useJUnitPlatform()
-    filter.includeTestsMatching "by.mrrockka.integration.*"
-    testClassesDirs = sourceSets.test.output.classesDirs
-    classpath = configurations.testRuntimeClasspath + sourceSets.test.runtimeClasspath
-}
-
-check.dependsOn integrationTest
+check.dependsOn(testing.suites.integrationTest)
 
 bootJar {
     enabled = false
