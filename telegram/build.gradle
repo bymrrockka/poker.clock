@@ -102,3 +102,12 @@ testing {
 }
 
 check.dependsOn(testing.suites.integrationTest)
+
+jar {
+    enabled = false
+}
+
+bootJar {
+    enabled = true
+    archiveFileName = "pokerclock-telegram-1.0.jar"
+}

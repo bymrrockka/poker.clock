@@ -100,4 +100,5 @@ bootRun {
 
 jar {
     enabled = true
+    archiveFileName = "pokerclock-lib-1.0.jar"
 }
