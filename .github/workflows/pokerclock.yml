@@ -31,12 +31,12 @@ jobs:
           distribution: 'adopt'
           architecture: 'x64'
           cache: 'gradle'
-      #
-      #      - name: Setup Gradle
-      #        uses: gradle/gradle-build-action@v2
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
 
       - name: Run build with Gradle Wrapper
-        run: ./gradlew assemble --no-daemon
+        run: ./gradlew build
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
@@ -50,5 +50,5 @@ jobs:
           name: pokerclock-telegram
           path: 'telegram/build/libs/*.jar'
 
-      - name: Run build with Gradle Wrapper
+      - name: Run integration tests
         run: ./gradlew test
