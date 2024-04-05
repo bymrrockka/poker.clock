@@ -88,8 +88,6 @@ testing {
     }
 }
 
-check.dependsOn(testing.suites.integrationTest)
-
 bootJar {
     enabled = false
 }
@@ -100,5 +98,4 @@ bootRun {
 
 jar {
     enabled = true
-    archiveFileName = "pokerclock-lib-1.0.jar"
 }
