@@ -1,17 +1,31 @@
 plugins {
     id 'java'
+    id 'idea'
     id 'maven-publish'
     id 'application'
+    id 'jvm-test-suite'
+    id 'java-test-fixtures'
     alias(libs.plugins.springBootPlugin)
     alias(libs.plugins.springDepManagementPlugin)
 }
 
 group = 'by.mrrockka'
 version = '1.0-SNAPSHOT'
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+defaultTasks "clean", "assemble"
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs = [
+            '-Amapstruct.suppressGeneratorTimestamp=true',
+            '-Amapstruct.defaultComponentModel=spring',
+    ]
+}
 
 repositories {
-    mavenLocal()
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
@@ -25,34 +39,67 @@ dependencies {
     implementation libs.liquibase
     implementation libs.mapstructCore
     implementation libs.lombokMapstructBinding
-
     runtimeOnly libs.aspectjWeaver
-
     compileOnly libs.lombok
     annotationProcessor libs.lombok
     annotationProcessor libs.mapstructProcessor
+
     testCompileOnly libs.lombok
     testAnnotationProcessor libs.lombok
     testAnnotationProcessor libs.mapstructProcessor
-
-    testRuntimeOnly libs.aspectjWeaver
     testImplementation libs.mockitoCore
     testImplementation libs.mockitoJupiter
     testImplementation libs.jupiter
     testImplementation libs.assertjCore
-    testImplementation libs.testContainerPostgresql
-    testImplementation libs.testContainerJupiter
-    testImplementation libs.springBootTest
-    testImplementation(libs.javaFaker) {
-        exclude group: 'org.yaml'
-    }
+    testImplementation(testFixtures(project))
     testImplementation(testFixtures(project(":lib")))
-}
 
-test {
-    useJUnitPlatform()
+    testFixturesCompileOnly libs.lombok
+    testFixturesAnnotationProcessor libs.lombok
+    testFixturesAnnotationProcessor libs.mapstructProcessor
+    testFixturesApi libs.springBootTelegrambots
+    testFixturesImplementation(project)
+    testFixturesImplementation(testFixtures(project(":lib")))
 }
 
 application {
     mainClass = 'by.mrrockka.TelegramApplication'
+}
+
+testing {
+    suites {
+        configureEach {
+            useJUnitJupiter()
+            targets {
+                all {
+                    testTask.configure {
+                        testLogging {
+                            events("passed", "failed")
+                        }
+                    }
+                }
+            }
+        }
+
+        integrationTest(JvmTestSuite) {
+            dependencies {
+                implementation libs.springBootJdbc
+                implementation libs.springBootWeb
+                implementation libs.springBootAop
+                implementation libs.springBootTelegrambots
+                implementation libs.assertjCore
+                implementation libs.springBootTest
+                implementation libs.liquibase
+                runtimeOnly libs.aspectjWeaver
+
+                compileOnly libs.lombok
+                annotationProcessor libs.lombok
+                annotationProcessor libs.mapstructProcessor
+
+                implementation(project())
+                implementation(testFixtures(project()))
+                implementation(testFixtures(project(":lib")))
+            }
+        }
+    }
 }

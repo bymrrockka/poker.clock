@@ -4,8 +4,9 @@ import org.testcontainers.containers.PostgreSQLContainer;
 
 class TestPostgreSQLContainer extends PostgreSQLContainer<TestPostgreSQLContainer> {
 
-  private static final String IMAGE_VERSION = "postgres:16.1";
-  private static final String DB_NAME = "pokerclock";
+  public static final String VERSION = "16.1";
+  public static final String IMAGE_AND_VERSION = "postgres:%s".formatted(VERSION);
+  public static final String DB_NAME = "pokerclock";
   private static final String USERNAME = "itest";
   private static final String PASSWORD = "itest123";
 
@@ -15,7 +16,7 @@ class TestPostgreSQLContainer extends PostgreSQLContainer<TestPostgreSQLContaine
     .withPassword(PASSWORD);
 
   TestPostgreSQLContainer() {
-    super(IMAGE_VERSION);
+    super(IMAGE_AND_VERSION);
   }
 
 }

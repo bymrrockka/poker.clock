@@ -16,7 +16,10 @@ import java.util.List;
 public class TelegramExceptionHandler {
 
   @SneakyThrows
-  @AfterThrowing(pointcut = "execution(* *.onUpdatesReceived(..)) && target(router) && args(updates)", throwing = "exception")
+  @AfterThrowing(
+    pointcut = "execution(* *.onUpdatesReceived(..)) && target(router) && args(updates)",
+    argNames = "exception,router,updates",
+    throwing = "exception")
   public void handleExceptions(final Throwable exception, final AbsSender router, final List<Update> updates) {
     String message = "ERROR\nMessage: Exception occurred during processing a command.";
     if (exception instanceof BusinessException) {

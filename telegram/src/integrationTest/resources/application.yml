@@ -1,0 +1,7 @@
+telegrambots:
+  enabled: false
+  token:
+
+spring:
+  liquibase:
+    enabled: false
