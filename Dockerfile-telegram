@@ -2,6 +2,6 @@ FROM openjdk:17
 
 WORKDIR /app
 
-COPY telegram/build/libs/telegram-1.0-SNAPSHOT.jar telegram.jar
+COPY telegram/build/libs/telegram-bot-*.jar telegram.jar
 
 ENTRYPOINT ["java", "-jar", "/app/telegram.jar"]
