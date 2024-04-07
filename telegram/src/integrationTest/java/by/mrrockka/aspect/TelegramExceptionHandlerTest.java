@@ -4,7 +4,7 @@ import by.mrrockka.creator.ChatCreator;
 import by.mrrockka.creator.MessageCreator;
 import by.mrrockka.creator.UpdateCreator;
 import by.mrrockka.exception.BusinessException;
-import by.mrrockka.route.PokerClockBotRouter;
+import by.mrrockka.route.PokerClockBot;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.*;
 class TelegramExceptionHandlerTest {
 
   @MockBean
-  private PokerClockBotRouter pokerClockBotRouter;
+  private PokerClockBot pokerClockBot;
 
   @MockBean
   private DataSource dataSource;
@@ -60,11 +60,11 @@ class TelegramExceptionHandlerTest {
       .text(text)
       .build();
 
-    doCallRealMethod().when(pokerClockBotRouter).onUpdatesReceived(updates);
-    doThrow(ex).when(pokerClockBotRouter).onUpdateReceived(updates.get(0));
-    assertThatThrownBy(() -> pokerClockBotRouter.onUpdatesReceived(updates));
+    doCallRealMethod().when(pokerClockBot).onUpdatesReceived(updates);
+    doThrow(ex).when(pokerClockBot).onUpdateReceived(updates.get(0));
+    assertThatThrownBy(() -> pokerClockBot.onUpdatesReceived(updates));
 
-    when(pokerClockBotRouter.execute(expected)).thenReturn(MessageCreator.message());
+    when(pokerClockBot.execute(expected)).thenReturn(MessageCreator.message());
   }
 
 }

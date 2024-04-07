@@ -5,6 +5,7 @@ import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
 import by.mrrockka.service.game.TelegramGameService;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -20,6 +21,15 @@ public class TelegramEntryService {
   private final TelegramPersonService telegramPersonService;
   private final MessageMetadataMapper messageMetadataMapper;
 
+/*todo:
+   1. retrieve users using additional commands like
+   - GetChat
+   - GetChatMember
+
+*
+* */
+
+  @SneakyThrows
   public BotApiMethodMessage storeEntry(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
     final var nicknameAndAmount = entryMessageMapper.map(messageMetadata.command());

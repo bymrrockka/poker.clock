@@ -1,4 +1,4 @@
-package by.mrrockka.route;
+package by.mrrockka.route.commands;
 
 import by.mrrockka.service.game.TelegramGameService;
 import lombok.RequiredArgsConstructor;
@@ -10,19 +10,25 @@ import static by.mrrockka.mapper.CommandRegexConstants.COMMAND_APPENDIX;
 
 @Component
 @RequiredArgsConstructor
-public class CashGameTelegramCommand implements TelegramCommand {
-  private static final String COMMAND = "/cash%s".formatted(COMMAND_APPENDIX);
+public class BountyGameTelegramCommand implements TelegramCommand {
+  private static final String COMMAND = "/bounty_tournament%s".formatted(COMMAND_APPENDIX);
   private final TelegramGameService gameService;
 
   @Override
   public BotApiMethodMessage process(final Update update) {
-    return gameService.storeCashGame(update);
+    return gameService.storeBountyGame(update);
   }
 
   @Override
-  public boolean isApplicable(final Update update) {
-    return TelegramCommand.super.isApplicable(update) &&
-      update.getMessage().getText().matches(COMMAND);
+  public String commandPattern() {
+    return COMMAND;
   }
+
+  /*
+
+  update.getMessage().getEntities().stream().filter(entity -> entity.getType().equals("bot_command")).findFirst()
+
+
+  * */
 
 }

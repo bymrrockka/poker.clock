@@ -1,4 +1,4 @@
-package by.mrrockka.route;
+package by.mrrockka.route.commands;
 
 import by.mrrockka.service.TelegramFinalePlacesService;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +21,8 @@ public class FinalePlacesTelegramCommand implements TelegramCommand {
   }
 
   @Override
-  public boolean isApplicable(final Update update) {
-    return TelegramCommand.super.isApplicable(update)
-      && update.getMessage().getText().matches(COMMAND);
+  public String commandPattern() {
+    return COMMAND;
   }
+
 }

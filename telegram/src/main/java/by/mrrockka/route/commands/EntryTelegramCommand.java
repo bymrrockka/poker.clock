@@ -1,4 +1,4 @@
-package by.mrrockka.route;
+package by.mrrockka.route.commands;
 
 import by.mrrockka.service.TelegramEntryService;
 import lombok.RequiredArgsConstructor;
@@ -6,14 +6,10 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.util.List;
-
-import static by.mrrockka.mapper.CommandRegexConstants.COMMAND_APPENDIX;
-
 @Component
 @RequiredArgsConstructor
 public class EntryTelegramCommand implements TelegramCommand {
-  private static final List<String> COMMANDS = List.of("/entry", "/reentry");
+  private static final String COMMAND = "/entry";
 
   private final TelegramEntryService telegramEntryService;
 
@@ -23,10 +19,8 @@ public class EntryTelegramCommand implements TelegramCommand {
   }
 
   @Override
-  public boolean isApplicable(final Update update) {
-    return TelegramCommand.super.isApplicable(update)
-      && COMMANDS.stream()
-      .map(str -> str + COMMAND_APPENDIX)
-      .anyMatch(command -> update.getMessage().getText().matches(command));
+  public String commandPattern() {
+    return COMMAND;
   }
+
 }

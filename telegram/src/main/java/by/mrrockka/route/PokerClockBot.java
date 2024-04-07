@@ -1,14 +1,17 @@
 package by.mrrockka.route;
 
+import by.mrrockka.route.commands.TelegramCommand;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
+import org.telegram.telegrambots.meta.generics.BotOptions;
+import org.telegram.telegrambots.meta.generics.LongPollingBot;
+import org.telegram.telegrambots.util.WebhookUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -16,10 +19,10 @@ import java.util.Objects;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class PokerClockBotRouter extends TelegramLongPollingBot {
+public class PokerClockBot implements LongPollingBot {
+
   private static final String BOT_NAME = "Poker calculator bot";
-  @Value("${telegrambots.token}")
-  private String token;
+  private final PokerClockAbsSender pokerClockAbsSender;
   private final List<TelegramCommand> telegramCommands;
 
   @Override
@@ -38,14 +41,28 @@ public class PokerClockBotRouter extends TelegramLongPollingBot {
     return BOT_NAME;
   }
 
-  @Override
-  public String getBotToken() {
-    return token;
-  }
-
   @SneakyThrows
   private Message executeMessage(final BotApiMethodMessage message) {
-    return execute(message);
+    return pokerClockAbsSender.execute(message);
   }
 
+  @Override
+  public void clearWebhook() throws TelegramApiRequestException {
+    WebhookUtils.clearWebhook(pokerClockAbsSender);
+  }
+
+  @Override
+  public void onClosing() {
+    pokerClockAbsSender.shutdown();
+  }
+
+  @Override
+  public BotOptions getOptions() {
+    return pokerClockAbsSender.getOptions();
+  }
+
+  @Override
+  public String getBotToken() {
+    return pokerClockAbsSender.getBotToken();
+  }
 }

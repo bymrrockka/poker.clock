@@ -1,4 +1,4 @@
-package by.mrrockka.route;
+package by.mrrockka.route.commands;
 
 import by.mrrockka.service.TelegramCalculationService;
 import lombok.RequiredArgsConstructor;
@@ -28,5 +28,11 @@ public class CalculateTelegramCommand implements TelegramCommand {
     return TelegramCommand.super.isApplicable(update) &&
       update.getMessage().getText().matches(COMMAND.formatted(botName));
   }
+
+  @Override
+  public String commandPattern() {
+    return COMMAND;
+  }
+
 
 }

@@ -3,6 +3,7 @@ package by.mrrockka.route;
 import by.mrrockka.creator.MessageCreator;
 import by.mrrockka.creator.SendCreator;
 import by.mrrockka.creator.UpdateCreator;
+import by.mrrockka.route.commands.TournamentGameTelegramCommand;
 import by.mrrockka.service.game.TelegramGameService;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
