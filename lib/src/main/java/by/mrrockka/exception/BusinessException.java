@@ -17,11 +17,12 @@ public class BusinessException extends RuntimeException {
   String code;
   String humanReadableCode;
 
+  public BusinessException(@NonNull final String message) {
+    this(message, null);
+  }
+
   public BusinessException(@NonNull final String message, final String humanReadableCode) {
-    super(message);
-    this.message = message;
-    this.humanReadableCode = humanReadableCode;
-    this.code = null;
+    this(message, null, humanReadableCode);
   }
 
   public BusinessException(@NonNull final String message, final String code, final String humanReadableCode) {
@@ -37,7 +38,9 @@ public class BusinessException extends RuntimeException {
 
     strBuilder.append("ERROR\n");
     strBuilder.append("Message: %s\n".formatted(message));
-    strBuilder.append("Readable code: %s\n".formatted(humanReadableCode));
+    if (StringUtils.isNoneBlank(humanReadableCode)) {
+      strBuilder.append("Readable code: %s\n".formatted(humanReadableCode));
+    }
     if (StringUtils.isNoneBlank(code)) {
       strBuilder.append("Code: %s\n".formatted(code));
     }

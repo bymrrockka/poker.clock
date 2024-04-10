@@ -24,11 +24,4 @@ public class BountyGameTelegramCommand implements TelegramCommand {
     return COMMAND;
   }
 
-  /*
-
-  update.getMessage().getEntities().stream().filter(entity -> entity.getType().equals("bot_command")).findFirst()
-
-
-  * */
-
 }

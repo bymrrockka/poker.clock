@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.function.Consumer;
 
 import static java.util.Objects.nonNull;
@@ -23,7 +24,8 @@ public final class MessageMetadataCreator {
       .id(MessageCreator.MESSAGE_ID)
       .createdAt(MessageCreator.MESSAGE_TIMESTAMP.truncatedTo(ChronoUnit.SECONDS))
       .chatId(ChatCreator.CHAT_ID)
-      .command(MessageCreator.MESSAGE_TEXT);
+      .command(MessageCreator.MESSAGE_TEXT)
+      .entities(List.of(MessageEntityCreator.domainEntity()));
 
     if (nonNull(messageMetadataBuilderConsumer)) {
       messageMetadataBuilderConsumer.accept(messageMetadataBuilder);

@@ -1,6 +1,9 @@
 package by.mrrockka.mapper.person;
 
+import by.mrrockka.domain.MessageEntityType;
+import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.TelegramPerson;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,12 +18,17 @@ import java.util.regex.Pattern;
 import static by.mrrockka.mapper.CommandRegexConstants.TELEGRAM_NAME_REGEX;
 
 @Component
+@RequiredArgsConstructor
 public class PersonMessageMapper {
+
+  private final TelegramPersonMapper personMapper;
 
   @Value("${telegrambots.name}")
   @Setter
   private String botName;
 
+
+  @Deprecated(since = "1.1.0", forRemoval = true)
   public List<TelegramPerson> map(final String command, final Long chatId) {
     final var strings = command.toLowerCase()
       .stripTrailing()
@@ -45,6 +53,31 @@ public class PersonMessageMapper {
     }
 
     return persons;
+  }
+
+  public List<TelegramPerson> map(final MessageMetadata messageMetadata) {
+    final var playersMentions = messageMetadata.entities().stream()
+      .filter(entity -> entity.type().equals(MessageEntityType.MENTION))
+      .filter(entity -> !entity.text().contains(botName))
+      .toList();
+
+    final var playerTextMention = messageMetadata.entities().stream()
+      .filter(entity -> entity.type().equals(MessageEntityType.TEXT_MENTION))
+      .findFirst();
+
+    if (playersMentions.isEmpty()) {
+      throw new NoPlayersException();
+    }
+
+    if (playersMentions.size() == 1) {
+      throw new OnlyOnePlayerSpecifiedException();
+    }
+
+    if (playerTextMention.isPresent()) {
+      throw new PlayerHasNoNicknameException(playerTextMention.get().text());
+    }
+
+    return personMapper.mapMessageToTelegrams(playersMentions, messageMetadata.chatId());
   }
 
 }

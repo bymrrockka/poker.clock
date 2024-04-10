@@ -1,13 +1,19 @@
 package by.mrrockka.mapper;
 
+import by.mrrockka.creator.MessageEntityCreator;
+import by.mrrockka.creator.MessageMetadataCreator;
+import by.mrrockka.domain.MessageEntityType;
+import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.TelegramPerson;
-import by.mrrockka.mapper.person.NoPlayersException;
-import by.mrrockka.mapper.person.PersonMessageMapper;
+import by.mrrockka.exception.BusinessException;
+import by.mrrockka.mapper.person.*;
 import lombok.Builder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mapstruct.factory.Mappers;
+import org.telegram.telegrambots.meta.api.objects.User;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,10 +26,12 @@ class PersonMessageMapperTest {
 
   private static final Long CHAT_ID = 123L;
 
-  private final PersonMessageMapper personMessageMapper = new PersonMessageMapper();
+  private final TelegramPersonMapper personMapper = Mappers.getMapper(TelegramPersonMapper.class);
+  private final PersonMessageMapper personMessageMapper = new PersonMessageMapper(personMapper);
 
   @Builder
-  private record PersonsMessageArgument(String message, List<TelegramPerson> persons) {}
+  private record PersonsMessageArgument(String message, MessageMetadata metadata, List<TelegramPerson> persons,
+                                        Class<? extends BusinessException> exception) {}
 
   @BeforeEach
   void setup() {
@@ -31,6 +39,7 @@ class PersonMessageMapperTest {
   }
 
 
+  @Deprecated(since = "1.1.0", forRemoval = true)
   private static Stream<Arguments> personsMessage() {
     return Stream.of(
       Arguments.of(
@@ -155,15 +164,18 @@ class PersonMessageMapperTest {
     );
   }
 
+  @Deprecated(since = "1.1.0", forRemoval = true)
   @ParameterizedTest
   @MethodSource("personsMessage")
-  void givenMessage_whenMapExecuted_shouldReturnPersonsList(PersonsMessageArgument argument) {
+  void givenMessage_whenMapExecuted_shouldReturnPersonsList(final PersonsMessageArgument argument) {
     assertThat(personMessageMapper.map(argument.message(), CHAT_ID))
       .usingRecursiveComparison()
       .ignoringFields("id")
       .isEqualTo(argument.persons());
   }
 
+
+  @Deprecated(since = "1.1.0", forRemoval = true)
   private static Stream<Arguments> noPlayersMessages() {
     return Stream.of(
       Arguments.of(
@@ -183,11 +195,245 @@ class PersonMessageMapperTest {
     );
   }
 
+  @Deprecated(since = "1.1.0", forRemoval = true)
   @ParameterizedTest
   @MethodSource("noPlayersMessages")
-  void givenMessage_whenNoPlayers_thenThrowException(String message) {
+  void givenMessage_whenNoPlayers_thenThrowException(final String message) {
     assertThatThrownBy(() -> personMessageMapper.map(message, CHAT_ID))
       .isInstanceOf(NoPlayersException.class);
+  }
+
+  private static Stream<Arguments> updateMessage() {
+    return Stream.of(
+      Arguments.of(
+        PersonsMessageArgument.builder()
+          .metadata(
+            MessageMetadataCreator.domain(builder -> builder
+              .chatId(CHAT_ID)
+              .command("""
+                         /tournament
+                         buy-in: 30  
+                         stack: 30k 
+                         players: 
+                           @mrrockka
+                         @miscusi   
+                                 """)
+              .entities(List.of(
+                MessageEntityCreator.domainMention("@mrrockka"),
+                MessageEntityCreator.domainMention("@miscusi")
+              ))))
+          .persons(List.of(
+            TelegramPerson.telegramPersonBuilder()
+              .id(UUID.randomUUID())
+              .nickname("mrrockka")
+              .chatId(CHAT_ID)
+              .build(),
+            TelegramPerson.telegramPersonBuilder()
+              .id(UUID.randomUUID())
+              .nickname("miscusi")
+              .chatId(CHAT_ID)
+              .build()
+          )).build()),
+      Arguments.of(
+        PersonsMessageArgument.builder()
+          .metadata(
+            MessageMetadataCreator.domain(builder -> builder
+              .chatId(CHAT_ID)
+              .command("""
+                         /tournament@pokerbot 
+                         buyin:    15zl    
+                         stack: 1.5k
+                           @mrrockka
+                         @ivano 
+                          @andrei 
+                         @ivano 
+                          @andrei 
+                         @mrrockka
+                         @miscusi   
+                                 """)
+              .entities(List.of(
+                MessageEntityCreator.domainMention("@mrrockka"),
+                MessageEntityCreator.domainMention("@ivano"),
+                MessageEntityCreator.domainMention("@andrei"),
+                MessageEntityCreator.domainMention("@miscusi")
+              ))))
+          .persons(List.of(
+            TelegramPerson.telegramPersonBuilder()
+              .id(UUID.randomUUID())
+              .nickname("mrrockka")
+              .chatId(CHAT_ID)
+              .build(),
+            TelegramPerson.telegramPersonBuilder()
+              .id(UUID.randomUUID())
+              .nickname("ivano")
+              .chatId(CHAT_ID)
+              .build(),
+            TelegramPerson.telegramPersonBuilder()
+              .id(UUID.randomUUID())
+              .nickname("andrei")
+              .chatId(CHAT_ID)
+              .build(),
+            TelegramPerson.telegramPersonBuilder()
+              .id(UUID.randomUUID())
+              .nickname("miscusi")
+              .chatId(CHAT_ID)
+              .build())).build()),
+
+      Arguments.of(
+        PersonsMessageArgument.builder()
+          .metadata(
+            MessageMetadataCreator.domain(builder -> builder
+              .chatId(CHAT_ID)
+              .command("""
+                         /tournament 
+                         buyin:    15zl    
+                         stack: 1.5k
+                         @mrrockka @ivano @andrei @ivano @andrei @mrrockka @miscusi @pokerbot   
+                                 """)
+              .entities(List.of(
+                MessageEntityCreator.domainMention("@mrrockka"),
+                MessageEntityCreator.domainMention("@ivano"),
+                MessageEntityCreator.domainMention("@andrei"),
+                MessageEntityCreator.domainMention("@miscusi"),
+                MessageEntityCreator.domainMention("@pokerbot")
+              ))))
+          .persons(List.of(
+            TelegramPerson.telegramPersonBuilder()
+              .id(UUID.randomUUID())
+              .nickname("mrrockka")
+              .chatId(CHAT_ID)
+              .build(),
+            TelegramPerson.telegramPersonBuilder()
+              .id(UUID.randomUUID())
+              .nickname("ivano")
+              .chatId(CHAT_ID)
+              .build(),
+            TelegramPerson.telegramPersonBuilder()
+              .id(UUID.randomUUID())
+              .nickname("andrei")
+              .chatId(CHAT_ID)
+              .build(),
+            TelegramPerson.telegramPersonBuilder()
+              .id(UUID.randomUUID())
+              .nickname("miscusi")
+              .chatId(CHAT_ID)
+              .build())).build()),
+
+      Arguments.of(
+        PersonsMessageArgument.builder()
+          .metadata(
+            MessageMetadataCreator.domain(builder -> builder
+              .chatId(CHAT_ID)
+              .command("""
+                         /tournament 
+                         buyin:    15zl    
+                         stack: 1.5k
+                         @mrrockka, @ivano, @andrei, @ivano, @andrei, @mrrockka, @miscusi
+                                 """)
+              .entities(List.of(
+                MessageEntityCreator.domainMention("@mrrockka"),
+                MessageEntityCreator.domainMention("@ivano"),
+                MessageEntityCreator.domainMention("@andrei"),
+                MessageEntityCreator.domainMention("@miscusi")
+              ))))
+          .persons(List.of(
+            TelegramPerson.telegramPersonBuilder()
+              .id(UUID.randomUUID())
+              .nickname("mrrockka")
+              .chatId(CHAT_ID)
+              .build(),
+            TelegramPerson.telegramPersonBuilder()
+              .id(UUID.randomUUID())
+              .nickname("ivano")
+              .chatId(CHAT_ID)
+              .build(),
+            TelegramPerson.telegramPersonBuilder()
+              .id(UUID.randomUUID())
+              .nickname("andrei")
+              .chatId(CHAT_ID)
+              .build(),
+            TelegramPerson.telegramPersonBuilder()
+              .id(UUID.randomUUID())
+              .nickname("miscusi")
+              .chatId(CHAT_ID)
+              .build())).build())
+    );
+  }
+
+  @ParameterizedTest
+  @MethodSource("updateMessage")
+  void givenMessageMeta_whenMapExecuted_shouldReturnPersonsList(final PersonsMessageArgument argument) {
+    assertThat(personMessageMapper.map(argument.metadata()))
+      .usingRecursiveComparison()
+      .ignoringFields("id")
+      .isEqualTo(argument.persons());
+  }
+
+  private static Stream<Arguments> updateNoPlayers() {
+    return Stream.of(
+      Arguments.of(
+        PersonsMessageArgument.builder()
+          .metadata(
+            MessageMetadataCreator.domain(builder -> builder
+              .chatId(CHAT_ID)
+              .command("""
+                           /tournament
+                           buyin:      100  
+                           stack:50000
+                         """)))
+          .exception(NoPlayersException.class)
+          .build()),
+
+      Arguments.of(
+        PersonsMessageArgument.builder()
+          .metadata(
+            MessageMetadataCreator.domain(builder -> builder
+              .chatId(CHAT_ID)
+              .command("""
+                           /tournament
+                           buyin:      100  
+                           stack:50000 
+                           players: 
+                             @mrrockka
+                         """)
+              .entities(List.of(
+                MessageEntityCreator.domainMention("@mrrockka")
+              ))))
+          .exception(OnlyOnePlayerSpecifiedException.class)
+          .build()),
+
+      Arguments.of(
+        PersonsMessageArgument.builder()
+          .metadata(
+            MessageMetadataCreator.domain(builder -> builder
+              .chatId(CHAT_ID)
+              .command("""
+                           /tournament
+                           buyin:      100  
+                           stack:50000 
+                           players: 
+                             @mrrockka
+                             @miscusi
+                             Agnes Timiano
+                         """)
+              .entities(List.of(
+                MessageEntityCreator.domainMention("@mrrockka"),
+                MessageEntityCreator.domainMention("@miscusi"),
+                MessageEntityCreator.domainEntity(entityBuilder -> entityBuilder
+                  .text("Agnes Timiano")
+                  .type(MessageEntityType.TEXT_MENTION)
+                  .user(new User()))
+              ))))
+          .exception(PlayerHasNoNicknameException.class)
+          .build())
+    );
+  }
+
+  @ParameterizedTest
+  @MethodSource("updateNoPlayers")
+  void givenMessageMeta_whenNoPlayers_thenThrowException(final PersonsMessageArgument argument) {
+    assertThatThrownBy(() -> personMessageMapper.map(argument.metadata()))
+      .isInstanceOf(argument.exception());
   }
 
 }

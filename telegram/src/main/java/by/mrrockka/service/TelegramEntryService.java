@@ -21,14 +21,6 @@ public class TelegramEntryService {
   private final TelegramPersonService telegramPersonService;
   private final MessageMetadataMapper messageMetadataMapper;
 
-/*todo:
-   1. retrieve users using additional commands like
-   - GetChat
-   - GetChatMember
-
-*
-* */
-
   @SneakyThrows
   public BotApiMethodMessage storeEntry(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
