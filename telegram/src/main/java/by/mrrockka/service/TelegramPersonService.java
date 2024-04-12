@@ -30,7 +30,7 @@ public class TelegramPersonService {
   public List<TelegramPerson> storePersons(final Update update) {
 //    todo: find a way to verify if person is in chat
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
-    final var persons = personMessageMapper.map(messageMetadata.command(), messageMetadata.chatId());
+    final var persons = personMessageMapper.map(messageMetadata);
 
     return storeMissed(persons, messageMetadata.chatId());
   }

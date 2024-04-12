@@ -3,9 +3,7 @@ package by.mrrockka.creator;
 import by.mrrockka.FakerProvider;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.telegram.telegrambots.meta.api.objects.EntityType;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 
 import java.time.Instant;
 import java.util.List;
@@ -29,15 +27,11 @@ public final class MessageCreator {
   }
 
   public static Message message(final Consumer<Message> messageConsumer) {
-    final var entity = new MessageEntity();
-    entity.setOffset(0);
-    entity.setType(EntityType.BOTCOMMAND);
-
     final var message = new Message();
     message.setMessageId(MESSAGE_ID);
     message.setText(MESSAGE_TEXT);
     message.setChat(ChatCreator.chat());
-    message.setEntities(List.of(entity));
+    message.setEntities(List.of(MessageEntityCreator.apiEntity()));
     message.setFrom(UserCreator.user());
     message.setDate((int) MESSAGE_TIMESTAMP.getEpochSecond());
 
