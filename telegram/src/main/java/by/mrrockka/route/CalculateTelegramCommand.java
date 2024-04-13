@@ -11,10 +11,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @RequiredArgsConstructor
 public class CalculateTelegramCommand implements TelegramCommand {
 
-  @Value("telegrambots.name")
+  @Value("${telegrambots.name}")
   private String botName;
 
-  private static final String COMMAND = "/calculate([\\s]*|%s)";
+  private static final String COMMAND = "/calculate([\\s]*|@%s)";
 
   private final TelegramCalculationService telegramCalculationService;
 

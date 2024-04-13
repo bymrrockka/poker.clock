@@ -17,7 +17,7 @@ import static by.mrrockka.mapper.CommandRegexConstants.TELEGRAM_NAME_REGEX;
 @Component
 public class PersonMessageMapper {
 
-  @Value("telegrambots.name")
+  @Value("${telegrambots.name}")
   @Setter
   private String botName;
 
