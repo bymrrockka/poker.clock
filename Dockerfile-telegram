@@ -1,5 +1,7 @@
 FROM openjdk:17
 
+ARG BOT_TOKEN=''
+
 WORKDIR /app
 
 COPY telegram/build/libs/telegram-bot-*.jar telegram.jar

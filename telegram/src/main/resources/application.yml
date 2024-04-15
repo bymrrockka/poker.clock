@@ -1,7 +1,7 @@
 telegrambots:
   name: pokerclc_bot
   enabled: true
-  token: 6602349464:AAHXWR1pnkqmfUj0YRiY1Jy7EmfyMQToYO8
+  token: ${BOT_TOKEN}
 
 spring:
   profiles:

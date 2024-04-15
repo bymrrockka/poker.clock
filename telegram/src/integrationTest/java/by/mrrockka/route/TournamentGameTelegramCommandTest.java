@@ -76,6 +76,8 @@ class TournamentGameTelegramCommandTest {
     "/tournament 123123"
   })
   void givenTournamentCommand_whenReceived_thenShouldMarkAsApplicable(final String text) {
-    assertThat(tournamentCommandRoute.isApplicable(UpdateCreator.update(MessageCreator.message(text)))).isTrue();
+    final var update = UpdateCreator.update(MessageCreator.message(text));
+
+    assertThat(tournamentCommandRoute.isApplicable(update)).isTrue();
   }
 }

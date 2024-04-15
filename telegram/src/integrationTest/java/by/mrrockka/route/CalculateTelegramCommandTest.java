@@ -96,10 +96,9 @@ class CalculateTelegramCommandTest {
 
   @ParameterizedTest
   @MethodSource("messages")
-  void givenUpdateContainsMessage_whenEqualsCalculate_thenShouldAssertTrue(MessageArgument arg) {
-    final var update = UpdateCreator.update(MessageCreator.message(message -> message.setText(arg.message())));
+  void givenUpdateContainsMessage_whenEqualsCalculate_thenShouldAssertTrue(final MessageArgument arg) {
+    final var update = UpdateCreator.update(MessageCreator.message(arg.message()));
 
-    assertThat(calculatePaymentsRoute.isApplicable(update))
-      .isEqualTo(arg.result());
+    assertThat(calculatePaymentsRoute.isApplicable(update)).isEqualTo(arg.result());
   }
 }

@@ -1,10 +1,7 @@
 package by.mrrockka.service;
 
 import by.mrrockka.config.PostgreSQLExtension;
-import by.mrrockka.creator.ChatCreator;
-import by.mrrockka.creator.MessageCreator;
-import by.mrrockka.creator.UpdateCreator;
-import by.mrrockka.creator.UserCreator;
+import by.mrrockka.creator.*;
 import by.mrrockka.repo.entries.EntriesEntity;
 import by.mrrockka.repo.entries.EntriesRepository;
 import by.mrrockka.repo.game.GameRepository;
@@ -15,7 +12,6 @@ import by.mrrockka.repo.person.PersonRepository;
 import by.mrrockka.repo.person.TelegramPersonEntity;
 import by.mrrockka.repo.person.TelegramPersonRepository;
 import by.mrrockka.service.game.TelegramGameService;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +20,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.math.BigDecimal;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -61,16 +56,25 @@ class TelegramGameServiceTest {
 
   @Test
   void giveTournamentMessage_whenAttemptToStored_shouldStoreGameConnectedToChatIdAndPersonsAndEntriesForPersons() {
-    final var update = UpdateCreator.update(MessageCreator.message(TOURNAMENT_MESSAGE));
-    final var createAt = MessageCreator.MESSAGE_TIMESTAMP.truncatedTo(ChronoUnit.SECONDS);
+    final var message = MessageCreator.message(msg -> {
+      msg.setText(TOURNAMENT_MESSAGE);
+      msg.setEntities(List.of(
+        MessageEntityCreator.apiCommand(TOURNAMENT_MESSAGE, "/tournament"),
+        MessageEntityCreator.apiMention(TOURNAMENT_MESSAGE, "@capusta"),
+        MessageEntityCreator.apiMention(TOURNAMENT_MESSAGE, "@kurva"),
+        MessageEntityCreator.apiMention(TOURNAMENT_MESSAGE, "@asdasd")
+      ));
+    });
+
+    final var update = UpdateCreator.update(message);
     final var chatId = ChatCreator.CHAT_ID;
 
     final var response = (SendMessage) telegramGameService.storeTournamentGame(update);
 
     assertAll(
-      () -> Assertions.assertThat(response.getChatId()).isEqualTo(String.valueOf(chatId)),
-      () -> Assertions.assertThat(response.getReplyToMessageId()).isEqualTo(MessageCreator.MESSAGE_ID),
-      () -> Assertions.assertThat(response.getText()).isEqualTo("Tournament started.")
+      () -> assertThat(response.getChatId()).isEqualTo(String.valueOf(chatId)),
+      () -> assertThat(response.getReplyToMessageId()).isEqualTo(MessageCreator.MESSAGE_ID),
+      () -> assertThat(response.getText()).isEqualTo("Tournament started.")
     );
 
     final var telegramGame = telegramGameRepository.findByChatAndMessageId(chatId, MessageCreator.MESSAGE_ID);
@@ -78,10 +82,10 @@ class TelegramGameServiceTest {
 
     final var gameEntity = gameRepository.findById(telegramGame.get().gameId());
     assertAll(
-      () -> Assertions.assertThat(gameEntity).isNotNull(),
-      () -> Assertions.assertThat(gameEntity.gameType()).isEqualTo(GameType.TOURNAMENT),
-      () -> Assertions.assertThat(gameEntity.buyIn()).isEqualTo(BigDecimal.valueOf(30)),
-      () -> Assertions.assertThat(gameEntity.stack()).isEqualTo(BigDecimal.valueOf(50000))
+      () -> assertThat(gameEntity).isNotNull(),
+      () -> assertThat(gameEntity.gameType()).isEqualTo(GameType.TOURNAMENT),
+      () -> assertThat(gameEntity.buyIn()).isEqualTo(BigDecimal.valueOf(30)),
+      () -> assertThat(gameEntity.stack()).isEqualTo(BigDecimal.valueOf(50000))
     );
 
     final var telegrams = List.of(
@@ -103,17 +107,17 @@ class TelegramGameServiceTest {
       telegramPersonEntities.stream().map(TelegramPersonEntity::getId).toList());
 
     assertAll(
-      () -> Assertions.assertThat(personEntities).isNotEmpty(),
+      () -> assertThat(personEntities).isNotEmpty(),
       () -> assertThat(telegramPersonEntities.stream().map(TelegramPersonEntity::getId).toList())
         .containsExactlyInAnyOrderElementsOf(personEntities.stream().map(PersonEntity::getId).toList())
     );
 
     final var entriesEntities = entriesRepository.findAllByGameId(telegramGame.get().gameId());
     assertAll(
-      () -> Assertions.assertThat(entriesEntities).isNotEmpty(),
-      () -> Assertions.assertThat(entriesEntities.stream().map(EntriesEntity::person).toList())
+      () -> assertThat(entriesEntities).isNotEmpty(),
+      () -> assertThat(entriesEntities.stream().map(EntriesEntity::person).toList())
         .containsExactlyInAnyOrderElementsOf(personEntities),
-      () -> entriesEntities.forEach(entriesEntity -> Assertions.assertThat(entriesEntity.amounts())
+      () -> entriesEntities.forEach(entriesEntity -> assertThat(entriesEntity.amounts())
         .isEqualTo(List.of(BigDecimal.valueOf(30))))
     );
   }

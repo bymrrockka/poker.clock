@@ -33,6 +33,18 @@ public final class MessageEntityCreator {
     return domainBuilder.build();
   }
 
+  public static org.telegram.telegrambots.meta.api.objects.MessageEntity apiMention(final String text,
+                                                                                    final String mention) {
+    return apiEntity(
+      bulder -> bulder.offset(text.indexOf(mention)).length(mention.length()).type(EntityType.MENTION));
+  }
+
+  public static org.telegram.telegrambots.meta.api.objects.MessageEntity apiCommand(final String text,
+                                                                                    final String command) {
+    return apiEntity(
+      bulder -> bulder.offset(text.indexOf(command)).length(command.length()));
+  }
+
   public static org.telegram.telegrambots.meta.api.objects.MessageEntity apiEntity() {
     return apiEntity(null);
   }
@@ -41,9 +53,8 @@ public final class MessageEntityCreator {
     final Consumer<org.telegram.telegrambots.meta.api.objects.MessageEntity.MessageEntityBuilder> apiBuilderConsumer) {
     final var apiBuilder = org.telegram.telegrambots.meta.api.objects.MessageEntity.builder()
       .offset(0)
-      .length(8)
-      .type(EntityType.BOTCOMMAND)
-      .text("/command");
+      .length(0)
+      .type(EntityType.BOTCOMMAND);
 
     if (nonNull(apiBuilderConsumer)) {
       apiBuilderConsumer.accept(apiBuilder);

@@ -23,7 +23,10 @@ public final class MessageCreator {
   }
 
   public static Message message(final String text) {
-    return message((message) -> message.setText(text));
+    return message((message) -> {
+      message.setText(text);
+      message.setEntities(List.of(MessageEntityCreator.apiCommand(text, text)));
+    });
   }
 
   public static Message message(final Consumer<Message> messageConsumer) {
