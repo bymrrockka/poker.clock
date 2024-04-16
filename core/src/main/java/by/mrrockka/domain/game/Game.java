@@ -56,6 +56,10 @@ public abstract class Game {
     return (BountyGame) this;
   }
 
+  public <T extends Game> T asType(final Class<T> clazz) {
+    return clazz.cast(this);
+  }
+
   public boolean isType(final Class<? extends Game> clazz) {
     return this.getClass().equals(clazz);
   }

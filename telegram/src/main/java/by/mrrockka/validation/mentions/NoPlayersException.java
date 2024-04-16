@@ -1,4 +1,4 @@
-package by.mrrockka.mapper.person;
+package by.mrrockka.validation.mentions;
 
 import by.mrrockka.exception.BusinessException;
 

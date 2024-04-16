@@ -1,10 +1,12 @@
 package by.mrrockka.route;
 
 import by.mrrockka.creator.MessageCreator;
+import by.mrrockka.creator.MessageEntityCreator;
 import by.mrrockka.creator.SendCreator;
 import by.mrrockka.creator.UpdateCreator;
 import by.mrrockka.route.commands.TournamentGameTelegramCommand;
 import by.mrrockka.service.game.TelegramGameService;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -14,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -58,7 +61,10 @@ class TournamentGameTelegramCommandTest {
   @MethodSource("tournamentMessages")
   void givenTournamentStartMessage_whenReceived_thenShouldValidateMessageAndStoreDataAndReturnGameId(
     final String text) {
-    final var update = UpdateCreator.update(MessageCreator.message(text));
+    final var update = UpdateCreator.update(MessageCreator.message(msg -> {
+      msg.setText(text);
+      msg.setEntities(List.of(MessageEntityCreator.apiCommand(text, "/tournament")));
+    }));
     final var expected = SendCreator.sendMessage(builder -> builder
       .chatId(update.getMessage().getChatId())
       .text(""));
@@ -68,16 +74,22 @@ class TournamentGameTelegramCommandTest {
     assertThat(tournamentCommandRoute.process(update)).isEqualTo(expected);
   }
 
-  @ParameterizedTest
-  @ValueSource(strings = {
-    "/tournament",
-    "/tournament ",
-    "/tournament asdasd",
-    "/tournament 123123"
-  })
-  void givenTournamentCommand_whenReceived_thenShouldMarkAsApplicable(final String text) {
-    final var update = UpdateCreator.update(MessageCreator.message(text));
+  @Test
+  void givenTournamentCommand_whenReceived_thenShouldMarkAsApplicable() {
+    final var update = UpdateCreator.update(MessageCreator.message("/tournament"));
 
     assertThat(tournamentCommandRoute.isApplicable(update)).isTrue();
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {
+    "/tournament1",
+    "/tournament asdasd",
+    "/tourname"
+  })
+  void givenTournamentCommand_whenReceived_thenShouldNotMarkAsApplicable(final String text) {
+    final var update = UpdateCreator.update(MessageCreator.message(text));
+
+    assertThat(tournamentCommandRoute.isApplicable(update)).isFalse();
   }
 }

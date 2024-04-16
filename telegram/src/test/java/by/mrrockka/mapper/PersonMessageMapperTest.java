@@ -2,18 +2,18 @@ package by.mrrockka.mapper;
 
 import by.mrrockka.creator.MessageEntityCreator;
 import by.mrrockka.creator.MessageMetadataCreator;
-import by.mrrockka.domain.MessageEntityType;
 import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.exception.BusinessException;
-import by.mrrockka.mapper.person.*;
+import by.mrrockka.mapper.person.PersonMessageMapper;
+import by.mrrockka.mapper.person.TelegramPersonMapper;
+import by.mrrockka.validation.mentions.NoPlayersException;
 import lombok.Builder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mapstruct.factory.Mappers;
-import org.telegram.telegrambots.meta.api.objects.User;
 
 import java.util.List;
 import java.util.UUID;
@@ -367,73 +367,6 @@ class PersonMessageMapperTest {
       .usingRecursiveComparison()
       .ignoringFields("id")
       .isEqualTo(argument.persons());
-  }
-
-  private static Stream<Arguments> updateNoPlayers() {
-    return Stream.of(
-      Arguments.of(
-        PersonsMessageArgument.builder()
-          .metadata(
-            MessageMetadataCreator.domain(builder -> builder
-              .chatId(CHAT_ID)
-              .command("""
-                           /tournament
-                           buyin:      100  
-                           stack:50000
-                         """)))
-          .exception(NoPlayersException.class)
-          .build()),
-
-      Arguments.of(
-        PersonsMessageArgument.builder()
-          .metadata(
-            MessageMetadataCreator.domain(builder -> builder
-              .chatId(CHAT_ID)
-              .command("""
-                           /tournament
-                           buyin:      100  
-                           stack:50000 
-                           players: 
-                             @mrrockka
-                         """)
-              .entities(List.of(
-                MessageEntityCreator.domainMention("@mrrockka")
-              ))))
-          .exception(OnlyOnePlayerSpecifiedException.class)
-          .build()),
-
-      Arguments.of(
-        PersonsMessageArgument.builder()
-          .metadata(
-            MessageMetadataCreator.domain(builder -> builder
-              .chatId(CHAT_ID)
-              .command("""
-                           /tournament
-                           buyin:      100  
-                           stack:50000 
-                           players: 
-                             @mrrockka
-                             @miscusi
-                             Agnes Timiano
-                         """)
-              .entities(List.of(
-                MessageEntityCreator.domainMention("@mrrockka"),
-                MessageEntityCreator.domainMention("@miscusi"),
-                MessageEntityCreator.domainEntity(entityBuilder -> entityBuilder
-                  .text("Agnes Timiano")
-                  .type(MessageEntityType.TEXT_MENTION)
-                  .user(new User()))
-              ))))
-          .exception(PlayerHasNoNicknameException.class)
-          .build())
-    );
-  }
-
-  @ParameterizedTest
-  @MethodSource("updateNoPlayers")
-  void givenMessageMeta_whenNoPlayers_thenThrowException(final PersonsMessageArgument argument) {
-    assertThatThrownBy(() -> personMessageMapper.map(argument.metadata()))
-      .isInstanceOf(argument.exception());
   }
 
 }

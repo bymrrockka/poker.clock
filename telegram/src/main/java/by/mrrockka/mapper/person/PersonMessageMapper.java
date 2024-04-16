@@ -3,6 +3,7 @@ package by.mrrockka.mapper.person;
 import by.mrrockka.domain.MessageEntityType;
 import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.TelegramPerson;
+import by.mrrockka.validation.mentions.NoPlayersException;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
@@ -26,7 +27,6 @@ public class PersonMessageMapper {
   @Value("${telegrambots.name}")
   @Setter
   private String botName;
-
 
   @Deprecated(since = "1.1.0", forRemoval = true)
   public List<TelegramPerson> map(final String command, final Long chatId) {
@@ -56,26 +56,11 @@ public class PersonMessageMapper {
   }
 
   public List<TelegramPerson> map(final MessageMetadata messageMetadata) {
+//    todo: verify if there is a case to add filter to message metadata (at least partially)
     final var playersMentions = messageMetadata.entities().stream()
       .filter(entity -> entity.type().equals(MessageEntityType.MENTION))
       .filter(entity -> !entity.text().contains(botName))
       .toList();
-
-    final var playerTextMention = messageMetadata.entities().stream()
-      .filter(entity -> entity.type().equals(MessageEntityType.TEXT_MENTION))
-      .findFirst();
-
-    if (playersMentions.isEmpty()) {
-      throw new NoPlayersException();
-    }
-
-    if (playersMentions.size() == 1) {
-      throw new OnlyOnePlayerSpecifiedException();
-    }
-
-    if (playerTextMention.isPresent()) {
-      throw new PlayerHasNoNicknameException(playerTextMention.get().text());
-    }
 
     return personMapper.mapMessageToTelegrams(playersMentions, messageMetadata.chatId());
   }

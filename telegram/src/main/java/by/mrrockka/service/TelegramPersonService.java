@@ -5,6 +5,7 @@ import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.mapper.person.PersonMessageMapper;
 import by.mrrockka.mapper.person.TelegramPersonMapper;
 import by.mrrockka.repo.person.TelegramPersonRepository;
+import by.mrrockka.validation.mentions.PersonMentionsValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -25,10 +26,12 @@ public class TelegramPersonService {
   private final PersonService personService;
   private final TelegramPersonRepository telegramPersonRepository;
   private final MessageMetadataMapper messageMetadataMapper;
+  private final PersonMentionsValidator personMentionsValidator;
 
   @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
   public List<TelegramPerson> storePersons(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
+    personMentionsValidator.validateMessageMentions(messageMetadata);
     final var persons = personMessageMapper.map(messageMetadata);
 
     return storeMissed(persons, messageMetadata.chatId());
