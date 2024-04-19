@@ -4,6 +4,7 @@ import by.mrrockka.mapper.EntryMessageMapper;
 import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
 import by.mrrockka.service.game.TelegramGameService;
+import by.mrrockka.validation.mentions.PersonMentionsValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
@@ -20,10 +21,14 @@ public class TelegramEntryService {
   private final TelegramGameService telegramGameService;
   private final TelegramPersonService telegramPersonService;
   private final MessageMetadataMapper messageMetadataMapper;
+  private final PersonMentionsValidator personMentionsValidator;
 
   @SneakyThrows
   public BotApiMethodMessage storeEntry(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
+    personMentionsValidator.validateMessageHasMentionsLessThen(messageMetadata, 1);
+    personMentionsValidator.validateMessageHasUserTextMention(messageMetadata);
+    //  todo: use entities
     final var nicknameAndAmount = entryMessageMapper.map(messageMetadata.command());
     final var telegramGame = telegramGameService
       .getGameByMessageMetadata(messageMetadata)

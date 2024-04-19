@@ -18,7 +18,7 @@ public class PersonMentionsValidator {
 
   public void validateMessageMentions(final MessageMetadata messageMetadata) {
     validateMessageHasUserTextMention(messageMetadata);
-    validateMessageHasInsufficientAmountOfMentions(messageMetadata);
+    validateMessageHasMentionsLessThen(messageMetadata, 2);
   }
 
   public void validateMessageHasUserTextMention(final MessageMetadata messageMetadata) {
@@ -30,21 +30,11 @@ public class PersonMentionsValidator {
       });
   }
 
-  public void validateMessageHasInsufficientAmountOfMentions(final MessageMetadata messageMetadata) {
+  public void validateMessageHasMentionsLessThen(final MessageMetadata messageMetadata, final int size) {
     final var playersMentions = filterUserMentions(messageMetadata);
 
-    validateMessageHasNoMentions(messageMetadata);
-
-    if (playersMentions.size() == 1) {
-      throw new OnlyOnePlayerSpecifiedException();
-    }
-  }
-
-  public void validateMessageHasNoMentions(final MessageMetadata messageMetadata) {
-    final var playersMentions = filterUserMentions(messageMetadata);
-
-    if (playersMentions.isEmpty()) {
-      throw new NoPlayersException();
+    if (playersMentions.isEmpty() || playersMentions.size() < size) {
+      throw new InsufficientMentionsSizeSpecifiedException(playersMentions.size(), size);
     }
   }
 

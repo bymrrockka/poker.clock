@@ -5,8 +5,8 @@ import by.mrrockka.creator.MessageMetadataCreator;
 import by.mrrockka.domain.MessageEntityType;
 import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.exception.BusinessException;
+import by.mrrockka.validation.mentions.InsufficientMentionsSizeSpecifiedException;
 import by.mrrockka.validation.mentions.NoPlayersException;
-import by.mrrockka.validation.mentions.OnlyOnePlayerSpecifiedException;
 import by.mrrockka.validation.mentions.PersonMentionsValidator;
 import by.mrrockka.validation.mentions.PlayerHasNoNicknameException;
 import lombok.Builder;
@@ -50,7 +50,7 @@ class PersonMentionsValidatorTest {
               .entities(List.of(
                 MessageEntityCreator.domainMention("@mrrockka")
               ))))
-          .exception(OnlyOnePlayerSpecifiedException.class)
+          .exception(InsufficientMentionsSizeSpecifiedException.class)
           .build()),
 
       Arguments.of(
