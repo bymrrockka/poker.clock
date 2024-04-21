@@ -30,6 +30,14 @@ public class TelegramFinalePlacesService {
   public BotApiMethodMessage storePrizePool(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
     final var places = finalePlacesMessageMapper.map(messageMetadata.command());
+    final var telegramGame = telegramGameService
+      .getGameByMessageMetadata(messageMetadata)
+      .orElseThrow(ChatGameNotFoundException::new);
+
+    if (!(telegramGame.game().isBounty() || telegramGame.game().isTournament())) {
+      throw new ProcessingRestrictedException("%s or %s".formatted(GameType.TOURNAMENT, GameType.BOUNTY));
+    }
+
     final var telegramPersons = telegramPersonService
       .getAllByTelegramsAndChatId(places.stream().map(Pair::getValue).toList(), messageMetadata.chatId());
 
@@ -43,14 +51,6 @@ public class TelegramFinalePlacesService {
                     .orElseThrow(() -> new FinalPlaceContainsTelegramOfNotExistingPlayerException(place.getValue())))
           .build())
         .toList());
-
-    final var telegramGame = telegramGameService
-      .getGameByMessageMetadata(messageMetadata)
-      .orElseThrow(ChatGameNotFoundException::new);
-
-    if (!(telegramGame.game().isBounty() || telegramGame.game().isTournament())) {
-      throw new ProcessingRestrictedException("%s or %s".formatted(GameType.TOURNAMENT, GameType.BOUNTY));
-    }
 
     finalePlacesService.store(telegramGame.game().getId(), finalePlaces);
     return SendMessage.builder()

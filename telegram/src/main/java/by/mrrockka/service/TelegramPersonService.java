@@ -28,7 +28,7 @@ public class TelegramPersonService {
   private final MessageMetadataMapper messageMetadataMapper;
   private final PersonMentionsValidator personMentionsValidator;
 
-  @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
+  @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED)
   public List<TelegramPerson> storePersons(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
     personMentionsValidator.validateMessageMentions(messageMetadata);
@@ -47,10 +47,15 @@ public class TelegramPersonService {
     return telegramPersonMapper.mapToTelegrams(telegramPersonRepository.findAllByChatIdAndTelegrams(chatId, telegrams));
   }
 
-  private List<TelegramPerson> storeMissed(final List<TelegramPerson> persons, final Long chatId) {
+  @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED)
+  public List<TelegramPerson> storeMissed(final List<TelegramPerson> persons, final Long chatId) {
+    /*todo: Investigate why during TelegramEntryServiceTest.givenGameAndPerson_whenEntryAttempt_shouldStoreEntry
+     *  findAllByChatIdAndTelegrams returns duplicated items*/
+
     final var stored = telegramPersonMapper
       .mapToTelegrams(telegramPersonRepository.findAllByChatIdAndTelegrams(chatId, persons.stream().map(
-        TelegramPerson::getNickname).toList()));
+        TelegramPerson::getNickname).toList()))
+      .stream().distinct().toList(); //todo: remove distinct after investigation
 
     final var storedTelegrams = stored.stream()
       .map(TelegramPerson::getNickname)
@@ -70,6 +75,7 @@ public class TelegramPersonService {
     return stored;
   }
 
+  @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED)
   private TelegramPerson saveNew(final String telegram, final Long chatId) {
     final var telegramPerson = TelegramPerson.telegramPersonBuilder()
       .id(UUID.randomUUID())

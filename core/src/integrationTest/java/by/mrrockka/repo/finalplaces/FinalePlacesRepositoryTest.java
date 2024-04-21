@@ -41,7 +41,8 @@ class FinalePlacesRepositoryTest {
   void givenFinalePlaces_whenDbHaveEntity_shouldBeAbleToGetByGameId() {
     final var gameId = UUID.fromString("fa3d03c4-f411-4852-810f-c0cc2f5b8c84");
     final var places = PLACES.entrySet()
-      .stream().map(entry -> MapEntry.entry(entry.getKey(), personRepository.findById(entry.getValue())))
+      .stream()
+      .map(entry -> MapEntry.entry(entry.getKey(), personRepository.findById(entry.getValue())))
       .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
     final var expected = FinalePlacesEntity.builder()

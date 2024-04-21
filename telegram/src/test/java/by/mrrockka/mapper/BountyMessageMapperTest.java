@@ -64,8 +64,8 @@ class BountyMessageMapperTest {
     );
 
     final var actual = bountyMessageMapper.map(messageMetadata);
-    assertThat(actual.getLeft()).isEqualTo(left);
-    assertThat(actual.getRight()).isEqualTo(right);
+    assertThat(actual.getLeft().getNickname()).isEqualTo(left);
+    assertThat(actual.getRight().getNickname()).isEqualTo(right);
   }
 
   @Test

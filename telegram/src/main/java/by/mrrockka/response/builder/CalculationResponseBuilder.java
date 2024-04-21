@@ -10,11 +10,10 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static by.mrrockka.response.builder.TextContants.*;
+
 @Component
-public class CalculationOutputBuilder {
-  private static final String NL = "\n";
-  private static final String TAB = "\t";
-  private static final String MINUS = " - ";
+public class CalculationResponseBuilder {
   private static final String PLUS = " + ";
   private static final String LEFT_PARENTHESIS = " (";
   private static final String RIGHT_PARENTHESIS = ")";
@@ -25,7 +24,7 @@ public class CalculationOutputBuilder {
   private static final String ENTRIES_WITH_AMOUNT = "entries %s";
   private static final String BOUNTIES_WITH_AMOUNT = "bounties %s";
 
-  public String buildPayout(final List<Payout> payouts, final Game game) {
+  public String response(final List<Payout> payouts, final Game game) {
     final var strBuilder = new StringBuilder();
     if (game instanceof CashGame) {
       buildForCash(strBuilder, payouts);

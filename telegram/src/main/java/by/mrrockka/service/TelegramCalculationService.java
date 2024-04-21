@@ -7,7 +7,7 @@ import by.mrrockka.domain.game.CashGame;
 import by.mrrockka.domain.game.TournamentGame;
 import by.mrrockka.features.calculation.CalculationService;
 import by.mrrockka.mapper.MessageMetadataMapper;
-import by.mrrockka.response.builder.CalculationOutputBuilder;
+import by.mrrockka.response.builder.CalculationResponseBuilder;
 import by.mrrockka.service.exception.*;
 import by.mrrockka.service.game.TelegramGameService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class TelegramCalculationService {
   private final CalculationService calculationService;
   private final TelegramGameService telegramGameService;
   private final MessageMetadataMapper messageMetadataMapper;
-  private final CalculationOutputBuilder calculationOutputBuilder;
+  private final CalculationResponseBuilder calculationResponseBuilder;
 
   public BotApiMethodMessage calculatePayments(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
@@ -60,7 +60,7 @@ public class TelegramCalculationService {
 
     return SendMessage.builder()
       .chatId(messageMetadata.chatId())
-      .text(calculationOutputBuilder.buildPayout(payouts, telegramGame.game()))
+      .text(calculationResponseBuilder.response(payouts, telegramGame.game()))
       .replyToMessageId(telegramGame.messageMetadata().id())
       .build();
   }
