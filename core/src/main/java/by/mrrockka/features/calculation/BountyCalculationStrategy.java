@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public final class BountyCalculationStrategy extends AbstractCalculationStrategy<BountyPlayerSummary, BountyGame> {
+public final class BountyCalculationStrategy extends AbstractCalculationTemplateMethodStrategy<BountyPlayerSummary, BountyGame> {
   @Override
   public boolean isApplicable(final Game game) {
     return game.isBounty();

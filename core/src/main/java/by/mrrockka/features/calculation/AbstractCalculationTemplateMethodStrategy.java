@@ -10,14 +10,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract sealed class AbstractCalculationStrategy<T extends PlayerSummary, G extends Game>
-  implements CalculationStrategy
-  permits BountyCalculationStrategy, CashCalculationStrategy, TournamentCalculationStrategy {
+public abstract class AbstractCalculationTemplateMethodStrategy<PS extends PlayerSummary, G extends Game> implements
+                                                                                                          CalculationStrategy {
   @Override
   public List<Payout> calculate(final Game game) {
     final var playersSummaries = buildPlayerSummary(game);
-
-
     return playersSummaries.stream()
       .filter(ps -> !ps.getTransferType().equals(TransferType.DEBIT))
       .map(creditorSummary -> {
@@ -30,14 +27,14 @@ public abstract sealed class AbstractCalculationStrategy<T extends PlayerSummary
       }).toList();
   }
 
-  protected abstract List<T> buildPlayerSummary(final Game game);
+  protected abstract List<PS> buildPlayerSummary(final Game game);
 
-  protected abstract Payout buildPayoutBase(final T creditorSummary);
+  protected abstract Payout buildPayoutBase(final PS creditorSummary);
 
-  protected abstract Payer buildDebtBase(final T debtorSummary);
+  protected abstract Payer buildDebtBase(final PS debtorSummary);
 
-  private Payout calculatePayout(final T creditorSummary,
-                                 final List<T> debtorSummaries) {
+  private Payout calculatePayout(final PS creditorSummary,
+                                 final List<PS> debtorSummaries) {
 
     final var payoutbuilder = buildPayoutBase(creditorSummary).toBuilder();
 

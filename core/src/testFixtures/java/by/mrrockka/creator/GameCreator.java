@@ -30,8 +30,8 @@ public final class GameCreator {
   public static final BigDecimal BUY_IN = BigDecimal.valueOf(FAKER.number().numberBetween(10, 100));
   public static final BigDecimal STACK = BigDecimal.valueOf(FAKER.number().numberBetween(1500, 30000));
   public static final BigDecimal BOUNTY = BigDecimal.valueOf(FAKER.number().numberBetween(10, 100));
-  public static final List<PersonEntries> ENTRIES = List.of(EntriesCreator.entries());
-  public static final List<PersonWithdrawals> WITHDRAWALS = List.of(WithdrawalsCreator.withdrawals());
+  public static final List<PersonEntries> ENTRIES = EntriesCreator.entriesList(2, BUY_IN);
+  public static final List<PersonWithdrawals> WITHDRAWALS = WithdrawalsCreator.withdrawalsList(2, BUY_IN);
   public static final List<Bounty> BOUNTIES = List.of(BountyCreator.bounty());
   public static final FinaleSummary FINALE_SUMMARY = new FinaleSummary(List.of());
 

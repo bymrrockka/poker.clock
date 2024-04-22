@@ -7,12 +7,12 @@ import by.mrrockka.domain.collection.PersonEntries;
 import by.mrrockka.domain.game.BountyGame;
 import by.mrrockka.mapper.BountyMessageMapper;
 import by.mrrockka.mapper.MessageMetadataMapper;
-import by.mrrockka.repo.game.GameType;
-import by.mrrockka.service.exception.*;
+import by.mrrockka.service.exception.ChatGameNotFoundException;
+import by.mrrockka.service.exception.EntriesForPersonNotFoundException;
 import by.mrrockka.service.game.TelegramGameService;
+import by.mrrockka.validation.bounty.BountyValidator;
 import by.mrrockka.validation.mentions.PersonMentionsValidator;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -29,6 +29,7 @@ public class TelegramBountyService {
   private final TelegramGameService telegramGameService;
   private final MessageMetadataMapper messageMetadataMapper;
   private final PersonMentionsValidator personMentionsValidator;
+  private final BountyValidator bountyValidator;
 
   public BotApiMethodMessage storeBounty(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
@@ -37,13 +38,9 @@ public class TelegramBountyService {
     final var telegramGame = telegramGameService
       .getGameByMessageMetadata(messageMetadata)
       .orElseThrow(ChatGameNotFoundException::new);
-    final var game = telegramGame.game();
+    final var game = telegramGame.game().asType(BountyGame.class);
 
-    if (game.isType(BountyGame.class)) {
-      validate(game.asType(BountyGame.class), fromAndTo);
-    } else {
-      throw new ProcessingRestrictedException(GameType.BOUNTY);
-    }
+    bountyValidator.validate(game, fromAndTo);
 
     final var gamePersons = game.getEntries().stream()
       .map(PersonEntries::person)
@@ -60,40 +57,9 @@ public class TelegramBountyService {
     return SendMessage.builder()
       .chatId(messageMetadata.chatId())
       .text("Bounty amount %s from %s stored for %s"
-              .formatted(game.asType(BountyGame.class).getBountyAmount(),
-                         fromAndTo.getKey().getNickname(), fromAndTo.getValue().getNickname()))
+              .formatted(game.getBountyAmount(), fromAndTo.getKey().getNickname(), fromAndTo.getValue().getNickname()))
       .replyToMessageId(telegramGame.messageMetadata().id())
       .build();
-  }
-
-  private void validate(final BountyGame game, final Pair<TelegramPerson, TelegramPerson> fromAndTo) {
-    if (fromAndTo.getValue().equals(fromAndTo.getKey())) {
-      throw new PersonsCantBeEqualForBountyException(fromAndTo.getKey().getNickname());
-    }
-
-    final var fromEntries = game.getEntries().stream()
-      .filter(entry -> entry.person().getNickname().equals(fromAndTo.getKey().getNickname()))
-      .findFirst()
-      .map(PersonEntries::entries);
-    final var fromBounties = game.getBountyList().stream()
-      .filter(bounty -> bounty.from().getNickname().equals(fromAndTo.getKey().getNickname()))
-      .toList();
-
-    if (fromEntries.isEmpty() || fromBounties.size() >= fromEntries.get().size()) {
-      throw new PlayerHasNotEnoughEntriesException(fromAndTo.getKey().getNickname());
-    }
-
-    final var toEntries = game.getEntries().stream()
-      .filter(entry -> entry.person().getNickname().equals(fromAndTo.getValue().getNickname()))
-      .findFirst()
-      .map(PersonEntries::entries);
-    final var toBounties = game.getBountyList().stream()
-      .filter(bounty -> bounty.from().getNickname().equals(fromAndTo.getValue().getNickname()))
-      .toList();
-
-    if (toEntries.isEmpty() || toBounties.size() == toEntries.get().size()) {
-      throw new PlayerHasNotEnoughEntriesException(fromAndTo.getValue().getNickname());
-    }
   }
 
   private Person findByTelegram(final TelegramPerson telegram, final List<Person> persons) {
@@ -102,5 +68,4 @@ public class TelegramBountyService {
       .findFirst()
       .orElseThrow(EntriesForPersonNotFoundException::new);
   }
-
 }

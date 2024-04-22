@@ -4,6 +4,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 
 class TestPostgreSQLContainer extends PostgreSQLContainer<TestPostgreSQLContainer> {
 
+  //  todo: found out that testcontainer creates two containers, one with default values another one with overriden - needs investigation
   public static final String VERSION = "16.1";
   public static final String IMAGE_AND_VERSION = "postgres:%s".formatted(VERSION);
   public static final String DB_NAME = "pokerclock";

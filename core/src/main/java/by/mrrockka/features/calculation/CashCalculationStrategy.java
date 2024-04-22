@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public final class CashCalculationStrategy extends AbstractCalculationStrategy<CashPlayerSummary, CashGame> {
+public final class CashCalculationStrategy extends AbstractCalculationTemplateMethodStrategy<CashPlayerSummary, CashGame> {
   @Override
   public boolean isApplicable(final Game game) {
     return game.isCash();
