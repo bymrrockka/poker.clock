@@ -49,13 +49,9 @@ public class TelegramPersonService {
 
   @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED)
   public List<TelegramPerson> storeMissed(final List<TelegramPerson> persons, final Long chatId) {
-    /*todo: Investigate why during TelegramEntryServiceTest.givenGameAndPerson_whenEntryAttempt_shouldStoreEntry
-     *  findAllByChatIdAndTelegrams returns duplicated items*/
-
     final var stored = telegramPersonMapper
       .mapToTelegrams(telegramPersonRepository.findAllByChatIdAndTelegrams(chatId, persons.stream().map(
-        TelegramPerson::getNickname).toList()))
-      .stream().distinct().toList(); //todo: remove distinct after investigation
+        TelegramPerson::getNickname).toList()));
 
     final var storedTelegrams = stored.stream()
       .map(TelegramPerson::getNickname)

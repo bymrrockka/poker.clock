@@ -6,7 +6,6 @@ import by.mrrockka.domain.MessageEntityType;
 import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.exception.BusinessException;
 import by.mrrockka.validation.mentions.InsufficientMentionsSizeSpecifiedException;
-import by.mrrockka.validation.mentions.NoPlayersException;
 import by.mrrockka.validation.mentions.PersonMentionsValidator;
 import by.mrrockka.validation.mentions.PlayerHasNoNicknameException;
 import lombok.Builder;
@@ -40,7 +39,7 @@ class PersonMentionsValidatorTest {
       Arguments.of(
         PersonsMessageArgument.builder()
           .metadata(MessageMetadataCreator.domain())
-          .exception(NoPlayersException.class)
+          .exception(InsufficientMentionsSizeSpecifiedException.class)
           .build()),
 
       Arguments.of(

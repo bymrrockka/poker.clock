@@ -36,7 +36,6 @@ public class BusinessException extends RuntimeException {
   public String toString() {
     final var strBuilder = new StringBuilder();
 
-    strBuilder.append("ERROR\n");
     strBuilder.append("Message: %s\n".formatted(message));
     if (StringUtils.isNoneBlank(humanReadableCode)) {
       strBuilder.append("Readable code: %s\n".formatted(humanReadableCode));
