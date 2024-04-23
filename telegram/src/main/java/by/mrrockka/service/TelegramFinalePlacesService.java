@@ -1,21 +1,23 @@
 package by.mrrockka.service;
 
+import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.domain.finaleplaces.FinalPlace;
 import by.mrrockka.domain.finaleplaces.FinalePlaces;
-import by.mrrockka.mapper.FinalePlacesMessageMapper;
 import by.mrrockka.mapper.MessageMetadataMapper;
-import by.mrrockka.repo.game.GameType;
+import by.mrrockka.mapper.finaleplaces.FinalePlacesMessageMapper;
+import by.mrrockka.response.builder.FinalePlacesResponseBuilder;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
-import by.mrrockka.service.exception.FinalPlaceContainsTelegramOfNotExistingPlayerException;
-import by.mrrockka.service.exception.ProcessingRestrictedException;
+import by.mrrockka.service.exception.FinalPlaceContainsNicknameOfNonExistingPlayerException;
 import by.mrrockka.service.game.TelegramGameService;
+import by.mrrockka.validation.finaleplaces.FinalePlacesValidator;
+import by.mrrockka.validation.mentions.PersonMentionsValidator;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,49 +28,47 @@ public class TelegramFinalePlacesService {
   private final TelegramGameService telegramGameService;
   private final TelegramPersonService telegramPersonService;
   private final MessageMetadataMapper messageMetadataMapper;
+  private final FinalePlacesResponseBuilder finalePlacesResponseBuilder;
+  private final PersonMentionsValidator personMentionsValidator;
+  private final FinalePlacesValidator finalePlacesValidator;
 
   public BotApiMethodMessage storePrizePool(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
-    final var places = finalePlacesMessageMapper.map(messageMetadata.command());
+    personMentionsValidator.validateMessageMentions(messageMetadata, 1);
+
+    final var places = finalePlacesMessageMapper.map(messageMetadata);
+    finalePlacesValidator.validatePlaces(places);
+
     final var telegramGame = telegramGameService
       .getGameByMessageMetadata(messageMetadata)
       .orElseThrow(ChatGameNotFoundException::new);
-
-    if (!(telegramGame.game().isBounty() || telegramGame.game().isTournament())) {
-      throw new ProcessingRestrictedException("%s or %s".formatted(GameType.TOURNAMENT, GameType.BOUNTY));
-    }
+    finalePlacesValidator.validateGameType(telegramGame.game());
 
     final var telegramPersons = telegramPersonService
-      .getAllByTelegramsAndChatId(places.stream().map(Pair::getValue).toList(), messageMetadata.chatId());
+      .getAllByTelegramsAndChatId(places.values().stream().map(TelegramPerson::getNickname).toList(),
+                                  messageMetadata.chatId());
 
     final var finalePlaces = new FinalePlaces(
-      places.stream()
+      places.entrySet().stream()
         .map(place -> FinalPlace.builder()
           .position(place.getKey())
-          .person(telegramPersons.stream()
-                    .filter(person -> person.getNickname().equals(place.getValue()))
-                    .findAny()
-                    .orElseThrow(() -> new FinalPlaceContainsTelegramOfNotExistingPlayerException(place.getValue())))
+          .person(findByNickname(telegramPersons, place.getValue().getNickname()))
           .build())
         .toList());
 
     finalePlacesService.store(telegramGame.game().getId(), finalePlaces);
     return SendMessage.builder()
       .chatId(messageMetadata.chatId())
-      .text(prettyPrint(finalePlaces))
+      .text(finalePlacesResponseBuilder.response(finalePlaces))
       .replyToMessageId(telegramGame.messageMetadata().id())
       .build();
   }
 
-  private String prettyPrint(final FinalePlaces finalePlaces) {
-    return """
-      Finale places stored:
-      %s
-      """.formatted(
-      finalePlaces.finalPlaces().stream()
-        .map(fp -> "\tposition: %s, telegram: @%s".formatted(fp.position(), fp.person().getNickname()))
-        .reduce("%s\n%s"::formatted)
-        .orElse(StringUtils.EMPTY)
-    );
+  private TelegramPerson findByNickname(final List<TelegramPerson> telegramPersons, final String nickname) {
+    return telegramPersons.stream()
+      .filter(person -> person.getNickname().equals(nickname))
+      .findAny()
+      .orElseThrow(() -> new FinalPlaceContainsNicknameOfNonExistingPlayerException(nickname));
   }
+
 }

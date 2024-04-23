@@ -11,14 +11,14 @@ import java.util.List;
 
 @Component
 public class PersonMentionsValidator {
-
+  //todo: I see lots of usage of this field, probably worth creating model for options instead of it
   @Value("${telegrambots.name}")
   @Setter
   private String botName;
 
-  public void validateMessageMentions(final MessageMetadata messageMetadata) {
+  public void validateMessageMentions(final MessageMetadata messageMetadata, final int mentionsSize) {
     validateMessageHasUserTextMention(messageMetadata);
-    validateMessageHasMentionsLessThen(messageMetadata, 2);
+    validateMessageHasMentionsNotLessThen(messageMetadata, mentionsSize);
   }
 
   public void validateMessageHasUserTextMention(final MessageMetadata messageMetadata) {
@@ -30,7 +30,7 @@ public class PersonMentionsValidator {
       });
   }
 
-  public void validateMessageHasMentionsLessThen(final MessageMetadata messageMetadata, final int size) {
+  public void validateMessageHasMentionsNotLessThen(final MessageMetadata messageMetadata, final int size) {
     final var playersMentions = filterUserMentions(messageMetadata);
 
     if (playersMentions.isEmpty() || playersMentions.size() < size) {

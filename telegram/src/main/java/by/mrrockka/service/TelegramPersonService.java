@@ -31,7 +31,7 @@ public class TelegramPersonService {
   @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED)
   public List<TelegramPerson> storePersons(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
-    personMentionsValidator.validateMessageMentions(messageMetadata);
+    personMentionsValidator.validateMessageMentions(messageMetadata, 2);
     final var persons = personMessageMapper.map(messageMetadata);
 
     return storeMissed(persons, messageMetadata.chatId());

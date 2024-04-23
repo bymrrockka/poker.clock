@@ -72,8 +72,8 @@ class PersonMentionsValidatorTest {
   @ParameterizedTest
   @MethodSource("mentions")
   void givenMessageMeta_whenNoPlayers_thenThrowException(final PersonsMessageArgument argument) {
-    assertThatThrownBy(() -> mentionsValidator.validateMessageMentions(argument.metadata())).isInstanceOf(
-      argument.exception());
+    assertThatThrownBy(() -> mentionsValidator.validateMessageMentions(argument.metadata(), 2))
+      .isInstanceOf(argument.exception());
   }
 
 }

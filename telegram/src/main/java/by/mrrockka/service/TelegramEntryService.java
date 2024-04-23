@@ -29,8 +29,7 @@ public class TelegramEntryService {
   @SneakyThrows
   public BotApiMethodMessage storeEntry(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
-    personMentionsValidator.validateMessageHasMentionsLessThen(messageMetadata, 1);
-    personMentionsValidator.validateMessageHasUserTextMention(messageMetadata);
+    personMentionsValidator.validateMessageMentions(messageMetadata, 1);
     final var nicknameAndAmountMap = entryMessageMapper.map(messageMetadata);
     final var telegramGame = telegramGameService
       .getGameByMessageMetadata(messageMetadata)

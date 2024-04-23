@@ -4,8 +4,6 @@ import by.mrrockka.creator.*;
 import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.domain.game.BountyGame;
 import by.mrrockka.domain.game.Game;
-import by.mrrockka.service.exception.PersonsCantBeEqualForBountyException;
-import by.mrrockka.service.exception.PlayerHasNotEnoughEntriesException;
 import by.mrrockka.service.exception.ProcessingRestrictedException;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;

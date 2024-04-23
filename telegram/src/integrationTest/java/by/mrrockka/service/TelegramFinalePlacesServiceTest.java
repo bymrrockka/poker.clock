@@ -3,6 +3,7 @@ package by.mrrockka.service;
 import by.mrrockka.config.PostgreSQLExtension;
 import by.mrrockka.creator.ChatCreator;
 import by.mrrockka.creator.MessageCreator;
+import by.mrrockka.creator.MessageEntityCreator;
 import by.mrrockka.creator.UpdateCreator;
 import by.mrrockka.domain.finaleplaces.FinalPlace;
 import by.mrrockka.domain.finaleplaces.FinalePlaces;
@@ -49,16 +50,20 @@ class TelegramFinalePlacesServiceTest {
         message.setText(COMMAND);
         message.setChat(ChatCreator.chat(CHAT_ID));
         message.setReplyToMessage(MessageCreator.message(msg -> msg.setMessageId(REPLY_TO_ID)));
+        message.setEntities(List.of(
+          MessageEntityCreator.apiMention(COMMAND, "@kinger"),
+          MessageEntityCreator.apiMention(COMMAND, "@queen"),
+          MessageEntityCreator.apiMention(COMMAND, "@jackas")
+        ));
       })
     );
 
     final var response = (SendMessage) telegramFinalePlacesService.storePrizePool(update);
     final var expectedMessage = """
-      Finale places stored:
+      Finale places:
       	position: 1, telegram: @kinger
       	position: 2, telegram: @queen
-      	position: 3, telegram: @jackas
-      	""";
+      	position: 3, telegram: @jackas""";
 
     assertAll(
       () -> Assertions.assertThat(response).isNotNull(),

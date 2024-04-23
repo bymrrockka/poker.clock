@@ -33,7 +33,7 @@ public class TelegramBountyService {
 
   public BotApiMethodMessage storeBounty(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
-    personMentionsValidator.validateMessageMentions(messageMetadata);
+    personMentionsValidator.validateMessageMentions(messageMetadata, 2);
     final var fromAndTo = bountyMessageMapper.map(messageMetadata);
     final var telegramGame = telegramGameService
       .getGameByMessageMetadata(messageMetadata)

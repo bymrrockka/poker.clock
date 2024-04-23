@@ -29,15 +29,6 @@ public final class TelegramPersonCreator {
     return domain(builder -> builder.nickname(nickname));
   }
 
-  public static TelegramPerson domainRandom() {
-    return domain(builder -> builder
-      .id(UUID.randomUUID())
-      .chatId(FAKER.random().nextLong())
-      .firstname(FAKER.name().firstName())
-      .lastname(FAKER.name().lastName())
-      .nickname(FAKER.name().username().replaceAll("\\.", "_")));
-  }
-
   public static TelegramPerson domain(final Consumer<TelegramPerson.TelegramPersonBuilder> builderConsumer) {
     final var personEntityBuilder = TelegramPerson.telegramPersonBuilder()
       .id(ID)

@@ -37,6 +37,7 @@ public class EntryMessageMapper {
   private static final int AMOUNT_GROUP = 5;
   private static final String ERROR_MESSAGE = "/entry @nickname (amount)";
 
+  @Deprecated(since = "1.1.0", forRemoval = true)
   public Pair<String, Optional<BigDecimal>> map(final String command) {
     final var str = command.toLowerCase().strip();
     final var matcher = Pattern.compile(ENTRY_REGEX).matcher(str);
