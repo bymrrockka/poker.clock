@@ -35,7 +35,7 @@ public class FinalePlacesMessageMapper {
   private static final String FINALE_PLACES_REGEX = "^(\\d)%s%s$".formatted(DELIMITER_REGEX, TELEGRAM_NAME_REGEX);
   private static final int POSITION_GROUP = 1;
   private static final int MENTION_GROUP = 3;
-  private static final String ERROR_MESSAGE = "/finaleplaces 1 @nickname (, # @nickname)";
+  private static final String ERROR_MESSAGE = "/finaleplaces 1 @nickname (, #position @nickname)";
 
   @Deprecated(since = "1.1.0", forRemoval = true)
   public List<Pair<Integer, String>> map(final String command) {

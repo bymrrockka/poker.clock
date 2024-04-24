@@ -9,6 +9,7 @@ import by.mrrockka.response.builder.FinalePlacesResponseBuilder;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
 import by.mrrockka.service.exception.FinalPlaceContainsNicknameOfNonExistingPlayerException;
 import by.mrrockka.service.game.TelegramGameService;
+import by.mrrockka.validation.GameValidator;
 import by.mrrockka.validation.finaleplaces.FinalePlacesValidator;
 import by.mrrockka.validation.mentions.PersonMentionsValidator;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class TelegramFinalePlacesService {
   private final TelegramPersonService telegramPersonService;
   private final MessageMetadataMapper messageMetadataMapper;
   private final FinalePlacesResponseBuilder finalePlacesResponseBuilder;
+  private final GameValidator gameValidator;
   private final PersonMentionsValidator personMentionsValidator;
   private final FinalePlacesValidator finalePlacesValidator;
 
@@ -42,7 +44,7 @@ public class TelegramFinalePlacesService {
     final var telegramGame = telegramGameService
       .getGameByMessageMetadata(messageMetadata)
       .orElseThrow(ChatGameNotFoundException::new);
-    finalePlacesValidator.validateGameType(telegramGame.game());
+    gameValidator.validateGameIsTournamentType(telegramGame.game());
 
     final var telegramPersons = telegramPersonService
       .getAllByTelegramsAndChatId(places.values().stream().map(TelegramPerson::getNickname).toList(),
