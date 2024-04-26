@@ -6,12 +6,10 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import static by.mrrockka.mapper.CommandRegexConstants.COMMAND_APPENDIX;
-
 @Component
 @RequiredArgsConstructor
 public class PrizePoolTelegramCommand implements TelegramCommand {
-  private static final String COMMAND = "/prizepool%s".formatted(COMMAND_APPENDIX);
+  private static final String COMMAND = "^/prizepool$";
 
   private final TelegramPrizePoolService prizePoolService;
 

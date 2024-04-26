@@ -14,7 +14,7 @@ public class CalculateTelegramCommand implements TelegramCommand {
   @Value("${telegrambots.name}")
   private String botName;
 
-  private static final String COMMAND = "/calculate([\\s]*|@%s)";
+  private static final String COMMAND = "^/calculate$";
 
   private final TelegramCalculationService telegramCalculationService;
 
@@ -24,15 +24,8 @@ public class CalculateTelegramCommand implements TelegramCommand {
   }
 
   @Override
-  public boolean isApplicable(final Update update) {
-    return TelegramCommand.super.isApplicable(update) &&
-      update.getMessage().getText().matches(COMMAND.formatted(botName));
-  }
-
-  @Override
   public String commandPattern() {
     return COMMAND;
   }
-
 
 }
