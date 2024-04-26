@@ -2,7 +2,109 @@ telegrambots:
   name: pokerclc_bot
   enabled: true
   token: ${BOT_TOKEN}
+  commands:
+    bounty_tournament:
+      description: Starts bounty tournament
+      details: |
+        You could create a bounty tournament game using /bounty_tournament command with list of players nicknames that separated with a space.
+        Also you should specify buy-in, stack and bounty amount.
+        There should be at least two players for the game
+        Example: 
+        /bounty_tournament
+        buy-in: 10
+        stack: 10
+        bounty: 10
+        @nickname 
+        @nickname
+    tournament:
+      description: Starts a tournament
+      details: |
+        You could create a tournament game using /tournament command with list of players nicknames that separated with a space.
+        Also you should specify buy-in, stack amount.
+        There should be at least two players for the game
+        Example: 
+        /tournament
+        buy-in: 10
+        stack: 10
+        @nickname 
+        @nickname
+    entry:
+      description: Player entry to game
+      details: |
+        For players reentries or new players entry use /entry command with nickname to save it against the last started game.
+        You could specify multiple players and amount of buy-in which is useful for cash game with not strict max buy-in amount.
+        You could forward game message in case there are multiple games happen in parallel to store against it.
+        Examples: 
+        /entry @nickname
+        /entry @nickname 20 
+        /entry @nickname @nickname
+        /entry @nickname @nickname 20
+    withdrawal:
+      description: Player withdrawal from a cash game
+      details: |
+        For players withdrawals use /withdrawal command with nickname and amount to save it against the last started game.
+        You could specify multiple players with same withdrawal amount.
+        You could forward game message in case there are multiple games happen in parallel to store against it.
+        Examples: 
+        /withdrawal @nickname 20
+        /withdrawal @nickname @nickname 20
+    prizepool:
+      description: Stores a prize pool for a tournament
+      details: |
+        When you ready to specify prize pool for tournament game use /prizepool command to store position and percentage map.
+        Should contain at least one position.
+        Total percentage should be equal to 100%.
+        You could forward game message in case there are multiple games happen in parallel to store against it.
+        Examples: 
+        /prizepool 
+        1. 100
+        /prizepool 
+        1 70%
+        2 30%
+    finaleplaces:
+      description: Stores a finale places for a tournament
+      details: |
+        When tournament is finished you could specify places for players who won the pot with /finaleplaces command.
+        Should contain at least one position with player nickname.
+        You could forward game message in case there are multiple games happen in parallel to store against it.
+        Examples: 
+        /finaleplaces 
+        1. @nickname
+        /finaleplaces 1 @nickname, 2 @nickname
+    calculate:
+      description: Calculate game payouts
+      details: |
+        When game is over you could use /calculate command to view calculated payouts.
+        You could forward game message in case there are multiple games happen in parallel to store against it.
+        Information needed to calculate:
+        - Tournament: 
+          - prize pool
+          - finale places
+        - Bounty Tournament: 
+          - prize pool
+          - finale places
+          - bounties 
+        - Cash game:
+          - withdrawals
+        Examples: 
+        /calculate
+    details:
+      description: Game details
+      details: |
+        When you want to see game details you could use /details command.
+        You could forward game message in case there are multiple games happen in parallel to store against it.
+        Examples: 
+        /details
+    help:
+      description: Post it with a command name for command details
+      details: |
+        You could use this command to get details about supported commands.
+        Empty command will send you this message.
+        Examples: 
+        /help
+        /help calculate
 
 spring:
   profiles:
     active: ${PROFILES:postgres}
+
