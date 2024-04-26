@@ -6,6 +6,7 @@ import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.response.builder.EntryResponseBuilder;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
 import by.mrrockka.service.game.TelegramGameService;
+import by.mrrockka.validation.collection.CollectionsValidator;
 import by.mrrockka.validation.mentions.PersonMentionsValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,18 +28,25 @@ public class TelegramEntryService {
   private final MessageMetadataMapper messageMetadataMapper;
   private final PersonMentionsValidator personMentionsValidator;
   private final EntryResponseBuilder entryResponseBuilder;
+  private final CollectionsValidator collectionsValidator;
 
   @SneakyThrows
   public BotApiMethodMessage storeEntry(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
     personMentionsValidator.validateMessageMentions(messageMetadata, 1);
-    final var nicknameAndAmountMap = entryMessageMapper.map(messageMetadata);
+    final var personAndAmountMap = entryMessageMapper.map(messageMetadata);
+    collectionsValidator.validateMapIsNotEmpty(personAndAmountMap, "Entry");
+
     final var telegramGame = telegramGameService
       .getGameByMessageMetadata(messageMetadata)
       .orElseThrow(ChatGameNotFoundException::new);
     final var game = telegramGame.game();
-    final var entries = nicknameAndAmountMap.keySet().stream().toList();
-    final var amount = nicknameAndAmountMap.get(entries.get(0)).orElse(game.getBuyIn());
+    final var entries = personAndAmountMap.keySet().stream().toList();
+    final var amount = personAndAmountMap.values().stream()
+      .filter(Optional::isPresent)
+      .map(Optional::get)
+      .findFirst()
+      .orElse(game.getBuyIn());
 
     final var persons = telegramPersonService.storeMissed(entries, messageMetadata.chatId());
 

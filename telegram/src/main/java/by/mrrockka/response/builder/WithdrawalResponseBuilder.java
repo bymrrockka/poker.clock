@@ -9,10 +9,10 @@ import java.util.List;
 import static by.mrrockka.response.builder.TextContants.*;
 
 @Component
-public class EntryResponseBuilder {
+public class WithdrawalResponseBuilder {
 
   public String response(final List<TelegramPerson> persons, final BigDecimal amount) {
-    final var strBuilder = new StringBuilder("Entries:");
+    final var strBuilder = new StringBuilder("Withdrawals:");
 
     persons.forEach(person -> strBuilder
       .append(NL)

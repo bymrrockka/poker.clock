@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.AbstractMap;
@@ -24,7 +26,7 @@ public class FinalePlacesRepository {
       (:game_id, :person_id, :position);
     """;
 
-  @Transactional
+  @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED)
   public void save(final FinalePlacesEntity finalePlacesEntity) {
     finalePlacesEntity.places().entrySet()
       .stream()

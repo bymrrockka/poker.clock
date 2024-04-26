@@ -16,7 +16,7 @@ class GameValidatorTest {
 
   private final GameValidator validator = new GameValidator();
 
-  private static Stream<Arguments> validGameType() {
+  private static Stream<Arguments> tournamentType() {
     return Stream.of(
       Arguments.of(GameCreator.tournament()),
       Arguments.of(GameCreator.bounty())
@@ -24,9 +24,15 @@ class GameValidatorTest {
   }
 
   @ParameterizedTest
-  @MethodSource("validGameType")
+  @MethodSource("tournamentType")
   void givenTournamentTypeGame_whenvalidateGameIsTournamentTypeExecuted_shouldNotThrowExceptions(final Game game) {
     assertThatCode(() -> validator.validateGameIsTournamentType(game)).doesNotThrowAnyException();
+  }
+
+  @Test
+  void givenCashTypeGame_whenvalidateGameIsCashTypeExecuted_shouldNotThrowExceptions() {
+    final var game = GameCreator.cash();
+    assertThatCode(() -> validator.validateGameIsCashType(game)).doesNotThrowAnyException();
   }
 
   @Test
@@ -36,4 +42,10 @@ class GameValidatorTest {
       .isInstanceOf(ProcessingRestrictedException.class);
   }
 
+  @ParameterizedTest
+  @MethodSource("tournamentType")
+  void givenTournamentTypeGame_whenvalidateGameIsCashTypeExecuted_shouldThrowExceptions(final Game game) {
+    assertThatCode(() -> validator.validateGameIsCashType(game))
+      .isInstanceOf(ProcessingRestrictedException.class);
+  }
 }

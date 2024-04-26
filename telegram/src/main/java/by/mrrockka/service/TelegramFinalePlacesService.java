@@ -10,7 +10,7 @@ import by.mrrockka.service.exception.ChatGameNotFoundException;
 import by.mrrockka.service.exception.FinalPlaceContainsNicknameOfNonExistingPlayerException;
 import by.mrrockka.service.game.TelegramGameService;
 import by.mrrockka.validation.GameValidator;
-import by.mrrockka.validation.finaleplaces.FinalePlacesValidator;
+import by.mrrockka.validation.collection.CollectionsValidator;
 import by.mrrockka.validation.mentions.PersonMentionsValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,14 +32,14 @@ public class TelegramFinalePlacesService {
   private final FinalePlacesResponseBuilder finalePlacesResponseBuilder;
   private final GameValidator gameValidator;
   private final PersonMentionsValidator personMentionsValidator;
-  private final FinalePlacesValidator finalePlacesValidator;
+  private final CollectionsValidator collectionsValidator;
 
   public BotApiMethodMessage storePrizePool(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
     personMentionsValidator.validateMessageMentions(messageMetadata, 1);
 
     final var places = finalePlacesMessageMapper.map(messageMetadata);
-    finalePlacesValidator.validatePlaces(places);
+    collectionsValidator.validateMapIsNotEmpty(places, "Finale places");
 
     final var telegramGame = telegramGameService
       .getGameByMessageMetadata(messageMetadata)

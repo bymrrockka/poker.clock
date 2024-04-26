@@ -7,7 +7,6 @@ values  ('13b4108e-2dfa-4fea-8b7b-277e1c87d2d8', 'Grisha', 'Anikii', 'kinger'),
         ('e2691144-3b1b-4841-9693-fad7af25bba9', null, 'Portugal', 'jackas'),
         ('58ae9984-1ebc-4621-ba0e-a577c69283ef', null, null, 'tenten');
 
-
 insert into game (id, stack, buy_in, bounty, game_type)
 values  ('fa3d03c4-f411-4852-810f-c0cc2f5b8c84', 1000, 15, 0, 'CASH'),
         ('4a411a12-2386-4dce-b579-d806c91d6d17', 1500, 30, 0, 'TOURNAMENT'),
