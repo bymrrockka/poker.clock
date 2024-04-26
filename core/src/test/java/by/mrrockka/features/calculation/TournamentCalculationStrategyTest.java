@@ -4,8 +4,12 @@ import by.mrrockka.creator.EntriesCreator;
 import by.mrrockka.creator.GameCreator;
 import by.mrrockka.domain.Person;
 import by.mrrockka.domain.collection.PersonEntries;
+import by.mrrockka.domain.finaleplaces.FinalPlace;
+import by.mrrockka.domain.finaleplaces.FinalePlaces;
 import by.mrrockka.domain.payout.Payer;
 import by.mrrockka.domain.payout.Payout;
+import by.mrrockka.domain.prize.PositionAndPercentage;
+import by.mrrockka.domain.prize.PrizePool;
 import by.mrrockka.domain.summary.finale.FinalePlaceSummary;
 import by.mrrockka.domain.summary.finale.FinaleSummary;
 import org.junit.jupiter.api.Test;
@@ -179,6 +183,47 @@ class TournamentCalculationStrategyTest {
     );
 
     assertThat(actual).containsExactlyInAnyOrderElementsOf(expect);
+  }
+
+  @Test
+  void givenPlayerBuyEquallyAndPrizePoolAmountHasDecimalPoints_thenShouldCreateListOfDebtorsOrderedByTheAmount() {
+    final int size = 17;
+    final var entries = new ArrayList<>(EntriesCreator.entriesList(size, BUY_IN));
+
+    final var prizePool = new PrizePool(List.of(
+      new PositionAndPercentage(1, BigDecimal.valueOf(63)),
+      new PositionAndPercentage(2, BigDecimal.valueOf(26)),
+      new PositionAndPercentage(3, BigDecimal.valueOf(11))
+    ));
+
+    final var finalePlaces = new FinalePlaces(List.of(
+      new FinalPlace(1, entries.get(0).person()),
+      new FinalPlace(2, entries.get(1).person()),
+      new FinalPlace(3, entries.get(2).person())
+    ));
+
+    final var total = entries.stream()
+      .map(PersonEntries::total)
+      .reduce(BigDecimal::add)
+      .orElse(BigDecimal.ZERO);
+
+    final var finaleSummary = FinaleSummary.of(prizePool, finalePlaces, total);
+    final var game = GameCreator.tournament(builder -> builder
+      .entries(entries)
+      .finaleSummary(finaleSummary)
+    );
+
+    final var actual = strategy.calculate(game);
+
+    assertThat(actual.get(0).total()).isEqualTo(prizePool.calculatePrizeAmountFor(1, total).subtract(BUY_IN));
+    assertThat(actual.get(1).total()).isEqualTo(prizePool.calculatePrizeAmountFor(2, total).subtract(BUY_IN));
+
+    final var lastPositionAmount = total
+      .subtract(prizePool.calculatePrizeAmountFor(1, total))
+      .subtract(prizePool.calculatePrizeAmountFor(2, total))
+      .subtract(BUY_IN);
+
+    assertThat(actual.get(2).total()).isEqualTo(lastPositionAmount);
   }
 
   private PersonEntries entry(final List<BigDecimal> entries) {
