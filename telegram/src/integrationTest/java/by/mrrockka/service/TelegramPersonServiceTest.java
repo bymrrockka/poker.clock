@@ -1,15 +1,11 @@
 package by.mrrockka.service;
 
 import by.mrrockka.config.PostgreSQLExtension;
-import by.mrrockka.creator.ChatCreator;
-import by.mrrockka.creator.MessageCreator;
-import by.mrrockka.creator.UpdateCreator;
-import by.mrrockka.creator.UserCreator;
+import by.mrrockka.creator.*;
 import by.mrrockka.domain.Person;
 import by.mrrockka.repo.person.PersonRepository;
 import by.mrrockka.repo.person.TelegramPersonEntity;
 import by.mrrockka.repo.person.TelegramPersonRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -51,7 +47,7 @@ class TelegramPersonServiceTest {
   @ParameterizedTest
   @MethodSource("telegrams")
   void givenMessageWithTelegrams_whenAttemptToStoreAndSomeTelegramsExistsInDb_shouldStoreOnlyNewPersons(
-    List<String> args) {
+    final List<String> args) {
     final var telegrams = new ArrayList<>(args);
 
     final var text = telegrams.stream()
@@ -63,6 +59,9 @@ class TelegramPersonServiceTest {
       MessageCreator.message(message -> {
         message.setText(text);
         message.setChat(ChatCreator.chat(CHAT_ID));
+        message.setEntities(
+          args.stream().filter(str -> !"me".equals(str)).map(
+            mention -> MessageEntityCreator.apiMention(text, mention)).toList());
       })
     );
 
@@ -73,7 +72,7 @@ class TelegramPersonServiceTest {
     final var personIds = telegramPersonService.storePersons(update).stream()
       .map(Person::getId)
       .toList();
-    Assertions.assertThat(personRepository.findAllByIds(personIds)).hasSize(args.size());
+    assertThat(personRepository.findAllByIds(personIds)).hasSize(args.size());
 
     final var actualIds = telegramPersonRepository.findAllByChatIdAndTelegrams(CHAT_ID, telegrams).stream()
       .map(TelegramPersonEntity::getId)

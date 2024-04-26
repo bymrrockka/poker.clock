@@ -7,6 +7,6 @@ import static by.mrrockka.service.exception.TelegramErrorCodes.INVALID_MESSAGE_F
 
 public class InvalidMessageFormatException extends BusinessException {
   public InvalidMessageFormatException(@NonNull final String regex) {
-    super("Message is not applicable. Format of the message is %s".formatted(regex), INVALID_MESSAGE_FORMAT);
+    super("Can't read message. Should be like \"%s\"".formatted(regex), INVALID_MESSAGE_FORMAT);
   }
 }

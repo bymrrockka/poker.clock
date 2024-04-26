@@ -1,14 +1,15 @@
 package by.mrrockka.service;
 
-import by.mrrockka.domain.prize.PrizePool;
 import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.mapper.PrizePoolMessageMapper;
 import by.mrrockka.repo.game.GameType;
+import by.mrrockka.response.builder.PrizePoolResponseBuilder;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
 import by.mrrockka.service.exception.ProcessingRestrictedException;
 import by.mrrockka.service.game.TelegramGameService;
+import by.mrrockka.validation.GameValidator;
+import by.mrrockka.validation.prizepool.PrizePoolValidator;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -22,14 +23,19 @@ public class TelegramPrizePoolService {
   private final PrizePoolMessageMapper prizePoolMessageMapper;
   private final TelegramGameService telegramGameService;
   private final MessageMetadataMapper messageMetadataMapper;
+  private final GameValidator gameValidator;
+  private final PrizePoolValidator prizePoolValidator;
+  private final PrizePoolResponseBuilder prizePoolResponseBuilder;
 
   public BotApiMethodMessage storePrizePool(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
     final var prizePool = prizePoolMessageMapper.map(messageMetadata.command());
+    prizePoolValidator.validate(prizePool);
 
     final var telegramGame = telegramGameService
       .getGameByMessageMetadata(messageMetadata)
       .orElseThrow(ChatGameNotFoundException::new);
+    gameValidator.validateGameIsTournamentType(telegramGame.game());
 
     if (!(telegramGame.game().isBounty() || telegramGame.game().isTournament())) {
       throw new ProcessingRestrictedException("%s or %s".formatted(GameType.TOURNAMENT, GameType.BOUNTY));
@@ -38,20 +44,9 @@ public class TelegramPrizePoolService {
     prizePoolService.store(telegramGame.game().getId(), prizePool);
     return SendMessage.builder()
       .chatId(messageMetadata.chatId())
-      .text(prettyPrint(prizePool))
+      .text(prizePoolResponseBuilder.response(prizePool))
       .replyToMessageId(telegramGame.messageMetadata().id())
       .build();
   }
 
-  private String prettyPrint(final PrizePool prizePool) {
-    return """
-      Prize Pool stored:
-      %s
-      """.formatted(
-      prizePool.positionAndPercentages().stream()
-        .map(pp -> "\tposition: %s, percentage: %s".formatted(pp.position(), pp.percentage()))
-        .reduce("%s\n%s"::formatted)
-        .orElse(StringUtils.EMPTY)
-    );
-  }
 }

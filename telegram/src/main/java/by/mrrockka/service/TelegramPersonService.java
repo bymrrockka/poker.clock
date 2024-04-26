@@ -5,6 +5,7 @@ import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.mapper.person.PersonMessageMapper;
 import by.mrrockka.mapper.person.TelegramPersonMapper;
 import by.mrrockka.repo.person.TelegramPersonRepository;
+import by.mrrockka.validation.mentions.PersonMentionsValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -25,12 +26,13 @@ public class TelegramPersonService {
   private final PersonService personService;
   private final TelegramPersonRepository telegramPersonRepository;
   private final MessageMetadataMapper messageMetadataMapper;
+  private final PersonMentionsValidator personMentionsValidator;
 
-  @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
+  @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED)
   public List<TelegramPerson> storePersons(final Update update) {
-//    todo: find a way to verify if person is in chat
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
-    final var persons = personMessageMapper.map(messageMetadata.command(), messageMetadata.chatId());
+    personMentionsValidator.validateMessageMentions(messageMetadata, 2);
+    final var persons = personMessageMapper.map(messageMetadata);
 
     return storeMissed(persons, messageMetadata.chatId());
   }
@@ -45,7 +47,8 @@ public class TelegramPersonService {
     return telegramPersonMapper.mapToTelegrams(telegramPersonRepository.findAllByChatIdAndTelegrams(chatId, telegrams));
   }
 
-  private List<TelegramPerson> storeMissed(final List<TelegramPerson> persons, final Long chatId) {
+  @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED)
+  public List<TelegramPerson> storeMissed(final List<TelegramPerson> persons, final Long chatId) {
     final var stored = telegramPersonMapper
       .mapToTelegrams(telegramPersonRepository.findAllByChatIdAndTelegrams(chatId, persons.stream().map(
         TelegramPerson::getNickname).toList()));
@@ -68,6 +71,7 @@ public class TelegramPersonService {
     return stored;
   }
 
+  @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED)
   private TelegramPerson saveNew(final String telegram, final Long chatId) {
     final var telegramPerson = TelegramPerson.telegramPersonBuilder()
       .id(UUID.randomUUID())

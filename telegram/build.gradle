@@ -33,7 +33,7 @@ dependencies {
     implementation libs.springBootWeb
     implementation libs.springBootAop
     implementation libs.springBootTelegrambots
-    implementation project(":lib")
+    implementation project(':core')
     implementation libs.apacheCommonsLang3
     implementation libs.postgresql
     implementation libs.liquibase
@@ -52,14 +52,14 @@ dependencies {
     testImplementation libs.jupiter
     testImplementation libs.assertjCore
     testImplementation(testFixtures(project))
-    testImplementation(testFixtures(project(":lib")))
+    testImplementation(testFixtures(project(":core")))
 
     testFixturesCompileOnly libs.lombok
     testFixturesAnnotationProcessor libs.lombok
     testFixturesAnnotationProcessor libs.mapstructProcessor
     testFixturesApi libs.springBootTelegrambots
     testFixturesImplementation(project)
-    testFixturesImplementation(testFixtures(project(":lib")))
+    testFixturesImplementation(testFixtures(project(":core")))
 }
 
 application {
@@ -98,7 +98,7 @@ testing {
 
                 implementation(project())
                 implementation(testFixtures(project()))
-                implementation(testFixtures(project(":lib")))
+                implementation(testFixtures(project(":core")))
             }
         }
     }

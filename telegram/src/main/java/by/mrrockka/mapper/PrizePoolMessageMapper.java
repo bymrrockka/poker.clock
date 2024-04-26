@@ -14,6 +14,9 @@ import java.util.regex.Pattern;
 public class PrizePoolMessageMapper {
 
   private static final String PRIZE_POOL_REGEX = "^(\\d)([. :\\-=]{1,3})([\\d]{1,3})$";
+  private static final int POSITION_GROUP = 1;
+  private static final int AMOUNT_GROUP = 3;
+  private static final String ERROR_MESSAGE = "/prizepool 1. 100 (, #places #amount)";
 
   public PrizePool map(final String command) {
     final var strings = command.toLowerCase().strip().replaceFirst("/prizepool([ \n]*)", "").split("[\n,;%]");
@@ -24,14 +27,14 @@ public class PrizePoolMessageMapper {
         .map(prizePattern::matcher)
         .filter(Matcher::matches)
         .map(matcher -> PositionAndPercentage.builder()
-          .position(Integer.parseInt(matcher.group(1)))
-          .percentage(new BigDecimal(matcher.group(3)))
+          .position(Integer.parseInt(matcher.group(POSITION_GROUP)))
+          .percentage(new BigDecimal(matcher.group(AMOUNT_GROUP)))
           .build())
         .toList()
     );
 
     if (result.positionAndPercentages().isEmpty()) {
-      throw new InvalidMessageFormatException(PRIZE_POOL_REGEX);
+      throw new InvalidMessageFormatException(ERROR_MESSAGE);
     }
 
     return result;

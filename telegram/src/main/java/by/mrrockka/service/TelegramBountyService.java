@@ -2,15 +2,17 @@ package by.mrrockka.service;
 
 import by.mrrockka.domain.Bounty;
 import by.mrrockka.domain.Person;
+import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.domain.collection.PersonEntries;
 import by.mrrockka.domain.game.BountyGame;
 import by.mrrockka.mapper.BountyMessageMapper;
 import by.mrrockka.mapper.MessageMetadataMapper;
-import by.mrrockka.repo.game.GameType;
-import by.mrrockka.service.exception.*;
+import by.mrrockka.service.exception.ChatGameNotFoundException;
+import by.mrrockka.service.exception.EntriesForPersonNotFoundException;
 import by.mrrockka.service.game.TelegramGameService;
+import by.mrrockka.validation.bounty.BountyValidator;
+import by.mrrockka.validation.mentions.PersonMentionsValidator;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -26,20 +28,19 @@ public class TelegramBountyService {
   private final BountyMessageMapper bountyMessageMapper;
   private final TelegramGameService telegramGameService;
   private final MessageMetadataMapper messageMetadataMapper;
+  private final PersonMentionsValidator personMentionsValidator;
+  private final BountyValidator bountyValidator;
 
   public BotApiMethodMessage storeBounty(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
-    final var fromAndTo = bountyMessageMapper.map(messageMetadata.command());
+    personMentionsValidator.validateMessageMentions(messageMetadata, 2);
+    final var fromAndTo = bountyMessageMapper.map(messageMetadata);
     final var telegramGame = telegramGameService
       .getGameByMessageMetadata(messageMetadata)
       .orElseThrow(ChatGameNotFoundException::new);
-    final var game = telegramGame.game();
+    final var game = telegramGame.game().asType(BountyGame.class);
 
-    if (game.isBounty()) {
-      validate(game.asBounty(), fromAndTo);
-    } else {
-      throw new ProcessingRestrictedException(GameType.BOUNTY);
-    }
+    bountyValidator.validate(game, fromAndTo);
 
     final var gamePersons = game.getEntries().stream()
       .map(PersonEntries::person)
@@ -56,46 +57,15 @@ public class TelegramBountyService {
     return SendMessage.builder()
       .chatId(messageMetadata.chatId())
       .text("Bounty amount %s from %s stored for %s"
-              .formatted(game.asBounty().getBountyAmount(), fromAndTo.getKey(), fromAndTo.getValue()))
+              .formatted(game.getBountyAmount(), fromAndTo.getKey().getNickname(), fromAndTo.getValue().getNickname()))
       .replyToMessageId(telegramGame.messageMetadata().id())
       .build();
   }
 
-  private void validate(final BountyGame game, final Pair<String, String> fromAndTo) {
-    if (fromAndTo.getValue().equals(fromAndTo.getKey())) {
-      throw new PersonsCantBeEqualForBountyException(fromAndTo.getKey());
-    }
-
-    final var fromEntries = game.getEntries().stream()
-      .filter(entry -> entry.person().getNickname().equals(fromAndTo.getKey()))
-      .findFirst()
-      .map(PersonEntries::entries);
-    final var fromBounties = game.getBountyList().stream()
-      .filter(bounty -> bounty.from().getNickname().equals(fromAndTo.getKey()))
-      .toList();
-
-    final var toEntries = game.getEntries().stream()
-      .filter(entry -> entry.person().getNickname().equals(fromAndTo.getValue()))
-      .findFirst()
-      .map(PersonEntries::entries);
-    final var toBounties = game.getBountyList().stream()
-      .filter(bounty -> bounty.from().getNickname().equals(fromAndTo.getValue()))
-      .toList();
-
-    if (fromEntries.isEmpty() || fromBounties.size() >= fromEntries.get().size()) {
-      throw new PlayerHasNotEnoughEntriesException(fromAndTo.getKey());
-    }
-
-    if (toEntries.isEmpty() || toBounties.size() == toEntries.get().size()) {
-      throw new PlayerHasNotEnoughEntriesException(fromAndTo.getValue());
-    }
-  }
-
-  private Person findByTelegram(final String telegram, final List<Person> persons) {
+  private Person findByTelegram(final TelegramPerson telegram, final List<Person> persons) {
     return persons.stream()
-      .filter(person -> person.getNickname().equals(telegram))
+      .filter(person -> person.getNickname().equals(telegram.getNickname()))
       .findFirst()
       .orElseThrow(EntriesForPersonNotFoundException::new);
   }
-
 }

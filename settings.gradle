@@ -3,7 +3,7 @@ plugins {
 }
 
 rootProject.name = 'poker.clock'
-include 'lib', 'telegram'
+include 'core', 'telegram'
 
 
 gradleEnterprise {

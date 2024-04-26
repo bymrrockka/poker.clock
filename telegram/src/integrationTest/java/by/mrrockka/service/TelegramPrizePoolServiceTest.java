@@ -49,11 +49,10 @@ class TelegramPrizePoolServiceTest {
 
     final var message = telegramPrizePoolService.storePrizePool(update);
     final var expectedMessage = """
-      Prize Pool stored:
+      Prize Pool:
       	position: 1, percentage: 60
       	position: 2, percentage: 30
-      	position: 3, percentage: 10
-      	""";
+      	position: 3, percentage: 10""";
     assertAll(
       () -> Assertions.assertThat(((SendMessage) message).getChatId()).isEqualTo(String.valueOf(CHAT_ID)),
       () -> Assertions.assertThat(((SendMessage) message).getText()).isEqualTo(expectedMessage),

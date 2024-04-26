@@ -3,6 +3,7 @@ package by.mrrockka.route;
 import by.mrrockka.config.PostgreSQLExtension;
 import by.mrrockka.creator.MessageCreator;
 import by.mrrockka.creator.UpdateCreator;
+import by.mrrockka.route.commands.CalculateTelegramCommand;
 import lombok.Builder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -95,10 +96,9 @@ class CalculateTelegramCommandTest {
 
   @ParameterizedTest
   @MethodSource("messages")
-  void givenUpdateContainsMessage_whenEqualsCalculate_thenShouldAssertTrue(MessageArgument arg) {
-    final var update = UpdateCreator.update(MessageCreator.message(message -> message.setText(arg.message())));
+  void givenUpdateContainsMessage_whenEqualsCalculate_thenShouldAssertTrue(final MessageArgument arg) {
+    final var update = UpdateCreator.update(MessageCreator.message(arg.message()));
 
-    assertThat(calculatePaymentsRoute.isApplicable(update))
-      .isEqualTo(arg.result());
+    assertThat(calculatePaymentsRoute.isApplicable(update)).isEqualTo(arg.result());
   }
 }

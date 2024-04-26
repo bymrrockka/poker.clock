@@ -1,13 +1,9 @@
 package by.mrrockka.service;
 
 import by.mrrockka.config.PostgreSQLExtension;
-import by.mrrockka.creator.ChatCreator;
-import by.mrrockka.creator.MessageCreator;
-import by.mrrockka.creator.UpdateCreator;
-import by.mrrockka.creator.UserCreator;
+import by.mrrockka.creator.*;
 import by.mrrockka.repo.withdrawals.WithdrawalsEntity;
 import by.mrrockka.repo.withdrawals.WithdrawalsRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -20,8 +16,10 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @ExtendWith(PostgreSQLExtension.class)
@@ -56,23 +54,77 @@ class TelegramWithdrawalServiceTest {
         message.setText(text);
         message.setReplyToMessage(MessageCreator.message(msg -> msg.setMessageId(REPLY_TO_ID)));
         message.setFrom(UserCreator.user(telegram));
+        if (!text.contains("@me")) {
+          message.setEntities(List.of(MessageEntityCreator.apiMention(text, "@%s".formatted(telegram))));
+        }
       })
     );
 
     final var response = (SendMessage) telegramWithdrawalService.storeWithdrawal(update);
     assertAll(
-      () -> Assertions.assertThat(response).isNotNull(),
-      () -> Assertions.assertThat(response.getChatId()).isEqualTo(String.valueOf(CHAT_ID)),
-      () -> Assertions.assertThat(response.getText()).isEqualTo(
-        "%s withdrawn %s amount.".formatted(telegram, expectedAmount))
+      () -> assertThat(response).isNotNull(),
+      () -> assertThat(response.getChatId()).isEqualTo(String.valueOf(CHAT_ID)),
+      () -> assertThat(response.getText()).isEqualTo(
+        "Withdrawals:\n - @%s -> %s".formatted(telegram, expectedAmount))
     );
 
     final var actual = withdrawalsRepository.findAllByGameId(GAME_ID);
     assertAll(
-      () -> Assertions.assertThat(actual).isNotEmpty(),
-      () -> Assertions.assertThat(findByTelegram(actual, telegram).amounts()).hasSize(1),
-      () -> Assertions.assertThat(findByTelegram(actual, telegram).amounts().get(0)).isEqualTo(expectedAmount)
+      () -> assertThat(actual).isNotEmpty(),
+      () -> assertThat(findByTelegram(actual, telegram).amounts()).hasSize(1),
+      () -> assertThat(findByTelegram(actual, telegram).amounts().get(0)).isEqualTo(expectedAmount)
     );
+  }
+
+
+  private static Stream<Arguments> multipleWithdrawalsMessage() {
+    return Stream.of(
+      Arguments.of("/withdrawal @mister @missis 60", List.of("mister", "missis"), BigDecimal.valueOf(60)),
+      Arguments.of("/withdrawal @smith @candle 15", List.of("smith", "candle"), BigDecimal.valueOf(15))
+    );
+  }
+
+  @ParameterizedTest
+  @MethodSource("multipleWithdrawalsMessage")
+  void givenGameAndPersons_whenMultipleWithdrawalsAttempt_shouldStoreWithdrawal(final String text,
+                                                                                final List<String> telegrams,
+                                                                                final BigDecimal expectedAmount) {
+    final var update = UpdateCreator.update(
+      MessageCreator.message(message -> {
+        message.setChat(ChatCreator.chat(CHAT_ID));
+        message.setText(text);
+        message.setReplyToMessage(MessageCreator.message(msg -> msg.setMessageId(REPLY_TO_ID)));
+        message.setEntities(telegrams.stream()
+                              .map(tg -> MessageEntityCreator.apiMention(text, "@%s".formatted(tg)))
+                              .toList());
+      })
+    );
+
+    final var expectedLines = telegrams.stream()
+      .map(telegram -> " - @%s -> %s".formatted(telegram, expectedAmount))
+      .collect(Collectors.toSet());
+    expectedLines.add("Withdrawals:\n");
+
+    final var response = (SendMessage) telegramWithdrawalService.storeWithdrawal(update);
+    assertAll(
+      () -> assertThat(response).isNotNull(),
+      () -> assertThat(response.getChatId()).isEqualTo(String.valueOf(CHAT_ID)),
+      () -> assertThat(response.getText()).contains(expectedLines)
+    );
+
+    final var entries = withdrawalsRepository.findAllByGameId(GAME_ID);
+    assertThat(entries).isNotEmpty();
+    telegrams.forEach(telegram -> {
+      final var actual = entries.stream()
+        .filter(entry -> entry.person().getNickname().equals(telegram))
+        .findAny();
+
+      assertAll(
+        () -> assertThat(actual).isNotEmpty(),
+        () -> assertThat(actual.get().amounts()).hasSize(1),
+        () -> assertThat(actual.get().amounts().get(0)).isEqualTo(expectedAmount)
+      );
+    });
   }
 
   private WithdrawalsEntity findByTelegram(final List<WithdrawalsEntity> withdrawals, final String telegram) {
