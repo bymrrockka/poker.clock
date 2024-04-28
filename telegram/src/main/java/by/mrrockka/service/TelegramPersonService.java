@@ -49,6 +49,7 @@ public class TelegramPersonService {
 
   @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED)
   public List<TelegramPerson> storeMissed(final List<TelegramPerson> persons, final Long chatId) {
+//    todo: call person repo to get person by nickname and store all using chat id
     final var stored = telegramPersonMapper
       .mapToTelegrams(telegramPersonRepository.findAllByChatIdAndTelegrams(chatId, persons.stream().map(
         TelegramPerson::getNickname).toList()));

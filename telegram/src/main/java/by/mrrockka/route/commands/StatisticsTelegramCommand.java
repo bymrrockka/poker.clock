@@ -1,6 +1,6 @@
 package by.mrrockka.route.commands;
 
-import by.mrrockka.service.TelegramDetailsService;
+import by.mrrockka.service.details.TelegramStatisticsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
@@ -8,13 +8,13 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
 @RequiredArgsConstructor
-public class DetailsTelegramCommand implements TelegramCommand {
-  private static final String COMMAND = "^/details";
-  private final TelegramDetailsService telegramDetailsService;
+public class StatisticsTelegramCommand implements TelegramCommand {
+  private static final String COMMAND = "^/(game|my)_stats$";
+  private final TelegramStatisticsService telegramStatisticsService;
 
   @Override
   public BotApiMethodMessage process(final Update update) {
-    return telegramDetailsService.calculatePayments(update);
+    return telegramStatisticsService.retrieveDetails(update);
   }
 
   @Override
@@ -22,4 +22,8 @@ public class DetailsTelegramCommand implements TelegramCommand {
     return COMMAND;
   }
 
+  @Override
+  public boolean isApplicable(final Update update) {
+    return TelegramCommand.super.isMessageApplicable(update);
+  }
 }

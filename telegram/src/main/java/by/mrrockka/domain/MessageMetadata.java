@@ -17,9 +17,14 @@ public record MessageMetadata(
   Integer id,
   String command,
   MessageMetadata replyTo,
-  List<MessageEntity> entities
+  List<MessageEntity> entities,
+  String fromNickname
 ) {
   public Optional<MessageMetadata> optReplyTo() {
     return Optional.ofNullable(replyTo);
+  }
+
+  public Optional<String> optFromNickname() {
+    return Optional.ofNullable(fromNickname);
   }
 }
