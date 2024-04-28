@@ -1,5 +1,6 @@
 telegrambots:
-  name: pokerclc_bot
+  name: Poker calculator bot
+  nickname: pokerclc_bot
   enabled: true
   token: ${BOT_TOKEN}
   commands:

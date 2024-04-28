@@ -11,7 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @RequiredArgsConstructor
 public class CalculateTelegramCommand implements TelegramCommand {
 
-  @Value("${telegrambots.name}")
+  @Value("${telegrambots.nickname}")
   private String botName;
 
   private static final String COMMAND = "^/calculate$";

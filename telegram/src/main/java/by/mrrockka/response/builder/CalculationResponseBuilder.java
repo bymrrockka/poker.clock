@@ -171,7 +171,7 @@ public class CalculationResponseBuilder {
   }
 
   private void addFinaleSummary(final StringBuilder strBuilder, final TournamentGame game) {
-    final var placesStr = game.asTournament().getFinaleSummary().finaleSummaries().stream()
+    final var placesStr = game.asType(TournamentGame.class).getFinaleSummary().finaleSummaries().stream()
       .map(place -> "%s. @%s won %s".formatted(place.position(), place.person().getNickname(), place.amount()))
       .reduce("%s\n%s"::formatted);
 

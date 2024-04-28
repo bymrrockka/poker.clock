@@ -13,12 +13,12 @@ import java.util.List;
 public final class CashCalculationStrategy extends AbstractCalculationTemplateMethodStrategy<CashPlayerSummary, CashGame> {
   @Override
   public boolean isApplicable(final Game game) {
-    return game.isCash();
+    return game.isType(CashGame.class);
   }
 
   @Override
   protected List<CashPlayerSummary> buildPlayerSummary(final Game game) {
-    final var cash = game.asCash();
+    final var cash = game.asType(CashGame.class);
     return cash.getEntries().stream()
       .map(entry -> CashPlayerSummary.of(entry, cash.getWithdrawals()))
       .sorted()

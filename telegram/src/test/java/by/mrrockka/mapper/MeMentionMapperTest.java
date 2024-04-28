@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class MeMentionUtilTest {
+class MeMentionMapperTest {
 
   private static Stream<Arguments> usernamesToReplace() {
     return Stream.of(
@@ -31,8 +31,8 @@ class MeMentionUtilTest {
       builder.setText(me);
     });
 
-    assertThat(MeMentionUtil.hasMeMention(message)).isTrue();
-    assertThat(MeMentionUtil.replaceMeMention(message))
+    assertThat(MeMentionMapper.hasMeMention(message)).isTrue();
+    assertThat(MeMentionMapper.replaceMeMention(message))
       .contains(user.getUserName());
   }
 
@@ -54,8 +54,8 @@ class MeMentionUtilTest {
       builder.setText(me);
     });
 
-    assertThat(MeMentionUtil.hasMeMention(message)).isFalse();
-    assertThat(MeMentionUtil.replaceMeMention(message))
+    assertThat(MeMentionMapper.hasMeMention(message)).isFalse();
+    assertThat(MeMentionMapper.replaceMeMention(message))
       .isEqualTo(me);
   }
 

@@ -4,6 +4,7 @@ import by.mrrockka.route.commands.TelegramCommand;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -21,24 +22,29 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class PokerClockBot implements LongPollingBot {
 
-  private static final String BOT_NAME = "Poker calculator bot";
   private final PokerClockAbsSender pokerClockAbsSender;
   private final List<TelegramCommand> telegramCommands;
 
+  @Value("${telegrambots.name}")
+  private String botName;
+
   @Override
   public void onUpdateReceived(final Update update) {
-    telegramCommands.stream()
-      .filter(telegramCommand -> telegramCommand.isApplicable(update))
-      .map(telegramCommand -> telegramCommand.process(update))
-      .filter(Objects::nonNull)
-      .findFirst()
-      .map(this::executeMessage)
-      .orElseThrow(() -> new NoRoutesFoundException(update.getMessage().getText()));
+//    todo: add logic to process edited message
+    if (update.hasMessage() && update.getMessage().isCommand()) {
+      telegramCommands.stream()
+        .filter(telegramCommand -> telegramCommand.isApplicable(update))
+        .map(telegramCommand -> telegramCommand.process(update))
+        .filter(Objects::nonNull)
+        .findFirst()
+        .map(this::executeMessage)
+        .orElseThrow(NoRoutesFoundException::new);
+    }
   }
 
   @Override
   public String getBotUsername() {
-    return BOT_NAME;
+    return botName;
   }
 
   @SneakyThrows

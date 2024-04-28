@@ -30,32 +30,6 @@ public abstract class Game {
     this.entries = entries;
   }
 
-
-  //  todo: remove because is doesn't make sense if there would be extensions
-  public TournamentGame asTournament() {
-    return (TournamentGame) this;
-  }
-
-  public boolean isTournament() {
-    return isType(TournamentGame.class);
-  }
-
-  public CashGame asCash() {
-    return (CashGame) this;
-  }
-
-  public boolean isCash() {
-    return isType(CashGame.class);
-  }
-
-  public boolean isBounty() {
-    return isType(BountyGame.class);
-  }
-
-  public BountyGame asBounty() {
-    return (BountyGame) this;
-  }
-
   public <T extends Game> T asType(final Class<T> clazz) {
     return clazz.cast(this);
   }
