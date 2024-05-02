@@ -1,4 +1,4 @@
-package by.mrrockka.service.details;
+package by.mrrockka.service.statistics;
 
 import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.mapper.StatisticsMessageMapper;
@@ -20,7 +20,7 @@ public class TelegramStatisticsService {
   private final PlayerInGameStatisticsService playerInGameStatisticsService;
   private final GameStatisticsService gameStatisticsService;
 
-  public BotApiMethodMessage retrieveDetails(final Update update) {
+  public BotApiMethodMessage retrieveStatistics(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
     personMentionsValidator.validateMessageHasUserTextMention(messageMetadata);
     final var statistics = statisticsMessageMapper.map(messageMetadata);

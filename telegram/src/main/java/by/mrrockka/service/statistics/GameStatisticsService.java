@@ -1,4 +1,4 @@
-package by.mrrockka.service.details;
+package by.mrrockka.service.statistics;
 
 import by.mrrockka.domain.statistics.StatisticsCommand;
 import by.mrrockka.response.builder.GameStatisticsResponseBuilder;

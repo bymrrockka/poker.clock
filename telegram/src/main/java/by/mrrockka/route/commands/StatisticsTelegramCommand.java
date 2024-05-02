@@ -1,6 +1,6 @@
 package by.mrrockka.route.commands;
 
-import by.mrrockka.service.details.TelegramStatisticsService;
+import by.mrrockka.service.statistics.TelegramStatisticsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
@@ -14,7 +14,7 @@ public class StatisticsTelegramCommand implements TelegramCommand {
 
   @Override
   public BotApiMethodMessage process(final Update update) {
-    return telegramStatisticsService.retrieveDetails(update);
+    return telegramStatisticsService.retrieveStatistics(update);
   }
 
   @Override

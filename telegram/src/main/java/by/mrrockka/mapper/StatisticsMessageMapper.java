@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class StatisticsMessageMapper {
 
-  private static final String STATISTICS_REGEX = "^/(game|my)_stats";
+  private static final String STATISTICS_REGEX = "^/(game|my)_stats$";
   private static final int TYPE_GROUP = 1;
   private static final String ERROR_MESSAGE = "/(game|my)_stats";
 
@@ -26,19 +26,18 @@ public class StatisticsMessageMapper {
     }
 
     return StatisticsCommand.builder()
-      .type(isType(matcher.group(TYPE_GROUP), messageMetadata))
+      .type(isType(matcher.group(TYPE_GROUP)))
       .metadata(messageMetadata)
       .build();
   }
 
-  private StatisticsType isType(final String type, final MessageMetadata messageMetadata) {
-    if ("my".equals(type) && messageMetadata.optReplyTo().isPresent()) {
-      return StatisticsType.PLAYER_IN_GAME;
-    } else if ("my".equals(type)) {
-      return StatisticsType.PERSON_GLOBAL;
-    } else {
-      return StatisticsType.GAME;
-    }
+  private StatisticsType isType(final String type) {
+    return switch (type) {
+      case "my" -> StatisticsType.PLAYER_IN_GAME;
+      case "my_global" -> StatisticsType.PERSON_GLOBAL;
+      case "game" -> StatisticsType.GAME;
+      default -> throw new InvalidMessageFormatException(ERROR_MESSAGE);
+    };
   }
 
 }
