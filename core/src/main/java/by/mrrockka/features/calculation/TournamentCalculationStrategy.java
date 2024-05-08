@@ -14,12 +14,12 @@ final class TournamentCalculationStrategy extends AbstractCalculationTemplateMet
 
   @Override
   public boolean isApplicable(final Game game) {
-    return game.isTournament();
+    return game.isType(TournamentGame.class);
   }
 
   @Override
   protected List<TournamentPlayerSummary> buildPlayerSummary(final Game game) {
-    final var tournament = game.asTournament();
+    final var tournament = game.asType(TournamentGame.class);
     return tournament.getEntries()
       .stream()
       .map(entries -> TournamentPlayerSummary.of(entries, tournament.getFinaleSummary()))

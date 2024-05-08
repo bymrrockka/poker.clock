@@ -22,6 +22,6 @@ public class EntryResponseBuilder {
       .append(amount)
     );
 
-    return strBuilder.toString();
+    return strBuilder.append(NL).toString();
   }
 }

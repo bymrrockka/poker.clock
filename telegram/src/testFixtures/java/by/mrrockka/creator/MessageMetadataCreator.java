@@ -25,7 +25,8 @@ public final class MessageMetadataCreator {
       .createdAt(MessageCreator.MESSAGE_TIMESTAMP.truncatedTo(ChronoUnit.SECONDS))
       .chatId(ChatCreator.CHAT_ID)
       .command(MessageCreator.MESSAGE_TEXT)
-      .entities(List.of(MessageEntityCreator.domainEntity()));
+      .entities(List.of(MessageEntityCreator.domainEntity()))
+      .fromNickname(UserCreator.USER_NAME);
 
     if (nonNull(messageMetadataBuilderConsumer)) {
       messageMetadataBuilderConsumer.accept(messageMetadataBuilder);

@@ -49,7 +49,7 @@ public class TelegramBountyService {
     final var bounty = Bounty.builder()
       .to(findByTelegram(fromAndTo.getValue(), gamePersons))
       .from(findByTelegram(fromAndTo.getKey(), gamePersons))
-      .amount(game.asBounty().getBountyAmount())
+      .amount(game.asType(BountyGame.class).getBountyAmount())
       .build();
 
     bountyService.storeBounty(game.getId(), bounty, messageMetadata.createdAt());

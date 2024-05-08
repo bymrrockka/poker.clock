@@ -12,7 +12,7 @@ import java.util.List;
 @Component
 public class PersonMentionsValidator {
   //todo: I see lots of usage of this field, probably worth creating model for options instead of it
-  @Value("${telegrambots.name}")
+  @Value("${telegrambots.nickname}")
   @Setter
   private String botName;
 

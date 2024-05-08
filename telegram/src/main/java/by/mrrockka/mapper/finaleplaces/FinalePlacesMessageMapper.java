@@ -28,7 +28,7 @@ public class FinalePlacesMessageMapper {
 
   private final TelegramPersonMapper personMapper;
 
-  @Value("${telegrambots.name}")
+  @Value("${telegrambots.nickname}")
   @Setter
   private String botName;
 

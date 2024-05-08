@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Component
 @RequiredArgsConstructor
 public class EntryTelegramCommand implements TelegramCommand {
-  private static final String COMMAND = "/entry";
+  private static final String COMMAND = "^/entry$";
 
   private final TelegramEntryService telegramEntryService;
 

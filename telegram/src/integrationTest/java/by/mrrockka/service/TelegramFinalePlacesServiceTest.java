@@ -63,7 +63,8 @@ class TelegramFinalePlacesServiceTest {
       Finale places:
       	position: 1, telegram: @kinger
       	position: 2, telegram: @queen
-      	position: 3, telegram: @jackas""";
+      	position: 3, telegram: @jackas
+      	""";
 
     assertAll(
       () -> Assertions.assertThat(response).isNotNull(),

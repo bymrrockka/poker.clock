@@ -13,12 +13,12 @@ import java.util.List;
 public final class BountyCalculationStrategy extends AbstractCalculationTemplateMethodStrategy<BountyPlayerSummary, BountyGame> {
   @Override
   public boolean isApplicable(final Game game) {
-    return game.isBounty();
+    return game.isType(BountyGame.class);
   }
 
   @Override
   protected List<BountyPlayerSummary> buildPlayerSummary(final Game game) {
-    final var bountyGame = game.asBounty();
+    final var bountyGame = game.asType(BountyGame.class);
     return bountyGame.getEntries().stream()
       .map(entry -> BountyPlayerSummary.of(entry, bountyGame.getBountyList(), bountyGame.getFinaleSummary()))
       .sorted()

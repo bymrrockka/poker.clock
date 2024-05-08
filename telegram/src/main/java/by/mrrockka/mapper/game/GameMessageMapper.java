@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 public class GameMessageMapper {
 
   private static final String AMOUNT_REGEX = "([.\\d]+)([A-z]|)";
-  private static final String BUY_IN_REGEX = "^buy([-_ ]*)in:%s$".formatted(AMOUNT_REGEX);
+  private static final String BUY_IN_REGEX = "^buy([-_ ]{0,1})in:%s$".formatted(AMOUNT_REGEX);
   private static final String STACK_REGEX = "^stack:%s$".formatted(AMOUNT_REGEX);
   private static final String BOUNTY_REGEX = "^bounty:%s$".formatted(AMOUNT_REGEX);
 

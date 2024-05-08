@@ -18,6 +18,6 @@ public class FinalePlacesResponseBuilder {
         .append("position: ").append(fp.position())
         .append(", telegram: ").append(AT).append(fp.person().getNickname()));
 
-    return strBuilder.toString();
+    return strBuilder.append(NL).toString();
   }
 }

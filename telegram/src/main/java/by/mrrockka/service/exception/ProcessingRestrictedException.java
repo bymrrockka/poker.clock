@@ -11,7 +11,8 @@ public class ProcessingRestrictedException extends BusinessException {
     super("Command processing restricted due to game type is not %s.".formatted(gameType), PROCESSING_RESTRICTED);
   }
 
-  public ProcessingRestrictedException(@NonNull final String types) {
-    super("Command processing restricted due to game type is not %s.".formatted(types), PROCESSING_RESTRICTED);
+  public ProcessingRestrictedException(@NonNull final String message) {
+    super(message, PROCESSING_RESTRICTED);
   }
+
 }

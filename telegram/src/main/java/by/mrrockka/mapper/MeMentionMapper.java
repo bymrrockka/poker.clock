@@ -8,7 +8,7 @@ import static by.mrrockka.mapper.CommandRegexConstants.COMMAND_APPENDIX;
 import static by.mrrockka.mapper.CommandRegexConstants.ME_REGEX;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-final class MeMentionUtil {
+final class MeMentionMapper {
 
   public static String replaceMeMention(final Message message) {
     return message.getText()

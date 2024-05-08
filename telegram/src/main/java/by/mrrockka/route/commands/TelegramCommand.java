@@ -12,7 +12,17 @@ public interface TelegramCommand {
   String commandPattern();
 
   default boolean isApplicable(final Update update) {
+    return isMessageApplicable(update) || isEditedMessageApplicable(update);
+  }
+
+  default boolean isMessageApplicable(final Update update) {
     return update.hasMessage() && update.getMessage().getEntities().stream()
+      .filter(entity -> BOT_COMMAND.value().equals(entity.getType()))
+      .anyMatch(entity -> entity.getText().matches(commandPattern()));
+  }
+
+  default boolean isEditedMessageApplicable(final Update update) {
+    return update.hasEditedMessage() && update.getEditedMessage().getEntities().stream()
       .filter(entity -> BOT_COMMAND.value().equals(entity.getType()))
       .anyMatch(entity -> entity.getText().matches(commandPattern()));
   }
