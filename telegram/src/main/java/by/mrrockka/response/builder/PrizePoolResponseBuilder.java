@@ -18,6 +18,6 @@ public class PrizePoolResponseBuilder {
         .append(TAB)
         .append("position: ").append(pp.position())
         .append(", percentage: ").append(pp.percentage()));
-    return strBuilder.toString();
+    return strBuilder.append(NL).toString();
   }
 }

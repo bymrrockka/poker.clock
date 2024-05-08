@@ -64,7 +64,7 @@ public class GlobalPersonStatisticsResponseBuilder {
       .append(POINTER)
       .append(details.inPrizeRatio());
 
-    return strBuilder.toString();
+    return strBuilder.append(NL).toString();
   }
 
 }

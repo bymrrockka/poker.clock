@@ -65,7 +65,7 @@ class TelegramWithdrawalServiceTest {
       () -> assertThat(response).isNotNull(),
       () -> assertThat(response.getChatId()).isEqualTo(String.valueOf(CHAT_ID)),
       () -> assertThat(response.getText()).isEqualTo(
-        "Withdrawals:\n - @%s -> %s".formatted(telegram, expectedAmount))
+        "Withdrawals:\n - @%s -> %s\n".formatted(telegram, expectedAmount))
     );
 
     final var actual = withdrawalsRepository.findAllByGameId(GAME_ID);

@@ -39,17 +39,17 @@ class CalculateTelegramCommandTest {
       Arguments.of(
         MessageArgument.builder()
           .message("/calculate ")
-          .result(true)
+          .result(false)
           .build()),
       Arguments.of(
         MessageArgument.builder()
           .message("/calculate\n")
-          .result(true)
+          .result(false)
           .build()),
       Arguments.of(
         MessageArgument.builder()
           .message("/calculate\t")
-          .result(true)
+          .result(false)
           .build()),
       Arguments.of(
         MessageArgument.builder()

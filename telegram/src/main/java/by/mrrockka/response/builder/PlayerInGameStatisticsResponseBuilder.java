@@ -74,7 +74,7 @@ public class PlayerInGameStatisticsResponseBuilder {
         .append(statistics.moneyInGame().negate());
     }
 
-    return strBuilder.toString();
+    return strBuilder.append(NL).toString();
   }
 
   private void addTotalBuyInAmount(final BigDecimal amount, final StringBuilder strBuilder) {

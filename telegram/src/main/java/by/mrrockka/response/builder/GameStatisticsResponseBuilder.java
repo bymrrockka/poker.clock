@@ -77,7 +77,7 @@ public class GameStatisticsResponseBuilder {
         .append(bountyGame.getBountyList().size());
     }
 
-    return strBuilder.toString();
+    return strBuilder.append(NL).toString();
   }
 
   private void addTotalBuyInAmount(final BigDecimal amount, final StringBuilder strBuilder) {
