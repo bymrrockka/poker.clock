@@ -1,14 +1,11 @@
 package by.mrrockka.mapper;
 
-import by.mrrockka.creator.ChatCreator;
 import by.mrrockka.creator.MessageCreator;
 import by.mrrockka.creator.MessageEntityCreator;
 import by.mrrockka.creator.MessageMetadataCreator;
-import by.mrrockka.domain.MessageMetadata;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,16 +16,8 @@ class MessageMetadataMapperTest {
 
   @Test
   void givenMessage_whenAttemptToMap_shouldReturnMetadata() {
-    final var message = MessageCreator.message();
-    final var messageMetadata = MessageMetadata.builder()
-      .id(MessageCreator.MESSAGE_ID)
-      .createdAt(MessageCreator.MESSAGE_TIMESTAMP.truncatedTo(ChronoUnit.SECONDS))
-      .chatId(ChatCreator.CHAT_ID)
-      .command(MessageCreator.MESSAGE_TEXT)
-      .entities(List.of(MessageEntityCreator.domainEntity()))
-      .build();
-
-    assertThat(messageMetadataMapper.map(message)).isEqualTo(messageMetadata);
+    assertThat(messageMetadataMapper.map(MessageCreator.message()))
+      .isEqualTo(MessageMetadataCreator.domain());
   }
 
   @Test

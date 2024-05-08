@@ -12,6 +12,7 @@
                 <list>
                     <option value=":telegram:clean"/>
                     <option value=":telegram:assemble"/>
+                    <option value=":telegram:test"/>
                     <option value=":telegram:integrationTest"/>
                 </list>
             </option>
