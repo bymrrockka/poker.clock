@@ -1,4 +1,4 @@
-package by.mrrockka.route;
+package by.mrrockka.bot;
 
 import by.mrrockka.exception.BusinessException;
 

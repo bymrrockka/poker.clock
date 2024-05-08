@@ -1,4 +1,4 @@
-package by.mrrockka.route;
+package by.mrrockka.bot;
 
 import by.mrrockka.domain.PokerClockBotOptions;
 import org.springframework.beans.factory.annotation.Value;

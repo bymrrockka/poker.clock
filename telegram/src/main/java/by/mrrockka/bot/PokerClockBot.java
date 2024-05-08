@@ -1,6 +1,6 @@
-package by.mrrockka.route;
+package by.mrrockka.bot;
 
-import by.mrrockka.route.commands.TelegramCommand;
+import by.mrrockka.bot.commands.TelegramCommand;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

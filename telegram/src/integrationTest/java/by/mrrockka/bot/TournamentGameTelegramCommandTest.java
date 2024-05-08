@@ -1,10 +1,10 @@
-package by.mrrockka.route;
+package by.mrrockka.bot;
 
+import by.mrrockka.bot.commands.TournamentGameTelegramCommand;
 import by.mrrockka.creator.MessageCreator;
 import by.mrrockka.creator.MessageEntityCreator;
 import by.mrrockka.creator.SendCreator;
 import by.mrrockka.creator.UpdateCreator;
-import by.mrrockka.route.commands.TournamentGameTelegramCommand;
 import by.mrrockka.service.game.TelegramGameService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
