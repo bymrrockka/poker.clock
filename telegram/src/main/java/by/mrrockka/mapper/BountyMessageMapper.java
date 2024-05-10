@@ -41,7 +41,7 @@ public class BountyMessageMapper {
       return Pair.of(matcher.group(FROM_GROUP), matcher.group(TO_GROUP));
     }
 
-    throw new InvalidMessageFormatException(BOUNTY_REGEX);
+    throw new InvalidMessageFormatException(ERROR_MESSAGE);
   }
 
   public Pair<TelegramPerson, TelegramPerson> map(final MessageMetadata messageMetadata) {

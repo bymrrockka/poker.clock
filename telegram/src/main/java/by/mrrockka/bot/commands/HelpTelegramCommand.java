@@ -14,7 +14,7 @@ public class HelpTelegramCommand implements TelegramCommand {
 
   @Override
   public BotApiMethodMessage process(final Update update) {
-    return telegramHelpService.calculatePayments(update);
+    return telegramHelpService.sendHelpInformation(update);
   }
 
   @Override
