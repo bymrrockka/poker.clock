@@ -1,10 +1,11 @@
 package by.mrrockka.route;
 
 import by.mrrockka.route.commands.TelegramCommand;
+import by.mrrockka.route.properties.BotProperties;
+import by.mrrockka.service.UpdateBotCommandsService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -23,15 +24,19 @@ import java.util.Objects;
 public class PokerClockBot implements LongPollingBot {
 
   private final PokerClockAbsSender pokerClockAbsSender;
+  private final UpdateBotCommandsService updateBotCommandsService;
   private final List<TelegramCommand> telegramCommands;
-
-  @Value("${telegrambots.name}")
-  private String botName;
+  private final BotProperties botProperties;
 
   @Override
   public void onUpdateReceived(final Update update) {
 //    todo: add logic to process edited message
-    if (update.hasMessage() && update.getMessage().isCommand()) {
+    if (isProcessable(update)) {
+      log.debug("Processing {\n%s\n} message from %s chat id.".
+                  formatted(update.getMessage().getText(), update.getMessage().getChatId()));
+    }
+
+    if (isProcessable(update)) {
       telegramCommands.stream()
         .filter(telegramCommand -> telegramCommand.isApplicable(update))
         .map(telegramCommand -> telegramCommand.process(update))
@@ -44,7 +49,7 @@ public class PokerClockBot implements LongPollingBot {
 
   @Override
   public String getBotUsername() {
-    return botName;
+    return botProperties.getName();
   }
 
   @SneakyThrows
@@ -69,6 +74,15 @@ public class PokerClockBot implements LongPollingBot {
 
   @Override
   public String getBotToken() {
-    return pokerClockAbsSender.getBotToken();
+    return botProperties.getToken();
+  }
+
+  private boolean isProcessable(final Update update) {
+    return update.hasMessage() && update.getMessage().isCommand();
+  }
+
+  @Override
+  public void onRegister() {
+    updateBotCommandsService.updateBotCommands(botProperties.getCommands());
   }
 }

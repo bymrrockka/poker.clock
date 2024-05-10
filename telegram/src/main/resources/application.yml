@@ -89,13 +89,20 @@ telegrambots:
           - withdrawals
         Examples: 
         /calculate
-    details:
-      description: Game details
+    game_stats:
+      description: Game statistics
       details: |
-        When you want to see game details you could use /details command.
+        When you want to see game statistics you could use /game_stats command.
         You could forward game message in case there are multiple games happen in parallel to store against it.
         Examples: 
-        /details
+        /game_stats
+    my_stats:
+      description: Player in game statistics
+      details: |
+        When you want to see your statistics as player in game you could use /my_stats command.
+        You could forward game message in case there are multiple games happen in parallel to store against it.
+        Examples: 
+        /my_stats
     help:
       description: Post it with a command name for command details
       details: |
