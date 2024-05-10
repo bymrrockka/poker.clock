@@ -1,6 +1,6 @@
-package by.mrrockka.route.commands;
+package by.mrrockka.bot.commands;
 
-import by.mrrockka.service.TelegramFinalePlacesService;
+import by.mrrockka.service.TelegramHelpService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
@@ -8,14 +8,13 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
 @RequiredArgsConstructor
-public class FinalePlacesTelegramCommand implements TelegramCommand {
-  private static final String COMMAND = "^/finaleplaces$";
-
-  private final TelegramFinalePlacesService telegramFinalePlacesService;
+public class HelpTelegramCommand implements TelegramCommand {
+  private static final String COMMAND = "^/help$";
+  private final TelegramHelpService telegramHelpService;
 
   @Override
   public BotApiMethodMessage process(final Update update) {
-    return telegramFinalePlacesService.storePrizePool(update);
+    return telegramHelpService.calculatePayments(update);
   }
 
   @Override

@@ -1,7 +1,7 @@
-package by.mrrockka.route;
+package by.mrrockka.bot;
 
+import by.mrrockka.bot.properties.BotProperties;
 import by.mrrockka.domain.PokerClockBotOptions;
-import by.mrrockka.route.properties.BotProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.DefaultAbsSender;

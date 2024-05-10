@@ -1,7 +1,7 @@
-package by.mrrockka.route;
+package by.mrrockka.bot;
 
-import by.mrrockka.route.commands.TelegramCommand;
-import by.mrrockka.route.properties.BotProperties;
+import by.mrrockka.bot.commands.TelegramCommand;
+import by.mrrockka.bot.properties.BotProperties;
 import by.mrrockka.service.UpdateBotCommandsService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
