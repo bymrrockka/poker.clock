@@ -1,7 +1,8 @@
-package by.mrrockka.route;
+package by.mrrockka.bot;
 
+import by.mrrockka.bot.properties.TelegramBotsProperties;
 import by.mrrockka.domain.PokerClockBotOptions;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.DefaultAbsSender;
 
@@ -19,8 +20,9 @@ public class PokerClockAbsSender extends DefaultAbsSender {
       MESSAGE)
     ).build();
 
-  protected PokerClockAbsSender(@Value("${telegrambots.token}") final String botToken) {
-    super(BOT_OPTIONS, botToken);
+  protected PokerClockAbsSender(@Autowired final TelegramBotsProperties telegramBotsProperties) {
+    super(BOT_OPTIONS, telegramBotsProperties.getToken());
+    ;
   }
 
   public void shutdown() {

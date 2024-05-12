@@ -1,4 +1,4 @@
-package by.mrrockka.route.commands;
+package by.mrrockka.bot.commands;
 
 import by.mrrockka.service.game.TelegramGameService;
 import lombok.RequiredArgsConstructor;
@@ -8,13 +8,13 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
 @RequiredArgsConstructor
-public class TournamentGameTelegramCommand implements TelegramCommand {
-  private static final String COMMAND = "^/tournament$";
+public class BountyGameTelegramCommand implements TelegramCommand {
+  private static final String COMMAND = "^/bounty_tournament$";
   private final TelegramGameService gameService;
 
   @Override
   public BotApiMethodMessage process(final Update update) {
-    return gameService.storeTournamentGame(update);
+    return gameService.storeBountyGame(update);
   }
 
   @Override

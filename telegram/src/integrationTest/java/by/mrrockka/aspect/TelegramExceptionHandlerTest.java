@@ -1,11 +1,11 @@
 package by.mrrockka.aspect;
 
+import by.mrrockka.bot.PokerClockAbsSender;
+import by.mrrockka.bot.PokerClockBot;
 import by.mrrockka.creator.ChatCreator;
 import by.mrrockka.creator.MessageCreator;
 import by.mrrockka.creator.UpdateCreator;
 import by.mrrockka.exception.BusinessException;
-import by.mrrockka.route.PokerClockAbsSender;
-import by.mrrockka.route.PokerClockBot;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -36,14 +36,11 @@ class TelegramExceptionHandlerTest {
   private static Stream<Arguments> exceptions() {
     return Stream.of(
       Arguments.of(
-        "Message: Exception occurred during processing a command",
+        "Exception occurred during processing a command",
         new RuntimeException("Any message")
       ),
       Arguments.of(
-        """
-          Message: No stack specified
-          Readable code: validation.error
-          """,
+        "No stack specified",
         new BusinessException("No stack specified", "validation.error")
       )
     );

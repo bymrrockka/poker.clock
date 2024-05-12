@@ -1,6 +1,6 @@
-package by.mrrockka.route.commands;
+package by.mrrockka.bot.commands;
 
-import by.mrrockka.service.TelegramEntryService;
+import by.mrrockka.service.help.TelegramHelpService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
@@ -8,14 +8,13 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
 @RequiredArgsConstructor
-public class EntryTelegramCommand implements TelegramCommand {
-  private static final String COMMAND = "^/entry$";
-
-  private final TelegramEntryService telegramEntryService;
+public class HelpTelegramCommand implements TelegramCommand {
+  private static final String COMMAND = "^/help$";
+  private final TelegramHelpService telegramHelpService;
 
   @Override
   public BotApiMethodMessage process(final Update update) {
-    return telegramEntryService.storeEntry(update);
+    return telegramHelpService.sendHelpInformation(update);
   }
 
   @Override

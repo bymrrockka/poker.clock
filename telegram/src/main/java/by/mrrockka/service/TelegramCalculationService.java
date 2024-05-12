@@ -28,9 +28,6 @@ public class TelegramCalculationService {
   public BotApiMethodMessage calculatePayments(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
 
-    log.debug("Processing {\n%s\n} message from %s chat id.".
-                formatted(messageMetadata.command(), messageMetadata.chatId()));
-
     final var telegramGame = telegramGameService
       .getGameByMessageMetadata(messageMetadata)
       .orElseThrow(ChatGameNotFoundException::new);

@@ -1,6 +1,6 @@
-package by.mrrockka.route.commands;
+package by.mrrockka.bot.commands;
 
-import by.mrrockka.service.TelegramPrizePoolService;
+import by.mrrockka.service.TelegramWithdrawalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
@@ -8,19 +8,18 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
 @RequiredArgsConstructor
-public class PrizePoolTelegramCommand implements TelegramCommand {
-  private static final String COMMAND = "^/prizepool$";
+public class WithdrawalTelegramCommand implements TelegramCommand {
+  private static final String COMMAND = "^/withdrawal$";
 
-  private final TelegramPrizePoolService prizePoolService;
+  private final TelegramWithdrawalService telegramWithdrawalService;
 
   @Override
   public BotApiMethodMessage process(final Update update) {
-    return prizePoolService.storePrizePool(update);
+    return telegramWithdrawalService.storeWithdrawal(update);
   }
 
   @Override
   public String commandPattern() {
     return COMMAND;
   }
-
 }

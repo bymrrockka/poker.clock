@@ -41,7 +41,7 @@ public class BountyMessageMapper {
       return Pair.of(matcher.group(FROM_GROUP), matcher.group(TO_GROUP));
     }
 
-    throw new InvalidMessageFormatException(BOUNTY_REGEX);
+    throw new InvalidMessageFormatException(ERROR_MESSAGE);
   }
 
   public Pair<TelegramPerson, TelegramPerson> map(final MessageMetadata messageMetadata) {
@@ -59,12 +59,12 @@ public class BountyMessageMapper {
     }
 
     final var from = mentions.stream()
-      .filter(mention -> mention.getNickname().equals(matcher.group(FROM_GROUP)))
+      .filter(mention -> mention.getNickname().equalsIgnoreCase(matcher.group(FROM_GROUP)))
       .findAny()
       .orElseThrow();
 
     final var to = mentions.stream()
-      .filter(mention -> mention.getNickname().equals(matcher.group(TO_GROUP)))
+      .filter(mention -> mention.getNickname().equalsIgnoreCase(matcher.group(TO_GROUP)))
       .findAny()
       .orElseThrow();
 

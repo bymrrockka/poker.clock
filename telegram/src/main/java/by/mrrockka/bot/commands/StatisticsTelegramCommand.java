@@ -1,4 +1,4 @@
-package by.mrrockka.route.commands;
+package by.mrrockka.bot.commands;
 
 import by.mrrockka.service.statistics.TelegramStatisticsService;
 import lombok.RequiredArgsConstructor;

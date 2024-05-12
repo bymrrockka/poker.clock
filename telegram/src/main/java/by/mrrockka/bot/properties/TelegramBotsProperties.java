@@ -1,0 +1,16 @@
+package by.mrrockka.bot.properties;
+
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+
+@Component
+@ConfigurationProperties(prefix = "telegrambots")
+@Data
+public class TelegramBotsProperties {
+
+  private String name;
+  private String nickname;
+  private boolean enabled;
+  private String token;
+}
