@@ -1,7 +1,7 @@
 package by.mrrockka.bot;
 
 import by.mrrockka.bot.commands.TelegramCommand;
-import by.mrrockka.bot.properties.BotProperties;
+import by.mrrockka.bot.properties.TelegramBotsProperties;
 import by.mrrockka.service.UpdateBotCommandsService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -26,7 +26,7 @@ public class PokerClockBot implements LongPollingBot {
   private final PokerClockAbsSender pokerClockAbsSender;
   private final UpdateBotCommandsService updateBotCommandsService;
   private final List<TelegramCommand> telegramCommands;
-  private final BotProperties botProperties;
+  private final TelegramBotsProperties telegramBotsProperties;
 
   @Override
   public void onUpdateReceived(final Update update) {
@@ -49,7 +49,7 @@ public class PokerClockBot implements LongPollingBot {
 
   @Override
   public String getBotUsername() {
-    return botProperties.getName();
+    return telegramBotsProperties.getName();
   }
 
   @SneakyThrows
@@ -74,7 +74,7 @@ public class PokerClockBot implements LongPollingBot {
 
   @Override
   public String getBotToken() {
-    return botProperties.getToken();
+    return telegramBotsProperties.getToken();
   }
 
   private boolean isProcessable(final Update update) {
@@ -83,6 +83,6 @@ public class PokerClockBot implements LongPollingBot {
 
   @Override
   public void onRegister() {
-    updateBotCommandsService.updateBotCommands(botProperties.getCommands());
+    updateBotCommandsService.updateBotCommands();
   }
 }

@@ -1,6 +1,6 @@
 package by.mrrockka.bot.commands;
 
-import by.mrrockka.service.TelegramHelpService;
+import by.mrrockka.service.help.TelegramHelpService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;

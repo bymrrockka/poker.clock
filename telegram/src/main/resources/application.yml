@@ -3,6 +3,8 @@ telegrambots:
   nickname: pokerclc_bot
   enabled: true
   token: ${BOT_TOKEN}
+
+botdescription:
   commands:
     bounty_tournament:
       description: Starts bounty tournament

@@ -1,6 +1,6 @@
 package by.mrrockka.mapper;
 
-import by.mrrockka.bot.properties.CommandDescription;
+import by.mrrockka.service.help.CommandDescription;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;

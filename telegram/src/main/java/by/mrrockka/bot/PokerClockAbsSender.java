@@ -1,6 +1,6 @@
 package by.mrrockka.bot;
 
-import by.mrrockka.bot.properties.BotProperties;
+import by.mrrockka.bot.properties.TelegramBotsProperties;
 import by.mrrockka.domain.PokerClockBotOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,8 +20,8 @@ public class PokerClockAbsSender extends DefaultAbsSender {
       MESSAGE)
     ).build();
 
-  protected PokerClockAbsSender(@Autowired final BotProperties botProperties) {
-    super(BOT_OPTIONS, botProperties.getToken());
+  protected PokerClockAbsSender(@Autowired final TelegramBotsProperties telegramBotsProperties) {
+    super(BOT_OPTIONS, telegramBotsProperties.getToken());
     ;
   }
 
