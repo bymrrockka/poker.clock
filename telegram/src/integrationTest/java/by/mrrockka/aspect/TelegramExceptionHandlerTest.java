@@ -36,14 +36,11 @@ class TelegramExceptionHandlerTest {
   private static Stream<Arguments> exceptions() {
     return Stream.of(
       Arguments.of(
-        "Message: Exception occurred during processing a command",
+        "Exception occurred during processing a command",
         new RuntimeException("Any message")
       ),
       Arguments.of(
-        """
-          Message: No stack specified
-          Readable code: validation.error
-          """,
+        "No stack specified",
         new BusinessException("No stack specified", "validation.error")
       )
     );

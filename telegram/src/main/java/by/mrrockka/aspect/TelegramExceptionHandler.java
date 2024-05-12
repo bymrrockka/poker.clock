@@ -1,7 +1,7 @@
 package by.mrrockka.aspect;
 
+import by.mrrockka.bot.PokerClockAbsSender;
 import by.mrrockka.exception.BusinessException;
-import by.mrrockka.route.PokerClockAbsSender;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -25,9 +25,9 @@ public class TelegramExceptionHandler {
     argNames = "exception,updates",
     throwing = "exception")
   public void handleExceptions(final Throwable exception, final List<Update> updates) {
-    String message = "Message: Exception occurred during processing a command";
+    String message = "Exception occurred during processing a command";
     if (exception instanceof BusinessException) {
-      message = exception.toString();
+      message = ((BusinessException) exception).getMessage();
     }
 
     final var sendMessage = SendMessage.builder()
