@@ -13,5 +13,5 @@ import java.util.Map;
 @Getter
 public class BotDescriptionProperties {
 
-  private Map<String, CommandDescription> commands;
+  private final Map<String, CommandDescription> commands;
 }

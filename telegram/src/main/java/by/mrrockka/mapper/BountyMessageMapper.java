@@ -59,12 +59,12 @@ public class BountyMessageMapper {
     }
 
     final var from = mentions.stream()
-      .filter(mention -> mention.getNickname().equals(matcher.group(FROM_GROUP)))
+      .filter(mention -> mention.getNickname().equalsIgnoreCase(matcher.group(FROM_GROUP)))
       .findAny()
       .orElseThrow();
 
     final var to = mentions.stream()
-      .filter(mention -> mention.getNickname().equals(matcher.group(TO_GROUP)))
+      .filter(mention -> mention.getNickname().equalsIgnoreCase(matcher.group(TO_GROUP)))
       .findAny()
       .orElseThrow();
 
