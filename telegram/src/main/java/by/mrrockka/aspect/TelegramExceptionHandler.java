@@ -1,27 +1,31 @@
 package by.mrrockka.aspect;
 
 import by.mrrockka.exception.BusinessException;
+import by.mrrockka.route.PokerClockAbsSender;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.bots.AbsSender;
 
 import java.util.List;
 
 @Aspect
 @Component
+@RequiredArgsConstructor
 public class TelegramExceptionHandler {
+
+  private final PokerClockAbsSender absSender;
 
   @SneakyThrows
   @AfterThrowing(
-    pointcut = "execution(* *.onUpdatesReceived(..)) && target(router) && args(updates)",
-    argNames = "exception,router,updates",
+    pointcut = "execution(* *.onUpdatesReceived(..)) && args(updates)",
+    argNames = "exception,updates",
     throwing = "exception")
-  public void handleExceptions(final Throwable exception, final AbsSender router, final List<Update> updates) {
-    String message = "ERROR\nMessage: Exception occurred during processing a command.";
+  public void handleExceptions(final Throwable exception, final List<Update> updates) {
+    String message = "Message: Exception occurred during processing a command";
     if (exception instanceof BusinessException) {
       message = exception.toString();
     }
@@ -31,7 +35,7 @@ public class TelegramExceptionHandler {
       .text(message)
       .build();
 
-    router.execute(sendMessage);
+    absSender.execute(sendMessage);
   }
 
   private Long getCatId(final List<Update> updates) {

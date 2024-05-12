@@ -9,9 +9,9 @@ import by.mrrockka.route.PokerClockBot;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -20,31 +20,28 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 class TelegramExceptionHandlerTest {
 
-  @MockBean
+  @SpyBean
   private PokerClockBot pokerClockBot;
   @MockBean
   private PokerClockAbsSender pokerClockAbsSender;
   @MockBean
   private DataSource dataSource;
 
-  @Autowired
-  private TelegramExceptionHandler telegramExceptionHandler;
-
   private static Stream<Arguments> exceptions() {
     return Stream.of(
       Arguments.of(
-        "Message",
-        new RuntimeException("Message")
+        "Message: Exception occurred during processing a command",
+        new RuntimeException("Any message")
       ),
       Arguments.of(
         """
-          ERROR
-          Message: No stack specified.
+          Message: No stack specified
           Readable code: validation.error
           """,
         new BusinessException("No stack specified", "validation.error")
@@ -62,11 +59,10 @@ class TelegramExceptionHandlerTest {
       .text(text)
       .build();
 
-    doCallRealMethod().when(pokerClockBot).onUpdatesReceived(updates);
     doThrow(ex).when(pokerClockBot).onUpdateReceived(updates.get(0));
     assertThatThrownBy(() -> pokerClockBot.onUpdatesReceived(updates));
 
-    when(pokerClockAbsSender.execute(expected)).thenReturn(MessageCreator.message());
+    verify(pokerClockAbsSender).execute(expected);
   }
 
 }
