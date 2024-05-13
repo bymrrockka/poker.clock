@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,15 +29,15 @@ public class GameService {
   private final BountyService bountyService;
 
   public void storeTournamentGame(@NonNull final TournamentGame game) {
-    gameRepository.save(gameMapper.toEntity(game));
+    gameRepository.save(gameMapper.toEntity(game), Instant.now());
   }
 
   public void storeCashGame(@NonNull final CashGame game) {
-    gameRepository.save(gameMapper.toEntity(game));
+    gameRepository.save(gameMapper.toEntity(game), Instant.now());
   }
 
   public void storeBountyGame(@NonNull final BountyGame game) {
-    gameRepository.save(gameMapper.toEntity(game));
+    gameRepository.save(gameMapper.toEntity(game), Instant.now());
   }
 
   //  todo: idea - inspect the repo for GameMetadata usage
@@ -47,6 +48,10 @@ public class GameService {
       case CASH -> assembleCashGame(gameEntity);
       case BOUNTY -> assembleBountyGame(gameEntity);
     };
+  }
+
+  public void finishGame(@NonNull final Game game) {
+    gameRepository.finishGame(game.getId(), Instant.now());
   }
 
   private TournamentGame assembleTournamentGame(@NonNull final GameEntity gameEntity) {

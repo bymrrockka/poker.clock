@@ -2,8 +2,8 @@
 
 --changeset task#13:1
 -- calculate bounty game tests
-insert into game (id, stack, buy_in, bounty, game_type)
-values  ('10e8b03e-aaf9-407b-8ad4-f126a0852f91', 1000, 30, 30, 'BOUNTY');
+insert into game (id, stack, buy_in, bounty, game_type, created_at)
+values  ('10e8b03e-aaf9-407b-8ad4-f126a0852f91', 1000, 30, 30, 'BOUNTY', NOW());
 
 insert into chat_games (game_id, chat_id, created_at, message_id)
 values  ('10e8b03e-aaf9-407b-8ad4-f126a0852f91', 123, NOW(), 6);
@@ -35,8 +35,8 @@ values  ('10e8b03e-aaf9-407b-8ad4-f126a0852f91', 1, '58ae9984-1ebc-4621-ba0e-a57
 
 
 -- calculate bounty service tests
-insert into game (id, stack, buy_in, bounty, game_type)
-values  ('0075be9f-999d-4688-a773-cc986c14f787', 1000, 30, 30, 'BOUNTY');
+insert into game (id, stack, buy_in, bounty, game_type, created_at)
+values  ('0075be9f-999d-4688-a773-cc986c14f787', 1000, 30, 30, 'BOUNTY', NOW());
 
 insert into chat_games (game_id, chat_id, created_at, message_id)
 values  ('0075be9f-999d-4688-a773-cc986c14f787', 123, NOW(), 7);

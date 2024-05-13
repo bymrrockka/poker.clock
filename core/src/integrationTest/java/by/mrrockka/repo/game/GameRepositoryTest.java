@@ -8,6 +8,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.Instant;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(PostgreSQLExtension.class)
@@ -20,7 +22,7 @@ class GameRepositoryTest {
   @Test
   void givenEntity_whenSaved_shouldBeAbleToGetById() {
     final var expected = GameCreator.entity();
-    gameRepository.save(expected);
+    gameRepository.save(expected, Instant.now());
 
     assertThat(gameRepository.findById(expected.id())).isEqualTo(expected);
   }
