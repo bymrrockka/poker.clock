@@ -3,7 +3,7 @@ package by.mrrockka.bot.commands;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import static by.mrrockka.domain.MessageEntityType.BOT_COMMAND;
+import static by.mrrockka.domain.mesageentity.MessageEntityType.BOT_COMMAND;
 
 public interface TelegramCommandProcessor {
 

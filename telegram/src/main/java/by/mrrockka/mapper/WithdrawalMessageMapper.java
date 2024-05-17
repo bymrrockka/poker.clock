@@ -1,14 +1,11 @@
 package by.mrrockka.mapper;
 
-import by.mrrockka.domain.MessageEntityType;
 import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.mapper.exception.InvalidMessageFormatException;
 import by.mrrockka.mapper.person.TelegramPersonMapper;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -24,10 +21,6 @@ import static by.mrrockka.mapper.CommandRegexConstants.TELEGRAM_NAME_REGEX;
 public class WithdrawalMessageMapper {
 
   private final TelegramPersonMapper personMapper;
-
-  @Value("${telegrambots.nickname}")
-  @Setter
-  private String botName;
 
   private static final String WITHDRAWAL_REGEX = "^/withdrawal(( %s)+) ([\\d]+)$".formatted(TELEGRAM_NAME_REGEX);
   private static final int MENTION_GROUP = 2;
@@ -53,9 +46,7 @@ public class WithdrawalMessageMapper {
     if (matcher.matches()) {
       final var amount = new BigDecimal(matcher.group(AMOUNT_GROUP));
 
-      return metadata.entities().stream()
-        .filter(entity -> entity.type().equals(MessageEntityType.MENTION))
-        .filter(entity -> !entity.text().contains(botName))
+      return metadata.mentions()
         .map(entity -> personMapper.mapMessageToTelegramPerson(entity, chatId))
         .collect(Collectors.toMap(Function.identity(), p -> amount));
     }

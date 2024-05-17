@@ -2,8 +2,8 @@ package by.mrrockka.validation;
 
 import by.mrrockka.creator.MessageEntityCreator;
 import by.mrrockka.creator.MessageMetadataCreator;
-import by.mrrockka.domain.MessageEntityType;
 import by.mrrockka.domain.MessageMetadata;
+import by.mrrockka.domain.mesageentity.MessageEntityType;
 import by.mrrockka.exception.BusinessException;
 import by.mrrockka.validation.mentions.InsufficientMentionsSizeSpecifiedException;
 import by.mrrockka.validation.mentions.PersonMentionsValidator;

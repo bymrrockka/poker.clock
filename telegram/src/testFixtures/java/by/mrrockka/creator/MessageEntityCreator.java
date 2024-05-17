@@ -1,7 +1,7 @@
 package by.mrrockka.creator;
 
-import by.mrrockka.domain.MessageEntity;
-import by.mrrockka.domain.MessageEntityType;
+import by.mrrockka.domain.mesageentity.MessageEntity;
+import by.mrrockka.domain.mesageentity.MessageEntityType;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.telegram.telegrambots.meta.api.objects.EntityType;

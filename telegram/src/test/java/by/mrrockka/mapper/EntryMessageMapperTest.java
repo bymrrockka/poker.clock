@@ -7,7 +7,6 @@ import by.mrrockka.domain.Person;
 import by.mrrockka.mapper.exception.InvalidMessageFormatException;
 import by.mrrockka.mapper.person.TelegramPersonMapper;
 import lombok.Builder;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -24,14 +23,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class EntryMessageMapperTest {
-  public static final String BOT_NAME = "pokerbot";
   private final TelegramPersonMapper personMapper = Mappers.getMapper(TelegramPersonMapper.class);
   private final EntryMessageMapper entryMessageMapper = new EntryMessageMapper(personMapper);
-
-  @BeforeEach
-  void setup() {
-    entryMessageMapper.setBotName(BOT_NAME);
-  }
 
   private static Stream<Arguments> entryMessage() {
     return Stream.of(
@@ -90,40 +83,17 @@ class EntryMessageMapperTest {
           .build()),
       Arguments.of(
         EntryArgument.builder()
-          .metadata(MessageMetadataCreator.domain(metadata -> metadata.command("/entry @%s".formatted(BOT_NAME))
-            .entities(List.of(MessageEntityCreator.domainMention("@%s".formatted(BOT_NAME))))))
-          .nicknames(Set.of())
-          .amount(null)
-          .build()),
-      Arguments.of(
-        EntryArgument.builder()
           .metadata(
             MessageMetadataCreator.domain(
-              metadata -> metadata.command("/entry @kinger @asadf @asdfasdf @koomko @%s 60".formatted(BOT_NAME))
+              metadata -> metadata.command("/entry @kinger @asadf @asdfasdf @koomko 60")
                 .entities(List.of(
                   MessageEntityCreator.domainMention("@kinger"),
                   MessageEntityCreator.domainMention("@asadf"),
                   MessageEntityCreator.domainMention("@asdfasdf"),
-                  MessageEntityCreator.domainMention("@koomko"),
-                  MessageEntityCreator.domainMention("@%s".formatted(BOT_NAME))
+                  MessageEntityCreator.domainMention("@koomko")
                 ))))
           .nicknames(Set.of("kinger", "asadf", "asdfasdf", "koomko"))
           .amount(BigDecimal.valueOf(60))
-          .build()),
-      Arguments.of(
-        EntryArgument.builder()
-          .metadata(
-            MessageMetadataCreator.domain(
-              metadata -> metadata.command("/entry @kinger @asadf @asdfasdf @koomko @%s".formatted(BOT_NAME))
-                .entities(List.of(
-                  MessageEntityCreator.domainMention("@kinger"),
-                  MessageEntityCreator.domainMention("@asadf"),
-                  MessageEntityCreator.domainMention("@asdfasdf"),
-                  MessageEntityCreator.domainMention("@koomko"),
-                  MessageEntityCreator.domainMention("@%s".formatted(BOT_NAME))
-                ))))
-          .nicknames(Set.of("kinger", "asadf", "asdfasdf", "koomko"))
-          .amount(null)
           .build())
     );
   }

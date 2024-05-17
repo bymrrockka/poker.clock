@@ -1,6 +1,5 @@
 package by.mrrockka.mapper.finaleplaces;
 
-import by.mrrockka.domain.MessageEntityType;
 import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.mapper.exception.InvalidMessageFormatException;
@@ -68,9 +67,7 @@ public class FinalePlacesMessageMapper {
       .filter(Matcher::matches)
       .toList();
     final var chatId = metadata.chatId();
-    final var mentions = metadata.entities().stream()
-      .filter(entity -> entity.type().equals(MessageEntityType.MENTION))
-      .filter(entity -> !entity.text().contains(botName))
+    final var mentions = metadata.mentions()
       .map(entity -> personMapper.mapMessageToTelegramPerson(entity, chatId))
       .toList();
 

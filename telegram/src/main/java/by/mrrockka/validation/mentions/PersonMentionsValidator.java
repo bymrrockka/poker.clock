@@ -1,8 +1,8 @@
 package by.mrrockka.validation.mentions;
 
-import by.mrrockka.domain.MessageEntity;
-import by.mrrockka.domain.MessageEntityType;
 import by.mrrockka.domain.MessageMetadata;
+import by.mrrockka.domain.mesageentity.MessageEntity;
+import by.mrrockka.domain.mesageentity.MessageEntityType;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -26,6 +26,7 @@ public class PersonMentionsValidator {
       .filter(entity -> entity.type().equals(MessageEntityType.TEXT_MENTION))
       .findAny()
       .ifPresent(textMention -> {
+//        todo: find another way to do that
         throw new PlayerHasNoNicknameException(textMention.text());
       });
   }
@@ -39,10 +40,6 @@ public class PersonMentionsValidator {
   }
 
   private List<MessageEntity> filterUserMentions(final MessageMetadata messageMetadata) {
-    //    todo: verify if there is a case to add filter to message metadata (at least partially)
-    return messageMetadata.entities().stream()
-      .filter(entity -> entity.type().equals(MessageEntityType.MENTION))
-      .filter(entity -> !entity.text().contains(botName))
-      .toList();
+    return messageMetadata.mentions().toList();
   }
 }

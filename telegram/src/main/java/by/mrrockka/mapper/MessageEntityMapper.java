@@ -1,7 +1,7 @@
 package by.mrrockka.mapper;
 
-import by.mrrockka.domain.MessageEntity;
-import by.mrrockka.domain.MessageEntityType;
+import by.mrrockka.domain.mesageentity.MessageEntity;
+import by.mrrockka.domain.mesageentity.MessageEntityType;
 import org.mapstruct.Mapper;
 
 import java.util.Arrays;

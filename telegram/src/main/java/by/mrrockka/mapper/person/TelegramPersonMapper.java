@@ -1,8 +1,8 @@
 package by.mrrockka.mapper.person;
 
-import by.mrrockka.domain.MessageEntity;
 import by.mrrockka.domain.Person;
 import by.mrrockka.domain.TelegramPerson;
+import by.mrrockka.domain.mesageentity.MessageEntity;
 import by.mrrockka.mapper.PersonMapper;
 import by.mrrockka.repo.person.TelegramPersonEntity;
 import org.mapstruct.Mapper;

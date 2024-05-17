@@ -1,4 +1,4 @@
-package by.mrrockka.domain;
+package by.mrrockka.domain.mesageentity;
 
 import lombok.Builder;
 import lombok.NonNull;

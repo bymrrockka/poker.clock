@@ -1,6 +1,5 @@
 package by.mrrockka.mapper;
 
-import by.mrrockka.domain.MessageEntityType;
 import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.mapper.exception.InvalidMessageFormatException;
@@ -47,9 +46,7 @@ public class BountyMessageMapper {
   public Pair<TelegramPerson, TelegramPerson> map(final MessageMetadata messageMetadata) {
     final var chatId = messageMetadata.chatId();
     final var str = messageMetadata.command().toLowerCase().strip();
-    final var mentions = messageMetadata.entities().stream()
-      .filter(entity -> entity.type().equals(MessageEntityType.MENTION))
-      .filter(entity -> !entity.text().contains(botName))
+    final var mentions = messageMetadata.mentions()
       .map(entity -> personMapper.mapMessageToTelegramPerson(entity, chatId))
       .toList();
     final var matcher = Pattern.compile(BOUNTY_REGEX).matcher(str);

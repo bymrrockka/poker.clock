@@ -1,4 +1,4 @@
-package by.mrrockka.domain;
+package by.mrrockka.domain.mesageentity;
 
 import org.apache.commons.lang3.StringUtils;
 
