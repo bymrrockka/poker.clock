@@ -88,19 +88,19 @@ class TelegramGameServiceTest {
       () -> assertThat(gameEntity.stack()).isEqualTo(BigDecimal.valueOf(50000))
     );
 
-    final var telegrams = List.of(
+    final var nicknames = List.of(
       "capusta",
       "kurva",
       "asdasd",
       UserCreator.USER_NAME
     );
 
-    final var telegramPersonEntities = telegramPersonRepository.findAllByChatIdAndTelegrams(chatId, telegrams);
+    final var telegramPersonEntities = telegramPersonRepository.findAllByChatIdAndNicknames(chatId, nicknames);
 
     assertAll(
       () -> assertThat(telegramPersonEntities).isNotEmpty(),
       () -> assertThat(telegramPersonEntities.stream().map(TelegramPersonEntity::getNickname).toList())
-        .containsExactlyInAnyOrderElementsOf(telegrams)
+        .containsExactlyInAnyOrderElementsOf(nicknames)
     );
 
     final var personEntities = personRepository.findAllByIds(

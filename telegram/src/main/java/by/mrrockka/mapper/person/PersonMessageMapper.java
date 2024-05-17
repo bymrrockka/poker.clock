@@ -56,13 +56,13 @@ public class PersonMessageMapper {
   }
 
   public List<TelegramPerson> map(final MessageMetadata messageMetadata) {
-//    todo: verify if there is a case to add filter to message metadata (at least partially)
+//    todo: verify if there is a chance to add filter to message metadata (at least partially)
     final var playersMentions = messageMetadata.entities().stream()
       .filter(entity -> entity.type().equals(MessageEntityType.MENTION))
       .filter(entity -> !entity.text().contains(botName))
       .toList();
 
-    return personMapper.mapMessageToTelegrams(playersMentions, messageMetadata.chatId());
+    return personMapper.mapMessageToTelegramPersons(playersMentions, messageMetadata.chatId());
   }
 
 }

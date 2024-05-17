@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
 @RequiredArgsConstructor
-public class CalculateTelegramCommand implements TelegramCommand {
+public class CalculateTelegramCommandProcessor implements TelegramCommandProcessor {
 
   @Value("${telegrambots.nickname}")
   private String botName;

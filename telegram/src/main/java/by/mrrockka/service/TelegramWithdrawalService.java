@@ -48,7 +48,7 @@ public class TelegramWithdrawalService {
     withdrawalsValidator.validateWithdrawalsAgainstEntries(personAndAmountMap,
                                                            telegramGame.game().asType(CashGame.class));
 
-    final var persons = telegramPersonService.getAllByTelegramsAndChatId(
+    final var persons = telegramPersonService.getAllByNicknamesAndChatId(
       personAndAmountMap.keySet().stream().map(TelegramPerson::getNickname).toList(), messageMetadata.chatId());
 
     withdrawalsService.storeBatch(telegramGame.game().getId(), persons.stream().map(Person::getId).toList(), amount,

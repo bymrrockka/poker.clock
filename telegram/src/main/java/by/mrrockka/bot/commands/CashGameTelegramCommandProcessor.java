@@ -8,13 +8,13 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
 @RequiredArgsConstructor
-public class TournamentGameTelegramCommand implements TelegramCommand {
-  private static final String COMMAND = "^/tournament$";
+public class CashGameTelegramCommandProcessor implements TelegramCommandProcessor {
+  private static final String COMMAND = "^/cash$";
   private final TelegramGameService gameService;
 
   @Override
   public BotApiMethodMessage process(final Update update) {
-    return gameService.storeTournamentGame(update);
+    return gameService.storeCashGame(update);
   }
 
   @Override

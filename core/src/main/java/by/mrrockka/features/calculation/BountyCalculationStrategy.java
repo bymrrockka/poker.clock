@@ -34,7 +34,7 @@ public final class BountyCalculationStrategy extends AbstractCalculationTemplate
   }
 
   @Override
-  protected Payer buildDebtBase(final BountyPlayerSummary debtorSummary) {
+  protected Payer buildPayerBase(final BountyPlayerSummary debtorSummary) {
     return Payer.builder()
       .personEntries(debtorSummary.getPersonEntries())
       .personBounties(debtorSummary.getPersonBounties())

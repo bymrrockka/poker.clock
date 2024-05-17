@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
 @RequiredArgsConstructor
-public class StatisticsTelegramCommand implements TelegramCommand {
+public class StatisticsTelegramCommandProcessor implements TelegramCommandProcessor {
   private static final String COMMAND = "^/(game|my)_stats$";
   private final TelegramStatisticsService telegramStatisticsService;
 
@@ -24,6 +24,6 @@ public class StatisticsTelegramCommand implements TelegramCommand {
 
   @Override
   public boolean isApplicable(final Update update) {
-    return TelegramCommand.super.isMessageApplicable(update);
+    return TelegramCommandProcessor.super.isMessageApplicable(update);
   }
 }

@@ -72,8 +72,8 @@ class TelegramFinalePlacesServiceTest {
       () -> Assertions.assertThat(response.getText()).isEqualTo(expectedMessage)
     );
 
-    final var telegrams = List.of("kinger", "queen", "jackas");
-    final var telegramPersons = telegramPersonService.getAllByTelegramsAndChatId(telegrams, CHAT_ID);
+    final var nicknames = List.of("kinger", "queen", "jackas");
+    final var telegramPersons = telegramPersonService.getAllByNicknamesAndChatId(nicknames, CHAT_ID);
     final var expected = new FinalePlaces(
       List.of(
         FinalPlace.builder()

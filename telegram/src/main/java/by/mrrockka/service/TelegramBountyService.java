@@ -47,8 +47,8 @@ public class TelegramBountyService {
       .toList();
 
     final var bounty = Bounty.builder()
-      .to(findByTelegram(fromAndTo.getValue(), gamePersons))
-      .from(findByTelegram(fromAndTo.getKey(), gamePersons))
+      .to(findByNickname(fromAndTo.getValue(), gamePersons))
+      .from(findByNickname(fromAndTo.getKey(), gamePersons))
       .amount(game.asType(BountyGame.class).getBountyAmount())
       .build();
 
@@ -62,9 +62,9 @@ public class TelegramBountyService {
       .build();
   }
 
-  private Person findByTelegram(final TelegramPerson telegram, final List<Person> persons) {
+  private Person findByNickname(final TelegramPerson telegramPerson, final List<Person> persons) {
     return persons.stream()
-      .filter(person -> person.getNickname().equals(telegram.getNickname()))
+      .filter(person -> person.getNickname().equals(telegramPerson.getNickname()))
       .findFirst()
       .orElseThrow(EntriesForPersonNotFoundException::new);
   }

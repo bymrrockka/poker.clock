@@ -34,7 +34,7 @@ public final class CashCalculationStrategy extends AbstractCalculationTemplateMe
   }
 
   @Override
-  protected Payer buildDebtBase(final CashPlayerSummary debtorSummary) {
+  protected Payer buildPayerBase(final CashPlayerSummary debtorSummary) {
     return Payer.builder()
       .personEntries(debtorSummary.getPersonEntries())
       .personWithdrawals(debtorSummary.getPersonWithdrawals())

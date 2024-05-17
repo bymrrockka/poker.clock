@@ -5,7 +5,7 @@ import by.mrrockka.domain.payout.Payout;
 
 import java.util.List;
 
-interface CalculationStrategy {
+public interface CalculationStrategy {
 
   List<Payout> calculate(final Game game);
 

@@ -48,16 +48,16 @@ class TelegramEntryServiceTest {
 
   @ParameterizedTest
   @MethodSource("entryMessage")
-  void givenGameAndPerson_whenEntryAttempt_shouldStoreEntry(final String text, final String telegram,
+  void givenGameAndPerson_whenEntryAttempt_shouldStoreEntry(final String text, final String nickname,
                                                             final BigDecimal expectedAmount) {
     final var update = UpdateCreator.update(
       MessageCreator.message(message -> {
         message.setChat(ChatCreator.chat(CHAT_ID));
         message.setText(text);
         message.setReplyToMessage(MessageCreator.message(msg -> msg.setMessageId(REPLY_TO_ID)));
-        message.setFrom(UserCreator.user(telegram));
+        message.setFrom(UserCreator.user(nickname));
         if (!text.contains("@me")) {
-          message.setEntities(List.of(MessageEntityCreator.apiMention(text, "@%s".formatted(telegram))));
+          message.setEntities(List.of(MessageEntityCreator.apiMention(text, "@%s".formatted(nickname))));
         }
       })
     );
@@ -67,10 +67,10 @@ class TelegramEntryServiceTest {
       () -> assertThat(response).isNotNull(),
       () -> assertThat(response.getChatId()).isEqualTo(String.valueOf(CHAT_ID)),
       () -> assertThat(response.getText()).isEqualTo(
-        "Entries:\n - @%s -> %s\n".formatted(telegram, expectedAmount))
+        "Entries:\n - @%s -> %s\n".formatted(nickname, expectedAmount))
     );
 
-    final var telegramPerson = telegramPersonService.getByTelegramAndChatId(telegram, CHAT_ID);
+    final var telegramPerson = telegramPersonService.getByNicknameAndChatId(nickname, CHAT_ID);
     final var actual = entriesRepository.findByGameAndPerson(GAME_ID, telegramPerson.getId());
     assertAll(
       () -> assertThat(actual).isNotEmpty(),
@@ -113,7 +113,7 @@ class TelegramEntryServiceTest {
       () -> assertThat(response.getText()).contains(expectedLines)
     );
 
-    final var telegramPersons = telegramPersonService.getAllByTelegramsAndChatId(telegrams, CHAT_ID).stream()
+    final var telegramPersons = telegramPersonService.getAllByNicknamesAndChatId(telegrams, CHAT_ID).stream()
       .map(TelegramPerson::getNickname)
       .toList();
 
@@ -137,7 +137,7 @@ class TelegramEntryServiceTest {
     });
   }
 
-  private static Stream<Arguments> newPersonTelegramsMessage() {
+  private static Stream<Arguments> newPersonNicknamesMessage() {
     return Stream.of(
       Arguments.of("/entry @asdfasf 60", "asdfasf", BigDecimal.valueOf(60)),
       Arguments.of("/entry @omoekrngoen", "omoekrngoen", BigDecimal.valueOf(15))
@@ -145,16 +145,16 @@ class TelegramEntryServiceTest {
   }
 
   @ParameterizedTest
-  @MethodSource("newPersonTelegramsMessage")
-  void givenGameAndNewPerson_whenEntryAttempt_shouldStorePlayerAndEntry(final String text, final String telegram,
+  @MethodSource("newPersonNicknamesMessage")
+  void givenGameAndNewPerson_whenEntryAttempt_shouldStorePlayerAndEntry(final String text, final String nickname,
                                                                         final BigDecimal expectedAmount) {
     final var update = UpdateCreator.update(
       MessageCreator.message(message -> {
         message.setChat(ChatCreator.chat(CHAT_ID));
         message.setText(text);
         message.setReplyToMessage(MessageCreator.message(msg -> msg.setMessageId(REPLY_TO_ID)));
-        message.setFrom(UserCreator.user(telegram));
-        message.setEntities(List.of(MessageEntityCreator.apiMention(text, "@%s".formatted(telegram))));
+        message.setFrom(UserCreator.user(nickname));
+        message.setEntities(List.of(MessageEntityCreator.apiMention(text, "@%s".formatted(nickname))));
       })
     );
 
@@ -163,10 +163,10 @@ class TelegramEntryServiceTest {
       () -> assertThat(response).isNotNull(),
       () -> assertThat(response.getChatId()).isEqualTo(String.valueOf(CHAT_ID)),
       () -> assertThat(response.getText()).isEqualTo(
-        "Entries:\n - @%s -> %s\n".formatted(telegram, expectedAmount))
+        "Entries:\n - @%s -> %s\n".formatted(nickname, expectedAmount))
     );
 
-    final var telegramPerson = telegramPersonService.getByTelegramAndChatId(telegram, CHAT_ID);
+    final var telegramPerson = telegramPersonService.getByNicknameAndChatId(nickname, CHAT_ID);
     final var actual = entriesRepository.findByGameAndPerson(GAME_ID, telegramPerson.getId());
     assertAll(
       () -> assertThat(actual).isNotEmpty(),

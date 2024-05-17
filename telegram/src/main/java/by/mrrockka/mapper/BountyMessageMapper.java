@@ -50,7 +50,7 @@ public class BountyMessageMapper {
     final var mentions = messageMetadata.entities().stream()
       .filter(entity -> entity.type().equals(MessageEntityType.MENTION))
       .filter(entity -> !entity.text().contains(botName))
-      .map(entity -> personMapper.mapMessageToTelegram(entity, chatId))
+      .map(entity -> personMapper.mapMessageToTelegramPerson(entity, chatId))
       .toList();
     final var matcher = Pattern.compile(BOUNTY_REGEX).matcher(str);
 

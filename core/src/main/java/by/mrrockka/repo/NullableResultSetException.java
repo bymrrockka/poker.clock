@@ -3,13 +3,11 @@ package by.mrrockka.repo;
 import by.mrrockka.exception.BusinessException;
 import lombok.NonNull;
 
-import static by.mrrockka.exception.ErrorCodes.QUERY_EXECUTION_RETURNS_NOTHING;
-
 //todo: verify if needed
 public class NullableResultSetException extends BusinessException {
 
   public NullableResultSetException(@NonNull final String message) {
-    super(message, QUERY_EXECUTION_RETURNS_NOTHING);
+    super(message);
   }
 
   public NullableResultSetException() {

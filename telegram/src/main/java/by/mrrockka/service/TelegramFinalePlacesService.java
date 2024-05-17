@@ -47,7 +47,7 @@ public class TelegramFinalePlacesService {
     gameValidator.validateGameIsTournamentType(telegramGame.game());
 
     final var telegramPersons = telegramPersonService
-      .getAllByTelegramsAndChatId(places.values().stream().map(TelegramPerson::getNickname).toList(),
+      .getAllByNicknamesAndChatId(places.values().stream().map(TelegramPerson::getNickname).toList(),
                                   messageMetadata.chatId());
 
     final var finalePlaces = new FinalePlaces(

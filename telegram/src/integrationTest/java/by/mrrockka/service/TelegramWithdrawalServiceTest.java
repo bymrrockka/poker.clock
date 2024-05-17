@@ -46,16 +46,16 @@ class TelegramWithdrawalServiceTest {
 
   @ParameterizedTest
   @MethodSource("withdrawalsMessage")
-  void givenGameAndPerson_whenWithdrawalAttempt_shouldStoreWithdrawal(final String text, final String telegram,
+  void givenGameAndPerson_whenWithdrawalAttempt_shouldStoreWithdrawal(final String text, final String nickname,
                                                                       final BigDecimal expectedAmount) {
     final var update = UpdateCreator.update(
       MessageCreator.message(message -> {
         message.setChat(ChatCreator.chat(CHAT_ID));
         message.setText(text);
         message.setReplyToMessage(MessageCreator.message(msg -> msg.setMessageId(REPLY_TO_ID)));
-        message.setFrom(UserCreator.user(telegram));
+        message.setFrom(UserCreator.user(nickname));
         if (!text.contains("@me")) {
-          message.setEntities(List.of(MessageEntityCreator.apiMention(text, "@%s".formatted(telegram))));
+          message.setEntities(List.of(MessageEntityCreator.apiMention(text, "@%s".formatted(nickname))));
         }
       })
     );
@@ -65,14 +65,14 @@ class TelegramWithdrawalServiceTest {
       () -> assertThat(response).isNotNull(),
       () -> assertThat(response.getChatId()).isEqualTo(String.valueOf(CHAT_ID)),
       () -> assertThat(response.getText()).isEqualTo(
-        "Withdrawals:\n - @%s -> %s\n".formatted(telegram, expectedAmount))
+        "Withdrawals:\n - @%s -> %s\n".formatted(nickname, expectedAmount))
     );
 
     final var actual = withdrawalsRepository.findAllByGameId(GAME_ID);
     assertAll(
       () -> assertThat(actual).isNotEmpty(),
-      () -> assertThat(findByTelegram(actual, telegram).amounts()).hasSize(1),
-      () -> assertThat(findByTelegram(actual, telegram).amounts().get(0)).isEqualTo(expectedAmount)
+      () -> assertThat(findByNickname(actual, nickname).amounts()).hasSize(1),
+      () -> assertThat(findByNickname(actual, nickname).amounts().get(0)).isEqualTo(expectedAmount)
     );
   }
 
@@ -127,9 +127,9 @@ class TelegramWithdrawalServiceTest {
     });
   }
 
-  private WithdrawalsEntity findByTelegram(final List<WithdrawalsEntity> withdrawals, final String telegram) {
+  private WithdrawalsEntity findByNickname(final List<WithdrawalsEntity> withdrawals, final String nickname) {
     return withdrawals.stream()
-      .filter(withdr -> withdr.person().getNickname().equals(telegram))
+      .filter(withdrawal -> withdrawal.person().getNickname().equals(nickname))
       .findFirst()
       .orElseThrow();
   }

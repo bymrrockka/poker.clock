@@ -56,7 +56,7 @@ public class WithdrawalMessageMapper {
       return metadata.entities().stream()
         .filter(entity -> entity.type().equals(MessageEntityType.MENTION))
         .filter(entity -> !entity.text().contains(botName))
-        .map(entity -> personMapper.mapMessageToTelegram(entity, chatId))
+        .map(entity -> personMapper.mapMessageToTelegramPerson(entity, chatId))
         .collect(Collectors.toMap(Function.identity(), p -> amount));
     }
 

@@ -5,7 +5,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import static by.mrrockka.domain.MessageEntityType.BOT_COMMAND;
 
-public interface TelegramCommand {
+public interface TelegramCommandProcessor {
 
   BotApiMethodMessage process(final Update update);
 

@@ -25,7 +25,7 @@ class TelegramPersonRepositoryTest {
   private static final UUID PERSON_ID = UUID.randomUUID();
   private static final UUID GAME_ID = UUID.fromString("4a411a12-2386-4dce-b579-d806c91d6d17");
   private static final Long CHAT_ID = 123L;
-  private static final String TELEGRAM = "okmasdf";
+  private static final String NICKNAME = "okmasdf";
 
   @Autowired
   private PersonRepository personRepository;
@@ -34,26 +34,26 @@ class TelegramPersonRepositoryTest {
   private TelegramPersonRepository telegramPersonRepository;
 
   @Test
-  void givenPersonIdAndChatIdAndTelegram_whenSaveExecuted_shouldReturnValidEntities() {
+  void givenPersonIdAndChatIdAndNickname_whenSaveExecuted_shouldReturnValidEntities() {
     personRepository.save(PersonEntity.personBuilder()
-                            .nickname(TELEGRAM)
+                            .nickname(NICKNAME)
                             .id(PERSON_ID)
                             .build());
 
     telegramPersonRepository.save(TelegramPerson.telegramPersonBuilder()
                                     .id(PERSON_ID)
                                     .chatId(CHAT_ID)
-                                    .nickname(TELEGRAM)
+                                    .nickname(NICKNAME)
                                     .build());
     assertThat(
-      telegramPersonRepository.findAllByChatIdAndTelegrams(CHAT_ID, List.of(TELEGRAM)).stream()
+      telegramPersonRepository.findAllByChatIdAndNicknames(CHAT_ID, List.of(NICKNAME)).stream()
         .map(TelegramPersonEntity::getId))
       .contains(PERSON_ID);
   }
 
   @Test
   void givenGameIdAndEntries_whenGetByGameIdExecuted_shouldReturnValidTelegramEntities() {
-    final var expected = telegramPersonRepository.findAllByChatIdAndTelegrams(CHAT_ID, List.of("kinger", "queen"));
+    final var expected = telegramPersonRepository.findAllByChatIdAndNicknames(CHAT_ID, List.of("kinger", "queen"));
     assertThat(telegramPersonRepository.findAllByGameId(GAME_ID))
       .containsExactlyInAnyOrderElementsOf(expected);
   }

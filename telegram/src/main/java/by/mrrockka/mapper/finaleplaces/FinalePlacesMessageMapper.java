@@ -71,7 +71,7 @@ public class FinalePlacesMessageMapper {
     final var mentions = metadata.entities().stream()
       .filter(entity -> entity.type().equals(MessageEntityType.MENTION))
       .filter(entity -> !entity.text().contains(botName))
-      .map(entity -> personMapper.mapMessageToTelegram(entity, chatId))
+      .map(entity -> personMapper.mapMessageToTelegramPerson(entity, chatId))
       .toList();
 
     if (finalePlaces.isEmpty()) {

@@ -33,7 +33,7 @@ class TelegramPersonServiceTest {
   @Autowired
   private TelegramPersonRepository telegramPersonRepository;
 
-  private static Stream<Arguments> telegrams() {
+  private static Stream<Arguments> nicknames() {
     return Stream.of(
       Arguments.of(
         List.of("mrrocka", "andrei", "marks")
@@ -45,12 +45,12 @@ class TelegramPersonServiceTest {
   }
 
   @ParameterizedTest
-  @MethodSource("telegrams")
-  void givenMessageWithTelegrams_whenAttemptToStoreAndSomeTelegramsExistsInDb_shouldStoreOnlyNewPersons(
+  @MethodSource("nicknames")
+  void givenMessageWithNicknames_whenAttemptToStoreAndSomeTelegramsExistsInDb_shouldStoreOnlyNewPersons(
     final List<String> args) {
-    final var telegrams = new ArrayList<>(args);
+    final var nicknames = new ArrayList<>(args);
 
-    final var text = telegrams.stream()
+    final var text = nicknames.stream()
       .map("@%s"::formatted)
       .reduce("%s\n%s"::formatted)
       .orElseThrow();
@@ -65,8 +65,8 @@ class TelegramPersonServiceTest {
       })
     );
 
-    if (telegrams.contains("me")) {
-      telegrams.set(3, UserCreator.USER_NAME);
+    if (nicknames.contains("me")) {
+      nicknames.set(3, UserCreator.USER_NAME);
     }
 
     final var personIds = telegramPersonService.storePersons(update).stream()
@@ -74,7 +74,7 @@ class TelegramPersonServiceTest {
       .toList();
     assertThat(personRepository.findAllByIds(personIds)).hasSize(args.size());
 
-    final var actualIds = telegramPersonRepository.findAllByChatIdAndTelegrams(CHAT_ID, telegrams).stream()
+    final var actualIds = telegramPersonRepository.findAllByChatIdAndNicknames(CHAT_ID, nicknames).stream()
       .map(TelegramPersonEntity::getId)
       .toList();
 

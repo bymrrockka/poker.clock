@@ -1,6 +1,6 @@
 package by.mrrockka.bot;
 
-import by.mrrockka.bot.commands.CalculateTelegramCommand;
+import by.mrrockka.bot.commands.CalculateTelegramCommandProcessor;
 import by.mrrockka.config.PostgreSQLExtension;
 import by.mrrockka.creator.MessageCreator;
 import by.mrrockka.creator.UpdateCreator;
@@ -20,10 +20,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest
 @ActiveProfiles("repository")
-class CalculateTelegramCommandTest {
+class CalculateTelegramCommandProcessorTest {
 
   @Autowired
-  private CalculateTelegramCommand calculatePaymentsRoute;
+  private CalculateTelegramCommandProcessor calculateTelegramCommand;
 
   @Builder
   private record MessageArgument(String message, boolean result, boolean isCommand) {
@@ -99,6 +99,6 @@ class CalculateTelegramCommandTest {
   void givenUpdateContainsMessage_whenEqualsCalculate_thenShouldAssertTrue(final MessageArgument arg) {
     final var update = UpdateCreator.update(MessageCreator.message(arg.message()));
 
-    assertThat(calculatePaymentsRoute.isApplicable(update)).isEqualTo(arg.result());
+    assertThat(calculateTelegramCommand.isApplicable(update)).isEqualTo(arg.result());
   }
 }

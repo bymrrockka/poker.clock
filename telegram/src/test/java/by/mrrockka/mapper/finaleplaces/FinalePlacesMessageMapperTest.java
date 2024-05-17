@@ -79,7 +79,7 @@ class FinalePlacesMessageMapperTest {
 
   @ParameterizedTest
   @MethodSource("finalePlacesMessage")
-  void givenFinalePlacesCommand_whenAttemptToMap_shouldReturnPositionAndTelegram(final String command) {
+  void givenFinalePlacesCommand_whenAttemptToMap_shouldReturnPositionAndNickname(final String command) {
     final var expected = List.of(
       Pair.of(1, "mrrockka"),
       Pair.of(2, "ararat"),

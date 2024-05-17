@@ -35,7 +35,7 @@ final class TournamentCalculationStrategy extends AbstractCalculationTemplateMet
   }
 
   @Override
-  protected Payer buildDebtBase(TournamentPlayerSummary debtorSummary) {
+  protected Payer buildPayerBase(TournamentPlayerSummary debtorSummary) {
     return Payer.builder()
       .personEntries(debtorSummary.getPersonEntries())
       .build();

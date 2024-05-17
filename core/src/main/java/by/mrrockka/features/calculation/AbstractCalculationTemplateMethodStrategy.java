@@ -31,7 +31,7 @@ public abstract class AbstractCalculationTemplateMethodStrategy<PS extends Playe
 
   protected abstract Payout buildPayoutBase(final PS creditorSummary);
 
-  protected abstract Payer buildDebtBase(final PS debtorSummary);
+  protected abstract Payer buildPayerBase(final PS debtorSummary);
 
   private Payout calculatePayout(final PS creditorSummary,
                                  final List<PS> debtorSummaries) {
@@ -47,7 +47,7 @@ public abstract class AbstractCalculationTemplateMethodStrategy<PS extends Playe
 
     for (final var debtorSummary : debtorSummaries) {
       final var debtAmount = debtorSummary.getTransferAmount();
-      final var debtBuilder = buildDebtBase(debtorSummary).toBuilder();
+      final var debtBuilder = buildPayerBase(debtorSummary).toBuilder();
       final var debtComparison = debtAmount.compareTo(leftToPay);
 
       if (debtComparison == 0) {

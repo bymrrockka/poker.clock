@@ -1,6 +1,6 @@
 package by.mrrockka.bot;
 
-import by.mrrockka.bot.commands.TournamentGameTelegramCommand;
+import by.mrrockka.bot.commands.TournamentGameTelegramCommandProcessor;
 import by.mrrockka.creator.MessageCreator;
 import by.mrrockka.creator.MessageEntityCreator;
 import by.mrrockka.creator.SendCreator;
@@ -23,12 +23,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class TournamentGameTelegramCommandTest {
+class TournamentGameTelegramCommandTestProcessor {
 
   @Mock
   private TelegramGameService telegramGameService;
   @InjectMocks
-  private TournamentGameTelegramCommand tournamentCommandRoute;
+  private TournamentGameTelegramCommandProcessor tournamentGameTelegramCommand;
 
   private static Stream<Arguments> tournamentMessages() {
     return Stream.of(
@@ -71,14 +71,14 @@ class TournamentGameTelegramCommandTest {
 
     when(telegramGameService.storeTournamentGame(update)).thenReturn(expected);
 
-    assertThat(tournamentCommandRoute.process(update)).isEqualTo(expected);
+    assertThat(tournamentGameTelegramCommand.process(update)).isEqualTo(expected);
   }
 
   @Test
   void givenTournamentCommand_whenReceived_thenShouldMarkAsApplicable() {
     final var update = UpdateCreator.update(MessageCreator.message("/tournament"));
 
-    assertThat(tournamentCommandRoute.isApplicable(update)).isTrue();
+    assertThat(tournamentGameTelegramCommand.isApplicable(update)).isTrue();
   }
 
   @ParameterizedTest
@@ -90,6 +90,6 @@ class TournamentGameTelegramCommandTest {
   void givenTournamentCommand_whenReceived_thenShouldNotMarkAsApplicable(final String text) {
     final var update = UpdateCreator.update(MessageCreator.message(text));
 
-    assertThat(tournamentCommandRoute.isApplicable(update)).isFalse();
+    assertThat(tournamentGameTelegramCommand.isApplicable(update)).isFalse();
   }
 }

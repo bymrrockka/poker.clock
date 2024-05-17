@@ -1,6 +1,6 @@
 package by.mrrockka.bot;
 
-import by.mrrockka.bot.commands.TelegramCommand;
+import by.mrrockka.bot.commands.TelegramCommandProcessor;
 import by.mrrockka.bot.properties.TelegramBotsProperties;
 import by.mrrockka.service.UpdateBotCommandsService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class PokerClockBot implements LongPollingBot {
 
   private final PokerClockAbsSender pokerClockAbsSender;
   private final UpdateBotCommandsService updateBotCommandsService;
-  private final List<TelegramCommand> telegramCommands;
+  private final List<TelegramCommandProcessor> telegramCommandProcessors;
   private final TelegramBotsProperties telegramBotsProperties;
 
   @Override
@@ -37,7 +37,8 @@ public class PokerClockBot implements LongPollingBot {
     }
 
     if (isProcessable(update)) {
-      telegramCommands.stream()
+//    todo: check if there is a better option to do this. Like factory usage or something
+      telegramCommandProcessors.stream()
         .filter(telegramCommand -> telegramCommand.isApplicable(update))
         .map(telegramCommand -> telegramCommand.process(update))
         .filter(Objects::nonNull)
