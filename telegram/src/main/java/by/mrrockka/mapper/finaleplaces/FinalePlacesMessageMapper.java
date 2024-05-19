@@ -55,7 +55,7 @@ public class FinalePlacesMessageMapper {
   }
 
   public Map<Integer, TelegramPerson> map(final MessageMetadata metadata) {
-    final var strings = metadata.command()
+    final var strings = metadata.text()
       .toLowerCase()
       .strip()
       .replaceAll("/finaleplaces([ \n]*)", "")

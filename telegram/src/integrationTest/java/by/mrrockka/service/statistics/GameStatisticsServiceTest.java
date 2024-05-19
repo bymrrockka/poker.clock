@@ -70,7 +70,7 @@ public class GameStatisticsServiceTest {
   void givenGame_whenGameStatisticsCommandPosted_shouldReturnMessageWithGameStatistics(final Integer gameId,
                                                                                        final String expected) {
     final var metadata = MessageMetadataCreator.domain(builder -> builder
-      .command("/game_statistics")
+      .text("/game_statistics")
       .chatId(CHAT_ID)
       .replyTo(MessageMetadataCreator.domain(replyto -> replyto.id(gameId)))
     );

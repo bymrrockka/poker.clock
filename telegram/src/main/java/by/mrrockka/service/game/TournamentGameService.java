@@ -31,7 +31,7 @@ class TournamentGameService {
   @Transactional(isolation = Isolation.READ_COMMITTED)
   BotApiMethodMessage storeGame(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
-    final var game = gameMessageMapper.mapTournament(messageMetadata.command());
+    final var game = gameMessageMapper.mapTournament(messageMetadata.text());
     final var personIds = telegramPersonService.storePersons(update).stream()
       .map(Person::getId)
       .toList();

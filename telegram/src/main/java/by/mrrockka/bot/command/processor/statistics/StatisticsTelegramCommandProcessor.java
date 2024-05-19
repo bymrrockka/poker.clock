@@ -1,5 +1,6 @@
-package by.mrrockka.bot.commands;
+package by.mrrockka.bot.command.processor.statistics;
 
+import by.mrrockka.bot.command.processor.TelegramCommandProcessor;
 import by.mrrockka.service.statistics.StatisticsTelegramService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

@@ -1,6 +1,6 @@
 package by.mrrockka.mapper;
 
-import by.mrrockka.bot.properties.TelegramBotsProperties;
+import by.mrrockka.bot.TelegramBotsProperties;
 import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.mesageentity.MessageEntity;
 import by.mrrockka.domain.mesageentity.MessageEntityType;
@@ -26,9 +26,9 @@ public abstract class MessageMetadataMapper {
   @Mapping(source = "chat.id", target = "chatId")
   @Mapping(target = "createdAt", expression = "java(Instant.ofEpochSecond(message.getDate()))")
   @Mapping(source = "messageId", target = "id")
-  @Mapping(target = "command", expression = "java(MeMentionMapper.replaceMeMention(message))")
+  @Mapping(target = "text", expression = "java(MeMentionMapper.replaceMeMention(message))")
   @Mapping(target = "replyTo", conditionQualifiedByName = "replyToMessage", expression = "java(this.map(message.getReplyToMessage()))")
-  @Mapping(target = "entities", source = "message", qualifiedByName = "mapEntities")
+  @Mapping(target = "entities", source = "message", qualifiedByName = "mapMessageEntities")
   @Mapping(target = "fromNickname", source = "message.from.userName")
   public abstract MessageMetadata map(Message message);
 
@@ -36,13 +36,13 @@ public abstract class MessageMetadataMapper {
   @Mapping(source = "chatId", target = "chatId")
   @Mapping(source = "messageId", target = "id")
   @Mapping(target = "replyTo", ignore = true)
-  @Mapping(target = "command", ignore = true)
+  @Mapping(target = "text", ignore = true)
   @Mapping(target = "fromNickname", ignore = true)
   @Mapping(target = "entities", expression = "java(Collections.emptyList())")
   public abstract MessageMetadata map(TelegramGameEntity entity);
 
-  @Named("mapEntities")
-  public List<MessageEntity> mapEntities(final Message message) {
+  @Named("mapMessageEntities")
+  public List<MessageEntity> mapMessageEntities(final Message message) {
     final var entities = message.getEntities().stream()
       .distinct()
       .filter(this::isBotMention)

@@ -1,6 +1,6 @@
 package by.mrrockka.mapper;
 
-import by.mrrockka.bot.properties.TelegramBotsProperties;
+import by.mrrockka.bot.TelegramBotsProperties;
 import by.mrrockka.creator.MessageCreator;
 import by.mrrockka.creator.MessageEntityCreator;
 import by.mrrockka.creator.MessageMetadataCreator;
@@ -71,7 +71,7 @@ class MessageMetadataMapperTest {
 
     final var root = MessageMetadataCreator.domain(
       builder -> builder
-        .command(messageText)
+        .text(messageText)
         .entities(List.of(
           MessageEntityCreator.domainEntity(entity -> entity
             .type(MessageEntityType.BOT_COMMAND)

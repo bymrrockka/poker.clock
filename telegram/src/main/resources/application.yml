@@ -8,6 +8,7 @@ bot:
   description:
     commands:
       bounty_game:
+        enabled: true
         description: Starts bounty tournament game
         details: |
           You could create a bounty tournament game using /bounty_game command with list of players nicknames that separated with a space.
@@ -21,6 +22,7 @@ bot:
           @nickname 
           @nickname
       tournament_game:
+        enabled: true
         description: Starts a tournament game
         details: |
           You could create a tournament game using /tournament_game command with list of players nicknames that separated with a space.
@@ -33,6 +35,7 @@ bot:
           @nickname 
           @nickname
       cash_game:
+        enabled: true
         description: Starts a cash game
         details: |
           You could create a cash game using /cash_game command with list of players nicknames that separated with a space.
@@ -45,6 +48,7 @@ bot:
           @nickname 
           @nickname
       entry:
+        enabled: true
         description: Player entry to game
         details: |
           For players reentries or new players entry use /entry command with nickname to save it against the last started game.
@@ -56,6 +60,7 @@ bot:
           /entry @nickname @nickname
           /entry @nickname @nickname 20
       withdrawal:
+        enabled: true
         description: Player withdrawal from a cash game
         details: |
           For players withdrawals use /withdrawal command with nickname and amount to save it against the last started game.
@@ -65,29 +70,32 @@ bot:
           /withdrawal @nickname 20
           /withdrawal @nickname @nickname 20
       prize_pool:
+        enabled: true
         description: Stores a prize pool for a tournament
         details: |
-          When you ready to specify prize pool for tournament game use /prizepool command to store position and percentage map.
+          When you ready to specify prize pool for tournament game use /prize_pool command to store position and percentage map.
           Should contain at least one position.
           Total percentage should be equal to 100%.
           You could forward game message in case there are multiple games happen in parallel to store against it.
           Examples: 
-          /prizepool 
+          /prize_pool 
           1. 100
-          /prizepool 
+          /prize_pool 
           1 70%
           2 30%
       finale_places:
+        enabled: true
         description: Stores a finale places for a tournament
         details: |
-          When tournament is finished you could specify places for players who won the pot with /finaleplaces command.
+          When tournament is finished you could specify places for players who won the pot with /finale_places command.
           Should contain at least one position with player nickname.
           You could forward game message in case there are multiple games happen in parallel to store against it.
           Examples: 
-          /finaleplaces 
+          /finale_places 
           1. @nickname
-          /finaleplaces 1 @nickname, 2 @nickname
+          /finale_places 1 @nickname, 2 @nickname
       calculate:
+        enabled: true
         description: Calculate game payouts
         details: |
           When game is over you could use /calculate command to view calculated payouts.
@@ -104,21 +112,31 @@ bot:
             - withdrawals
           Examples: 
           /calculate
-      game_statistics:
+      game_stats:
+        enabled: true
         description: Game statistics
         details: |
-          When you want to see game statistics you could use /game_statistics command.
+          When you want to see game statistics you could use /game_stats command.
           You could forward game message in case there are multiple games happen in parallel to store against it.
           Examples: 
-          /game_statistics
-      my_statistics:
+          /game_stats
+      my_stats:
+        enabled: true
         description: Player in game statistics
         details: |
-          When you want to see your statistics as player in game you could use /my_statistics command.
+          When you want to see your statistics as player in game you could use /my_stats command.
           You could forward game message in case there are multiple games happen in parallel to store against it.
           Examples: 
-          /my_statistics
+          /my_stats
+      global_stats:
+        enabled: false
+        description: Player global statistics
+        details: |
+          When you want to see your global statistics for all the games you were into you could use /global_stats command.
+          Examples: 
+          /global_stats
       help:
+        enabled: true
         description: Post it with a command name for command details
         details: |
           You could use this command to get details about supported commands.

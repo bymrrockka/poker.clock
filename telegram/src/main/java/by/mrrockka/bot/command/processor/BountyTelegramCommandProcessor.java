@@ -1,4 +1,4 @@
-package by.mrrockka.bot.commands;
+package by.mrrockka.bot.command.processor;
 
 import by.mrrockka.service.BountyTelegramService;
 import lombok.RequiredArgsConstructor;

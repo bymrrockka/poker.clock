@@ -1,6 +1,5 @@
 package by.mrrockka.bot;
 
-import by.mrrockka.bot.properties.TelegramBotsProperties;
 import by.mrrockka.domain.PokerClockBotOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

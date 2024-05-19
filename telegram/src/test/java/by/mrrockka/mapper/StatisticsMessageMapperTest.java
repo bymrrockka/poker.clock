@@ -29,7 +29,7 @@ class StatisticsMessageMapperTest {
   @ParameterizedTest
   @MethodSource("validScenarios")
   void givenValidMessage_whenMapCalled_thenShouldReturnMappedDto(final String command, final StatisticsType type) {
-    final var metadata = MessageMetadataCreator.domain(builder -> builder.command(command));
+    final var metadata = MessageMetadataCreator.domain(builder -> builder.text(command));
     final var actual = mapper.map(metadata);
     assertAll(
       () -> assertThat(actual).isNotNull(),
@@ -41,7 +41,7 @@ class StatisticsMessageMapperTest {
   @ParameterizedTest
   @ValueSource(strings = {"/gam_stats", "/gamee_stats", "/m_stats", "/mymy_stats"})
   void givenInvalidMessage_whenMapCalled_thenShouldThrowExxception(final String command) {
-    final var metadata = MessageMetadataCreator.domain(builder -> builder.command(command));
+    final var metadata = MessageMetadataCreator.domain(builder -> builder.text(command));
     assertThatCode(() -> mapper.map(metadata))
       .isInstanceOf(InvalidMessageFormatException.class);
   }

@@ -1,4 +1,4 @@
-package by.mrrockka.bot.properties;
+package by.mrrockka.bot;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

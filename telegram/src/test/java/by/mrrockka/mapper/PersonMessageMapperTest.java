@@ -37,7 +37,7 @@ class PersonMessageMapperTest {
           .metadata(
             MessageMetadataCreator.domain(builder -> builder
               .chatId(CHAT_ID)
-              .command("""
+              .text("""
                          /tournament
                          buy-in: 30  
                          stack: 30k 
@@ -66,7 +66,7 @@ class PersonMessageMapperTest {
           .metadata(
             MessageMetadataCreator.domain(builder -> builder
               .chatId(CHAT_ID)
-              .command("""
+              .text("""
                          /tournament@pokerbot 
                          buyin:    15zl    
                          stack: 1.5k
@@ -111,7 +111,7 @@ class PersonMessageMapperTest {
           .metadata(
             MessageMetadataCreator.domain(builder -> builder
               .chatId(CHAT_ID)
-              .command("""
+              .text("""
                          /tournament 
                          buyin:    15zl    
                          stack: 1.5k

@@ -35,9 +35,9 @@ class CashGameService {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
 
     log.debug("Processing {\n%s\n} message from %s chat id. Timestamp %s"
-                .formatted(messageMetadata.command(), messageMetadata.chatId(), messageMetadata.createdAt()));
+                .formatted(messageMetadata.text(), messageMetadata.chatId(), messageMetadata.createdAt()));
 
-    final var game = gameMessageMapper.mapCash(messageMetadata.command());
+    final var game = gameMessageMapper.mapCash(messageMetadata.text());
     final var personIds = telegramPersonService.storePersons(update).stream()
       .map(Person::getId)
       .toList();

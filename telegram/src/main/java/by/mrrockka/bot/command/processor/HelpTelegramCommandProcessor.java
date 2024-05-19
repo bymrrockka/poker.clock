@@ -1,6 +1,6 @@
-package by.mrrockka.bot.commands;
+package by.mrrockka.bot.command.processor;
 
-import by.mrrockka.service.game.GameTelegramService;
+import by.mrrockka.service.help.HelpTelegramService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
@@ -8,13 +8,13 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
 @RequiredArgsConstructor
-public class BountyGameTelegramCommandProcessor implements TelegramCommandProcessor {
-  private static final String COMMAND = "^/bounty_tournament$";
-  private final GameTelegramService gameService;
+public class HelpTelegramCommandProcessor implements TelegramCommandProcessor {
+  private static final String COMMAND = "^/help$";
+  private final HelpTelegramService helpTelegramService;
 
   @Override
   public BotApiMethodMessage process(final Update update) {
-    return gameService.storeBountyGame(update);
+    return helpTelegramService.sendHelpInformation(update);
   }
 
   @Override

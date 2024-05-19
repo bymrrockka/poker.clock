@@ -42,7 +42,11 @@ class HelpTelegramServiceTest {
     final var update = UpdateCreator.update(MessageCreator.message());
     final var metadata = MessageMetadataCreator.domain();
     final var helpCommandOpt = Optional.of(COMMAND);
-    final var commandsMap = Map.of(COMMAND, new CommandDescription(COMMAND_DESCRIPTION, COMMAND_DETAILS));
+    final var commandsMap = Map.of(COMMAND,
+                                   CommandDescription.builder()
+                                     .description(COMMAND_DESCRIPTION)
+                                     .details(COMMAND_DETAILS)
+                                     .build());
 
     when(messageMetadataMapper.map(update.getMessage())).thenReturn(metadata);
     when(helpMessageMapper.map(metadata)).thenReturn(helpCommandOpt);
@@ -61,7 +65,11 @@ class HelpTelegramServiceTest {
   void givenHelpWithoutCommandMessage_whenSendHelpInformationCalled_shouldReturnHelpDescription() {
     final var update = UpdateCreator.update(MessageCreator.message());
     final var metadata = MessageMetadataCreator.domain();
-    final var commandsMap = Map.of(HELP_COMMAND, new CommandDescription(COMMAND_DESCRIPTION, COMMAND_DETAILS));
+    final var commandsMap = Map.of(HELP_COMMAND,
+                                   CommandDescription.builder()
+                                     .description(COMMAND_DESCRIPTION)
+                                     .details(COMMAND_DETAILS)
+                                     .build());
 
     when(messageMetadataMapper.map(update.getMessage())).thenReturn(metadata);
     when(helpMessageMapper.map(metadata)).thenReturn(Optional.empty());

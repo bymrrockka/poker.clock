@@ -56,7 +56,7 @@ class BountyMessageMapperTest {
   void givenBountyMessageMetadata_whenMapAttempt_shouldParseToPair(final String command, final String left,
                                                                    final String right) {
     final var messageMetadata = MessageMetadataCreator.domain(builder -> builder
-      .command(command)
+      .text(command)
       .entities(List.of(
         MessageEntityCreator.domainMention("@%s".formatted(left)),
         MessageEntityCreator.domainMention("@%s".formatted(right))
@@ -72,7 +72,7 @@ class BountyMessageMapperTest {
   void givenInvalidBountyMessageMetadata_whenMapAttempt_shouldThrowException() {
     final var message = "/bounty @kinger kicked";
     final var messageMetadata = MessageMetadataCreator.domain(builder -> builder
-      .command(message)
+      .text(message)
       .entities(List.of(
         MessageEntityCreator.domainMention("@kinger")
       ))

@@ -115,7 +115,7 @@ class FinalePlacesMessageMapperTest {
         FinalePlacesArgument.builder()
           .metadata(
             MessageMetadataCreator.domain(metadata -> metadata
-              .command("""
+              .text("""
                          /finaleplaces
                          1 @mrrockka
                          2 @ararat
@@ -136,7 +136,7 @@ class FinalePlacesMessageMapperTest {
         FinalePlacesArgument.builder()
           .metadata(
             MessageMetadataCreator.domain(metadata -> metadata
-              .command("""
+              .text("""
                          /finaleplaces
                          1 - @mrrockka
                          2 -@ararat
@@ -157,7 +157,7 @@ class FinalePlacesMessageMapperTest {
         FinalePlacesArgument.builder()
           .metadata(
             MessageMetadataCreator.domain(metadata -> metadata
-              .command("""
+              .text("""
                          /finaleplaces
                          1 @mrrockka, 2. @ararat,3- @andrei
                          """)
@@ -176,7 +176,7 @@ class FinalePlacesMessageMapperTest {
         FinalePlacesArgument.builder()
           .metadata(
             MessageMetadataCreator.domain(metadata -> metadata
-              .command("""
+              .text("""
                          /finaleplaces
                          1= @mrrockka, 2. @ararat,
                          3: @andrei
@@ -196,7 +196,7 @@ class FinalePlacesMessageMapperTest {
         FinalePlacesArgument.builder()
           .metadata(
             MessageMetadataCreator.domain(metadata -> metadata
-              .command("/finaleplaces 1 @mrrockka, 2. @ararat,3- @andrei")
+              .text("/finaleplaces 1 @mrrockka, 2. @ararat,3- @andrei")
               .entities(List.of(
                 MessageEntityCreator.domainMention("@mrrockka"),
                 MessageEntityCreator.domainMention("@ararat"),
@@ -229,7 +229,7 @@ class FinalePlacesMessageMapperTest {
         FinalePlacesArgument.builder()
           .metadata(
             MessageMetadataCreator.domain(metadata -> metadata
-              .command("/finaleplaces 1@mrrockka, 2@ararat,3@andrei")
+              .text("/finaleplaces 1@mrrockka, 2@ararat,3@andrei")
               .entities(List.of(
                 MessageEntityCreator.domainMention("@mrrockka"),
                 MessageEntityCreator.domainMention("@ararat"),
@@ -242,7 +242,7 @@ class FinalePlacesMessageMapperTest {
         FinalePlacesArgument.builder()
           .metadata(
             MessageMetadataCreator.domain(metadata -> metadata
-              .command("/finaleplaces\n@mrrockka @ararat")
+              .text("/finaleplaces\n@mrrockka @ararat")
               .entities(List.of(
                 MessageEntityCreator.domainMention("@mrrockka"),
                 MessageEntityCreator.domainMention("@ararat")
@@ -254,7 +254,7 @@ class FinalePlacesMessageMapperTest {
         FinalePlacesArgument.builder()
           .metadata(
             MessageMetadataCreator.domain(metadata -> metadata
-              .command("/finaleplaces 1 @mrrockka, 2 @ararat, 3 @andrei")
+              .text("/finaleplaces 1 @mrrockka, 2 @ararat, 3 @andrei")
               .entities(List.of(
                 MessageEntityCreator.domainMention("@mrrockka"),
                 MessageEntityCreator.domainMention("@ararat")
@@ -266,7 +266,7 @@ class FinalePlacesMessageMapperTest {
         FinalePlacesArgument.builder()
           .metadata(
             MessageMetadataCreator.domain(metadata -> metadata
-              .command("/finaleplaces 1 @mrrockka, 2 @ararat, 3 @andrei")
+              .text("/finaleplaces 1 @mrrockka, 2 @ararat, 3 @andrei")
               .entities(List.of(
                 MessageEntityCreator.domainMention("@mrrockka"),
                 MessageEntityCreator.domainMention("@ararat"),
@@ -280,7 +280,7 @@ class FinalePlacesMessageMapperTest {
         FinalePlacesArgument.builder()
           .metadata(
             MessageMetadataCreator.domain(metadata -> metadata
-              .command("/finaleplaces 1 @mrrockka, 2 @ararat, 3 @andrei")
+              .text("/finaleplaces 1 @mrrockka, 2 @ararat, 3 @andrei")
               .entities(List.of(
                 MessageEntityCreator.domainMention("@mrrockka"),
                 MessageEntityCreator.domainMention("@ararat"),

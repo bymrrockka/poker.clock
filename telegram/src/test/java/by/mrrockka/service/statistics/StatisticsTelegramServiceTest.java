@@ -38,7 +38,7 @@ class StatisticsTelegramServiceTest {
   void givenUpdateWithValidGameCommand_whenRetrieveStatisticsCalled_shouldReturnMessageWithGameResponse() {
     final var command = "/game_stats";
     final var message = MessageCreator.message(command);
-    final var metadata = MessageMetadataCreator.domain(builder -> builder.command(command));
+    final var metadata = MessageMetadataCreator.domain(builder -> builder.text(command));
     final var update = UpdateCreator.update(message);
     final var statisticsCommand = StatisticsCommand.builder()
       .type(StatisticsType.GAME)
@@ -64,7 +64,7 @@ class StatisticsTelegramServiceTest {
   void givenUpdateWithValidPlayerInGameCommand_whenRetrieveStatisticsCalled_shouldReturnMessageWithPlayerResponse() {
     final var command = "/my_stats";
     final var message = MessageCreator.message(command);
-    final var metadata = MessageMetadataCreator.domain(builder -> builder.command(command));
+    final var metadata = MessageMetadataCreator.domain(builder -> builder.text(command));
     final var update = UpdateCreator.update(message);
     final var statisticsCommand = StatisticsCommand.builder()
       .type(StatisticsType.PLAYER_IN_GAME)
@@ -90,7 +90,7 @@ class StatisticsTelegramServiceTest {
   void givenUpdateWithValidGlobalPersonCommand_whenRetrieveStatisticsCalled_shouldReturnMessageWithGlobalPersonResponse() {
     final var command = "/my_global_stats";
     final var message = MessageCreator.message(command);
-    final var metadata = MessageMetadataCreator.domain(builder -> builder.command(command));
+    final var metadata = MessageMetadataCreator.domain(builder -> builder.text(command));
     final var update = UpdateCreator.update(message);
     final var statisticsCommand = StatisticsCommand.builder()
       .type(StatisticsType.PERSON_GLOBAL)

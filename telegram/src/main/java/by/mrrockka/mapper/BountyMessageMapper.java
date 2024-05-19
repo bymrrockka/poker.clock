@@ -45,7 +45,7 @@ public class BountyMessageMapper {
 
   public Pair<TelegramPerson, TelegramPerson> map(final MessageMetadata messageMetadata) {
     final var chatId = messageMetadata.chatId();
-    final var str = messageMetadata.command().toLowerCase().strip();
+    final var str = messageMetadata.text().toLowerCase().strip();
     final var mentions = messageMetadata.mentions()
       .map(entity -> personMapper.mapMessageToTelegramPerson(entity, chatId))
       .toList();

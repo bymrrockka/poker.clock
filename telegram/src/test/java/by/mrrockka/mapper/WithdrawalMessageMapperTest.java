@@ -34,7 +34,7 @@ class WithdrawalMessageMapperTest {
     return Stream.of(
       Arguments.of(
         WithdrawalArgument.builder()
-          .metadata(MessageMetadataCreator.domain(metadata -> metadata.command("/withdrawal @kinger 60")
+          .metadata(MessageMetadataCreator.domain(metadata -> metadata.text("/withdrawal @kinger 60")
             .entities(List.of(MessageEntityCreator.domainMention("@kinger")))))
           .nicknames(Set.of("kinger"))
           .amount(BigDecimal.valueOf(60))
@@ -43,7 +43,7 @@ class WithdrawalMessageMapperTest {
         WithdrawalArgument.builder()
           .metadata(
             MessageMetadataCreator.domain(
-              metadata -> metadata.command("/withdrawal @kinger @asadf @asdfasdf @koomko 30")
+              metadata -> metadata.text("/withdrawal @kinger @asadf @asdfasdf @koomko 30")
                 .entities(List.of(
                   MessageEntityCreator.domainMention("@kinger"),
                   MessageEntityCreator.domainMention("@asadf"),
@@ -86,7 +86,7 @@ class WithdrawalMessageMapperTest {
   @ParameterizedTest
   @MethodSource("invalidEntryWithMentionsMessage")
   void givenInvalidEntryMessageWithMentions_whenMapAttempt_shouldThrowException(final String message) {
-    final var metadata = MessageMetadataCreator.domain(builder -> builder.command(message));
+    final var metadata = MessageMetadataCreator.domain(builder -> builder.text(message));
 
     assertThatThrownBy(() -> withdrawalMessageMapper.map(metadata))
       .isInstanceOf(InvalidMessageFormatException.class);

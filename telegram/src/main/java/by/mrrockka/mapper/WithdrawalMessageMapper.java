@@ -40,7 +40,7 @@ public class WithdrawalMessageMapper {
 
   //  Map to be able to extend withdrawals to have different values for players
   public Map<TelegramPerson, BigDecimal> map(final MessageMetadata metadata) {
-    final var command = metadata.command().toLowerCase().strip();
+    final var command = metadata.text().toLowerCase().strip();
     final var chatId = metadata.chatId();
     final var matcher = Pattern.compile(WITHDRAWAL_REGEX).matcher(command);
     if (matcher.matches()) {

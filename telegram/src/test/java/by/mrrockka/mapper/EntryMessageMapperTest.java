@@ -69,14 +69,14 @@ class EntryMessageMapperTest {
     return Stream.of(
       Arguments.of(
         EntryArgument.builder()
-          .metadata(MessageMetadataCreator.domain(metadata -> metadata.command("/entry @kinger 60")
+          .metadata(MessageMetadataCreator.domain(metadata -> metadata.text("/entry @kinger 60")
             .entities(List.of(MessageEntityCreator.domainMention("@kinger")))))
           .nicknames(Set.of("kinger"))
           .amount(BigDecimal.valueOf(60))
           .build()),
       Arguments.of(
         EntryArgument.builder()
-          .metadata(MessageMetadataCreator.domain(metadata -> metadata.command("/entry @kinger")
+          .metadata(MessageMetadataCreator.domain(metadata -> metadata.text("/entry @kinger")
             .entities(List.of(MessageEntityCreator.domainMention("@kinger")))))
           .nicknames(Set.of("kinger"))
           .amount(null)
@@ -85,7 +85,7 @@ class EntryMessageMapperTest {
         EntryArgument.builder()
           .metadata(
             MessageMetadataCreator.domain(
-              metadata -> metadata.command("/entry @kinger @asadf @asdfasdf @koomko 60")
+              metadata -> metadata.text("/entry @kinger @asadf @asdfasdf @koomko 60")
                 .entities(List.of(
                   MessageEntityCreator.domainMention("@kinger"),
                   MessageEntityCreator.domainMention("@asadf"),
@@ -132,7 +132,7 @@ class EntryMessageMapperTest {
   @ParameterizedTest
   @MethodSource("invalidEntryWithMentionsMessage")
   void givenInvalidEntryMessageWithMentions_whenMapAttempt_shouldThrowException(final String message) {
-    final var metadata = MessageMetadataCreator.domain(builder -> builder.command(message));
+    final var metadata = MessageMetadataCreator.domain(builder -> builder.text(message));
 
     assertThatThrownBy(() -> entryMessageMapper.map(metadata))
       .isInstanceOf(InvalidMessageFormatException.class);

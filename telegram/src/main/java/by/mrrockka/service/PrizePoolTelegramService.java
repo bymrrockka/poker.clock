@@ -30,7 +30,7 @@ public class PrizePoolTelegramService {
 
   public BotApiMethodMessage storePrizePool(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
-    final var prizePool = prizePoolMessageMapper.map(messageMetadata.command());
+    final var prizePool = prizePoolMessageMapper.map(messageMetadata.text());
     prizePoolValidator.validate(prizePool);
 
     final var telegramGame = gameTelegramService

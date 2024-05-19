@@ -26,7 +26,7 @@ class HelpMessageMapperTest {
   @ParameterizedTest
   @MethodSource("helpMessage")
   void givenMetadataWithHelpText_whenMap_thenShouldReturnOptionalWithCommand(final String text, final String expected) {
-    final var metadata = MessageMetadataCreator.domain(builder -> builder.command(text));
+    final var metadata = MessageMetadataCreator.domain(builder -> builder.text(text));
 
     if (nonNull(expected)) {
       assertThat(mapper.map(metadata)).contains(expected);
@@ -45,7 +45,7 @@ class HelpMessageMapperTest {
   @ParameterizedTest
   @MethodSource("invalidMessage")
   void givenMetadataWithInvalidText_whenMap_thenShouldThrowException(final String text) {
-    final var metadata = MessageMetadataCreator.domain(builder -> builder.command(text));
+    final var metadata = MessageMetadataCreator.domain(builder -> builder.text(text));
 
     assertThatCode(() -> mapper.map(metadata))
       .isInstanceOf(InvalidMessageFormatException.class);

@@ -17,6 +17,7 @@ public interface BotCommandMapper {
 
   default List<BotCommand> mapToApi(final Map<String, CommandDescription> descriptions) {
     return descriptions.entrySet().stream()
+      .filter(entry -> entry.getValue().enabled())
       .map(entry -> mapToApi(entry.getKey(), entry.getValue()))
       .toList();
   }

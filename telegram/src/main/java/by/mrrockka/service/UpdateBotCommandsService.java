@@ -1,6 +1,7 @@
 package by.mrrockka.service;
 
 import by.mrrockka.bot.PokerClockAbsSender;
+import by.mrrockka.bot.TelegramBotsProperties;
 import by.mrrockka.mapper.BotCommandMapper;
 import by.mrrockka.service.help.BotDescriptionProperties;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +17,15 @@ public class UpdateBotCommandsService {
 
   private final PokerClockAbsSender pokerClockAbsSender;
   private final BotCommandMapper botCommandMapper;
+  private final TelegramBotsProperties telegramBotsProperties;
   private final BotDescriptionProperties botDescriptionProperties;
 
   public void updateBotCommands() {
+    if (!telegramBotsProperties.isEnabled()) {
+      log.debug("Telegram bot is not enabled.");
+      return;
+    }
+
     log.debug("Attempt to update bot commands");
     final var botCommands = botCommandMapper.mapToApi(botDescriptionProperties.getCommands());
     log.debug("New commands list %s".formatted(botCommands));

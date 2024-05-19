@@ -1,6 +1,6 @@
 package by.mrrockka.bot;
 
-import by.mrrockka.bot.commands.CalculateTelegramCommandProcessor;
+import by.mrrockka.bot.command.processor.CalculateTelegramCommandProcessor;
 import by.mrrockka.config.PostgreSQLExtension;
 import by.mrrockka.creator.MessageCreator;
 import by.mrrockka.creator.UpdateCreator;

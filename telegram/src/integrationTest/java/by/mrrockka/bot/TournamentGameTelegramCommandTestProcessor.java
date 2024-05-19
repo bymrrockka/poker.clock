@@ -1,6 +1,6 @@
 package by.mrrockka.bot;
 
-import by.mrrockka.bot.commands.TournamentGameTelegramCommandProcessor;
+import by.mrrockka.bot.command.processor.game.TournamentGameTelegramCommandProcessor;
 import by.mrrockka.creator.MessageCreator;
 import by.mrrockka.creator.MessageEntityCreator;
 import by.mrrockka.creator.SendCreator;
