@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class TelegramStatisticsServiceTest {
+class StatisticsTelegramServiceTest {
 
   @Mock
   private MessageMetadataMapper messageMetadataMapper;
@@ -32,7 +32,7 @@ class TelegramStatisticsServiceTest {
   @Mock
   private GameStatisticsService gameStatisticsService;
   @InjectMocks
-  private TelegramStatisticsService statisticsService;
+  private StatisticsTelegramService statisticsService;
 
   @Test
   void givenUpdateWithValidGameCommand_whenRetrieveStatisticsCalled_shouldReturnMessageWithGameResponse() {

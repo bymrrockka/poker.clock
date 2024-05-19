@@ -9,7 +9,7 @@ import by.mrrockka.mapper.BountyMessageMapper;
 import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
 import by.mrrockka.service.exception.EntriesForPersonNotFoundException;
-import by.mrrockka.service.game.TelegramGameService;
+import by.mrrockka.service.game.GameTelegramService;
 import by.mrrockka.validation.bounty.BountyValidator;
 import by.mrrockka.validation.mentions.PersonMentionsValidator;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +22,11 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class TelegramBountyService {
+public class BountyTelegramService {
 
   private final BountyService bountyService;
   private final BountyMessageMapper bountyMessageMapper;
-  private final TelegramGameService telegramGameService;
+  private final GameTelegramService gameTelegramService;
   private final MessageMetadataMapper messageMetadataMapper;
   private final PersonMentionsValidator personMentionsValidator;
   private final BountyValidator bountyValidator;
@@ -35,7 +35,7 @@ public class TelegramBountyService {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
     personMentionsValidator.validateMessageMentions(messageMetadata, 2);
     final var fromAndTo = bountyMessageMapper.map(messageMetadata);
-    final var telegramGame = telegramGameService
+    final var telegramGame = gameTelegramService
       .getGameByMessageMetadata(messageMetadata)
       .orElseThrow(ChatGameNotFoundException::new);
     final var game = telegramGame.game().asType(BountyGame.class);

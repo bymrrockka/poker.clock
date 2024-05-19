@@ -1,6 +1,6 @@
 package by.mrrockka.bot.commands;
 
-import by.mrrockka.service.TelegramCalculationService;
+import by.mrrockka.service.CalculationTelegramService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
@@ -12,11 +12,11 @@ public class CalculateTelegramCommandProcessor implements TelegramCommandProcess
 
   private static final String COMMAND = "^/calculate$";
 
-  private final TelegramCalculationService telegramCalculationService;
+  private final CalculationTelegramService calculationTelegramService;
 
   @Override
   public BotApiMethodMessage process(final Update update) {
-    return telegramCalculationService.calculatePayments(update);
+    return calculationTelegramService.calculatePayouts(update);
   }
 
   @Override

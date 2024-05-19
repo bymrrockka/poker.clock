@@ -25,14 +25,14 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest
 @ActiveProfiles("repository")
-class TelegramWithdrawalServiceTest {
+class WithdrawalTelegramServiceTest {
 
   private static final UUID GAME_ID = UUID.fromString("51d973b6-cde3-4bbb-b67b-7555243dbc15");
   private static final Integer REPLY_TO_ID = 5;
   private static final Long CHAT_ID = 123L;
 
   @Autowired
-  private TelegramWithdrawalService telegramWithdrawalService;
+  private WithdrawalTelegramService withdrawalTelegramService;
   @Autowired
   private WithdrawalsRepository withdrawalsRepository;
 
@@ -60,7 +60,7 @@ class TelegramWithdrawalServiceTest {
       })
     );
 
-    final var response = (SendMessage) telegramWithdrawalService.storeWithdrawal(update);
+    final var response = (SendMessage) withdrawalTelegramService.storeWithdrawal(update);
     assertAll(
       () -> assertThat(response).isNotNull(),
       () -> assertThat(response.getChatId()).isEqualTo(String.valueOf(CHAT_ID)),
@@ -105,7 +105,7 @@ class TelegramWithdrawalServiceTest {
       .collect(Collectors.toSet());
     expectedLines.add("Withdrawals:\n");
 
-    final var response = (SendMessage) telegramWithdrawalService.storeWithdrawal(update);
+    final var response = (SendMessage) withdrawalTelegramService.storeWithdrawal(update);
     assertAll(
       () -> assertThat(response).isNotNull(),
       () -> assertThat(response.getChatId()).isEqualTo(String.valueOf(CHAT_ID)),

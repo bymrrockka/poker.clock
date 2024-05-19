@@ -7,7 +7,7 @@ import by.mrrockka.repo.game.GameType;
 import by.mrrockka.response.builder.PrizePoolResponseBuilder;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
 import by.mrrockka.service.exception.ProcessingRestrictedException;
-import by.mrrockka.service.game.TelegramGameService;
+import by.mrrockka.service.game.GameTelegramService;
 import by.mrrockka.validation.GameValidator;
 import by.mrrockka.validation.prizepool.PrizePoolValidator;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +18,11 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Service
 @RequiredArgsConstructor
-public class TelegramPrizePoolService {
+public class PrizePoolTelegramService {
 
   private final PrizePoolService prizePoolService;
   private final PrizePoolMessageMapper prizePoolMessageMapper;
-  private final TelegramGameService telegramGameService;
+  private final GameTelegramService gameTelegramService;
   private final MessageMetadataMapper messageMetadataMapper;
   private final GameValidator gameValidator;
   private final PrizePoolValidator prizePoolValidator;
@@ -33,7 +33,7 @@ public class TelegramPrizePoolService {
     final var prizePool = prizePoolMessageMapper.map(messageMetadata.command());
     prizePoolValidator.validate(prizePool);
 
-    final var telegramGame = telegramGameService
+    final var telegramGame = gameTelegramService
       .getGameByMessageMetadata(messageMetadata)
       .orElseThrow(ChatGameNotFoundException::new);
     gameValidator.validateGameIsTournamentType(telegramGame.game());

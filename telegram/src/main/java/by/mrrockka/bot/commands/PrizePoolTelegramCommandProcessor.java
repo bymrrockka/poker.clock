@@ -1,6 +1,6 @@
 package by.mrrockka.bot.commands;
 
-import by.mrrockka.service.TelegramPrizePoolService;
+import by.mrrockka.service.PrizePoolTelegramService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
@@ -11,7 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class PrizePoolTelegramCommandProcessor implements TelegramCommandProcessor {
   private static final String COMMAND = "^/prizepool$";
 
-  private final TelegramPrizePoolService prizePoolService;
+  private final PrizePoolTelegramService prizePoolService;
 
   @Override
   public BotApiMethodMessage process(final Update update) {

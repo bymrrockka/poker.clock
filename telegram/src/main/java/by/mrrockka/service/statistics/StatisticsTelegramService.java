@@ -12,7 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class TelegramStatisticsService {
+public class StatisticsTelegramService {
 
   private final MessageMetadataMapper messageMetadataMapper;
   private final StatisticsMessageMapper statisticsMessageMapper;

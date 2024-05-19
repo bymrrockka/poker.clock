@@ -1,6 +1,6 @@
 package by.mrrockka.bot.commands;
 
-import by.mrrockka.service.statistics.TelegramStatisticsService;
+import by.mrrockka.service.statistics.StatisticsTelegramService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
@@ -10,11 +10,11 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @RequiredArgsConstructor
 public class StatisticsTelegramCommandProcessor implements TelegramCommandProcessor {
   private static final String COMMAND = "^/(game|my)_stats$";
-  private final TelegramStatisticsService telegramStatisticsService;
+  private final StatisticsTelegramService statisticsTelegramService;
 
   @Override
   public BotApiMethodMessage process(final Update update) {
-    return telegramStatisticsService.retrieveStatistics(update);
+    return statisticsTelegramService.retrieveStatistics(update);
   }
 
   @Override

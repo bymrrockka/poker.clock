@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest
 @ActiveProfiles("repository")
-class TelegramBountyServiceTest {
+class BountyTelegramServiceTest {
 
   private static final UUID GAME_ID = UUID.fromString("0075be9f-999d-4688-a773-cc986c14f787");
   private static final String ME_MENTION = "jackas";
@@ -35,7 +35,7 @@ class TelegramBountyServiceTest {
   private static final Long CHAT_ID = 123L;
 
   @Autowired
-  private TelegramBountyService telegramBountyService;
+  private BountyTelegramService bountyTelegramService;
   @Autowired
   private GameService gameService;
   @Autowired
@@ -119,7 +119,7 @@ class TelegramBountyServiceTest {
     );
 
     final var bountyAmount = gameService.retrieveGame(GAME_ID).asType(BountyGame.class).getBountyAmount();
-    final var response = (SendMessage) telegramBountyService.storeBounty(update);
+    final var response = (SendMessage) bountyTelegramService.storeBounty(update);
     assertAll(
       () -> Assertions.assertThat(response).isNotNull(),
       () -> Assertions.assertThat(response.getChatId()).isEqualTo(String.valueOf(CHAT_ID)),

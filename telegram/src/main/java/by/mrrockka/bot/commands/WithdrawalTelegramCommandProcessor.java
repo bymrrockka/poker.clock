@@ -1,6 +1,6 @@
 package by.mrrockka.bot.commands;
 
-import by.mrrockka.service.TelegramWithdrawalService;
+import by.mrrockka.service.WithdrawalTelegramService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
@@ -11,11 +11,11 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class WithdrawalTelegramCommandProcessor implements TelegramCommandProcessor {
   private static final String COMMAND = "^/withdrawal$";
 
-  private final TelegramWithdrawalService telegramWithdrawalService;
+  private final WithdrawalTelegramService withdrawalTelegramService;
 
   @Override
   public BotApiMethodMessage process(final Update update) {
-    return telegramWithdrawalService.storeWithdrawal(update);
+    return withdrawalTelegramService.storeWithdrawal(update);
   }
 
   @Override

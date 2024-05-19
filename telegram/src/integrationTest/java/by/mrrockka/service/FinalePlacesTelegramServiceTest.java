@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest
 @ActiveProfiles("repository")
-class TelegramFinalePlacesServiceTest {
+class FinalePlacesTelegramServiceTest {
 
   private static final Long CHAT_ID = 123L;
   private static final UUID GAME_ID = UUID.fromString("4a411a12-2386-4dce-b579-d806c91d6d17");
@@ -36,7 +36,7 @@ class TelegramFinalePlacesServiceTest {
     """;
 
   @Autowired
-  private TelegramFinalePlacesService telegramFinalePlacesService;
+  private FinalePlacesTelegramService finalePlacesTelegramService;
 
   @Autowired
   private FinalePlacesService finalePlacesService;
@@ -58,7 +58,7 @@ class TelegramFinalePlacesServiceTest {
       })
     );
 
-    final var response = (SendMessage) telegramFinalePlacesService.storePrizePool(update);
+    final var response = (SendMessage) finalePlacesTelegramService.storePrizePool(update);
     final var expectedMessage = """
       Finale places:
       	position: 1, telegram: @kinger

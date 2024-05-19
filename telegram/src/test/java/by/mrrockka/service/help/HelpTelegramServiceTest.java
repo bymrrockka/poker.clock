@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class TelegramHelpServiceTest {
+class HelpTelegramServiceTest {
 
   private static final String HELP_COMMAND = "help";
   private static final String COMMAND = "command";
@@ -35,7 +35,7 @@ class TelegramHelpServiceTest {
   private HelpMessageMapper helpMessageMapper;
 
   @InjectMocks
-  private TelegramHelpService telegramHelpService;
+  private HelpTelegramService helpTelegramService;
 
   @Test
   void givenHelpWithCommandMessage_whenSendHelpInformationCalled_shouldReturnValidDescription() {
@@ -48,7 +48,7 @@ class TelegramHelpServiceTest {
     when(helpMessageMapper.map(metadata)).thenReturn(helpCommandOpt);
     when(botDescriptionProperties.getCommands()).thenReturn(commandsMap);
 
-    final var actual = (SendMessage) telegramHelpService.sendHelpInformation(update);
+    final var actual = (SendMessage) helpTelegramService.sendHelpInformation(update);
 
     assertAll(
       () -> assertThat(actual).isNotNull(),
@@ -67,7 +67,7 @@ class TelegramHelpServiceTest {
     when(helpMessageMapper.map(metadata)).thenReturn(Optional.empty());
     when(botDescriptionProperties.getCommands()).thenReturn(commandsMap);
 
-    final var actual = (SendMessage) telegramHelpService.sendHelpInformation(update);
+    final var actual = (SendMessage) helpTelegramService.sendHelpInformation(update);
 
     assertAll(
       () -> assertThat(actual).isNotNull(),

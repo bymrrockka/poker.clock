@@ -1,6 +1,6 @@
 package by.mrrockka.bot.commands;
 
-import by.mrrockka.service.TelegramFinalePlacesService;
+import by.mrrockka.service.FinalePlacesTelegramService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
@@ -11,11 +11,11 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class FinalePlacesTelegramCommandProcessor implements TelegramCommandProcessor {
   private static final String COMMAND = "^/finaleplaces$";
 
-  private final TelegramFinalePlacesService telegramFinalePlacesService;
+  private final FinalePlacesTelegramService finalePlacesTelegramService;
 
   @Override
   public BotApiMethodMessage process(final Update update) {
-    return telegramFinalePlacesService.storePrizePool(update);
+    return finalePlacesTelegramService.storePrizePool(update);
   }
 
   @Override

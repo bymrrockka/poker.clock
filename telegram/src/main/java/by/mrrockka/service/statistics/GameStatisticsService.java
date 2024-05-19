@@ -3,7 +3,7 @@ package by.mrrockka.service.statistics;
 import by.mrrockka.domain.statistics.StatisticsCommand;
 import by.mrrockka.response.builder.GameStatisticsResponseBuilder;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
-import by.mrrockka.service.game.TelegramGameService;
+import by.mrrockka.service.game.GameTelegramService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
@@ -14,10 +14,10 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 class GameStatisticsService {
 
   private final GameStatisticsResponseBuilder gameStatisticsResponseBuilder;
-  private final TelegramGameService telegramGameService;
+  private final GameTelegramService gameTelegramService;
 
   BotApiMethodMessage retrieveStatistics(final StatisticsCommand statisticsCommand) {
-    final var telegramGame = telegramGameService
+    final var telegramGame = gameTelegramService
       .getGameByMessageMetadata(statisticsCommand.metadata())
       .orElseThrow(ChatGameNotFoundException::new);
 

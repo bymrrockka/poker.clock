@@ -12,7 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class TelegramHelpService {
+public class HelpTelegramService {
 
   private static final String HELP_COMMAND = "help";
 

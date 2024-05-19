@@ -16,7 +16,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class TelegramGameService {
+public class GameTelegramService {
 
   private final TelegramGameRepository telegramGameRepository;
   private final TournamentGameService tournamentGameService;

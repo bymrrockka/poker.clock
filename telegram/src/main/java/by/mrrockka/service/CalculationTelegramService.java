@@ -5,7 +5,7 @@ import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.response.builder.CalculationResponseBuilder;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
 import by.mrrockka.service.exception.PayoutsAreNotCalculatedException;
-import by.mrrockka.service.game.TelegramGameService;
+import by.mrrockka.service.game.GameTelegramService;
 import by.mrrockka.validation.calculation.CalculationValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,18 +17,18 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class TelegramCalculationService {
+public class CalculationTelegramService {
 
   private final CalculationService calculationService;
-  private final TelegramGameService telegramGameService;
+  private final GameTelegramService gameTelegramService;
   private final MessageMetadataMapper messageMetadataMapper;
   private final CalculationResponseBuilder calculationResponseBuilder;
   private final CalculationValidator calculationValidator;
 
-  public BotApiMethodMessage calculatePayments(final Update update) {
+  public BotApiMethodMessage calculatePayouts(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
 
-    final var telegramGame = telegramGameService
+    final var telegramGame = gameTelegramService
       .getGameByMessageMetadata(messageMetadata)
       .orElseThrow(ChatGameNotFoundException::new);
 

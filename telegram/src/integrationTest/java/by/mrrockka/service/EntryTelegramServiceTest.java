@@ -25,14 +25,14 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest
 @ActiveProfiles("repository")
-class TelegramEntryServiceTest {
+class EntryTelegramServiceTest {
 
   private static final UUID GAME_ID = UUID.fromString("b759ac52-1496-463f-b0d8-982deeac085c");
   private static final Integer REPLY_TO_ID = 2;
   private static final Long CHAT_ID = 123L;
 
   @Autowired
-  private TelegramEntryService telegramEntryService;
+  private EntryTelegramService entryTelegramService;
   @Autowired
   private TelegramPersonService telegramPersonService;
   @Autowired
@@ -62,7 +62,7 @@ class TelegramEntryServiceTest {
       })
     );
 
-    final var response = (SendMessage) telegramEntryService.storeEntry(update);
+    final var response = (SendMessage) entryTelegramService.storeEntry(update);
     assertAll(
       () -> assertThat(response).isNotNull(),
       () -> assertThat(response.getChatId()).isEqualTo(String.valueOf(CHAT_ID)),
@@ -106,7 +106,7 @@ class TelegramEntryServiceTest {
       .collect(Collectors.toSet());
     expectedLines.add("Entries:\n");
 
-    final var response = (SendMessage) telegramEntryService.storeEntry(update);
+    final var response = (SendMessage) entryTelegramService.storeEntry(update);
     assertAll(
       () -> assertThat(response).isNotNull(),
       () -> assertThat(response.getChatId()).isEqualTo(String.valueOf(CHAT_ID)),
@@ -158,7 +158,7 @@ class TelegramEntryServiceTest {
       })
     );
 
-    final var response = (SendMessage) telegramEntryService.storeEntry(update);
+    final var response = (SendMessage) entryTelegramService.storeEntry(update);
     assertAll(
       () -> assertThat(response).isNotNull(),
       () -> assertThat(response.getChatId()).isEqualTo(String.valueOf(CHAT_ID)),

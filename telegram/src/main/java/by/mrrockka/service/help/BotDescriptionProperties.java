@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 @Component
-@ConfigurationProperties(prefix = "botdescription")
+@ConfigurationProperties(prefix = "bot.description")
 @RequiredArgsConstructor
 @Getter
 public class BotDescriptionProperties {

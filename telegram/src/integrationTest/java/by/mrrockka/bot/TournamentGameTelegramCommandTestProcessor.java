@@ -5,7 +5,7 @@ import by.mrrockka.creator.MessageCreator;
 import by.mrrockka.creator.MessageEntityCreator;
 import by.mrrockka.creator.SendCreator;
 import by.mrrockka.creator.UpdateCreator;
-import by.mrrockka.service.game.TelegramGameService;
+import by.mrrockka.service.game.GameTelegramService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
 class TournamentGameTelegramCommandTestProcessor {
 
   @Mock
-  private TelegramGameService telegramGameService;
+  private GameTelegramService gameTelegramService;
   @InjectMocks
   private TournamentGameTelegramCommandProcessor tournamentGameTelegramCommand;
 
@@ -69,7 +69,7 @@ class TournamentGameTelegramCommandTestProcessor {
       .chatId(update.getMessage().getChatId())
       .text(""));
 
-    when(telegramGameService.storeTournamentGame(update)).thenReturn(expected);
+    when(gameTelegramService.storeTournamentGame(update)).thenReturn(expected);
 
     assertThat(tournamentGameTelegramCommand.process(update)).isEqualTo(expected);
   }

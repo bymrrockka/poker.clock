@@ -34,12 +34,10 @@ public class PokerClockBot implements LongPollingBot {
     if (isProcessable(update)) {
       log.debug("Processing {\n%s\n} message from %s chat id.".
                   formatted(update.getMessage().getText(), update.getMessage().getChatId()));
-    }
-
-    if (isProcessable(update)) {
 //    todo: check if there is a better option to do this. Like factory usage or something
       telegramCommandProcessors.stream()
         .filter(telegramCommand -> telegramCommand.isApplicable(update))
+//    todo: change update type to message metadata model
         .map(telegramCommand -> telegramCommand.process(update))
         .filter(Objects::nonNull)
         .findFirst()

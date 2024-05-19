@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest
 @ActiveProfiles("repository")
-class TelegramCalculationServiceTest {
+class CalculationTelegramServiceTest {
 
   private static final Long CHAT_ID = 123L;
   private static final Integer TOURNAMENT_GAME_REPLY_TO_ID = 3;
@@ -29,7 +29,7 @@ class TelegramCalculationServiceTest {
   private static final Integer BOUNTY_GAME_REPLY_TO_ID = 6;
 
   @Autowired
-  private TelegramCalculationService telegramCalculationService;
+  private CalculationTelegramService calculationTelegramService;
 
 
   private static Stream<Arguments> gameArguments() {
@@ -115,7 +115,7 @@ class TelegramCalculationServiceTest {
           message.setReplyToMessage(MessageCreator.message(msg -> msg.setMessageId(gameId)));
         }));
 
-    final var response = (SendMessage) telegramCalculationService.calculatePayments(update);
+    final var response = (SendMessage) calculationTelegramService.calculatePayouts(update);
 
     assertAll(
       () -> Assertions.assertThat(response).isNotNull(),
