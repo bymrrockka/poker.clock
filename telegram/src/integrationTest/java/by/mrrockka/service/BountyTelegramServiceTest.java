@@ -1,9 +1,11 @@
 package by.mrrockka.service;
 
 import by.mrrockka.config.PostgreSQLExtension;
-import by.mrrockka.creator.*;
+import by.mrrockka.creator.MessageEntityCreator;
+import by.mrrockka.creator.MessageMetadataCreator;
 import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.domain.game.BountyGame;
+import by.mrrockka.domain.mesageentity.MessageEntity;
 import by.mrrockka.repo.bounty.BountyRepository;
 import lombok.Builder;
 import org.apache.commons.lang3.tuple.Pair;
@@ -16,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 
 import java.util.List;
 import java.util.UUID;
@@ -50,49 +51,13 @@ class BountyTelegramServiceTest {
       Arguments.of(BountyArgument.builder()
                      .message("/bounty @kinger kicked @queen")
                      .entities(List.of(
-                       MessageEntityCreator.apiMention("/bounty @kinger kicked @queen", "@kinger"),
-                       MessageEntityCreator.apiMention("/bounty @kinger kicked @queen", "@queen")
+                       MessageEntityCreator.domainMention("@kinger"),
+                       MessageEntityCreator.domainMention("@queen")
                      ))
                      .fromAndTo(Pair.of(
                        TelegramPerson.telegramPersonBuilder()
                          .id(UUID.randomUUID())
                          .nickname("queen")
-                         .chatId(CHAT_ID)
-                         .build(),
-                       TelegramPerson.telegramPersonBuilder()
-                         .id(UUID.randomUUID())
-                         .nickname("kinger")
-                         .chatId(CHAT_ID)
-                         .build()
-                     ))
-                     .build()),
-      Arguments.of(BountyArgument.builder()
-                     .message("/bounty @me kicked @tenten")
-                     .entities(List.of(
-                       MessageEntityCreator.apiMention("/bounty @me kicked @tenten", "@tenten")
-                     ))
-                     .fromAndTo(Pair.of(
-                       TelegramPerson.telegramPersonBuilder()
-                         .id(UUID.randomUUID())
-                         .nickname("tenten")
-                         .chatId(CHAT_ID)
-                         .build(),
-                       TelegramPerson.telegramPersonBuilder()
-                         .id(UUID.randomUUID())
-                         .nickname(ME_MENTION)
-                         .chatId(CHAT_ID)
-                         .build()
-                     ))
-                     .build()),
-      Arguments.of(BountyArgument.builder()
-                     .message("/bounty @kinger kicked @me")
-                     .entities(List.of(
-                       MessageEntityCreator.apiMention("/bounty @kinger kicked @me", "@kinger")
-                     ))
-                     .fromAndTo(Pair.of(
-                       TelegramPerson.telegramPersonBuilder()
-                         .id(UUID.randomUUID())
-                         .nickname(ME_MENTION)
                          .chatId(CHAT_ID)
                          .build(),
                        TelegramPerson.telegramPersonBuilder()
@@ -108,18 +73,16 @@ class BountyTelegramServiceTest {
   @ParameterizedTest
   @MethodSource("bountyMessage")
   void givenGameAndPerson_whenEntryAttempt_shouldStoreEntry(final BountyArgument argument) {
-    final var update = UpdateCreator.update(
-      MessageCreator.message(message -> {
-        message.setChat(ChatCreator.chat(CHAT_ID));
-        message.setText(argument.message());
-        message.setEntities(argument.entities());
-        message.setReplyToMessage(MessageCreator.message(msg -> msg.setMessageId(REPLY_TO_ID)));
-        message.setFrom(UserCreator.user(ME_MENTION));
-      })
+    final var messageMetadata = MessageMetadataCreator.domain(metadata -> metadata
+      .chatId(CHAT_ID)
+      .text(argument.message())
+      .entities(argument.entities())
+      .replyTo(MessageMetadataCreator.domain(replyto -> replyto.id(REPLY_TO_ID)))
+      .fromNickname(ME_MENTION)
     );
 
     final var bountyAmount = gameService.retrieveGame(GAME_ID).asType(BountyGame.class).getBountyAmount();
-    final var response = (SendMessage) bountyTelegramService.storeBounty(update);
+    final var response = (SendMessage) bountyTelegramService.storeBounty(messageMetadata);
     assertAll(
       () -> Assertions.assertThat(response).isNotNull(),
       () -> Assertions.assertThat(response.getChatId()).isEqualTo(String.valueOf(CHAT_ID)),

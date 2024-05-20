@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static by.mrrockka.repo.person.TelegramPersonColumnNames.CHAT_ID;
 import static by.mrrockka.repo.person.TelegramPersonColumnNames.NICK_NAME;
@@ -83,23 +82,4 @@ public class TelegramPersonRepository {
       : Optional.empty());
   }
 
-  private static final String FIND_ALL_BY_GAME_ID = """
-      SELECT
-        cp.chat_id, p.id, p.first_name, p.last_name, p.nick_name
-      FROM
-        entries as e
-      JOIN
-        person as p on p.id = e.person_id
-      JOIN
-        chat_persons as cp on cp.person_id = e.person_id
-      WHERE
-        e.game_id = :game_id
-    """;
-
-  public List<TelegramPersonEntity> findAllByGameId(final UUID gameId) {
-    final var params = new MapSqlParameterSource()
-      .addValue(TelegramPersonColumnNames.GAME_ID, gameId);
-
-    return jdbcTemplate.query(FIND_ALL_BY_GAME_ID, params, telegramPersonEntityRowMapper);
-  }
 }

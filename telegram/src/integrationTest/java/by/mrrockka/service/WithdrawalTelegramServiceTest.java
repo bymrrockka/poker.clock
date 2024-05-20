@@ -1,7 +1,8 @@
 package by.mrrockka.service;
 
 import by.mrrockka.config.PostgreSQLExtension;
-import by.mrrockka.creator.*;
+import by.mrrockka.creator.MessageEntityCreator;
+import by.mrrockka.creator.MessageMetadataCreator;
 import by.mrrockka.repo.withdrawals.WithdrawalsEntity;
 import by.mrrockka.repo.withdrawals.WithdrawalsRepository;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,8 +40,7 @@ class WithdrawalTelegramServiceTest {
   private static Stream<Arguments> withdrawalsMessage() {
     return Stream.of(
       Arguments.of("/withdrawal @kinger 60", "kinger", BigDecimal.valueOf(60)),
-      Arguments.of("/withdrawal @queen 15", "queen", BigDecimal.valueOf(15)),
-      Arguments.of("/withdrawal @me 20", "jackas", BigDecimal.valueOf(20))
+      Arguments.of("/withdrawal @queen 15", "queen", BigDecimal.valueOf(15))
     );
   }
 
@@ -48,19 +48,16 @@ class WithdrawalTelegramServiceTest {
   @MethodSource("withdrawalsMessage")
   void givenGameAndPerson_whenWithdrawalAttempt_shouldStoreWithdrawal(final String text, final String nickname,
                                                                       final BigDecimal expectedAmount) {
-    final var update = UpdateCreator.update(
-      MessageCreator.message(message -> {
-        message.setChat(ChatCreator.chat(CHAT_ID));
-        message.setText(text);
-        message.setReplyToMessage(MessageCreator.message(msg -> msg.setMessageId(REPLY_TO_ID)));
-        message.setFrom(UserCreator.user(nickname));
-        if (!text.contains("@me")) {
-          message.setEntities(List.of(MessageEntityCreator.apiMention(text, "@%s".formatted(nickname))));
-        }
-      })
-    );
+    final var messageMetadata = MessageMetadataCreator
+      .domain(metadata -> metadata
+        .chatId(CHAT_ID)
+        .text(text)
+        .fromNickname(nickname)
+        .replyTo(MessageMetadataCreator.domain(replyto -> replyto.id(REPLY_TO_ID)))
+        .entities(List.of(MessageEntityCreator.domainMention("@%s".formatted(nickname))))
+      );
 
-    final var response = (SendMessage) withdrawalTelegramService.storeWithdrawal(update);
+    final var response = (SendMessage) withdrawalTelegramService.storeWithdrawal(messageMetadata);
     assertAll(
       () -> assertThat(response).isNotNull(),
       () -> assertThat(response.getChatId()).isEqualTo(String.valueOf(CHAT_ID)),
@@ -89,15 +86,13 @@ class WithdrawalTelegramServiceTest {
   void givenGameAndPersons_whenMultipleWithdrawalsAttempt_shouldStoreWithdrawal(final String text,
                                                                                 final List<String> telegrams,
                                                                                 final BigDecimal expectedAmount) {
-    final var update = UpdateCreator.update(
-      MessageCreator.message(message -> {
-        message.setChat(ChatCreator.chat(CHAT_ID));
-        message.setText(text);
-        message.setReplyToMessage(MessageCreator.message(msg -> msg.setMessageId(REPLY_TO_ID)));
-        message.setEntities(telegrams.stream()
-                              .map(tg -> MessageEntityCreator.apiMention(text, "@%s".formatted(tg)))
-                              .toList());
-      })
+    final var messageMetadata = MessageMetadataCreator.domain(metadata -> metadata
+      .chatId(CHAT_ID)
+      .text(text)
+      .replyTo(MessageMetadataCreator.domain(replyto -> replyto.id(REPLY_TO_ID)))
+      .entities(telegrams.stream()
+                  .map(tg -> MessageEntityCreator.domainMention("@%s".formatted(tg)))
+                  .toList())
     );
 
     final var expectedLines = telegrams.stream()
@@ -105,7 +100,7 @@ class WithdrawalTelegramServiceTest {
       .collect(Collectors.toSet());
     expectedLines.add("Withdrawals:\n");
 
-    final var response = (SendMessage) withdrawalTelegramService.storeWithdrawal(update);
+    final var response = (SendMessage) withdrawalTelegramService.storeWithdrawal(messageMetadata);
     assertAll(
       () -> assertThat(response).isNotNull(),
       () -> assertThat(response.getChatId()).isEqualTo(String.valueOf(CHAT_ID)),

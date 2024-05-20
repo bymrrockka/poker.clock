@@ -1,7 +1,8 @@
 package by.mrrockka.service;
 
 import by.mrrockka.config.PostgreSQLExtension;
-import by.mrrockka.creator.*;
+import by.mrrockka.creator.MessageEntityCreator;
+import by.mrrockka.creator.MessageMetadataCreator;
 import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.repo.entries.EntriesRepository;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,8 +42,7 @@ class EntryTelegramServiceTest {
   private static Stream<Arguments> entryMessage() {
     return Stream.of(
       Arguments.of("/entry @kinger 60", "kinger", BigDecimal.valueOf(60)),
-      Arguments.of("/entry @queen", "queen", BigDecimal.valueOf(15)),
-      Arguments.of("/entry @me", "jackas", BigDecimal.valueOf(15))
+      Arguments.of("/entry @queen", "queen", BigDecimal.valueOf(15))
     );
   }
 
@@ -50,19 +50,15 @@ class EntryTelegramServiceTest {
   @MethodSource("entryMessage")
   void givenGameAndPerson_whenEntryAttempt_shouldStoreEntry(final String text, final String nickname,
                                                             final BigDecimal expectedAmount) {
-    final var update = UpdateCreator.update(
-      MessageCreator.message(message -> {
-        message.setChat(ChatCreator.chat(CHAT_ID));
-        message.setText(text);
-        message.setReplyToMessage(MessageCreator.message(msg -> msg.setMessageId(REPLY_TO_ID)));
-        message.setFrom(UserCreator.user(nickname));
-        if (!text.contains("@me")) {
-          message.setEntities(List.of(MessageEntityCreator.apiMention(text, "@%s".formatted(nickname))));
-        }
-      })
-    );
+    final var messageMetadata = MessageMetadataCreator
+      .domain(metadata -> metadata
+        .chatId(CHAT_ID)
+        .text(text)
+        .replyTo(MessageMetadataCreator.domain(replyto -> replyto.id(REPLY_TO_ID)))
+        .entities(List.of(MessageEntityCreator.domainMention("@%s".formatted(nickname))))
+      );
 
-    final var response = (SendMessage) entryTelegramService.storeEntry(update);
+    final var response = (SendMessage) entryTelegramService.storeEntry(messageMetadata);
     assertAll(
       () -> assertThat(response).isNotNull(),
       () -> assertThat(response.getChatId()).isEqualTo(String.valueOf(CHAT_ID)),
@@ -90,15 +86,13 @@ class EntryTelegramServiceTest {
   @MethodSource("multipleEntryMessage")
   void givenGameAndPersons_whenMultipleEntryAttempt_shouldStoreEntry(final String text, final List<String> telegrams,
                                                                      final BigDecimal expectedAmount) {
-    final var update = UpdateCreator.update(
-      MessageCreator.message(message -> {
-        message.setChat(ChatCreator.chat(CHAT_ID));
-        message.setText(text);
-        message.setReplyToMessage(MessageCreator.message(msg -> msg.setMessageId(REPLY_TO_ID)));
-        message.setEntities(telegrams.stream()
-                              .map(tg -> MessageEntityCreator.apiMention(text, "@%s".formatted(tg)))
-                              .toList());
-      })
+    final var messageMetadata = MessageMetadataCreator.domain(metadata -> metadata
+      .chatId(CHAT_ID)
+      .text(text)
+      .replyTo(MessageMetadataCreator.domain(replyto -> replyto.id(REPLY_TO_ID)))
+      .entities(telegrams.stream()
+                  .map(tg -> MessageEntityCreator.domainMention("@%s".formatted(tg)))
+                  .toList())
     );
 
     final var expectedLines = telegrams.stream()
@@ -106,7 +100,7 @@ class EntryTelegramServiceTest {
       .collect(Collectors.toSet());
     expectedLines.add("Entries:\n");
 
-    final var response = (SendMessage) entryTelegramService.storeEntry(update);
+    final var response = (SendMessage) entryTelegramService.storeEntry(messageMetadata);
     assertAll(
       () -> assertThat(response).isNotNull(),
       () -> assertThat(response.getChatId()).isEqualTo(String.valueOf(CHAT_ID)),
@@ -148,17 +142,14 @@ class EntryTelegramServiceTest {
   @MethodSource("newPersonNicknamesMessage")
   void givenGameAndNewPerson_whenEntryAttempt_shouldStorePlayerAndEntry(final String text, final String nickname,
                                                                         final BigDecimal expectedAmount) {
-    final var update = UpdateCreator.update(
-      MessageCreator.message(message -> {
-        message.setChat(ChatCreator.chat(CHAT_ID));
-        message.setText(text);
-        message.setReplyToMessage(MessageCreator.message(msg -> msg.setMessageId(REPLY_TO_ID)));
-        message.setFrom(UserCreator.user(nickname));
-        message.setEntities(List.of(MessageEntityCreator.apiMention(text, "@%s".formatted(nickname))));
-      })
+    final var messageMetadata = MessageMetadataCreator.domain(metadata -> metadata
+      .chatId(CHAT_ID)
+      .text(text)
+      .replyTo(MessageMetadataCreator.domain(replyto -> replyto.id(REPLY_TO_ID)))
+      .entities(List.of(MessageEntityCreator.domainMention("@%s".formatted(nickname))))
     );
 
-    final var response = (SendMessage) entryTelegramService.storeEntry(update);
+    final var response = (SendMessage) entryTelegramService.storeEntry(messageMetadata);
     assertAll(
       () -> assertThat(response).isNotNull(),
       () -> assertThat(response.getChatId()).isEqualTo(String.valueOf(CHAT_ID)),

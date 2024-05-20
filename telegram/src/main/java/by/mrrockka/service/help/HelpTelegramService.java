@@ -1,5 +1,6 @@
 package by.mrrockka.service.help;
 
+import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.mapper.HelpMessageMapper;
 import by.mrrockka.mapper.MessageMetadataMapper;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,17 @@ public class HelpTelegramService {
 
   public BotApiMethodMessage sendHelpInformation(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
+    final var description = helpMessageMapper.map(messageMetadata)
+      .map(command -> botDescriptionProperties.getCommands().get(command))
+      .orElse(botDescriptionProperties.getCommands().get(HELP_COMMAND));
+
+    return SendMessage.builder()
+      .chatId(messageMetadata.chatId())
+      .text(description.details())
+      .build();
+  }
+
+  public BotApiMethodMessage sendHelpInformation(final MessageMetadata messageMetadata) {
     final var description = helpMessageMapper.map(messageMetadata)
       .map(command -> botDescriptionProperties.getCommands().get(command))
       .orElse(botDescriptionProperties.getCommands().get(HELP_COMMAND));

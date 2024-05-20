@@ -1,7 +1,7 @@
 package by.mrrockka.service;
 
+import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.game.TournamentGame;
-import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.mapper.PrizePoolMessageMapper;
 import by.mrrockka.repo.game.GameType;
 import by.mrrockka.response.builder.PrizePoolResponseBuilder;
@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Service
 @RequiredArgsConstructor
@@ -23,13 +22,11 @@ public class PrizePoolTelegramService {
   private final PrizePoolService prizePoolService;
   private final PrizePoolMessageMapper prizePoolMessageMapper;
   private final GameTelegramService gameTelegramService;
-  private final MessageMetadataMapper messageMetadataMapper;
   private final GameValidator gameValidator;
   private final PrizePoolValidator prizePoolValidator;
   private final PrizePoolResponseBuilder prizePoolResponseBuilder;
 
-  public BotApiMethodMessage storePrizePool(final Update update) {
-    final var messageMetadata = messageMetadataMapper.map(update.getMessage());
+  public BotApiMethodMessage storePrizePool(final MessageMetadata messageMetadata) {
     final var prizePool = prizePoolMessageMapper.map(messageMetadata.text());
     prizePoolValidator.validate(prizePool);
 

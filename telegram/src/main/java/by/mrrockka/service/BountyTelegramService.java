@@ -1,12 +1,12 @@
 package by.mrrockka.service;
 
 import by.mrrockka.domain.Bounty;
+import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.Person;
 import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.domain.collection.PersonEntries;
 import by.mrrockka.domain.game.BountyGame;
 import by.mrrockka.mapper.BountyMessageMapper;
-import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
 import by.mrrockka.service.exception.EntriesForPersonNotFoundException;
 import by.mrrockka.service.game.GameTelegramService;
@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
 
@@ -27,12 +26,10 @@ public class BountyTelegramService {
   private final BountyService bountyService;
   private final BountyMessageMapper bountyMessageMapper;
   private final GameTelegramService gameTelegramService;
-  private final MessageMetadataMapper messageMetadataMapper;
   private final PersonMentionsValidator personMentionsValidator;
   private final BountyValidator bountyValidator;
 
-  public BotApiMethodMessage storeBounty(final Update update) {
-    final var messageMetadata = messageMetadataMapper.map(update.getMessage());
+  public BotApiMethodMessage storeBounty(final MessageMetadata messageMetadata) {
     personMentionsValidator.validateMessageMentions(messageMetadata, 2);
     final var fromAndTo = bountyMessageMapper.map(messageMetadata);
     final var telegramGame = gameTelegramService

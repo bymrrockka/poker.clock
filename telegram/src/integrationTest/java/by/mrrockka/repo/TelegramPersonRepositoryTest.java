@@ -23,7 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 class TelegramPersonRepositoryTest {
 
   private static final UUID PERSON_ID = UUID.randomUUID();
-  private static final UUID GAME_ID = UUID.fromString("4a411a12-2386-4dce-b579-d806c91d6d17");
   private static final Long CHAT_ID = 123L;
   private static final String NICKNAME = "okmasdf";
 
@@ -51,10 +50,4 @@ class TelegramPersonRepositoryTest {
       .contains(PERSON_ID);
   }
 
-  @Test
-  void givenGameIdAndEntries_whenGetByGameIdExecuted_shouldReturnValidTelegramEntities() {
-    final var expected = telegramPersonRepository.findAllByChatIdAndNicknames(CHAT_ID, List.of("kinger", "queen"));
-    assertThat(telegramPersonRepository.findAllByGameId(GAME_ID))
-      .containsExactlyInAnyOrderElementsOf(expected);
-  }
 }

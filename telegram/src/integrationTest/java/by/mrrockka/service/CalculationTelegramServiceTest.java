@@ -1,9 +1,7 @@
 package by.mrrockka.service;
 
 import by.mrrockka.config.PostgreSQLExtension;
-import by.mrrockka.creator.ChatCreator;
-import by.mrrockka.creator.MessageCreator;
-import by.mrrockka.creator.UpdateCreator;
+import by.mrrockka.creator.MessageMetadataCreator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -107,15 +105,13 @@ class CalculationTelegramServiceTest {
   @ParameterizedTest
   @MethodSource("gameArguments")
   void givenGame_whenCalculateAttempt_shouldCalculateAndPrettyPrintData(final Integer gameId, final String expected) {
-    final var update = UpdateCreator.update(
-      MessageCreator.message(
-        message -> {
-          message.setText("/calculate");
-          message.setChat(ChatCreator.chat(CHAT_ID));
-          message.setReplyToMessage(MessageCreator.message(msg -> msg.setMessageId(gameId)));
-        }));
+    final var messageMetadata = MessageMetadataCreator.domain(metadata -> metadata
+      .chatId(CHAT_ID)
+      .text("/calculate")
+      .replyTo(MessageMetadataCreator.domain(replyto -> replyto.id(gameId)))
+    );
 
-    final var response = (SendMessage) calculationTelegramService.calculatePayouts(update);
+    final var response = (SendMessage) calculationTelegramService.calculatePayouts(messageMetadata);
 
     assertAll(
       () -> Assertions.assertThat(response).isNotNull(),

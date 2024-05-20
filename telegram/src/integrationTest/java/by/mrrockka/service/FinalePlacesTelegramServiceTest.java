@@ -1,10 +1,8 @@
 package by.mrrockka.service;
 
 import by.mrrockka.config.PostgreSQLExtension;
-import by.mrrockka.creator.ChatCreator;
-import by.mrrockka.creator.MessageCreator;
 import by.mrrockka.creator.MessageEntityCreator;
-import by.mrrockka.creator.UpdateCreator;
+import by.mrrockka.creator.MessageMetadataCreator;
 import by.mrrockka.domain.finaleplaces.FinalPlace;
 import by.mrrockka.domain.finaleplaces.FinalePlaces;
 import org.assertj.core.api.Assertions;
@@ -28,7 +26,7 @@ class FinalePlacesTelegramServiceTest {
   private static final Long CHAT_ID = 123L;
   private static final UUID GAME_ID = UUID.fromString("4a411a12-2386-4dce-b579-d806c91d6d17");
   private static final Integer REPLY_TO_ID = 1;
-  private static final String COMMAND = """
+  private static final String TEXT = """
     /finaleplaces
     1 @kinger
     2 @queen
@@ -45,20 +43,18 @@ class FinalePlacesTelegramServiceTest {
 
   @Test
   void givenGameIdAndChatId_whenFinalePlacesMessageConsumed_shouldMapAndStoreFinalePlacesAgainstTheGameId() {
-    final var update = UpdateCreator.update(
-      MessageCreator.message(message -> {
-        message.setText(COMMAND);
-        message.setChat(ChatCreator.chat(CHAT_ID));
-        message.setReplyToMessage(MessageCreator.message(msg -> msg.setMessageId(REPLY_TO_ID)));
-        message.setEntities(List.of(
-          MessageEntityCreator.apiMention(COMMAND, "@kinger"),
-          MessageEntityCreator.apiMention(COMMAND, "@queen"),
-          MessageEntityCreator.apiMention(COMMAND, "@jackas")
-        ));
-      })
+    final var messageMetadata = MessageMetadataCreator.domain(metadata -> metadata
+      .chatId(CHAT_ID)
+      .text(TEXT)
+      .replyTo(MessageMetadataCreator.domain(replyto -> replyto.id(REPLY_TO_ID)))
+      .entities(List.of(
+        MessageEntityCreator.domainMention("@kinger"),
+        MessageEntityCreator.domainMention("@queen"),
+        MessageEntityCreator.domainMention("@jackas")
+      ))
     );
 
-    final var response = (SendMessage) finalePlacesTelegramService.storePrizePool(update);
+    final var response = (SendMessage) finalePlacesTelegramService.storePrizePool(messageMetadata);
     final var expectedMessage = """
       Finale places:
       	position: 1, telegram: @kinger

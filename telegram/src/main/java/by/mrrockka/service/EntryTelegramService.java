@@ -1,8 +1,8 @@
 package by.mrrockka.service;
 
+import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.Person;
 import by.mrrockka.mapper.EntryMessageMapper;
-import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.response.builder.EntryResponseBuilder;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
 import by.mrrockka.service.game.GameTelegramService;
@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Optional;
 
@@ -28,15 +27,13 @@ public class EntryTelegramService {
   private final EntryMessageMapper entryMessageMapper;
   private final GameTelegramService gameTelegramService;
   private final TelegramPersonService telegramPersonService;
-  private final MessageMetadataMapper messageMetadataMapper;
   private final PersonMentionsValidator personMentionsValidator;
   private final EntryResponseBuilder entryResponseBuilder;
   private final CollectionsValidator collectionsValidator;
 
   @SneakyThrows
-  @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED)
-  public BotApiMethodMessage storeEntry(final Update update) {
-    final var messageMetadata = messageMetadataMapper.map(update.getMessage());
+  @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
+  public BotApiMethodMessage storeEntry(final MessageMetadata messageMetadata) {
     personMentionsValidator.validateMessageMentions(messageMetadata, 1);
     final var personAndAmountMap = entryMessageMapper.map(messageMetadata);
     collectionsValidator.validateMapIsNotEmpty(personAndAmountMap, "Entry");

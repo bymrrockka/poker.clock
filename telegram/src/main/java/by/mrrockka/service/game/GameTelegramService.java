@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Optional;
 
@@ -25,16 +24,16 @@ public class GameTelegramService {
   private final GameService gameService;
   private final TelegramGameMapper telegramGameMapper;
 
-  public BotApiMethodMessage storeTournamentGame(final Update update) {
-    return tournamentGameService.storeGame(update);
+  public BotApiMethodMessage storeTournamentGame(final MessageMetadata messageMetadata) {
+    return tournamentGameService.storeGame(messageMetadata);
   }
 
-  public BotApiMethodMessage storeCashGame(final Update update) {
-    return cashGameService.storeGame(update);
+  public BotApiMethodMessage storeCashGame(final MessageMetadata messageMetadata) {
+    return cashGameService.storeGame(messageMetadata);
   }
 
-  public BotApiMethodMessage storeBountyGame(final Update update) {
-    return bountyGameService.storeGame(update);
+  public BotApiMethodMessage storeBountyGame(final MessageMetadata messageMetadata) {
+    return bountyGameService.storeGame(messageMetadata);
   }
 
   public Optional<TelegramGame> getGameByMessageMetadata(final MessageMetadata messageMetadata) {

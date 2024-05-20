@@ -1,9 +1,9 @@
 package by.mrrockka.service;
 
+import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.Person;
 import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.domain.game.CashGame;
-import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.mapper.WithdrawalMessageMapper;
 import by.mrrockka.response.builder.WithdrawalResponseBuilder;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Service
 @RequiredArgsConstructor
@@ -26,15 +25,13 @@ public class WithdrawalTelegramService {
   private final WithdrawalMessageMapper withdrawalMessageMapper;
   private final GameTelegramService gameTelegramService;
   private final TelegramPersonService telegramPersonService;
-  private final MessageMetadataMapper messageMetadataMapper;
   private final GameValidator gameValidator;
   private final PersonMentionsValidator personMentionsValidator;
   private final WithdrawalResponseBuilder withdrawalResponseBuilder;
   private final CollectionsValidator collectionsValidator;
   private final WithdrawalsValidator withdrawalsValidator;
 
-  public BotApiMethodMessage storeWithdrawal(final Update update) {
-    final var messageMetadata = messageMetadataMapper.map(update.getMessage());
+  public BotApiMethodMessage storeWithdrawal(final MessageMetadata messageMetadata) {
     personMentionsValidator.validateMessageMentions(messageMetadata, 1);
 
     final var personAndAmountMap = withdrawalMessageMapper.map(messageMetadata);

@@ -26,42 +26,6 @@ class EntryMessageMapperTest {
   private final TelegramPersonMapper personMapper = Mappers.getMapper(TelegramPersonMapper.class);
   private final EntryMessageMapper entryMessageMapper = new EntryMessageMapper(personMapper);
 
-  private static Stream<Arguments> entryMessage() {
-    return Stream.of(
-      Arguments.of("/entry @kinger 60", BigDecimal.valueOf(60)),
-      Arguments.of("/entry @kinger", null)
-    );
-  }
-
-  @ParameterizedTest
-  @MethodSource("entryMessage")
-  void givenEntryMessage_whenMapAttempt_shouldParseToPair(final String command, final BigDecimal amount) {
-    final var actual = entryMessageMapper.map(command);
-    assertThat(actual.getKey()).isEqualTo("kinger");
-    if (nonNull(amount)) {
-      assertThat(actual.getValue()).contains(amount);
-    } else {
-      assertThat(actual.getValue()).isEmpty();
-    }
-  }
-
-
-  private static Stream<Arguments> invalidEntryMessage() {
-    return Stream.of(
-      Arguments.of("/entry 60 @kinger"),
-      Arguments.of("/entry@kinger"),
-      Arguments.of("/entry"),
-      Arguments.of("@kinger/entry")
-    );
-  }
-
-  @ParameterizedTest
-  @MethodSource("invalidEntryMessage")
-  void givenInvalidEntryMessage_whenMapAttempt_shouldThrowException(final String message) {
-    assertThatThrownBy(() -> entryMessageMapper.map(message))
-      .isInstanceOf(InvalidMessageFormatException.class);
-  }
-
   @Builder
   private record EntryArgument(MessageMetadata metadata, Set<String> nicknames, BigDecimal amount) {}
 

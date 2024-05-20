@@ -1,7 +1,8 @@
 package by.mrrockka.service;
 
 import by.mrrockka.config.PostgreSQLExtension;
-import by.mrrockka.creator.*;
+import by.mrrockka.creator.MessageEntityCreator;
+import by.mrrockka.creator.MessageMetadataCreator;
 import by.mrrockka.domain.Person;
 import by.mrrockka.repo.person.PersonRepository;
 import by.mrrockka.repo.person.TelegramPersonEntity;
@@ -39,7 +40,7 @@ class TelegramPersonServiceTest {
         List.of("mrrocka", "andrei", "marks")
       ),
       Arguments.of(
-        List.of("mrrocka", "kinger", "queen", "me")
+        List.of("mrrocka", "kinger", "queen")
       )
     );
   }
@@ -55,21 +56,15 @@ class TelegramPersonServiceTest {
       .reduce("%s\n%s"::formatted)
       .orElseThrow();
 
-    final var update = UpdateCreator.update(
-      MessageCreator.message(message -> {
-        message.setText(text);
-        message.setChat(ChatCreator.chat(CHAT_ID));
-        message.setEntities(
-          args.stream().filter(str -> !"me".equals(str)).map(
-            mention -> MessageEntityCreator.apiMention(text, mention)).toList());
-      })
+    final var messageMetadata = MessageMetadataCreator.domain(metadata -> metadata
+      .chatId(CHAT_ID)
+      .text(text)
+      .entities(args.stream()
+                  .map(MessageEntityCreator::domainMention)
+                  .toList())
     );
 
-    if (nicknames.contains("me")) {
-      nicknames.set(3, UserCreator.USER_NAME);
-    }
-
-    final var personIds = telegramPersonService.storePersons(update).stream()
+    final var personIds = telegramPersonService.storePersons(messageMetadata).stream()
       .map(Person::getId)
       .toList();
     assertThat(personRepository.findAllByIds(personIds)).hasSize(args.size());

@@ -1,11 +1,8 @@
 package by.mrrockka.service.statistics;
 
-import by.mrrockka.creator.MessageCreator;
 import by.mrrockka.creator.MessageMetadataCreator;
-import by.mrrockka.creator.UpdateCreator;
 import by.mrrockka.domain.statistics.StatisticsCommand;
 import by.mrrockka.domain.statistics.StatisticsType;
-import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.mapper.StatisticsMessageMapper;
 import by.mrrockka.validation.mentions.PersonMentionsValidator;
 import org.junit.jupiter.api.Test;
@@ -22,8 +19,6 @@ import static org.mockito.Mockito.*;
 class StatisticsTelegramServiceTest {
 
   @Mock
-  private MessageMetadataMapper messageMetadataMapper;
-  @Mock
   private StatisticsMessageMapper statisticsMessageMapper;
   @Mock
   private PersonMentionsValidator personMentionsValidator;
@@ -36,10 +31,8 @@ class StatisticsTelegramServiceTest {
 
   @Test
   void givenUpdateWithValidGameCommand_whenRetrieveStatisticsCalled_shouldReturnMessageWithGameResponse() {
-    final var command = "/game_stats";
-    final var message = MessageCreator.message(command);
-    final var metadata = MessageMetadataCreator.domain(builder -> builder.text(command));
-    final var update = UpdateCreator.update(message);
+    final var text = "/game_stats";
+    final var metadata = MessageMetadataCreator.domain(builder -> builder.text(text));
     final var statisticsCommand = StatisticsCommand.builder()
       .type(StatisticsType.GAME)
       .metadata(metadata)
@@ -50,22 +43,19 @@ class StatisticsTelegramServiceTest {
       .text("game response")
       .build();
 
-    when(messageMetadataMapper.map(message)).thenReturn(metadata);
     when(statisticsMessageMapper.map(metadata)).thenReturn(statisticsCommand);
     when(gameStatisticsService.retrieveStatistics(statisticsCommand)).thenReturn(expected);
 
-    assertThat(statisticsService.retrieveStatistics(update)).isEqualTo(expected);
-    verifyNoMoreInteractions(messageMetadataMapper, statisticsMessageMapper, gameStatisticsService);
+    assertThat(statisticsService.retrieveStatistics(metadata)).isEqualTo(expected);
+    verifyNoMoreInteractions(statisticsMessageMapper, gameStatisticsService);
     verify(personMentionsValidator, only()).validateMessageHasUserTextMention(metadata);
     verifyNoInteractions(playerInGameStatisticsService);
   }
 
   @Test
   void givenUpdateWithValidPlayerInGameCommand_whenRetrieveStatisticsCalled_shouldReturnMessageWithPlayerResponse() {
-    final var command = "/my_stats";
-    final var message = MessageCreator.message(command);
-    final var metadata = MessageMetadataCreator.domain(builder -> builder.text(command));
-    final var update = UpdateCreator.update(message);
+    final var text = "/my_stats";
+    final var metadata = MessageMetadataCreator.domain(builder -> builder.text(text));
     final var statisticsCommand = StatisticsCommand.builder()
       .type(StatisticsType.PLAYER_IN_GAME)
       .metadata(metadata)
@@ -76,22 +66,19 @@ class StatisticsTelegramServiceTest {
       .text("player response")
       .build();
 
-    when(messageMetadataMapper.map(message)).thenReturn(metadata);
     when(statisticsMessageMapper.map(metadata)).thenReturn(statisticsCommand);
     when(playerInGameStatisticsService.retrieveStatistics(statisticsCommand)).thenReturn(expected);
 
-    assertThat(statisticsService.retrieveStatistics(update)).isEqualTo(expected);
-    verifyNoMoreInteractions(messageMetadataMapper, statisticsMessageMapper, playerInGameStatisticsService);
+    assertThat(statisticsService.retrieveStatistics(metadata)).isEqualTo(expected);
+    verifyNoMoreInteractions(statisticsMessageMapper, playerInGameStatisticsService);
     verify(personMentionsValidator, only()).validateMessageHasUserTextMention(metadata);
     verifyNoInteractions(gameStatisticsService);
   }
 
   @Test
   void givenUpdateWithValidGlobalPersonCommand_whenRetrieveStatisticsCalled_shouldReturnMessageWithGlobalPersonResponse() {
-    final var command = "/my_global_stats";
-    final var message = MessageCreator.message(command);
-    final var metadata = MessageMetadataCreator.domain(builder -> builder.text(command));
-    final var update = UpdateCreator.update(message);
+    final var text = "/my_global_stats";
+    final var metadata = MessageMetadataCreator.domain(builder -> builder.text(text));
     final var statisticsCommand = StatisticsCommand.builder()
       .type(StatisticsType.PERSON_GLOBAL)
       .metadata(metadata)
@@ -102,12 +89,11 @@ class StatisticsTelegramServiceTest {
       .text("global person response")
       .build();
 
-    when(messageMetadataMapper.map(message)).thenReturn(metadata);
     when(statisticsMessageMapper.map(metadata)).thenReturn(statisticsCommand);
     when(playerInGameStatisticsService.retrieveStatistics(statisticsCommand)).thenReturn(expected);
 
-    assertThat(statisticsService.retrieveStatistics(update)).isEqualTo(expected);
-    verifyNoMoreInteractions(messageMetadataMapper, statisticsMessageMapper, playerInGameStatisticsService);
+    assertThat(statisticsService.retrieveStatistics(metadata)).isEqualTo(expected);
+    verifyNoMoreInteractions(statisticsMessageMapper, playerInGameStatisticsService);
     verify(personMentionsValidator, only()).validateMessageHasUserTextMention(metadata);
     verifyNoInteractions(gameStatisticsService);
   }

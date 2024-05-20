@@ -1,7 +1,7 @@
 package by.mrrockka.service;
 
+import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.features.calculation.CalculationService;
-import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.response.builder.CalculationResponseBuilder;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
 import by.mrrockka.service.exception.PayoutsAreNotCalculatedException;
@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Slf4j
 @Service
@@ -21,12 +20,10 @@ public class CalculationTelegramService {
 
   private final CalculationService calculationService;
   private final GameTelegramService gameTelegramService;
-  private final MessageMetadataMapper messageMetadataMapper;
   private final CalculationResponseBuilder calculationResponseBuilder;
   private final CalculationValidator calculationValidator;
 
-  public BotApiMethodMessage calculatePayouts(final Update update) {
-    final var messageMetadata = messageMetadataMapper.map(update.getMessage());
+  public BotApiMethodMessage calculatePayouts(final MessageMetadata messageMetadata) {
 
     final var telegramGame = gameTelegramService
       .getGameByMessageMetadata(messageMetadata)

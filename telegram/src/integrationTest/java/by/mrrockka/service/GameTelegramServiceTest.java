@@ -1,7 +1,10 @@
 package by.mrrockka.service;
 
 import by.mrrockka.config.PostgreSQLExtension;
-import by.mrrockka.creator.*;
+import by.mrrockka.creator.ChatCreator;
+import by.mrrockka.creator.MessageCreator;
+import by.mrrockka.creator.MessageEntityCreator;
+import by.mrrockka.creator.MessageMetadataCreator;
 import by.mrrockka.repo.entries.EntriesEntity;
 import by.mrrockka.repo.entries.EntriesRepository;
 import by.mrrockka.repo.game.GameRepository;
@@ -30,15 +33,15 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @ActiveProfiles("repository")
 class GameTelegramServiceTest {
 
+  private static final Long CHAT_ID = ChatCreator.CHAT_ID;
   private static final String TOURNAMENT_MESSAGE = """
     /tournament
-    buy-in: 30
+    buyin: 30
     stack: 50k
     players:
     @capusta
     @kurva
     @asdasd
-    @me
     """;
 
   @Autowired
@@ -56,28 +59,25 @@ class GameTelegramServiceTest {
 
   @Test
   void giveTournamentMessage_whenAttemptToStored_shouldStoreGameConnectedToChatIdAndPersonsAndEntriesForPersons() {
-    final var message = MessageCreator.message(msg -> {
-      msg.setText(TOURNAMENT_MESSAGE);
-      msg.setEntities(List.of(
-        MessageEntityCreator.apiCommand(TOURNAMENT_MESSAGE, "/tournament"),
-        MessageEntityCreator.apiMention(TOURNAMENT_MESSAGE, "@capusta"),
-        MessageEntityCreator.apiMention(TOURNAMENT_MESSAGE, "@kurva"),
-        MessageEntityCreator.apiMention(TOURNAMENT_MESSAGE, "@asdasd")
-      ));
-    });
+    final var messageMetadata = MessageMetadataCreator.domain(metadata -> metadata
+      .chatId(CHAT_ID)
+      .text(TOURNAMENT_MESSAGE)
+      .entities(List.of(
+        MessageEntityCreator.domainMention("@capusta"),
+        MessageEntityCreator.domainMention("@kurva"),
+        MessageEntityCreator.domainMention("@asdasd")
+      ))
+    );
 
-    final var update = UpdateCreator.update(message);
-    final var chatId = ChatCreator.CHAT_ID;
-
-    final var response = (SendMessage) gameTelegramService.storeTournamentGame(update);
+    final var response = (SendMessage) gameTelegramService.storeTournamentGame(messageMetadata);
 
     assertAll(
-      () -> assertThat(response.getChatId()).isEqualTo(String.valueOf(chatId)),
+      () -> assertThat(response.getChatId()).isEqualTo(String.valueOf(CHAT_ID)),
       () -> assertThat(response.getReplyToMessageId()).isEqualTo(MessageCreator.MESSAGE_ID),
       () -> assertThat(response.getText()).isEqualTo("Tournament started.")
     );
 
-    final var telegramGame = telegramGameRepository.findByChatAndMessageId(chatId, MessageCreator.MESSAGE_ID);
+    final var telegramGame = telegramGameRepository.findByChatAndMessageId(CHAT_ID, MessageCreator.MESSAGE_ID);
     assertThat(telegramGame).isNotEmpty();
 
     final var gameEntity = gameRepository.findById(telegramGame.get().gameId());
@@ -91,11 +91,10 @@ class GameTelegramServiceTest {
     final var nicknames = List.of(
       "capusta",
       "kurva",
-      "asdasd",
-      UserCreator.USER_NAME
+      "asdasd"
     );
 
-    final var telegramPersonEntities = telegramPersonRepository.findAllByChatIdAndNicknames(chatId, nicknames);
+    final var telegramPersonEntities = telegramPersonRepository.findAllByChatIdAndNicknames(CHAT_ID, nicknames);
 
     assertAll(
       () -> assertThat(telegramPersonEntities).isNotEmpty(),

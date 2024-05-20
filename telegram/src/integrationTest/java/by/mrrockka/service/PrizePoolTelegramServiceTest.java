@@ -1,10 +1,8 @@
 package by.mrrockka.service;
 
 import by.mrrockka.config.PostgreSQLExtension;
-import by.mrrockka.creator.ChatCreator;
-import by.mrrockka.creator.MessageCreator;
+import by.mrrockka.creator.MessageMetadataCreator;
 import by.mrrockka.creator.PrizePoolCreator;
-import by.mrrockka.creator.UpdateCreator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,8 +23,7 @@ class PrizePoolTelegramServiceTest {
   private static final UUID GAME_ID = UUID.fromString("4a411a12-2386-4dce-b579-d806c91d6d17");
   private static final Long CHAT_ID = 123L;
   private static final Integer REPLY_TO_ID = 1;
-
-  private static final String PRIZE_POOL_COMMAND =
+  private static final String PRIZE_POOL_MESSAGE =
     """
       /prizepool
       1 60%, 2. 30%,3 - 10%
@@ -39,15 +36,13 @@ class PrizePoolTelegramServiceTest {
 
   @Test
   void givenGameIdAndChatId_whenPrizePoolMessageReceived_shouldStorePrizePoolAgainstGame() {
-    final var update = UpdateCreator.update(
-      MessageCreator.message(message -> {
-        message.setText(PRIZE_POOL_COMMAND);
-        message.setChat(ChatCreator.chat(CHAT_ID));
-        message.setReplyToMessage(MessageCreator.message(msg -> msg.setMessageId(REPLY_TO_ID)));
-      })
+    final var messageMetadata = MessageMetadataCreator.domain(metadata -> metadata
+      .chatId(CHAT_ID)
+      .text(PRIZE_POOL_MESSAGE)
+      .replyTo(MessageMetadataCreator.domain(reply -> reply.id(REPLY_TO_ID)))
     );
 
-    final var message = prizePoolTelegramService.storePrizePool(update);
+    final var message = prizePoolTelegramService.storePrizePool(messageMetadata);
     final var expectedMessage = """
       Prize Pool:
       	position: 1, percentage: 60

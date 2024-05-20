@@ -10,12 +10,10 @@ import by.mrrockka.mapper.exception.InvalidMessageFormatException;
 import by.mrrockka.mapper.person.TelegramPersonMapper;
 import by.mrrockka.service.exception.FinalPlaceContainsNicknameOfNonExistingPlayerException;
 import lombok.Builder;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mapstruct.factory.Mappers;
-import org.testcontainers.shaded.org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 import java.util.Map;
@@ -29,82 +27,6 @@ class FinalePlacesMessageMapperTest {
   private final TelegramPersonMapper personMapper = Mappers.getMapper(TelegramPersonMapper.class);
   private final FinalePlacesMessageMapper finalePlacesMessageMapper = new FinalePlacesMessageMapper(personMapper);
 
-  @BeforeEach
-  void setup() {
-    finalePlacesMessageMapper.setBotName("pokerbot");
-  }
-
-  private static Stream<Arguments> finalePlacesMessage() {
-    return Stream.of(
-      Arguments.of(
-        """
-          /finaleplaces
-          1 @mrrockka
-          2 @ararat
-          3 @andrei
-          """
-      ),
-      Arguments.of(
-        """
-          /finaleplaces
-          1. @mrrockka
-          2. @ararat
-          3. @andrei
-          """
-      ),
-      Arguments.of(
-        """
-          /finaleplaces
-          1 - @mrrockka
-          2 -@ararat
-          3-@andrei
-          """
-      ),
-      Arguments.of(
-        """
-          /finaleplaces
-          1 @mrrockka, 2. @ararat,3- @andrei
-          """
-      ),
-      Arguments.of(
-        """
-          /finaleplaces
-          1= @mrrockka, 2. @ararat,
-          3: @andrei
-          """
-      ),
-      Arguments.of("/finaleplaces 1 @mrrockka, 2. @ararat,3- @andrei")
-    );
-  }
-
-  @ParameterizedTest
-  @MethodSource("finalePlacesMessage")
-  void givenFinalePlacesCommand_whenAttemptToMap_shouldReturnPositionAndNickname(final String command) {
-    final var expected = List.of(
-      Pair.of(1, "mrrockka"),
-      Pair.of(2, "ararat"),
-      Pair.of(3, "andrei")
-    );
-
-    assertThat(finalePlacesMessageMapper.map(command))
-      .isEqualTo(expected);
-  }
-
-  private static Stream<Arguments> invalidMessage() {
-    return Stream.of(
-      Arguments.of("/finaleplaces 1@mrrockka, 2@ararat,3@andrei"),
-      Arguments.of("/finaleplaces\n@mrrockka @ararat"),
-      Arguments.of("/finaleplaces\n")
-    );
-  }
-
-  @ParameterizedTest
-  @MethodSource("invalidMessage")
-  void givenInvalidFinalePlacesMessage_whenMapAttempt_shouldThrowException(final String message) {
-    assertThatThrownBy(() -> finalePlacesMessageMapper.map(message))
-      .isInstanceOf(InvalidMessageFormatException.class);
-  }
-
   @Builder
   private record FinalePlacesArgument(MessageMetadata metadata, Map<Integer, TelegramPerson> result,
                                       Class<? extends BusinessException> exception) {}
@@ -116,11 +38,11 @@ class FinalePlacesMessageMapperTest {
           .metadata(
             MessageMetadataCreator.domain(metadata -> metadata
               .text("""
-                         /finaleplaces
-                         1 @mrrockka
-                         2 @ararat
-                         3 @andrei
-                         """)
+                      /finaleplaces
+                      1 @mrrockka
+                      2 @ararat
+                      3 @andrei
+                      """)
               .entities(List.of(
                 MessageEntityCreator.domainMention("@mrrockka"),
                 MessageEntityCreator.domainMention("@ararat"),
@@ -137,11 +59,11 @@ class FinalePlacesMessageMapperTest {
           .metadata(
             MessageMetadataCreator.domain(metadata -> metadata
               .text("""
-                         /finaleplaces
-                         1 - @mrrockka
-                         2 -@ararat
-                         3-@andrei
-                         """)
+                      /finaleplaces
+                      1 - @mrrockka
+                      2 -@ararat
+                      3-@andrei
+                      """)
               .entities(List.of(
                 MessageEntityCreator.domainMention("@mrrockka"),
                 MessageEntityCreator.domainMention("@ararat"),
@@ -158,9 +80,9 @@ class FinalePlacesMessageMapperTest {
           .metadata(
             MessageMetadataCreator.domain(metadata -> metadata
               .text("""
-                         /finaleplaces
-                         1 @mrrockka, 2. @ararat,3- @andrei
-                         """)
+                      /finaleplaces
+                      1 @mrrockka, 2. @ararat,3- @andrei
+                      """)
               .entities(List.of(
                 MessageEntityCreator.domainMention("@mrrockka"),
                 MessageEntityCreator.domainMention("@ararat"),
@@ -177,10 +99,10 @@ class FinalePlacesMessageMapperTest {
           .metadata(
             MessageMetadataCreator.domain(metadata -> metadata
               .text("""
-                         /finaleplaces
-                         1= @mrrockka, 2. @ararat,
-                         3: @andrei
-                         """)
+                      /finaleplaces
+                      1= @mrrockka, 2. @ararat,
+                      3: @andrei
+                      """)
               .entities(List.of(
                 MessageEntityCreator.domainMention("@mrrockka"),
                 MessageEntityCreator.domainMention("@ararat"),

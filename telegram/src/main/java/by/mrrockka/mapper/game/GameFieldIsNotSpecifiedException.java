@@ -8,6 +8,8 @@ public class GameFieldIsNotSpecifiedException extends BusinessException {
     super("Game field %s is not specified. Format %s".formatted(field, regex));
   }
 
+//  todo: add readable exception message instead of regex
+
   public static GameFieldIsNotSpecifiedException stack(final String regex) {
     return new GameFieldIsNotSpecifiedException("stack", regex);
   }
