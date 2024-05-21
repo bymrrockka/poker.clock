@@ -31,7 +31,7 @@ public class CalculationTelegramService {
 
     calculationValidator.validateGame(telegramGame.game());
 
-    final var payouts = calculationService.calculate(telegramGame.game());
+    final var payouts = calculationService.calculateAndSave(telegramGame.game());
     if (payouts.isEmpty()) {
       throw new PayoutsAreNotCalculatedException();
     }

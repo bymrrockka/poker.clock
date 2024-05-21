@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Optional;
 import java.util.UUID;
 
 import static by.mrrockka.repo.game.GameColumnNames.*;
@@ -20,6 +22,9 @@ class GameEntityRowMapper implements RowMapper<GameEntity> {
       .stack(rs.getBigDecimal(STACK))
       .buyIn(rs.getBigDecimal(BUY_IN))
       .bounty(rs.getBigDecimal(BOUNTY))
+      .finishedAt(Optional.ofNullable(rs.getTimestamp(FINISHED_AT))
+                    .map(Timestamp::toInstant)
+                    .orElse(null))
       .build();
   }
 }

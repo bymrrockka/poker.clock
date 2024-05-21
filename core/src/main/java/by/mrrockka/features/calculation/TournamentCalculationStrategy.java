@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-final class TournamentCalculationStrategy extends AbstractCalculationTemplateMethodStrategy<TournamentPlayerSummary, TournamentGame> {
+final class TournamentCalculationStrategy extends AbstractCalculationStrategyTemplateMethod<TournamentPlayerSummary, TournamentGame> {
 
   @Override
   public boolean isApplicable(final Game game) {

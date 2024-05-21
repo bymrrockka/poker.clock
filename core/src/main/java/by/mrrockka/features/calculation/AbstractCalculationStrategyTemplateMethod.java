@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class AbstractCalculationTemplateMethodStrategy<PS extends PlayerSummary, G extends Game> implements
+public abstract class AbstractCalculationStrategyTemplateMethod<PS extends PlayerSummary, G extends Game> implements
                                                                                                           CalculationStrategy {
   @Override
   public List<Payout> calculate(final Game game) {

@@ -1,5 +1,6 @@
 package by.mrrockka.repo.game;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 
 import static by.mrrockka.repo.game.GameColumnNames.*;
@@ -44,16 +46,26 @@ public class GameRepository {
       game_id = :game_id;
     """;
 
-  public void finishGame(final UUID gameId, final Instant finishedAt) {
+  public void setFinished(final UUID gameId, final Instant finishedAt) {
     final var params = new MapSqlParameterSource()
       .addValue(ID, gameId)
       .addValue(FINISHED_AT, Timestamp.from(finishedAt));
     jdbcTemplate.update(FINISH_GAME_SQL, params);
   }
 
+  private static final String HAS_UPDATES_SQL = "SELECT check_game_updates(:game_id, :finished_at);";
+
+  public boolean hasUpdates(@NonNull final UUID gameId, @NonNull final Instant finishedAt) {
+    final var params = new MapSqlParameterSource()
+      .addValue(ID, gameId)
+      .addValue(FINISHED_AT, Timestamp.from(finishedAt));
+    return Optional.ofNullable(jdbcTemplate.queryForObject(HAS_UPDATES_SQL, params, Boolean.class))
+      .orElse(false);
+  }
+
   private static final String FIND_BY_ID_SQL = """
       SELECT
-        id, game_type, buy_in, stack, bounty
+        id, game_type, buy_in, stack, bounty, finished_at
       FROM
         game
       WHERE

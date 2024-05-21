@@ -40,7 +40,7 @@ public class MoneyTransferRepository {
     jdbcTemplate.update(SAVE_SQL, params);
   }
 
-  @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED)
+  @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
   public void saveAll(final List<MoneyTransferEntity> payoutsEntities, final Instant createdAt) {
     payoutsEntities.forEach(entity -> save(entity, createdAt));
   }

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -40,7 +41,6 @@ public class GameService {
     gameRepository.save(gameMapper.toEntity(game), Instant.now());
   }
 
-  //  todo: idea - inspect the repo for GameMetadata usage
   public Game retrieveGame(@NonNull final UUID gameId) {
     final var gameEntity = gameRepository.findById(gameId);
     return switch (gameEntity.gameType()) {
@@ -51,7 +51,11 @@ public class GameService {
   }
 
   public void finishGame(@NonNull final Game game) {
-    gameRepository.finishGame(game.getId(), Instant.now());
+    gameRepository.setFinished(game.getId(), Instant.now());
+  }
+
+  public boolean doesGameHasUpdates(@NonNull final Game game) {
+    return Objects.isNull(game.getFinishedAt()) || gameRepository.hasUpdates(game.getId(), game.getFinishedAt());
   }
 
   private TournamentGame assembleTournamentGame(@NonNull final GameEntity gameEntity) {
