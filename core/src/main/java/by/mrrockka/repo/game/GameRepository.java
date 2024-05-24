@@ -46,7 +46,7 @@ public class GameRepository {
       game_id = :game_id;
     """;
 
-  public void setFinished(final UUID gameId, final Instant finishedAt) {
+  public void finish(final UUID gameId, final Instant finishedAt) {
     final var params = new MapSqlParameterSource()
       .addValue(ID, gameId)
       .addValue(FINISHED_AT, Timestamp.from(finishedAt));

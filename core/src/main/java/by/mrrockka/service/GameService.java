@@ -51,7 +51,7 @@ public class GameService {
   }
 
   public void finishGame(@NonNull final Game game) {
-    gameRepository.setFinished(game.getId(), Instant.now());
+    gameRepository.finish(game.getId(), Instant.now());
   }
 
   public boolean doesGameHasUpdates(@NonNull final Game game) {
