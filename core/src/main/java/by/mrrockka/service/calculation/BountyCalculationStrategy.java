@@ -1,4 +1,4 @@
-package by.mrrockka.features.calculation;
+package by.mrrockka.service.calculation;
 
 import by.mrrockka.domain.game.BountyGame;
 import by.mrrockka.domain.game.Game;
@@ -11,11 +11,6 @@ import java.util.List;
 
 @Component
 public final class BountyCalculationStrategy extends AbstractCalculationStrategyTemplateMethod<BountyPlayerSummary, BountyGame> {
-  @Override
-  public boolean isApplicable(final Game game) {
-    return game.isType(BountyGame.class);
-  }
-
   @Override
   protected List<BountyPlayerSummary> buildPlayerSummary(final Game game) {
     final var bountyGame = game.asType(BountyGame.class);

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -43,7 +44,7 @@ public class GameRepository {
     SET
       finished_at = :finished_at
     WHERE
-      game_id = :game_id;
+      id = :id;
     """;
 
   public void finish(final UUID gameId, final Instant finishedAt) {
@@ -77,6 +78,23 @@ public class GameRepository {
       .addValue(ID, id);
 
     return jdbcTemplate.queryForObject(FIND_BY_ID_SQL, params, gameEntityRowMapper);
+  }
+
+
+  private static final String FIND_ALL_BY_IDS_SQL = """
+      SELECT
+        id, game_type, buy_in, stack, bounty, finished_at
+      FROM
+        game
+      WHERE
+        id IN (:id);
+    """;
+
+  public List<GameEntity> findAllByIds(final List<UUID> ids) {
+    final var params = new MapSqlParameterSource()
+      .addValue(ID, ids);
+
+    return jdbcTemplate.query(FIND_ALL_BY_IDS_SQL, params, gameEntityRowMapper);
   }
 
 }

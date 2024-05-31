@@ -23,4 +23,8 @@ public class PersonService {
     personRepository.save(personMapper.toEntity(person));
   }
 
+  public Person getByNickname(final String nickname) {
+    return personMapper.toDomain(personRepository.findByNickname(nickname));
+  }
+
 }

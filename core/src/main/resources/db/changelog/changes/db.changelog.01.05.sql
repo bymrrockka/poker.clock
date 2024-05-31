@@ -3,7 +3,8 @@
 --changeset task#36:2
 
 CREATE OR REPLACE FUNCTION check_game_updates(gid uuid, finished_at timestamp = NULL)
-RETURNS BOOLEAN AS $$
+RETURNS BOOLEAN AS
+'
 DECLARE updates integer;
 BEGIN
         if (finished_at is null) then RETURN true; end if;
@@ -31,4 +32,4 @@ BEGIN
         else RETURN false;
         end if;
 END;
-$$  LANGUAGE plpgsql;
+'  LANGUAGE plpgsql;

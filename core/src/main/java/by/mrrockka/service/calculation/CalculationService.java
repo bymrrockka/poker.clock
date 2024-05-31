@@ -1,4 +1,4 @@
-package by.mrrockka.features.calculation;
+package by.mrrockka.service.calculation;
 
 import by.mrrockka.domain.game.Game;
 import by.mrrockka.domain.payout.Payout;
@@ -17,17 +17,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CalculationService {
 
-  private final List<CalculationStrategy> strategies;
   private final MoneyTransferService moneyTransferService;
   private final GameService gameService;
+  private final CalculationStrategyFactory calculationStrategyFactory;
 
   @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
   public List<Payout> calculateAndSave(final Game game) {
-    final var payouts = strategies.stream()
-      .filter(strategy -> strategy.isApplicable(game))
-      .findFirst()
-      .orElseThrow(() -> new NoStrategyFoundToCalculateGameException(game))
-      .calculate(game);
+    final var payouts = calculationStrategyFactory.getStrategy(game).calculate(game);
 
     if (gameService.doesGameHasUpdates(game)) {
       //  todo: add transactionality service to execute transaction only part of code

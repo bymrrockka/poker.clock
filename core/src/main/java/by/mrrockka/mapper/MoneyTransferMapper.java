@@ -1,5 +1,6 @@
 package by.mrrockka.mapper;
 
+import by.mrrockka.domain.MoneyTransfer;
 import by.mrrockka.domain.payout.Payer;
 import by.mrrockka.domain.payout.Payout;
 import by.mrrockka.domain.payout.TransferType;
@@ -42,5 +43,7 @@ public interface MoneyTransferMapper {
   @Mapping(target = "type", constant = "DEBIT")
   @Mapping(target = "gameId", source = "gameId")
   MoneyTransferEntity map(UUID gameId, Payer payer);
+
+  MoneyTransfer map(MoneyTransferEntity entity);
 
 }

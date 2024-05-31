@@ -129,7 +129,7 @@ bot:
           Examples: 
           /my_stats
       global_stats:
-        enabled: false
+        enabled: true
         description: Player global statistics
         details: |
           When you want to see your global statistics for all the games you were into you could use /global_stats command.

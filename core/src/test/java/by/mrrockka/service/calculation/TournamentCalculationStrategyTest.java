@@ -1,4 +1,4 @@
-package by.mrrockka.features.calculation;
+package by.mrrockka.service.calculation;
 
 import by.mrrockka.creator.EntriesCreator;
 import by.mrrockka.creator.GameCreator;

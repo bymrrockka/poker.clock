@@ -2,20 +2,32 @@ package by.mrrockka.domain.statistics;
 
 
 import by.mrrockka.domain.Person;
+import lombok.Builder;
 import lombok.NonNull;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-//todo: move to main lib
+@Builder
 public record GlobalPersonStatistics(
+  @NonNull
   Person person,
-  int gamesPlayed,
+  @NonNull
+  Integer gamesPlayed,
+  @NonNull
   BigDecimal totalMoneyIn,
+  @NonNull
   BigDecimal totalMoneyWon,
+  @NonNull
   BigDecimal totalMoneyLose,
-  int timesOnFirstPlace,
-  int timesInPrizes
+  @NonNull
+  Integer timesOnFirstPlace,
+  @NonNull
+  Integer timesInPrizes,
+  @NonNull
+  BigDecimal inPrizeRatio,
+  @NonNull
+  BigDecimal wonToLoseRatio
 ) {
 
   public BigDecimal inPrizeRatio() {

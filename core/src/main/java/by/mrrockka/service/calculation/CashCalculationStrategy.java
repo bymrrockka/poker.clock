@@ -1,4 +1,4 @@
-package by.mrrockka.features.calculation;
+package by.mrrockka.service.calculation;
 
 import by.mrrockka.domain.game.CashGame;
 import by.mrrockka.domain.game.Game;
@@ -11,11 +11,6 @@ import java.util.List;
 
 @Component
 public final class CashCalculationStrategy extends AbstractCalculationStrategyTemplateMethod<CashPlayerSummary, CashGame> {
-  @Override
-  public boolean isApplicable(final Game game) {
-    return game.isType(CashGame.class);
-  }
-
   @Override
   protected List<CashPlayerSummary> buildPlayerSummary(final Game game) {
     final var cash = game.asType(CashGame.class);

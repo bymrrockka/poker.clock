@@ -1,4 +1,4 @@
-package by.mrrockka.features.calculation;
+package by.mrrockka.service.calculation;
 
 import by.mrrockka.domain.game.Game;
 import by.mrrockka.domain.game.TournamentGame;
@@ -11,11 +11,6 @@ import java.util.List;
 
 @Component
 final class TournamentCalculationStrategy extends AbstractCalculationStrategyTemplateMethod<TournamentPlayerSummary, TournamentGame> {
-
-  @Override
-  public boolean isApplicable(final Game game) {
-    return game.isType(TournamentGame.class);
-  }
 
   @Override
   protected List<TournamentPlayerSummary> buildPlayerSummary(final Game game) {
@@ -35,7 +30,7 @@ final class TournamentCalculationStrategy extends AbstractCalculationStrategyTem
   }
 
   @Override
-  protected Payer buildPayerBase(TournamentPlayerSummary debtorSummary) {
+  protected Payer buildPayerBase(final TournamentPlayerSummary debtorSummary) {
     return Payer.builder()
       .personEntries(debtorSummary.getPersonEntries())
       .build();

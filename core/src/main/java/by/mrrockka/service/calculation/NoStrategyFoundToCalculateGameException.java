@@ -1,4 +1,4 @@
-package by.mrrockka.features.calculation;
+package by.mrrockka.service.calculation;
 
 import by.mrrockka.domain.game.Game;
 import by.mrrockka.exception.BusinessException;

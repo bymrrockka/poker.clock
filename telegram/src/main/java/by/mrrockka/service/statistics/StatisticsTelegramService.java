@@ -15,7 +15,8 @@ public class StatisticsTelegramService {
 
   private final StatisticsMessageMapper statisticsMessageMapper;
   private final PersonMentionsValidator personMentionsValidator;
-  private final PlayerInGameStatisticsService playerInGameStatisticsService;
+  private final PlayerInGameStatisticsTelegramService playerInGameStatisticsTelegramService;
+  private final GlobalPersonStatisticsTelegramService globalPersonStatisticsTelegramService;
   private final GameStatisticsService gameStatisticsService;
 
   public BotApiMethodMessage retrieveStatistics(final MessageMetadata messageMetadata) {
@@ -23,8 +24,8 @@ public class StatisticsTelegramService {
     final var statistics = statisticsMessageMapper.map(messageMetadata);
     return switch (statistics.type()) {
       case GAME -> gameStatisticsService.retrieveStatistics(statistics);
-//      todo: until person global service is not implemented
-      case PLAYER_IN_GAME, PERSON_GLOBAL -> playerInGameStatisticsService.retrieveStatistics(statistics);
+      case PLAYER_IN_GAME -> playerInGameStatisticsTelegramService.retrieveStatistics(statistics);
+      case PERSON_GLOBAL -> globalPersonStatisticsTelegramService.retrieveStatistics(statistics);
     };
   }
 

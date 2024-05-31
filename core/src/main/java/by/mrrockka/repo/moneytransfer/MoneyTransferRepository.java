@@ -18,6 +18,7 @@ import java.util.UUID;
 public class MoneyTransferRepository {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
+  private final MoneyTransferEntityListResultSetExtractor moneyTransferEntityListResultSetExtractor;
 
   private static final String SAVE_SQL = """
     INSERT INTO money_transfer
@@ -46,51 +47,17 @@ public class MoneyTransferRepository {
     payoutsEntities.forEach(entity -> save(entity, createdAt));
   }
 
-
-  private static final String GET_GLOBAL_PERSON_STATISTICS_SQL = """
-    select
-        mt.person_id,
-        count(mt.game_id) as games_played,
-        sum(g.buy_in) + sum(g.bounty) as money_in,
-        sum(won.total) as money_won,
-        sum(lose.total) as money_lose,
-        sum(tonfp.times_on_first_place) as times_on_first_place,
-        count(fp.person_id) as times_in_prizes
-    from money_transfer as mt
-
-    left join (
-        select person_id as pid, sum(amount) as total
-        from money_transfer
-        where type = 'CREDIT'
-        group by person_id
-        ) as won on won.pid = mt.person_id
-
-    left join (
-        select person_id as pid, sum(amount) as total
-        from money_transfer
-        where type = 'DEBIT'
-        group by person_id
-        ) as lose on lose.pid = mt.person_id
-
-    left join game as g on g.id = mt.game_id
-
-    left join (
-        select person_id as pid, count(position) as times_on_first_place
-        from finale_places
-        where position = 1
-        group by person_id
-        ) as tonfp on tonfp.pid = mt.person_id
-
-    left join finale_places as fp on fp.person_id = mt.person_id
-
-    where mt.person_id = :person_id
-    group by mt.person_id;
+  private static final String GET_PERSON_MONEY_TRANSFERS_SQL = """
+      SELECT
+          person_id, game_id, amount, type
+      FROM money_transfer
+      WHERE person_id = :person_id;
     """;
 
-  public void getPersonGlobalStatistics(final UUID personId) {
+  public List<MoneyTransferEntity> getForPerson(final UUID personId) {
     final MapSqlParameterSource params = new MapSqlParameterSource()
       .addValue(MoneyTransferColumnNames.PERSON_ID, personId);
-    jdbcTemplate.queryForObject(GET_GLOBAL_PERSON_STATISTICS_SQL, params, (rs, rowNum) -> personId); //todo:
+    return jdbcTemplate.query(GET_PERSON_MONEY_TRANSFERS_SQL, params, moneyTransferEntityListResultSetExtractor);
   }
 
 }

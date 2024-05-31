@@ -43,6 +43,17 @@ public class GameService {
 
   public Game retrieveGame(@NonNull final UUID gameId) {
     final var gameEntity = gameRepository.findById(gameId);
+    return assembleGame(gameEntity);
+  }
+
+  public List<Game> retrieveAllGames(@NonNull final List<UUID> gameIds) {
+    final var gameEntities = gameRepository.findAllByIds(gameIds);
+    return gameEntities.stream()
+      .map(this::assembleGame)
+      .toList();
+  }
+
+  private Game assembleGame(final GameEntity gameEntity) {
     return switch (gameEntity.gameType()) {
       case TOURNAMENT -> assembleTournamentGame(gameEntity);
       case CASH -> assembleCashGame(gameEntity);

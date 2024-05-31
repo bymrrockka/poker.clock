@@ -23,7 +23,9 @@ class StatisticsTelegramServiceTest {
   @Mock
   private PersonMentionsValidator personMentionsValidator;
   @Mock
-  private PlayerInGameStatisticsService playerInGameStatisticsService;
+  private PlayerInGameStatisticsTelegramService playerInGameStatisticsTelegramService;
+  @Mock
+  private GlobalPersonStatisticsTelegramService globalPersonStatisticsTelegramService;
   @Mock
   private GameStatisticsService gameStatisticsService;
   @InjectMocks
@@ -47,9 +49,9 @@ class StatisticsTelegramServiceTest {
     when(gameStatisticsService.retrieveStatistics(statisticsCommand)).thenReturn(expected);
 
     assertThat(statisticsService.retrieveStatistics(metadata)).isEqualTo(expected);
-    verifyNoMoreInteractions(statisticsMessageMapper, gameStatisticsService);
     verify(personMentionsValidator, only()).validateMessageHasUserTextMention(metadata);
-    verifyNoInteractions(playerInGameStatisticsService);
+    verifyNoInteractions(playerInGameStatisticsTelegramService, globalPersonStatisticsTelegramService);
+    verifyNoMoreInteractions(statisticsMessageMapper, gameStatisticsService);
   }
 
   @Test
@@ -67,17 +69,17 @@ class StatisticsTelegramServiceTest {
       .build();
 
     when(statisticsMessageMapper.map(metadata)).thenReturn(statisticsCommand);
-    when(playerInGameStatisticsService.retrieveStatistics(statisticsCommand)).thenReturn(expected);
+    when(playerInGameStatisticsTelegramService.retrieveStatistics(statisticsCommand)).thenReturn(expected);
 
     assertThat(statisticsService.retrieveStatistics(metadata)).isEqualTo(expected);
-    verifyNoMoreInteractions(statisticsMessageMapper, playerInGameStatisticsService);
     verify(personMentionsValidator, only()).validateMessageHasUserTextMention(metadata);
-    verifyNoInteractions(gameStatisticsService);
+    verifyNoInteractions(gameStatisticsService, globalPersonStatisticsTelegramService);
+    verifyNoMoreInteractions(statisticsMessageMapper, playerInGameStatisticsTelegramService);
   }
 
   @Test
   void givenUpdateWithValidGlobalPersonCommand_whenRetrieveStatisticsCalled_shouldReturnMessageWithGlobalPersonResponse() {
-    final var text = "/my_global_stats";
+    final var text = "/global_stats";
     final var metadata = MessageMetadataCreator.domain(builder -> builder.text(text));
     final var statisticsCommand = StatisticsCommand.builder()
       .type(StatisticsType.PERSON_GLOBAL)
@@ -90,11 +92,11 @@ class StatisticsTelegramServiceTest {
       .build();
 
     when(statisticsMessageMapper.map(metadata)).thenReturn(statisticsCommand);
-    when(playerInGameStatisticsService.retrieveStatistics(statisticsCommand)).thenReturn(expected);
+    when(globalPersonStatisticsTelegramService.retrieveStatistics(statisticsCommand)).thenReturn(expected);
 
     assertThat(statisticsService.retrieveStatistics(metadata)).isEqualTo(expected);
-    verifyNoMoreInteractions(statisticsMessageMapper, playerInGameStatisticsService);
     verify(personMentionsValidator, only()).validateMessageHasUserTextMention(metadata);
-    verifyNoInteractions(gameStatisticsService);
+    verifyNoInteractions(gameStatisticsService, playerInGameStatisticsTelegramService);
+    verifyNoMoreInteractions(statisticsMessageMapper, globalPersonStatisticsTelegramService);
   }
 }
