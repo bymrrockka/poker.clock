@@ -5,7 +5,7 @@ import by.mrrockka.response.builder.CalculationResponseBuilder;
 import by.mrrockka.service.calculation.CalculationService;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
 import by.mrrockka.service.exception.PayoutsAreNotCalculatedException;
-import by.mrrockka.service.game.GameTelegramService;
+import by.mrrockka.service.game.GameTelegramFacadeService;
 import by.mrrockka.validation.calculation.CalculationValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,13 +19,13 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 public class CalculationTelegramService {
 
   private final CalculationService calculationService;
-  private final GameTelegramService gameTelegramService;
+  private final GameTelegramFacadeService gameTelegramFacadeService;
   private final CalculationResponseBuilder calculationResponseBuilder;
   private final CalculationValidator calculationValidator;
 
   public BotApiMethodMessage calculatePayouts(final MessageMetadata messageMetadata) {
 
-    final var telegramGame = gameTelegramService
+    final var telegramGame = gameTelegramFacadeService
       .getGameByMessageMetadata(messageMetadata)
       .orElseThrow(ChatGameNotFoundException::new);
 

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest(classes = IntegrationTestConfiguration.class)
@@ -22,6 +23,17 @@ class PersonRepositoryTest {
 
   @Test
   void givenPersonEntity_whenSave_thenShouldBeAbleToGet() {
+    final var expected = PersonCreator.entity();
+
+    personRepository.save(expected);
+
+    assertThat(personRepository.findById(expected.getId())).isEqualTo(expected);
+  }
+
+  @Test
+  void givenNickname_whenGetByNicknameCalled_thenShouldReturnPersonEntity() {
+    fail("add tests");
+
     final var expected = PersonCreator.entity();
 
     personRepository.save(expected);

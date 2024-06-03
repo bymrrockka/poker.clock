@@ -2,7 +2,7 @@ package by.mrrockka.bot.command.processor.game;
 
 import by.mrrockka.bot.command.processor.TelegramCommandProcessor;
 import by.mrrockka.domain.MessageMetadata;
-import by.mrrockka.service.game.GameTelegramService;
+import by.mrrockka.service.game.GameTelegramFacadeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
@@ -10,7 +10,7 @@ import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMess
 @Component
 @RequiredArgsConstructor
 public class TournamentGameTelegramCommandProcessor implements TelegramCommandProcessor {
-  private final GameTelegramService gameService;
+  private final GameTelegramFacadeService gameService;
 
   @Override
   public BotApiMethodMessage process(final MessageMetadata messageMetadata) {

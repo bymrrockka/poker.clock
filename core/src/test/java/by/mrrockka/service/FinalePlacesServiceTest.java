@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,6 +20,7 @@ import static org.mockito.Mockito.*;
 class FinalePlacesServiceTest {
 
   private static final UUID GAME_ID = UUID.randomUUID();
+  private static final UUID PERSON_ID = UUID.randomUUID();
 
   @Mock
   private FinalePlacesRepository finalePlacesRepository;
@@ -55,6 +57,19 @@ class FinalePlacesServiceTest {
     assertThat(finalePlacesService.getByGameId(GAME_ID))
       .isNull();
     verifyNoInteractions(finalePlacesMapper);
+  }
+
+  @Test
+  void givenPersonId_whenGetAllByPersonId_thenShouldReturnListOfModels() {
+    final var entity = FinalePlacesCreator.finalePlacesEntity();
+    final var finalePlacesEntities = List.of(entity);
+    final var domain = FinalePlacesCreator.finalePlaces();
+
+    when(finalePlacesRepository.findAllByPersonId(PERSON_ID)).thenReturn(finalePlacesEntities);
+    when(finalePlacesMapper.toDomain(entity)).thenReturn(domain);
+
+    assertThat(finalePlacesService.getAllByPersonId(PERSON_ID))
+      .isEqualTo(List.of(domain));
   }
 
 

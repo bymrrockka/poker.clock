@@ -11,11 +11,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PersonServiceTest {
+
+  private static final String NICKNAME = "nickname";
 
   @Mock
   private PersonRepository personRepository;
@@ -42,6 +45,15 @@ class PersonServiceTest {
       .thenReturn(entities);
     personService.storeAll(domains);
     verify(personRepository).saveAll(entities);
+  }
+
+  @Test
+  void givenPersonNickname_whenGetByNicknameCalled_thenShouldReturnPerson() {
+    final var entity = PersonCreator.entity();
+    final var expected = PersonCreator.domain();
+    when(personMapper.toDomain(entity)).thenReturn(expected);
+    when(personRepository.findByNickname(NICKNAME)).thenReturn(entity);
+    assertThat(personService.getByNickname(NICKNAME)).isEqualTo(expected);
   }
 
 }

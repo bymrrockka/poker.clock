@@ -29,6 +29,10 @@ public class PokerClockBot implements LongPollingBot {
 
   @Override
   public void onUpdateReceived(final Update update) {
+    if (!telegramBotsProperties.isEnabled()) {
+      throw new BotIsNotEnabledException();
+    }
+
 //    todo: add logic to process edited message
     if (isProcessable(update)) {
       final var messageMetadata = messageMetadataMapper.map(update.getMessage());

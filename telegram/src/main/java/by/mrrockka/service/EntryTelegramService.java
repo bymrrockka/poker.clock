@@ -5,7 +5,7 @@ import by.mrrockka.domain.Person;
 import by.mrrockka.mapper.EntryMessageMapper;
 import by.mrrockka.response.builder.EntryResponseBuilder;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
-import by.mrrockka.service.game.GameTelegramService;
+import by.mrrockka.service.game.GameTelegramFacadeService;
 import by.mrrockka.validation.collection.CollectionsValidator;
 import by.mrrockka.validation.mentions.PersonMentionsValidator;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class EntryTelegramService {
 
   private final EntriesService entriesService;
   private final EntryMessageMapper entryMessageMapper;
-  private final GameTelegramService gameTelegramService;
+  private final GameTelegramFacadeService gameTelegramFacadeService;
   private final TelegramPersonService telegramPersonService;
   private final PersonMentionsValidator personMentionsValidator;
   private final EntryResponseBuilder entryResponseBuilder;
@@ -38,7 +38,7 @@ public class EntryTelegramService {
     final var personAndAmountMap = entryMessageMapper.map(messageMetadata);
     collectionsValidator.validateMapIsNotEmpty(personAndAmountMap, "Entry");
 
-    final var telegramGame = gameTelegramService
+    final var telegramGame = gameTelegramFacadeService
       .getGameByMessageMetadata(messageMetadata)
       .orElseThrow(ChatGameNotFoundException::new);
     final var game = telegramGame.game();

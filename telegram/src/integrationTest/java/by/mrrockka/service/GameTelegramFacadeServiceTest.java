@@ -14,7 +14,7 @@ import by.mrrockka.repo.person.PersonEntity;
 import by.mrrockka.repo.person.PersonRepository;
 import by.mrrockka.repo.person.TelegramPersonEntity;
 import by.mrrockka.repo.person.TelegramPersonRepository;
-import by.mrrockka.service.game.GameTelegramService;
+import by.mrrockka.service.game.GameTelegramFacadeService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest
 @ActiveProfiles("repository")
-class GameTelegramServiceTest {
+class GameTelegramFacadeServiceTest {
 
   private static final Long CHAT_ID = ChatCreator.CHAT_ID;
   private static final String TOURNAMENT_MESSAGE = """
@@ -45,7 +45,7 @@ class GameTelegramServiceTest {
     """;
 
   @Autowired
-  private GameTelegramService gameTelegramService;
+  private GameTelegramFacadeService gameTelegramFacadeService;
   @Autowired
   private TelegramGameRepository telegramGameRepository;
   @Autowired
@@ -69,7 +69,7 @@ class GameTelegramServiceTest {
       ))
     );
 
-    final var response = (SendMessage) gameTelegramService.storeTournamentGame(messageMetadata);
+    final var response = (SendMessage) gameTelegramFacadeService.storeTournamentGame(messageMetadata);
 
     assertAll(
       () -> assertThat(response.getChatId()).isEqualTo(String.valueOf(CHAT_ID)),

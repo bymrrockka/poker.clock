@@ -11,7 +11,7 @@ import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMess
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class StatisticsTelegramService {
+public class StatisticsTelegramFacadeService {
 
   private final StatisticsMessageMapper statisticsMessageMapper;
   private final PersonMentionsValidator personMentionsValidator;

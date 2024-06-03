@@ -29,7 +29,7 @@ class StatisticsTelegramServiceTest {
   @Mock
   private GameStatisticsService gameStatisticsService;
   @InjectMocks
-  private StatisticsTelegramService statisticsService;
+  private StatisticsTelegramFacadeService statisticsService;
 
   @Test
   void givenUpdateWithValidGameCommand_whenRetrieveStatisticsCalled_shouldReturnMessageWithGameResponse() {

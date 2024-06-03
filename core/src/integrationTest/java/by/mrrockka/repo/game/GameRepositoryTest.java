@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest(classes = IntegrationTestConfiguration.class)
@@ -25,6 +26,11 @@ class GameRepositoryTest {
     gameRepository.save(expected, Instant.now());
 
     assertThat(gameRepository.findById(expected.id())).isEqualTo(expected);
+  }
+
+  @Test
+  void givenIds_whenGetAllByIdsExecuted_thenShouldReturnRelatedGames() {
+    fail("add tests");
   }
 
 

@@ -1,12 +1,12 @@
 package by.mrrockka.bot.command.processor.statistics;
 
-import by.mrrockka.service.statistics.StatisticsTelegramService;
+import by.mrrockka.service.statistics.StatisticsTelegramFacadeService;
 import org.springframework.stereotype.Component;
 
 @Component("myStatsTelegramCommandProcessor")
 public class MyStatisticsTelegramCommandProcessor extends AbstractStatisticsTelegramCommandProcessor {
 
-  public MyStatisticsTelegramCommandProcessor(final StatisticsTelegramService statisticsTelegramService) {
+  public MyStatisticsTelegramCommandProcessor(final StatisticsTelegramFacadeService statisticsTelegramService) {
     super(statisticsTelegramService);
   }
 }

@@ -31,6 +31,7 @@ import static org.mockito.Mockito.when;
 class GameServiceTest {
 
   private static final UUID GAME_ID = UUID.randomUUID();
+  private static final Instant FINISHED_AT = Instant.now();
 
   @Mock
   private GameMapper gameMapper;
@@ -49,7 +50,7 @@ class GameServiceTest {
   private GameService gameService;
 
   @Test
-  void givenTournamentGame_whenAttemptToSave_shouldMapAndCallRepo() {
+  void givenTournamentGame_whenAttemptToSave_thenShouldStore() {
     final var given = GameCreator.tournament();
     final var mapped = GameCreator.entity(builder -> builder.gameType(GameType.TOURNAMENT));
 
@@ -59,7 +60,7 @@ class GameServiceTest {
   }
 
   @Test
-  void givenCashGame_whenAttemptToSave_shouldMapAndCallRepo() {
+  void givenCashGame_whenAttemptToSave_thenShouldStore() {
     final var given = GameCreator.cash();
     final var mapped = GameCreator.entity(builder -> builder.gameType(GameType.CASH));
 
@@ -69,7 +70,7 @@ class GameServiceTest {
   }
 
   @Test
-  void givenBountyGame_whenAttemptToSave_shouldMapAndCallRepo() {
+  void givenBountyGame_whenAttemptToSave_thenShouldStore() {
     final var given = GameCreator.bounty();
     final var mapped = GameCreator.entity(builder -> builder.gameType(GameType.TOURNAMENT));
 
@@ -79,7 +80,7 @@ class GameServiceTest {
   }
 
   @Test
-  void givenTounnamentGameId_whenOnlyGameAndEntriesStored_shouldCallReposAndReturnOnlyGame() {
+  void givenTounnamentGameId_whenOnlyGameAndEntriesStored_thenShouldReturnOnlyTournamentGame() {
     final var entries = List.of(EntriesCreator.entries());
     final var expected = GameCreator.tournament(builder -> builder
       .finaleSummary(null)
@@ -95,7 +96,7 @@ class GameServiceTest {
 
 
   @Test
-  void givenTounnamentGameId_whenGameAndEntriesStoredAndGameSummaryIsAssemblable_shouldCallReposAndReturnGame() {
+  void givenTounnamentGameId_whenGameAndEntriesStoredAndGameSummaryIsAssemblable_thenShouldReturnTournamentGame() {
     final var entries = List.of(EntriesCreator.entries());
     final var finaleSummary = GameCreator.FINALE_SUMMARY;
     final var expected = GameCreator.tournament(builder -> builder
@@ -112,7 +113,7 @@ class GameServiceTest {
   }
 
   @Test
-  void givenCashGameId_whenOnlyGameAndEntriesStored_shouldCallReposAndReturnOnlyGame() {
+  void givenCashGameId_whenOnlyGameAndEntriesStored_thenShouldReturnOnlyCashGame() {
     final var entries = List.of(EntriesCreator.entries());
     final var withdrawals = Collections.<PersonWithdrawals>emptyList();
     final var expected = GameCreator.cash(builder -> builder
@@ -128,7 +129,7 @@ class GameServiceTest {
   }
 
   @Test
-  void givenCashGameId_whenGameAndEntriesAndWithdrawalsStored_shouldCallReposAndReturnGame() {
+  void givenCashGameId_whenGameAndEntriesAndWithdrawalsStored_thenShouldReturnCashGame() {
     final var entries = List.of(EntriesCreator.entries());
     final var withdrawals = List.of(WithdrawalsCreator.withdrawals());
     final var expected = GameCreator.cash(builder -> builder
@@ -145,7 +146,7 @@ class GameServiceTest {
   }
 
   @Test
-  void givenBountyGameId_whenOnlyGameAndEntriesStored_shouldCallReposAndReturnOnlyGame() {
+  void givenBountyGameId_whenOnlyGameAndEntriesStored_thenShouldReturnOnlyGame() {
     final var entries = List.of(EntriesCreator.entries());
     final var bounties = Collections.<Bounty>emptyList();
     final var expected = GameCreator.bounty(builder -> builder
@@ -163,7 +164,7 @@ class GameServiceTest {
 
 
   @Test
-  void givenBountyGameId_whenGameAndEntriesAndBountiesStored_shouldCallReposAndReturnGame() {
+  void givenBountyGameId_whenGameAndEntriesAndBountiesStored_thenShouldReturnGame() {
     final var entries = List.of(EntriesCreator.entries());
     final var bounties = List.of(BountyCreator.bounty());
     final var finaleSummary = GameCreator.FINALE_SUMMARY;
@@ -181,6 +182,50 @@ class GameServiceTest {
     when(bountyService.getAllForGame(GAME_ID)).thenReturn(bounties);
     when(gameMapper.toBounty(given, entries, bounties, finaleSummary)).thenReturn(expected);
     assertThat(gameService.retrieveGame(GAME_ID)).isEqualTo(expected);
+  }
+
+  @Test
+  void givenGame_whenFinishGameExecuted_thenShouldAddFinishGameTimestamp() {
+    final var game = GameCreator.tournament();
+    gameService.finishGame(game);
+    verify(gameRepository).finish(eq(game.getId()), any(Instant.class));
+  }
+
+  @Test
+  void givenGameIds_whenRetrieveAllGamesCalled_thenShouldReturnListOfGames() {
+    final var entries = List.of(EntriesCreator.entries());
+    final var bounties = Collections.<Bounty>emptyList();
+    final var expected = GameCreator.bounty(builder -> builder
+      .entries(entries)
+      .finaleSummary(null)
+    );
+    final var given = GameCreator.entity(builder -> builder.gameType(GameType.BOUNTY).id(GAME_ID));
+
+    when(gameRepository.findAllByIds(List.of(GAME_ID))).thenReturn(List.of(given));
+    when(entriesService.getAllForGame(GAME_ID)).thenReturn(entries);
+    when(bountyService.getAllForGame(GAME_ID)).thenReturn(bounties);
+    when(gameMapper.toBounty(given, entries, bounties, null)).thenReturn(expected);
+    assertThat(gameService.retrieveAllGames(List.of(GAME_ID))).isEqualTo(List.of(expected));
+  }
+
+  @Test
+  void givenGameWithoutFinishedAt_whenDoesGameHasUpdatesCalled_thenShouldReturnTrue() {
+    final var game = GameCreator.tournament();
+    assertThat(gameService.doesGameHasUpdates(game)).isTrue();
+  }
+
+  @Test
+  void givenGameWithFinishedAtAndUpdatesWereStored_whenDoesGameHasUpdatesCalled_thenShouldReturnTrue() {
+    final var game = GameCreator.tournament(tournament -> tournament.finishedAt(FINISHED_AT));
+    when(gameRepository.hasUpdates(game.getId(), FINISHED_AT)).thenReturn(true);
+    assertThat(gameService.doesGameHasUpdates(game)).isTrue();
+  }
+
+  @Test
+  void givenGameWithFinishedAtAndNoUpdatesWereStored_whenDoesGameHasUpdatesCalled_thenShouldReturnFalse() {
+    final var game = GameCreator.tournament(tournament -> tournament.finishedAt(FINISHED_AT));
+    when(gameRepository.hasUpdates(game.getId(), FINISHED_AT)).thenReturn(false);
+    assertThat(gameService.doesGameHasUpdates(game)).isFalse();
   }
 
 }

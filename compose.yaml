@@ -17,3 +17,5 @@ services:
       - 'POSTGRES_USER=psuser'
       - 'POSTGRES_DB=pokerclock'
       - 'POSTGRES_PASSWORD=r8E6&r3>'
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data

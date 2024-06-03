@@ -7,7 +7,7 @@ import by.mrrockka.domain.game.CashGame;
 import by.mrrockka.mapper.WithdrawalMessageMapper;
 import by.mrrockka.response.builder.WithdrawalResponseBuilder;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
-import by.mrrockka.service.game.GameTelegramService;
+import by.mrrockka.service.game.GameTelegramFacadeService;
 import by.mrrockka.validation.GameValidator;
 import by.mrrockka.validation.collection.CollectionsValidator;
 import by.mrrockka.validation.mentions.PersonMentionsValidator;
@@ -23,7 +23,7 @@ public class WithdrawalTelegramService {
 
   private final WithdrawalsService withdrawalsService;
   private final WithdrawalMessageMapper withdrawalMessageMapper;
-  private final GameTelegramService gameTelegramService;
+  private final GameTelegramFacadeService gameTelegramFacadeService;
   private final TelegramPersonService telegramPersonService;
   private final GameValidator gameValidator;
   private final PersonMentionsValidator personMentionsValidator;
@@ -38,7 +38,7 @@ public class WithdrawalTelegramService {
     collectionsValidator.validateMapIsNotEmpty(personAndAmountMap, "Withdrawal");
 
     final var amount = personAndAmountMap.values().stream().findFirst().orElseThrow();
-    final var telegramGame = gameTelegramService
+    final var telegramGame = gameTelegramFacadeService
       .getGameByMessageMetadata(messageMetadata)
       .orElseThrow(ChatGameNotFoundException::new);
     gameValidator.validateGameIsCashType(telegramGame.game());

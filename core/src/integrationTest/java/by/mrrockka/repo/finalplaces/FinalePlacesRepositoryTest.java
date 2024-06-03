@@ -17,6 +17,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Fail.fail;
 
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest(classes = IntegrationTestConfiguration.class)
@@ -82,6 +83,20 @@ class FinalePlacesRepositoryTest {
 
   @Test
   void givenGameId_whenNoDataInTable_shouldReturnEmpty() {
+    assertThat(finalePlacesRepository.findByGameId(UUID.randomUUID()))
+      .isEmpty();
+  }
+
+  @Test
+  void givenPersonId_whenDataInTable_shouldReturnAllFinalePlaces() {
+    fail("add tests");
+    assertThat(finalePlacesRepository.findByGameId(UUID.randomUUID()))
+      .isEmpty();
+  }
+
+  @Test
+  void givenPersonId_whenNoDataInTable_shouldReturnEmpty() {
+    fail("add tests");
     assertThat(finalePlacesRepository.findByGameId(UUID.randomUUID()))
       .isEmpty();
   }
