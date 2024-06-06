@@ -43,6 +43,8 @@ dependencies {
     testCompileOnly libs.lombok
     testAnnotationProcessor libs.lombok
     testAnnotationProcessor libs.mapstructProcessor
+    testImplementation libs.mockitoCore
+    testImplementation libs.mockitoJupiter
     testImplementation libs.assertjCore
 
     testFixturesCompileOnly libs.lombok

@@ -1,34 +1,31 @@
 package by.mrrockka.service.calculation;
 
-import by.mrrockka.domain.game.BountyGame;
-import by.mrrockka.domain.game.CashGame;
 import by.mrrockka.domain.game.Game;
-import by.mrrockka.domain.game.TournamentGame;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
+
+import java.util.regex.Pattern;
 
 @Component
 @RequiredArgsConstructor
 public class CalculationStrategyFactory {
 
-  private final BountyCalculationStrategy bountyCalculationStrategy;
-  private final CashCalculationStrategy cashCalculationStrategy;
-  private final TournamentCalculationStrategy tournamentCalculationStrategy;
+  private final ApplicationContext applicationContext;
 
-  public CalculationStrategy getStrategy(final Game game) {
-    if (game.isType(BountyGame.class)) {
-      return bountyCalculationStrategy;
+  public CalculationStrategy getStrategy(@NonNull final Game game) {
+    final var beanName = StringUtils.uncapitalize(Pattern.compile(Game.class.getSimpleName())
+                                                    .matcher(game.getClass().getSimpleName())
+                                                    .replaceFirst(CalculationStrategy.class.getSimpleName()));
+
+    try {
+      return applicationContext.getBean(beanName, CalculationStrategy.class);
+    } catch (final NoSuchBeanDefinitionException beanDefinitionException) {
+      throw new NoStrategyFoundToCalculateGameException(StringUtils.capitalize(beanName), game);
     }
-
-    if (game.isType(TournamentGame.class)) {
-      return tournamentCalculationStrategy;
-    }
-
-    if (game.isType(CashGame.class)) {
-      return cashCalculationStrategy;
-    }
-
-    throw new NoStrategyFoundToCalculateGameException(game);
   }
 
 }

@@ -39,10 +39,11 @@ public class TelegramCommandProcessorFactory {
     }
 
     final var interfaceClass = TelegramCommandProcessor.class;
+//    todo: cover with try-catch block
     return applicationContext.getBean(assembleProcessorName(commandName, interfaceClass), interfaceClass);
   }
 
-  private String assembleProcessorName(final String commandName, final Class<?> interfaceClass) {
+  private String assembleProcessorName(final String commandName, final Class<TelegramCommandProcessor> interfaceClass) {
     final var processorNamePrefix = Arrays.stream(commandName.split("_"))
       .map(StringUtils::capitalize)
       .reduce("%s%s"::formatted)
