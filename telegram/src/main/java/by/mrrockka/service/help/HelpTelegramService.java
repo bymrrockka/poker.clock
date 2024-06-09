@@ -21,6 +21,7 @@ public class HelpTelegramService {
   private final MessageMetadataMapper messageMetadataMapper;
   private final HelpMessageMapper helpMessageMapper;
 
+  @Deprecated(forRemoval = true)
   public BotApiMethodMessage sendHelpInformation(final Update update) {
     final var messageMetadata = messageMetadataMapper.map(update.getMessage());
     final var description = helpMessageMapper.map(messageMetadata)

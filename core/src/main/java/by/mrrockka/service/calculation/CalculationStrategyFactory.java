@@ -17,9 +17,10 @@ public class CalculationStrategyFactory {
   private final ApplicationContext applicationContext;
 
   public CalculationStrategy getStrategy(@NonNull final Game game) {
-    final var beanName = StringUtils.uncapitalize(Pattern.compile(Game.class.getSimpleName())
-                                                    .matcher(game.getClass().getSimpleName())
-                                                    .replaceFirst(CalculationStrategy.class.getSimpleName()));
+    final var beanName = StringUtils.uncapitalize(
+      Pattern.compile(Game.class.getSimpleName())
+        .matcher(game.getClass().getSimpleName())
+        .replaceFirst(CalculationStrategy.class.getSimpleName()));
 
     try {
       return applicationContext.getBean(beanName, CalculationStrategy.class);

@@ -17,6 +17,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -59,6 +60,8 @@ class HelpTelegramServiceTest {
       () -> assertThat(actual.getText()).isEqualTo(COMMAND_DETAILS),
       () -> assertThat(actual.getChatId()).isEqualTo(metadata.chatId().toString())
     );
+
+    fail("Refactor tests");
   }
 
   @Test
@@ -82,5 +85,7 @@ class HelpTelegramServiceTest {
       () -> assertThat(actual.getText()).isEqualTo(COMMAND_DETAILS),
       () -> assertThat(actual.getChatId()).isEqualTo(metadata.chatId().toString())
     );
+
+    fail("Refactor tests");
   }
 }

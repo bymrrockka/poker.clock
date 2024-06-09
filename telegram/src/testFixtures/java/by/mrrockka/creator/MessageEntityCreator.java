@@ -17,6 +17,10 @@ public final class MessageEntityCreator {
     return domainEntity(builder -> builder.type(MessageEntityType.MENTION).text(text));
   }
 
+  public static MessageEntity domainCommand(final String text) {
+    return domainEntity(builder -> builder.type(MessageEntityType.BOT_COMMAND).text(text));
+  }
+
   public static MessageEntity domainEntity() {
     return domainEntity(null);
   }
