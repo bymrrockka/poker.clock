@@ -29,11 +29,11 @@ class PlayerInGameStatisticsTelegramService {
     final var nickname = statisticsCommand.metadata().optFromNickname()
       .orElseThrow(PlayerHasNoNicknameException::new);
 
-    final var playerInGameDetails = playerInGameStatisticsService.retrieveStatistics(game, nickname);
+    final var playerInGameStatistics = playerInGameStatisticsService.retrieveStatistics(game, nickname);
 
     return SendMessage.builder()
       .chatId(messageMetadata.chatId())
-      .text(playerInGameStatisticsResponseBuilder.response(playerInGameDetails))
+      .text(playerInGameStatisticsResponseBuilder.response(playerInGameStatistics))
       .replyToMessageId(telegramGame.messageMetadata().id())
       .build();
   }

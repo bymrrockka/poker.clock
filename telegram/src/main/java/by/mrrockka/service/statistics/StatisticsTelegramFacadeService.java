@@ -17,13 +17,13 @@ public class StatisticsTelegramFacadeService {
   private final PersonMentionsValidator personMentionsValidator;
   private final PlayerInGameStatisticsTelegramService playerInGameStatisticsTelegramService;
   private final GlobalPersonStatisticsTelegramService globalPersonStatisticsTelegramService;
-  private final GameStatisticsService gameStatisticsService;
+  private final GameStatisticsTelegramService gameStatisticsTelegramService;
 
   public BotApiMethodMessage retrieveStatistics(final MessageMetadata messageMetadata) {
     personMentionsValidator.validateMessageHasUserTextMention(messageMetadata);
     final var statistics = statisticsMessageMapper.map(messageMetadata);
     return switch (statistics.type()) {
-      case GAME -> gameStatisticsService.retrieveStatistics(statistics);
+      case GAME -> gameStatisticsTelegramService.retrieveStatistics(statistics);
       case PLAYER_IN_GAME -> playerInGameStatisticsTelegramService.retrieveStatistics(statistics);
       case PERSON_GLOBAL -> globalPersonStatisticsTelegramService.retrieveStatistics(statistics);
     };

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static java.util.Objects.nonNull;
@@ -17,7 +18,7 @@ public final class WithdrawalsCreator {
   public static List<PersonWithdrawals> withdrawalsList(final int size, BigDecimal buyin) {
     return IntStream.range(0, size)
       .mapToObj(i -> withdrawals(builder -> builder.withdrawals(List.of(buyin))))
-      .toList();
+      .collect(Collectors.toList());
   }
 
   public static PersonWithdrawals withdrawals() {

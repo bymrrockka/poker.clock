@@ -27,7 +27,7 @@ class StatisticsTelegramServiceTest {
   @Mock
   private GlobalPersonStatisticsTelegramService globalPersonStatisticsTelegramService;
   @Mock
-  private GameStatisticsService gameStatisticsService;
+  private GameStatisticsTelegramService gameStatisticsTelegramService;
   @InjectMocks
   private StatisticsTelegramFacadeService statisticsService;
 
@@ -46,12 +46,12 @@ class StatisticsTelegramServiceTest {
       .build();
 
     when(statisticsMessageMapper.map(metadata)).thenReturn(statisticsCommand);
-    when(gameStatisticsService.retrieveStatistics(statisticsCommand)).thenReturn(expected);
+    when(gameStatisticsTelegramService.retrieveStatistics(statisticsCommand)).thenReturn(expected);
 
     assertThat(statisticsService.retrieveStatistics(metadata)).isEqualTo(expected);
     verify(personMentionsValidator, only()).validateMessageHasUserTextMention(metadata);
     verifyNoInteractions(playerInGameStatisticsTelegramService, globalPersonStatisticsTelegramService);
-    verifyNoMoreInteractions(statisticsMessageMapper, gameStatisticsService);
+    verifyNoMoreInteractions(statisticsMessageMapper, gameStatisticsTelegramService);
   }
 
   @Test
@@ -73,7 +73,7 @@ class StatisticsTelegramServiceTest {
 
     assertThat(statisticsService.retrieveStatistics(metadata)).isEqualTo(expected);
     verify(personMentionsValidator, only()).validateMessageHasUserTextMention(metadata);
-    verifyNoInteractions(gameStatisticsService, globalPersonStatisticsTelegramService);
+    verifyNoInteractions(gameStatisticsTelegramService, globalPersonStatisticsTelegramService);
     verifyNoMoreInteractions(statisticsMessageMapper, playerInGameStatisticsTelegramService);
   }
 
@@ -96,7 +96,7 @@ class StatisticsTelegramServiceTest {
 
     assertThat(statisticsService.retrieveStatistics(metadata)).isEqualTo(expected);
     verify(personMentionsValidator, only()).validateMessageHasUserTextMention(metadata);
-    verifyNoInteractions(gameStatisticsService, playerInGameStatisticsTelegramService);
+    verifyNoInteractions(gameStatisticsTelegramService, playerInGameStatisticsTelegramService);
     verifyNoMoreInteractions(statisticsMessageMapper, globalPersonStatisticsTelegramService);
   }
 }

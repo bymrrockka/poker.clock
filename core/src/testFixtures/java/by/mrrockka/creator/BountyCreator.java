@@ -5,7 +5,10 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static java.util.Objects.nonNull;
 
@@ -13,6 +16,12 @@ import static java.util.Objects.nonNull;
 public final class BountyCreator {
 
   public static final BigDecimal BOUNTY_AMOUNT = BigDecimal.ONE;
+
+  public static List<Bounty> bountiesList(final int size, final BigDecimal bounty) {
+    return IntStream.range(0, size)
+      .mapToObj(i -> bounty(builder -> builder.amount(bounty)))
+      .collect(Collectors.toList());
+  }
 
   public static Bounty bounty() {
     return bounty(null);

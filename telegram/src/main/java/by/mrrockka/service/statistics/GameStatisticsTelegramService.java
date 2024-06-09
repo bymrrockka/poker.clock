@@ -11,7 +11,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 @Component
 @RequiredArgsConstructor
-class GameStatisticsService {
+class GameStatisticsTelegramService {
 
   private final GameStatisticsResponseBuilder gameStatisticsResponseBuilder;
   private final GameTelegramFacadeService gameTelegramFacadeService;

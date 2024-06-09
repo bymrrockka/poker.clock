@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest
 @ActiveProfiles("repository")
-public class GameStatisticsServiceTest {
+public class GameStatisticsTelegramServiceTest {
 
   private static final Long CHAT_ID = 123L;
   private static final Integer TOURNAMENT_GAME_REPLY_TO_ID = 3;
@@ -30,7 +30,7 @@ public class GameStatisticsServiceTest {
   private static final Integer BOUNTY_GAME_REPLY_TO_ID = 6;
 
   @Autowired
-  private GameStatisticsService gameStatisticsService;
+  private GameStatisticsTelegramService gameStatisticsTelegramService;
 
   private static Stream<Arguments> gameArguments() {
     return Stream.of(
@@ -80,7 +80,7 @@ public class GameStatisticsServiceTest {
       .metadata(metadata)
       .build();
 
-    final var response = (SendMessage) gameStatisticsService.retrieveStatistics(statisticsCommand);
+    final var response = (SendMessage) gameStatisticsTelegramService.retrieveStatistics(statisticsCommand);
 
     assertAll(
       () -> Assertions.assertThat(response).isNotNull(),

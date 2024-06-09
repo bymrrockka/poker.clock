@@ -25,7 +25,8 @@ public class PlayerInGameStatisticsService {
   }
 
   private BigDecimal calculateMoneyInGame(final Game game, final String nickname) {
-    final var personEntriesTotal = getPersonEntries(game, nickname).total();
+    final var personEntries = getPersonEntries(game, nickname);
+    final var personEntriesTotal = personEntries.total();
 
     if (game.isType(CashGame.class)) {
       final var personWithdrawalsTotal = getPersonWithdrawals(game, nickname)
@@ -38,7 +39,9 @@ public class PlayerInGameStatisticsService {
       final var personBountiesTotal = getPersonBounties(game, nickname)
         .map(PersonBounties::totalTaken)
         .orElse(BigDecimal.ZERO);
-      return personEntriesTotal.multiply(BigDecimal.valueOf(2)).subtract(personBountiesTotal);
+      final var bountyTotal = game.asType(BountyGame.class).getBountyAmount()
+        .multiply(BigDecimal.valueOf(personEntries.entries().size()));
+      return personEntriesTotal.add(bountyTotal).subtract(personBountiesTotal);
     }
 
     return personEntriesTotal;
@@ -75,7 +78,7 @@ public class PlayerInGameStatisticsService {
     return game.getEntries().stream()
       .filter(personEntries -> personEntries.person().getNickname().equals(nickname))
       .findFirst()
-      .orElseThrow();
+      .orElseThrow(() -> new PersonIsNotInGameException(nickname));
   }
 
 }
