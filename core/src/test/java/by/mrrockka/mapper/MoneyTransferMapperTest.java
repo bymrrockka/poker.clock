@@ -20,7 +20,7 @@ class MoneyTransferMapperTest {
   @Test
   void givenEntity_whenMap_thenShouldReturnDomain() {
     final var actual = MoneyTransferCreator.entity();
-    final var expected = MoneyTransferCreator.domain();
+    final var expected = MoneyTransferCreator.equal();
 
     assertThat(moneyTransferMapper.map(actual)).isEqualTo(expected);
   }

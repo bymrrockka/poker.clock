@@ -38,8 +38,16 @@ public final class MoneyTransferCreator {
     return moneyTransferEntityBuilder.build();
   }
 
-  public static MoneyTransfer domain() {
-    return domain(null);
+  public static MoneyTransfer debit() {
+    return domain(builder -> builder.type(TransferType.DEBIT));
+  }
+
+  public static MoneyTransfer credit() {
+    return domain(builder -> builder.type(TransferType.CREDIT));
+  }
+
+  public static MoneyTransfer equal() {
+    return domain(builder -> builder.type(TransferType.EQUAL));
   }
 
   public static MoneyTransfer domain(final Consumer<MoneyTransfer.MoneyTransferBuilder> builderConsumer) {

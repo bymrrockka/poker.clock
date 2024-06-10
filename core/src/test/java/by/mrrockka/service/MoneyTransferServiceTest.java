@@ -47,7 +47,7 @@ class MoneyTransferServiceTest {
   void givenPersonAndAssociatedTransfers_whenGetByPersonExecuted_thenShouldReturnMoneyTransferForPerson() {
     final var person = PersonCreator.domain();
     final var entity = MoneyTransferCreator.entity();
-    final var domain = MoneyTransferCreator.domain();
+    final var domain = MoneyTransferCreator.equal();
     final var expected = List.of(entity);
 
     when(moneyTransferRepository.getForPerson(person.getId())).thenReturn(expected);
