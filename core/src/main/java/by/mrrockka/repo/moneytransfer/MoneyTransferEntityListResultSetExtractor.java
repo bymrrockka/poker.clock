@@ -19,8 +19,7 @@ class MoneyTransferEntityListResultSetExtractor implements ResultSetExtractor<Li
   @Override
   public List<MoneyTransferEntity> extractData(final ResultSet rs) throws SQLException, DataAccessException {
     final List<MoneyTransferEntity> entriesEntities = new ArrayList<>();
-    final var hasNext = rs.next();
-    while (hasNext && !rs.isAfterLast()) {
+    while (rs.next()) {
       entriesEntities.add(extractEntity(rs));
     }
     return entriesEntities;
