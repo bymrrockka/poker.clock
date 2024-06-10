@@ -9,10 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
 
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest(classes = IntegrationTestConfiguration.class)
@@ -23,7 +21,7 @@ class PersonRepositoryTest {
 
   @Test
   void givenPersonEntity_whenSave_thenShouldBeAbleToGet() {
-    final var expected = PersonCreator.entity();
+    final var expected = PersonCreator.entityRandom();
 
     personRepository.save(expected);
 
@@ -32,18 +30,16 @@ class PersonRepositoryTest {
 
   @Test
   void givenNickname_whenGetByNicknameCalled_thenShouldReturnPersonEntity() {
-    fail("add tests");
-
-    final var expected = PersonCreator.entity();
+    final var expected = PersonCreator.entityRandom();
 
     personRepository.save(expected);
 
-    assertThat(personRepository.findById(expected.getId())).isEqualTo(expected);
+    assertThat(personRepository.findByNickname(expected.getNickname())).isEqualTo(expected);
   }
 
   @Test
   void givenPersonEntityList_whenSave_thenShouldBeAbleToGet() {
-    final var expected = List.of(PersonCreator.entity(builder -> builder.id(UUID.randomUUID())));
+    final var expected = List.of(PersonCreator.entityRandom());
 
     personRepository.saveAll(expected);
 

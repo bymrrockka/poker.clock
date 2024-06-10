@@ -3,7 +3,6 @@ package by.mrrockka.repo.finalplaces;
 import by.mrrockka.IntegrationTestConfiguration;
 import by.mrrockka.config.PostgreSQLExtension;
 import by.mrrockka.creator.PersonCreator;
-import by.mrrockka.repo.person.PersonEntity;
 import by.mrrockka.repo.person.PersonRepository;
 import org.assertj.core.data.MapEntry;
 import org.junit.jupiter.api.Test;
@@ -11,13 +10,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Fail.fail;
 
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest(classes = IntegrationTestConfiguration.class)
@@ -27,10 +25,6 @@ class FinalePlacesRepositoryTest {
     1, UUID.fromString("13b4108e-2dfa-4fea-8b7b-277e1c87d2d8"),
     2, UUID.fromString("72775968-3da6-469e-8a61-60104eacdb3a")
   );
-
-  private final Consumer<PersonEntity.PersonEntityBuilder> personBuilder =
-    builder -> builder
-      .id(UUID.randomUUID());
 
   @Autowired
   FinalePlacesRepository finalePlacesRepository;
@@ -58,13 +52,13 @@ class FinalePlacesRepositoryTest {
   @Test
   void givenFinalePlaces_whenStored_shouldBeAbleToGetByGameId() {
     final var places = Map.of(
-      1, PersonCreator.entity(personBuilder),
-      2, PersonCreator.entity(personBuilder),
-      3, PersonCreator.entity(personBuilder),
-      4, PersonCreator.entity(personBuilder),
-      5, PersonCreator.entity(personBuilder),
-      6, PersonCreator.entity(personBuilder),
-      7, PersonCreator.entity(personBuilder)
+      1, PersonCreator.entityRandom(),
+      2, PersonCreator.entityRandom(),
+      3, PersonCreator.entityRandom(),
+      4, PersonCreator.entityRandom(),
+      5, PersonCreator.entityRandom(),
+      6, PersonCreator.entityRandom(),
+      7, PersonCreator.entityRandom()
     );
 
     personRepository.saveAll(places.values().stream().toList());
@@ -89,15 +83,28 @@ class FinalePlacesRepositoryTest {
 
   @Test
   void givenPersonId_whenDataInTable_shouldReturnAllFinalePlaces() {
-    fail("add tests");
-    assertThat(finalePlacesRepository.findByGameId(UUID.randomUUID()))
-      .isEmpty();
+    final var personEntity = PersonCreator.entity(
+      builder -> builder.id(UUID.fromString("13b4108e-2dfa-4fea-8b7b-277e1c87d2d8"))
+        .firstname(null)
+        .lastname(null)
+        .nickname(null));
+    final var gameIds = List.of(UUID.fromString("fa3d03c4-f411-4852-810f-c0cc2f5b8c84"),
+                                UUID.fromString("b759ac52-1496-463f-b0d8-982deeac085c"));
+
+    final var places = Map.of(1, personEntity);
+    final var expected = gameIds.stream()
+      .map(gameId -> FinalePlacesEntity.builder()
+        .places(places)
+        .gameId(gameId)
+        .build())
+      .toList();
+
+    assertThat(finalePlacesRepository.findAllByPersonId(personEntity.getId())).isEqualTo(expected);
   }
 
   @Test
   void givenPersonId_whenNoDataInTable_shouldReturnEmpty() {
-    fail("add tests");
-    assertThat(finalePlacesRepository.findByGameId(UUID.randomUUID()))
+    assertThat(finalePlacesRepository.findAllByPersonId(UUID.randomUUID()))
       .isEmpty();
   }
 }

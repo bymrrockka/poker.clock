@@ -21,6 +21,14 @@ public final class PersonCreator {
   public static final String LASTNAME = FAKER.name().lastName();
   public static final String NICKNAME = FAKER.name().username().replaceAll("\\.", "_");
 
+  public static PersonEntity entityRandom() {
+    return entity(builder -> builder
+      .id(UUID.randomUUID())
+      .firstname(FAKER.name().firstName())
+      .lastname(FAKER.name().lastName())
+      .nickname(FAKER.name().username().replaceAll("\\.", "_")));
+  }
+
   public static PersonEntity entity() {
     return entity(null);
   }
