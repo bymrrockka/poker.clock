@@ -9,9 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.Instant;
+import java.util.UUID;
+import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
 
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest(classes = IntegrationTestConfiguration.class)
@@ -30,8 +31,11 @@ class GameRepositoryTest {
 
   @Test
   void givenIds_whenGetAllByIdsExecuted_thenShouldReturnRelatedGames() {
-    fail("add tests");
+    final var expected = IntStream.range(0, 3)
+      .mapToObj(i -> GameCreator.entity(builder -> builder.id(UUID.randomUUID())))
+      .toList();
+    expected.forEach(gameEntity -> gameRepository.save(gameEntity, Instant.now()));
+
+    assertThat(gameRepository.findAllByIds(expected.stream().map(GameEntity::id).toList())).isEqualTo(expected);
   }
-
-
 }
