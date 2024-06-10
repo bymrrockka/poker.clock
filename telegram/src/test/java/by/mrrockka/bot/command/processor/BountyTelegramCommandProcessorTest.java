@@ -23,7 +23,7 @@ class BountyTelegramCommandProcessorTest {
   @Test
   void givenMessageMetadata_whenProcessorExecuted_thenShouldReturnBotMessage() {
     final var metadata = MessageMetadataCreator.domain();
-    final var expected = SendMessageCreator.model();
+    final var expected = SendMessageCreator.api();
 
     when(bountyTelegramService.storeBounty(metadata)).thenReturn(expected);
     assertThat(bountyTelegramCommandProcessor.process(metadata)).isEqualTo(expected);

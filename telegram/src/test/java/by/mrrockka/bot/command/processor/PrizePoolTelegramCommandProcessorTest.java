@@ -22,7 +22,7 @@ class PrizePoolTelegramCommandProcessorTest {
   @Test
   void givenMessageMetadata_whenProcessorExecuted_thenShouldReturnBotMessage() {
     final var metadata = MessageMetadataCreator.domain();
-    final var expected = SendMessageCreator.model();
+    final var expected = SendMessageCreator.api();
 
     when(prizePoolTelegramService.storePrizePool(metadata)).thenReturn(expected);
     assertThat(prizePoolTelegramCommandProcessor.process(metadata)).isEqualTo(expected);

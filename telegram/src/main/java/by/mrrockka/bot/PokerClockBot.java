@@ -14,8 +14,6 @@ import org.telegram.telegrambots.meta.generics.BotOptions;
 import org.telegram.telegrambots.meta.generics.LongPollingBot;
 import org.telegram.telegrambots.util.WebhookUtils;
 
-import java.util.Optional;
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -41,8 +39,7 @@ public class PokerClockBot implements LongPollingBot {
                   .formatted(messageMetadata.text(), messageMetadata.chatId()));
 
       final var commandProcessor = telegramCommandProcessorFactory.provideProcessor(messageMetadata);
-      Optional.ofNullable(commandProcessor.process(messageMetadata))
-        .ifPresent(this::executeMessage);
+      executeMessage(commandProcessor.process(messageMetadata));
     }
   }
 

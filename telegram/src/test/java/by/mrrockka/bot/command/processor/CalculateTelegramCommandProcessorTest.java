@@ -23,7 +23,7 @@ class CalculateTelegramCommandProcessorTest {
   @Test
   void givenMessageMetadata_whenProcessorExecuted_thenShouldReturnBotMessage() {
     final var metadata = MessageMetadataCreator.domain();
-    final var expected = SendMessageCreator.model();
+    final var expected = SendMessageCreator.api();
 
     when(calculationTelegramService.calculatePayouts(metadata)).thenReturn(expected);
     assertThat(calculateTelegramCommand.process(metadata)).isEqualTo(expected);

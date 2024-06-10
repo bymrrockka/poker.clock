@@ -15,11 +15,11 @@ public final class SendMessageCreator {
   public static final Long CHAT_ID = 1 + Double.valueOf(Math.random() * 10).longValue();
   public static final String TEXT = FakerProvider.faker().backToTheFuture().quote();
 
-  public static SendMessage model() {
-    return model(null);
+  public static SendMessage api() {
+    return api(null);
   }
 
-  public static SendMessage model(final Consumer<SendMessage.SendMessageBuilder> sendMessageBuilderConsumer) {
+  public static SendMessage api(final Consumer<SendMessage.SendMessageBuilder> sendMessageBuilderConsumer) {
     final var sendMessageBuilder = SendMessage.builder()
       .chatId(CHAT_ID)
       .text(TEXT);

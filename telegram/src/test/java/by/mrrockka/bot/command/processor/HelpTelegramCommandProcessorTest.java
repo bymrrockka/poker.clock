@@ -22,7 +22,7 @@ class HelpTelegramCommandProcessorTest {
   @Test
   void givenMessageMetadata_whenProcessorExecuted_thenShouldReturnBotMessage() {
     final var metadata = MessageMetadataCreator.domain();
-    final var expected = SendMessageCreator.model();
+    final var expected = SendMessageCreator.api();
 
     when(helpTelegramService.sendHelpInformation(metadata)).thenReturn(expected);
     assertThat(helpTelegramCommandProcessor.process(metadata)).isEqualTo(expected);

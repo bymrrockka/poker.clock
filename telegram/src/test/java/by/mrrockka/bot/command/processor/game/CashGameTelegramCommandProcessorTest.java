@@ -22,7 +22,7 @@ class CashGameTelegramCommandProcessorTest {
   @Test
   void givenMessageMetadata_whenProcessorExecuted_thenShouldReturnBotMessage() {
     final var metadata = MessageMetadataCreator.domain();
-    final var expected = SendMessageCreator.model();
+    final var expected = SendMessageCreator.api();
 
     when(gameTelegramFacadeService.storeCashGame(metadata)).thenReturn(expected);
     assertThat(cashGameTelegramCommandProcessor.process(metadata)).isEqualTo(expected);
