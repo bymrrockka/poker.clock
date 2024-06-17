@@ -54,6 +54,21 @@ public class PersonRepository {
     return jdbcTemplate.queryForObject(FIND_BY_ID_SQL, params, personEntityRowMapper);
   }
 
+  private static final String FIND_BY_NICKNAME_SQL = """
+      SELECT
+        id, first_name, last_name, nick_name
+      FROM person
+      WHERE
+        nick_name = :nick_name;
+    """;
+
+  public PersonEntity findByNickname(final String nickname) {
+    final var params = new MapSqlParameterSource()
+      .addValue(NICK_NAME, nickname);
+
+    return jdbcTemplate.queryForObject(FIND_BY_NICKNAME_SQL, params, personEntityRowMapper);
+  }
+
   private static final String FIND_ALL_BY_IDS_SQL = """
       SELECT
         id, first_name, last_name, nick_name

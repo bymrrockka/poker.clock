@@ -1,14 +1,12 @@
 package by.mrrockka.repo.game;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
 import java.util.Optional;
-import java.util.UUID;
 
 import static by.mrrockka.repo.game.TelegramGameColumnNames.*;
 
@@ -69,10 +67,6 @@ public class TelegramGameRepository {
       .addValue(CHAT_ID, chatId);
 
     return jdbcTemplate.query(FIND_LATEST_BY_CHAT_ID_SQL, params, telegramGameEntityResultSetExtractor);
-  }
-
-  private RowMapper<Optional<UUID>> mapOptionalUuid() {
-    return (rs, rowNum) -> Optional.ofNullable(rs.getObject(1, UUID.class));
   }
 
 }

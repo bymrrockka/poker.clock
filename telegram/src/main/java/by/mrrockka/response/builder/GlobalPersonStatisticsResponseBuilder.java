@@ -13,7 +13,7 @@ public class GlobalPersonStatisticsResponseBuilder {
 
     strBuilder
       .append(AT)
-      .append(details.nickname())
+      .append(details.person().getNickname())
       .append(" global statistics:");
 
     strBuilder
@@ -30,15 +30,31 @@ public class GlobalPersonStatisticsResponseBuilder {
       .append(MINUS.stripLeading())
       .append("total money in")
       .append(POINTER)
-      .append(details.moneyIn());
+      .append(details.totalMoneyIn());
 
     strBuilder
       .append(NL)
       .append(TAB)
       .append(MINUS.stripLeading())
-      .append("total money out")
+      .append("total money won")
       .append(POINTER)
-      .append(details.totalMoneyOut());
+      .append(details.totalMoneyWon());
+
+    strBuilder
+      .append(NL)
+      .append(TAB)
+      .append(MINUS.stripLeading())
+      .append("total money lose")
+      .append(POINTER)
+      .append(details.totalMoneyWon());
+
+    strBuilder
+      .append(NL)
+      .append(TAB)
+      .append(MINUS.stripLeading())
+      .append("won to lose ratio")
+      .append(POINTER)
+      .append(details.wonToLoseRatio());
 
     strBuilder
       .append(NL)

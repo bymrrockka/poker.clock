@@ -7,6 +7,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -20,6 +21,12 @@ public class FinalePlacesService {
     return finalePlacesRepository.findByGameId(gameId)
       .map(finalePlacesMapper::toDomain)
       .orElse(null);
+  }
+
+  public List<FinalePlaces> getAllByPersonId(@NonNull final UUID personId) {
+    return finalePlacesRepository.findAllByPersonId(personId).stream()
+      .map(finalePlacesMapper::toDomain)
+      .toList();
   }
 
   public void store(@NonNull final UUID gameId, @NonNull final FinalePlaces finalePlaces) {

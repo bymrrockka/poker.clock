@@ -13,7 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -28,25 +30,43 @@ public class GameService {
   private final BountyService bountyService;
 
   public void storeTournamentGame(@NonNull final TournamentGame game) {
-    gameRepository.save(gameMapper.toEntity(game));
+    gameRepository.save(gameMapper.toEntity(game), Instant.now());
   }
 
   public void storeCashGame(@NonNull final CashGame game) {
-    gameRepository.save(gameMapper.toEntity(game));
+    gameRepository.save(gameMapper.toEntity(game), Instant.now());
   }
 
   public void storeBountyGame(@NonNull final BountyGame game) {
-    gameRepository.save(gameMapper.toEntity(game));
+    gameRepository.save(gameMapper.toEntity(game), Instant.now());
   }
 
-  //  todo: idea - inspect the repo for GameMetadata usage
   public Game retrieveGame(@NonNull final UUID gameId) {
     final var gameEntity = gameRepository.findById(gameId);
+    return assembleGame(gameEntity);
+  }
+
+  public List<Game> retrieveAllGames(@NonNull final List<UUID> gameIds) {
+    final var gameEntities = gameRepository.findAllByIds(gameIds);
+    return gameEntities.stream()
+      .map(this::assembleGame)
+      .toList();
+  }
+
+  private Game assembleGame(final GameEntity gameEntity) {
     return switch (gameEntity.gameType()) {
       case TOURNAMENT -> assembleTournamentGame(gameEntity);
       case CASH -> assembleCashGame(gameEntity);
       case BOUNTY -> assembleBountyGame(gameEntity);
     };
+  }
+
+  public void finishGame(@NonNull final Game game) {
+    gameRepository.finish(game.getId(), Instant.now());
+  }
+
+  public boolean doesGameHasUpdates(@NonNull final Game game) {
+    return Objects.isNull(game.getFinishedAt()) || gameRepository.hasUpdates(game.getId(), game.getFinishedAt());
   }
 
   private TournamentGame assembleTournamentGame(@NonNull final GameEntity gameEntity) {

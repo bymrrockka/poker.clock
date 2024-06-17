@@ -7,7 +7,6 @@ import by.mrrockka.domain.Person;
 import by.mrrockka.mapper.exception.InvalidMessageFormatException;
 import by.mrrockka.mapper.person.TelegramPersonMapper;
 import lombok.Builder;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -24,50 +23,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class EntryMessageMapperTest {
-  public static final String BOT_NAME = "pokerbot";
   private final TelegramPersonMapper personMapper = Mappers.getMapper(TelegramPersonMapper.class);
   private final EntryMessageMapper entryMessageMapper = new EntryMessageMapper(personMapper);
-
-  @BeforeEach
-  void setup() {
-    entryMessageMapper.setBotName(BOT_NAME);
-  }
-
-  private static Stream<Arguments> entryMessage() {
-    return Stream.of(
-      Arguments.of("/entry @kinger 60", BigDecimal.valueOf(60)),
-      Arguments.of("/entry @kinger", null)
-    );
-  }
-
-  @ParameterizedTest
-  @MethodSource("entryMessage")
-  void givenEntryMessage_whenMapAttempt_shouldParseToPair(final String command, final BigDecimal amount) {
-    final var actual = entryMessageMapper.map(command);
-    assertThat(actual.getKey()).isEqualTo("kinger");
-    if (nonNull(amount)) {
-      assertThat(actual.getValue()).contains(amount);
-    } else {
-      assertThat(actual.getValue()).isEmpty();
-    }
-  }
-
-
-  private static Stream<Arguments> invalidEntryMessage() {
-    return Stream.of(
-      Arguments.of("/entry 60 @kinger"),
-      Arguments.of("/entry@kinger"),
-      Arguments.of("/entry"),
-      Arguments.of("@kinger/entry")
-    );
-  }
-
-  @ParameterizedTest
-  @MethodSource("invalidEntryMessage")
-  void givenInvalidEntryMessage_whenMapAttempt_shouldThrowException(final String message) {
-    assertThatThrownBy(() -> entryMessageMapper.map(message))
-      .isInstanceOf(InvalidMessageFormatException.class);
-  }
 
   @Builder
   private record EntryArgument(MessageMetadata metadata, Set<String> nicknames, BigDecimal amount) {}
@@ -76,54 +33,31 @@ class EntryMessageMapperTest {
     return Stream.of(
       Arguments.of(
         EntryArgument.builder()
-          .metadata(MessageMetadataCreator.domain(metadata -> metadata.command("/entry @kinger 60")
+          .metadata(MessageMetadataCreator.domain(metadata -> metadata.text("/entry @kinger 60")
             .entities(List.of(MessageEntityCreator.domainMention("@kinger")))))
           .nicknames(Set.of("kinger"))
           .amount(BigDecimal.valueOf(60))
           .build()),
       Arguments.of(
         EntryArgument.builder()
-          .metadata(MessageMetadataCreator.domain(metadata -> metadata.command("/entry @kinger")
+          .metadata(MessageMetadataCreator.domain(metadata -> metadata.text("/entry @kinger")
             .entities(List.of(MessageEntityCreator.domainMention("@kinger")))))
           .nicknames(Set.of("kinger"))
           .amount(null)
           .build()),
       Arguments.of(
         EntryArgument.builder()
-          .metadata(MessageMetadataCreator.domain(metadata -> metadata.command("/entry @%s".formatted(BOT_NAME))
-            .entities(List.of(MessageEntityCreator.domainMention("@%s".formatted(BOT_NAME))))))
-          .nicknames(Set.of())
-          .amount(null)
-          .build()),
-      Arguments.of(
-        EntryArgument.builder()
           .metadata(
             MessageMetadataCreator.domain(
-              metadata -> metadata.command("/entry @kinger @asadf @asdfasdf @koomko @%s 60".formatted(BOT_NAME))
+              metadata -> metadata.text("/entry @kinger @asadf @asdfasdf @koomko 60")
                 .entities(List.of(
                   MessageEntityCreator.domainMention("@kinger"),
                   MessageEntityCreator.domainMention("@asadf"),
                   MessageEntityCreator.domainMention("@asdfasdf"),
-                  MessageEntityCreator.domainMention("@koomko"),
-                  MessageEntityCreator.domainMention("@%s".formatted(BOT_NAME))
+                  MessageEntityCreator.domainMention("@koomko")
                 ))))
           .nicknames(Set.of("kinger", "asadf", "asdfasdf", "koomko"))
           .amount(BigDecimal.valueOf(60))
-          .build()),
-      Arguments.of(
-        EntryArgument.builder()
-          .metadata(
-            MessageMetadataCreator.domain(
-              metadata -> metadata.command("/entry @kinger @asadf @asdfasdf @koomko @%s".formatted(BOT_NAME))
-                .entities(List.of(
-                  MessageEntityCreator.domainMention("@kinger"),
-                  MessageEntityCreator.domainMention("@asadf"),
-                  MessageEntityCreator.domainMention("@asdfasdf"),
-                  MessageEntityCreator.domainMention("@koomko"),
-                  MessageEntityCreator.domainMention("@%s".formatted(BOT_NAME))
-                ))))
-          .nicknames(Set.of("kinger", "asadf", "asdfasdf", "koomko"))
-          .amount(null)
           .build())
     );
   }
@@ -162,7 +96,7 @@ class EntryMessageMapperTest {
   @ParameterizedTest
   @MethodSource("invalidEntryWithMentionsMessage")
   void givenInvalidEntryMessageWithMentions_whenMapAttempt_shouldThrowException(final String message) {
-    final var metadata = MessageMetadataCreator.domain(builder -> builder.command(message));
+    final var metadata = MessageMetadataCreator.domain(builder -> builder.text(message));
 
     assertThatThrownBy(() -> entryMessageMapper.map(metadata))
       .isInstanceOf(InvalidMessageFormatException.class);

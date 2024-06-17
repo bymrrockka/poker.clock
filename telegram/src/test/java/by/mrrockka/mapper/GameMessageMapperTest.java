@@ -31,7 +31,7 @@ class GameMessageMapperTest {
         GameArgument.builder()
           .message("""
                      /tournament 
-                     buy-in: 30  
+                     buyin: 30  
                      stack: 30k 
                      bounty:30
                      players: 

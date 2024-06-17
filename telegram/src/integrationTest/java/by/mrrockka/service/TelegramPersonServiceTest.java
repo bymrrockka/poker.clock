@@ -1,7 +1,8 @@
 package by.mrrockka.service;
 
 import by.mrrockka.config.PostgreSQLExtension;
-import by.mrrockka.creator.*;
+import by.mrrockka.creator.MessageEntityCreator;
+import by.mrrockka.creator.MessageMetadataCreator;
 import by.mrrockka.domain.Person;
 import by.mrrockka.repo.person.PersonRepository;
 import by.mrrockka.repo.person.TelegramPersonEntity;
@@ -33,48 +34,42 @@ class TelegramPersonServiceTest {
   @Autowired
   private TelegramPersonRepository telegramPersonRepository;
 
-  private static Stream<Arguments> telegrams() {
+  private static Stream<Arguments> nicknames() {
     return Stream.of(
       Arguments.of(
         List.of("mrrocka", "andrei", "marks")
       ),
       Arguments.of(
-        List.of("mrrocka", "kinger", "queen", "me")
+        List.of("mrrocka", "kinger", "queen")
       )
     );
   }
 
   @ParameterizedTest
-  @MethodSource("telegrams")
-  void givenMessageWithTelegrams_whenAttemptToStoreAndSomeTelegramsExistsInDb_shouldStoreOnlyNewPersons(
+  @MethodSource("nicknames")
+  void givenMessageWithNicknames_whenAttemptToStoreAndSomeTelegramsExistsInDb_shouldStoreOnlyNewPersons(
     final List<String> args) {
-    final var telegrams = new ArrayList<>(args);
+    final var nicknames = new ArrayList<>(args);
 
-    final var text = telegrams.stream()
+    final var text = nicknames.stream()
       .map("@%s"::formatted)
       .reduce("%s\n%s"::formatted)
       .orElseThrow();
 
-    final var update = UpdateCreator.update(
-      MessageCreator.message(message -> {
-        message.setText(text);
-        message.setChat(ChatCreator.chat(CHAT_ID));
-        message.setEntities(
-          args.stream().filter(str -> !"me".equals(str)).map(
-            mention -> MessageEntityCreator.apiMention(text, mention)).toList());
-      })
+    final var messageMetadata = MessageMetadataCreator.domain(metadata -> metadata
+      .chatId(CHAT_ID)
+      .text(text)
+      .entities(args.stream()
+                  .map(MessageEntityCreator::domainMention)
+                  .toList())
     );
 
-    if (telegrams.contains("me")) {
-      telegrams.set(3, UserCreator.USER_NAME);
-    }
-
-    final var personIds = telegramPersonService.storePersons(update).stream()
+    final var personIds = telegramPersonService.storePersons(messageMetadata).stream()
       .map(Person::getId)
       .toList();
     assertThat(personRepository.findAllByIds(personIds)).hasSize(args.size());
 
-    final var actualIds = telegramPersonRepository.findAllByChatIdAndTelegrams(CHAT_ID, telegrams).stream()
+    final var actualIds = telegramPersonRepository.findAllByChatIdAndNicknames(CHAT_ID, nicknames).stream()
       .map(TelegramPersonEntity::getId)
       .toList();
 

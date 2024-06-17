@@ -2,8 +2,8 @@
 
 --changeset task#9:1
 --calculate cash tests
-insert into game (id, stack, buy_in, bounty, game_type)
-values  ('123934e5-2cf0-46c8-bc73-9a8ed6696e63', 1000, 30, 0, 'CASH');
+insert into game (id, stack, buy_in, bounty, game_type, created_at)
+values  ('123934e5-2cf0-46c8-bc73-9a8ed6696e63', 1000, 30, 0, 'CASH', NOW());
 
 insert into chat_games (game_id, chat_id, created_at, message_id)
 values  ('123934e5-2cf0-46c8-bc73-9a8ed6696e63', 123, NOW(), 4);
@@ -28,8 +28,8 @@ values  ('123934e5-2cf0-46c8-bc73-9a8ed6696e63', '13b4108e-2dfa-4fea-8b7b-277e1c
         ('123934e5-2cf0-46c8-bc73-9a8ed6696e63', '58ae9984-1ebc-4621-ba0e-a577c69283ef', 15, NOW());
 
 -- withdrawals test
-insert into game (id, stack, buy_in, bounty, game_type)
-values  ('51d973b6-cde3-4bbb-b67b-7555243dbc15', 1000, 60, 0, 'CASH');
+insert into game (id, stack, buy_in, bounty, game_type, created_at)
+values  ('51d973b6-cde3-4bbb-b67b-7555243dbc15', 1000, 60, 0, 'CASH', NOW());
 
 insert into chat_games (game_id, chat_id, created_at, message_id)
 values  ('51d973b6-cde3-4bbb-b67b-7555243dbc15', 123, NOW(), 5);

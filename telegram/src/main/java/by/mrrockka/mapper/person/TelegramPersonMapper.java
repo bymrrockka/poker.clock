@@ -1,8 +1,8 @@
 package by.mrrockka.mapper.person;
 
-import by.mrrockka.domain.MessageEntity;
 import by.mrrockka.domain.Person;
 import by.mrrockka.domain.TelegramPerson;
+import by.mrrockka.domain.mesageentity.MessageEntity;
 import by.mrrockka.mapper.PersonMapper;
 import by.mrrockka.repo.person.TelegramPersonEntity;
 import org.mapstruct.Mapper;
@@ -18,20 +18,20 @@ public interface TelegramPersonMapper {
 
   List<Person> mapToPersons(List<TelegramPerson> telegramPerson);
 
-  TelegramPerson mapToTelegram(TelegramPersonEntity entity);
+  TelegramPerson mapToTelegramPerson(TelegramPersonEntity entity);
 
-  List<TelegramPerson> mapToTelegrams(List<TelegramPersonEntity> entities);
+  List<TelegramPerson> mapToTelegramPersons(List<TelegramPersonEntity> entities);
 
   @Mapping(target = "id", expression = "java(UUID.randomUUID())")
   @Mapping(target = "chatId", source = "chatId")
   @Mapping(target = "nickname", expression = "java(entity.text().replaceAll(\"@\", \"\"))")
   @Mapping(target = "lastname", ignore = true)
   @Mapping(target = "firstname", ignore = true)
-  TelegramPerson mapMessageToTelegram(MessageEntity entity, long chatId);
+  TelegramPerson mapMessageToTelegramPerson(MessageEntity entity, long chatId);
 
-  default List<TelegramPerson> mapMessageToTelegrams(final List<MessageEntity> entities, final long chatId) {
+  default List<TelegramPerson> mapMessageToTelegramPersons(final List<MessageEntity> entities, final long chatId) {
     return entities.stream()
-      .map(entity -> mapMessageToTelegram(entity, chatId))
+      .map(entity -> mapMessageToTelegramPerson(entity, chatId))
       .toList();
   }
 }

@@ -1,7 +1,7 @@
 package by.mrrockka.creator;
 
-import by.mrrockka.domain.MessageEntity;
-import by.mrrockka.domain.MessageEntityType;
+import by.mrrockka.domain.mesageentity.MessageEntity;
+import by.mrrockka.domain.mesageentity.MessageEntityType;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.telegram.telegrambots.meta.api.objects.EntityType;
@@ -15,6 +15,10 @@ public final class MessageEntityCreator {
 
   public static MessageEntity domainMention(final String text) {
     return domainEntity(builder -> builder.type(MessageEntityType.MENTION).text(text));
+  }
+
+  public static MessageEntity domainCommand(final String text) {
+    return domainEntity(builder -> builder.type(MessageEntityType.BOT_COMMAND).text(text));
   }
 
   public static MessageEntity domainEntity() {

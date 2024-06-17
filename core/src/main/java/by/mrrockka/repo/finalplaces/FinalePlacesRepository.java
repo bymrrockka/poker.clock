@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.AbstractMap;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,6 +19,7 @@ public class FinalePlacesRepository {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
   private final FinalePlacesEntityResultSetExtractor finalePlacesEntityResultSetExtractor;
+  private final FinalePlacesEntityListResultSetExtractor finalePlacesEntityListResultSetExtractor;
 
   private static final String SAVE_SQL = """
     INSERT INTO finale_places
@@ -56,5 +58,21 @@ public class FinalePlacesRepository {
       .addValue(FinaleColumnNames.GAME_ID, gameId);
 
     return jdbcTemplate.query(FIND_BY_GAME_ID_SQL, params, finalePlacesEntityResultSetExtractor);
+  }
+
+  private static final String FIND_ALL_BY_PERSON_ID_SQL = """
+    SELECT
+      f.game_id, f.position, f.person_id
+    FROM
+     finale_places as f
+    WHERE
+      f.person_id = :person_id;
+    """;
+
+  public List<FinalePlacesEntity> findAllByPersonId(final UUID personId) {
+    final var params = new MapSqlParameterSource()
+      .addValue(FinaleColumnNames.PERSON_ID, personId);
+
+    return jdbcTemplate.query(FIND_ALL_BY_PERSON_ID_SQL, params, finalePlacesEntityListResultSetExtractor);
   }
 }

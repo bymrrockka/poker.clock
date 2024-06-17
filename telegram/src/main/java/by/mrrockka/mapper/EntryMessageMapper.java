@@ -1,15 +1,12 @@
 package by.mrrockka.mapper;
 
-import by.mrrockka.domain.MessageEntityType;
 import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.mapper.exception.InvalidMessageFormatException;
 import by.mrrockka.mapper.person.TelegramPersonMapper;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -27,10 +24,6 @@ import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 public class EntryMessageMapper {
 
   private final TelegramPersonMapper personMapper;
-
-  @Value("${telegrambots.nickname}")
-  @Setter
-  private String botName;
 
   private static final String ENTRY_REGEX = "^/entry(( %s)+)([ ]*)([\\d]*)$".formatted(TELEGRAM_NAME_REGEX);
   private static final int MENTION_GROUP = 3;
@@ -50,17 +43,15 @@ public class EntryMessageMapper {
   }
 
   public Map<TelegramPerson, Optional<BigDecimal>> map(final MessageMetadata metadata) {
-    final var command = metadata.command().toLowerCase().strip();
+    final var command = metadata.text().toLowerCase().strip();
     final var chatId = metadata.chatId();
     final var matcher = Pattern.compile(ENTRY_REGEX).matcher(command);
     if (matcher.matches()) {
       final var optAmount = Optional.ofNullable(defaultIfBlank(matcher.group(AMOUNT_GROUP), null))
         .map(BigDecimal::new);
 
-      return metadata.entities().stream()
-        .filter(entity -> entity.type().equals(MessageEntityType.MENTION))
-        .filter(entity -> !entity.text().contains(botName))
-        .map(entity -> personMapper.mapMessageToTelegram(entity, chatId))
+      return metadata.mentions()
+        .map(entity -> personMapper.mapMessageToTelegramPerson(entity, chatId))
         .collect(Collectors.toMap(Function.identity(), p -> optAmount));
     }
 

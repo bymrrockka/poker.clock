@@ -19,7 +19,7 @@ public class HelpMessageMapper {
   private static final String ERROR_MESSAGE = "/help (command)";
 
   public Optional<String> map(final MessageMetadata metadata) {
-    final var str = metadata.command().toLowerCase().strip();
+    final var str = metadata.text().toLowerCase().strip();
     final var matcher = Pattern.compile(HELP_REGEX).matcher(str);
     if (matcher.matches()) {
       final var command = matcher.group(COMMAND_GROUP);

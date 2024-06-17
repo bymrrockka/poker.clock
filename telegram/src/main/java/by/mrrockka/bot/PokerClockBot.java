@@ -1,22 +1,18 @@
 package by.mrrockka.bot;
 
-import by.mrrockka.bot.commands.TelegramCommand;
-import by.mrrockka.bot.properties.TelegramBotsProperties;
+import by.mrrockka.bot.command.TelegramCommandProcessorFactory;
+import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.service.UpdateBotCommandsService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import org.telegram.telegrambots.meta.generics.BotOptions;
 import org.telegram.telegrambots.meta.generics.LongPollingBot;
 import org.telegram.telegrambots.util.WebhookUtils;
-
-import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @Component
@@ -25,25 +21,25 @@ public class PokerClockBot implements LongPollingBot {
 
   private final PokerClockAbsSender pokerClockAbsSender;
   private final UpdateBotCommandsService updateBotCommandsService;
-  private final List<TelegramCommand> telegramCommands;
   private final TelegramBotsProperties telegramBotsProperties;
+  private final TelegramCommandProcessorFactory telegramCommandProcessorFactory;
+  private final MessageMetadataMapper messageMetadataMapper;
 
   @Override
   public void onUpdateReceived(final Update update) {
-//    todo: add logic to process edited message
-    if (isProcessable(update)) {
-      log.debug("Processing {\n%s\n} message from %s chat id.".
-                  formatted(update.getMessage().getText(), update.getMessage().getChatId()));
+    if (!telegramBotsProperties.isEnabled()) {
+      throw new BotIsNotEnabledException();
     }
 
+//    todo: add logic to process edited message
     if (isProcessable(update)) {
-      telegramCommands.stream()
-        .filter(telegramCommand -> telegramCommand.isApplicable(update))
-        .map(telegramCommand -> telegramCommand.process(update))
-        .filter(Objects::nonNull)
-        .findFirst()
-        .map(this::executeMessage)
-        .orElseThrow(NoRoutesFoundException::new);
+      final var messageMetadata = messageMetadataMapper.map(update.getMessage());
+
+      log.debug("Processing {\n%s\n} message from %s chat id."
+                  .formatted(messageMetadata.text(), messageMetadata.chatId()));
+
+      final var commandProcessor = telegramCommandProcessorFactory.provideProcessor(messageMetadata);
+      executeMessage(commandProcessor.process(messageMetadata));
     }
   }
 
@@ -53,8 +49,8 @@ public class PokerClockBot implements LongPollingBot {
   }
 
   @SneakyThrows
-  private Message executeMessage(final BotApiMethodMessage message) {
-    return pokerClockAbsSender.execute(message);
+  private void executeMessage(final BotApiMethodMessage message) {
+    pokerClockAbsSender.execute(message);
   }
 
   @Override

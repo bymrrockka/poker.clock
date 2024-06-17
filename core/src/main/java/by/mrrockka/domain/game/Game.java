@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,13 +21,15 @@ public abstract class Game {
   protected BigDecimal buyIn;
   @NonNull
   protected BigDecimal stack;
+  protected Instant finishedAt;
   protected List<PersonEntries> entries;
 
   protected Game(@NonNull final UUID id, @NonNull final BigDecimal buyIn,
-                 @NonNull final BigDecimal stack, final List<PersonEntries> entries) {
+                 @NonNull final BigDecimal stack, final Instant finishedAt, final List<PersonEntries> entries) {
     this.id = id;
     this.buyIn = buyIn;
     this.stack = stack;
+    this.finishedAt = finishedAt;
     this.entries = entries;
   }
 

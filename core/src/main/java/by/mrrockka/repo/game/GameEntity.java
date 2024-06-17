@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.NonNull;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.UUID;
 
 @Builder
@@ -17,6 +18,8 @@ public record GameEntity(
   @NonNull
   BigDecimal stack,
   @NonNull
-  BigDecimal bounty
+  BigDecimal bounty,
+
+  Instant finishedAt
 ) {
 }

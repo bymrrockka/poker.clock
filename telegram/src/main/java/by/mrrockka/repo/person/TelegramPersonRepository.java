@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static by.mrrockka.repo.person.TelegramPersonColumnNames.CHAT_ID;
 import static by.mrrockka.repo.person.TelegramPersonColumnNames.NICK_NAME;
@@ -41,7 +40,7 @@ public class TelegramPersonRepository {
     telegramPersons.forEach(this::save);
   }
 
-  private static final String FIND_BY_CHAT_ID_AND_TELEGRAMS_SQL = """
+  private static final String FIND_BY_CHAT_ID_AND_NICKNAMES_SQL = """
       SELECT
         cp.chat_id, p.id, p.first_name, p.last_name, p.nick_name
       FROM
@@ -53,15 +52,15 @@ public class TelegramPersonRepository {
         p.nick_name IN (:nick_name)
     """;
 
-  public List<TelegramPersonEntity> findAllByChatIdAndTelegrams(final Long chatId, final List<String> telegrams) {
+  public List<TelegramPersonEntity> findAllByChatIdAndNicknames(final Long chatId, final List<String> telegrams) {
     final var params = new MapSqlParameterSource()
       .addValue(CHAT_ID, chatId)
       .addValue(NICK_NAME, telegrams);
 
-    return jdbcTemplate.query(FIND_BY_CHAT_ID_AND_TELEGRAMS_SQL, params, telegramPersonEntityRowMapper);
+    return jdbcTemplate.query(FIND_BY_CHAT_ID_AND_NICKNAMES_SQL, params, telegramPersonEntityRowMapper);
   }
 
-  private static final String FIND_BY_TELEGRAM_SQL = """
+  private static final String FIND_BY_NICKNAME_SQL = """
       SELECT
         cp.chat_id, p.id, p.first_name, p.last_name, p.nick_name
       FROM
@@ -73,54 +72,14 @@ public class TelegramPersonRepository {
         nick_name = :nick_name
     """;
 
-  public Optional<TelegramPersonEntity> findByTelegram(final Long chatId, final String telegram) {
+  public Optional<TelegramPersonEntity> findByNickname(final Long chatId, final String nickname) {
     final var params = new MapSqlParameterSource()
-      .addValue(NICK_NAME, telegram)
+      .addValue(NICK_NAME, nickname)
       .addValue(CHAT_ID, chatId);
 
-    return jdbcTemplate.query(FIND_BY_TELEGRAM_SQL, params, rs -> rs.next()
+    return jdbcTemplate.query(FIND_BY_NICKNAME_SQL, params, rs -> rs.next()
       ? Optional.ofNullable(telegramPersonEntityRowMapper.mapRow(rs, rs.getRow()))
       : Optional.empty());
   }
-
-  private static final String FIND_ALL_BY_GAME_ID = """
-      SELECT
-        cp.chat_id, p.id, p.first_name, p.last_name, p.nick_name
-      FROM
-        entries as e
-      JOIN
-        person as p on p.id = e.person_id
-      JOIN
-        chat_persons as cp on cp.person_id = e.person_id
-      WHERE
-        e.game_id = :game_id
-    """;
-
-  public List<TelegramPersonEntity> findAllByGameId(final UUID gameId) {
-    final var params = new MapSqlParameterSource()
-      .addValue(TelegramPersonColumnNames.GAME_ID, gameId);
-
-    return jdbcTemplate.query(FIND_ALL_BY_GAME_ID, params, telegramPersonEntityRowMapper);
-  }
-
-  /* todo: move to service
-  private static final String FIND_ALL_BY_TELEGRAM_SQL = """
-      SELECT
-         id, chat_id, telegram, first_name, last_name
-      FROM person
-      WHERE
-        chat_id = :chat_id AND
-        telegram IN (:telegram)
-    """;
-
-  public List<PersonEntity> findAllByTelegrams(List<String> telegrams, String chatId) {
-    final var params = new MapSqlParameterSource()
-      .addValue(TELEGRAM, telegrams)
-      .addValue(CHAT_ID, chatId);
-
-    return jdbcTemplate.query(FIND_ALL_BY_TELEGRAM_SQL, params, personEntityRowMapper);
-  }
-*/
-
 
 }

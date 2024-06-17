@@ -1,7 +1,7 @@
 package by.mrrockka.service.game;
 
+import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.Person;
-import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.mapper.game.GameMessageMapper;
 import by.mrrockka.mapper.game.TelegramGameMapper;
 import by.mrrockka.repo.game.TelegramGameRepository;
@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Slf4j
 @Service
@@ -27,18 +26,13 @@ class CashGameService {
   private final GameService gameService;
   private final EntriesService entriesService;
   private final GameMessageMapper gameMessageMapper;
-  private final MessageMetadataMapper messageMetadataMapper;
   private final TelegramGameMapper telegramGameMapper;
 
   @Transactional(isolation = Isolation.READ_COMMITTED)
-  BotApiMethodMessage storeGame(final Update update) {
-    final var messageMetadata = messageMetadataMapper.map(update.getMessage());
+  BotApiMethodMessage storeGame(final MessageMetadata messageMetadata) {
 
-    log.debug("Processing {\n%s\n} message from %s chat id. Timestamp %s"
-                .formatted(messageMetadata.command(), messageMetadata.chatId(), messageMetadata.createdAt()));
-
-    final var game = gameMessageMapper.mapCash(messageMetadata.command());
-    final var personIds = telegramPersonService.storePersons(update).stream()
+    final var game = gameMessageMapper.mapCash(messageMetadata.text());
+    final var personIds = telegramPersonService.storePersons(messageMetadata).stream()
       .map(Person::getId)
       .toList();
     gameService.storeCashGame(game);
@@ -48,6 +42,7 @@ class CashGameService {
     return SendMessage.builder()
       .chatId(messageMetadata.chatId())
       .text("Cash game started.")
+//      todo: add table places randomizer
       .replyToMessageId(messageMetadata.id())
       .build();
   }

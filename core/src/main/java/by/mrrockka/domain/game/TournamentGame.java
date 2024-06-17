@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,8 +21,8 @@ public class TournamentGame extends Game {
   @Builder(builderMethodName = "tournamentBuilder")
   public TournamentGame(@NonNull final UUID id, @NonNull final BigDecimal buyIn,
                         @NonNull final BigDecimal stack, final List<PersonEntries> entries,
-                        final FinaleSummary finaleSummary) {
-    super(id, buyIn, stack, entries);
+                        final Instant finishedAt, final FinaleSummary finaleSummary) {
+    super(id, buyIn, stack, finishedAt, entries);
     this.finaleSummary = finaleSummary;
   }
 }

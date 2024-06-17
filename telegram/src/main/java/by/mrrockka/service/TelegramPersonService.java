@@ -1,7 +1,7 @@
 package by.mrrockka.service;
 
+import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.TelegramPerson;
-import by.mrrockka.mapper.MessageMetadataMapper;
 import by.mrrockka.mapper.person.PersonMessageMapper;
 import by.mrrockka.mapper.person.TelegramPersonMapper;
 import by.mrrockka.repo.person.TelegramPersonRepository;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,41 +24,40 @@ public class TelegramPersonService {
   private final TelegramPersonMapper telegramPersonMapper;
   private final PersonService personService;
   private final TelegramPersonRepository telegramPersonRepository;
-  private final MessageMetadataMapper messageMetadataMapper;
   private final PersonMentionsValidator personMentionsValidator;
 
-  @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED)
-  public List<TelegramPerson> storePersons(final Update update) {
-    final var messageMetadata = messageMetadataMapper.map(update.getMessage());
+  @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
+  public List<TelegramPerson> storePersons(final MessageMetadata messageMetadata) {
     personMentionsValidator.validateMessageMentions(messageMetadata, 2);
     final var persons = personMessageMapper.map(messageMetadata);
 
     return storeMissed(persons, messageMetadata.chatId());
   }
 
-  public TelegramPerson getByTelegramAndChatId(final String telegram, final Long chatId) {
-    return telegramPersonRepository.findByTelegram(chatId, telegram)
-      .map(telegramPersonMapper::mapToTelegram)
-      .orElseGet(() -> saveNew(telegram, chatId));
+  public TelegramPerson getByNicknameAndChatId(final String nickname, final Long chatId) {
+    return telegramPersonRepository.findByNickname(chatId, nickname)
+      .map(telegramPersonMapper::mapToTelegramPerson)
+      .orElseGet(() -> saveNew(nickname, chatId));
   }
 
-  public List<TelegramPerson> getAllByTelegramsAndChatId(final List<String> telegrams, final Long chatId) {
-    return telegramPersonMapper.mapToTelegrams(telegramPersonRepository.findAllByChatIdAndTelegrams(chatId, telegrams));
+  public List<TelegramPerson> getAllByNicknamesAndChatId(final List<String> telegrams, final Long chatId) {
+    return telegramPersonMapper.mapToTelegramPersons(
+      telegramPersonRepository.findAllByChatIdAndNicknames(chatId, telegrams));
   }
 
-  @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED)
+  @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
   public List<TelegramPerson> storeMissed(final List<TelegramPerson> persons, final Long chatId) {
 //    todo: call person repo to get person by nickname and store all using chat id
     final var stored = telegramPersonMapper
-      .mapToTelegrams(telegramPersonRepository.findAllByChatIdAndTelegrams(chatId, persons.stream().map(
+      .mapToTelegramPersons(telegramPersonRepository.findAllByChatIdAndNicknames(chatId, persons.stream().map(
         TelegramPerson::getNickname).toList()));
 
-    final var storedTelegrams = stored.stream()
+    final var storedTelegramPersons = stored.stream()
       .map(TelegramPerson::getNickname)
       .toList();
 
     final var toStore = persons.stream()
-      .filter(person -> !storedTelegrams.contains(person.getNickname()))
+      .filter(person -> !storedTelegramPersons.contains(person.getNickname()))
       .toList();
 
     if (!toStore.isEmpty()) {
@@ -72,11 +70,11 @@ public class TelegramPersonService {
     return stored;
   }
 
-  @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED)
-  private TelegramPerson saveNew(final String telegram, final Long chatId) {
+  @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
+  private TelegramPerson saveNew(final String nickname, final Long chatId) {
     final var telegramPerson = TelegramPerson.telegramPersonBuilder()
       .id(UUID.randomUUID())
-      .nickname(telegram)
+      .nickname(nickname)
       .chatId(chatId)
       .build();
 
