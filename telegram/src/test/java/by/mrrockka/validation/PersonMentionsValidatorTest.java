@@ -9,7 +9,6 @@ import by.mrrockka.validation.mentions.InsufficientMentionsSizeSpecifiedExceptio
 import by.mrrockka.validation.mentions.PersonMentionsValidator;
 import by.mrrockka.validation.mentions.PlayerHasNoNicknameException;
 import lombok.Builder;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -27,12 +26,6 @@ class PersonMentionsValidatorTest {
 
   @Builder
   private record PersonsMessageArgument(MessageMetadata metadata, Class<? extends BusinessException> exception) {}
-
-  @BeforeEach
-  void setup() {
-    mentionsValidator.setBotName("pokerbot");
-  }
-
 
   private static Stream<Arguments> mentions() {
     return Stream.of(

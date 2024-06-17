@@ -59,7 +59,7 @@ public class GameMessageMapper {
       .map(matcher -> matcher.group(1))
       .map(BigDecimal::new)
       .findFirst()
-      .orElseThrow(() -> GameFieldIsNotSpecifiedException.buyin(BUY_IN_REGEX));
+      .orElseThrow(GameFieldIsNotSpecifiedException::buyin);
   }
 
   private BigDecimal retrieveStack(final String[] strings) {
@@ -70,7 +70,7 @@ public class GameMessageMapper {
       .map(matcher -> extractStack(matcher.group(1), StringUtils.isNotBlank(matcher.group(2))))
       .map(BigDecimal::new)
       .findFirst()
-      .orElseThrow(() -> GameFieldIsNotSpecifiedException.stack(STACK_REGEX));
+      .orElseThrow(GameFieldIsNotSpecifiedException::stack);
   }
 
   private BigDecimal retrieveBounty(final String[] strings) {
@@ -81,7 +81,7 @@ public class GameMessageMapper {
       .map(matcher -> extractStack(matcher.group(1), StringUtils.isNotBlank(matcher.group(2))))
       .map(BigDecimal::new)
       .findFirst()
-      .orElseThrow(() -> GameFieldIsNotSpecifiedException.bounty(STACK_REGEX));
+      .orElseThrow(GameFieldIsNotSpecifiedException::bounty);
   }
 
   private Double extractStack(final String value, final boolean shouldMultiply) {
