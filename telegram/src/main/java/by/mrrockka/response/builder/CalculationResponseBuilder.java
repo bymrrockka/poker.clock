@@ -186,7 +186,7 @@ public class CalculationResponseBuilder {
       strBuilder.append(TOTAL);
       strBuilder.append(game.getFinaleSummary().total());
       strBuilder.append(LEFT_PARENTHESIS);
-      strBuilder.append(game.getEntries().size());
+      strBuilder.append(game.getEntries().stream().mapToLong(entries -> entries.entries().size()).sum());
       strBuilder.append(" entries * ");
       strBuilder.append(game.getBuyIn());
       strBuilder.append(" buy in");

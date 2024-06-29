@@ -29,7 +29,6 @@ class CalculationTelegramServiceTest {
   @Autowired
   private CalculationTelegramService calculationTelegramService;
 
-
   private static Stream<Arguments> gameArguments() {
     return Stream.of(
       Arguments.of(
@@ -62,7 +61,7 @@ class CalculationTelegramServiceTest {
           Finale places:
           1. @tenten won 105
           2. @queen won 45
-          Total: 150 (4 entries * 30 buy in)
+          Total: 150 (5 entries * 30 buy in)
           -----------------------------
           Payout to: @tenten
           	Entries: 1
