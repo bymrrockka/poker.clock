@@ -59,6 +59,15 @@ bot:
           /entry @nickname 20 
           /entry @nickname @nickname
           /entry @nickname @nickname 20
+      bounty:
+        enabled: true
+        description: Bounty transaction in game
+        details: |
+          When one player kicks another, the one who kick gets bounty chip, to make it happen use /bounty command with bounty transaction between players which will be executed against the last started BOUNTY game.
+          Message should contain person who kicked, keyword and person who was kicked. 
+          You could forward game message in case there are multiple games happen in parallel to store against it.
+          Examples: 
+          /bounty @nickname kicked @nickname
       withdrawal:
         enabled: true
         description: Player withdrawal from a cash game
