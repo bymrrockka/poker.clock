@@ -63,7 +63,7 @@ public class FinalePlacesMessageMapper {
 
   private TelegramPerson findMentionByNickname(final List<TelegramPerson> mentions, final String nickname) {
     return mentions.stream()
-      .filter(person -> person.getNickname().equals(nickname))
+      .filter(person -> person.getNickname().equalsIgnoreCase(nickname))
       .findFirst()
       .orElseThrow(() -> new FinalPlaceContainsNicknameOfNonExistingPlayerException(nickname));
   }

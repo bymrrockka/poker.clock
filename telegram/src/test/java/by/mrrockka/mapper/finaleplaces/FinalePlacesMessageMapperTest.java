@@ -129,6 +129,22 @@ class FinalePlacesMessageMapperTest {
             2, TelegramPersonCreator.domain("ararat"),
             3, TelegramPersonCreator.domain("andrei")
           )).build()
+      ),
+      Arguments.of(
+        FinalePlacesArgument.builder()
+          .metadata(
+            MessageMetadataCreator.domain(metadata -> metadata
+              .text("/finaleplaces 1 @mrrockka, 2. @ararat,3- @AnDreI")
+              .entities(List.of(
+                MessageEntityCreator.domainMention("@mrrockka"),
+                MessageEntityCreator.domainMention("@ararat"),
+                MessageEntityCreator.domainMention("@AnDreI")
+              ))
+            )).result(Map.of(
+            1, TelegramPersonCreator.domain("mrrockka"),
+            2, TelegramPersonCreator.domain("ararat"),
+            3, TelegramPersonCreator.domain("AnDreI")
+          )).build()
       )
     );
   }
