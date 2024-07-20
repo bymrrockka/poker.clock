@@ -1,6 +1,5 @@
 package by.mrrockka.bot.command;
 
-import by.mrrockka.bot.TelegramBotsProperties;
 import by.mrrockka.bot.command.processor.CalculateTelegramCommandProcessor;
 import by.mrrockka.bot.command.processor.EntryTelegramCommandProcessor;
 import by.mrrockka.bot.command.processor.TelegramCommandProcessor;
@@ -32,14 +31,11 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class TelegramCommandProcessorFactoryTest {
 
-  private static final String BOTNAME = "botname";
   private static final String DESCRIPTION = "description";
   private static final String DETAILS = "details";
 
   @Mock
   private BotDescriptionProperties botDescriptionProperties;
-  @Mock
-  private TelegramBotsProperties telegramBotsProperties;
   @Mock
   private ApplicationContext applicationContext;
   @InjectMocks
@@ -60,15 +56,7 @@ class TelegramCommandProcessorFactoryTest {
         new EntryTelegramCommandProcessor(null)
       ),
       Arguments.of(
-        "/entry@%s".formatted(BOTNAME),
-        new EntryTelegramCommandProcessor(null)
-      ),
-      Arguments.of(
         "/calculate",
-        new CalculateTelegramCommandProcessor(null)
-      ),
-      Arguments.of(
-        "/calculate@%s".formatted(BOTNAME),
         new CalculateTelegramCommandProcessor(null)
       )
     );
@@ -84,7 +72,7 @@ class TelegramCommandProcessorFactoryTest {
           List.of(MessageEntityCreator.domainCommand(command))
         ));
 
-    final var commandName = command.replaceAll("/", "").replaceAll("@" + BOTNAME, "");
+    final var commandName = command.replaceAll("/", "");
 
     final var commandDescription = CommandDescription.builder()
       .description(DESCRIPTION)
@@ -94,7 +82,6 @@ class TelegramCommandProcessorFactoryTest {
 
     final var commands = Map.of(commandName, commandDescription);
 
-    when(telegramBotsProperties.getNickname()).thenReturn(BOTNAME);
     when(botDescriptionProperties.getCommands()).thenReturn(commands);
     when(applicationContext.getBean(StringUtils.uncapitalize(commandProcessor.getClass().getSimpleName()),
                                     TelegramCommandProcessor.class)).thenReturn(commandProcessor);
@@ -111,7 +98,6 @@ class TelegramCommandProcessorFactoryTest {
           List.of(MessageEntityCreator.domainCommand(command))
         ));
 
-    when(telegramBotsProperties.getNickname()).thenReturn(BOTNAME);
     when(botDescriptionProperties.getCommands()).thenReturn(Map.of());
 
     assertThatThrownBy(() -> telegramCommandProcessorFactory.provideProcessor(metadata))
@@ -136,7 +122,6 @@ class TelegramCommandProcessorFactoryTest {
 
     final var commands = Map.of(command, commandDescription);
 
-    when(telegramBotsProperties.getNickname()).thenReturn(BOTNAME);
     when(botDescriptionProperties.getCommands()).thenReturn(commands);
 
     assertThatThrownBy(() -> telegramCommandProcessorFactory.provideProcessor(metadata))
@@ -161,7 +146,6 @@ class TelegramCommandProcessorFactoryTest {
 
     final var commands = Map.of(command, commandDescription);
 
-    when(telegramBotsProperties.getNickname()).thenReturn(BOTNAME);
     when(botDescriptionProperties.getCommands()).thenReturn(commands);
 
     when(applicationContext.getBean(commandProcessorBeanName, TelegramCommandProcessor.class))

@@ -1,6 +1,5 @@
 package by.mrrockka.bot.command;
 
-import by.mrrockka.bot.TelegramBotsProperties;
 import by.mrrockka.bot.command.processor.TelegramCommandProcessor;
 import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.service.help.BotDescriptionProperties;
@@ -19,15 +18,13 @@ import static java.util.Objects.isNull;
 public class TelegramCommandProcessorFactory {
 
   private final BotDescriptionProperties botDescriptionProperties;
-  private final TelegramBotsProperties telegramBotsProperties;
   private final ApplicationContext applicationContext;
 
   public TelegramCommandProcessor provideProcessor(final MessageMetadata messageMetadata) {
     final var commandName = messageMetadata.command()
       .text()
       .toLowerCase()
-      .replaceAll("/", "")
-      .replaceAll("@%s".formatted(telegramBotsProperties.getNickname()), "");
+      .replaceAll("/", "");
 
     final var commandDescription = botDescriptionProperties.getCommands().get(commandName);
 

@@ -12,9 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Mapper(imports = {Instant.class, MeMentionMapper.class, Collections.class})
 public abstract class MessageMetadataMapper {
@@ -26,7 +26,7 @@ public abstract class MessageMetadataMapper {
   @Mapping(source = "chat.id", target = "chatId")
   @Mapping(target = "createdAt", expression = "java(Instant.ofEpochSecond(message.getDate()))")
   @Mapping(source = "messageId", target = "id")
-  @Mapping(target = "text", expression = "java(MeMentionMapper.replaceMeMention(message))")
+  @Mapping(target = "text", source = "message", qualifiedByName = "filterText")
   @Mapping(target = "replyTo", conditionQualifiedByName = "replyToMessage", expression = "java(this.map(message.getReplyToMessage()))")
   @Mapping(target = "entities", source = "message", qualifiedByName = "mapMessageEntities")
   @Mapping(target = "fromNickname", source = "message.from.userName")
@@ -43,24 +43,45 @@ public abstract class MessageMetadataMapper {
 
   @Named("mapMessageEntities")
   public List<MessageEntity> mapMessageEntities(final Message message) {
-    final var entities = message.getEntities().stream()
+    final var messageEntities = message.getEntities().stream()
       .distinct()
-      .filter(this::isBotMention)
-      .map(messageEntityMapper::map)
-      .collect(Collectors.toList());
+      .filter(this::isBotNotMention)
+      .toList();
+    final var entities = new ArrayList<MessageEntity>();
+    for (final org.telegram.telegrambots.meta.api.objects.MessageEntity messageEntity : messageEntities) {
+      if (MessageEntityType.BOT_COMMAND.value().equals(messageEntity.getType())) {
+        entities.add(MessageEntity.builder()
+                       .text(removeBotNicknameFromCommand(messageEntity.getText()))
+                       .type(MessageEntityType.BOT_COMMAND)
+                       .build());
+        continue;
+      }
 
-    if (MeMentionMapper.hasMeMention(message)) {
-      entities.add(MessageEntity.builder()
-                     .text("@%s".formatted(message.getFrom().getUserName()))
-                     .type(MessageEntityType.MENTION)
-                     .build());
+      if (MeMentionMapper.hasMeMention(messageEntity)) {
+        entities.add(MessageEntity.builder()
+                       .text("@%s".formatted(message.getFrom().getUserName()))
+                       .type(MessageEntityType.MENTION)
+                       .build());
+        continue;
+      }
+
+      entities.add(messageEntityMapper.map(messageEntity));
     }
 
     return entities;
   }
 
-  private boolean isBotMention(org.telegram.telegrambots.meta.api.objects.MessageEntity entity) {
-    return !(entity.getText().contains(telegramBotsProperties.getNickname()) && entity.getType().equals(
-      MessageEntityType.MENTION.value()));
+  private boolean isBotNotMention(org.telegram.telegrambots.meta.api.objects.MessageEntity entity) {
+    return !(entity.getText().contains(telegramBotsProperties.getNickname())
+      && MessageEntityType.MENTION.value().equals(entity.getType()));
+  }
+
+  @Named("filterText")
+  public String filterText(final Message message) {
+    return removeBotNicknameFromCommand(MeMentionMapper.replaceMeMention(message));
+  }
+
+  private String removeBotNicknameFromCommand(final String text) {
+    return text.replaceAll("([/\\w]+)@%s".formatted(telegramBotsProperties.getNickname()), "$1");
   }
 }
