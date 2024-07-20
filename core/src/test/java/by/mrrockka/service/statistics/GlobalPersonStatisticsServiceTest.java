@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -59,16 +60,18 @@ class GlobalPersonStatisticsServiceTest {
     final var totalMoneyIn = GameCreator.BUY_IN.multiply(BigDecimal.valueOf(games.size())).add(GameCreator.BOUNTY);
     final var totalMoneyWon = MoneyTransferCreator.AMOUNT.multiply(BigDecimal.valueOf(2));
     final var totalMoneyLose = MoneyTransferCreator.AMOUNT;
+    final var totalMoneyOut = totalMoneyIn.add(totalMoneyWon).subtract(totalMoneyLose);
 
     final var expected = GlobalPersonStatistics.builder()
       .person(person)
       .gamesPlayed(moneyTransfers.size())
       .totalMoneyIn(totalMoneyIn)
+      .totalMoneyOut(totalMoneyOut)
       .totalMoneyWon(totalMoneyWon)
       .totalMoneyLose(totalMoneyLose)
-      .wonToLoseRatio(BigDecimal.valueOf(200).setScale(2))
+      .outToInRatio(totalMoneyOut.divide(totalMoneyIn, 2, RoundingMode.DOWN))
       .timesInPrizes(finalePlaces.size())
-      .inPrizeRatio(BigDecimal.valueOf(50).setScale(2))
+      .inPrizeRatio(BigDecimal.valueOf(0.5).setScale(2))
       .timesOnFirstPlace(finalePlaces.size())
       .build();
 

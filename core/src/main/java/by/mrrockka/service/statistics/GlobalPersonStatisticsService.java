@@ -37,13 +37,13 @@ public class GlobalPersonStatisticsService {
     final var person = personService.getByNickname(nickname);
     final var moneyTransfers = moneyTransferService.getForPerson(person);
     final var games = gameService.retrieveAllGames(moneyTransfers.stream().map(MoneyTransfer::gameId).toList());
-    final var finalePlaces = finalePlacesService.getAllByPersonId(person.getId());
+    final var finalePlacesForPerson = finalePlacesService.getAllByPersonId(person.getId());
 
     final var tournamentGamesCount = games.stream()
       .filter(game -> game instanceof TournamentGame)
       .count();
 
-    final var firstPlacesCount = finalePlaces.stream()
+    final var firstPlacesCount = finalePlacesForPerson.stream()
       .flatMap(places -> places.finalPlaces().stream())
       .filter(finalPlace -> 1 == finalPlace.position())
       .toList()
@@ -62,23 +62,25 @@ public class GlobalPersonStatisticsService {
       .orElse(BigDecimal.ZERO);
 
     final var totalMoneyIn = totalMoneyIn(games, person);
+    final var totalMoneyOut = totalMoneyIn.add(totalMoneyWon).subtract(totalMoneyLose);
 
     return GlobalPersonStatistics.builder()
       .person(person)
       .gamesPlayed(moneyTransfers.size())
       .totalMoneyIn(totalMoneyIn)
+      .totalMoneyOut(totalMoneyOut)
       .totalMoneyWon(totalMoneyWon)
       .totalMoneyLose(totalMoneyLose)
-      .wonToLoseRatio(leftToRightRatio(totalMoneyWon, totalMoneyLose))
-      .timesInPrizes(finalePlaces.size())
-      .inPrizeRatio(leftToRightRatio(BigDecimal.valueOf(finalePlaces.size()), BigDecimal.valueOf(tournamentGamesCount)))
+      .outToInRatio(leftToRightRatio(totalMoneyOut, totalMoneyIn))
+      .timesInPrizes(finalePlacesForPerson.size())
+      .inPrizeRatio(
+        leftToRightRatio(BigDecimal.valueOf(finalePlacesForPerson.size()), BigDecimal.valueOf(tournamentGamesCount)))
       .timesOnFirstPlace(firstPlacesCount)
       .build();
   }
 
   private BigDecimal leftToRightRatio(final @NonNull BigDecimal left, final @NonNull BigDecimal right) {
-    return left.divide(right, 2, RoundingMode.DOWN)
-      .multiply(BigDecimal.valueOf(100));
+    return left.divide(right, 2, RoundingMode.DOWN);
   }
 
   private BigDecimal totalMoneyIn(final List<Game> games, final Person person) {

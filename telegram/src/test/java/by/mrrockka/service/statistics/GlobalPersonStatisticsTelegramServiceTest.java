@@ -41,10 +41,11 @@ public class GlobalPersonStatisticsTelegramServiceTest {
       .build();
     final var globalStatistics = GlobalPersonStatistics.builder()
       .person(PersonCreator.domainRandom())
-      .wonToLoseRatio(AMOUNT)
+      .outToInRatio(AMOUNT)
       .inPrizeRatio(AMOUNT)
       .totalMoneyWon(AMOUNT)
       .totalMoneyIn(AMOUNT)
+      .totalMoneyOut(AMOUNT)
       .totalMoneyLose(AMOUNT)
       .timesOnFirstPlace(TIMES)
       .gamesPlayed(TIMES)

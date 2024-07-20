@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.NonNull;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 @Builder
 public record GlobalPersonStatistics(
@@ -16,6 +15,8 @@ public record GlobalPersonStatistics(
   Integer gamesPlayed,
   @NonNull
   BigDecimal totalMoneyIn,
+  @NonNull
+  BigDecimal totalMoneyOut,
   @NonNull
   BigDecimal totalMoneyWon,
   @NonNull
@@ -27,19 +28,7 @@ public record GlobalPersonStatistics(
   @NonNull
   BigDecimal inPrizeRatio,
   @NonNull
-  BigDecimal wonToLoseRatio
+  BigDecimal outToInRatio
 ) {
 
-  public BigDecimal inPrizeRatio() {
-    return leftToRightRatio(BigDecimal.valueOf(timesInPrizes), BigDecimal.valueOf(gamesPlayed));
-  }
-
-  public BigDecimal wonToLoseRatio() {
-    return leftToRightRatio(totalMoneyWon, totalMoneyLose);
-  }
-
-  private BigDecimal leftToRightRatio(final @NonNull BigDecimal left, final @NonNull BigDecimal right) {
-    return left.divide(right, 2, RoundingMode.DOWN)
-      .multiply(BigDecimal.valueOf(100));
-  }
 }

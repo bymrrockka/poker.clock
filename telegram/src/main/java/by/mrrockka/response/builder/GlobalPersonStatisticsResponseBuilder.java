@@ -28,14 +28,6 @@ public class GlobalPersonStatisticsResponseBuilder {
       .append(NL)
       .append(TAB)
       .append(MINUS.stripLeading())
-      .append("total money in")
-      .append(POINTER)
-      .append(details.totalMoneyIn());
-
-    strBuilder
-      .append(NL)
-      .append(TAB)
-      .append(MINUS.stripLeading())
       .append("total money won")
       .append(POINTER)
       .append(details.totalMoneyWon());
@@ -46,15 +38,31 @@ public class GlobalPersonStatisticsResponseBuilder {
       .append(MINUS.stripLeading())
       .append("total money lose")
       .append(POINTER)
-      .append(details.totalMoneyWon());
+      .append(details.totalMoneyLose());
 
     strBuilder
       .append(NL)
       .append(TAB)
       .append(MINUS.stripLeading())
-      .append("won to lose ratio")
+      .append("total money in")
       .append(POINTER)
-      .append(details.wonToLoseRatio());
+      .append(details.totalMoneyIn());
+
+    strBuilder
+      .append(NL)
+      .append(TAB)
+      .append(MINUS.stripLeading())
+      .append("total money out")
+      .append(POINTER)
+      .append(details.totalMoneyOut());
+
+    strBuilder
+      .append(NL)
+      .append(TAB)
+      .append(MINUS.stripLeading())
+      .append("out to in ratio")
+      .append(POINTER)
+      .append(details.outToInRatio());
 
     strBuilder
       .append(NL)
