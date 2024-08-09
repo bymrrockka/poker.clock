@@ -3,7 +3,6 @@ package by.mrrockka.mapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 
 import static by.mrrockka.mapper.CommandRegexConstants.COMMAND_APPENDIX;
 import static by.mrrockka.mapper.CommandRegexConstants.ME_REGEX;
@@ -20,7 +19,4 @@ final class MeMentionMapper {
     return message.getText().matches("%s%s%s".formatted(COMMAND_APPENDIX, ME_REGEX, COMMAND_APPENDIX));
   }
 
-  public static boolean hasMeMention(final MessageEntity entity) {
-    return entity.getText().matches("%s%s%s".formatted(COMMAND_APPENDIX, ME_REGEX, COMMAND_APPENDIX));
-  }
 }

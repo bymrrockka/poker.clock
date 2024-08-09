@@ -57,16 +57,17 @@ public abstract class MessageMetadataMapper {
         continue;
       }
 
-      if (MeMentionMapper.hasMeMention(messageEntity)) {
-        entities.add(MessageEntity.builder()
-                       .text("@%s".formatted(message.getFrom().getUserName()))
-                       .type(MessageEntityType.MENTION)
-                       .build());
-        continue;
-      }
-
       entities.add(messageEntityMapper.map(messageEntity));
     }
+
+
+    if (MeMentionMapper.hasMeMention(message)) {
+      entities.add(MessageEntity.builder()
+                     .text("@%s".formatted(message.getFrom().getUserName()))
+                     .type(MessageEntityType.MENTION)
+                     .build());
+    }
+
 
     return entities;
   }

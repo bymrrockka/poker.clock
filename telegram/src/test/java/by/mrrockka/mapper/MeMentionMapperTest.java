@@ -11,8 +11,15 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class MeMentionMapperTest {
+  private static final String TEXT = """
+    /command
+    @guys
+    @julius
+    %s
+    @anybody
+    """;
 
-  private static Stream<Arguments> usernamesToReplace() {
+  private static Stream<Arguments> validMeMentions() {
     return Stream.of(
       Arguments.of("@me"),
       Arguments.of("@me "),
@@ -23,12 +30,12 @@ class MeMentionMapperTest {
   }
 
   @ParameterizedTest
-  @MethodSource("usernamesToReplace")
-  void givenMeUsername_whenReplaceUtilExecuted_shouldReplaceWithUsernameFromMessage(final String me) {
+  @MethodSource("validMeMentions")
+  void givenMeUsername_whenReplaceUtilExecuted_shouldReplaceWithUsernameFromMessage(final String mention) {
     final var user = UserCreator.user();
     final var message = MessageCreator.message(builder -> {
       builder.setFrom(user);
-      builder.setText(me);
+      builder.setText(TEXT.formatted(mention));
     });
 
     assertThat(MeMentionMapper.hasMeMention(message)).isTrue();
@@ -36,7 +43,7 @@ class MeMentionMapperTest {
       .contains(user.getUserName());
   }
 
-  private static Stream<Arguments> usernamesToKeep() {
+  private static Stream<Arguments> invalidMeMentions() {
     return Stream.of(
       Arguments.of("@mer"),
       Arguments.of("@measd "),
@@ -47,16 +54,16 @@ class MeMentionMapperTest {
   }
 
   @ParameterizedTest
-  @MethodSource("usernamesToKeep")
-  void givenUsernamesStartingFromMe_whenReplaceUtilExecuted_shouldKeepSameUsername(final String me) {
+  @MethodSource("invalidMeMentions")
+  void givenUsernamesStartingFromMe_whenReplaceUtilExecuted_shouldKeepSameUsername(final String mention) {
     final var message = MessageCreator.message(builder -> {
       builder.setFrom(UserCreator.user());
-      builder.setText(me);
+      builder.setText(TEXT.formatted(mention));
     });
 
     assertThat(MeMentionMapper.hasMeMention(message)).isFalse();
     assertThat(MeMentionMapper.replaceMeMention(message))
-      .isEqualTo(me);
+      .contains(mention);
   }
 
 }
