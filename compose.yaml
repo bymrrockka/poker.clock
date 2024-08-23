@@ -19,6 +19,7 @@ services:
       - 'POSTGRES_PASSWORD=r8E6&r3>'
     volumes:
       - pokerclock-data:/var/lib/postgresql/data
+      - ~/backups:/backup
 
 volumes:
   pokerclock-data:
