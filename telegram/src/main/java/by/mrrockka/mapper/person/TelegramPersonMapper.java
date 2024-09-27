@@ -20,6 +20,8 @@ public interface TelegramPersonMapper {
 
   TelegramPerson mapToTelegramPerson(TelegramPersonEntity entity);
 
+  List<TelegramPerson> mapToTelegramPersons(Long chatId, List<Person> entities);
+
   List<TelegramPerson> mapToTelegramPersons(List<TelegramPersonEntity> entities);
 
   @Mapping(target = "id", expression = "java(UUID.randomUUID())")

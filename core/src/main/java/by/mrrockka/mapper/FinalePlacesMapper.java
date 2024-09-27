@@ -9,7 +9,10 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Mapper
@@ -36,8 +39,6 @@ public interface FinalePlacesMapper {
   @Named("finalPlaceListToPlacesMap")
   default Map<Integer, PersonEntity> finalPlaceListToPlacesMap(final List<FinalPlace> finalPlaces) {
     return finalPlaces.stream()
-      .map(finalPlace ->
-             new AbstractMap.SimpleEntry<>(finalPlace.position(), PERSON_MAPPER.toEntity(finalPlace.person())))
-      .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+      .collect(Collectors.toMap(FinalPlace::position, finalPlace -> PERSON_MAPPER.toEntity(finalPlace.person())));
   }
 }

@@ -9,10 +9,12 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
-import static by.mrrockka.repo.person.TelegramPersonColumnNames.CHAT_ID;
-import static by.mrrockka.repo.person.TelegramPersonColumnNames.NICK_NAME;
+import static by.mrrockka.repo.person.TelegramPersonColumnNames.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -20,6 +22,7 @@ public class TelegramPersonRepository {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
   private final TelegramPersonEntityRowMapper telegramPersonEntityRowMapper;
+  private final ChatIdToPersonEntityResultSetExtractor chatIdToPersonEntityResultSetExtractor;
 
   private static final String SAVE_SQL = """
     INSERT INTO chat_persons
@@ -82,4 +85,60 @@ public class TelegramPersonRepository {
       : Optional.empty());
   }
 
+  private static final String FIND_NOT_EXISTING_IDS_SQL = """
+    WITH new_persons AS (
+        SELECT v.id id
+        FROM (VALUES :id) v(id)
+        WHERE NOT EXISTS (SELECT 1 FROM person p WHERE p.id = v.id)
+    ), new_for_chat AS (
+        SELECT v.id id
+        FROM (VALUES :id) v(id)
+        WHERE NOT EXISTS (SELECT 1 FROM chat_persons cp WHERE cp.person_id = v.id AND cp.chat_id = :chat_id)
+    )
+    SELECT DISTINCT COALESCE(np.id, nfc.id), cp.chat_id
+    FROM new_persons np
+    RIGHT JOIN new_for_chat nfc ON nfc.id = np.id
+    LEFT JOIN chat_persons cp ON cp.person_id = nfc.id
+    ;
+    """;
+
+  public Map<UUID, Long> findNewPersonIds(final List<UUID> personIds, final Long chatId) {
+    final var params = new MapSqlParameterSource()
+      .addValue(CHAT_ID, chatId)
+      .addValue(ID, personIds);
+
+    return jdbcTemplate.query(FIND_NOT_EXISTING_IDS_SQL, params,
+                              (rs, rowNum) -> Map.entry(rs.getObject(ID, UUID.class), rs.getLong(CHAT_ID)))
+      .stream()
+      .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+  }
+
+  private static final String FIND_NOT_EXISTING_NICK_NAMES_SQL = """
+    WITH new_persons AS (
+        SELECT v.nick
+        FROM (VALUES nick_name) v(nick)
+        WHERE NOT EXISTS (SELECT 1 FROM person p WHERE p.nick_name = v.nick)
+    ), new_for_chat AS (
+        SELECT p.id, v.nick
+        FROM (VALUES :nick_name) v(nick)
+        JOIN person p ON p.nick_name = v.nick
+        WHERE NOT EXISTS (SELECT 1 FROM chat_persons cp WHERE cp.person_id = p.id AND cp.chat_id = :chat_id)
+    )
+    select nick, null chat_id
+    from new_persons np
+    union
+    select nfc.nick, cp.chat_id from new_for_chat nfc
+    left join chat_persons cp on cp.person_id = nfc.id
+    """;
+
+  public Map<UUID, Long> findNewPersonIds(final List<UUID> personIds, final Long chatId) {
+    final var params = new MapSqlParameterSource()
+      .addValue(CHAT_ID, chatId)
+      .addValue(ID, personIds);
+
+    return jdbcTemplate.query(FIND_NOT_EXISTING_IDS_SQL, params,
+                              (rs, rowNum) -> Map.entry(rs.getObject(ID, UUID.class), rs.getLong(CHAT_ID)))
+      .stream()
+      .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+  }
 }

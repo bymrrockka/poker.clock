@@ -35,6 +35,7 @@ public class EntryTelegramService {
   @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
   public BotApiMethodMessage storeEntry(final MessageMetadata messageMetadata) {
     personMentionsValidator.validateMessageMentions(messageMetadata, 1);
+//    todo: 1 change entries mapping to gather only entry amount and change validation
     final var personAndAmountMap = entryMessageMapper.map(messageMetadata);
     collectionsValidator.validateMapIsNotEmpty(personAndAmountMap, "Entry");
 
@@ -49,6 +50,7 @@ public class EntryTelegramService {
       .findFirst()
       .orElse(game.getBuyIn());
 
+//    todo: 2. execute method with message metadata mentions
     final var persons = telegramPersonService.storeMissed(entries, messageMetadata.chatId());
 
     entriesService.storeBatch(game.getId(), persons.stream().map(Person::getId).toList(), amount,
