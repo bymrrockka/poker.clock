@@ -84,5 +84,15 @@ public class PersonRepository {
     return jdbcTemplate.query(FIND_ALL_BY_IDS_SQL, params, personEntityRowMapper);
   }
 
+  public List<String> findNewNicknames(final List<String> nicknames) {
+    final var sql = STR."""
+    SELECT v.nick_name
+    FROM (VALUES \{nicknames.stream().map("('%s')"::formatted).reduce("%s,%s"::formatted).orElse("")}) v(nick_name)
+    WHERE NOT EXISTS (SELECT 1 FROM person p WHERE p.nick_name = v.nick_name)
+    """;
+
+    return jdbcTemplate.query(sql, (rs, rowNum) -> rs.getString(NICK_NAME));
+  }
+
 
 }

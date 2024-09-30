@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -44,6 +45,20 @@ class PersonRepositoryTest {
     personRepository.saveAll(expected);
 
     assertThat(personRepository.findAllByIds(List.of(expected.get(0).getId()))).isEqualTo(expected);
+  }
+
+  @Test
+  void givenPersonEntities_whenetNewNicknames_thenShouldBeAbleToFind() {
+    final var randomPersons = IntStream.range(0, 3)
+      .mapToObj(i -> PersonCreator.entityRandom())
+      .toList();
+
+    final var personNicknames = randomPersons.stream().map(PersonEntity::getNickname).toList();
+    personRepository.saveAll(randomPersons);
+
+    assertThat(
+      personRepository.findNewNicknames(randomPersons.stream().map(PersonEntity::getNickname).toList())
+        .containsAll(personNicknames));
   }
 
 }

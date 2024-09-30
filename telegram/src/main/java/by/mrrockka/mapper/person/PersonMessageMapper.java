@@ -13,6 +13,7 @@ public class PersonMessageMapper {
 
   private final TelegramPersonMapper personMapper;
 
+  @Deprecated(since = "1.4.2", forRemoval = true)
   public List<TelegramPerson> map(final MessageMetadata messageMetadata) {
     return personMapper.mapMessageToTelegramPersons(messageMetadata.mentions().toList(), messageMetadata.chatId());
   }

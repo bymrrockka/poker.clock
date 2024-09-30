@@ -2,6 +2,7 @@ package by.mrrockka.creator;
 
 import by.mrrockka.FakerProvider;
 import by.mrrockka.domain.TelegramPerson;
+import by.mrrockka.repo.person.TelegramPersonEntity;
 import com.github.javafaker.Faker;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,29 @@ public final class TelegramPersonCreator {
 
   public static TelegramPerson domain(final Consumer<TelegramPerson.TelegramPersonBuilder> builderConsumer) {
     final var personEntityBuilder = TelegramPerson.telegramPersonBuilder()
+      .id(ID)
+      .chatId(CHAT_ID)
+      .firstname(FIRSTNAME)
+      .lastname(LASTNAME)
+      .nickname(NICKNAME);
+
+    if (nonNull(builderConsumer))
+      builderConsumer.accept(personEntityBuilder);
+
+    return personEntityBuilder.build();
+  }
+
+  public static TelegramPersonEntity entity() {
+    return entity((Consumer<TelegramPersonEntity.TelegramPersonEntityBuilder>) null);
+  }
+
+  public static TelegramPersonEntity entity(final String nickname) {
+    return entity(builder -> builder.nickname(nickname));
+  }
+
+  public static TelegramPersonEntity entity(
+    final Consumer<TelegramPersonEntity.TelegramPersonEntityBuilder> builderConsumer) {
+    final var personEntityBuilder = TelegramPersonEntity.telegramPersonBuilder()
       .id(ID)
       .chatId(CHAT_ID)
       .firstname(FIRSTNAME)
