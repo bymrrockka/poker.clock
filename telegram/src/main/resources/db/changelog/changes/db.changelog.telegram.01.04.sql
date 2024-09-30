@@ -1,6 +1,6 @@
 --liquibase formatted sql
 
---changeset task#11:2
+--changeset task#47:2
 with persons as (
         select (array_agg(id))[1] as id,
                 nick_name as nick,
