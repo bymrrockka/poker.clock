@@ -7,8 +7,8 @@ services:
       - 'DB_USER=psuser'
       - 'PROFILES=production,postgres'
       - 'BOT_TOKEN=6602349464:AAHXWR1pnkqmfUj0YRiY1Jy7EmfyMQToYO8'
-      - 'NAME=Poker calculator bot'
-      - 'NICKNAME=pokerclc_bot'
+      - 'BOT_NAME=Poker calculator bot'
+      - 'BOT_NICKNAME=pokerclc_bot'
     depends_on:
       - postgres
   postgres:

@@ -43,15 +43,13 @@ public class EntryTelegramService {
       .getGameByMessageMetadata(messageMetadata)
       .orElseThrow(ChatGameNotFoundException::new);
     final var game = telegramGame.game();
-    final var entries = personAndAmountMap.keySet().stream().toList();
     final var amount = personAndAmountMap.values().stream()
       .filter(Optional::isPresent)
       .map(Optional::get)
       .findFirst()
       .orElse(game.getBuyIn());
 
-//    todo: 2. execute method with message metadata mentions
-    final var persons = telegramPersonService.storeMissed(entries, messageMetadata.chatId());
+    final var persons = telegramPersonService.storeMissed(messageMetadata);
 
     entriesService.storeBatch(game.getId(), persons.stream().map(Person::getId).toList(), amount,
                               messageMetadata.createdAt());

@@ -94,7 +94,7 @@ class GameTelegramFacadeServiceTest {
       "asdasd"
     );
 
-    final var telegramPersonEntities = telegramPersonRepository.findAllByChatIdAndNicknames(CHAT_ID, nicknames);
+    final var telegramPersonEntities = telegramPersonRepository.findAllByChatIdAndNicknames(nicknames, CHAT_ID);
 
     assertAll(
       () -> assertThat(telegramPersonEntities).isNotEmpty(),

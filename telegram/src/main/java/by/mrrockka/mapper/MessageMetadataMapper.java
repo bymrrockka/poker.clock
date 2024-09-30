@@ -27,7 +27,7 @@ public abstract class MessageMetadataMapper {
   @Mapping(target = "createdAt", expression = "java(Instant.ofEpochSecond(message.getDate()))")
   @Mapping(source = "messageId", target = "id")
   @Mapping(target = "text", source = "message", qualifiedByName = "filterText")
-  @Mapping(target = "replyTo", conditionQualifiedByName = "replyToMessage", expression = "java(this.map(message.getReplyToMessage()))")
+  @Mapping(target = "replyTo", expression = "java(this.map(message.getReplyToMessage()))")
   @Mapping(target = "entities", source = "message", qualifiedByName = "mapMessageEntities")
   @Mapping(target = "fromNickname", source = "message.from.userName")
   public abstract MessageMetadata map(Message message);

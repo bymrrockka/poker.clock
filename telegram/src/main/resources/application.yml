@@ -1,7 +1,7 @@
 telegrambots:
-  name: ${NAME:Poker calculator bot}
-  nickname: ${NICKNAME:bot}
-  enabled: ${ENABLED:true}
+  name: ${BOT_NAME:Poker calculator bot}
+  nickname: ${BOT_NICKNAME:bot}
+  enabled: ${BOT_ENABLED:true}
   token: ${BOT_TOKEN:}
 
 bot:
