@@ -33,7 +33,7 @@ public class FinalePlacesRepository {
       .forEach((key, value) -> {
         final MapSqlParameterSource params = new MapSqlParameterSource()
           .addValue(FinaleColumnNames.GAME_ID, finalePlacesEntity.gameId())
-          .addValue(FinaleColumnNames.PERSON_ID, value)
+          .addValue(FinaleColumnNames.PERSON_ID, value.getId())
           .addValue(FinaleColumnNames.POSITION, key);
 
         jdbcTemplate.update(SAVE_SQL, params);
