@@ -8,7 +8,10 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Mapper
@@ -23,8 +26,7 @@ public interface PrizePoolMapper {
   @Named("mapToSchema")
   default Map<Integer, BigDecimal> mapToSchema(final List<PositionAndPercentage> positionAndPercentages) {
     return positionAndPercentages.stream()
-      .map(pp -> new AbstractMap.SimpleEntry<>(pp.position(), pp.percentage()))
-      .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+      .collect(Collectors.toMap(PositionAndPercentage::position, PositionAndPercentage::percentage));
   }
 
   @Named("mapToPositionAndPercentages")

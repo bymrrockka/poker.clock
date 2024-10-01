@@ -1,6 +1,4 @@
-FROM openjdk:17
-
-ARG BOT_TOKEN=''
+FROM openjdk:22
 
 WORKDIR /app
 

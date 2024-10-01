@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -24,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest
 @ActiveProfiles("repository")
-class TelegramPersonServiceTest {
+class TelegramPersonServiceIntTest {
 
   private static final Long CHAT_ID = 123L;
   @Autowired
@@ -41,6 +40,9 @@ class TelegramPersonServiceTest {
       ),
       Arguments.of(
         List.of("mrrocka", "kinger", "queen")
+      ),
+      Arguments.of(
+        List.of("tenten", "nines", "eights", "seventh", "sixth", "fives")
       )
     );
   }
@@ -48,9 +50,7 @@ class TelegramPersonServiceTest {
   @ParameterizedTest
   @MethodSource("nicknames")
   void givenMessageWithNicknames_whenAttemptToStoreAndSomeTelegramsExistsInDb_shouldStoreOnlyNewPersons(
-    final List<String> args) {
-    final var nicknames = new ArrayList<>(args);
-
+    final List<String> nicknames) {
     final var text = nicknames.stream()
       .map("@%s"::formatted)
       .reduce("%s\n%s"::formatted)
@@ -59,7 +59,7 @@ class TelegramPersonServiceTest {
     final var messageMetadata = MessageMetadataCreator.domain(metadata -> metadata
       .chatId(CHAT_ID)
       .text(text)
-      .entities(args.stream()
+      .entities(nicknames.stream()
                   .map(MessageEntityCreator::domainMention)
                   .toList())
     );
@@ -67,9 +67,9 @@ class TelegramPersonServiceTest {
     final var personIds = telegramPersonService.storePersons(messageMetadata).stream()
       .map(Person::getId)
       .toList();
-    assertThat(personRepository.findAllByIds(personIds)).hasSize(args.size());
+    assertThat(personRepository.findAllByIds(personIds)).hasSize(nicknames.size());
 
-    final var actualIds = telegramPersonRepository.findAllByChatIdAndNicknames(CHAT_ID, nicknames).stream()
+    final var actualIds = telegramPersonRepository.findAllByChatIdAndNicknames(nicknames, CHAT_ID).stream()
       .map(TelegramPersonEntity::getId)
       .toList();
 

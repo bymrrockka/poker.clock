@@ -1,6 +1,5 @@
 package by.mrrockka.mapper.person;
 
-import by.mrrockka.domain.Person;
 import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.domain.mesageentity.MessageEntity;
 import by.mrrockka.mapper.PersonMapper;
@@ -13,10 +12,6 @@ import java.util.UUID;
 
 @Mapper(imports = UUID.class, uses = PersonMapper.class)
 public interface TelegramPersonMapper {
-
-  Person mapToPerson(TelegramPerson telegramPerson);
-
-  List<Person> mapToPersons(List<TelegramPerson> telegramPerson);
 
   TelegramPerson mapToTelegramPerson(TelegramPersonEntity entity);
 

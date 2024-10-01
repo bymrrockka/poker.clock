@@ -11,16 +11,22 @@ plugins {
 
 group = 'by.mrrockka'
 version = '1.4.2-SNAPSHOT'
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(22)
+    }
+}
 
 defaultTasks "clean", "assemble"
 
 tasks.withType(JavaCompile) {
-    options.compilerArgs = [
+    options.compilerArgs.addAll([
+            '--enable-preview',
             '-Amapstruct.suppressGeneratorTimestamp=true',
             '-Amapstruct.defaultComponentModel=spring',
-    ]
+    ])
+    options.release.set(22)
 }
 
 repositories {
@@ -73,8 +79,10 @@ testing {
             targets {
                 all {
                     testTask.configure {
+                        jvmArgs('--enable-preview')
                         testLogging {
                             events("passed", "failed")
+
                         }
                     }
                 }

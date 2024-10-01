@@ -1,6 +1,8 @@
 package by.mrrockka.repo;
 
+import by.mrrockka.FakerProvider;
 import by.mrrockka.config.PostgreSQLExtension;
+import by.mrrockka.creator.PersonCreator;
 import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.repo.person.PersonEntity;
 import by.mrrockka.repo.person.PersonRepository;
@@ -14,6 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -45,9 +48,27 @@ class TelegramPersonRepositoryTest {
                                     .nickname(NICKNAME)
                                     .build());
     assertThat(
-      telegramPersonRepository.findAllByChatIdAndNicknames(CHAT_ID, List.of(NICKNAME)).stream()
+      telegramPersonRepository.findAllByChatIdAndNicknames(List.of(NICKNAME), CHAT_ID).stream()
         .map(TelegramPersonEntity::getId))
       .contains(PERSON_ID);
+  }
+
+  @Test
+  void givenChatIdAndNickname_whenFindNotExistentExecuted_shouldReturnValidIds() {
+    final var newChatId = FakerProvider.faker().number().randomNumber();
+    final var randomPersons = IntStream.range(0, 3)
+      .mapToObj(i -> PersonCreator.entityRandom())
+      .toList();
+
+    final var personIds = randomPersons.stream().map(PersonEntity::getId).toList();
+
+    personRepository.saveAll(randomPersons);
+    telegramPersonRepository.saveAll(personIds, newChatId);
+
+    assertThat(
+      telegramPersonRepository.findNotExistentInChat(
+          randomPersons.stream().map(PersonEntity::getNickname).toList(), CHAT_ID)
+        .containsAll(personIds));
   }
 
 }

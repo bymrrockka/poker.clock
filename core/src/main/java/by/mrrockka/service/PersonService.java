@@ -27,4 +27,8 @@ public class PersonService {
     return personMapper.toDomain(personRepository.findByNickname(nickname));
   }
 
+  public List<String> getNewNicknames(final List<String> nicknames) {
+    return personRepository.findNewNicknames(nicknames);
+  }
+
 }

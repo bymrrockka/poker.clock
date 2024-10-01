@@ -35,7 +35,7 @@ class MoneyTransferRepositoryTest {
     final var game = GameCreator.entity(builder -> builder.id(UUID.randomUUID()));
     gameRepository.save(game, Instant.now());
 
-    final var person = PersonCreator.entity(builder -> builder.id(UUID.randomUUID()));
+    final var person = PersonCreator.entityRandom();
     personRepository.save(person);
 
     final var expected = MoneyTransferCreator.entity(builder -> builder.gameId(game.id()).personId(person.getId()));
@@ -45,7 +45,7 @@ class MoneyTransferRepositoryTest {
 
   @Test
   void givenEntities_whenSaveAllExecuted_thenShouldStore() {
-    final var person = PersonCreator.entity(builder -> builder.id(UUID.randomUUID()));
+    final var person = PersonCreator.entityRandom();
     personRepository.save(person);
 
     final var expected =

@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.AbstractMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,14 +29,12 @@ public class FinalePlacesRepository {
 
   @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED)
   public void save(final FinalePlacesEntity finalePlacesEntity) {
-    finalePlacesEntity.places().entrySet()
-      .stream()
-      .map(entry -> new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue().getId()))
-      .forEach(entry -> {
+    finalePlacesEntity.places()
+      .forEach((key, value) -> {
         final MapSqlParameterSource params = new MapSqlParameterSource()
           .addValue(FinaleColumnNames.GAME_ID, finalePlacesEntity.gameId())
-          .addValue(FinaleColumnNames.PERSON_ID, entry.getValue())
-          .addValue(FinaleColumnNames.POSITION, entry.getKey());
+          .addValue(FinaleColumnNames.PERSON_ID, value.getId())
+          .addValue(FinaleColumnNames.POSITION, key);
 
         jdbcTemplate.update(SAVE_SQL, params);
       });
