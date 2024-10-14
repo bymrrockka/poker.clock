@@ -6,6 +6,7 @@ plugins {
     id 'java-test-fixtures'
     alias(libs.plugins.springBootPlugin)
     alias(libs.plugins.springDepManagementPlugin)
+    alias(libs.plugins.kotlinJvm)
 }
 
 group = 'by.mrrockka'
@@ -15,6 +16,10 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(22)
     }
+}
+
+kotlin {
+    jvmToolchain(22)
 }
 
 defaultTasks "clean", "assemble"
@@ -41,6 +46,7 @@ dependencies {
     implementation libs.mapstructCore
     implementation libs.lombokMapstructBinding
     implementation libs.hikariCP
+    implementation libs.kotlinStdLib
 
     compileOnly libs.lombok
     annotationProcessor libs.lombok

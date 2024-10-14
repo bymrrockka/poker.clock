@@ -2,6 +2,7 @@
 #plugins
 springBootVersion = "3.3.2"
 springDepManagementVersion = "1.1.6"
+kotlinJvmVersion = "2.0.21"
 
 #libs
 postgresqlVersion = "42.7.4"
@@ -20,10 +21,12 @@ lombokMapstructBindingVersion = "0.2.0"
 hikariCPVersion = "5.1.0"
 
 [plugins]
+kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinJvmVersion" }
 springBootPlugin = { id = "org.springframework.boot", version.ref = "springBootVersion" }
 springDepManagementPlugin = { id = "io.spring.dependency-management", version.ref = "springDepManagementVersion" }
 
 [libraries]
+kotlinStdLib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8" }
 springBootJdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc" }
 springBootAop = { module = "org.springframework.boot:spring-boot-starter-aop" }
 springBootTestContainers = { module = "org.springframework.boot:spring-boot-testcontainers" }
