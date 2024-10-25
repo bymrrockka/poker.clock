@@ -49,7 +49,7 @@ class StatisticsTelegramServiceTest {
     when(gameStatisticsTelegramService.retrieveStatistics(statisticsCommand)).thenReturn(expected);
 
     assertThat(statisticsService.retrieveStatistics(metadata)).isEqualTo(expected);
-    verify(personMentionsValidator, only()).validateMessageHasUserTextMention(metadata);
+    verify(personMentionsValidator, only()).validateMessageHasNoUserTextMention(metadata);
     verifyNoInteractions(playerInGameStatisticsTelegramService, globalPersonStatisticsTelegramService);
     verifyNoMoreInteractions(statisticsMessageMapper, gameStatisticsTelegramService);
   }
@@ -72,7 +72,7 @@ class StatisticsTelegramServiceTest {
     when(playerInGameStatisticsTelegramService.retrieveStatistics(statisticsCommand)).thenReturn(expected);
 
     assertThat(statisticsService.retrieveStatistics(metadata)).isEqualTo(expected);
-    verify(personMentionsValidator, only()).validateMessageHasUserTextMention(metadata);
+    verify(personMentionsValidator, only()).validateMessageHasNoUserTextMention(metadata);
     verifyNoInteractions(gameStatisticsTelegramService, globalPersonStatisticsTelegramService);
     verifyNoMoreInteractions(statisticsMessageMapper, playerInGameStatisticsTelegramService);
   }
@@ -95,7 +95,7 @@ class StatisticsTelegramServiceTest {
     when(globalPersonStatisticsTelegramService.retrieveStatistics(statisticsCommand)).thenReturn(expected);
 
     assertThat(statisticsService.retrieveStatistics(metadata)).isEqualTo(expected);
-    verify(personMentionsValidator, only()).validateMessageHasUserTextMention(metadata);
+    verify(personMentionsValidator, only()).validateMessageHasNoUserTextMention(metadata);
     verifyNoInteractions(gameStatisticsTelegramService, playerInGameStatisticsTelegramService);
     verifyNoMoreInteractions(statisticsMessageMapper, globalPersonStatisticsTelegramService);
   }

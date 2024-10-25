@@ -20,7 +20,7 @@ public class StatisticsTelegramFacadeService {
   private final GameStatisticsTelegramService gameStatisticsTelegramService;
 
   public BotApiMethodMessage retrieveStatistics(final MessageMetadata messageMetadata) {
-    personMentionsValidator.validateMessageHasUserTextMention(messageMetadata);
+    personMentionsValidator.validateMessageHasNoUserTextMention(messageMetadata);
     final var statistics = statisticsMessageMapper.map(messageMetadata);
     return switch (statistics.type()) {
       case GAME -> gameStatisticsTelegramService.retrieveStatistics(statistics);

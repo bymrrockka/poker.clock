@@ -11,11 +11,11 @@ import java.util.List;
 public class PersonMentionsValidator {
 
   public void validateMessageMentions(final MessageMetadata messageMetadata, final int mentionsSize) {
-    validateMessageHasUserTextMention(messageMetadata);
+    validateMessageHasNoUserTextMention(messageMetadata);
     validateMessageHasMentionsNotLessThen(messageMetadata, mentionsSize);
   }
 
-  public void validateMessageHasUserTextMention(final MessageMetadata messageMetadata) {
+  public void validateMessageHasNoUserTextMention(final MessageMetadata messageMetadata) {
     messageMetadata.entities().stream()
       .filter(entity -> entity.type().equals(MessageEntityType.TEXT_MENTION))
       .findAny()

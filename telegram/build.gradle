@@ -55,6 +55,11 @@ dependencies {
     annotationProcessor libs.lombok
     annotationProcessor libs.mapstructProcessor
     implementation libs.kotlinStdLib
+    implementation libs.exposedCore
+    implementation libs.exposedJdbc
+    implementation libs.exposedJson
+    implementation libs.exposedJavaTime
+
 
     testCompileOnly libs.lombok
     testAnnotationProcessor libs.lombok
@@ -65,6 +70,7 @@ dependencies {
     testImplementation libs.assertjCore
     testImplementation(testFixtures(project))
     testImplementation(testFixtures(project(":core")))
+    testImplementation libs.kotlinStdLib
 
     testFixturesCompileOnly libs.lombok
     testFixturesAnnotationProcessor libs.lombok

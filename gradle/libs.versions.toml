@@ -19,6 +19,7 @@ jacksonDataformatVersion = "2.18.0"
 mapstructVersion = "1.6.2"
 lombokMapstructBindingVersion = "0.2.0"
 hikariCPVersion = "5.1.0"
+jetbrainsExposedVersion = "0.55.0"
 
 [plugins]
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinJvmVersion" }
@@ -50,6 +51,10 @@ mapstructCore = { module = "org.mapstruct:mapstruct", version.ref = "mapstructVe
 mapstructProcessor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstructVersion" }
 lombokMapstructBinding = { module = "org.projectlombok:lombok-mapstruct-binding", version.ref = "lombokMapstructBindingVersion" }
 hikariCP = { module = "com.zaxxer:HikariCP", version.ref = "hikariCPVersion" }
+exposedCore = { module = "org.jetbrains.exposed:exposed-core", version.ref = "jetbrainsExposedVersion" }
+exposedJdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "jetbrainsExposedVersion" }
+exposedJavaTime = { module = "org.jetbrains.exposed:exposed-java-time", version.ref = "jetbrainsExposedVersion" }
+exposedJson = { module = "org.jetbrains.exposed:exposed-json", version.ref = "jetbrainsExposedVersion" }
 
 
 
