@@ -2,9 +2,8 @@ package by.mrrockka.repo.task
 
 import by.mrrockka.domain.ForcedBetsTask
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.springframework.stereotype.Component
 
-@Component
+//@Component
 class ForcedBetsRepository {
 
     fun save(task: ForcedBetsTask) {

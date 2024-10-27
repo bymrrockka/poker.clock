@@ -7,7 +7,6 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.upsert
 import org.springframework.stereotype.Component
-import java.util.*
 
 
 @Component
@@ -27,28 +26,22 @@ class PollTaskRepository {
         }
     }
 
-    fun getById(id: UUID): PollTask? {
-        return transaction {
-            TODO()
-        }
-    }
-
     fun selectNotFinished(): List<PollTask> {
         return transaction {
             PollTaskTable.selectAll()
-                    .where { PollTaskTable.finishedAt.isNotNull() }
-                    .map { pollTask(it) }
+                .where { PollTaskTable.finishedAt.isNull() }
+                .map { pollTask(it) }
         }
     }
 
     private fun pollTask(it: ResultRow) = PollTask(
-            id = it[PollTaskTable.id],
-            chatId = it[PollTaskTable.chatId],
-            messageId = it[PollTaskTable.messageId],
-            cron = it[cron],
-            createdAt = it[PollTaskTable.createdAt],
-            finishedAt = it[PollTaskTable.finishedAt],
-            message = it[PollTaskTable.message],
-            options = it[PollTaskTable.options].toList(),
+        id = it[PollTaskTable.id],
+        chatId = it[PollTaskTable.chatId],
+        messageId = it[PollTaskTable.messageId],
+        cron = it[cron],
+        createdAt = it[PollTaskTable.createdAt],
+        finishedAt = it[PollTaskTable.finishedAt],
+        message = it[PollTaskTable.message],
+        options = it[PollTaskTable.options].toList(),
     )
 }

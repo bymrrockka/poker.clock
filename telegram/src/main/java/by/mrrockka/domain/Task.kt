@@ -20,23 +20,18 @@ interface Task {
 }
 
 data class PollTask(
-        override val id: UUID,
-        override val chatId: Long,
-        val messageId: Int? = null, //todo: find a way to get poll message id in chat
-        override val cron: String,
-        val message: String,
-        val options: List<Option>,
-        override val finishedAt: Instant? = null,
-        override val createdAt: Instant
+    override val id: UUID,
+    override val chatId: Long,
+    val messageId: Int,
+    override val cron: String,
+    val message: String,
+    val options: List<Option>,
+    override val finishedAt: Instant? = null,
+    override val createdAt: Instant
 ) : Task {
-
-    constructor() : this(id = UUID.randomUUID(), cron = "", chatId = 1, message = "", options = listOf(), createdAt = Instant.now()) {
-        TODO("Filler for current code implementation. To removal")
-    }
-
     data class Option(
-            val text: String,
-            val isParticipant: Boolean? = false,
+        val text: String,
+        val isParticipant: Boolean? = false,
     )
 
     override fun toMessage(): BotApiMethodMessage {
@@ -53,25 +48,25 @@ data class PollTask(
 }
 
 data class ForcedBetsTask(
-        override val id: UUID,
-        override val cron: String,
-        override val chatId: Long,
-        val schema: Schema,
-        override val createdAt: Instant,
-        override val finishedAt: Instant? = null,
+    override val id: UUID,
+    override val cron: String,
+    override val chatId: Long,
+    val schema: Schema,
+    override val createdAt: Instant,
+    override val finishedAt: Instant? = null,
 ) : Task {
     var currentIndex: AtomicInteger = AtomicInteger(0)
 
     data class Schema(
-            val id: UUID,
-            val forcedBets: List<ForcedBets>
+        val id: UUID,
+        val forcedBets: List<ForcedBets>
     )
 
     data class ForcedBets(
-            val index: Int,
-            val bigBlind: BigDecimal,
-            val smallBlind: BigDecimal,
-            val ante: BigDecimal
+        val index: Int,
+        val bigBlind: BigDecimal,
+        val smallBlind: BigDecimal,
+        val ante: BigDecimal
     )
 
     override fun toMessage(): BotApiMethodMessage {

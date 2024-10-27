@@ -4,9 +4,9 @@ import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.domain.PollTask
 import by.mrrockka.domain.Task
 import by.mrrockka.repo.poll.PollTaskRepository
-import by.mrrockka.repo.task.ForcedBetsRepository
 import by.mrrockka.validation.poll.PollMessageValidator
 import jakarta.annotation.PostConstruct
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
@@ -14,9 +14,8 @@ import java.util.*
 
 @Service
 class TaskTelegramService(
-        private val pollMessageValidator: PollMessageValidator,
-        private val pollTaskRepository: PollTaskRepository,
-        private val forcedBetsRepository: ForcedBetsRepository
+    private val pollMessageValidator: PollMessageValidator,
+    private val pollTaskRepository: PollTaskRepository
 ) {
     var tasks: Map<UUID, Task> = mapOf();
 
@@ -26,18 +25,19 @@ class TaskTelegramService(
     }
 
     fun createPoll(messageMetadata: MessageMetadata): BotApiMethodMessage {
-        pollMessageValidator.validatePoll()
-        pollTaskRepository.upsert(PollTask())
+        return transaction {
+            pollMessageValidator.validatePoll(messageMetadata.toPollTask())
+            pollTaskRepository.upsert(messageMetadata.toPollTask())
+            assignTasks()
 
-        /* todo:
-        *   - validate message
-        *   - store to database???
-        *   - return message
-        * */
-
-        return SendMessage().apply {
-            chatId = messageMetadata.chatId.toString()
-
+            SendMessage().apply {
+                chatId = messageMetadata.chatId.toString()
+                replyToMessageId = messageMetadata.id
+                text = """
+                Poll created.  
+                Will be triggered at $
+            """.trimIndent()
+            }
         }
     }
 
@@ -46,9 +46,19 @@ class TaskTelegramService(
     }
 
     private fun assignTasks() {
-        tasks = (forcedBetsRepository.getAllNotDeleted() + pollTaskRepository.selectNotFinished())
-                .associateBy({ it.id }, { it })
+        tasks = pollTaskRepository.selectNotFinished()
+            .associateBy({ it.id }, { it })
     }
+}
 
-
+private fun MessageMetadata.toPollTask(): PollTask {
+    return PollTask(
+        id = UUID.randomUUID(),
+        chatId = this.chatId,
+        messageId = this.id,
+        cron = this.text,
+        message = this.text,
+        options = listOf(),
+        createdAt = this.createdAt
+    )
 }
