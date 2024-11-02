@@ -71,6 +71,7 @@ dependencies {
     testImplementation(testFixtures(project))
     testImplementation(testFixtures(project(":core")))
     testImplementation libs.kotlinStdLib
+    testImplementation libs.mockk
 
     testFixturesCompileOnly libs.lombok
     testFixturesAnnotationProcessor libs.lombok

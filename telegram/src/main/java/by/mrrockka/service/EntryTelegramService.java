@@ -2,7 +2,7 @@ package by.mrrockka.service;
 
 import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.Person;
-import by.mrrockka.mapper.EntryMessageMapper;
+import by.mrrockka.parser.EntryMessageParser;
 import by.mrrockka.response.builder.EntryResponseBuilder;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
 import by.mrrockka.service.game.GameTelegramFacadeService;
@@ -24,7 +24,7 @@ import java.util.Optional;
 public class EntryTelegramService {
 
   private final EntriesService entriesService;
-  private final EntryMessageMapper entryMessageMapper;
+  private final EntryMessageParser entryMessageParser;
   private final GameTelegramFacadeService gameTelegramFacadeService;
   private final TelegramPersonService telegramPersonService;
   private final PersonMentionsValidator personMentionsValidator;
@@ -36,7 +36,7 @@ public class EntryTelegramService {
   public BotApiMethodMessage storeEntry(final MessageMetadata messageMetadata) {
     personMentionsValidator.validateMessageMentions(messageMetadata, 1);
 //    todo: 1 change entries mapping to gather only entry amount and change validation
-    final var personAndAmountMap = entryMessageMapper.map(messageMetadata);
+    final var personAndAmountMap = entryMessageParser.parse(messageMetadata);
     collectionsValidator.validateMapIsNotEmpty(personAndAmountMap, "Entry");
 
     final var telegramGame = gameTelegramFacadeService

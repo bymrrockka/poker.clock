@@ -4,7 +4,7 @@ import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.Person;
 import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.domain.game.CashGame;
-import by.mrrockka.mapper.WithdrawalMessageMapper;
+import by.mrrockka.parser.WithdrawalMessageParser;
 import by.mrrockka.response.builder.WithdrawalResponseBuilder;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
 import by.mrrockka.service.game.GameTelegramFacadeService;
@@ -22,7 +22,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 public class WithdrawalTelegramService {
 
   private final WithdrawalsService withdrawalsService;
-  private final WithdrawalMessageMapper withdrawalMessageMapper;
+  private final WithdrawalMessageParser withdrawalMessageParser;
   private final GameTelegramFacadeService gameTelegramFacadeService;
   private final TelegramPersonService telegramPersonService;
   private final GameValidator gameValidator;
@@ -34,7 +34,7 @@ public class WithdrawalTelegramService {
   public BotApiMethodMessage storeWithdrawal(final MessageMetadata messageMetadata) {
     personMentionsValidator.validateMessageMentions(messageMetadata, 1);
 
-    final var personAndAmountMap = withdrawalMessageMapper.map(messageMetadata);
+    final var personAndAmountMap = withdrawalMessageParser.parse(messageMetadata);
     collectionsValidator.validateMapIsNotEmpty(personAndAmountMap, "Withdrawal");
 
     final var amount = personAndAmountMap.values().stream().findFirst().orElseThrow();

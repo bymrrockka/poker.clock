@@ -1,5 +1,6 @@
 package by.mrrockka.domain
 
+import org.springframework.scheduling.support.CronExpression
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage
 import org.telegram.telegrambots.meta.api.methods.polls.SendPoll
 import java.math.BigDecimal
@@ -10,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 interface Task {
     val id: UUID
-    val cron: String
+    val cron: CronExpression
     val createdAt: Instant
     val finishedAt: Instant?
     val chatId: Long
@@ -20,14 +21,14 @@ interface Task {
 }
 
 data class PollTask(
-    override val id: UUID,
-    override val chatId: Long,
-    val messageId: Int,
-    override val cron: String,
-    val message: String,
-    val options: List<Option>,
-    override val finishedAt: Instant? = null,
-    override val createdAt: Instant
+        override val id: UUID,
+        override val chatId: Long,
+        val messageId: Int,
+        override val cron: CronExpression,
+        val message: String,
+        val options: List<Option>,
+        override val finishedAt: Instant? = null,
+        override val createdAt: Instant
 ) : Task {
     data class Option(
         val text: String,
@@ -49,7 +50,7 @@ data class PollTask(
 
 data class ForcedBetsTask(
     override val id: UUID,
-    override val cron: String,
+    override val cron: CronExpression,
     override val chatId: Long,
     val schema: Schema,
     override val createdAt: Instant,

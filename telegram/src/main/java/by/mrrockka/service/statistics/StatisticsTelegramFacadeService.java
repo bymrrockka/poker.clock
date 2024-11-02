@@ -1,7 +1,7 @@
 package by.mrrockka.service.statistics;
 
 import by.mrrockka.domain.MessageMetadata;
-import by.mrrockka.mapper.StatisticsMessageMapper;
+import by.mrrockka.parser.StatisticsMessageParser;
 import by.mrrockka.validation.mentions.PersonMentionsValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMess
 @RequiredArgsConstructor
 public class StatisticsTelegramFacadeService {
 
-  private final StatisticsMessageMapper statisticsMessageMapper;
+  private final StatisticsMessageParser statisticsMessageParser;
   private final PersonMentionsValidator personMentionsValidator;
   private final PlayerInGameStatisticsTelegramService playerInGameStatisticsTelegramService;
   private final GlobalPersonStatisticsTelegramService globalPersonStatisticsTelegramService;
@@ -21,7 +21,7 @@ public class StatisticsTelegramFacadeService {
 
   public BotApiMethodMessage retrieveStatistics(final MessageMetadata messageMetadata) {
     personMentionsValidator.validateMessageHasNoUserTextMention(messageMetadata);
-    final var statistics = statisticsMessageMapper.map(messageMetadata);
+    final var statistics = statisticsMessageParser.map(messageMetadata);
     return switch (statistics.type()) {
       case GAME -> gameStatisticsTelegramService.retrieveStatistics(statistics);
       case PLAYER_IN_GAME -> playerInGameStatisticsTelegramService.retrieveStatistics(statistics);

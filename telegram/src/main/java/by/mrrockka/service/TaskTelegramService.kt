@@ -3,21 +3,23 @@ package by.mrrockka.service
 import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.domain.PollTask
 import by.mrrockka.domain.Task
+import by.mrrockka.parser.PollMessageParser
 import by.mrrockka.repo.poll.PollTaskRepository
 import by.mrrockka.validation.poll.PollMessageValidator
 import jakarta.annotation.PostConstruct
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
+import java.time.LocalDateTime
 import java.util.*
 
 @Service
 class TaskTelegramService(
-    private val pollMessageValidator: PollMessageValidator,
-    private val pollTaskRepository: PollTaskRepository
+        private val pollMessageValidator: PollMessageValidator,
+        private val pollMessageParser: PollMessageParser,
+        private val pollTaskRepository: PollTaskRepository
 ) {
-    var tasks: Map<UUID, Task> = mapOf();
+    private var tasks: Map<UUID, Task> = mapOf();
 
     @PostConstruct
     fun init() {
@@ -25,19 +27,18 @@ class TaskTelegramService(
     }
 
     fun createPoll(messageMetadata: MessageMetadata): BotApiMethodMessage {
-        return transaction {
-            pollMessageValidator.validatePoll(messageMetadata.toPollTask())
-            pollTaskRepository.upsert(messageMetadata.toPollTask())
-            assignTasks()
+        val pollTask = messageMetadata.toPollTask()
+        pollMessageValidator.validatePoll(pollTask)
+        pollTaskRepository.upsert(pollTask)
+        assignTasks()
 
-            SendMessage().apply {
-                chatId = messageMetadata.chatId.toString()
-                replyToMessageId = messageMetadata.id
-                text = """
-                Poll created.  
-                Will be triggered at $
+        return SendMessage().apply {
+            chatId = messageMetadata.chatId.toString()
+            replyToMessageId = messageMetadata.id
+            text = """
+                Poll created.
+                Will be triggered at ${pollTask.cron.next(LocalDateTime.now())}
             """.trimIndent()
-            }
         }
     }
 
@@ -47,18 +48,20 @@ class TaskTelegramService(
 
     private fun assignTasks() {
         tasks = pollTaskRepository.selectNotFinished()
-            .associateBy({ it.id }, { it })
+                .associateBy({ it.id }, { it })
+                .orEmpty()
+    }
+
+    private fun MessageMetadata.toPollTask(): PollTask {
+        return PollTask(
+                id = UUID.randomUUID(),
+                chatId = this.chatId,
+                messageId = this.id,
+                cron = pollMessageParser.parseCron(this),
+                message = pollMessageParser.parseMessageText(this),
+                options = pollMessageParser.parseOptions(this),
+                createdAt = this.createdAt
+        )
     }
 }
 
-private fun MessageMetadata.toPollTask(): PollTask {
-    return PollTask(
-        id = UUID.randomUUID(),
-        chatId = this.chatId,
-        messageId = this.id,
-        cron = this.text,
-        message = this.text,
-        options = listOf(),
-        createdAt = this.createdAt
-    )
-}

@@ -4,7 +4,7 @@ import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.domain.finaleplaces.FinalPlace;
 import by.mrrockka.domain.finaleplaces.FinalePlaces;
-import by.mrrockka.mapper.finaleplaces.FinalePlacesMessageMapper;
+import by.mrrockka.parser.finaleplaces.FinalePlacesMessageParser;
 import by.mrrockka.response.builder.FinalePlacesResponseBuilder;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
 import by.mrrockka.service.exception.FinalPlaceContainsNicknameOfNonExistingPlayerException;
@@ -24,7 +24,7 @@ import java.util.List;
 public class FinalePlacesTelegramService {
 
   private final FinalePlacesService finalePlacesService;
-  private final FinalePlacesMessageMapper finalePlacesMessageMapper;
+  private final FinalePlacesMessageParser finalePlacesMessageParser;
   private final GameTelegramFacadeService gameTelegramFacadeService;
   private final TelegramPersonService telegramPersonService;
   private final FinalePlacesResponseBuilder finalePlacesResponseBuilder;
@@ -35,7 +35,7 @@ public class FinalePlacesTelegramService {
   public BotApiMethodMessage storePrizePool(final MessageMetadata messageMetadata) {
     personMentionsValidator.validateMessageMentions(messageMetadata, 1);
 
-    final var places = finalePlacesMessageMapper.map(messageMetadata);
+    final var places = finalePlacesMessageParser.parse(messageMetadata);
     collectionsValidator.validateMapIsNotEmpty(places, "Finale places");
 
     final var telegramGame = gameTelegramFacadeService

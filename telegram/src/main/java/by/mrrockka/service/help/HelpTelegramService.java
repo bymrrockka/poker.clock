@@ -1,7 +1,7 @@
 package by.mrrockka.service.help;
 
 import by.mrrockka.domain.MessageMetadata;
-import by.mrrockka.mapper.HelpMessageMapper;
+import by.mrrockka.parser.HelpMessageParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,10 +15,10 @@ public class HelpTelegramService {
   private static final String HELP_COMMAND = "help";
 
   private final BotDescriptionProperties botDescriptionProperties;
-  private final HelpMessageMapper helpMessageMapper;
+  private final HelpMessageParser helpMessageParser;
 
   public BotApiMethodMessage sendHelpInformation(final MessageMetadata messageMetadata) {
-    final var description = helpMessageMapper.map(messageMetadata)
+    final var description = helpMessageParser.parse(messageMetadata)
       .map(command -> botDescriptionProperties.getCommands().get(command))
       .orElse(botDescriptionProperties.getCommands().get(HELP_COMMAND));
 

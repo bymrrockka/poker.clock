@@ -159,16 +159,16 @@ bot:
         details: |
           You could use this command to scheduled a poll for chat.
           Cron field and options field are required ones.
-          Cron is default cron format starting rfom second to year. 
+          Cron is default cron format starting from seconds to year. (Sec Min Hour Day-of-month Month Day-of-week Year) 
           For options you can mark one of it with "participant" keyword to make it an option to start game with (all answered this options would be used to create a game).
           Examples: 
           /create_poll
-          cron: 40 59 10:00 Tue Apr 2024
+          cron: 40 59 10 1-7 JAN MON-TUE 2024
           message: Example message
           options:
           1. Yes 
           /create_poll
-          cron: * * 17:00 Mon * *
+          cron: * 00 17 * * MON *
           message: Example message
           options:
           1. Yes - participant

@@ -20,6 +20,7 @@ mapstructVersion = "1.6.2"
 lombokMapstructBindingVersion = "0.2.0"
 hikariCPVersion = "5.1.0"
 jetbrainsExposedVersion = "0.55.0"
+mockkVersion = "1.13.13"
 
 [plugins]
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinJvmVersion" }
@@ -42,6 +43,7 @@ springBootWeb = { module = "org.springframework.boot:spring-boot-starter-web" }
 springBootTelegrambots = { module = "org.telegram:telegrambots-spring-boot-starter", version.ref = "springBootTelegrambotsVersion" }
 apacheCommonsLang3 = { module = "org.apache.commons:commons-lang3", version.ref = "apacheCommonsLang3Version" }
 mockitoCore = { module = "org.mockito:mockito-core", version.ref = "mockitoVersion" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockkVersion" }
 mockitoJupiter = { module = "org.mockito:mockito-junit-jupiter", version.ref = "mockitoVersion" }
 springBootTest = { module = "org.springframework.boot:spring-boot-starter-test" }
 liquibase = { module = "org.liquibase:liquibase-core", version.ref = "liquibaseVersion" }

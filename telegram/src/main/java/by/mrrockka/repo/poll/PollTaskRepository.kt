@@ -6,6 +6,7 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.upsert
+import org.springframework.scheduling.support.CronExpression
 import org.springframework.stereotype.Component
 
 
@@ -38,7 +39,7 @@ class PollTaskRepository {
         id = it[PollTaskTable.id],
         chatId = it[PollTaskTable.chatId],
         messageId = it[PollTaskTable.messageId],
-        cron = it[cron],
+            cron = CronExpression.parse(it[cron]),
         createdAt = it[PollTaskTable.createdAt],
         finishedAt = it[PollTaskTable.finishedAt],
         message = it[PollTaskTable.message],

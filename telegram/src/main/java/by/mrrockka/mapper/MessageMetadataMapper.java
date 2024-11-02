@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@Mapper(imports = {Instant.class, MeMentionMapper.class, Collections.class})
+@Mapper(imports = {Instant.class, MeMentionUtil.class, Collections.class})
 public abstract class MessageMetadataMapper {
   @Autowired
   private MessageEntityMapper messageEntityMapper;
@@ -61,7 +61,7 @@ public abstract class MessageMetadataMapper {
     }
 
 
-    if (MeMentionMapper.hasMeMention(message)) {
+    if (MeMentionUtil.hasMeMention(message)) {
       entities.add(MessageEntity.builder()
                      .text("@%s".formatted(message.getFrom().getUserName()))
                      .type(MessageEntityType.MENTION)
@@ -79,7 +79,7 @@ public abstract class MessageMetadataMapper {
 
   @Named("filterText")
   public String filterText(final Message message) {
-    return removeBotNicknameFromCommand(MeMentionMapper.replaceMeMention(message));
+    return removeBotNicknameFromCommand(MeMentionUtil.replaceMeMention(message));
   }
 
   private String removeBotNicknameFromCommand(final String text) {

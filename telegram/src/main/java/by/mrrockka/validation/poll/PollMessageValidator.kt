@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class PollMessageValidator {
-    fun validatePoll(toPollTask: PollTask) {
+    fun validatePoll(pollTask: PollTask) {
         throw UnsupportedOperationException("Not supported yet.")
     }
 }
