@@ -6,7 +6,7 @@ import by.mrrockka.domain.Task
 import by.mrrockka.parser.PollMessageParser
 import by.mrrockka.repo.poll.PollTaskRepository
 import by.mrrockka.validation.poll.PollMessageValidator
-import jakarta.annotation.PostConstruct
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
@@ -17,20 +17,15 @@ import java.util.*
 class TaskTelegramService(
         private val pollMessageValidator: PollMessageValidator,
         private val pollMessageParser: PollMessageParser,
-        private val pollTaskRepository: PollTaskRepository
+        private val pollTaskRepository: PollTaskRepository,
+        private val eventPublisher: ApplicationEventPublisher
 ) {
-    private var tasks: Map<UUID, Task> = mapOf();
-
-    @PostConstruct
-    fun init() {
-        assignTasks()
-    }
 
     fun createPoll(messageMetadata: MessageMetadata): BotApiMethodMessage {
         val pollTask = messageMetadata.toPollTask()
         pollMessageValidator.validatePoll(pollTask)
         pollTaskRepository.upsert(pollTask)
-        assignTasks()
+        eventPublisher.publishEvent(TaskCreated(pollTask))
 
         return SendMessage().apply {
             chatId = messageMetadata.chatId.toString()
@@ -42,13 +37,12 @@ class TaskTelegramService(
         }
     }
 
-    fun getTasks(): List<Task> {
-        return tasks.values.toList().orEmpty();
+    fun batchUpdate(tasks: List<PollTask>) {
+        pollTaskRepository.batchUpsert(tasks)
     }
 
-    private fun assignTasks() {
-        tasks = pollTaskRepository.selectNotFinished()
-                .associateBy({ it.id }, { it })
+    fun getTasks(): List<Task> {
+        return pollTaskRepository.selectNotFinished()
                 .orEmpty()
     }
 
@@ -64,4 +58,7 @@ class TaskTelegramService(
         )
     }
 }
+
+data class TaskCreated(val task: Task)
+data class TaskFinished(val task: Task)
 

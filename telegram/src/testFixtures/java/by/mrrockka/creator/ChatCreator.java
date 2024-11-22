@@ -11,7 +11,7 @@ import static java.util.Objects.nonNull;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ChatCreator {
 
-  public static final Long CHAT_ID = 1 + Double.valueOf(Math.random() * 10).longValue();
+  public static final Long CHAT_ID = randomChatId();
 
   public static Chat chat() {
     return chat(CHAT_ID);
@@ -29,6 +29,10 @@ public final class ChatCreator {
     }
 
     return chat;
+  }
+
+  public static Long randomChatId() {
+    return 1 + Double.valueOf(Math.random() * 10).longValue();
   }
 
 }

@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest
 @ActiveProfiles("repository")
-class EntryTelegramServiceTest {
+class EntryTelegramServiceITest {
 
   private static final UUID GAME_ID = UUID.fromString("b759ac52-1496-463f-b0d8-982deeac085c");
   private static final Integer REPLY_TO_ID = 2;

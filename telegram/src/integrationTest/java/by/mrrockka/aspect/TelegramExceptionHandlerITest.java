@@ -6,6 +6,7 @@ import by.mrrockka.creator.ChatCreator;
 import by.mrrockka.creator.MessageCreator;
 import by.mrrockka.creator.UpdateCreator;
 import by.mrrockka.exception.BusinessException;
+import by.mrrockka.service.TaskTelegramService;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -24,7 +25,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 
 @SpringBootTest
-class TelegramExceptionHandlerTest {
+class TelegramExceptionHandlerITest {
 
   @SpyBean
   private PokerClockBot pokerClockBot;
@@ -32,6 +33,8 @@ class TelegramExceptionHandlerTest {
   private PokerClockAbsSender pokerClockAbsSender;
   @MockBean
   private DataSource dataSource;
+  @MockBean
+  private TaskTelegramService taskTelegramService;
 
   private static Stream<Arguments> exceptions() {
     return Stream.of(

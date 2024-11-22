@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest
 @ActiveProfiles("repository")
-class TelegramPersonServiceIntTest {
+class TelegramPersonServiceITest {
 
   private static final Long CHAT_ID = 123L;
   @Autowired

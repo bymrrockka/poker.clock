@@ -14,6 +14,7 @@ import io.mockk.junit5.MockKExtension
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.scheduling.support.CronExpression
 import java.time.LocalDateTime
 
@@ -28,6 +29,9 @@ class TaskTelegramServiceTest {
 
     @MockK(relaxUnitFun = true)
     lateinit var pollMessageParser: PollMessageParser
+
+    @MockK(relaxUnitFun = true)
+    lateinit var eventPublisher: ApplicationEventPublisher
 
     @InjectMockKs
     lateinit var taskTelegramService: TaskTelegramService

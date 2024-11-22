@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest
 @ActiveProfiles("repository")
-class FinalePlacesTelegramServiceTest {
+class FinalePlacesTelegramServiceITest {
 
   private static final Long CHAT_ID = 123L;
   private static final UUID GAME_ID = UUID.fromString("4a411a12-2386-4dce-b579-d806c91d6d17");

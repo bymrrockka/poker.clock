@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest
 @ActiveProfiles("repository")
-public class GameStatisticsTelegramServiceTest {
+public class GameStatisticsTelegramServiceITest {
 
   private static final Long CHAT_ID = 123L;
   private static final Integer TOURNAMENT_GAME_REPLY_TO_ID = 3;

@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @ExtendWith(PostgreSQLExtension.class)
 @SpringBootTest
 @ActiveProfiles("repository")
-class GameTelegramFacadeServiceTest {
+class GameTelegramFacadeServiceITest {
 
   private static final Long CHAT_ID = ChatCreator.CHAT_ID;
   private static final String TOURNAMENT_MESSAGE = """

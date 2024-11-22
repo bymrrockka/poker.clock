@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMess
 
 @Component
 class CreatePollTelegramCommandProcessor(
-        val taskTelegramService: TaskTelegramService
+        private val taskTelegramService: TaskTelegramService
 ) : TelegramCommandProcessor {
 
     override fun process(messageMetadata: MessageMetadata): BotApiMethodMessage {

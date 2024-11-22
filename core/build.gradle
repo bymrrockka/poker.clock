@@ -63,6 +63,7 @@ dependencies {
     testFixturesCompileOnly libs.lombok
     testFixturesAnnotationProcessor libs.lombok
     testFixturesAnnotationProcessor libs.mapstructProcessor
+    testFixturesApi libs.springBootJdbc
     testFixturesApi libs.springBootTest
     testFixturesApi libs.testContainerPostgresql
     testFixturesApi libs.testContainerJupiter

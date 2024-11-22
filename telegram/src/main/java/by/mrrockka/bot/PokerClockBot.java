@@ -19,7 +19,7 @@ import org.telegram.telegrambots.util.WebhookUtils;
 @RequiredArgsConstructor
 public class PokerClockBot implements LongPollingBot {
 
-  private final PokerClockAbsSender pokerClockAbsSender;
+  private final PokerClockAbsSender absSender;
   private final UpdateBotCommandsService updateBotCommandsService;
   private final TelegramBotsProperties telegramBotsProperties;
   private final TelegramCommandProcessorFactory telegramCommandProcessorFactory;
@@ -50,22 +50,22 @@ public class PokerClockBot implements LongPollingBot {
 
   @SneakyThrows
   private void executeMessage(final BotApiMethodMessage message) {
-    pokerClockAbsSender.execute(message);
+    absSender.execute(message);
   }
 
   @Override
   public void clearWebhook() throws TelegramApiRequestException {
-    WebhookUtils.clearWebhook(pokerClockAbsSender);
+    WebhookUtils.clearWebhook(absSender);
   }
 
   @Override
   public void onClosing() {
-    pokerClockAbsSender.shutdown();
+    absSender.shutdown();
   }
 
   @Override
   public BotOptions getOptions() {
-    return pokerClockAbsSender.getOptions();
+    return absSender.getOptions();
   }
 
   @Override

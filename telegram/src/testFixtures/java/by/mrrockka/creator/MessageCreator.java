@@ -15,7 +15,7 @@ import static java.util.Objects.nonNull;
 public final class MessageCreator {
 
   public static final Instant MESSAGE_TIMESTAMP = Instant.now();
-  public static final Integer MESSAGE_ID = Double.valueOf(100 + Math.random() * 100).intValue();
+  public static final Integer MESSAGE_ID = randomMessageId();
   public static final String MESSAGE_TEXT = FakerProvider.faker().chuckNorris().fact();
 
   public static Message message() {
@@ -43,6 +43,10 @@ public final class MessageCreator {
     }
 
     return message;
+  }
+
+  public static Integer randomMessageId() {
+    return Double.valueOf(100 + Math.random() * 100).intValue();
   }
 
 }

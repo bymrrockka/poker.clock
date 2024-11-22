@@ -3,6 +3,7 @@
 springBootVersion = "3.3.2"
 springDepManagementVersion = "1.1.6"
 kotlinJvmVersion = "2.0.21"
+kotlinSerializationVersion = "2.0.21"
 
 #libs
 postgresqlVersion = "42.7.4"
@@ -21,11 +22,14 @@ lombokMapstructBindingVersion = "0.2.0"
 hikariCPVersion = "5.1.0"
 jetbrainsExposedVersion = "0.55.0"
 mockkVersion = "1.13.13"
+springMockkVersion = "4.0.2"
+awaitilityVersion = "4.2.2"
 
 [plugins]
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinJvmVersion" }
 springBootPlugin = { id = "org.springframework.boot", version.ref = "springBootVersion" }
 springDepManagementPlugin = { id = "io.spring.dependency-management", version.ref = "springDepManagementVersion" }
+kotlinSerializationPlugin = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerializationVersion" }
 
 [libraries]
 kotlinStdLib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8" }
@@ -44,6 +48,7 @@ springBootTelegrambots = { module = "org.telegram:telegrambots-spring-boot-start
 apacheCommonsLang3 = { module = "org.apache.commons:commons-lang3", version.ref = "apacheCommonsLang3Version" }
 mockitoCore = { module = "org.mockito:mockito-core", version.ref = "mockitoVersion" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockkVersion" }
+springMockk = { module = "com.ninja-squad:springmockk", version.ref = "springMockkVersion" }
 mockitoJupiter = { module = "org.mockito:mockito-junit-jupiter", version.ref = "mockitoVersion" }
 springBootTest = { module = "org.springframework.boot:spring-boot-starter-test" }
 liquibase = { module = "org.liquibase:liquibase-core", version.ref = "liquibaseVersion" }
@@ -57,6 +62,7 @@ exposedCore = { module = "org.jetbrains.exposed:exposed-core", version.ref = "je
 exposedJdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "jetbrainsExposedVersion" }
 exposedJavaTime = { module = "org.jetbrains.exposed:exposed-java-time", version.ref = "jetbrainsExposedVersion" }
 exposedJson = { module = "org.jetbrains.exposed:exposed-json", version.ref = "jetbrainsExposedVersion" }
-
+exposedSpringBoot = { module = "org.jetbrains.exposed:exposed-spring-boot-starter", version.ref = "jetbrainsExposedVersion" }
+awaitility = { module = "org.awaitility:awaitility-kotlin", version.ref = "awaitilityVersion" }
 
 
