@@ -7,6 +7,8 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.sql.PreparedStatement;
+
 import static by.mrrockka.config.TestPostgreSQLContainer.*;
 
 @Slf4j
@@ -26,7 +28,7 @@ public class PostgreSQLExtension implements BeforeAllCallback, AfterEachCallback
   @Override
   public void afterEach(ExtensionContext context) {
     final var jdbcTemplate = SpringExtension.getApplicationContext(context).getBean(NamedParameterJdbcTemplate.class);
-    jdbcTemplate.execute("");
+    jdbcTemplate.execute("truncate bounty", PreparedStatement::execute);
   }
 
 

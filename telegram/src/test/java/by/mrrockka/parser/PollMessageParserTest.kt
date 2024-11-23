@@ -12,13 +12,14 @@ class PollMessageParserTest {
 
     private var text = """
         /create_poll
-        cron: 10 00 10 1-6 FEB MON-FRI
-        message: Poker Night on Friday 19:30. Are you going?
-        options:
-        1. Yes - participant
-        No
-        3 Maybe
-    """.trimIndent()
+        cron: 10 00 10 1-6 FEB MON-FRI    
+        message:    Poker Night on Friday 19:30. Are you going?    
+        options:    
+        1. Yes - participant 
+        2 No   
+        3   Maybe - participant
+        
+        """
 
     @Test
     fun `when metadata text contains cron expresssion then should extract it`() {
@@ -51,7 +52,7 @@ class PollMessageParserTest {
         val expected = listOf(
                 PollTask.Option("Yes", true),
                 PollTask.Option("No"),
-                PollTask.Option("Maybe"),
+                PollTask.Option("Maybe", true),
         )
         assertThat(parser.parseOptions(metadata))
                 .isEqualTo(expected)
