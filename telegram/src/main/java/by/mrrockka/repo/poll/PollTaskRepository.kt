@@ -4,11 +4,13 @@ import by.mrrockka.domain.PollTask
 import by.mrrockka.repo.poll.PollTaskTable.cron
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.update
 import org.jetbrains.exposed.sql.upsert
 import org.springframework.scheduling.support.CronExpression
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
+import java.time.Instant
 
 @Component
 open class PollTaskRepository {
@@ -33,7 +35,15 @@ open class PollTaskRepository {
         tasks.forEach { upsert(it) }
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
+    open fun finishPoll(messageId: Int, finishedAt: Instant): Int {
+        return PollTaskTable
+                .update({ PollTaskTable.messageId eq messageId }) {
+                    it[PollTaskTable.finishedAt] = finishedAt
+                }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
     open fun selectNotFinished(): List<PollTask> {
         return PollTaskTable.selectAll()
                 .where { PollTaskTable.finishedAt.isNull() }

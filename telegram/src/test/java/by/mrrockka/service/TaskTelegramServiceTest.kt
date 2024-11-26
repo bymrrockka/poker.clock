@@ -13,6 +13,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.scheduling.support.CronExpression
@@ -37,7 +38,7 @@ class TaskTelegramServiceTest {
     lateinit var taskTelegramService: TaskTelegramService
 
     @Test
-    fun `when received message metadata return message with poll created text`() {
+    fun `when received message metadata to create poll return message with poll created text`() {
         val metadata = MessageMetadataCreator.domain()
         val cronExp = CronExpression.parse("* * 2 * * *")
         val poll = TaskCreator.poll.copy(
@@ -58,10 +59,12 @@ class TaskTelegramServiceTest {
         val expected = SendMessageCreator.api {
             it.chatId(metadata.chatId)
             it.replyToMessageId(metadata.id)
-            it.text("""
+            it.text(
+                    """
                 Poll created.
                 Will be triggered at ${cronExp.next(LocalDateTime.now())}
-            """.trimIndent())
+            """.trimIndent()
+            )
         }
 
         assertThat(actual).isEqualTo(expected)
@@ -73,6 +76,48 @@ class TaskTelegramServiceTest {
                 .usingRecursiveComparison()
                 .ignoringFields("id")
                 .isEqualTo(poll)
+    }
+
+    @Test
+    fun `when received message metadata to stop poll return message with poll stop text`() {
+        val replyTo = MessageMetadataCreator.domainRandom()
+        val metadata = MessageMetadataCreator.domain {
+            it.replyTo(replyTo)
+        }
+
+        every { pollTaskRepository.finishPoll(replyTo.id, metadata.createdAt) } returns 1
+
+        val actual = taskTelegramService.stopPoll(metadata)
+        val expected = SendMessageCreator.api {
+            it.chatId(metadata.chatId)
+            it.replyToMessageId(metadata.replyTo.id)
+            it.text(
+                    """
+                Poll stopped.
+            """.trimIndent()
+            )
+        }
+
+        assertThat(actual).isEqualTo(expected)
+        verify { pollTaskRepository.finishPoll(replyTo.id, metadata.createdAt) }
+        verify { eventPublisher.publishEvent(PollTaskFinished(replyTo.id, metadata.createdAt)) }
+    }
+
+    @Test
+    fun `when received message metadata without reply message to stop poll throws exception`() {
+        val metadata = MessageMetadataCreator.domain()
+        assertThrows<NoAttachedMessagesFound> { taskTelegramService.stopPoll(metadata) }
+    }
+
+    @Test
+    fun `when received message metadata to stop poll and there is no related message id throws exception`() {
+        val replyTo = MessageMetadataCreator.domainRandom()
+        val metadata = MessageMetadataCreator.domain {
+            it.replyTo(replyTo)
+        }
+
+        every { pollTaskRepository.finishPoll(replyTo.id, metadata.createdAt) } returns 0
+        assertThrows<NoPollsFound> { taskTelegramService.stopPoll(metadata) }
     }
 
 }

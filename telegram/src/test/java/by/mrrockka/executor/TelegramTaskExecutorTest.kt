@@ -2,7 +2,7 @@ package by.mrrockka.executor
 
 import by.mrrockka.bot.PokerClockAbsSender
 import by.mrrockka.creator.TaskCreator
-import by.mrrockka.service.TaskCreated
+import by.mrrockka.service.PollTaskCreated
 import by.mrrockka.service.TaskTelegramService
 import io.mockk.Called
 import io.mockk.confirmVerified
@@ -74,7 +74,7 @@ class TelegramTaskExecutorTest {
         telegramTaskExecutor.init()
         verify { taskTelegramService.getTasks() }
 
-        telegramTaskExecutor.taskCreated(TaskCreated(updatedTask))
+        telegramTaskExecutor.pollTaskCreated(PollTaskCreated(updatedTask))
         telegramTaskExecutor.execute()
         (initTasks + updatedTask).forEach {
             verify { pokerClockAbsSender.executeAsync(it.toMessage()) }

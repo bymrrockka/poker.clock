@@ -1,7 +1,7 @@
 package by.mrrockka.service
 
 import by.mrrockka.bot.PokerClockAbsSender
-import by.mrrockka.config.PostgreSQLExtension
+import by.mrrockka.config.TelegramPSQLExtension
 import by.mrrockka.creator.TaskCreator
 import by.mrrockka.executor.TelegramTaskExecutor
 import com.ninjasquad.springmockk.MockkBean
@@ -19,14 +19,17 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.ApplicationEventPublisher
-import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ActiveProfiles
 import java.time.Duration
+import java.time.Instant
 
-@ExtendWith(PostgreSQLExtension::class)
+@ExtendWith(TelegramPSQLExtension::class)
 @SpringBootTest
 @ActiveProfiles("repository")
 class TelegramTaskExecutorITest {
+
+    @Autowired
+    private lateinit var telegramTaskExecutor: TelegramTaskExecutor
 
     @MockkBean(relaxed = true, clear = MockkClear.BEFORE)
     lateinit var pokerClockAbsSender: PokerClockAbsSender
@@ -46,7 +49,9 @@ class TelegramTaskExecutorITest {
     );
 
     @BeforeEach
-    fun init() {
+    fun before() {
+        taskExecutor.init()
+        verify { taskTelegramService.getTasks() }
     }
 
     @AfterEach
@@ -56,25 +61,28 @@ class TelegramTaskExecutorITest {
 
     @Test
     fun `given task list on execute should send messages`() {
-        taskTelegramService.batchUpdate(tasks)
-        verify { taskTelegramService.batchUpdate(tasks) }
         tasks.forEach {
-            eventPublisher.publishEvent(TaskCreated(it))
+            eventPublisher.publishEvent(PollTaskCreated(it))
         }
 
         val newTask = TaskCreator.randomPoll()
-        eventPublisher.publishEvent(TaskCreated(newTask))
+        eventPublisher.publishEvent(PollTaskCreated(newTask))
 
-        await atMost Duration.ofMillis(1100L) untilAsserted {
+        await atMost Duration.ofMillis(2000L) untilAsserted {
             (tasks + newTask).forEach {
                 verify { pokerClockAbsSender.executeAsync(it.toMessage()) }
             }
         }
     }
 
-    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Test
-    fun `should batch store all the tasks before destroying the bean`() {
-        verify { taskTelegramService.batchUpdate(tasks) }
+    fun `given task list when task finished should filter it out`() {
+        tasks.forEach {
+            eventPublisher.publishEvent(PollTaskCreated(it))
+        }
+        eventPublisher.publishEvent(PollTaskFinished(tasks[0].messageId, Instant.now().minusMillis(1000L)))
+        await atMost Duration.ofMillis(2000L) untilAsserted {
+            verify { pokerClockAbsSender.executeAsync(tasks[1].toMessage()) }
+        }
     }
 }

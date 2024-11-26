@@ -4,7 +4,8 @@ import by.mrrockka.bot.PokerClockAbsSender
 import by.mrrockka.domain.PollTask
 import by.mrrockka.domain.Task
 import by.mrrockka.exception.BusinessException
-import by.mrrockka.service.TaskCreated
+import by.mrrockka.service.PollTaskCreated
+import by.mrrockka.service.PollTaskFinished
 import by.mrrockka.service.TaskTelegramService
 import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
@@ -48,9 +49,20 @@ class TelegramTaskExecutor(
     }
 
     @EventListener
-    fun taskCreated(event: TaskCreated) {
+    fun pollTaskCreated(event: PollTaskCreated) {
         synchronized(tasks) {
             tasks += event.task.id to event.task
+        }
+    }
+
+    @EventListener
+    fun pollTaskFinished(event: PollTaskFinished) {
+        synchronized(tasks) {
+            tasks.polls().filter {
+                it.messageId == event.messageId
+            }.first().let {
+                tasks[it.id] = it.copy(finishedAt = event.finishedAt)
+            }
         }
     }
 
