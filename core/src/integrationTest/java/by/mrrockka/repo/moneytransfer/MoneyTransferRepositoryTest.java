@@ -1,7 +1,7 @@
 package by.mrrockka.repo.moneytransfer;
 
 import by.mrrockka.IntegrationTestConfiguration;
-import by.mrrockka.config.PostgreSQLExtension;
+import by.mrrockka.config.CorePSQLExtension;
 import by.mrrockka.creator.GameCreator;
 import by.mrrockka.creator.MoneyTransferCreator;
 import by.mrrockka.creator.PersonCreator;
@@ -19,7 +19,7 @@ import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(PostgreSQLExtension.class)
+@ExtendWith(CorePSQLExtension.class)
 @SpringBootTest(classes = IntegrationTestConfiguration.class)
 class MoneyTransferRepositoryTest {
 

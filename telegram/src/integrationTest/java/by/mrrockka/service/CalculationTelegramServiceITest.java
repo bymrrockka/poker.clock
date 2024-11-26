@@ -1,6 +1,6 @@
 package by.mrrockka.service;
 
-import by.mrrockka.config.PostgreSQLExtension;
+import by.mrrockka.config.TelegramPSQLExtension;
 import by.mrrockka.creator.MessageMetadataCreator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@ExtendWith(PostgreSQLExtension.class)
+@ExtendWith(TelegramPSQLExtension.class)
 @SpringBootTest
 @ActiveProfiles("repository")
 class CalculationTelegramServiceITest {

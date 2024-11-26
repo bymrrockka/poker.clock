@@ -1,6 +1,6 @@
 package by.mrrockka.service;
 
-import by.mrrockka.config.PostgreSQLExtension;
+import by.mrrockka.config.TelegramPSQLExtension;
 import by.mrrockka.creator.MessageMetadataCreator;
 import by.mrrockka.creator.PrizePoolCreator;
 import org.assertj.core.api.Assertions;
@@ -15,7 +15,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@ExtendWith(PostgreSQLExtension.class)
+@ExtendWith(TelegramPSQLExtension.class)
 @SpringBootTest
 @ActiveProfiles("repository")
 class PrizePoolTelegramServiceITest {

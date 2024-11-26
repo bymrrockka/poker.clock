@@ -2,7 +2,7 @@ package by.mrrockka.config;
 
 import org.testcontainers.containers.PostgreSQLContainer;
 
-class TestPostgreSQLContainer extends PostgreSQLContainer<TestPostgreSQLContainer> {
+class TestPSQLContainer extends PostgreSQLContainer<TestPSQLContainer> {
 
   //  todo: found out that testcontainer creates two containers, one with default values another one with overriden - needs investigation
   public static final String VERSION = "16.1";
@@ -11,12 +11,12 @@ class TestPostgreSQLContainer extends PostgreSQLContainer<TestPostgreSQLContaine
   private static final String USERNAME = "itest";
   private static final String PASSWORD = "itest123";
 
-  static final TestPostgreSQLContainer container = new TestPostgreSQLContainer()
+  static final TestPSQLContainer container = new TestPSQLContainer()
     .withDatabaseName(DB_NAME)
     .withUsername(USERNAME)
     .withPassword(PASSWORD);
 
-  TestPostgreSQLContainer() {
+  TestPSQLContainer() {
     super(IMAGE_AND_VERSION);
   }
 

@@ -1,6 +1,6 @@
 package by.mrrockka.repo;
 
-import by.mrrockka.config.PostgreSQLExtension;
+import by.mrrockka.config.TelegramPSQLExtension;
 import by.mrrockka.creator.MessageCreator;
 import by.mrrockka.repo.game.TelegramGameEntity;
 import by.mrrockka.repo.game.TelegramGameRepository;
@@ -16,7 +16,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-@ExtendWith(PostgreSQLExtension.class)
+@ExtendWith(TelegramPSQLExtension.class)
 @SpringBootTest
 @ActiveProfiles("repository")
 public class TelegramGameRepositoryITest {

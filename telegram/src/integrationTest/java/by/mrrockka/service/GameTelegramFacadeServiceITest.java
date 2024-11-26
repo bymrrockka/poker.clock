@@ -1,6 +1,6 @@
 package by.mrrockka.service;
 
-import by.mrrockka.config.PostgreSQLExtension;
+import by.mrrockka.config.TelegramPSQLExtension;
 import by.mrrockka.creator.ChatCreator;
 import by.mrrockka.creator.MessageCreator;
 import by.mrrockka.creator.MessageEntityCreator;
@@ -28,7 +28,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@ExtendWith(PostgreSQLExtension.class)
+@ExtendWith(TelegramPSQLExtension.class)
 @SpringBootTest
 @ActiveProfiles("repository")
 class GameTelegramFacadeServiceITest {

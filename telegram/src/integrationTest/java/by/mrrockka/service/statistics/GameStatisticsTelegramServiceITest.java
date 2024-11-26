@@ -1,7 +1,7 @@
 package by.mrrockka.service.statistics;
 
 
-import by.mrrockka.config.PostgreSQLExtension;
+import by.mrrockka.config.TelegramPSQLExtension;
 import by.mrrockka.creator.MessageMetadataCreator;
 import by.mrrockka.domain.statistics.StatisticsCommand;
 import by.mrrockka.domain.statistics.StatisticsType;
@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@ExtendWith(PostgreSQLExtension.class)
+@ExtendWith(TelegramPSQLExtension.class)
 @SpringBootTest
 @ActiveProfiles("repository")
 public class GameStatisticsTelegramServiceITest {

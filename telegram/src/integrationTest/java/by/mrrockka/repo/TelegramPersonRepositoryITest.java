@@ -1,7 +1,7 @@
 package by.mrrockka.repo;
 
 import by.mrrockka.FakerProvider;
-import by.mrrockka.config.PostgreSQLExtension;
+import by.mrrockka.config.TelegramPSQLExtension;
 import by.mrrockka.creator.PersonCreator;
 import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.repo.person.PersonEntity;
@@ -20,7 +20,7 @@ import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(PostgreSQLExtension.class)
+@ExtendWith(TelegramPSQLExtension.class)
 @SpringBootTest
 @ActiveProfiles("repository")
 class TelegramPersonRepositoryITest {
