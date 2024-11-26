@@ -5,7 +5,7 @@ import by.mrrockka.creator.MessageMetadataCreator;
 import by.mrrockka.creator.TelegramPersonCreator;
 import by.mrrockka.domain.Person;
 import by.mrrockka.domain.TelegramPerson;
-import by.mrrockka.mapper.person.TelegramPersonMapper;
+import by.mrrockka.mapper.TelegramPersonMapper;
 import by.mrrockka.repo.person.TelegramPersonRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

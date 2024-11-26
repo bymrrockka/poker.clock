@@ -1,7 +1,7 @@
 package by.mrrockka.repo.finalplaces;
 
 import by.mrrockka.IntegrationTestConfiguration;
-import by.mrrockka.config.PostgreSQLExtension;
+import by.mrrockka.config.CorePSQLExtension;
 import by.mrrockka.creator.PersonCreator;
 import by.mrrockka.repo.person.PersonRepository;
 import org.assertj.core.data.MapEntry;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(PostgreSQLExtension.class)
+@ExtendWith(CorePSQLExtension.class)
 @SpringBootTest(classes = IntegrationTestConfiguration.class)
 class FinalePlacesRepositoryTest {
 

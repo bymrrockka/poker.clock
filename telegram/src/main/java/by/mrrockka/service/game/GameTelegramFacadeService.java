@@ -2,7 +2,7 @@ package by.mrrockka.service.game;
 
 import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.TelegramGame;
-import by.mrrockka.mapper.game.TelegramGameMapper;
+import by.mrrockka.mapper.TelegramGameMapper;
 import by.mrrockka.repo.game.TelegramGameRepository;
 import by.mrrockka.service.GameService;
 import lombok.RequiredArgsConstructor;

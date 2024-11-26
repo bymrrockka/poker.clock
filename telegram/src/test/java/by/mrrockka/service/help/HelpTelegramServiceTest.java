@@ -1,7 +1,7 @@
 package by.mrrockka.service.help;
 
 import by.mrrockka.creator.MessageMetadataCreator;
-import by.mrrockka.mapper.HelpMessageMapper;
+import by.mrrockka.parser.HelpMessageParser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,7 +26,7 @@ class HelpTelegramServiceTest {
   @Mock
   private BotDescriptionProperties botDescriptionProperties;
   @Mock
-  private HelpMessageMapper helpMessageMapper;
+  private HelpMessageParser helpMessageParser;
   @InjectMocks
   private HelpTelegramService helpTelegramService;
 
@@ -40,7 +40,7 @@ class HelpTelegramServiceTest {
                                      .details(COMMAND_DETAILS)
                                      .build());
 
-    when(helpMessageMapper.map(metadata)).thenReturn(helpCommandOpt);
+    when(helpMessageParser.parse(metadata)).thenReturn(helpCommandOpt);
     when(botDescriptionProperties.getCommands()).thenReturn(commandsMap);
 
     final var actual = (SendMessage) helpTelegramService.sendHelpInformation(metadata);
@@ -61,7 +61,7 @@ class HelpTelegramServiceTest {
                                      .details(COMMAND_DETAILS)
                                      .build());
 
-    when(helpMessageMapper.map(metadata)).thenReturn(Optional.empty());
+    when(helpMessageParser.parse(metadata)).thenReturn(Optional.empty());
     when(botDescriptionProperties.getCommands()).thenReturn(commandsMap);
 
     final var actual = (SendMessage) helpTelegramService.sendHelpInformation(metadata);

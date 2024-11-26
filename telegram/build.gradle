@@ -7,6 +7,8 @@ plugins {
     id 'java-test-fixtures'
     alias(libs.plugins.springBootPlugin)
     alias(libs.plugins.springDepManagementPlugin)
+    alias(libs.plugins.kotlinJvm)
+    alias(libs.plugins.kotlinSerializationPlugin)
 }
 
 group = 'by.mrrockka'
@@ -16,6 +18,10 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(22)
     }
+}
+
+kotlin {
+    jvmToolchain(22)
 }
 
 defaultTasks "clean", "assemble"
@@ -49,6 +55,12 @@ dependencies {
     compileOnly libs.lombok
     annotationProcessor libs.lombok
     annotationProcessor libs.mapstructProcessor
+    implementation libs.kotlinStdLib
+    implementation libs.exposedCore
+    implementation libs.exposedJdbc
+    implementation libs.exposedJson
+    implementation libs.exposedJavaTime
+    implementation libs.exposedSpringBoot
 
     testCompileOnly libs.lombok
     testAnnotationProcessor libs.lombok
@@ -59,6 +71,8 @@ dependencies {
     testImplementation libs.assertjCore
     testImplementation(testFixtures(project))
     testImplementation(testFixtures(project(":core")))
+    testImplementation libs.kotlinStdLib
+    testImplementation libs.mockk
 
     testFixturesCompileOnly libs.lombok
     testFixturesAnnotationProcessor libs.lombok
@@ -95,10 +109,19 @@ testing {
                 implementation libs.springBootWeb
                 implementation libs.springBootAop
                 implementation libs.springBootTelegrambots
+                implementation libs.exposedCore
+                implementation libs.exposedJdbc
+                implementation libs.exposedJson
+                implementation libs.exposedJavaTime
+                implementation libs.exposedSpringBoot
                 implementation libs.assertjCore
                 implementation libs.springBootTest
                 implementation libs.liquibase
                 runtimeOnly libs.aspectjWeaver
+                implementation libs.kotlinStdLib
+                implementation libs.mockk
+                implementation libs.springMockk
+                implementation libs.awaitility
 
                 compileOnly libs.lombok
                 annotationProcessor libs.lombok

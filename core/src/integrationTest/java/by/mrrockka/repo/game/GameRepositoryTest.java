@@ -1,7 +1,7 @@
 package by.mrrockka.repo.game;
 
 import by.mrrockka.IntegrationTestConfiguration;
-import by.mrrockka.config.PostgreSQLExtension;
+import by.mrrockka.config.CorePSQLExtension;
 import by.mrrockka.creator.GameCreator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +14,7 @@ import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(PostgreSQLExtension.class)
+@ExtendWith(CorePSQLExtension.class)
 @SpringBootTest(classes = IntegrationTestConfiguration.class)
 class GameRepositoryTest {
 

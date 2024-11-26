@@ -4,6 +4,7 @@ import by.mrrockka.domain.MessageMetadata;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.function.Consumer;
@@ -15,6 +16,10 @@ public final class MessageMetadataCreator {
 
   public static MessageMetadata domain() {
     return domain(null);
+  }
+
+  public static MessageMetadata domainRandom() {
+    return domain(builder -> builder.id(MessageCreator.randomMessageId()).createdAt(Instant.now()));
   }
 
   public static MessageMetadata domain(

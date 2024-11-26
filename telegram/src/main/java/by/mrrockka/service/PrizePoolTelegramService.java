@@ -2,7 +2,7 @@ package by.mrrockka.service;
 
 import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.game.TournamentGame;
-import by.mrrockka.mapper.PrizePoolMessageMapper;
+import by.mrrockka.parser.PrizePoolMessageParser;
 import by.mrrockka.repo.game.GameType;
 import by.mrrockka.response.builder.PrizePoolResponseBuilder;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
@@ -20,14 +20,14 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 public class PrizePoolTelegramService {
 
   private final PrizePoolService prizePoolService;
-  private final PrizePoolMessageMapper prizePoolMessageMapper;
+  private final PrizePoolMessageParser prizePoolMessageParser;
   private final GameTelegramFacadeService gameTelegramFacadeService;
   private final GameValidator gameValidator;
   private final PrizePoolValidator prizePoolValidator;
   private final PrizePoolResponseBuilder prizePoolResponseBuilder;
 
   public BotApiMethodMessage storePrizePool(final MessageMetadata messageMetadata) {
-    final var prizePool = prizePoolMessageMapper.map(messageMetadata.text());
+    final var prizePool = prizePoolMessageParser.parse(messageMetadata.text());
     prizePoolValidator.validate(prizePool);
 
     final var telegramGame = gameTelegramFacadeService

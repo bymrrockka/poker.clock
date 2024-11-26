@@ -6,7 +6,7 @@ import by.mrrockka.domain.Person;
 import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.domain.collection.PersonEntries;
 import by.mrrockka.domain.game.BountyGame;
-import by.mrrockka.mapper.BountyMessageMapper;
+import by.mrrockka.parser.BountyMessageParser;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
 import by.mrrockka.service.exception.EntriesForPersonNotFoundException;
 import by.mrrockka.service.game.GameTelegramFacadeService;
@@ -24,14 +24,14 @@ import java.util.List;
 public class BountyTelegramService {
 
   private final BountyService bountyService;
-  private final BountyMessageMapper bountyMessageMapper;
+  private final BountyMessageParser bountyMessageParser;
   private final GameTelegramFacadeService gameTelegramFacadeService;
   private final PersonMentionsValidator personMentionsValidator;
   private final BountyValidator bountyValidator;
 
   public BotApiMethodMessage storeBounty(final MessageMetadata messageMetadata) {
     personMentionsValidator.validateMessageMentions(messageMetadata, 2);
-    final var fromAndTo = bountyMessageMapper.map(messageMetadata);
+    final var fromAndTo = bountyMessageParser.parse(messageMetadata);
     final var telegramGame = gameTelegramFacadeService
       .getGameByMessageMetadata(messageMetadata)
       .orElseThrow(ChatGameNotFoundException::new);

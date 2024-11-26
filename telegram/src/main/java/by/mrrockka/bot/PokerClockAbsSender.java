@@ -21,7 +21,6 @@ public class PokerClockAbsSender extends DefaultAbsSender {
 
   protected PokerClockAbsSender(@Autowired final TelegramBotsProperties telegramBotsProperties) {
     super(BOT_OPTIONS, telegramBotsProperties.getToken());
-    ;
   }
 
   public void shutdown() {

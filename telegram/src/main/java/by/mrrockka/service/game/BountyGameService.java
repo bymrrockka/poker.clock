@@ -2,8 +2,8 @@ package by.mrrockka.service.game;
 
 import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.Person;
-import by.mrrockka.mapper.game.GameMessageMapper;
-import by.mrrockka.mapper.game.TelegramGameMapper;
+import by.mrrockka.mapper.TelegramGameMapper;
+import by.mrrockka.parser.game.GameMessageParser;
 import by.mrrockka.repo.game.TelegramGameRepository;
 import by.mrrockka.service.EntriesService;
 import by.mrrockka.service.GameService;
@@ -25,12 +25,12 @@ class BountyGameService {
   private final TelegramPersonService telegramPersonService;
   private final GameService gameService;
   private final EntriesService entriesService;
-  private final GameMessageMapper gameMessageMapper;
+  private final GameMessageParser gameMessageParser;
   private final TelegramGameMapper telegramGameMapper;
 
   @Transactional(isolation = Isolation.READ_COMMITTED)
   BotApiMethodMessage storeGame(final MessageMetadata messageMetadata) {
-    final var game = gameMessageMapper.mapBounty(messageMetadata.text());
+    final var game = gameMessageParser.parseBountyGame(messageMetadata.text());
     final var personIds = telegramPersonService.storePersons(messageMetadata).stream()
       .map(Person::getId)
       .toList();
