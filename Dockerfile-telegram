@@ -4,4 +4,4 @@ WORKDIR /app
 
 COPY telegram/build/libs/telegram-bot-*.jar telegram.jar
 
-ENTRYPOINT ["java", "-jar", "/app/telegram.jar"]
+ENTRYPOINT ["java", "-jar", "/app/telegram.jar", "--enable-preview"]
