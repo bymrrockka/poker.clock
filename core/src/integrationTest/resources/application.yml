@@ -2,15 +2,3 @@ spring:
   liquibase:
     enabled: true
     change-log: db/changelog/db.changelog-master-test.yml
-#  datasource:
-#    url: jdbc:tc:postgresql:16.1:///pokerclock?TC_DAEMON=true
-#    type: com.zaxxer.hikari.HikariDataSource
-#    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
-#    username: itest
-#    password: itest123
-#    hikari:
-#      connectionTimeout: 3000
-#      idleTimeout: 3000
-#      maxLifetime: 4000
-#      maximumPoolSize: 10
-#      minimumIdle: 1

@@ -101,6 +101,26 @@ class PokerClockBotTest {
     verify(pokerClockAbsSender).execute(sendMessage);
   }
 
+  @Test
+  void givenUpdateWithPollAnswer_whenOnUpdateReceivedExecuted_thenShouldProcessUpdate() throws TelegramApiException {
+    final var message = MessageCreator.message(msg -> {
+      msg.setText(COMMAND_TEXT);
+      msg.setEntities(List.of(MessageEntityCreator.apiCommand(COMMAND_TEXT, COMMAND)));
+    });
+    final var update = UpdateCreator.update(message);
+    final var metadata = MessageMetadataCreator.domain();
+    final var sendMessage = SendMessageCreator.api();
+
+    when(telegramBotsProperties.isEnabled()).thenReturn(true);
+    when(messageMetadataMapper.map(message)).thenReturn(metadata);
+    when(telegramCommandProcessorFactory.provideProcessor(metadata)).thenReturn(commandProcessor);
+    when(commandProcessor.process(metadata)).thenReturn(sendMessage);
+    pokerClockBot.onUpdateReceived(update);
+
+    verify(commandProcessor).process(metadata);
+    verify(pokerClockAbsSender).execute(sendMessage);
+  }
+
   private static Stream<Arguments> notProcessableMessages() {
     return Stream.of(
       Arguments.of(

@@ -45,6 +45,7 @@ data class PollTask(
             it.chatId = chatId.toString()
             it.question = message
             it.options = options.map(Option::text)
+            it.isAnonymous = false
         }
     }
 

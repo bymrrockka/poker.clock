@@ -32,8 +32,7 @@ public class PrizePoolRepository {
 
   @SneakyThrows
   public void save(final PrizePoolEntity prizePoolEntity) {
-    final MapSqlParameterSource params;
-    params = new MapSqlParameterSource()
+    final MapSqlParameterSource params = new MapSqlParameterSource()
       .addValue(GAME_ID, prizePoolEntity.gameId())
       .addValue(SCHEMA, objectMapper.writeValueAsString(prizePoolEntity.schema()));
 

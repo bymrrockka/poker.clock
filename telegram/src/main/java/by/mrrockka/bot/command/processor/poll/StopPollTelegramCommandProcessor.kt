@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage
 
 @Component
-class PausePollTelegramCommandProcessor(
+class StopPollTelegramCommandProcessor(
         private val taskTelegramService: TaskTelegramService
 ) : TelegramCommandProcessor {
 
