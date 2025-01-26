@@ -24,6 +24,9 @@ jetbrainsExposedVersion = "0.55.0"
 mockkVersion = "1.13.13"
 springMockkVersion = "4.0.2"
 awaitilityVersion = "4.2.2"
+wiremockVersion = "3.6.0"
+wiremockSpringVersion = "3.6.0"
+wiremockKotlinVersion = "2.1.1"
 
 [plugins]
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinJvmVersion" }
@@ -35,7 +38,6 @@ kotlinSerializationPlugin = { id = "org.jetbrains.kotlin.plugin.serialization", 
 kotlinStdLib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8" }
 springBootJdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc" }
 springBootAop = { module = "org.springframework.boot:spring-boot-starter-aop" }
-springBootTestContainers = { module = "org.springframework.boot:spring-boot-testcontainers" }
 aspectjWeaver = { module = "org.aspectj:aspectjweaver" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresqlVersion" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombockVersion" }
@@ -64,5 +66,7 @@ exposedJavaTime = { module = "org.jetbrains.exposed:exposed-java-time", version.
 exposedJson = { module = "org.jetbrains.exposed:exposed-json", version.ref = "jetbrainsExposedVersion" }
 exposedSpringBoot = { module = "org.jetbrains.exposed:exposed-spring-boot-starter", version.ref = "jetbrainsExposedVersion" }
 awaitility = { module = "org.awaitility:awaitility-kotlin", version.ref = "awaitilityVersion" }
-
+wiremock = { module = "org.wiremock:wiremock", version.ref = "wiremockVersion" }
+wiremockSpring = { module = "org.wiremock.integrations:wiremock-spring-boot", version.ref = "wiremockSpringVersion" }
+wiremockKotlinDsl = { module = "com.marcinziolo:kotlin-wiremock", version.ref = "wiremockKotlinVersion" }
 

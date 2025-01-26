@@ -27,10 +27,6 @@ public class PokerClockBot implements LongPollingBot {
 
   @Override
   public void onUpdateReceived(final Update update) {
-    if (!telegramBotsProperties.isEnabled()) {
-      throw new BotIsNotEnabledException();
-    }
-
 //    todo: add logic to process edited message
     if (isProcessable(update)) {
       final var messageMetadata = messageMetadataMapper.map(update.getMessage());
@@ -55,7 +51,9 @@ public class PokerClockBot implements LongPollingBot {
 
   @Override
   public void clearWebhook() throws TelegramApiRequestException {
-    WebhookUtils.clearWebhook(absSender);
+    if (!telegramBotsProperties.isTest()) {
+      WebhookUtils.clearWebhook(absSender);
+    }
   }
 
   @Override
@@ -79,6 +77,8 @@ public class PokerClockBot implements LongPollingBot {
 
   @Override
   public void onRegister() {
-    updateBotCommandsService.updateBotCommands();
+    if (!telegramBotsProperties.isTest()) {
+      updateBotCommandsService.updateBotCommands();
+    }
   }
 }

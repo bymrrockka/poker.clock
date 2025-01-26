@@ -1,0 +1,10 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/bottoken/deleteWebhook"
+  },
+  "response": {
+    "status": 200,
+    "body": "{}"
+  }
+}

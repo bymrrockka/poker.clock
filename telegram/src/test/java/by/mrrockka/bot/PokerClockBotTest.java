@@ -91,7 +91,7 @@ class PokerClockBotTest {
     final var metadata = MessageMetadataCreator.domain();
     final var sendMessage = SendMessageCreator.api();
 
-    when(telegramBotsProperties.isEnabled()).thenReturn(true);
+    when(telegramBotsProperties.isTest()).thenReturn(true);
     when(messageMetadataMapper.map(message)).thenReturn(metadata);
     when(telegramCommandProcessorFactory.provideProcessor(metadata)).thenReturn(commandProcessor);
     when(commandProcessor.process(metadata)).thenReturn(sendMessage);
@@ -103,6 +103,7 @@ class PokerClockBotTest {
 
   @Test
   void givenUpdateWithPollAnswer_whenOnUpdateReceivedExecuted_thenShouldProcessUpdate() throws TelegramApiException {
+//    todo: create a test
     final var message = MessageCreator.message(msg -> {
       msg.setText(COMMAND_TEXT);
       msg.setEntities(List.of(MessageEntityCreator.apiCommand(COMMAND_TEXT, COMMAND)));
@@ -111,7 +112,7 @@ class PokerClockBotTest {
     final var metadata = MessageMetadataCreator.domain();
     final var sendMessage = SendMessageCreator.api();
 
-    when(telegramBotsProperties.isEnabled()).thenReturn(true);
+    when(telegramBotsProperties.isTest()).thenReturn(true);
     when(messageMetadataMapper.map(message)).thenReturn(metadata);
     when(telegramCommandProcessorFactory.provideProcessor(metadata)).thenReturn(commandProcessor);
     when(commandProcessor.process(metadata)).thenReturn(sendMessage);
@@ -139,7 +140,7 @@ class PokerClockBotTest {
   @ParameterizedTest
   @MethodSource("notProcessableMessages")
   void givenNotProcessableUpdate_whenOnUpdateReceivedExecuted_thenShouldSkipProcessing(final Update update) {
-    when(telegramBotsProperties.isEnabled()).thenReturn(true);
+    when(telegramBotsProperties.isTest()).thenReturn(true);
     pokerClockBot.onUpdateReceived(update);
 
     verifyNoInteractions(commandProcessor, telegramCommandProcessorFactory, pokerClockAbsSender, messageMetadataMapper);
@@ -149,7 +150,7 @@ class PokerClockBotTest {
   void givenBotProperties_whenOnUpdateReceivedExecutedAndBotDisabled_thenShouldThrowException() {
     final var update = UpdateCreator.update(MessageCreator.message());
 
-    when(telegramBotsProperties.isEnabled()).thenReturn(false);
+    when(telegramBotsProperties.isTest()).thenReturn(false);
     assertThatThrownBy(() -> pokerClockBot.onUpdateReceived(update))
       .isInstanceOf(BotIsNotEnabledException.class);
   }

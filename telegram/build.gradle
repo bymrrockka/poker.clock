@@ -122,6 +122,9 @@ testing {
                 implementation libs.mockk
                 implementation libs.springMockk
                 implementation libs.awaitility
+                implementation libs.wiremock
+                implementation libs.wiremockKotlinDsl
+                implementation libs.wiremockSpring
 
                 compileOnly libs.lombok
                 annotationProcessor libs.lombok

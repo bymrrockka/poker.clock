@@ -1,27 +1,18 @@
 package by.mrrockka.bot;
 
-import by.mrrockka.domain.PokerClockBotOptions;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.DefaultAbsSender;
-
-import java.util.List;
-
-import static org.telegram.telegrambots.meta.api.methods.updates.AllowedUpdates.*;
+import org.telegram.telegrambots.bots.DefaultBotOptions;
 
 @Component
+@Slf4j
 public class PokerClockAbsSender extends DefaultAbsSender {
 
-  private static final PokerClockBotOptions BOT_OPTIONS = PokerClockBotOptions.builder()
-    .allowedUpdates(List.of(
-      EDITEDMESSAGE,
-      MESSAGE,
-      POLL,
-      POLLANSWER)
-    ).build();
-
-  protected PokerClockAbsSender(@Autowired final TelegramBotsProperties telegramBotsProperties) {
-    super(BOT_OPTIONS, telegramBotsProperties.getToken());
+  public PokerClockAbsSender(@Autowired final DefaultBotOptions botOptions,
+                             @Autowired final TelegramBotsProperties telegramBotsProperties) {
+    super(botOptions, telegramBotsProperties.getToken());
   }
 
   public void shutdown() {

@@ -21,8 +21,8 @@ public class UpdateBotCommandsService {
   private final BotDescriptionProperties botDescriptionProperties;
 
   public void updateBotCommands() {
-    if (!telegramBotsProperties.isEnabled()) {
-      log.debug("Telegram bot is not enabled.");
+    if (telegramBotsProperties.isTest()) {
+      log.debug("Test telegram bot enabled.");
       return;
     }
 
