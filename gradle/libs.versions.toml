@@ -24,8 +24,9 @@ jetbrainsExposedVersion = "0.55.0"
 mockkVersion = "1.13.13"
 springMockkVersion = "4.0.2"
 awaitilityVersion = "4.2.2"
-wiremockVersion = "3.6.0"
+wiremockVersion = "3.10.0"
 wiremockSpringVersion = "3.6.0"
+wiremockContainerVersion = "1.0-alpha-13"
 wiremockKotlinVersion = "2.1.1"
 
 [plugins]
@@ -66,7 +67,6 @@ exposedJavaTime = { module = "org.jetbrains.exposed:exposed-java-time", version.
 exposedJson = { module = "org.jetbrains.exposed:exposed-json", version.ref = "jetbrainsExposedVersion" }
 exposedSpringBoot = { module = "org.jetbrains.exposed:exposed-spring-boot-starter", version.ref = "jetbrainsExposedVersion" }
 awaitility = { module = "org.awaitility:awaitility-kotlin", version.ref = "awaitilityVersion" }
-wiremock = { module = "org.wiremock:wiremock", version.ref = "wiremockVersion" }
-wiremockSpring = { module = "org.wiremock.integrations:wiremock-spring-boot", version.ref = "wiremockSpringVersion" }
+wiremock = { module = "org.wiremock:wiremock-standalone", version.ref = "wiremockVersion" }
+wiremockContainer = { module = "org.wiremock.integrations.testcontainers:wiremock-testcontainers-module", version.ref = "wiremockContainerVersion" }
 wiremockKotlinDsl = { module = "com.marcinziolo:kotlin-wiremock", version.ref = "wiremockKotlinVersion" }
-

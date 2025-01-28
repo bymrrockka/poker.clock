@@ -1,0 +1,65 @@
+{
+  "mappings": [
+    {
+      "request": {
+        "method": "POST",
+        "url": "/bottoken/setMyCommands"
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "ok": "true",
+          "result": "true"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "/bottoken/deleteWebhook"
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "ok": "true",
+          "result": "true"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "/bottoken/getupdates"
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "ok": "true",
+          "result": []
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/blah"
+      },
+      "response": {
+        "status": 200,
+        "body": "blah",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    }
+  ]
+}

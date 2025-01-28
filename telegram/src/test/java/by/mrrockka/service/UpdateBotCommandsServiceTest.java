@@ -36,7 +36,7 @@ class UpdateBotCommandsServiceTest {
 
   @Test
   void givenTelegramBotPropertiesAndBotIsDisabled_whenUpdateBotCommandsCalled_thenShouldLog() {
-    when(telegramBotsProperties.isTest()).thenReturn(false);
+    when(telegramBotsProperties.isEnabled()).thenReturn(false);
     updateBotCommandsService.updateBotCommands();
     verifyNoInteractions(pokerClockAbsSender, botCommandMapper, botDescriptionProperties);
   }
@@ -46,7 +46,7 @@ class UpdateBotCommandsServiceTest {
     final var commands = Map.of(COMMAND, CommandDescription.builder().build());
     final var apiCommands = List.of(BotCommand.builder().command(COMMAND).description("").build());
 
-    when(telegramBotsProperties.isTest()).thenReturn(true);
+    when(telegramBotsProperties.isEnabled()).thenReturn(true);
     when(botDescriptionProperties.getCommands()).thenReturn(commands);
     when(botCommandMapper.mapToApi(commands)).thenReturn(apiCommands);
     updateBotCommandsService.updateBotCommands();
@@ -59,7 +59,7 @@ class UpdateBotCommandsServiceTest {
     final var commands = Map.of(COMMAND, CommandDescription.builder().build());
     final var apiCommands = List.of(BotCommand.builder().command(COMMAND).description("").build());
 
-    when(telegramBotsProperties.isTest()).thenReturn(true);
+    when(telegramBotsProperties.isEnabled()).thenReturn(true);
     when(botDescriptionProperties.getCommands()).thenReturn(commands);
     when(botCommandMapper.mapToApi(commands)).thenReturn(apiCommands);
     when(pokerClockAbsSender.execute(SetMyCommands.builder().commands(apiCommands).build())).thenThrow(

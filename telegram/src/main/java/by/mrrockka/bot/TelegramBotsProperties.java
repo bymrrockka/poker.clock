@@ -11,6 +11,6 @@ public class TelegramBotsProperties {
 
   private String name;
   private String nickname;
-  private boolean test;
+  private boolean enabled;
   private String token;
 }

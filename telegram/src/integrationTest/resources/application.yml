@@ -1,5 +1,5 @@
 telegrambots:
-  test: true
+  enabled: true
   token: bottoken
   name: Bot
   nickname: bot

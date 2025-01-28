@@ -124,7 +124,7 @@ testing {
                 implementation libs.awaitility
                 implementation libs.wiremock
                 implementation libs.wiremockKotlinDsl
-                implementation libs.wiremockSpring
+                implementation libs.wiremockContainer
 
                 compileOnly libs.lombok
                 annotationProcessor libs.lombok

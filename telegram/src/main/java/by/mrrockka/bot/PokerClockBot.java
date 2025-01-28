@@ -51,7 +51,7 @@ public class PokerClockBot implements LongPollingBot {
 
   @Override
   public void clearWebhook() throws TelegramApiRequestException {
-    if (!telegramBotsProperties.isTest()) {
+    if (telegramBotsProperties.isEnabled()) {
       WebhookUtils.clearWebhook(absSender);
     }
   }
@@ -77,7 +77,7 @@ public class PokerClockBot implements LongPollingBot {
 
   @Override
   public void onRegister() {
-    if (!telegramBotsProperties.isTest()) {
+    if (telegramBotsProperties.isEnabled()) {
       updateBotCommandsService.updateBotCommands();
     }
   }
