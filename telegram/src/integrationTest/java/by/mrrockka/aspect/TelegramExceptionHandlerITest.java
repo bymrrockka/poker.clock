@@ -53,7 +53,7 @@ class TelegramExceptionHandlerITest {
   @MethodSource("exceptions")
   void whenRouterThrowsException_shouldSendMessageWithExceptionMessage(final String text,
                                                                        final Throwable ex) throws TelegramApiException {
-    final var updates = List.of(UpdateCreator.update(MessageCreator.message("")));
+    final var updates = List.of(UpdateCreator.Companion.update(MessageCreator.message("")));
     final var expected = SendMessage.builder()
       .chatId(ChatCreator.CHAT_ID)
       .text(text)

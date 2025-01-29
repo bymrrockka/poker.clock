@@ -2,6 +2,7 @@ package by.mrrockka.scenario
 
 import by.mrrockka.config.TelegramPSQLExtension
 import by.mrrockka.config.TestBotConfig
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.marcinziolo.kotlin.wiremock.equalTo
 import com.marcinziolo.kotlin.wiremock.verify
@@ -9,6 +10,7 @@ import org.awaitility.kotlin.await
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import org.testcontainers.junit.jupiter.Container
@@ -23,6 +25,12 @@ import java.time.Duration
 @Testcontainers
 @SpringBootTest(classes = [TestBotConfig::class])
 abstract class AbstractScenarioTest {
+
+    @Autowired
+    lateinit var mapper: ObjectMapper
+
+    fun Any.toJsonString(): String = mapper.writeValueAsString(this)
+
     companion object {
         @Container
         val container = WireMockContainer("$OFFICIAL_IMAGE_NAME:3.10.0")

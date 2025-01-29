@@ -1,30 +1,24 @@
-package by.mrrockka.creator;
+package by.mrrockka.creator
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.Message
+import org.telegram.telegrambots.meta.api.objects.Update
 
-import java.util.function.Consumer;
 
-import static java.util.Objects.nonNull;
+class UpdateCreator private constructor() {
+    companion object {
+        var updateId = 0
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class UpdateCreator {
+        fun update(message: Message?): Update {
+            return update { this.message = message }
+        }
 
-  public static Update update(final Message message) {
-    return update(update -> update.setMessage(message));
-  }
+        fun update(block: (Update.() -> Unit) = {}): Update {
+            val update = Update()
+            update.updateId = ++updateId
 
-  public static Update update(final Consumer<Update> updateConsumer) {
-    final var update = new Update();
+            return update.apply(block)
+        }
 
-    if (nonNull(updateConsumer)) {
-      updateConsumer.accept(update);
+        fun emptyList(): List<Update> = listOf(update())
     }
-
-    return update;
-  }
-
-
 }
