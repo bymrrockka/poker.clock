@@ -11,8 +11,6 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.DynamicPropertyRegistry
-import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 import org.wiremock.integrations.testcontainers.WireMockContainer
@@ -45,12 +43,15 @@ abstract class AbstractScenarioTest {
         fun afterAll(): Unit {
             await.atMost(Duration.ofSeconds(3)).untilAsserted {
                 wireMock.verify {
-                    url equalTo "/blah"
+                    url equalTo "/bottoken/setMyCommands"
                     atLeast = 1
                 }
-
                 wireMock.verify {
-                    url equalTo "/param"
+                    url equalTo "/bottoken/deleteWebhook"
+                    atLeast = 1
+                }
+                wireMock.verify {
+                    url equalTo "/bottoken/getupdates"
                     atLeast = 1
                 }
             }
