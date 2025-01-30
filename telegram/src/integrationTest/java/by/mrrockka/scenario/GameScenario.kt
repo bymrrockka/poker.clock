@@ -5,13 +5,18 @@ import by.mrrockka.creator.MessageCreator
 import by.mrrockka.creator.MessageEntityCreator
 import by.mrrockka.creator.SendMessageCreator
 import by.mrrockka.creator.UpdateCreator
+import com.github.tomakehurst.wiremock.http.RequestMethod
 import com.marcinziolo.kotlin.wiremock.*
 import org.assertj.core.api.Assertions.assertThat
+import org.awaitility.kotlin.await
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.client.getForEntity
 import org.springframework.http.HttpStatus
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage
+import org.telegram.telegrambots.meta.api.objects.MessageEntity
+import java.time.Duration
 
 
 class GameScenario : AbstractScenarioTest() {
@@ -41,6 +46,7 @@ class GameScenario : AbstractScenarioTest() {
 
     @Test
     fun `user sent command to create a game and receive successful message`() {
+//        given
         val command = """
                             /cash_game
                             stack: 30k
@@ -67,32 +73,23 @@ class GameScenario : AbstractScenarioTest() {
                 }
         )
 
+        Given {
+            command {
+                it.message = command
+                it.entities = entities
+            }
+        } When {
+            it.command.updateReceived()
+        } Then {
+            it.url = "/bottoken/sendmessage"
+            it.result = SendMessageCreator.api {
+                it.text("Cash game started.")
+            }
+        }
+
+//then
         val expected = SendMessageCreator.api {
             it.text("Cash game started.")
-        }
-
-        wireMock.post {
-            priority = 1
-            url equalTo "/bottoken/getupdates"
-        } returnsJson {
-            body = """
-            {
-                "ok": "true",
-                "result": ${updates.toJsonString()}
-            }
-            """
-        }
-
-        wireMock.post {
-            priority = 2
-            url equalTo "/bottoken/getupdates"
-        } returnsJson {
-            body = """
-            {
-                "ok": "true",
-                "result": ${UpdateCreator.emptyList().toJsonString()}
-            }
-            """
         }
 
         wireMock.post {
@@ -106,12 +103,45 @@ class GameScenario : AbstractScenarioTest() {
             """
         }
 
-        wireMock.verify {
 
+        await.atMost(Duration.ofSeconds(1)).untilAsserted {
+            wireMock.verify {
+                url equalTo "/bottoken/sendmessage"
+                method = RequestMethod.POST
+                body contains "text" equalTo expected.text
+            }
         }
+
+
+//when
+        wireMock.post {
+            url equalTo "/bottoken/getupdates"
+        } returnsJson {
+            body = """
+            {
+                "ok": "true",
+                "result": ${updates.toJsonString()}
+            }
+            """
+        } and {
+            toState = "no updates"
+        }
+//finally?
+        wireMock.post {
+            url equalTo "/bottoken/getupdates"
+            whenState = "no updates"
+        } returnsJson {
+            body = """
+            {
+                "ok": "true",
+                "result": ${UpdateCreator.emptyList().toJsonString()}
+            }
+            """
+        }
+
         /*
 
-                When {
+                Given {
                     command {
                         message = """
                             /cash_game
@@ -128,9 +158,9 @@ class GameScenario : AbstractScenarioTest() {
                                 "@nickname3"
                         )
                     }
-                }
-
-                Then {
+                } When {
+                    updateReceived
+                } Then {
                     messageReceived {
                         message = """
                             Game created successfully!
@@ -139,3 +169,31 @@ class GameScenario : AbstractScenarioTest() {
                 }*/
     }
 }
+
+class Command {
+    lateinit var message: String
+    lateinit var entities: List<MessageEntity>
+}
+
+class ScenarioSpecification {
+    lateinit var command: Command
+
+    fun command(init: (Command) -> Unit) {
+        command = Command().apply(init)
+    }
+}
+
+class Expected<T> {
+    lateinit var url: String
+    var result: T? = null
+}
+
+fun Command.updateReceived() {
+
+}
+
+fun Given(block: ScenarioSpecification.() -> Unit): ScenarioSpecification = block.run { ScenarioSpecification() }
+
+infix fun ScenarioSpecification.When(block: (ScenarioSpecification) -> Unit): ScenarioSpecification = ScenarioSpecification().apply(block)
+
+infix fun ScenarioSpecification.Then(block: (Expected<SendMessage>) -> Unit) = Expected<SendMessage>().also(block)
