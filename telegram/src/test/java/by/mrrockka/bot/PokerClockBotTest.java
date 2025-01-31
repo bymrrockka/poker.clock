@@ -87,7 +87,7 @@ class PokerClockBotTest {
       msg.setText(COMMAND_TEXT);
       msg.setEntities(List.of(MessageEntityCreator.apiCommand(COMMAND_TEXT, COMMAND)));
     });
-    final var update = UpdateCreator.update(message);
+    final var update = UpdateCreator.Companion.update(message);
     final var metadata = MessageMetadataCreator.domain();
     final var sendMessage = SendMessageCreator.api();
 
@@ -108,7 +108,7 @@ class PokerClockBotTest {
       msg.setText(COMMAND_TEXT);
       msg.setEntities(List.of(MessageEntityCreator.apiCommand(COMMAND_TEXT, COMMAND)));
     });
-    final var update = UpdateCreator.update(message);
+    final var update = UpdateCreator.Companion.update(message);
     final var metadata = MessageMetadataCreator.domain();
     final var sendMessage = SendMessageCreator.api();
 
@@ -125,14 +125,14 @@ class PokerClockBotTest {
   private static Stream<Arguments> notProcessableMessages() {
     return Stream.of(
       Arguments.of(
-        UpdateCreator.update(
+        UpdateCreator.Companion.update(
           MessageCreator.message(msg -> {
             msg.setText(MENTION_TEXT);
             msg.setEntities(List.of(MessageEntityCreator.apiMention(MENTION_TEXT, MENTION)));
           }))
       ),
       Arguments.of(
-        UpdateCreator.update((Message) null)
+        UpdateCreator.Companion.update((Message) null)
       )
     );
   }
@@ -148,7 +148,7 @@ class PokerClockBotTest {
 
   @Test
   void givenBotProperties_whenOnUpdateReceivedExecutedAndBotDisabled_thenShouldThrowException() {
-    final var update = UpdateCreator.update(MessageCreator.message());
+    final var update = UpdateCreator.Companion.update(MessageCreator.message());
 
     when(telegramBotsProperties.isEnabled()).thenReturn(false);
     assertThatThrownBy(() -> pokerClockBot.onUpdateReceived(update))

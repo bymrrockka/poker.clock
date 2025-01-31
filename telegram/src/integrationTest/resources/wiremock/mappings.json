@@ -47,19 +47,6 @@
           "Content-Type": "application/json"
         }
       }
-    },
-    {
-      "request": {
-        "method": "GET",
-        "url": "/blah"
-      },
-      "response": {
-        "status": 200,
-        "body": "blah",
-        "headers": {
-          "Content-Type": "application/json"
-        }
-      }
     }
   ]
 }
