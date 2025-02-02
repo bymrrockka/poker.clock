@@ -1,7 +1,7 @@
 package by.mrrockka.service.exception;
 
 import by.mrrockka.exception.BusinessException;
-import by.mrrockka.repo.game.GameType;
+import by.mrrockka.domain.GameType;
 import lombok.NonNull;
 
 public class ProcessingRestrictedException extends BusinessException {

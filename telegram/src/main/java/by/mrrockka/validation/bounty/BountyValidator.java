@@ -5,7 +5,7 @@ import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.domain.collection.PersonEntries;
 import by.mrrockka.domain.game.BountyGame;
 import by.mrrockka.domain.game.Game;
-import by.mrrockka.repo.game.GameType;
+import by.mrrockka.domain.GameType;
 import by.mrrockka.service.exception.ProcessingRestrictedException;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Component;

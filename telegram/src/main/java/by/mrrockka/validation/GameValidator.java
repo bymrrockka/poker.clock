@@ -3,7 +3,7 @@ package by.mrrockka.validation;
 import by.mrrockka.domain.game.CashGame;
 import by.mrrockka.domain.game.Game;
 import by.mrrockka.domain.game.TournamentGame;
-import by.mrrockka.repo.game.GameType;
+import by.mrrockka.domain.GameType;
 import by.mrrockka.service.exception.ProcessingRestrictedException;
 import org.springframework.stereotype.Component;
 

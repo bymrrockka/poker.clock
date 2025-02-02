@@ -8,7 +8,7 @@ import by.mrrockka.domain.Bounty;
 import by.mrrockka.domain.collection.PersonWithdrawals;
 import by.mrrockka.mapper.GameMapper;
 import by.mrrockka.repo.game.GameRepository;
-import by.mrrockka.repo.game.GameType;
+import by.mrrockka.domain.GameType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

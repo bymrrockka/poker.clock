@@ -1,5 +1,6 @@
 package by.mrrockka.repo.game;
 
+import by.mrrockka.domain.GameType;
 import lombok.Builder;
 import lombok.NonNull;
 

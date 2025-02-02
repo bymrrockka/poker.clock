@@ -3,7 +3,7 @@ package by.mrrockka.service;
 import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.game.TournamentGame;
 import by.mrrockka.parser.PrizePoolMessageParser;
-import by.mrrockka.repo.game.GameType;
+import by.mrrockka.domain.GameType;
 import by.mrrockka.response.builder.PrizePoolResponseBuilder;
 import by.mrrockka.service.exception.ChatGameNotFoundException;
 import by.mrrockka.service.exception.ProcessingRestrictedException;

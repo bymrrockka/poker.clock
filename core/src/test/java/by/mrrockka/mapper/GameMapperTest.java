@@ -1,7 +1,7 @@
 package by.mrrockka.mapper;
 
 import by.mrrockka.creator.GameCreator;
-import by.mrrockka.repo.game.GameType;
+import by.mrrockka.domain.GameType;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 

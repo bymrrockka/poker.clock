@@ -18,6 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.updates.DeleteWebhook
@@ -106,6 +107,7 @@ abstract class AbstractScenarioTest {
 
             mentionRegex.findAll(this.message.trimIndent())
                     .map { it.groups[0]!!.value }
+                    .distinct()
                     .forEach { mention -> entity(mention, EntityType.MENTION) }
         }
 
@@ -117,30 +119,40 @@ abstract class AbstractScenarioTest {
         }
     }
 
-    class ScenarioSpecification {
-        lateinit var command: Command
+    class GivenSpecification {
+        var commands: List<Command> = mutableListOf()
 
         fun command(init: (Command) -> Unit) {
-            this.command = Command(init)
+            this.commands += Command(init)
         }
     }
 
-    class Expected<T> {
+    class ThenSpecification {
+        var expects: List<Expect<*>> = mutableListOf()
+
+        fun <T: PartialBotApiMethod<*>> expect(expect: (Expect<T>) -> Unit) {
+            this.expects += Expect<T>().apply(expect)
+        }
+    }
+
+    class Expect<T: PartialBotApiMethod<*>> {
         lateinit var url: String
         var result: T? = null
     }
 
-    fun Command.updateReceived() {
-        val updates = listOf(
+    fun List<Command>.updateReceived() = map {
+        listOf(
                 UpdateCreator.update {
                     this.message = MessageCreator.message { message ->
                         message.messageId = MessageCreator.randomMessageId()
-                        message.text = this@updateReceived.message
-                        message.entities = entities
+                        message.text = it.message
+                        message.entities = it.entities
                     }
                 }
         )
+    }.forEachIndexed { index, updates ->
         wireMock.post {
+            priority = index
             url equalTo "/${botProps.token}/${GetUpdates.PATH}"
         } returnsJson {
             body = """
@@ -150,11 +162,12 @@ abstract class AbstractScenarioTest {
             }
             """
         } and {
-            toState = "updates"
+            toState = "updates$index"
         }
         wireMock.post {
+            priority = index
             url equalTo "/${botProps.token}/${GetUpdates.PATH}"
-            whenState = "updates"
+            whenState = "updates$index"
         } returnsJson {
             body = """
             {
@@ -165,36 +178,43 @@ abstract class AbstractScenarioTest {
         }
     }
 
-    fun Given(block: ScenarioSpecification.() -> Unit): ScenarioSpecification = ScenarioSpecification().apply(block)
+    fun Given(block: GivenSpecification.() -> Unit): GivenSpecification = GivenSpecification().apply(block)
 
-    infix fun ScenarioSpecification.When(block: (ScenarioSpecification) -> Unit): ScenarioSpecification = this.apply(block)
+    infix fun GivenSpecification.When(block: GivenSpecification.() -> Unit): GivenSpecification = this.apply(block)
 
-    infix fun ScenarioSpecification.Then(block: (Expected<SendMessage>) -> Unit) = Expected<SendMessage>()
+    infix fun GivenSpecification.Then(block: ThenSpecification.() -> Unit) = ThenSpecification()
             .apply(block)
             .also { thenExecute(it) }
             .let { thenAssert(it) }
 
-    private fun thenExecute(expected: Expected<SendMessage>) {
-        wireMock.post {
-            url equalTo "/${botProps.token}/${expected.result!!.method}"
-        } returnsJson {
-            body = """
+    private fun thenExecute(thenSpec: ThenSpecification) {
+        thenSpec.expects.forEach { expect ->
+            wireMock.post {
+                url equalTo "/${botProps.token}/${expect.result!!.method}"
+            } returnsJson {
+                body = """
             {
                 "ok": "true",
-                "result": ${expected.toJsonString()}
+                "result": ${expect.toJsonString()}
             }
             """
+            }
         }
     }
 
-    private fun thenAssert(expected: Expected<SendMessage>) {
-        await.atMost(Duration.ofSeconds(3)).untilAsserted {
-            wireMock.verify {
-                url equalTo "/${botProps.token}/${expected.result!!.method}"
-                method = RequestMethod.POST
-                body contains "text" equalTo expected.result!!.text
+    private fun thenAssert(thenSpec: ThenSpecification) {
+        thenSpec.expects.forEach { expect ->
+            await.atMost(Duration.ofSeconds(3)).untilAsserted {
+                wireMock.verify {
+                    url equalTo "/${botProps.token}/${expect.result!!.method}"
+                    method = RequestMethod.POST
+                    when(val resp = expect.result!!) {
+                        is SendMessage -> body contains "text" equalTo resp.text
+                    }
+                }
             }
         }
     }
+
 
 }

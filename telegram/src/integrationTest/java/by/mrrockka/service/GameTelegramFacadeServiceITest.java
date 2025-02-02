@@ -8,7 +8,7 @@ import by.mrrockka.creator.MessageMetadataCreator;
 import by.mrrockka.repo.entries.EntriesEntity;
 import by.mrrockka.repo.entries.EntriesRepository;
 import by.mrrockka.repo.game.GameRepository;
-import by.mrrockka.repo.game.GameType;
+import by.mrrockka.domain.GameType;
 import by.mrrockka.repo.game.TelegramGameRepository;
 import by.mrrockka.repo.person.PersonEntity;
 import by.mrrockka.repo.person.PersonRepository;

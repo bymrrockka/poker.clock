@@ -9,7 +9,7 @@ import by.mrrockka.domain.game.CashGame;
 import by.mrrockka.domain.game.TournamentGame;
 import by.mrrockka.domain.summary.finale.FinaleSummary;
 import by.mrrockka.repo.game.GameEntity;
-import by.mrrockka.repo.game.GameType;
+import by.mrrockka.domain.GameType;
 import com.github.javafaker.Faker;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
