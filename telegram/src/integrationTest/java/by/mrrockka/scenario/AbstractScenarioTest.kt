@@ -4,6 +4,7 @@ import by.mrrockka.bot.TelegramBotsProperties
 import by.mrrockka.config.TelegramPSQLExtension
 import by.mrrockka.config.TestBotConfig
 import by.mrrockka.creator.MessageCreator
+import by.mrrockka.creator.MessageCreator.randomMessageId
 import by.mrrockka.creator.MessageEntityCreator
 import by.mrrockka.creator.UpdateCreator
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -122,37 +123,42 @@ abstract class AbstractScenarioTest {
     class GivenSpecification {
         var commands: List<Command> = mutableListOf()
 
-        fun command(init: (Command) -> Unit) {
+        fun command(init: Command.() -> Unit) {
             this.commands += Command(init)
         }
     }
 
-    class ThenSpecification {
+    class ThenSpecification() {
         var expects: List<Expect<*>> = mutableListOf()
 
-        fun <T: PartialBotApiMethod<*>> expect(expect: (Expect<T>) -> Unit) {
+        fun <T : PartialBotApiMethod<*>> expect(expect: Expect<T>.() -> Unit) {
             this.expects += Expect<T>().apply(expect)
         }
     }
 
-    class Expect<T: PartialBotApiMethod<*>> {
+    class Expect<T : PartialBotApiMethod<*>> {
         lateinit var url: String
         var result: T? = null
+
+        fun url(url: String) {
+            this.url = url
+        }
+
+        fun result(result: T) {
+            this.result = result
+        }
     }
 
-    fun List<Command>.updateReceived() = map {
-        listOf(
-                UpdateCreator.update {
-                    this.message = MessageCreator.message { message ->
-                        message.messageId = MessageCreator.randomMessageId()
-                        message.text = it.message
-                        message.entities = it.entities
-                    }
-                }
-        )
-    }.forEachIndexed { index, updates ->
+    fun List<Command>.updateReceived() = mapIndexed { index, command ->
+        UpdateCreator.update {
+            this.message = MessageCreator.message { message ->
+                message.messageId = randomMessageId()
+                message.text = command.message
+                message.entities = command.entities
+            }
+        }
+    }.toList().also { updates ->
         wireMock.post {
-            priority = index
             url equalTo "/${botProps.token}/${GetUpdates.PATH}"
         } returnsJson {
             body = """
@@ -162,12 +168,12 @@ abstract class AbstractScenarioTest {
             }
             """
         } and {
-            toState = "updates$index"
+            toState = "updates"
         }
+
         wireMock.post {
-            priority = index
             url equalTo "/${botProps.token}/${GetUpdates.PATH}"
-            whenState = "updates$index"
+            whenState = "updates"
         } returnsJson {
             body = """
             {
@@ -175,8 +181,11 @@ abstract class AbstractScenarioTest {
                 "result": ${UpdateCreator.emptyList().toJsonString()}
             }
             """
+        } and {
+            toState = "expect0"
         }
     }
+
 
     fun Given(block: GivenSpecification.() -> Unit): GivenSpecification = GivenSpecification().apply(block)
 
@@ -188,16 +197,21 @@ abstract class AbstractScenarioTest {
             .let { thenAssert(it) }
 
     private fun thenExecute(thenSpec: ThenSpecification) {
-        thenSpec.expects.forEach { expect ->
+        thenSpec.expects.forEachIndexed { index, expect ->
             wireMock.post {
                 url equalTo "/${botProps.token}/${expect.result!!.method}"
+                priority = 1
+                whenState = "expect$index"
             } returnsJson {
                 body = """
             {
                 "ok": "true",
-                "result": ${expect.toJsonString()}
+                "result": ${expect.result!!.toJsonString()}
             }
             """
+
+            } and {
+                toState = "expect${index + 1}"
             }
         }
     }
@@ -208,13 +222,12 @@ abstract class AbstractScenarioTest {
                 wireMock.verify {
                     url equalTo "/${botProps.token}/${expect.result!!.method}"
                     method = RequestMethod.POST
-                    when(val resp = expect.result!!) {
-                        is SendMessage -> body contains "text" equalTo resp.text
+                    when (val resp = expect.result!!) {
+                        is SendMessage -> body contains "text" like resp.text
                     }
                 }
             }
         }
     }
-
 
 }

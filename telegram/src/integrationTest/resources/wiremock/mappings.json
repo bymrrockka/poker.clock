@@ -47,6 +47,20 @@
           "Content-Type": "application/json"
         }
       }
+    },
+    {
+      "priority": 10,
+      "request": {
+        "method": "ANY",
+        "urlPattern": ".*"
+      },
+      "response": {
+        "status": 404,
+        "jsonBody": { "status": "Error", "message": "Endpoint not found" },
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
     }
   ]
 }
