@@ -1,46 +1,47 @@
-package by.mrrockka.service.game;
+package by.mrrockka.service.game
 
-import by.mrrockka.domain.MessageMetadata;
-import by.mrrockka.domain.TelegramGame;
-import by.mrrockka.mapper.TelegramGameMapper;
-import by.mrrockka.repo.game.TelegramGameRepository;
-import by.mrrockka.service.GameService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
+import by.mrrockka.domain.MessageMetadata
+import by.mrrockka.domain.TelegramGame
+import by.mrrockka.mapper.TelegramGameMapper
+import by.mrrockka.repo.game.TelegramGameRepository
+import by.mrrockka.service.GameService
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Service
+import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage
+import java.util.*
 
-import java.util.Optional;
-
-@Slf4j
 @Service
-@RequiredArgsConstructor
-public class GameTelegramFacadeService {
+open class GameTelegramFacadeService(
+        private val telegramGameRepository: TelegramGameRepository,
+        private val gameService: GameService,
+        private val telegramGameMapper: TelegramGameMapper,
+) {
+    @Autowired
+    lateinit private var tournamentGameService: TournamentGameService
 
-  private final TelegramGameRepository telegramGameRepository;
-  private final TournamentGameService tournamentGameService;
-  private final CashGameService cashGameService;
-  private final BountyGameService bountyGameService;
-  private final GameService gameService;
-  private final TelegramGameMapper telegramGameMapper;
+    @Autowired
+    lateinit private var cashGameService: CashGameService
 
-  public BotApiMethodMessage storeTournamentGame(final MessageMetadata messageMetadata) {
-    return tournamentGameService.storeGame(messageMetadata);
-  }
+    @Autowired
+    lateinit private var bountyGameService: BountyGameService
 
-  public BotApiMethodMessage storeCashGame(final MessageMetadata messageMetadata) {
-    return cashGameService.storeGame(messageMetadata);
-  }
+    fun storeTournamentGame(messageMetadata: MessageMetadata): BotApiMethodMessage {
+        return tournamentGameService.storeGame(messageMetadata)
+    }
 
-  public BotApiMethodMessage storeBountyGame(final MessageMetadata messageMetadata) {
-    return bountyGameService.storeGame(messageMetadata);
-  }
+    fun storeCashGame(messageMetadata: MessageMetadata): BotApiMethodMessage {
+        return cashGameService.storeGame(messageMetadata)
+    }
 
-  public Optional<TelegramGame> getGameByMessageMetadata(final MessageMetadata messageMetadata) {
-    return messageMetadata.optReplyTo()
-      .map(replyTo -> telegramGameRepository.findByChatAndMessageId(messageMetadata.chatId(), replyTo.id()))
-      .orElseGet(() -> telegramGameRepository.findLatestByChatId(messageMetadata.chatId()))
-      .map(entity -> telegramGameMapper.toGame(gameService.retrieveGame(entity.gameId()), entity));
-  }
+    fun storeBountyGame(messageMetadata: MessageMetadata): BotApiMethodMessage {
+        return bountyGameService.storeGame(messageMetadata)
+    }
 
+    fun getGameByMessageMetadata(messageMetadata: MessageMetadata): Optional<TelegramGame> {
+//        todo: refactor to kotlin -> remove optionals
+        return messageMetadata.optReplyTo()
+                .map { telegramGameRepository.findByChatAndMessageId(messageMetadata.chatId, it.id) }
+                .orElseGet { telegramGameRepository.findLatestByChatId(messageMetadata.chatId) }
+                .map { telegramGameMapper.toGame(gameService.retrieveGame(it.gameId), it) }
+    }
 }
