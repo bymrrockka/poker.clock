@@ -1,7 +1,7 @@
 package by.mrrockka.repo
 
+import by.mrrockka.Random
 import by.mrrockka.config.TelegramPSQLExtension
-import by.mrrockka.creator.ChatCreator
 import by.mrrockka.creator.TaskCreator
 import by.mrrockka.repo.poll.PollTaskRepository
 import org.assertj.core.api.Assertions.assertThat
@@ -36,7 +36,7 @@ class PollTaskRepositoryITest {
                 TaskCreator.randomPoll(),
                 TaskCreator.randomPoll(),
                 TaskCreator.randomPoll(),
-                TaskCreator.randomPoll().copy(chatId = ChatCreator.randomChatId())
+                TaskCreator.randomPoll().copy(chatId = Random.chatId())
         )
         repository.batchUpsert(tasks)
         assertThat(repository.selectNotFinished())

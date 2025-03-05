@@ -77,6 +77,7 @@ class PokerClockBotTest {
 
   @Test
   void givenBotCommands_whenOnRegisterExecuted_thenShouldRegisterBotCommands() {
+    when(telegramBotsProperties.isEnabled()).thenReturn(true);
     pokerClockBot.onRegister();
     verify(updateBotCommandsService).updateBotCommands();
   }

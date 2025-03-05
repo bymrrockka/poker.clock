@@ -1,4 +1,4 @@
-package by.mrrockka.aspect;
+package by.mrrockka;
 
 import by.mrrockka.bot.PokerClockAbsSender;
 import by.mrrockka.bot.PokerClockBot;

@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.MethodSource
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import java.util.stream.Stream
 
-class GameScenario : AbstractScenarioTest() {
+class GameCreationScenario : AbstractScenarioTest() {
 
     @ParameterizedTest
     @MethodSource("createGameTypesArguments")
@@ -67,22 +67,22 @@ class GameScenario : AbstractScenarioTest() {
         fun createGameTypesArguments(): Stream<Arguments> {
             return Stream.of(
                     Arguments.of(games[CASH], "Cash game started.", """
-                        Game statistics:
+                        Cash game statistics:
                             - players entered -> 1
                             - total buy-in amount -> 10
                             - total withdrawal amount -> 0
                     """.trimIndent()),
                     Arguments.of(games[TOURNAMENT], "Tournament game started.", """
-                        Game statistics:
-                            - players entered -> 1
-                            - number of entries -> 1
-                            - total buy-in amount -> 10
+                        Tournament game statistics:
+                            - players entered -> 2
+                            - number of entries -> 2
+                            - total buy-in amount -> 20
                     """.trimIndent()),
                     Arguments.of(games[BOUNTY], "Bounty tournament game started.", """
-                        Game statistics:
-                            - players entered -> 1
-                            - number of entries -> 1
-                            - total buy-in amount -> 20
+                        Bounty game statistics:
+                            - players entered -> 3
+                            - number of entries -> 3
+                            - total buy-in amount -> 60
                             - bounties out of game -> 0
                     """.trimIndent()),
             )

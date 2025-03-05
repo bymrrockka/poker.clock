@@ -17,7 +17,6 @@ import java.math.BigDecimal
 internal class GameStatisticsTelegramService(
         private val gameTelegramFacadeService: GameTelegramFacadeService,
 ) {
-
     fun retrieveStatistics(statisticsCommand: StatisticsCommand): BotApiMethodMessage {
         val telegramGame = gameTelegramFacadeService
                 .getGameByMessageMetadata(statisticsCommand.metadata)
@@ -34,14 +33,14 @@ internal class GameStatisticsTelegramService(
 private fun TelegramGame.responseMessage(): String {
     return when (val game = this.game) {
         is CashGame -> """
-            Game statistics:
-                - players entered -> ${game.entries.size}   
+            Cash game statistics:
+                - players entered -> ${game.entries.size}
                 - total buy-in amount -> ${game.entries.flatMap { it.entries }.sumOrZero()}
                 - total withdrawal amount -> ${game.withdrawals?.map { it.total() }.sumOrZero()}
             """.trimIndent()
 
         is BountyGame -> """
-            Game statistics:
+            Bounty game statistics:
                 - players entered -> ${game.entries.size}
                 - number of entries -> ${game.entries.flatMap { it.entries }.size}
                 - total buy-in amount -> ${game.entries entriesPlusBounties game.bountyAmount}
@@ -49,7 +48,7 @@ private fun TelegramGame.responseMessage(): String {
             """.trimIndent()
 
         is TournamentGame -> """
-            Game statistics:
+            Tournament game statistics:
                 - players entered -> ${game.entries.size}
                 - number of entries -> ${game.entries.flatMap { it.entries }.size}
                 - total buy-in amount -> ${game.entries.map { it.total() }.sumOrZero()}

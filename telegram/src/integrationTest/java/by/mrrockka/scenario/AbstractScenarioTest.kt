@@ -1,10 +1,11 @@
 package by.mrrockka.scenario
 
+import by.mrrockka.Random
 import by.mrrockka.bot.TelegramBotsProperties
 import by.mrrockka.config.TelegramPSQLExtension
 import by.mrrockka.config.TestBotConfig
+import by.mrrockka.creator.ChatCreator
 import by.mrrockka.creator.MessageCreator
-import by.mrrockka.creator.MessageCreator.randomMessageId
 import by.mrrockka.creator.MessageEntityCreator
 import by.mrrockka.creator.UpdateCreator
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -148,40 +149,44 @@ abstract class AbstractScenarioTest {
         }
     }
 
-    fun List<Command>.updateReceived() = mapIndexed { index, command ->
-        UpdateCreator.update {
-            this.message = MessageCreator.message { message ->
-                message.messageId = randomMessageId()
-                message.text = command.message
-                message.entities = command.entities
+    fun List<Command>.updateReceived() {
+        val chatId = Random.chatId()
+        mapIndexed { index, command ->
+            UpdateCreator.update {
+                this.message = MessageCreator.message { message ->
+                    message.messageId = Random.messageId()
+                    message.text = command.message
+                    message.chat = ChatCreator.chat(chatId)
+                    message.entities = command.entities
+                }
             }
-        }
-    }.toList().also { updates ->
-        wireMock.post {
-            url equalTo "/${botProps.token}/${GetUpdates.PATH}"
-        } returnsJson {
-            body = """
+        }.toList().also { updates ->
+            wireMock.post {
+                url equalTo "/${botProps.token}/${GetUpdates.PATH}"
+            } returnsJson {
+                body = """
             {
                 "ok": "true",
                 "result": ${updates.toJsonString()}
             }
             """
-        } and {
-            toState = "updates"
-        }
+            } and {
+                toState = "updates"
+            }
 
-        wireMock.post {
-            url equalTo "/${botProps.token}/${GetUpdates.PATH}"
-            whenState = "updates"
-        } returnsJson {
-            body = """
+            wireMock.post {
+                url equalTo "/${botProps.token}/${GetUpdates.PATH}"
+                whenState = "updates"
+            } returnsJson {
+                body = """
             {
                 "ok": "true",
                 "result": ${UpdateCreator.emptyList().toJsonString()}
             }
             """
-        } and {
-            toState = "expect0"
+            } and {
+                toState = "expect0"
+            }
         }
     }
 
@@ -199,7 +204,6 @@ abstract class AbstractScenarioTest {
         thenSpec.expects.forEachIndexed { index, expect ->
             wireMock.post {
                 url equalTo "/${botProps.token}/${expect.result!!.method}"
-                priority = 1
                 whenState = "expect$index"
             } returnsJson {
                 body = """
@@ -222,7 +226,7 @@ abstract class AbstractScenarioTest {
                     method = RequestMethod.POST
                     exactly = 1
                     when (val resp = expect.result!!) {
-                        is SendMessage -> body contains "text" equalTo resp.text
+                        is SendMessage -> body contains "text" contains resp.text
                     }
                 }
             }

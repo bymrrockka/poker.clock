@@ -1,5 +1,6 @@
 package by.mrrockka.creator;
 
+import by.mrrockka.Random;
 import by.mrrockka.domain.MessageMetadata;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,7 @@ public final class MessageMetadataCreator {
   }
 
   public static MessageMetadata domainRandom() {
-    return domain(builder -> builder.id(MessageCreator.randomMessageId()).createdAt(Instant.now()));
+    return domain(builder -> builder.id(Random.messageId()).createdAt(Instant.now()));
   }
 
   public static MessageMetadata domain(

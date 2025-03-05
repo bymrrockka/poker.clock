@@ -1,5 +1,6 @@
 package by.mrrockka.creator
 
+import by.mrrockka.Random
 import by.mrrockka.domain.PollTask
 import by.mrrockka.domain.PollTask.Option
 import org.springframework.scheduling.support.CronExpression
@@ -7,9 +8,7 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.*
 
-final class TaskCreator {
-    private constructor()
-
+class TaskCreator {
     companion object {
         val poll = PollTask(
                 id = UUID.randomUUID(),
@@ -24,8 +23,8 @@ final class TaskCreator {
         fun randomPoll(): PollTask {
             return poll.copy(
                     id = UUID.randomUUID(),
-                    messageId = MessageCreator.randomMessageId(),
-                    chatId = ChatCreator.randomChatId(),
+                    messageId = Random.messageId(),
+                    chatId = Random.chatId(),
                     createdAt = Instant.now().truncatedTo(ChronoUnit.SECONDS)
             )
         }

@@ -1,6 +1,7 @@
 package by.mrrockka.creator;
 
 import by.mrrockka.FakerProvider;
+import by.mrrockka.Random;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -15,7 +16,7 @@ import static java.util.Objects.nonNull;
 public final class MessageCreator {
 
   public static final Instant MESSAGE_TIMESTAMP = Instant.now();
-  public static final Integer MESSAGE_ID = randomMessageId();
+  public static final Integer MESSAGE_ID = Random.messageId();
   public static final String MESSAGE_TEXT = FakerProvider.faker().chuckNorris().fact();
 
   public static Message message() {
@@ -43,10 +44,6 @@ public final class MessageCreator {
     }
 
     return message;
-  }
-
-  public static Integer randomMessageId() {
-    return Double.valueOf(100 + Math.random() * 100).intValue();
   }
 
 }

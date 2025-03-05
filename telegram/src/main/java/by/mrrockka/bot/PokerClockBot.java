@@ -28,11 +28,14 @@ public class PokerClockBot implements LongPollingBot {
   @Override
   public void onUpdateReceived(final Update update) {
 //    todo: add logic to process edited message
+    if (!telegramBotsProperties.isEnabled()) {
+      throw new BotIsNotEnabledException();
+    }
     if (isProcessable(update)) {
       final var messageMetadata = messageMetadataMapper.map(update.getMessage());
 
-      log.debug("Processing {\n%s\n} message from %s chat id."
-                  .formatted(messageMetadata.text(), messageMetadata.chatId()));
+      log.debug("Processing %s command with message id %s from chat id %s."
+                  .formatted(messageMetadata.command().text(), messageMetadata.id(), messageMetadata.chatId()));
 
       final var commandProcessor = telegramCommandProcessorFactory.provideProcessor(messageMetadata);
       executeMessage(commandProcessor.process(messageMetadata));
