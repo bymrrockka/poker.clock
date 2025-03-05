@@ -56,7 +56,11 @@
       },
       "response": {
         "status": 404,
-        "jsonBody": { "status": "Error", "message": "Endpoint not found" },
+        "jsonBody": {
+          "ok": "false",
+          "error_code": "404",
+          "description": "Endpoint not found"
+        },
         "headers": {
           "Content-Type": "application/json"
         }

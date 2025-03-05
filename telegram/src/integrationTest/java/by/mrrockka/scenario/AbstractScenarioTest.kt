@@ -33,9 +33,8 @@ import org.wiremock.integrations.testcontainers.WireMockContainer.OFFICIAL_IMAGE
 import java.time.Duration
 import kotlin.text.RegexOption.MULTILINE
 
-
 @ExtendWith(TelegramPSQLExtension::class)
-@ActiveProfiles("repository")
+@ActiveProfiles(profiles = ["repository", "exception-handler"])
 @Testcontainers
 @SpringBootTest(classes = [TestBotConfig::class])
 abstract class AbstractScenarioTest {
@@ -209,7 +208,6 @@ abstract class AbstractScenarioTest {
                 "result": ${expect.result!!.toJsonString()}
             }
             """
-
             } and {
                 toState = "expect${index + 1}"
             }
@@ -222,8 +220,9 @@ abstract class AbstractScenarioTest {
                 wireMock.verify {
                     url equalTo "/${botProps.token}/${expect.result!!.method}"
                     method = RequestMethod.POST
+                    exactly = 1
                     when (val resp = expect.result!!) {
-                        is SendMessage -> body contains "text" like resp.text
+                        is SendMessage -> body contains "text" equalTo resp.text
                     }
                 }
             }

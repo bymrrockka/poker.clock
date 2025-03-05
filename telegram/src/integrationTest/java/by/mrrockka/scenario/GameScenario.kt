@@ -12,35 +12,24 @@ class GameScenario : AbstractScenarioTest() {
 
     @ParameterizedTest
     @MethodSource("createGameTypesArguments")
-    fun `user sent command to create a game and receive successful message`(commandText: String, expectedMessage: String) {
+    fun `user sent command to create a game and receive successful message`(commandText: String, gameCreatedText: String, gameStatsText: String) {
         Given {
-            command { it.message(commandText) }
-            command { it.message("/game_stats") }
+            command { message(commandText) }
+            command { message("/game_stats") }
         } When {
             commands.updateReceived()
         } Then {
             expect<SendMessage> {
-                it.url = "/${SendMessage.PATH}}"
-                it.result = SendMessageCreator.api {
-                    it.text(expectedMessage)
-                }
+                url("/${SendMessage.PATH}}")
+                result(SendMessageCreator.api {
+                    it.text(gameCreatedText)
+                })
             }
-        }
-    }
-
-    @ParameterizedTest
-    @MethodSource("createGameTypesArguments")
-    fun `given a game when new player enters the game then should add and sent message`(commandText: String, expectedMessage: String) {
-        Given {
-            command { it.message(commandText) }
-        } When {
-            commands.updateReceived()
-        } Then {
             expect<SendMessage> {
-                it.url = "/${SendMessage.PATH}}"
-                it.result = SendMessageCreator.api {
-                    it.text(expectedMessage)
-                }
+                url("/${SendMessage.PATH}}")
+                result(SendMessageCreator.api {
+                    it.text(gameStatsText)
+                })
             }
         }
     }
@@ -50,22 +39,22 @@ class GameScenario : AbstractScenarioTest() {
         val games = mapOf(
                 TOURNAMENT to """
                             /tournament_game
-                            stack: 30k
-                            buyin: 30
+                            stack: 10k
+                            buyin: 10
                             @nickname1
                             @Nickname2
                         """.trimIndent(),
                 CASH to """
                             /cash_game
-                            stack: 30k
-                            buyin: 30
+                            stack: 10k
+                            buyin: 10
                             @nickname1
                         """.trimIndent(),
                 BOUNTY to """
                             /bounty_game
-                            stack: 30k
-                            bounty: 30
-                            buyin: 30
+                            stack: 10k
+                            bounty: 10
+                            buyin: 10
                             @nickname1
                             @nickASDame2
                             @nickname3
@@ -77,9 +66,25 @@ class GameScenario : AbstractScenarioTest() {
         @JvmStatic
         fun createGameTypesArguments(): Stream<Arguments> {
             return Stream.of(
-                    Arguments.of(games[CASH], "Cash game started."),
-                    Arguments.of(games[TOURNAMENT], "Tournament started."),
-                    Arguments.of(games[BOUNTY], "Bounty tournament started."),
+                    Arguments.of(games[CASH], "Cash game started.", """
+                        Game statistics:
+                            - players entered -> 1
+                            - total buy-in amount -> 10
+                            - total withdrawal amount -> 0
+                    """.trimIndent()),
+                    Arguments.of(games[TOURNAMENT], "Tournament game started.", """
+                        Game statistics:
+                            - players entered -> 1
+                            - number of entries -> 1
+                            - total buy-in amount -> 10
+                    """.trimIndent()),
+                    Arguments.of(games[BOUNTY], "Bounty tournament game started.", """
+                        Game statistics:
+                            - players entered -> 1
+                            - number of entries -> 1
+                            - total buy-in amount -> 20
+                            - bounties out of game -> 0
+                    """.trimIndent()),
             )
         }
     }

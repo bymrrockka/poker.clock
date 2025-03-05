@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import static by.mrrockka.response.builder.TextContants.*;
 
 @Component
+@Deprecated(since = "1.4.3", forRemoval = true)
 public class GameStatisticsResponseBuilder {
 
   public String response(final Game game) {
