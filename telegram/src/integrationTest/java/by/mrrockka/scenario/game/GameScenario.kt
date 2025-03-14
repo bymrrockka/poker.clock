@@ -1,15 +1,14 @@
-package by.mrrockka.scenario
+package by.mrrockka.scenario.game
 
-import by.mrrockka.creator.SendMessageCreator
-import by.mrrockka.domain.GameType.*
+import by.mrrockka.domain.GameType
+import by.mrrockka.scenario.AbstractScenarioTest
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import java.util.stream.Stream
 
-class GameCreationScenario : AbstractScenarioTest() {
-
+class GameScenario : AbstractScenarioTest() {
     @ParameterizedTest
     @MethodSource("createGameTypesArguments")
     fun `user sent command to create a game and receive successful message`(commandText: String, gameCreatedText: String, gameStatsText: String) {
@@ -19,38 +18,27 @@ class GameCreationScenario : AbstractScenarioTest() {
         } When {
             commands.updateReceived()
         } Then {
-            expect<SendMessage> {
-                url("/${SendMessage.PATH}}")
-                result(SendMessageCreator.api {
-                    it.text(gameCreatedText)
-                })
-            }
-            expect<SendMessage> {
-                url("/${SendMessage.PATH}}")
-                result(SendMessageCreator.api {
-                    it.text(gameStatsText)
-                })
-            }
+            expect { text<SendMessage>(gameCreatedText) }
+            expect { text<SendMessage>(gameStatsText) }
         }
     }
 
     companion object {
-
         val games = mapOf(
-                TOURNAMENT to """
+                GameType.TOURNAMENT to """
                             /tournament_game
                             stack: 10k
                             buyin: 10
                             @nickname1
                             @Nickname2
                         """.trimIndent(),
-                CASH to """
+                GameType.CASH to """
                             /cash_game
                             stack: 10k
                             buyin: 10
                             @nickname1
                         """.trimIndent(),
-                BOUNTY to """
+                GameType.BOUNTY to """
                             /bounty_game
                             stack: 10k
                             bounty: 10
@@ -66,19 +54,19 @@ class GameCreationScenario : AbstractScenarioTest() {
         @JvmStatic
         fun createGameTypesArguments(): Stream<Arguments> {
             return Stream.of(
-                    Arguments.of(games[CASH], "Cash game started.", """
+                    Arguments.of(games[GameType.CASH], "Cash game started.", """
                         Cash game statistics:
                             - players entered -> 1
                             - total buy-in amount -> 10
                             - total withdrawal amount -> 0
                     """.trimIndent()),
-                    Arguments.of(games[TOURNAMENT], "Tournament game started.", """
+                    Arguments.of(games[GameType.TOURNAMENT], "Tournament game started.", """
                         Tournament game statistics:
                             - players entered -> 2
                             - number of entries -> 2
                             - total buy-in amount -> 20
                     """.trimIndent()),
-                    Arguments.of(games[BOUNTY], "Bounty tournament game started.", """
+                    Arguments.of(games[GameType.BOUNTY], "Bounty tournament game started.", """
                         Bounty game statistics:
                             - players entered -> 3
                             - number of entries -> 3

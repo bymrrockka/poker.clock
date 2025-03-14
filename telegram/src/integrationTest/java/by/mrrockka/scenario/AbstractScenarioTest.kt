@@ -4,10 +4,7 @@ import by.mrrockka.Random
 import by.mrrockka.bot.TelegramBotsProperties
 import by.mrrockka.config.TelegramPSQLExtension
 import by.mrrockka.config.TestBotConfig
-import by.mrrockka.creator.ChatCreator
-import by.mrrockka.creator.MessageCreator
-import by.mrrockka.creator.MessageEntityCreator
-import by.mrrockka.creator.UpdateCreator
+import by.mrrockka.creator.*
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.http.RequestMethod
@@ -20,7 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
-import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.updates.DeleteWebhook
@@ -39,6 +36,8 @@ import kotlin.text.RegexOption.MULTILINE
 @Testcontainers
 @SpringBootTest(classes = [TestBotConfig::class])
 abstract class AbstractScenarioTest {
+
+    val calculateCommand = "/calculate"
 
     @Autowired
     lateinit var mapper: ObjectMapper
@@ -102,7 +101,7 @@ abstract class AbstractScenarioTest {
         fun message(message: String) {
             this.message = message
             val botCommandRegex = "^(/[\\w_]+)".toRegex(MULTILINE)
-            val mentionRegex = "^(@[\\w\\d_]+)".toRegex(MULTILINE)
+            val mentionRegex = "(@[\\w\\d_]+)".toRegex(MULTILINE)
             val botCommand = botCommandRegex.find(this.message.trimIndent())!!.groups[0]!!.value
             entity(botCommand, EntityType.BOTCOMMAND)
 
@@ -129,23 +128,26 @@ abstract class AbstractScenarioTest {
     }
 
     class ThenSpecification() {
-        var expects: List<Expect<*>> = mutableListOf()
+        var expects: List<Expect> = mutableListOf()
 
-        fun <T : PartialBotApiMethod<*>> expect(expect: Expect<T>.() -> Unit) {
-            this.expects += Expect<T>().apply(expect)
+        fun expect(expect: Expect.() -> Unit) {
+            this.expects += Expect().apply(expect)
         }
     }
 
-    class Expect<T : PartialBotApiMethod<*>> {
-        lateinit var url: String
-        var result: T? = null
+    class Expect {
+        lateinit var result: BotApiMethod<*>
 
-        fun url(url: String) {
-            this.url = url
+        fun <T : BotApiMethod<*>> result(result: T) {
+            this.result = result
         }
 
-        fun result(result: T) {
-            this.result = result
+        inline fun <reified T : BotApiMethod<*>> text(text: String) {
+            if (T::class.java.isAssignableFrom(SendMessage::class.java)) {
+                this.result = SendMessageCreator.api { it.text(text) }
+            } else {
+                throw IllegalStateException("Invalid type ${T::class.java}")
+            }
         }
     }
 
@@ -203,13 +205,13 @@ abstract class AbstractScenarioTest {
     private fun thenExecute(thenSpec: ThenSpecification) {
         thenSpec.expects.forEachIndexed { index, expect ->
             wireMock.post {
-                url equalTo "/${botProps.token}/${expect.result!!.method}"
+                url equalTo "/${botProps.token}/${expect.result.method}"
                 whenState = "expect$index"
             } returnsJson {
                 body = """
             {
                 "ok": "true",
-                "result": ${expect.result!!.toJsonString()}
+                "result": ${expect.result.toJsonString()}
             }
             """
             } and {
@@ -222,11 +224,11 @@ abstract class AbstractScenarioTest {
         thenSpec.expects.forEach { expect ->
             await.atMost(Duration.ofSeconds(3)).untilAsserted {
                 wireMock.verify {
-                    url equalTo "/${botProps.token}/${expect.result!!.method}"
+                    url equalTo "/${botProps.token}/${expect.result.method}"
                     method = RequestMethod.POST
                     exactly = 1
-                    when (val resp = expect.result!!) {
-                        is SendMessage -> body contains "text" contains resp.text
+                    when (val resp = expect.result) {
+                        is SendMessage -> body contains "text" equalTo resp.text
                     }
                 }
             }
