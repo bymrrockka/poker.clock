@@ -42,7 +42,7 @@ class CashGameScenario : AbstractScenarioTest() {
         Payout to: $nickname
             Entries: $entries
             Withdrawals: $withdrawal
-            Total: ${withdrawal - entries} (withdrawal $withdrawal - entries $entries)
+            Total: ${withdrawal - entries}
     """.trimIndent()
 
     fun gameStatResponse(buyin: Int, playersSize: Int, withdrawalAmount: Int = 0): String = """
@@ -56,8 +56,5 @@ class CashGameScenario : AbstractScenarioTest() {
     fun withdrawalResponse(nickname: String, amount: Int): String = """
         Withdrawals: 
             - @$nickname -> $amount
-    """
-
-
-
+    """.trimIndent()
 }

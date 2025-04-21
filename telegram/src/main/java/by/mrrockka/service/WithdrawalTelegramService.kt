@@ -1,60 +1,65 @@
-package by.mrrockka.service;
+package by.mrrockka.service
 
-import by.mrrockka.domain.MessageMetadata;
-import by.mrrockka.domain.Person;
-import by.mrrockka.domain.TelegramPerson;
-import by.mrrockka.domain.game.CashGame;
-import by.mrrockka.parser.WithdrawalMessageParser;
-import by.mrrockka.response.builder.WithdrawalResponseBuilder;
-import by.mrrockka.service.exception.ChatGameNotFoundException;
-import by.mrrockka.service.game.GameTelegramFacadeService;
-import by.mrrockka.validation.GameValidator;
-import by.mrrockka.validation.collection.CollectionsValidator;
-import by.mrrockka.validation.mentions.PersonMentionsValidator;
-import by.mrrockka.validation.withdrawals.WithdrawalsValidator;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import by.mrrockka.domain.MessageMetadata
+import by.mrrockka.domain.game.CashGame
+import by.mrrockka.parser.WithdrawalMessageParser
+import by.mrrockka.service.exception.ChatGameNotFoundException
+import by.mrrockka.service.game.GameTelegramFacadeService
+import by.mrrockka.validation.GameValidator
+import by.mrrockka.validation.collection.CollectionsValidator
+import by.mrrockka.validation.mentions.PersonMentionsValidator
+import by.mrrockka.validation.withdrawals.WithdrawalsValidator
+import org.springframework.stereotype.Service
+import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage
+import java.util.function.Supplier
 
 @Service
-@RequiredArgsConstructor
-public class WithdrawalTelegramService {
+class WithdrawalTelegramService(
+        val withdrawalsService: WithdrawalsService,
+        val withdrawalMessageParser: WithdrawalMessageParser,
+        val gameTelegramFacadeService: GameTelegramFacadeService,
+        val telegramPersonService: TelegramPersonService,
+        val gameValidator: GameValidator,
+        val personMentionsValidator: PersonMentionsValidator,
+        val collectionsValidator: CollectionsValidator,
+        val withdrawalsValidator: WithdrawalsValidator,
+) {
+    fun storeWithdrawal(messageMetadata: MessageMetadata): BotApiMethodMessage? {
+        personMentionsValidator.validateMessageMentions(messageMetadata, 1)
 
-  private final WithdrawalsService withdrawalsService;
-  private final WithdrawalMessageParser withdrawalMessageParser;
-  private final GameTelegramFacadeService gameTelegramFacadeService;
-  private final TelegramPersonService telegramPersonService;
-  private final GameValidator gameValidator;
-  private final PersonMentionsValidator personMentionsValidator;
-  private final WithdrawalResponseBuilder withdrawalResponseBuilder;
-  private final CollectionsValidator collectionsValidator;
-  private final WithdrawalsValidator withdrawalsValidator;
+        val personAndAmountMap = withdrawalMessageParser.parse(messageMetadata)
+        collectionsValidator.validateMapIsNotEmpty(personAndAmountMap, "Withdrawal")
 
-  public BotApiMethodMessage storeWithdrawal(final MessageMetadata messageMetadata) {
-    personMentionsValidator.validateMessageMentions(messageMetadata, 1);
+        val amount = personAndAmountMap.values.stream().findFirst().orElseThrow()
+        val telegramGame = gameTelegramFacadeService
+                .getGameByMessageMetadata(messageMetadata)
+                .orElseThrow<ChatGameNotFoundException?>(Supplier { ChatGameNotFoundException() })
+        gameValidator.validateGameIsCashType(telegramGame.game)
+        withdrawalsValidator.validateWithdrawalsAgainstEntries(
+                personAndAmountMap,
+                telegramGame.game.asType<CashGame?>(CashGame::class.java)
+        )
 
-    final var personAndAmountMap = withdrawalMessageParser.parse(messageMetadata);
-    collectionsValidator.validateMapIsNotEmpty(personAndAmountMap, "Withdrawal");
+        val persons = telegramPersonService.getAllByNicknamesAndChatId(
+                personAndAmountMap.keys.map { it.nickname },
+                messageMetadata.chatId
+        )
 
-    final var amount = personAndAmountMap.values().stream().findFirst().orElseThrow();
-    final var telegramGame = gameTelegramFacadeService
-      .getGameByMessageMetadata(messageMetadata)
-      .orElseThrow(ChatGameNotFoundException::new);
-    gameValidator.validateGameIsCashType(telegramGame.game());
-    withdrawalsValidator.validateWithdrawalsAgainstEntries(personAndAmountMap,
-                                                           telegramGame.game().asType(CashGame.class));
+        withdrawalsService.storeBatch(
+                telegramGame.game.getId(),
+                persons.map { it.id },
+                amount,
+                messageMetadata.createdAt
+        )
 
-    final var persons = telegramPersonService.getAllByNicknamesAndChatId(
-      personAndAmountMap.keySet().stream().map(TelegramPerson::getNickname).toList(), messageMetadata.chatId());
-
-    withdrawalsService.storeBatch(telegramGame.game().getId(), persons.stream().map(Person::getId).toList(), amount,
-                                  messageMetadata.createdAt());
-
-    return SendMessage.builder()
-      .chatId(messageMetadata.chatId())
-      .text(withdrawalResponseBuilder.response(persons, amount))
-      .replyToMessageId(telegramGame.messageMetadata().id())
-      .build();
-  }
+        return SendMessage.builder()
+                .chatId(messageMetadata.chatId)
+                .text("""
+                    Withdrawals: 
+                    ${personAndAmountMap.entries.joinToString { (key, value) -> "    - @${key.nickname} -> $value" }}
+                """.trimIndent())
+                .replyToMessageId(telegramGame.messageMetadata.id)
+                .build()
+    }
 }

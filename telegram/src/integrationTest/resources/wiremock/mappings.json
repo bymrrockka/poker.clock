@@ -59,8 +59,9 @@
         "jsonBody": {
           "ok": "false",
           "error_code": "404",
-          "description": "Endpoint not found"
+          "description": "Endpoint not found '{{request.method}} {{request.path}}'\nAnd body {{request.body}}"
         },
+        "transformers": ["response-template"],
         "headers": {
           "Content-Type": "application/json"
         }

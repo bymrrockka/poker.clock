@@ -54,7 +54,6 @@ private fun TelegramGame.payoutsResponse(payouts: List<Payout>): String {
                 Entries: ${it.personEntries.total()}
                 Withdrawals: ${it.personWithdrawals.total()}
                 Total: ${it.total()}
-                
             """.trimIndent()
         }
 
