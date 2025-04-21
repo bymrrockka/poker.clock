@@ -1,7 +1,7 @@
 package by.mrrockka.repo.person;
 
 import by.mrrockka.IntegrationTestConfiguration;
-import by.mrrockka.config.CorePSQLExtension;
+import by.mrrockka.extension.CorePSQLExtension;
 import by.mrrockka.creator.PersonCreator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

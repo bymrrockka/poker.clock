@@ -14,7 +14,7 @@ class GameScenario : AbstractScenarioTest() {
     fun `user sent command to create a game and receive successful message`(commandText: String, gameCreatedText: String, gameStatsText: String) {
         Given {
             command { message(commandText) }
-            command { message("/game_stats") }
+            command { message(UserCommand.gameStats) }
         } When {
             commands.updateReceived()
         } Then {
@@ -26,20 +26,20 @@ class GameScenario : AbstractScenarioTest() {
     companion object {
         val games = mapOf(
                 GameType.TOURNAMENT to """
-                            /tournament_game
+                            ${UserCommand.tournamentGame}
                             stack: 10k
                             buyin: 10
                             @nickname1
                             @Nickname2
                         """.trimIndent(),
                 GameType.CASH to """
-                            /cash_game
+                            ${UserCommand.cashGame}
                             stack: 10k
                             buyin: 10
                             @nickname1
                         """.trimIndent(),
                 GameType.BOUNTY to """
-                            /bounty_game
+                            ${UserCommand.bountyGame}
                             stack: 10k
                             bounty: 10
                             buyin: 10

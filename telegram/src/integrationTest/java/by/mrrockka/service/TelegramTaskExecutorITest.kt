@@ -1,7 +1,7 @@
 package by.mrrockka.service
 
 import by.mrrockka.bot.PokerClockAbsSender
-import by.mrrockka.config.TelegramPSQLExtension
+import by.mrrockka.extension.TelegramPSQLExtension
 import by.mrrockka.creator.TaskCreator
 import by.mrrockka.executor.TelegramTaskExecutor
 import com.ninjasquad.springmockk.MockkBean

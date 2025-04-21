@@ -25,6 +25,7 @@ public class WithdrawalMessageParser {
   private static final String ERROR_MESSAGE = "/withdrawal @nickname( @nickname) #amount";
 
   //  Map to be able to extend withdrawals to have different values for players
+  //todo: refactor to have Pair<BigDecimal, List<TelegramPerson>>
   public Map<TelegramPerson, BigDecimal> parse(final MessageMetadata metadata) {
     final var command = metadata.text().toLowerCase().strip();
     final var chatId = metadata.chatId();

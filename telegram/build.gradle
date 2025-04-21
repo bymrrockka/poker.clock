@@ -80,6 +80,7 @@ dependencies {
     testFixturesApi libs.springBootTelegrambots
     testFixturesImplementation(project)
     testFixturesImplementation(testFixtures(project(":core")))
+    testFixturesImplementation libs.wiremockContainer
 }
 
 application {

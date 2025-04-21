@@ -1,4 +1,4 @@
-package by.mrrockka.config;
+package by.mrrockka.extension;
 
 import org.testcontainers.containers.PostgreSQLContainer;
 

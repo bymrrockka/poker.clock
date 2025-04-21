@@ -2,9 +2,11 @@ package by.mrrockka.scenario
 
 import by.mrrockka.Random
 import by.mrrockka.bot.TelegramBotsProperties
-import by.mrrockka.config.TelegramPSQLExtension
 import by.mrrockka.config.TestBotConfig
 import by.mrrockka.creator.*
+import by.mrrockka.extension.TelegramPSQLExtension
+import by.mrrockka.extension.TelegramWiremockContainer
+import by.mrrockka.extension.TelegramWiremockExtension
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.http.RequestMethod
@@ -24,20 +26,26 @@ import org.telegram.telegrambots.meta.api.methods.updates.DeleteWebhook
 import org.telegram.telegrambots.meta.api.methods.updates.GetUpdates
 import org.telegram.telegrambots.meta.api.objects.EntityType
 import org.telegram.telegrambots.meta.api.objects.MessageEntity
-import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
-import org.wiremock.integrations.testcontainers.WireMockContainer
-import org.wiremock.integrations.testcontainers.WireMockContainer.OFFICIAL_IMAGE_NAME
 import java.time.Duration
 import kotlin.text.RegexOption.MULTILINE
 
-@ExtendWith(TelegramPSQLExtension::class)
+@ExtendWith(value = [TelegramPSQLExtension::class, TelegramWiremockExtension::class])
 @ActiveProfiles(profiles = ["repository", "exception-handler"])
 @Testcontainers
 @SpringBootTest(classes = [TestBotConfig::class])
 abstract class AbstractScenarioTest {
 
-    val calculateCommand = "/calculate"
+    class UserCommand {
+        companion object {
+            val calculate = "/calculate"
+            val gameStats = "/game_stats"
+            val cashGame = "/cash_game"
+            val tournamentGame = "/tournament_game"
+            val bountyGame = "/bounty_game"
+            val withdrawal = "/withdrawal"
+        }
+    }
 
     @Autowired
     lateinit var mapper: ObjectMapper
@@ -47,32 +55,24 @@ abstract class AbstractScenarioTest {
 
     fun Any.toJsonString(): String = mapper.writeValueAsString(this)
 
-
     @BeforeEach
     fun setUp() {
         wireMock.resetToDefaultMappings()
     }
 
     companion object {
-
-        @Container
-        val container = WireMockContainer("$OFFICIAL_IMAGE_NAME:3.10.0")
-                .withMappingFromResource("telegram", "wiremock/mappings.json")
-
         lateinit var wireMock: WireMock
 
         @JvmStatic
         @BeforeAll
         fun beforeAll(): Unit {
-            container.start()
-            wireMock = WireMock(container.port)
-            System.setProperty("wiremock.server.baseUrl", container.baseUrl)
+            wireMock = WireMock(TelegramWiremockContainer.port)
         }
 
         @JvmStatic
         @AfterAll
         fun afterAll(): Unit {
-            await.atMost(Duration.ofSeconds(3)).untilAsserted {
+            await.atMost(Duration.ofSeconds(1)).untilAsserted {
                 wireMock.verify {
                     url equalTo "/bottoken/${SetMyCommands.PATH}"
                     atMost = 1
@@ -88,7 +88,6 @@ abstract class AbstractScenarioTest {
             }
         }
     }
-
 
     class Command(init: Command.() -> Unit) {
         lateinit var message: String
@@ -162,7 +161,7 @@ abstract class AbstractScenarioTest {
                     message.entities = command.entities
                 }
             }
-        }.toList().also { updates ->
+        }.also { updates ->
             wireMock.post {
                 url equalTo "/${botProps.token}/${GetUpdates.PATH}"
             } returnsJson {

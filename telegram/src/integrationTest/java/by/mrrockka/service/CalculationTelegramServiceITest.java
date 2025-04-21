@@ -1,6 +1,6 @@
 package by.mrrockka.service;
 
-import by.mrrockka.config.TelegramPSQLExtension;
+import by.mrrockka.extension.TelegramPSQLExtension;
 import by.mrrockka.creator.MessageMetadataCreator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.extension.ExtendWith;

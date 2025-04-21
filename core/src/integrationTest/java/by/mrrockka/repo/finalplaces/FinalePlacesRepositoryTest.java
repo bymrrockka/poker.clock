@@ -1,7 +1,7 @@
 package by.mrrockka.repo.finalplaces;
 
 import by.mrrockka.IntegrationTestConfiguration;
-import by.mrrockka.config.CorePSQLExtension;
+import by.mrrockka.extension.CorePSQLExtension;
 import by.mrrockka.creator.PersonCreator;
 import by.mrrockka.repo.person.PersonRepository;
 import org.assertj.core.data.MapEntry;

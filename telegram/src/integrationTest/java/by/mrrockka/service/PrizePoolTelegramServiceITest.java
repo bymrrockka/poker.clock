@@ -1,6 +1,6 @@
 package by.mrrockka.service;
 
-import by.mrrockka.config.TelegramPSQLExtension;
+import by.mrrockka.extension.TelegramPSQLExtension;
 import by.mrrockka.creator.MessageMetadataCreator;
 import by.mrrockka.creator.PrizePoolCreator;
 import org.assertj.core.api.Assertions;

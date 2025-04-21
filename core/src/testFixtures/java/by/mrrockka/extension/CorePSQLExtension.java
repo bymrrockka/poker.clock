@@ -1,11 +1,11 @@
-package by.mrrockka.config;
+package by.mrrockka.extension;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-import static by.mrrockka.config.TestPSQLContainer.*;
+import static by.mrrockka.extension.TestPSQLContainer.*;
 
 @Slf4j
 public class CorePSQLExtension implements BeforeAllCallback, AfterEachCallback {

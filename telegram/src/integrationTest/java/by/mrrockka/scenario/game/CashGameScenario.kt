@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 
 class CashGameScenario : AbstractScenarioTest() {
-    private val gameStatsCommand = "/game_stats"
     private val gameStartedResponse = "Cash game started."
 
     @Test
@@ -15,10 +14,10 @@ class CashGameScenario : AbstractScenarioTest() {
 
         Given {
             command { message(createGameCommand(buyin, players)) }
-            command { message(gameStatsCommand) }
+            command { message(UserCommand.gameStats) }
             command { message(withdrawalCommand("nickname1", buyin)) }
-            command { message(gameStatsCommand) }
-            command { message(calculateCommand) }
+            command { message(UserCommand.gameStats) }
+            command { message(UserCommand.calculate) }
         } When {
             commands.updateReceived()
         } Then {
@@ -31,7 +30,7 @@ class CashGameScenario : AbstractScenarioTest() {
     }
 
     fun createGameCommand(buyin: Int, players: List<String>): String = """
-            /cash_game
+            ${UserCommand.cashGame}
             stack: 10k
             buyin: $buyin
             ${players.joinToString("\n")}
@@ -52,7 +51,7 @@ class CashGameScenario : AbstractScenarioTest() {
                 - total withdrawal amount -> $withdrawalAmount
         """.trimIndent()
 
-    fun withdrawalCommand(nickname: String, amount: Int): String = "/withdrawal @$nickname $amount"
+    fun withdrawalCommand(nickname: String, amount: Int): String = "${UserCommand.withdrawal} @$nickname $amount"
     fun withdrawalResponse(nickname: String, amount: Int): String = """
         Withdrawals: 
             - @$nickname -> $amount

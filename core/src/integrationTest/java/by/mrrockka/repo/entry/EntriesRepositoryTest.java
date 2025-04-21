@@ -1,7 +1,7 @@
 package by.mrrockka.repo.entry;
 
 import by.mrrockka.IntegrationTestConfiguration;
-import by.mrrockka.config.CorePSQLExtension;
+import by.mrrockka.extension.CorePSQLExtension;
 import by.mrrockka.repo.entries.EntriesEntity;
 import by.mrrockka.repo.entries.EntriesRepository;
 import by.mrrockka.repo.person.PersonRepository;

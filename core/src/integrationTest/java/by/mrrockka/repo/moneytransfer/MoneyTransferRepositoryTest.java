@@ -1,7 +1,7 @@
 package by.mrrockka.repo.moneytransfer;
 
 import by.mrrockka.IntegrationTestConfiguration;
-import by.mrrockka.config.CorePSQLExtension;
+import by.mrrockka.extension.CorePSQLExtension;
 import by.mrrockka.creator.GameCreator;
 import by.mrrockka.creator.MoneyTransferCreator;
 import by.mrrockka.creator.PersonCreator;
