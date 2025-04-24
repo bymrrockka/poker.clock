@@ -2,6 +2,9 @@ package by.mrrockka.scenario.game
 
 import by.mrrockka.domain.GameType
 import by.mrrockka.scenario.AbstractScenarioTest
+import by.mrrockka.scenario.Given
+import by.mrrockka.scenario.UserCommand
+import by.mrrockka.scenario.When
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
@@ -16,7 +19,7 @@ class GameScenario : AbstractScenarioTest() {
             command { message(commandText) }
             command { message(UserCommand.gameStats) }
         } When {
-            commands.updateReceived()
+            updatesReceived()
         } Then {
             expect { text<SendMessage>(gameCreatedText) }
             expect { text<SendMessage>(gameStatsText) }
@@ -49,7 +52,6 @@ class GameScenario : AbstractScenarioTest() {
                             @nickname3
                         """.trimIndent()
         )
-
 
         @JvmStatic
         fun createGameTypesArguments(): Stream<Arguments> {

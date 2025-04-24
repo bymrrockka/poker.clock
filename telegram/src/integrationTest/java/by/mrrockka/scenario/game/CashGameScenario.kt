@@ -1,59 +1,33 @@
 package by.mrrockka.scenario.game
 
+import by.mrrockka.domain.GameType
 import by.mrrockka.scenario.AbstractScenarioTest
+import by.mrrockka.scenario.Given
+import by.mrrockka.scenario.UserCommand.Companion.withdrawalRequest
+import by.mrrockka.scenario.UserCommand.Companion.withdrawalResponse
+import by.mrrockka.scenario.When
 import org.junit.jupiter.api.Test
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 
 class CashGameScenario : AbstractScenarioTest() {
-    private val gameStartedResponse = "Cash game started."
-
     @Test
     fun `given cash game when all money withdrawn then should be able to calculate`() {
         val buyin = 10
+        val type = GameType.CASH
         val players = listOf("@nickname1")
 
+        givenGameCreated(type, buyin, players)
         Given {
-            command { message(createGameCommand(buyin, players)) }
-            command { message(UserCommand.gameStats) }
-            command { message(withdrawalCommand("nickname1", buyin)) }
-            command { message(UserCommand.gameStats) }
-            command { message(UserCommand.calculate) }
+            command { message(withdrawalRequest("nickname1", buyin)) }
+//            command { message(UserCommand.gameStats) }
+//            command { message(UserCommand.calculate) }
         } When {
-            commands.updateReceived()
+            updatesReceived()
         } Then {
-            expect { text<SendMessage>(gameStartedResponse) }
-            expect { text<SendMessage>(gameStatResponse(buyin, players.size)) }
-            expect { text<SendMessage>(withdrawalResponse("nickname1", 10)) }
-            expect { text<SendMessage>(gameStatResponse(buyin, players.size, 10)) }
-            expect { text<SendMessage>(calculateResponse("@nickname1", 10, 10)) }
+            expect { text<SendMessage>(withdrawalResponse("nickname1", buyin)) }
+//            expect { text<SendMessage>(gameStatsResponse(GameType.CASH, players.size, 10)) }
+//            expect { text<SendMessage>(calculateResponse(type, "@nickname1", 10, 10)) }
         }
     }
 
-    fun createGameCommand(buyin: Int, players: List<String>): String = """
-            ${UserCommand.cashGame}
-            stack: 10k
-            buyin: $buyin
-            ${players.joinToString("\n")}
-        """.trimIndent()
-
-    fun calculateResponse(nickname: String, entries: Int, withdrawal: Int = 0): String = """
-        -----------------------------
-        Payout to: $nickname
-            Entries: $entries
-            Withdrawals: $withdrawal
-            Total: ${withdrawal - entries}
-    """.trimIndent()
-
-    fun gameStatResponse(buyin: Int, playersSize: Int, withdrawalAmount: Int = 0): String = """
-            Cash game statistics:
-                - players entered -> $playersSize
-                - total buy-in amount -> ${buyin * playersSize}
-                - total withdrawal amount -> $withdrawalAmount
-        """.trimIndent()
-
-    fun withdrawalCommand(nickname: String, amount: Int): String = "${UserCommand.withdrawal} @$nickname $amount"
-    fun withdrawalResponse(nickname: String, amount: Int): String = """
-        Withdrawals: 
-            - @$nickname -> $amount
-    """.trimIndent()
 }

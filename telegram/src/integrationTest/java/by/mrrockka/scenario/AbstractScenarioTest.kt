@@ -3,10 +3,17 @@ package by.mrrockka.scenario
 import by.mrrockka.Random
 import by.mrrockka.bot.TelegramBotsProperties
 import by.mrrockka.config.TestBotConfig
-import by.mrrockka.creator.*
+import by.mrrockka.creator.ChatCreator
+import by.mrrockka.creator.MessageCreator
+import by.mrrockka.creator.UpdateCreator
+import by.mrrockka.domain.GameType
 import by.mrrockka.extension.TelegramPSQLExtension
 import by.mrrockka.extension.TelegramWiremockContainer
 import by.mrrockka.extension.TelegramWiremockExtension
+import by.mrrockka.scenario.UserCommand.Companion.gameRequest
+import by.mrrockka.scenario.UserCommand.Companion.gameResponse
+import by.mrrockka.scenario.UserCommand.Companion.gameStats
+import by.mrrockka.scenario.UserCommand.Companion.gameStatsResponse
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.http.RequestMethod
@@ -19,34 +26,18 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.updates.DeleteWebhook
 import org.telegram.telegrambots.meta.api.methods.updates.GetUpdates
-import org.telegram.telegrambots.meta.api.objects.EntityType
-import org.telegram.telegrambots.meta.api.objects.MessageEntity
 import org.testcontainers.junit.jupiter.Testcontainers
 import java.time.Duration
-import kotlin.text.RegexOption.MULTILINE
 
 @ExtendWith(value = [TelegramPSQLExtension::class, TelegramWiremockExtension::class])
 @ActiveProfiles(profiles = ["repository", "exception-handler"])
 @Testcontainers
 @SpringBootTest(classes = [TestBotConfig::class])
 abstract class AbstractScenarioTest {
-
-    class UserCommand {
-        companion object {
-            val calculate = "/calculate"
-            val gameStats = "/game_stats"
-            val cashGame = "/cash_game"
-            val tournamentGame = "/tournament_game"
-            val bountyGame = "/bounty_game"
-            val withdrawal = "/withdrawal"
-        }
-    }
-
     @Autowired
     lateinit var mapper: ObjectMapper
 
@@ -89,70 +80,10 @@ abstract class AbstractScenarioTest {
         }
     }
 
-    class Command(init: Command.() -> Unit) {
-        lateinit var message: String
-        var entities: List<MessageEntity> = mutableListOf()
-
-        init {
-            init(this)
-        }
-
-        fun message(message: String) {
-            this.message = message
-            val botCommandRegex = "^(/[\\w_]+)".toRegex(MULTILINE)
-            val mentionRegex = "(@[\\w\\d_]+)".toRegex(MULTILINE)
-            val botCommand = botCommandRegex.find(this.message.trimIndent())!!.groups[0]!!.value
-            entity(botCommand, EntityType.BOTCOMMAND)
-
-            mentionRegex.findAll(this.message.trimIndent())
-                    .map { it.groups[0]!!.value }
-                    .distinct()
-                    .forEach { mention -> entity(mention, EntityType.MENTION) }
-        }
-
-        fun entity(value: String, type: String) {
-            when (type) {
-                EntityType.BOTCOMMAND -> entities += MessageEntityCreator.apiCommand(message, value)
-                EntityType.MENTION -> entities += MessageEntityCreator.apiMention(message, value)
-            }
-        }
-    }
-
-    class GivenSpecification {
-        var commands: List<Command> = mutableListOf()
-
-        fun command(init: Command.() -> Unit) {
-            this.commands += Command(init)
-        }
-    }
-
-    class ThenSpecification() {
-        var expects: List<Expect> = mutableListOf()
-
-        fun expect(expect: Expect.() -> Unit) {
-            this.expects += Expect().apply(expect)
-        }
-    }
-
-    class Expect {
-        lateinit var result: BotApiMethod<*>
-
-        fun <T : BotApiMethod<*>> result(result: T) {
-            this.result = result
-        }
-
-        inline fun <reified T : BotApiMethod<*>> text(text: String) {
-            if (T::class.java.isAssignableFrom(SendMessage::class.java)) {
-                this.result = SendMessageCreator.api { it.text(text) }
-            } else {
-                throw IllegalStateException("Invalid type ${T::class.java}")
-            }
-        }
-    }
-
-    fun List<Command>.updateReceived() {
+    fun GivenSpecification.updatesReceived() {
         val chatId = Random.chatId()
-        mapIndexed { index, command ->
+        this.commands.mapIndexed { index, command ->
+
             UpdateCreator.update {
                 this.message = MessageCreator.message { message ->
                     message.messageId = Random.messageId()
@@ -186,26 +117,21 @@ abstract class AbstractScenarioTest {
             }
             """
             } and {
-                toState = "expect0"
+                toState = "${scenarioSeed}0"
             }
         }
     }
 
-
-    fun Given(block: GivenSpecification.() -> Unit): GivenSpecification = GivenSpecification().apply(block)
-
-    infix fun GivenSpecification.When(block: GivenSpecification.() -> Unit): GivenSpecification = this.apply(block)
-
-    infix fun GivenSpecification.Then(block: ThenSpecification.() -> Unit) = ThenSpecification()
+    infix fun WhenSpecification.Then(block: ThenSpecification.() -> Unit) = ThenSpecification(this.scenarioSeed)
             .apply(block)
             .also { thenExecute(it) }
-            .let { thenAssert(it) }
+            .also { thenAssert(it) }
 
     private fun thenExecute(thenSpec: ThenSpecification) {
         thenSpec.expects.forEachIndexed { index, expect ->
             wireMock.post {
                 url equalTo "/${botProps.token}/${expect.result.method}"
-                whenState = "expect$index"
+                whenState = "${thenSpec.scenarioSeed}$index"
             } returnsJson {
                 body = """
             {
@@ -214,14 +140,14 @@ abstract class AbstractScenarioTest {
             }
             """
             } and {
-                toState = "expect${index + 1}"
+                toState = "${thenSpec.scenarioSeed}${index + 1}"
             }
         }
     }
 
     private fun thenAssert(thenSpec: ThenSpecification) {
         thenSpec.expects.forEach { expect ->
-            await.atMost(Duration.ofSeconds(3)).untilAsserted {
+            await.atMost(Duration.ofSeconds(1)).untilAsserted {
                 wireMock.verify {
                     url equalTo "/${botProps.token}/${expect.result.method}"
                     method = RequestMethod.POST
@@ -234,4 +160,15 @@ abstract class AbstractScenarioTest {
         }
     }
 
+    fun givenGameCreated(type: GameType, buyin: Int, players: List<String>) {
+        Given {
+            command { message(gameRequest(type, buyin, players)) }
+            command { message(gameStats) }
+        } When {
+            updatesReceived()
+        } Then {
+            expect { text<SendMessage>(gameResponse(type)) }
+            expect { text<SendMessage>(gameStatsResponse(type, buyin, players.size)) }
+        }
+    }
 }
