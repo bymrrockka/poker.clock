@@ -67,10 +67,13 @@ class Expect {
     }
 
     inline fun <reified T : BotApiMethod<*>> text(text: String) {
-        if (T::class.java.isAssignableFrom(SendMessage::class.java)) {
-            this.result = SendMessageCreator.api { it.text(text) }
-        } else {
-            throw IllegalStateException("Invalid type ${T::class.java}")
+        when {
+            T::class.java.isAssignableFrom(SendMessage::class.java) -> {
+                this.result = SendMessageCreator.api { it.text(text) }
+            }
+            else -> {
+                throw IllegalStateException("Invalid type ${T::class.java}")
+            }
         }
     }
 }

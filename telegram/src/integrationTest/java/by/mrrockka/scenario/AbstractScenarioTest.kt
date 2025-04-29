@@ -31,6 +31,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.updates.DeleteWebhook
 import org.telegram.telegrambots.meta.api.methods.updates.GetUpdates
 import org.testcontainers.junit.jupiter.Testcontainers
+import java.math.BigDecimal
 import java.time.Duration
 
 @ExtendWith(value = [TelegramPSQLExtension::class, TelegramWiremockExtension::class])
@@ -80,8 +81,7 @@ abstract class AbstractScenarioTest {
         }
     }
 
-    fun GivenSpecification.updatesReceived() {
-        val chatId = Random.chatId()
+    fun GivenSpecification.updatesReceived(chatId: Long = Random.chatId()) {
         this.commands.mapIndexed { index, command ->
 
             UpdateCreator.update {
@@ -126,6 +126,7 @@ abstract class AbstractScenarioTest {
             .apply(block)
             .also { thenExecute(it) }
             .also { thenAssert(it) }
+            .run { wireMock.resetScenarios() }
 
     private fun thenExecute(thenSpec: ThenSpecification) {
         thenSpec.expects.forEachIndexed { index, expect ->
@@ -160,15 +161,17 @@ abstract class AbstractScenarioTest {
         }
     }
 
-    fun givenGameCreated(type: GameType, buyin: Int, players: List<String>) {
+    fun givenGameCreatedWithChatId(type: GameType, buyin: BigDecimal, players: List<String>): Long {
+        val chatId = Random.chatId()
         Given {
-            command { message(gameRequest(type, buyin, players)) }
+            command { message(gameRequest(type, players, buyin)) }
             command { message(gameStats) }
         } When {
-            updatesReceived()
+            updatesReceived(chatId)
         } Then {
             expect { text<SendMessage>(gameResponse(type)) }
-            expect { text<SendMessage>(gameStatsResponse(type, buyin, players.size)) }
+            expect { text<SendMessage>(gameStatsResponse(type, players.size, buyin)) }
         }
+        return chatId
     }
 }

@@ -1,73 +1,67 @@
-package by.mrrockka.service;
+package by.mrrockka.service
 
-import by.mrrockka.domain.MessageMetadata;
-import by.mrrockka.domain.TelegramPerson;
-import by.mrrockka.domain.finaleplaces.FinalPlace;
-import by.mrrockka.domain.finaleplaces.FinalePlaces;
-import by.mrrockka.parser.finaleplaces.FinalePlacesMessageParser;
-import by.mrrockka.response.builder.FinalePlacesResponseBuilder;
-import by.mrrockka.service.exception.ChatGameNotFoundException;
-import by.mrrockka.service.exception.FinalPlaceContainsNicknameOfNonExistingPlayerException;
-import by.mrrockka.service.game.GameTelegramFacadeService;
-import by.mrrockka.validation.GameValidator;
-import by.mrrockka.validation.collection.CollectionsValidator;
-import by.mrrockka.validation.mentions.PersonMentionsValidator;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-
-import java.util.List;
+import by.mrrockka.domain.MessageMetadata
+import by.mrrockka.domain.TelegramPerson
+import by.mrrockka.domain.finaleplaces.FinalPlace
+import by.mrrockka.domain.finaleplaces.FinalePlaces
+import by.mrrockka.parser.finaleplaces.FinalePlacesMessageParser
+import by.mrrockka.service.exception.ChatGameNotFoundException
+import by.mrrockka.service.exception.FinalPlaceContainsNicknameOfNonExistingPlayerException
+import by.mrrockka.service.game.GameTelegramFacadeService
+import by.mrrockka.validation.GameValidator
+import by.mrrockka.validation.collection.CollectionsValidator
+import by.mrrockka.validation.mentions.PersonMentionsValidator
+import lombok.RequiredArgsConstructor
+import org.springframework.stereotype.Service
+import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 
 @Service
 @RequiredArgsConstructor
-public class FinalePlacesTelegramService {
+class FinalePlacesTelegramService(
+        val finalePlacesService: FinalePlacesService,
+        val finalePlacesMessageParser: FinalePlacesMessageParser,
+        val gameTelegramFacadeService: GameTelegramFacadeService,
+        val telegramPersonService: TelegramPersonService,
+        val gameValidator: GameValidator,
+        val personMentionsValidator: PersonMentionsValidator,
+        val collectionsValidator: CollectionsValidator,
+) {
 
-  private final FinalePlacesService finalePlacesService;
-  private final FinalePlacesMessageParser finalePlacesMessageParser;
-  private final GameTelegramFacadeService gameTelegramFacadeService;
-  private final TelegramPersonService telegramPersonService;
-  private final FinalePlacesResponseBuilder finalePlacesResponseBuilder;
-  private final GameValidator gameValidator;
-  private final PersonMentionsValidator personMentionsValidator;
-  private final CollectionsValidator collectionsValidator;
+    fun storePrizePool(messageMetadata: MessageMetadata): BotApiMethodMessage? {
+        personMentionsValidator.validateMessageMentions(messageMetadata, 1)
 
-  public BotApiMethodMessage storePrizePool(final MessageMetadata messageMetadata) {
-    personMentionsValidator.validateMessageMentions(messageMetadata, 1);
+        val places = finalePlacesMessageParser.parse(messageMetadata)
+        collectionsValidator.validateMapIsNotEmpty(places, "Finale places")
 
-    final var places = finalePlacesMessageParser.parse(messageMetadata);
-    collectionsValidator.validateMapIsNotEmpty(places, "Finale places");
+        val telegramGame = gameTelegramFacadeService
+                .getGameByMessageMetadata(messageMetadata)
+                .orElseThrow { ChatGameNotFoundException() }
+        gameValidator.validateGameIsTournamentType(telegramGame.game)
 
-    final var telegramGame = gameTelegramFacadeService
-      .getGameByMessageMetadata(messageMetadata)
-      .orElseThrow(ChatGameNotFoundException::new);
-    gameValidator.validateGameIsTournamentType(telegramGame.game());
+        val telegramPersons = telegramPersonService
+                .getAllByNicknamesAndChatId(
+                        places.values.mapNotNull { it.getNickname() }.toList(),
+                        messageMetadata.chatId
+                )
 
-    final var telegramPersons = telegramPersonService
-      .getAllByNicknamesAndChatId(places.values().stream().map(TelegramPerson::getNickname).toList(),
-                                  messageMetadata.chatId());
+        val finalePlaces = FinalePlaces(
+                places.entries
+                        .map { (position, person) -> FinalPlace(position, telegramPersons find person) }
+                        .toList())
 
-    final var finalePlaces = new FinalePlaces(
-      places.entrySet().stream()
-        .map(place -> FinalPlace.builder()
-          .position(place.getKey())
-          .person(findByNickname(telegramPersons, place.getValue().getNickname()))
-          .build())
-        .toList());
+        finalePlacesService.store(telegramGame.game.getId(), finalePlaces)
+        return SendMessage.builder()
+                .chatId(messageMetadata.chatId)
+                .text("""
+                    Finale places stored:
+                    ${finalePlaces.finalPlaces.joinToString { "${it.position}. -> @${it.person.nickname}" }}
+                """.trimIndent())
+                .replyToMessageId(telegramGame.messageMetadata.id)
+                .build()
+    }
 
-    finalePlacesService.store(telegramGame.game().getId(), finalePlaces);
-    return SendMessage.builder()
-      .chatId(messageMetadata.chatId())
-      .text(finalePlacesResponseBuilder.response(finalePlaces))
-      .replyToMessageId(telegramGame.messageMetadata().id())
-      .build();
-  }
-
-  private TelegramPerson findByNickname(final List<TelegramPerson> telegramPersons, final String nickname) {
-    return telegramPersons.stream()
-      .filter(person -> person.getNickname().equals(nickname))
-      .findAny()
-      .orElseThrow(() -> new FinalPlaceContainsNicknameOfNonExistingPlayerException(nickname));
-  }
-
+    private infix fun List<TelegramPerson>.find(person: TelegramPerson): TelegramPerson =
+            find { it.getNickname() == person.getNickname() }
+                    ?: throw FinalPlaceContainsNicknameOfNonExistingPlayerException(person.getNickname())
 }

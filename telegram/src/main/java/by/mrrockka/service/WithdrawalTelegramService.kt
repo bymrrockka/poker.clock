@@ -34,7 +34,7 @@ class WithdrawalTelegramService(
         val amount = personAndAmountMap.values.stream().findFirst().orElseThrow()
         val telegramGame = gameTelegramFacadeService
                 .getGameByMessageMetadata(messageMetadata)
-                .orElseThrow<ChatGameNotFoundException?>(Supplier { ChatGameNotFoundException() })
+                .orElseThrow { ChatGameNotFoundException() }
         gameValidator.validateGameIsCashType(telegramGame.game)
         withdrawalsValidator.validateWithdrawalsAgainstEntries(
                 personAndAmountMap,
