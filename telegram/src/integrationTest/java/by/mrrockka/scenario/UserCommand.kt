@@ -152,8 +152,8 @@ class UserCommand {
             """.trimIndent()
         }
 
+        @Suppress("UNCHECKED_CAST")
         fun List<Payout<*>>.calculateResponse(): String {
-            @Suppress("UNCHECKED_CAST")
             val gameSummaryResponse = when {
                 all { it::class.java.isAssignableFrom(BountyPayout::class.java) } -> {
                     val allEntries = flatMap { it.player.entries + it.payers.flatMap { it.player.entries } }

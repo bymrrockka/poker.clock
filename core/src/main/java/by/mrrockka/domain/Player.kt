@@ -2,7 +2,7 @@ package by.mrrockka.domain
 
 import java.math.BigDecimal
 
-sealed class Player(
+open class Player(
         open val person: Person,
         open val entries: List<BigDecimal>
 )
