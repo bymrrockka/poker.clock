@@ -12,6 +12,7 @@ import java.util.function.Consumer;
 
 import static java.util.Objects.nonNull;
 
+//todo: refactor to kotlin dsl
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PersonCreator {
 

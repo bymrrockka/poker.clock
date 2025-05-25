@@ -1,118 +1,139 @@
 package by.mrrockka.service.calculation
 
 import by.mrrockka.domain.*
-import by.mrrockka.domain.game.BountyGame
-import by.mrrockka.domain.game.CashGame
-import by.mrrockka.domain.game.Game
-import by.mrrockka.domain.game.TournamentGame
-import by.mrrockka.domain.payout.TransferType.DEBIT
-import by.mrrockka.domain.payout.TransferType.EQUAL
-import by.mrrockka.domain.summary.player.BountyPlayerSummary
-import by.mrrockka.domain.summary.player.CashPlayerSummary
-import by.mrrockka.domain.summary.player.PlayerSummary
-import by.mrrockka.domain.summary.player.TournamentPlayerSummary
+import by.mrrockka.domain.payout.TransferType
+import by.mrrockka.domain.payout.TransferType.*
 import org.springframework.stereotype.Component
 import java.math.BigDecimal
+import java.math.BigDecimal.ZERO
 
 @Component
 open class GameCalculator {
 
-    fun calculate(game: Game): List<Payout<*>> {
-        var playersSummaries = buildPlayerSummary(game);
-        return playersSummaries
-                .filter { it.transferType != DEBIT }
-                .map {
-                    calculatePayout(
-                            creditorSummary = it,
-                            debtorSummaries = playersSummaries.filter { it.transferType == DEBIT }.sorted())
-                }
+    fun calculate(game: Game): List<Payout> {
+        val transferTypeToPlayer = game.associateTransferTypeWithPlayers()
+        val creditors = transferTypeToPlayer[CREDIT]?.sortedByDescending { it.total } ?: emptyList()
+        val debtors = transferTypeToPlayer[DEBIT]?.sortedByDescending { it.total } ?: emptyList()
+        val equals = transferTypeToPlayer[EQUAL] ?: emptyList()
+
+        validate(game, creditors, debtors, equals)
+
+        return creditors.calculatePayouts(debtors) + equals.asEqualPayouts()
     }
 
-    private fun calculatePayout(creditorSummary: PlayerSummary, debtorSummaries: List<PlayerSummary>): Payout<*> {
-        val payout = creditorSummary.buildPayout()
+    private fun validate(game: Game, creditors: List<PlayerTotal>, debtors: List<PlayerTotal>, equals: List<PlayerTotal>) {
+        if (game.players.size != (creditors + debtors + equals).size) error("Players size and payout size are not equal")
+        if ((creditors + debtors + equals).isEmpty()) error("There must be at least one player in a game")
+        if (debtors.isEmpty() && creditors.isNotEmpty()) error("There must be at least one debtor")
+    }
 
-        if (creditorSummary.transferType == EQUAL) {
-            return payout
-        }
+    private fun List<PlayerTotal>.calculatePayouts(debtorTotals: List<PlayerTotal>): List<Payout> {
+        var debtorsLeft = debtorTotals
 
-        val debts = mutableListOf<Payer<*>>();
-        var leftToPay = creditorSummary.transferAmount;
-
-        for (debtorSummary in debtorSummaries) {
-            var debtAmount = debtorSummary.transferAmount;
-            var debt = debtorSummary.buildPayerBase()
-            var debtComparison = debtAmount.compareTo(leftToPay);
-
-            if (debtComparison == 0) {
-                debtorSummary.subtractCalculated(debtAmount);
-                debts.add(debt.copy(amount = debtAmount))
-                break
+        val payouts = map { creditor ->
+            val debtors = debtorsLeft.findDebtors(creditor.total)
+            check(debtors.isNotEmpty()) { error("Didn't find debtors for ${creditor.player.person.nickname}") }
+            debtorsLeft = debtorsLeft - debtors
+            Payout(creditor.player, creditor.total, debtors)
+        }.let { prefilled ->
+            var payouts = prefilled
+            debtorsLeft.map { debtor ->
+                var debt = debtor.total
+                payouts = prefilled.filter { it.player.total() - it.total != ZERO }
+                        .map { payout ->
+                            val leftToPay = payout.player.total() - payout.total
+                            if (leftToPay >= ZERO) {
+                                debt -= leftToPay
+                                payout.copy(total = payout.total + leftToPay, debtors = payout.debtors + Debtor(debtor.player, leftToPay))
+                            } else payout
+                        }
             }
-
-            if (debtComparison < 0) {
-                debtorSummary.subtractCalculated(debtAmount);
-                debts.add(debt.copy(amount = debtAmount))
-                leftToPay = leftToPay - debtAmount
-            }
-
-            if (debtComparison > 0) {
-                debtorSummary.subtractCalculated(leftToPay);
-                debts.add(debt.copy(amount = debtAmount))
-                break
-            }
+            payouts
         }
 
-        return payout.addPayers(debts)
+        return payouts
     }
 
-    fun buildPlayerSummary(game: Game): List<PlayerSummary> {
-        return when (game) {
-            is CashGame -> emptyList()
-            is BountyGame -> game.entries
-                    .map { BountyPlayerSummary.of(it, game.bountyList, game.finaleSummary) }
-                    .sorted()
-
-            is TournamentGame -> emptyList()
-            else -> throw IllegalArgumentException("Unknown game type");
-        }
-
-    }
-
-    fun PlayerSummary.buildPayout(): Payout<*> {
-        return when (this) {
-            is CashPlayerSummary -> CashPayout(this.toPlayer() as CashPlayer, emptyList())
-            is BountyPlayerSummary -> BountyPayout(this.toPlayer() as BountyPlayer, emptyList())
-            is TournamentPlayerSummary -> TournamentPayout(this.toPlayer(), emptyList())
-        }
-    }
-
-    fun PlayerSummary.buildPayerBase(): Payer<*> {
-        return this.toPayer()
-    }
-
-    private fun PlayerSummary.toPlayer(): Player {
-        return when (this) {
-            is CashPlayerSummary -> CashPlayer(person, personEntries.entries, personWithdrawals.withdrawals)
-            is BountyPlayerSummary -> BountyPlayer(person, personEntries.entries, personBounties.bounties)
-            is TournamentPlayerSummary -> TournamentPlayer(person, personEntries.entries)
-        }
-    }
-
-    private fun PlayerSummary.toPayer(): Payer<*> {
-        return when (this) {
-            is CashPlayerSummary -> CashPayer(this.toPlayer() as CashPlayer, BigDecimal(0))
-            is BountyPlayerSummary -> BountyPayer(this.toPlayer() as BountyPlayer, BigDecimal(0))
-            is TournamentPlayerSummary -> TournamentPayer(this.toPlayer(), BigDecimal(0))
-        }
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    private fun Payout<*>.addPayers(debts: List<Payer<*>>): Payout<*> {
+    private fun List<PlayerTotal>.findDebtors(total: BigDecimal): List<Debtor> {
+        val playerTotal = find { it.total <= total }
+        val payer = playerTotal?.let { Debtor(it.player, it.total) }
         return when {
-            this::class.java.isAssignableFrom(CashPayout::class.java) -> (this as CashPayout).copy(payers = (debts as List<CashPayer>))
-            this::class.java.isAssignableFrom(BountyPayout::class.java) -> (this as BountyPayout).copy(payers = (debts as List<BountyPayer>))
-            this::class.java.isAssignableFrom(TournamentPayout::class.java) -> (this as TournamentPayout).copy(payers = (debts as List<TournamentPayer>))
-            else -> throw IllegalArgumentException("Unknown payout type")
+            payer == null -> emptyList()
+            payer.amount < total -> this.minus(playerTotal).findDebtors(total - payer.amount) + payer
+            else -> listOf(payer)
         }
     }
+
+    private fun List<PlayerTotal>.asEqualPayouts(): List<Payout> {
+        return map {
+            when (val player = it.player) {
+                is CashPlayer -> Payout(player, ZERO, emptyList())
+                is TournamentPlayer -> Payout(player, ZERO, emptyList())
+                is BountyPlayer -> Payout(player, ZERO, emptyList())
+                else -> error("Unknown player type")
+            }
+        }
+    }
+
+    private fun Player.total(): BigDecimal = let {
+        when (val player = this) {
+            is CashPlayer -> player.withdrawals.total() - player.entries.total()
+            is TournamentPlayer -> -player.entries.total()
+            is BountyPlayer -> {
+                val (taken, given) = player.bounties.partition { it.to == player }
+                taken.total() - given.total() - player.entries.total()
+            }
+
+            else -> error("Unknown player type")
+        }
+    }
+
+    private fun Player.associateByTransferType(total: BigDecimal): Pair<TransferType, PlayerTotal> =
+            when {
+                total < ZERO -> DEBIT to PlayerTotal(this, -total)
+                total > ZERO -> CREDIT to PlayerTotal(this, total)
+                else -> EQUAL to PlayerTotal(this, total)
+            }
+
+    private infix fun List<Player>.associateByTransferType(prizeSummaries: List<PrizeSummary>): Map<TransferType, List<PlayerTotal>> =
+            map {
+                val playerPrize = prizeSummaries.find { prize -> it == prize.player }?.amount ?: ZERO
+                it.associateByTransferType(it.total() + playerPrize)
+            }.groupBy({ it.first }, { it.second })
+
+    private fun Game.associateTransferTypeWithPlayers(): Map<TransferType, List<PlayerTotal>> =
+            when (val game = this) {
+                is CashGame -> game.players associateByTransferType emptyList()
+                is TournamentGame -> game.players associateByTransferType game.toSummary()
+                is BountyTournamentGame -> game.players associateByTransferType game.toSummary()
+
+                else -> error("Unknown game type")
+            }
+
+    /*
+        private fun PositionPrize.toSummary(finalePlace: FinalPlace, amount: BigDecimal): PrizeSummary {
+            this
+                    ?.sortedBy { it.position }
+                    ?.zip(finalePlaces?.sortedBy { it.position } ?: emptyList())
+                    ?.map { (prize, place) -> PrizeSummary(place, prize) }
+                    ?: error("Can't build prize summary for game")
+        }
+    */
+
+    private fun Game.toSummary(): List<PrizeSummary> {
+        return when (this) {
+            is TournamentGame -> prizeSummary(finalePlaces = finalePlaces, prizePool = prizePool, players.totalEntries())
+//            todo: bounty game
+//            todo: cash game
+
+            else -> emptyList()
+        }
+    }
+}
+
+internal class PlayerTotal(val player: Player, val total: BigDecimal)
+
+private operator fun List<PlayerTotal>.minus(debtors: List<Debtor>): List<PlayerTotal> {
+    val debtorPlayers = debtors.map { it.player }
+    return this.filterNot { debtorPlayers.contains(it.player) }
 }

@@ -1,6 +1,6 @@
 package by.mrrockka.service;
 
-import by.mrrockka.domain.Bounty;
+import by.mrrockka.domain.bounty.Bounty;
 import by.mrrockka.mapper.BountyMapper;
 import by.mrrockka.repo.bounty.BountyRepository;
 import lombok.NonNull;

@@ -13,13 +13,13 @@ class PrizePoolTest {
   private static final BigDecimal TOTAL_AMOUNT = BigDecimal.valueOf(100);
   private static final int VALID_POSITION = 1;
   private static final int INVALID_POSITION = 2;
-  private static final List<PositionAndPercentage> PERCENTAGE_AND_POSITIONS =
-    List.of(PositionAndPercentage.builder()
+  private static final List<PositionPrize> PERCENTAGE_AND_POSITIONS =
+    List.of(PositionPrize.builder()
               .position(VALID_POSITION)
               .percentage(BigDecimal.valueOf(100))
               .build());
   private static final PrizePool PRIZE_POOL = PrizePool.builder()
-    .positionAndPercentages(PERCENTAGE_AND_POSITIONS)
+    .positionPrizes(PERCENTAGE_AND_POSITIONS)
     .build();
 
   @Test

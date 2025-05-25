@@ -1,7 +1,7 @@
 package by.mrrockka.validation.prizepool;
 
 import by.mrrockka.creator.PrizePoolCreator;
-import by.mrrockka.domain.prize.PositionAndPercentage;
+import by.mrrockka.domain.prize.PositionPrize;
 import by.mrrockka.domain.prize.PrizePool;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -32,21 +32,21 @@ class PrizePoolValidatorTest {
       ),
       Arguments.of(
         PrizePoolCreator.domain(builder -> builder.positionAndPercentages(
-          List.of(new PositionAndPercentage(1, BigDecimal.valueOf(99)))))
+          List.of(new PositionPrize(1, BigDecimal.valueOf(99)))))
       ),
       Arguments.of(
         PrizePoolCreator.domain(builder -> builder.positionAndPercentages(
           List.of(
-            new PositionAndPercentage(1, BigDecimal.valueOf(66)),
-            new PositionAndPercentage(1, BigDecimal.valueOf(33))
+            new PositionPrize(1, BigDecimal.valueOf(66)),
+            new PositionPrize(1, BigDecimal.valueOf(33))
           )))
       ),
       Arguments.of(
         PrizePoolCreator.domain(builder -> builder.positionAndPercentages(
           List.of(
-            new PositionAndPercentage(1, BigDecimal.valueOf(10)),
-            new PositionAndPercentage(2, BigDecimal.valueOf(1)),
-            new PositionAndPercentage(3, BigDecimal.valueOf(5))
+            new PositionPrize(1, BigDecimal.valueOf(10)),
+            new PositionPrize(2, BigDecimal.valueOf(1)),
+            new PositionPrize(3, BigDecimal.valueOf(5))
           )))
       )
     );
@@ -65,21 +65,21 @@ class PrizePoolValidatorTest {
     return Stream.of(
       Arguments.of(
         PrizePoolCreator.domain(builder -> builder.positionAndPercentages(
-          List.of(new PositionAndPercentage(2, BigDecimal.valueOf(100)))))
+          List.of(new PositionPrize(2, BigDecimal.valueOf(100)))))
       ),
       Arguments.of(
         PrizePoolCreator.domain(builder -> builder.positionAndPercentages(
           List.of(
-            new PositionAndPercentage(1, BigDecimal.valueOf(66)),
-            new PositionAndPercentage(1, BigDecimal.valueOf(34))
+            new PositionPrize(1, BigDecimal.valueOf(66)),
+            new PositionPrize(1, BigDecimal.valueOf(34))
           )))
       ),
       Arguments.of(
         PrizePoolCreator.domain(builder -> builder.positionAndPercentages(
           List.of(
-            new PositionAndPercentage(1, BigDecimal.valueOf(70)),
-            new PositionAndPercentage(2, BigDecimal.valueOf(20)),
-            new PositionAndPercentage(4, BigDecimal.valueOf(10))
+            new PositionPrize(1, BigDecimal.valueOf(70)),
+            new PositionPrize(2, BigDecimal.valueOf(20)),
+            new PositionPrize(4, BigDecimal.valueOf(10))
           )))
       )
     );

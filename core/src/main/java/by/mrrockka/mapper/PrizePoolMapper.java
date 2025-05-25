@@ -1,6 +1,6 @@
 package by.mrrockka.mapper;
 
-import by.mrrockka.domain.prize.PositionAndPercentage;
+import by.mrrockka.domain.prize.PositionPrize;
 import by.mrrockka.domain.prize.PrizePool;
 import by.mrrockka.repo.prizepool.PrizePoolEntity;
 import org.mapstruct.Mapper;
@@ -17,27 +17,27 @@ import java.util.stream.Collectors;
 @Mapper
 public interface PrizePoolMapper {
 
-  @Mapping(target = "schema", source = "domain.positionAndPercentages", qualifiedByName = "mapToSchema")
+  @Mapping(target = "schema", source = "domain.positionPrizes", qualifiedByName = "mapToSchema")
   PrizePoolEntity toEntity(UUID gameId, PrizePool domain);
 
-  @Mapping(target = "positionAndPercentages", source = "schema", qualifiedByName = "mapToPositionAndPercentages")
+  @Mapping(target = "positionPrizes", source = "schema", qualifiedByName = "mapToPositionPrizes")
   PrizePool toDomain(PrizePoolEntity entity);
 
   @Named("mapToSchema")
-  default Map<Integer, BigDecimal> mapToSchema(final List<PositionAndPercentage> positionAndPercentages) {
-    return positionAndPercentages.stream()
-      .collect(Collectors.toMap(PositionAndPercentage::position, PositionAndPercentage::percentage));
+  default Map<Integer, BigDecimal> mapToSchema(final List<PositionPrize> positionPrizes) {
+    return positionPrizes.stream()
+      .collect(Collectors.toMap(PositionPrize::position, PositionPrize::percentage));
   }
 
-  @Named("mapToPositionAndPercentages")
-  default List<PositionAndPercentage> mapToPositionAndPercentages(final Map<Integer, BigDecimal> schema) {
+  @Named("mapToPositionPrizes")
+  default List<PositionPrize> mapToPositionAndPercentages(final Map<Integer, BigDecimal> schema) {
     return schema.entrySet()
       .stream()
-      .map(entry -> PositionAndPercentage.builder()
+      .map(entry -> PositionPrize.builder()
         .position(entry.getKey())
         .percentage(entry.getValue())
         .build())
-      .sorted(Comparator.comparingLong(PositionAndPercentage::position))
+      .sorted(Comparator.comparingLong(PositionPrize::position))
       .toList();
   }
 }

@@ -4,7 +4,7 @@ import by.mrrockka.creator.BountyCreator;
 import by.mrrockka.creator.EntriesCreator;
 import by.mrrockka.creator.GameCreator;
 import by.mrrockka.creator.WithdrawalsCreator;
-import by.mrrockka.domain.Bounty;
+import by.mrrockka.domain.bounty.Bounty;
 import by.mrrockka.domain.collection.PersonWithdrawals;
 import by.mrrockka.mapper.GameMapper;
 import by.mrrockka.repo.game.GameRepository;

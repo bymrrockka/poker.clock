@@ -2,6 +2,7 @@ package by.mrrockka.scenario
 
 import by.mrrockka.domain.*
 import java.math.BigDecimal
+import java.math.BigDecimal.ZERO
 import java.math.RoundingMode
 
 class UserCommand {
@@ -153,24 +154,24 @@ class UserCommand {
         }
 
         @Suppress("UNCHECKED_CAST")
-        fun List<Payout<*>>.calculateResponse(): String {
+        fun List<Payout>.calculateResponse(): String {
             val gameSummaryResponse = when {
-                all { it::class.java.isAssignableFrom(BountyPayout::class.java) } -> {
-                    val allEntries = flatMap { it.player.entries + it.payers.flatMap { it.player.entries } }
+                all { it::class.java.isAssignableFrom(Payout::class.java) } -> {
+                    val allEntries = flatMap { it.player.entries + it.debtors.flatMap { it.player.entries } }
                     """
                     -----------------------------
                     Finale places:
-                        ${mapIndexed { index, payout -> "${index}. @${payout.player.person.nickname} won ${payout.total()}" }.joinToString()}
+                        ${mapIndexed { index, payout -> "${index}. @${payout.player.person.nickname} won ${payout.total}" }.joinToString()}
                         Total: ${allEntries.total()} (${allEntries.size}entries * ${allEntries.first()}buy in)
                     """.trimIndent()
                 }
 
-                all { it::class.java.isAssignableFrom(TournamentPayout::class.java) } -> {
-                    val allEntries = flatMap { it.player.entries + it.payers.flatMap { it.player.entries } }
+                all { it::class.java.isAssignableFrom(Payout::class.java) } -> {
+                    val allEntries = flatMap { it.player.entries + it.debtors.flatMap { it.player.entries } }
                     """
                     -----------------------------
                     Finale places:
-                        ${mapIndexed { index, payout -> "${index}. @${payout.player.person.nickname} won ${payout.total()}" }.joinToString()}
+                        ${mapIndexed { index, payout -> "${index}. @${payout.player.person.nickname} won ${payout.total}" }.joinToString()}
                         Total: ${allEntries.total()} (${allEntries.size}entries * ${allEntries.first()}buy in)
                     """.trimIndent()
                 }
@@ -181,11 +182,11 @@ class UserCommand {
 
             val payoutsResponse = joinToString {
                 when {
-                    it::class.java.isAssignableFrom(CashPayout::class.java) -> {
+                    it::class.java.isAssignableFrom(Payout::class.java) -> {
                         @Suppress("UNCHECKED_CAST")
-                        val payout = it as CashPayout
+                        val payout = it
                         val entries = payout.player.entries.total()
-                        val withdrawals = payout.player.withdrawals.total()
+                        val withdrawals = /* TODO: payout.player.withdrawals.total()*/ ZERO
                         """
                             -----------------------------
                             Payout to: @${payout.player.person.nickname}
@@ -193,21 +194,21 @@ class UserCommand {
                                 Withdrawals: ${withdrawals}
                                 Total: ${withdrawals - entries} ($withdrawals - $entries)
                             From:
-                                ${it.payers.joinToString { "@${it.player.person.nickname} -> ${it.amount}" }}
+                                ${it.debtors.joinToString { "@${it.player.person.nickname} -> ${it.amount}" }}
                             """.trimIndent()
                     }
 
-                    it::class.java.isAssignableFrom(TournamentPayout::class.java) -> {
+                    it::class.java.isAssignableFrom(Payout::class.java) -> {
                         @Suppress("UNCHECKED_CAST")
-                        val payout = it as TournamentPayout
+                        val payout = it as Payout
                         val entries = payout.player.entries
                         gameSummaryResponse + """
                         -----------------------------
                         Payout to: @${payout.player.person.nickname}
                             Entries: ${entries}
-                            Total: ${payout.total()} (- $entries)
+                            Total: ${payout.total} (- $entries)
                         From:
-                            ${it.payers.joinToString { "@${it.player.person.nickname} -> ${it.amount}" }}
+                            ${it.debtors.joinToString { "@${it.player.person.nickname} -> ${it.amount}" }}
                         """.trimIndent()
                     }
 

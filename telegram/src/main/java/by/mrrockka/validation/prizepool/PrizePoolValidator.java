@@ -1,6 +1,6 @@
 package by.mrrockka.validation.prizepool;
 
-import by.mrrockka.domain.prize.PositionAndPercentage;
+import by.mrrockka.domain.prize.PositionPrize;
 import by.mrrockka.domain.prize.PrizePool;
 import org.springframework.stereotype.Component;
 
@@ -16,8 +16,8 @@ public class PrizePoolValidator {
   }
 
   private void validatePercentage(final PrizePool prizePool) {
-    final var totalPercentage = prizePool.positionAndPercentages().stream()
-      .map(PositionAndPercentage::percentage)
+    final var totalPercentage = prizePool.positionPrizes().stream()
+      .map(PositionPrize::percentage)
       .reduce(BigDecimal::add)
       .orElse(BigDecimal.ZERO);
 
@@ -27,9 +27,9 @@ public class PrizePoolValidator {
   }
 
   private void validatePositions(final PrizePool prizePool) {
-    final var pps = prizePool.positionAndPercentages()
+    final var pps = prizePool.positionPrizes()
       .stream()
-      .sorted(Comparator.comparing(PositionAndPercentage::position))
+      .sorted(Comparator.comparing(PositionPrize::position))
       .toList();
 
     for (int i = 0; i < pps.size(); i++) {

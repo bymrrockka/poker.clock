@@ -1,9 +1,10 @@
-package by.mrrockka.domain;
+package by.mrrockka.domain
 
-import lombok.Builder;
-import lombok.NonNull;
+import java.math.BigDecimal
 
-import java.math.BigDecimal;
+data class Bounty(val from: Player, val to: Player, val amount: BigDecimal)
 
-@Builder
-public record Bounty(@NonNull Person from, @NonNull Person to, @NonNull BigDecimal amount) {}
+
+fun List<Bounty>.total(): BigDecimal {
+    return this.map { it.amount }.fold(BigDecimal.ZERO, BigDecimal::add)
+}

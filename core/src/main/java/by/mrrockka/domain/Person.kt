@@ -1,28 +1,43 @@
-package by.mrrockka.domain;
+package by.mrrockka.domain
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
+import java.util.*
 
-import java.util.UUID;
+data class Person(
+        val id: UUID,
+        val firstname: String?,
+        val lastname: String?,
+        val nickname: String?
+) {
 
+//    todo: remove
+    companion object {
+        @JvmStatic
+        fun personBuilder(): PersonBuilder = PersonBuilder()
+    }
 
-@Getter
-@EqualsAndHashCode
-@ToString
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class Person {
+    @Deprecated(message = "Use constructor instead.")
+    class PersonBuilder {
+        lateinit var id: UUID
+        var firstname: String? = null
+        var lastname: String? = null
+        var nickname: String? = null
 
-  @NonNull
-  UUID id;
-  String firstname;
-  String lastname;
-  String nickname;
+        fun id(id: UUID): PersonBuilder {
+            this.id = id; return this
+        }
 
-  @Builder(builderMethodName = "personBuilder")
-  public Person(@NonNull final UUID id, final String firstname, final String lastname, final String nickname) {
-    this.id = id;
-    this.firstname = firstname;
-    this.lastname = lastname;
-    this.nickname = nickname;
-  }
+        fun firstname(firstname: String): PersonBuilder {
+            this.firstname = firstname; return this
+        }
+
+        fun lastname(lastname: String): PersonBuilder {
+            this.lastname = lastname; return this
+        }
+
+        fun nickname(nickname: String): PersonBuilder {
+            this.nickname = nickname; return this
+        }
+
+        fun build(): Person = Person(id, firstname, lastname, nickname)
+    }
 }

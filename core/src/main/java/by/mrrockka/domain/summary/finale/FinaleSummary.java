@@ -12,7 +12,7 @@ public record FinaleSummary(@NonNull List<FinalePlaceSummary> finaleSummaries) {
 
   public static FinaleSummary of(@NonNull final PrizePool prizePool, @NonNull final FinalePlaces finalePlaces,
                                  @NonNull final BigDecimal totalAmount) {
-    final var finaleSummaries = prizePool.positionAndPercentages()
+    final var finaleSummaries = prizePool.positionPrizes()
       .stream()
       .map(percentageAndPosition ->
              FinalePlaceSummary.builder()

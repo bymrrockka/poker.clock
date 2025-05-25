@@ -8,7 +8,7 @@ import by.mrrockka.domain.finaleplaces.FinalPlace;
 import by.mrrockka.domain.finaleplaces.FinalePlaces;
 import by.mrrockka.domain.payout.Payer;
 import by.mrrockka.domain.payout.Payout;
-import by.mrrockka.domain.prize.PositionAndPercentage;
+import by.mrrockka.domain.prize.PositionPrize;
 import by.mrrockka.domain.prize.PrizePool;
 import by.mrrockka.domain.summary.finale.FinalePlaceSummary;
 import by.mrrockka.domain.summary.finale.FinaleSummary;
@@ -191,9 +191,9 @@ class TournamentCalculationStrategyTest {
     final var entries = new ArrayList<>(EntriesCreator.entriesList(size, BUY_IN));
 
     final var prizePool = new PrizePool(List.of(
-      new PositionAndPercentage(1, BigDecimal.valueOf(63)),
-      new PositionAndPercentage(2, BigDecimal.valueOf(26)),
-      new PositionAndPercentage(3, BigDecimal.valueOf(11))
+      new PositionPrize(1, BigDecimal.valueOf(63)),
+      new PositionPrize(2, BigDecimal.valueOf(26)),
+      new PositionPrize(3, BigDecimal.valueOf(11))
     ));
 
     final var finalePlaces = new FinalePlaces(List.of(

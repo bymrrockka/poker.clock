@@ -3,7 +3,7 @@ package by.mrrockka.service.calculation;
 import by.mrrockka.creator.EntriesCreator;
 import by.mrrockka.creator.GameCreator;
 import by.mrrockka.creator.PersonCreator;
-import by.mrrockka.domain.Bounty;
+import by.mrrockka.domain.bounty.Bounty;
 import by.mrrockka.domain.Person;
 import by.mrrockka.domain.collection.PersonBounties;
 import by.mrrockka.domain.collection.PersonEntries;

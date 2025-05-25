@@ -1,6 +1,6 @@
 package by.mrrockka.domain.game;
 
-import by.mrrockka.domain.Bounty;
+import by.mrrockka.domain.bounty.Bounty;
 import by.mrrockka.domain.collection.PersonEntries;
 import by.mrrockka.domain.summary.finale.FinaleSummary;
 import lombok.*;

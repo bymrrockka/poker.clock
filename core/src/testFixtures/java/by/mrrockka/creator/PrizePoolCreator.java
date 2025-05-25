@@ -1,6 +1,6 @@
 package by.mrrockka.creator;
 
-import by.mrrockka.domain.prize.PositionAndPercentage;
+import by.mrrockka.domain.prize.PositionPrize;
 import by.mrrockka.domain.prize.PrizePool;
 import by.mrrockka.repo.prizepool.PrizePoolEntity;
 
@@ -37,7 +37,7 @@ public class PrizePoolCreator {
 
   public static PrizePool domain(Consumer<PrizePool.PrizePoolBuilder> builderConsumer) {
     final var prizePoolBuilder = PrizePool.builder()
-      .positionAndPercentages(positionsAndPercentage());
+      .positionPrizes(positionsAndPercentage());
 
     if (nonNull(builderConsumer))
       builderConsumer.accept(prizePoolBuilder);
@@ -53,11 +53,11 @@ public class PrizePoolCreator {
     );
   }
 
-  private static List<PositionAndPercentage> positionsAndPercentage() {
+  private static List<PositionPrize> positionsAndPercentage() {
     return List.of(
-      new PositionAndPercentage(1, BigDecimal.valueOf(60)),
-      new PositionAndPercentage(2, BigDecimal.valueOf(30)),
-      new PositionAndPercentage(3, BigDecimal.valueOf(10))
+      new PositionPrize(1, BigDecimal.valueOf(60)),
+      new PositionPrize(2, BigDecimal.valueOf(30)),
+      new PositionPrize(3, BigDecimal.valueOf(10))
     );
   }
 }

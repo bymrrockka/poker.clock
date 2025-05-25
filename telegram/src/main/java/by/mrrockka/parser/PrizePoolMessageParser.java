@@ -1,6 +1,6 @@
 package by.mrrockka.parser;
 
-import by.mrrockka.domain.prize.PositionAndPercentage;
+import by.mrrockka.domain.prize.PositionPrize;
 import by.mrrockka.domain.prize.PrizePool;
 import org.springframework.stereotype.Component;
 
@@ -25,14 +25,14 @@ public class PrizePoolMessageParser {
         .map(String::strip)
         .map(prizePattern::matcher)
         .filter(Matcher::matches)
-        .map(matcher -> PositionAndPercentage.builder()
+        .map(matcher -> PositionPrize.builder()
           .position(Integer.parseInt(matcher.group(POSITION_GROUP)))
           .percentage(new BigDecimal(matcher.group(AMOUNT_GROUP)))
           .build())
         .toList()
     );
 
-    if (result.positionAndPercentages().isEmpty()) {
+    if (result.positionPrizes().isEmpty()) {
       throw new InvalidMessageFormatException(ERROR_MESSAGE);
     }
 

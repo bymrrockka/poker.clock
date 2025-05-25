@@ -1,6 +1,6 @@
 package by.mrrockka.creator;
 
-import by.mrrockka.domain.Bounty;
+import by.mrrockka.domain.bounty.Bounty;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

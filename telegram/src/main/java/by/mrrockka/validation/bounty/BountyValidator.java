@@ -1,6 +1,6 @@
 package by.mrrockka.validation.bounty;
 
-import by.mrrockka.domain.Bounty;
+import by.mrrockka.domain.bounty.Bounty;
 import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.domain.collection.PersonEntries;
 import by.mrrockka.domain.game.BountyGame;

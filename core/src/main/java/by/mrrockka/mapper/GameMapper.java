@@ -1,6 +1,6 @@
 package by.mrrockka.mapper;
 
-import by.mrrockka.domain.Bounty;
+import by.mrrockka.domain.bounty.Bounty;
 import by.mrrockka.domain.collection.PersonEntries;
 import by.mrrockka.domain.collection.PersonWithdrawals;
 import by.mrrockka.domain.game.BountyGame;

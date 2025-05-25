@@ -9,13 +9,13 @@ import java.util.List;
 import static java.math.RoundingMode.HALF_DOWN;
 
 @Builder
-public record PrizePool(@NonNull List<PositionAndPercentage> positionAndPercentages) {
+public record PrizePool(@NonNull List<PositionPrize> positionPrizes) {
 
   public BigDecimal calculatePrizeAmountFor(final int position, @NonNull final BigDecimal totalAmount) {
-    if (positionAndPercentages().get(positionAndPercentages().size() - 1).position() == position) {
-      final var calculatedPrizeExceptLast = positionAndPercentages().stream()
+    if (positionPrizes().get(positionPrizes().size() - 1).position() == position) {
+      final var calculatedPrizeExceptLast = positionPrizes().stream()
         .filter(pp -> pp.position() != position)
-        .map(PositionAndPercentage::percentage)
+        .map(PositionPrize::percentage)
         .map(totalPercentage -> calculatePrize(totalPercentage, totalAmount))
         .reduce(BigDecimal::add)
         .orElse(BigDecimal.ZERO);
@@ -23,7 +23,7 @@ public record PrizePool(@NonNull List<PositionAndPercentage> positionAndPercenta
       return totalAmount.subtract(calculatedPrizeExceptLast);
     }
 
-    return positionAndPercentages().stream()
+    return positionPrizes().stream()
       .filter(positionAndPercentage -> position == positionAndPercentage.position())
       .map(pp -> calculatePrize(pp.percentage(), totalAmount))
       .findFirst()
@@ -35,7 +35,7 @@ public record PrizePool(@NonNull List<PositionAndPercentage> positionAndPercenta
   }
 
   public boolean isInPrizes(final int position) {
-    return positionAndPercentages().stream()
+    return positionPrizes().stream()
       .anyMatch(positionAndPercentage -> positionAndPercentage.position() == position);
   }
 }

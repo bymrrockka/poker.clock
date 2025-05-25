@@ -1,6 +1,6 @@
 package by.mrrockka.domain.summary.player;
 
-import by.mrrockka.domain.Bounty;
+import by.mrrockka.domain.bounty.Bounty;
 import by.mrrockka.domain.collection.PersonBounties;
 import by.mrrockka.domain.collection.PersonEntries;
 import by.mrrockka.domain.payout.TransferType;

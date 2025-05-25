@@ -1,7 +1,7 @@
 package by.mrrockka.creator;
 
 import by.mrrockka.FakerProvider;
-import by.mrrockka.domain.Bounty;
+import by.mrrockka.domain.bounty.Bounty;
 import by.mrrockka.domain.collection.PersonEntries;
 import by.mrrockka.domain.collection.PersonWithdrawals;
 import by.mrrockka.domain.game.BountyGame;

@@ -2,26 +2,30 @@ package by.mrrockka.domain
 
 import java.math.BigDecimal
 
-open class Player(
-        open val person: Person,
-        open val entries: List<BigDecimal>
-)
+interface Player {
+    val person: Person
+    val entries: List<BigDecimal>
+}
 
-typealias TournamentPlayer = Player
+data class TournamentPlayer(
+        override val person: Person,
+        override val entries: List<BigDecimal>,
+) : Player
 
 data class CashPlayer(
         override val person: Person,
         override val entries: List<BigDecimal>,
         val withdrawals: List<BigDecimal> = emptyList()
-) : Player(person, entries)
+) : Player
 
 data class BountyPlayer(
         override val person: Person,
         override val entries: List<BigDecimal>,
         val bounties: List<Bounty> = emptyList(),
-) : Player(person, entries)
+) : Player
 
 fun List<BigDecimal>.total(): BigDecimal {
     return this.fold(BigDecimal.ZERO, BigDecimal::add)
 }
 
+fun List<Player>.totalEntries(): BigDecimal = flatMap { it.entries }.total()
