@@ -31,7 +31,7 @@ open class GameCalculator {
         var debtorsLeft = debtorTotals
 
         val payouts = map { creditor ->
-            val debtors = debtorsLeft.findDebtors(creditor.total)
+            val debtors = debtorsLeft.findDebtors(creditor.total).sortedByDescending { it.amount }
             check(debtors.isNotEmpty()) { error("Didn't find debtors for ${creditor.player.person.nickname}") }
             debtorsLeft = debtorsLeft - debtors
             Payout(creditor.player, creditor.total, debtors)
@@ -109,16 +109,6 @@ open class GameCalculator {
 
                 else -> error("Unknown game type")
             }
-
-    /*
-        private fun PositionPrize.toSummary(finalePlace: FinalPlace, amount: BigDecimal): PrizeSummary {
-            this
-                    ?.sortedBy { it.position }
-                    ?.zip(finalePlaces?.sortedBy { it.position } ?: emptyList())
-                    ?.map { (prize, place) -> PrizeSummary(place, prize) }
-                    ?: error("Can't build prize summary for game")
-        }
-    */
 
     private fun Game.toSummary(): List<PrizeSummary> {
         return when (this) {

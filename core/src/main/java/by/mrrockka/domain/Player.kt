@@ -29,3 +29,16 @@ fun List<BigDecimal>.total(): BigDecimal {
 }
 
 fun List<Player>.totalEntries(): BigDecimal = flatMap { it.entries }.total()
+
+fun Player.total(): BigDecimal = let {
+    when (val player = this) {
+        is CashPlayer -> player.withdrawals.total() - player.entries.total()
+        is TournamentPlayer -> -player.entries.total()
+        is BountyPlayer -> {
+            val (taken, given) = player.bounties.partition { it.to == player }
+            taken.total() - given.total() - player.entries.total()
+        }
+
+        else -> error("Unknown player type")
+    }
+}
