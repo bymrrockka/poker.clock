@@ -15,7 +15,7 @@ fun prizeSummary(finalePlaces: List<FinalPlace>?, prizePool: List<PositionPrize>
     return prizePool.sortedBy { it.position }
             .zip(finalePlaces.sortedBy { it.position })
             .mapIndexed { index, (prize, place) ->
-                if (finalePlaces.size - 1 > index) PrizeSummary(place.position, place.player, left)
+                if (finalePlaces.size - 1 <= index) PrizeSummary(place.position, place.player, left)
                 else {
                     val amount = (total * prize.percentage / BigDecimal("100")).setScale(0, RoundingMode.HALF_DOWN)
                     left -= amount

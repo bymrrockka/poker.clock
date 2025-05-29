@@ -59,6 +59,7 @@ dependencies {
     testImplementation libs.mockitoJupiter
     testImplementation libs.assertjCore
     testImplementation libs.kotlinStdLib
+    testImplementation libs.okeydoke
 
     testFixturesCompileOnly libs.lombok
     testFixturesAnnotationProcessor libs.lombok

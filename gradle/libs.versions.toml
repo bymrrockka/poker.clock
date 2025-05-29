@@ -27,6 +27,7 @@ awaitilityVersion = "4.2.2"
 wiremockVersion = "3.10.0"
 wiremockContainerVersion = "1.0-alpha-13"
 wiremockKotlinVersion = "2.1.1"
+okeydokieVersion = "2.0.3"
 
 [plugins]
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinJvmVersion" }
@@ -69,3 +70,4 @@ awaitility = { module = "org.awaitility:awaitility-kotlin", version.ref = "await
 wiremock = { module = "org.wiremock:wiremock-standalone", version.ref = "wiremockVersion" }
 wiremockContainer = { module = "org.wiremock.integrations.testcontainers:wiremock-testcontainers-module", version.ref = "wiremockContainerVersion" }
 wiremockKotlinDsl = { module = "com.marcinziolo:kotlin-wiremock", version.ref = "wiremockKotlinVersion" }
+okeydoke = { module = "com.oneeyedmen:okeydoke", version.ref = "okeydokieVersion" }
