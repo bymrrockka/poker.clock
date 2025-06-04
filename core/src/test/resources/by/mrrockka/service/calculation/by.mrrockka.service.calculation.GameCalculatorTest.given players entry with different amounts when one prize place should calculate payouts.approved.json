@@ -1,0 +1,134 @@
+[ {
+  "player" : {
+    "person" : {
+      "id" : "910cc3eb-7a6d-352b-9330-67be7103548a",
+      "firstname" : "Elly",
+      "lastname" : "Mohr",
+      "nickname" : "nan_rosenbaum"
+    },
+    "entries" : [ 10 ]
+  },
+  "total" : 160,
+  "debtors" : [ {
+    "player" : {
+      "person" : {
+        "id" : "3b99d7ef-1f11-320a-a27c-97e09bec0edc",
+        "firstname" : "Dave",
+        "lastname" : "Stamm",
+        "nickname" : "tifany_renner"
+      },
+      "entries" : [ 10, 10, 10, 10 ]
+    },
+    "amount" : 40
+  }, {
+    "player" : {
+      "person" : {
+        "id" : "919b3688-02c2-3adf-bf4e-7d4dfa288e32",
+        "firstname" : "Sherrell",
+        "lastname" : "Kertzmann",
+        "nickname" : "marcelino_gusikowski"
+      },
+      "entries" : [ 10, 10, 10 ]
+    },
+    "amount" : 30
+  }, {
+    "player" : {
+      "person" : {
+        "id" : "b0fe0acb-5b6a-31a0-aeba-7815979ef728",
+        "firstname" : "Chas",
+        "lastname" : "Murphy",
+        "nickname" : "elidia_nienow"
+      },
+      "entries" : [ 10 ]
+    },
+    "amount" : 10
+  }, {
+    "player" : {
+      "person" : {
+        "id" : "cafe07a2-8802-30a3-89c4-70ff11f6a3ec",
+        "firstname" : "Iris",
+        "lastname" : "Vandervort",
+        "nickname" : "lee_herzog"
+      },
+      "entries" : [ 10 ]
+    },
+    "amount" : 10
+  }, {
+    "player" : {
+      "person" : {
+        "id" : "9a5c7454-92f9-300a-ac97-029a41fd4082",
+        "firstname" : "Sana",
+        "lastname" : "Haley",
+        "nickname" : "john_gulgowski"
+      },
+      "entries" : [ 10 ]
+    },
+    "amount" : 10
+  }, {
+    "player" : {
+      "person" : {
+        "id" : "9f42f59e-ba7e-3067-8e29-2a6d8d03c9e4",
+        "firstname" : "Joslyn",
+        "lastname" : "Leuschke",
+        "nickname" : "holly_grimes"
+      },
+      "entries" : [ 10 ]
+    },
+    "amount" : 10
+  }, {
+    "player" : {
+      "person" : {
+        "id" : "fbb02688-f965-3078-9153-2cb311993e56",
+        "firstname" : "Isaiah",
+        "lastname" : "Boyer",
+        "nickname" : "omer_runolfsson"
+      },
+      "entries" : [ 10 ]
+    },
+    "amount" : 10
+  }, {
+    "player" : {
+      "person" : {
+        "id" : "c79d14b8-0d56-3054-926a-b8157611cd40",
+        "firstname" : "Arie",
+        "lastname" : "Wisozk",
+        "nickname" : "charmain_marquardt"
+      },
+      "entries" : [ 10 ]
+    },
+    "amount" : 10
+  }, {
+    "player" : {
+      "person" : {
+        "id" : "03432c84-1e65-3a7a-9345-ff5bdef9b43f",
+        "firstname" : "Nereida",
+        "lastname" : "Aufderhar",
+        "nickname" : "pearlie_larkin"
+      },
+      "entries" : [ 10 ]
+    },
+    "amount" : 10
+  }, {
+    "player" : {
+      "person" : {
+        "id" : "4f920186-3355-36d6-8760-0d7ba9d7038c",
+        "firstname" : "Grant",
+        "lastname" : "Boehm",
+        "nickname" : "jani_aufderhar"
+      },
+      "entries" : [ 10 ]
+    },
+    "amount" : 10
+  }, {
+    "player" : {
+      "person" : {
+        "id" : "cd549ceb-4ace-337a-b91e-8c03e3496d24",
+        "firstname" : "Karl",
+        "lastname" : "Skiles",
+        "nickname" : "elton_jerde"
+      },
+      "entries" : [ 10 ]
+    },
+    "amount" : 10
+  } ]
+} ]

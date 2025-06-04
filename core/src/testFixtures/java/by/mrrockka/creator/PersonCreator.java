@@ -56,6 +56,7 @@ public final class PersonCreator {
   }
 
   public static Person domainRandom() {
+
     return domain(builder -> builder
       .id(UUID.randomUUID())
       .firstname(FAKER.name().firstName())

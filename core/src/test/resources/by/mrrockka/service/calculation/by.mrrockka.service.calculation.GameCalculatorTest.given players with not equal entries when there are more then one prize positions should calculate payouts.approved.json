@@ -1,0 +1,124 @@
+[ {
+  "player" : {
+    "person" : {
+      "id" : "6023809a-23f5-324b-bce1-5c7c3e16298b",
+      "firstname" : "Guillermo",
+      "lastname" : "Will",
+      "nickname" : "wendell_auer"
+    },
+    "entries" : [ 10 ]
+  },
+  "total" : 109,
+  "debtors" : [ {
+    "player" : {
+      "person" : {
+        "id" : "41a426eb-cadd-3dcf-91dc-bf236cc31667",
+        "firstname" : "Angelo",
+        "lastname" : "Brown",
+        "nickname" : "ayesha_schmitt"
+      },
+      "entries" : [ 10, 10, 10, 10 ]
+    },
+    "amount" : 40
+  }, {
+    "player" : {
+      "person" : {
+        "id" : "31466be5-5e02-3b3a-8002-8a0c622f377f",
+        "firstname" : "Sandie",
+        "lastname" : "Bartoletti",
+        "nickname" : "elbert_deckow"
+      },
+      "entries" : [ 10, 10, 10 ]
+    },
+    "amount" : 30
+  }, {
+    "player" : {
+      "person" : {
+        "id" : "614984c5-eae4-35ce-bc30-f4f0c0048da5",
+        "firstname" : "Herb",
+        "lastname" : "Nikolaus",
+        "nickname" : "geraldo_bailey"
+      },
+      "entries" : [ 10 ]
+    },
+    "amount" : 10
+  }, {
+    "player" : {
+      "person" : {
+        "id" : "c0466825-433f-3e6c-8f90-d1af1996b635",
+        "firstname" : "Daryl",
+        "lastname" : "Kreiger",
+        "nickname" : "lucina_kihn"
+      },
+      "entries" : [ 10 ]
+    },
+    "amount" : 10
+  }, {
+    "player" : {
+      "person" : {
+        "id" : "921aca8d-68cd-3d6b-8a52-2882d62409e8",
+        "firstname" : "Diego",
+        "lastname" : "Ullrich",
+        "nickname" : "terrence_hyatt"
+      },
+      "entries" : [ 10 ]
+    },
+    "amount" : 10
+  } ]
+}, {
+  "player" : {
+    "person" : {
+      "id" : "fe3edf55-3dde-3202-bccf-f343a0b6a397",
+      "firstname" : "Kristian",
+      "lastname" : "Koelpin",
+      "nickname" : "leia_grant"
+    },
+    "entries" : [ 10 ]
+  },
+  "total" : 41,
+  "debtors" : [ {
+    "player" : {
+      "person" : {
+        "id" : "a02f31bd-05dd-3091-9026-1e393e6fdf95",
+        "firstname" : "Jeanie",
+        "lastname" : "Hyatt",
+        "nickname" : "paige_gutmann"
+      },
+      "entries" : [ 10 ]
+    },
+    "amount" : 10
+  }, {
+    "player" : {
+      "person" : {
+        "id" : "21e2735e-9e93-3809-88db-fe8e4131e53d",
+        "firstname" : "Pam",
+        "lastname" : "Torp",
+        "nickname" : "ward_turner"
+      },
+      "entries" : [ 10 ]
+    },
+    "amount" : 10
+  }, {
+    "player" : {
+      "person" : {
+        "id" : "bca2eaa4-be3f-3a5f-b021-5f4c80f522b2",
+        "firstname" : "Clair",
+        "lastname" : "Lind",
+        "nickname" : "claudine_lind"
+      },
+      "entries" : [ 10 ]
+    },
+    "amount" : 10
+  }, {
+    "player" : {
+      "person" : {
+        "id" : "b28ac606-a8b2-33e1-a2fd-d85c79e3f223",
+        "firstname" : "Maegan",
+        "lastname" : "Klocko",
+        "nickname" : "kylie_runolfsdottir"
+      },
+      "entries" : [ 10 ]
+    },
+    "amount" : 10
+  } ]
+} ]

@@ -12,6 +12,6 @@ abstract class AbstractTest {
             .enable(SerializationFeature.INDENT_OUTPUT)
             .setSerializationInclusion(JsonInclude.Include.NON_NULL)
 
-    fun Any?.toJsonString() = objectMapper.writeValueAsString(this)
+    fun Any?.toJsonString() = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(this)
 
 }

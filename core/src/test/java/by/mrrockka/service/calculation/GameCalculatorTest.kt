@@ -1,18 +1,16 @@
 package by.mrrockka.service.calculation
 
 import by.mrrockka.AbstractTest
-import by.mrrockka.creator.PersonCreator
+import by.mrrockka.builder.game
+import by.mrrockka.builder.player
 import by.mrrockka.domain.*
-import by.mrrockka.extension.jsonApprover
+import com.oneeyedmen.okeydoke.Approver
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import java.math.BigDecimal
-import java.math.BigDecimal.ZERO
-import java.time.Instant
-import java.util.*
 import java.util.stream.Stream
 
 class GameCalculatorTest : AbstractTest() {
@@ -22,9 +20,9 @@ class GameCalculatorTest : AbstractTest() {
     @MethodSource("playerSize")
     fun `given players entry equally when one prize place should calculate payouts`(size: Int) {
         val buyin = BigDecimal("10")
-        val players = tournamentPlayers(size, buyin)
+        val players = player { this.buyin = buyin }.tournamentBatch(size)
 
-        val game = GameBuilder {
+        val game = game {
             this.buyIn = buyin
             this.players = players
             this.prizePool = listOf(PositionPrize(1, BigDecimal("100")))
@@ -42,42 +40,31 @@ class GameCalculatorTest : AbstractTest() {
         ))
 
         assertThat(actual).isEqualTo(expect)
-        jsonApprover("given players entry equally when one prize place should calculate payouts $size")
-                .assertApproved(actual.toJsonString())
     }
 
-    @ParameterizedTest
-    @MethodSource("playerSize")
-    fun `given players entry with different amounts when one prize place should calculate payouts`(size: Int) {
+    @Test
+    fun `given players entry with different amounts when one prize place should calculate payouts`(approver: Approver) {
+        val size = 10
         val buyin = BigDecimal("10")
         val players = tournamentPlayers(size, buyin) + tournamentPlayer(buyin, 3) + tournamentPlayer(buyin, 4)
 
-        val game = GameBuilder {
+        val game = game {
             this.buyIn = buyin
             this.players = players
             this.prizePool = listOf(PositionPrize(1, BigDecimal("100")))
             this.finalePlaces = listOf(FinalPlace(1, players[0]))
         }.tournament()
 
-        val actual = calculator.calculate(game)
-        val expect = listOf(Payout(
-                player = players[0],
-                debtors = players.drop(1)
-                        .map { Debtor(it, it.entries.total()) }
-                        .reversed(),
-                total = players.totalEntries() - BigDecimal("10")
-        ))
-
-        assertThat(actual).isEqualTo(expect)
+        approver.assertApproved(calculator.calculate(game).toJsonString())
     }
 
     @Test
-    fun `given players with equal entries when there are more then one prize positions should calculate payouts`() {
+    fun `given players with equal entries when there are more then one prize positions should calculate payouts`(approver: Approver) {
         val size = 10
         val buyin = BigDecimal("10")
         val players = tournamentPlayers(size, buyin)
 
-        val game = GameBuilder {
+        val game = game {
             this.buyIn = buyin
             this.players = players
             this.prizePool = listOf(
@@ -90,37 +77,16 @@ class GameCalculatorTest : AbstractTest() {
             )
         }.tournament()
 
-        val actual = calculator.calculate(game)
-        val expect = listOf(
-                Payout(
-                        player = players[0],
-                        debtors = players
-                                .drop(2)
-                                .dropLast(2)
-                                .map { Debtor(it, it.entries.total()) }
-                                .reversed(),
-                        total = BigDecimal("60")
-                ),
-                Payout(
-                        player = players[1],
-                        debtors = players.drop(8)
-                                .map { Debtor(it, it.entries.total()) }
-                                .reversed(),
-                        total = BigDecimal("20")
-                ),
-        )
-
-        assertThat(actual).isEqualTo(expect)
+        approver.assertApproved(calculator.calculate(game).toJsonString())
     }
 
     @Test
-    fun `given players with not equal entries when there are more then one prize positions should calculate payouts`() {
+    fun `given players with not equal entries when there are more then one prize positions should calculate payouts`(approver: Approver) {
         val size = 10
         val buyin = BigDecimal("10")
         val players = tournamentPlayers(size, buyin) + tournamentPlayer(buyin, 3) + tournamentPlayer(buyin, 4)
 
-
-        val game = GameBuilder {
+        val game = game {
             this.buyIn = buyin
             this.players = players
             this.prizePool = listOf(
@@ -133,27 +99,7 @@ class GameCalculatorTest : AbstractTest() {
             )
         }.tournament()
 
-        val actual = calculator.calculate(game)
-        val expect = listOf(
-                Payout(
-                        player = players[0],
-                        debtors = players
-                                .drop(2)
-                                .dropLast(2)
-                                .map { Debtor(it, it.entries.total()) }
-                                .reversed(),
-                        total = BigDecimal("60")
-                ),
-                Payout(
-                        player = players[1],
-                        debtors = players.drop(8)
-                                .map { Debtor(it, it.entries.total()) }
-                                .reversed(),
-                        total = BigDecimal("20")
-                ),
-        )
-
-        assertThat(actual).isEqualTo(expect)
+        approver.assertApproved(calculator.calculate(game).toJsonString())
     }
     /*
                 @Test
@@ -387,41 +333,13 @@ class GameCalculatorTest : AbstractTest() {
     }
 }
 
-@Suppress("UNCHECKED_CAST")
-class GameBuilder(init: (GameBuilder.() -> Unit) = {}) {
-    var id: UUID = UUID.randomUUID()
-    var buyIn: BigDecimal = BigDecimal("10")
-    var stack: BigDecimal? = ZERO
-    var finishedAt: Instant? = null
-    var players: List<Player> = emptyList()
-    var finalePlaces: List<FinalPlace>? = emptyList()
-    var prizePool: List<PositionPrize>? = emptyList()
-    var bounty: BigDecimal = BigDecimal("10")
-
-    init {
-        init()
-    }
-
-    fun tournament(): TournamentGame = TournamentGame(
-            id = id,
-            buyIn = buyIn,
-            stack = stack,
-            players = players as List<TournamentPlayer>,
-            finalePlaces = finalePlaces,
-            prizePool = prizePool,
-            finishedAt = finishedAt,
-    )
-
-}
-
 fun tournamentPlayers(size: Int, buyin: BigDecimal = BigDecimal("10")): List<Player> =
         (0..<size)
                 .asSequence()
-                .map { tournamentPlayer(buyin) }
+                .map { player { this.buyin = buyin }.tournament() }
                 .toList()
 
-fun tournamentPlayer(buyin: BigDecimal = BigDecimal("10"), entries: Int = 1): Player {
-    return TournamentPlayer(
-            person = PersonCreator.domainRandom(),
-            entries = (0..<entries).asSequence().map { buyin }.toList())
-}
+fun tournamentPlayer(buyin: BigDecimal = BigDecimal("10"), entries: Int = 1): Player = player {
+    this.buyin = buyin
+    this.size = entries
+}.tournament()

@@ -28,7 +28,8 @@ class JsonApproverExtension : BeforeTestExecutionCallback, AfterTestExecutionCal
     }
 
     override fun afterTestExecution(context: ExtensionContext) {
-        if (!context.executionException.isPresent && store(context)[ENABLED_KEY] as Boolean == true) {
+        val enabled = store(context)[ENABLED_KEY].let { (it ?: false) as Boolean }
+        if (!context.executionException.isPresent && enabled) {
             val approver = store(context).get(STORE_KEY) as JsonApprover
             if (!approver.satisfactionChecked()) {
                 approver.assertSatisfied()
