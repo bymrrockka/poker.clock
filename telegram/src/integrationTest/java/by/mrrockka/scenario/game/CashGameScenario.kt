@@ -26,7 +26,7 @@ class CashGameScenario : AbstractScenarioTest() {
         val players = listOf("nickname1", "nickname2")
 
         val payout = Payout(
-                player = CashPlayer(
+                creditor = CashPlayer(
                         person = PersonCreator.domain("nickname1"),
                         entries = listOf(buyin),
                         withdrawals = listOf(BigDecimal(20)),
@@ -36,7 +36,7 @@ class CashGameScenario : AbstractScenarioTest() {
                                 person = PersonCreator.domain("nickname2"),
                                 entries = listOf(buyin)
                         ),
-                        amount = buyin,
+                        debt = buyin,
                 )),
                 total = buyin
         )

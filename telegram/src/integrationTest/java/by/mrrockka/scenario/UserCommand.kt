@@ -157,21 +157,21 @@ class UserCommand {
         fun List<Payout>.calculateResponse(): String {
             val gameSummaryResponse = when {
                 all { it::class.java.isAssignableFrom(Payout::class.java) } -> {
-                    val allEntries = flatMap { it.player.entries + it.debtors.flatMap { it.player.entries } }
+                    val allEntries = flatMap { it.creditor.entries + it.debtors.flatMap { it.player.entries } }
                     """
                     -----------------------------
                     Finale places:
-                        ${mapIndexed { index, payout -> "${index}. @${payout.player.person.nickname} won ${payout.total}" }.joinToString()}
+                        ${mapIndexed { index, payout -> "${index}. @${payout.creditor.person.nickname} won ${payout.total}" }.joinToString()}
                         Total: ${allEntries.total()} (${allEntries.size}entries * ${allEntries.first()}buy in)
                     """.trimIndent()
                 }
 
                 all { it::class.java.isAssignableFrom(Payout::class.java) } -> {
-                    val allEntries = flatMap { it.player.entries + it.debtors.flatMap { it.player.entries } }
+                    val allEntries = flatMap { it.creditor.entries + it.debtors.flatMap { it.player.entries } }
                     """
                     -----------------------------
                     Finale places:
-                        ${mapIndexed { index, payout -> "${index}. @${payout.player.person.nickname} won ${payout.total}" }.joinToString()}
+                        ${mapIndexed { index, payout -> "${index}. @${payout.creditor.person.nickname} won ${payout.total}" }.joinToString()}
                         Total: ${allEntries.total()} (${allEntries.size}entries * ${allEntries.first()}buy in)
                     """.trimIndent()
                 }
@@ -185,30 +185,30 @@ class UserCommand {
                     it::class.java.isAssignableFrom(Payout::class.java) -> {
                         @Suppress("UNCHECKED_CAST")
                         val payout = it
-                        val entries = payout.player.entries.total()
+                        val entries = payout.creditor.entries.total()
                         val withdrawals = /* TODO: payout.player.withdrawals.total()*/ ZERO
                         """
                             -----------------------------
-                            Payout to: @${payout.player.person.nickname}
+                            Payout to: @${payout.creditor.person.nickname}
                                 Entries: ${entries}
                                 Withdrawals: ${withdrawals}
                                 Total: ${withdrawals - entries} ($withdrawals - $entries)
                             From:
-                                ${it.debtors.joinToString { "@${it.player.person.nickname} -> ${it.amount}" }}
+                                ${it.debtors.joinToString { "@${it.player.person.nickname} -> ${it.debt}" }}
                             """.trimIndent()
                     }
 
                     it::class.java.isAssignableFrom(Payout::class.java) -> {
                         @Suppress("UNCHECKED_CAST")
                         val payout = it as Payout
-                        val entries = payout.player.entries
+                        val entries = payout.creditor.entries
                         gameSummaryResponse + """
                         -----------------------------
-                        Payout to: @${payout.player.person.nickname}
+                        Payout to: @${payout.creditor.person.nickname}
                             Entries: ${entries}
                             Total: ${payout.total} (- $entries)
                         From:
-                            ${it.debtors.joinToString { "@${it.player.person.nickname} -> ${it.amount}" }}
+                            ${it.debtors.joinToString { "@${it.player.person.nickname} -> ${it.debt}" }}
                         """.trimIndent()
                     }
 

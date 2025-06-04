@@ -31,7 +31,7 @@ open class GameCalculator {
         var debtorsLeft = debtorTotals
 
         val payouts = map { creditor ->
-            val debtors = debtorsLeft.findDebtors(creditor.total).sortedByDescending { it.amount }
+            val debtors = debtorsLeft.findDebtors(creditor.total).sortedByDescending { it.debt }
             check(debtors.isNotEmpty()) { error("Didn't find debtors for ${creditor.player.person.nickname}") }
             debtorsLeft = debtorsLeft - debtors
             Payout(creditor.player, creditor.total, debtors)
@@ -39,9 +39,9 @@ open class GameCalculator {
             var payouts = prefilled
             debtorsLeft.map { debtor ->
                 var debt = debtor.total
-                payouts = prefilled.filter { it.player.total() - it.total != ZERO }
+                payouts = prefilled.filter { it.creditor.total() - it.total != ZERO }
                         .map { payout ->
-                            val leftToPay = payout.player.total() - payout.total
+                            val leftToPay = payout.creditor.total() - payout.total
                             if (leftToPay >= ZERO) {
                                 debt -= leftToPay
                                 payout.copy(total = payout.total + leftToPay, debtors = payout.debtors + Debtor(debtor.player, leftToPay))
@@ -59,7 +59,7 @@ open class GameCalculator {
         val payer = playerTotal?.let { Debtor(it.player, it.total) }
         return when {
             payer == null -> emptyList()
-            payer.amount < total -> this.minus(playerTotal).findDebtors(total - payer.amount) + payer
+            payer.debt < total -> this.minus(playerTotal).findDebtors(total - payer.debt) + payer
             else -> listOf(payer)
         }
     }

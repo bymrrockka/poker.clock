@@ -1,5 +1,5 @@
 [ {
-  "player" : {
+  "creditor" : {
     "person" : {
       "id" : "6023809a-23f5-324b-bce1-5c7c3e16298b",
       "firstname" : "Guillermo",
@@ -19,7 +19,7 @@
       },
       "entries" : [ 10, 10, 10, 10 ]
     },
-    "amount" : 40
+    "debt" : 40
   }, {
     "player" : {
       "person" : {
@@ -30,7 +30,7 @@
       },
       "entries" : [ 10, 10, 10 ]
     },
-    "amount" : 30
+    "debt" : 30
   }, {
     "player" : {
       "person" : {
@@ -41,7 +41,7 @@
       },
       "entries" : [ 10 ]
     },
-    "amount" : 10
+    "debt" : 10
   }, {
     "player" : {
       "person" : {
@@ -52,7 +52,7 @@
       },
       "entries" : [ 10 ]
     },
-    "amount" : 10
+    "debt" : 10
   }, {
     "player" : {
       "person" : {
@@ -63,10 +63,10 @@
       },
       "entries" : [ 10 ]
     },
-    "amount" : 10
+    "debt" : 10
   } ]
 }, {
-  "player" : {
+  "creditor" : {
     "person" : {
       "id" : "fe3edf55-3dde-3202-bccf-f343a0b6a397",
       "firstname" : "Kristian",
@@ -86,7 +86,7 @@
       },
       "entries" : [ 10 ]
     },
-    "amount" : 10
+    "debt" : 10
   }, {
     "player" : {
       "person" : {
@@ -97,7 +97,7 @@
       },
       "entries" : [ 10 ]
     },
-    "amount" : 10
+    "debt" : 10
   }, {
     "player" : {
       "person" : {
@@ -108,7 +108,7 @@
       },
       "entries" : [ 10 ]
     },
-    "amount" : 10
+    "debt" : 10
   }, {
     "player" : {
       "person" : {
@@ -119,6 +119,6 @@
       },
       "entries" : [ 10 ]
     },
-    "amount" : 10
+    "debt" : 10
   } ]
 } ]

@@ -31,7 +31,7 @@ class GameCalculatorTest : AbstractTest() {
 
         val actual = calculator.calculate(game)
         val expect = listOf(Payout(
-                player = players[0],
+                creditor = players[0],
                 debtors = players
                         .filterNot { it == players[0] }
                         .map { Debtor(it, buyin) }
