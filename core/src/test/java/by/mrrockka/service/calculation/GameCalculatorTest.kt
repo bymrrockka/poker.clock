@@ -3,7 +3,7 @@ package by.mrrockka.service.calculation
 import by.mrrockka.AbstractTest
 import by.mrrockka.creator.PersonCreator
 import by.mrrockka.domain.*
-import com.oneeyedmen.okeydoke.Approver
+import by.mrrockka.extension.jsonApprover
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -20,7 +20,7 @@ class GameCalculatorTest : AbstractTest() {
 
     @ParameterizedTest
     @MethodSource("playerSize")
-    fun `given players entry equally when one prize place should calculate payouts`(size: Int, approver: Approver) {
+    fun `given players entry equally when one prize place should calculate payouts`(size: Int) {
         val buyin = BigDecimal("10")
         val players = tournamentPlayers(size, buyin)
 
@@ -42,7 +42,8 @@ class GameCalculatorTest : AbstractTest() {
         ))
 
         assertThat(actual).isEqualTo(expect)
-        approver.assertApproved(actual.toJsonString())
+        jsonApprover("given players entry equally when one prize place should calculate payouts $size")
+                .assertApproved(actual.toJsonString())
     }
 
     @ParameterizedTest
