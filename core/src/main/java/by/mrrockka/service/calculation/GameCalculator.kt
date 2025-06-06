@@ -39,12 +39,13 @@ open class GameCalculator {
             var payouts = prefilled
             debtorsLeft.map { debtor ->
                 var debt = debtor.total
-                payouts = prefilled.filter { it.creditor.total() - it.total != ZERO }
+                payouts = prefilled
+                        .filter { it.creditor.total() - it.total != ZERO }
                         .map { payout ->
-                            val leftToPay = payout.creditor.total() - payout.total
+                            val leftToPay = payout.total - payout.debtors.map { it.debt }.total()
                             if (leftToPay >= ZERO) {
                                 debt -= leftToPay
-                                payout.copy(total = payout.total + leftToPay, debtors = payout.debtors + Debtor(debtor.player, leftToPay))
+                                payout.copy(total = payout.total, debtors = payout.debtors + Debtor(debtor.player, leftToPay))
                             } else payout
                         }
             }

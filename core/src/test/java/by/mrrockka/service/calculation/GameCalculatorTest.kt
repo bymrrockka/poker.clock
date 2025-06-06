@@ -45,9 +45,8 @@ class GameCalculatorTest : AbstractTest() {
 
     @Test
     fun `given players entry with different amounts when one prize place should calculate payouts`(approver: Approver) {
-        val size = 10
         val buyin = BigDecimal("10")
-        val players = tournamentPlayers(size, buyin) + tournamentPlayer(buyin, 3) + tournamentPlayer(buyin, 4)
+        val players = tournamentPlayers(size = 10, buyin) + tournamentPlayer(buyin, 3) + tournamentPlayer(buyin, 4)
 
         val game = game {
             this.buyIn = buyin
@@ -61,9 +60,8 @@ class GameCalculatorTest : AbstractTest() {
 
     @Test
     fun `given players with equal entries when there are more then one prize positions should calculate payouts`(approver: Approver) {
-        val size = 10
         val buyin = BigDecimal("10")
-        val players = tournamentPlayers(size, buyin)
+        val players = tournamentPlayers(size = 10, buyin)
 
         val game = game {
             this.buyIn = buyin
@@ -83,9 +81,8 @@ class GameCalculatorTest : AbstractTest() {
 
     @Test
     fun `given players with not equal entries when there are more then one prize positions should calculate payouts`(approver: Approver) {
-        val size = 10
         val buyin = BigDecimal("10")
-        val players = tournamentPlayers(size, buyin) + tournamentPlayer(buyin, 3) + tournamentPlayer(buyin, 4)
+        val players = tournamentPlayers(size = 10, buyin) + tournamentPlayer(buyin, 3) + tournamentPlayer(buyin, 4)
 
         val game = game {
             this.buyIn = buyin
@@ -105,9 +102,8 @@ class GameCalculatorTest : AbstractTest() {
 
     @Test
     fun `given winners has more than one entry should calculate prize pool including entries`(approver: Approver) {
-        val size = 10
         val buyin = BigDecimal("10")
-        val players = listOf(tournamentPlayer(buyin, 3), tournamentPlayer(buyin, 4)) + tournamentPlayers(size, buyin)
+        val players = listOf(tournamentPlayer(buyin, 3), tournamentPlayer(buyin, 4)) + tournamentPlayers(size = 10, buyin)
 
         val game = game {
             this.buyIn = buyin
@@ -123,6 +119,28 @@ class GameCalculatorTest : AbstractTest() {
         }.tournament()
 
         approver.assertApproved(calculator.calculate(game).simplify().toJsonString())
+    }
+
+    @Test
+    fun `given winners has more than one entry and one still in debt should calculate payouts`(approver: Approver) {
+        val buyin = BigDecimal("10")
+        val players = listOf(tournamentPlayer(buyin, 3), tournamentPlayer(buyin, 4)) + tournamentPlayers(size = 10, buyin)
+
+        val game = game {
+            this.buyIn = buyin
+            this.players = players
+            this.prizePool = listOf(
+                    PositionPrize(1, BigDecimal("90")),
+                    PositionPrize(2, BigDecimal("10")),
+            )
+            this.finalePlaces = listOf(
+                    FinalPlace(1, players[0]),
+                    FinalPlace(2, players[1]),
+            )
+        }.tournament()
+
+        approver.assertApproved(calculator.calculate(game).simplify().toJsonString())
+
     }
 
 
@@ -326,7 +344,7 @@ fun tournamentPlayer(buyin: BigDecimal = BigDecimal("10"), entries: Int = 1): Pl
 data class SimplePayout(
         val creditor: String,
         val entries: BigDecimal,
-        val won: BigDecimal,
+        val total: BigDecimal,
         val debtors: List<SimpleDebtor>,
 )
 
@@ -340,7 +358,7 @@ internal fun List<Payout>.simplify(): List<SimplePayout> = map { payout ->
     SimplePayout(
             creditor = payout.creditor.person.nickname ?: fail("No creditor nickname found"),
             entries = payout.creditor.entries.total(),
-            won = payout.total,
+            total = payout.total,
             debtors = payout.debtors.map { debtor ->
                 SimpleDebtor(
                         debtor = debtor.player.person.nickname ?: fail("No debtor nickname found"),

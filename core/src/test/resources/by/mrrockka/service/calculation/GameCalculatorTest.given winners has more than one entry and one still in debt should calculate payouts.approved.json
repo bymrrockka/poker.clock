@@ -1,0 +1,50 @@
+[ {
+  "creditor" : "donte_durgan",
+  "entries" : 30,
+  "total" : 123,
+  "debtors" : [ {
+    "debtor" : "adelia_connelly",
+    "debt" : 23,
+    "entries" : 40
+  }, {
+    "debtor" : "kelly_gibson",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "evangelina_dubuque",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "dion_damore",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "romana_beer",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "lauri_lakin",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "soledad_parker",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "douglas_cummings",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "kennith_bradtke",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "beckie_mccullough",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "timmy_mohr",
+    "debt" : 10,
+    "entries" : 10
+  } ]
+} ]

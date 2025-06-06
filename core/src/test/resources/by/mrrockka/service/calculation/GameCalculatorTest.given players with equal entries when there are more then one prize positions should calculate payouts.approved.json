@@ -1,42 +1,42 @@
 [ {
-  "creditor" : "terrence_hyatt",
+  "creditor" : "jani_aufderhar",
   "entries" : 10,
-  "won" : 60,
+  "total" : 60,
   "debtors" : [ {
-    "debtor" : "catherin_abbott",
+    "debtor" : "elidia_nienow",
     "debt" : 10,
     "entries" : 10
   }, {
-    "debtor" : "paige_gutmann",
+    "debtor" : "lee_herzog",
     "debt" : 10,
     "entries" : 10
   }, {
-    "debtor" : "ward_turner",
+    "debtor" : "john_gulgowski",
     "debt" : 10,
     "entries" : 10
   }, {
-    "debtor" : "claudine_lind",
+    "debtor" : "holly_grimes",
     "debt" : 10,
     "entries" : 10
   }, {
-    "debtor" : "kylie_runolfsdottir",
+    "debtor" : "omer_runolfsson",
     "debt" : 10,
     "entries" : 10
   }, {
-    "debtor" : "geraldo_bailey",
+    "debtor" : "charmain_marquardt",
     "debt" : 10,
     "entries" : 10
   } ]
 }, {
-  "creditor" : "lucina_kihn",
+  "creditor" : "pearlie_larkin",
   "entries" : 10,
-  "won" : 20,
+  "total" : 20,
   "debtors" : [ {
-    "debtor" : "ayesha_schmitt",
+    "debtor" : "tifany_renner",
     "debt" : 10,
     "entries" : 10
   }, {
-    "debtor" : "elbert_deckow",
+    "debtor" : "marcelino_gusikowski",
     "debt" : 10,
     "entries" : 10
   } ]

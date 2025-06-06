@@ -1,49 +1,49 @@
 [ {
-  "creditor" : "jody_weimann",
+  "creditor" : "gonzalo_powlowski",
   "entries" : 10,
-  "won" : 160,
+  "total" : 160,
   "debtors" : [ {
-    "debtor" : "sonny_larson",
+    "debtor" : "danny_frami",
     "debt" : 40,
     "entries" : 40
   }, {
-    "debtor" : "angele_schinner",
+    "debtor" : "marlin_toy",
     "debt" : 30,
     "entries" : 30
   }, {
-    "debtor" : "harris_friesen",
+    "debtor" : "hiram_sanford",
     "debt" : 10,
     "entries" : 10
   }, {
-    "debtor" : "hyo_langworth",
+    "debtor" : "refugio_fay",
     "debt" : 10,
     "entries" : 10
   }, {
-    "debtor" : "marty_beahan",
+    "debtor" : "gaye_grimes",
     "debt" : 10,
     "entries" : 10
   }, {
-    "debtor" : "glynis_pouros",
+    "debtor" : "bernardo_reichert",
     "debt" : 10,
     "entries" : 10
   }, {
-    "debtor" : "vaughn_rosenbaum",
+    "debtor" : "lowell_pacocha",
     "debt" : 10,
     "entries" : 10
   }, {
-    "debtor" : "harley_smitham",
+    "debtor" : "renato_hilpert",
     "debt" : 10,
     "entries" : 10
   }, {
-    "debtor" : "claire_hamill",
+    "debtor" : "willis_wehner",
     "debt" : 10,
     "entries" : 10
   }, {
-    "debtor" : "carin_mayer",
+    "debtor" : "dotty_predovic",
     "debt" : 10,
     "entries" : 10
   }, {
-    "debtor" : "leandro_jacobi",
+    "debtor" : "francesca_conroy",
     "debt" : 10,
     "entries" : 10
   } ]

@@ -1,7 +1,7 @@
 [ {
   "creditor" : "terisa_johnston",
   "entries" : 30,
-  "won" : 89,
+  "total" : 89,
   "debtors" : [ {
     "debtor" : "lance_crooks",
     "debt" : 10,
@@ -34,14 +34,22 @@
     "debtor" : "loria_block",
     "debt" : 10,
     "entries" : 10
+  }, {
+    "debtor" : "latrisha_torp",
+    "debt" : 9,
+    "entries" : 10
   } ]
 }, {
   "creditor" : "risa_huels",
   "entries" : 40,
-  "won" : 11,
+  "total" : 11,
   "debtors" : [ {
     "debtor" : "thaddeus_orn",
     "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "latrisha_torp",
+    "debt" : 1,
     "entries" : 10
   } ]
 } ]
