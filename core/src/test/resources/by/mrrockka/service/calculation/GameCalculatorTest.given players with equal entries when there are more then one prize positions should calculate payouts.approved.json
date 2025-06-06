@@ -1,0 +1,43 @@
+[ {
+  "creditor" : "terrence_hyatt",
+  "entries" : 10,
+  "won" : 60,
+  "debtors" : [ {
+    "debtor" : "catherin_abbott",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "paige_gutmann",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "ward_turner",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "claudine_lind",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "kylie_runolfsdottir",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "geraldo_bailey",
+    "debt" : 10,
+    "entries" : 10
+  } ]
+}, {
+  "creditor" : "lucina_kihn",
+  "entries" : 10,
+  "won" : 20,
+  "debtors" : [ {
+    "debtor" : "ayesha_schmitt",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "elbert_deckow",
+    "debt" : 10,
+    "entries" : 10
+  } ]
+} ]

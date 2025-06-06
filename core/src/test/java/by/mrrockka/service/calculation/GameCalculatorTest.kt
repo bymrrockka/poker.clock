@@ -7,6 +7,7 @@ import by.mrrockka.domain.*
 import com.oneeyedmen.okeydoke.Approver
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.fail
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
@@ -55,7 +56,7 @@ class GameCalculatorTest : AbstractTest() {
             this.finalePlaces = listOf(FinalPlace(1, players[0]))
         }.tournament()
 
-        approver.assertApproved(calculator.calculate(game).toJsonString())
+        approver.assertApproved(calculator.calculate(game).simplify().toJsonString())
     }
 
     @Test
@@ -77,7 +78,7 @@ class GameCalculatorTest : AbstractTest() {
             )
         }.tournament()
 
-        approver.assertApproved(calculator.calculate(game).toJsonString())
+        approver.assertApproved(calculator.calculate(game).simplify().toJsonString())
     }
 
     @Test
@@ -99,55 +100,33 @@ class GameCalculatorTest : AbstractTest() {
             )
         }.tournament()
 
-        approver.assertApproved(calculator.calculate(game).toJsonString())
+        approver.assertApproved(calculator.calculate(game).simplify().toJsonString())
     }
+
+    @Test
+    fun `given winners has more than one entry should calculate prize pool including entries`(approver: Approver) {
+        val size = 10
+        val buyin = BigDecimal("10")
+        val players = listOf(tournamentPlayer(buyin, 3), tournamentPlayer(buyin, 4)) + tournamentPlayers(size, buyin)
+
+        val game = game {
+            this.buyIn = buyin
+            this.players = players
+            this.prizePool = listOf(
+                    PositionPrize(1, BigDecimal("70")),
+                    PositionPrize(2, BigDecimal("30")),
+            )
+            this.finalePlaces = listOf(
+                    FinalPlace(1, players[0]),
+                    FinalPlace(2, players[1]),
+            )
+        }.tournament()
+
+        approver.assertApproved(calculator.calculate(game).simplify().toJsonString())
+    }
+
+
     /*
-                @Test
-                fun givenPlayerBuyInNotEquallyAndPrizePoolHasMultiplePositions_thenShouldCreateListOfDebtorsOrderedByTheAmount() {
-                    val size = 10
-                    val entries = ArrayList<PersonEntries?>(EntriesCreator.entriesList(size, BUY_IN))
-
-                    val firstPlace = entry(List.of<BigDecimal?>(BUY_IN, BUY_IN, BUY_IN))
-                    val secondPlace = entry(List.of<BigDecimal?>(BUY_IN, BUY_IN))
-
-                    entries.set(0, firstPlace)
-                    entries.set(1, secondPlace)
-
-                    val game =
-                            GameCreator.tournament(Consumer { builder: by.mrrockka.domain.game.TournamentGame.TournamentGameBuilder? ->
-                                builder
-                                        .entries(entries)
-                                        .finaleSummary(FinaleSummary(finaleSummaries(entries)))
-                            }
-                            )
-
-                    val actual = strategy.calculate(game)
-                    val expect = List.of<Payout?>(
-                            payout(
-                                    entries.get(0)!!, List.of<Payer?>(
-                                    payer(entries.get(3)!!, BUY_IN),
-                                    payer(entries.get(4)!!, BUY_IN),
-                                    payer(entries.get(5)!!, BUY_IN),
-                                    payer(entries.get(6)!!, BUY_IN),
-                                    payer(entries.get(7)!!, BigDecimal.valueOf(16))
-                            )
-                            ),
-                            payout(
-                                    entries.get(1)!!, List.of<Payer?>(
-                                    payer(entries.get(8)!!, BUY_IN),
-                                    payer(entries.get(9)!!, BigDecimal.valueOf(18))
-                            )
-                            ),
-                            payout(
-                                    entries.get(2)!!, List.of<Payer?>(
-                                    payer(entries.get(7)!!, BigDecimal.valueOf(4)),
-                                    payer(entries.get(9)!!, BigDecimal.valueOf(2))
-                            )
-                            )
-                    )
-
-                    Assertions.assertThat<Payout?>(actual).containsExactlyInAnyOrderElementsOf(expect)
-                }
 
                 @Test
                 fun givenPlayerBuyInNotEquallyAndPrizePoolHasMultiplePositionsAndPrizePositionStillHasDebt_thenShouldCreateListOfDebtorsOrderedByTheAmount() {
@@ -343,3 +322,31 @@ fun tournamentPlayer(buyin: BigDecimal = BigDecimal("10"), entries: Int = 1): Pl
     this.buyin = buyin
     this.size = entries
 }.tournament()
+
+data class SimplePayout(
+        val creditor: String,
+        val entries: BigDecimal,
+        val won: BigDecimal,
+        val debtors: List<SimpleDebtor>,
+)
+
+data class SimpleDebtor(
+        val debtor: String,
+        val debt: BigDecimal,
+        val entries: BigDecimal
+)
+
+internal fun List<Payout>.simplify(): List<SimplePayout> = map { payout ->
+    SimplePayout(
+            creditor = payout.creditor.person.nickname ?: fail("No creditor nickname found"),
+            entries = payout.creditor.entries.total(),
+            won = payout.total,
+            debtors = payout.debtors.map { debtor ->
+                SimpleDebtor(
+                        debtor = debtor.player.person.nickname ?: fail("No debtor nickname found"),
+                        debt = debtor.debt,
+                        entries = debtor.player.entries.total()
+                )
+            }
+    )
+}

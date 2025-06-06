@@ -1,0 +1,47 @@
+[ {
+  "creditor" : "nan_rosenbaum",
+  "entries" : 10,
+  "won" : 109,
+  "debtors" : [ {
+    "debtor" : "tifany_renner",
+    "debt" : 40,
+    "entries" : 40
+  }, {
+    "debtor" : "marcelino_gusikowski",
+    "debt" : 30,
+    "entries" : 30
+  }, {
+    "debtor" : "charmain_marquardt",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "pearlie_larkin",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "jani_aufderhar",
+    "debt" : 10,
+    "entries" : 10
+  } ]
+}, {
+  "creditor" : "elton_jerde",
+  "entries" : 10,
+  "won" : 41,
+  "debtors" : [ {
+    "debtor" : "lee_herzog",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "john_gulgowski",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "holly_grimes",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "omer_runolfsson",
+    "debt" : 10,
+    "entries" : 10
+  } ]
+} ]

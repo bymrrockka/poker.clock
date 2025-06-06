@@ -1,0 +1,50 @@
+[ {
+  "creditor" : "jody_weimann",
+  "entries" : 10,
+  "won" : 160,
+  "debtors" : [ {
+    "debtor" : "sonny_larson",
+    "debt" : 40,
+    "entries" : 40
+  }, {
+    "debtor" : "angele_schinner",
+    "debt" : 30,
+    "entries" : 30
+  }, {
+    "debtor" : "harris_friesen",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "hyo_langworth",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "marty_beahan",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "glynis_pouros",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "vaughn_rosenbaum",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "harley_smitham",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "claire_hamill",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "carin_mayer",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "leandro_jacobi",
+    "debt" : 10,
+    "entries" : 10
+  } ]
+} ]

@@ -65,7 +65,7 @@ class JsonApproverExtension : BeforeTestExecutionCallback, AfterTestExecutionCal
 
         private fun nameFromClass(testClass: Class<*>): String {
             val nameAnnotation = testClass.getAnnotation(Name::class.java)
-            return nameAnnotation?.value ?: testClass.name
+            return nameAnnotation?.value ?: testClass.simpleName
         }
     }
 }
