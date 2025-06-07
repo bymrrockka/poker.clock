@@ -1,0 +1,50 @@
+[ {
+  "creditor" : "jani_aufderhar",
+  "entries" : 10,
+  "total" : 160,
+  "debtors" : [ {
+    "debtor" : "hsiu_grady",
+    "debt" : 40,
+    "entries" : 40
+  }, {
+    "debtor" : "hung_muller",
+    "debt" : 30,
+    "entries" : 30
+  }, {
+    "debtor" : "tifany_renner",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "marcelino_gusikowski",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "elidia_nienow",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "lee_herzog",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "john_gulgowski",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "holly_grimes",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "omer_runolfsson",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "charmain_marquardt",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "pearlie_larkin",
+    "debt" : 10,
+    "entries" : 10
+  } ]
+} ]

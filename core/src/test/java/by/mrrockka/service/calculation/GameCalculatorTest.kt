@@ -19,7 +19,7 @@ class GameCalculatorTest : AbstractTest() {
 
     @ParameterizedTest
     @MethodSource("playerSize")
-    fun `given players entry equally when one prize place should calculate payouts`(size: Int) {
+    fun `given equal entries and one prize place should calculate`(size: Int) {
         val buyin = BigDecimal("10")
         val players = player { this.buyin = buyin }.tournamentBatch(size)
 
@@ -44,7 +44,7 @@ class GameCalculatorTest : AbstractTest() {
     }
 
     @Test
-    fun `given players entry with different amounts when one prize place should calculate payouts`(approver: Approver) {
+    fun `given some reentries and one prize place should calculate`(approver: Approver) {
         val buyin = BigDecimal("10")
         val players = tournamentPlayers(size = 10, buyin) + tournamentPlayer(buyin, 3) + tournamentPlayer(buyin, 4)
 
@@ -59,7 +59,7 @@ class GameCalculatorTest : AbstractTest() {
     }
 
     @Test
-    fun `given players with equal entries when there are more then one prize positions should calculate payouts`(approver: Approver) {
+    fun `given equal entries and two prize positions should calculate`(approver: Approver) {
         val buyin = BigDecimal("10")
         val players = tournamentPlayers(size = 10, buyin)
 
@@ -80,7 +80,7 @@ class GameCalculatorTest : AbstractTest() {
     }
 
     @Test
-    fun `given players with not equal entries when there are more then one prize positions should calculate payouts`(approver: Approver) {
+    fun `given some reentries and two prize positions should calculate`(approver: Approver) {
         val buyin = BigDecimal("10")
         val players = tournamentPlayers(size = 10, buyin) + tournamentPlayer(buyin, 3) + tournamentPlayer(buyin, 4)
 
@@ -101,7 +101,7 @@ class GameCalculatorTest : AbstractTest() {
     }
 
     @Test
-    fun `given winners has more than one entry should calculate prize pool including entries`(approver: Approver) {
+    fun `given winners has reentries should calculate`(approver: Approver) {
         val buyin = BigDecimal("10")
         val players = listOf(tournamentPlayer(buyin, 3), tournamentPlayer(buyin, 4)) + tournamentPlayers(size = 10, buyin)
 
@@ -122,7 +122,7 @@ class GameCalculatorTest : AbstractTest() {
     }
 
     @Test
-    fun `given winners has more than one entry and one still in debt should calculate payouts`(approver: Approver) {
+    fun `given winners has reentries and prize don't cover debt should calculate payouts`(approver: Approver) {
         val buyin = BigDecimal("10")
         val players = listOf(tournamentPlayer(buyin, 3), tournamentPlayer(buyin, 4)) + tournamentPlayers(size = 10, buyin)
 
@@ -143,7 +143,7 @@ class GameCalculatorTest : AbstractTest() {
     }
 
     @Test
-    fun `given prize pool amounts result has decimal points should calculate payouts`(approver: Approver) {
+    fun `given prize amounts has decimal points should calculate`(approver: Approver) {
         val buyin = BigDecimal("10")
         val players = tournamentPlayers(size = 11, buyin)
 

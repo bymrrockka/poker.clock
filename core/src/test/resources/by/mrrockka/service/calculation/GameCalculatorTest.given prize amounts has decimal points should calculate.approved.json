@@ -1,16 +1,8 @@
 [ {
-  "creditor" : "jacinto_reynolds",
+  "creditor" : "morgan_harris",
   "entries" : 10,
-  "total" : 160,
+  "total" : 72,
   "debtors" : [ {
-    "debtor" : "sheba_rowe",
-    "debt" : 40,
-    "entries" : 40
-  }, {
-    "debtor" : "mason_botsford",
-    "debt" : 30,
-    "entries" : 30
-  }, {
     "debtor" : "herbert_lindgren",
     "debt" : 10,
     "entries" : 10
@@ -39,12 +31,21 @@
     "debt" : 10,
     "entries" : 10
   }, {
-    "debtor" : "ward_zemlak",
+    "debtor" : "sheba_rowe",
+    "debt" : 2,
+    "entries" : 10
+  } ]
+}, {
+  "creditor" : "ward_zemlak",
+  "entries" : 10,
+  "total" : 18,
+  "debtors" : [ {
+    "debtor" : "mason_botsford",
     "debt" : 10,
     "entries" : 10
   }, {
-    "debtor" : "morgan_harris",
-    "debt" : 10,
+    "debtor" : "sheba_rowe",
+    "debt" : 8,
     "entries" : 10
   } ]
 } ]
