@@ -24,6 +24,14 @@ class GameBuilder(init: (GameBuilder.() -> Unit) = {}) {
         init()
     }
 
+    fun cash(): CashGame = CashGame(
+            id = id ?: randoms.uuid(),
+            buyIn = buyIn ?: BigDecimal("10"),
+            stack = stack ?: randoms.decimal(from = 1000, to = 30000),
+            players = players as List<CashPlayer>,
+            finishedAt = finishedAt,
+    )
+
     fun tournament(): TournamentGame = TournamentGame(
             id = id ?: randoms.uuid(),
             buyIn = buyIn ?: BigDecimal("10"),

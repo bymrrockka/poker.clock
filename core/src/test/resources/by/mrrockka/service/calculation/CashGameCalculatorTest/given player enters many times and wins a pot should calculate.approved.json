@@ -1,0 +1,10 @@
+[ {
+  "creditor" : "jackie_rau",
+  "entries" : 50,
+  "total" : 10,
+  "debtors" : [ {
+    "debtor" : "terisa_johnston",
+    "debt" : 10,
+    "entries" : 10
+  } ]
+} ]
