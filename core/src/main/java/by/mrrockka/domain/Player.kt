@@ -35,7 +35,7 @@ fun Player.total(): BigDecimal = let {
         is CashPlayer -> player.withdrawals.total() - player.entries.total()
         is TournamentPlayer -> -player.entries.total()
         is BountyPlayer -> {
-            val (taken, given) = player.bounties.partition { it.to == player }
+            val (taken, given) = player.bounties.partition { it.to == player.person }
             taken.total() - given.total() - player.entries.total()
         }
 

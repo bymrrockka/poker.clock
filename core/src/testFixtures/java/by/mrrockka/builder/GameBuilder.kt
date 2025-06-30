@@ -34,6 +34,16 @@ class GameBuilder(init: (GameBuilder.() -> Unit) = {}) {
             finishedAt = finishedAt,
     )
 
+    fun bountyTournament(): BountyTournamentGame = BountyTournamentGame(
+            id = id ?: randoms.uuid(),
+            buyIn = buyIn ?: BigDecimal("10"),
+            stack = stack ?: randoms.decimal(from = 1000, to = 30000),
+            players = players as List<BountyPlayer>,
+            finalePlaces = finalePlaces,
+            prizePool = prizePool,
+            finishedAt = finishedAt,
+            bounty = bounty ?: BigDecimal("10")
+    )
 }
 
 fun game(init: (GameBuilder.() -> Unit) = {}) = GameBuilder(init)

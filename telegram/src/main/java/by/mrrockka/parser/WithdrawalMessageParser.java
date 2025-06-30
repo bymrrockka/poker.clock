@@ -27,8 +27,8 @@ public class WithdrawalMessageParser {
   //  Map to be able to extend withdrawals to have different values for players
   //todo: refactor to have Pair<BigDecimal, List<TelegramPerson>>
   public Map<TelegramPerson, BigDecimal> parse(final MessageMetadata metadata) {
-    final var command = metadata.text().toLowerCase().strip();
-    final var chatId = metadata.chatId();
+    final var command = metadata.getText().toLowerCase().strip();
+    final var chatId = metadata.getChatId();
     final var matcher = Pattern.compile(WITHDRAWAL_REGEX).matcher(command);
     if (matcher.matches()) {
       final var amount = new BigDecimal(matcher.group(AMOUNT_GROUP));

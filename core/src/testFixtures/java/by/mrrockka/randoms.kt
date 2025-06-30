@@ -6,9 +6,9 @@ import java.util.*
 
 val sharedRandoms = randoms()
 
-class Randoms(
-        val random: Random = sharedRandoms.random,
-        val faker: Faker = Faker(random)
+open class Randoms(
+        open val random: Random = sharedRandoms.random,
+        open val faker: Faker = Faker(random)
 ) {
 
     fun username(): String = faker.name().username().replace("\\.".toRegex(), "_")
@@ -26,3 +26,5 @@ fun randoms(seed: String? = null): Randoms {
     val random = Random(seed.hashCode().toLong())
     return Randoms(random)
 }
+
+fun resetRandom() = sharedRandoms.random.setSeed(0)

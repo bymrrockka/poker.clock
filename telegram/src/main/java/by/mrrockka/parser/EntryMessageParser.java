@@ -27,8 +27,8 @@ public class EntryMessageParser {
   private static final String ERROR_MESSAGE = "/entry @nickname (amount)";
 
   public Map<TelegramPerson, Optional<BigDecimal>> parse(final MessageMetadata metadata) {
-    final var command = metadata.text().toLowerCase().strip();
-    final var chatId = metadata.chatId();
+    final var command = metadata.getText().toLowerCase().strip();
+    final var chatId = metadata.getChatId();
     final var matcher = Pattern.compile(ENTRY_REGEX).matcher(command);
     if (matcher.matches()) {
       final var optAmount = Optional.ofNullable(defaultIfBlank(matcher.group(AMOUNT_GROUP), null))

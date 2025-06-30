@@ -16,7 +16,7 @@ public class PersonMentionsValidator {
   }
 
   public void validateMessageHasNoUserTextMention(final MessageMetadata messageMetadata) {
-    messageMetadata.entities().stream()
+    messageMetadata.getEntities().stream()
       .filter(entity -> entity.type().equals(MessageEntityType.TEXT_MENTION))
       .findAny()
       .ifPresent(textMention -> {

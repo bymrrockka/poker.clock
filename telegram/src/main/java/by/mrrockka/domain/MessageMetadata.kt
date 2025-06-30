@@ -1,47 +1,99 @@
-package by.mrrockka.domain;
+package by.mrrockka.domain
 
-import by.mrrockka.domain.mesageentity.MessageEntity;
-import by.mrrockka.domain.mesageentity.MessageEntityType;
-import by.mrrockka.service.exception.ProcessingRestrictedException;
-import lombok.Builder;
-import lombok.NonNull;
+import by.mrrockka.domain.mesageentity.MessageEntity
+import by.mrrockka.domain.mesageentity.MessageEntityType
+import by.mrrockka.service.exception.ProcessingRestrictedException
+import java.time.Instant
+import java.util.*
+import java.util.function.Supplier
+import java.util.stream.Stream
 
-import java.time.Instant;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
-
-@Builder
-public record MessageMetadata(
-  @NonNull
-  Long chatId,
-  @NonNull
-  Instant createdAt,
-  @NonNull
-  Integer id,
-  String text,
-  MessageMetadata replyTo,
-  List<MessageEntity> entities,
-  String fromNickname
+data class MessageMetadata(
+        val chatId: Long,
+        val createdAt: Instant,
+        val id: Int,
+        val text: String,
+        val replyTo: MessageMetadata?,
+        val entities: List<MessageEntity>,
+        val fromNickname: String?
 ) {
-  public Optional<MessageMetadata> optReplyTo() {
-    return Optional.ofNullable(replyTo);
-  }
+    fun optReplyTo(): Optional<MessageMetadata> {
+        return Optional.ofNullable(replyTo)
+    }
 
-  public Optional<String> optFromNickname() {
-    return Optional.ofNullable(fromNickname);
-  }
+    fun optFromNickname(): Optional<String> {
+        return Optional.ofNullable(fromNickname)
+    }
 
-  public Stream<MessageEntity> mentions() {
-    return entities().stream()
-      .filter(entity -> entity.type().equals(MessageEntityType.MENTION));
-  }
+    fun mentions(): Stream<MessageEntity> {
+        return this.entities.stream()
+                .filter { entity: MessageEntity? -> entity!!.type == MessageEntityType.MENTION }
+    }
 
-  public MessageEntity command() {
-    return entities().stream()
-      .filter(entity -> entity.type().equals(MessageEntityType.BOT_COMMAND))
-      .findFirst()
-      .orElseThrow(() -> new ProcessingRestrictedException("Message has no command."));
-  }
+    fun command(): MessageEntity? {
+        return this.entities.stream()
+                .filter { entity: MessageEntity? -> entity!!.type == MessageEntityType.BOT_COMMAND }
+                .findFirst()
+                .orElseThrow<ProcessingRestrictedException?>(Supplier { ProcessingRestrictedException("Message has no command.") })
+    }
 
+    //todo: remove
+    companion object {
+        @JvmStatic
+        fun builder(): MessageMetadataBuilder = MessageMetadataBuilder()
+    }
+
+    @Deprecated(message = "Use constructor instead.")
+    class MessageMetadataBuilder {
+        var chatId: Long = -1L
+        lateinit var createdAt: Instant
+        var id: Int = -1
+        lateinit var text: String
+        var replyTo: MessageMetadata? = null
+        lateinit var entities: List<MessageEntity>
+        var fromNickname: String? = null
+
+        fun id(id: Int): MessageMetadataBuilder {
+            this.id = id; return this
+        }
+
+        fun chatId(chatId: Long): MessageMetadataBuilder {
+            this.chatId = chatId; return this
+        }
+
+        fun createdAt(createdAt: Instant): MessageMetadataBuilder {
+            this.createdAt = createdAt; return this
+        }
+
+        fun text(text: String): MessageMetadataBuilder {
+            this.text = text; return this
+        }
+
+        fun replyTo(replyTo: MessageMetadata?): MessageMetadataBuilder {
+            this.replyTo = replyTo; return this
+        }
+
+        fun entities(entities: List<MessageEntity>): MessageMetadataBuilder {
+            this.entities = entities; return this
+        }
+
+        fun fromNickname(fromNickname: String?): MessageMetadataBuilder {
+            this.fromNickname = fromNickname; return this
+        }
+
+        fun build(): MessageMetadata {
+            check(chatId != -1L) { "chatId must be set" }
+            check(id != -1) { "id must be set" }
+
+            return MessageMetadata(
+                    chatId = chatId,
+                    createdAt = createdAt,
+                    id = id,
+                    text = text,
+                    replyTo = replyTo,
+                    entities = entities,
+                    fromNickname = fromNickname,
+            )
+        }
+    }
 }

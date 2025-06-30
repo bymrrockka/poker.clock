@@ -18,7 +18,7 @@ public class HelpMessageParser {
   private static final String ERROR_MESSAGE = "/help (command)";
 
   public Optional<String> parse(final MessageMetadata metadata) {
-    final var str = metadata.text().toLowerCase().strip();
+    final var str = metadata.getText().toLowerCase().strip();
     final var matcher = Pattern.compile(HELP_REGEX).matcher(str);
     if (matcher.matches()) {
       final var command = matcher.group(COMMAND_GROUP);

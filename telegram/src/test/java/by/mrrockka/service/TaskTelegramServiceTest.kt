@@ -90,7 +90,7 @@ class TaskTelegramServiceTest {
         val actual = taskTelegramService.stopPoll(metadata)
         val expected = SendMessageCreator.api {
             it.chatId(metadata.chatId)
-            it.replyToMessageId(metadata.replyTo.id)
+            it.replyToMessageId(metadata.replyTo?.id)
             it.text(
                     """
                 Poll stopped.

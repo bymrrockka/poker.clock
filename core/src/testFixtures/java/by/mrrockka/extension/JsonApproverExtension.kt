@@ -21,10 +21,13 @@ class JsonApproverExtension : BeforeTestExecutionCallback, AfterTestExecutionCal
         store(context).put(
                 STORE_KEY,
                 JsonApprover(
-                        testNamer.nameFor(context.requiredTestClass, context.requiredTestMethod),
-                        JsonSourceOfApproval(File(sourceRoot, Sources.pathForPackage(context.requiredTestClass.`package`))),
-                )
-        )
+                        testNamer.nameFor(context.requiredTestMethod),
+                        JsonSourceOfApproval(
+                                File(
+                                        File(sourceRoot, Sources.pathForPackage(context.requiredTestClass.`package`)),
+                                        context.requiredTestClass.simpleName
+                                ),
+                        )))
     }
 
     override fun afterTestExecution(context: ExtensionContext) {
@@ -54,18 +57,13 @@ class JsonApproverExtension : BeforeTestExecutionCallback, AfterTestExecutionCal
     }
 
     private class TestNamer {
-        fun nameFor(testClass: Class<*>, testMethod: Method): String {
-            return nameFromClass(testClass) + "." + nameFromMethod(testMethod)
+        fun nameFor(testMethod: Method): String {
+            return nameFromMethod(testMethod)
         }
 
         private fun nameFromMethod(testMethod: Method): String {
             val nameAnnotation = testMethod.getAnnotation(Name::class.java)
             return nameAnnotation?.value ?: testMethod.name
-        }
-
-        private fun nameFromClass(testClass: Class<*>): String {
-            val nameAnnotation = testClass.getAnnotation(Name::class.java)
-            return nameAnnotation?.value ?: testClass.simpleName
         }
     }
 }

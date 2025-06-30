@@ -35,7 +35,7 @@ public class PokerClockBot implements LongPollingBot {
       final var messageMetadata = messageMetadataMapper.map(update.getMessage());
 
       log.debug("Processing %s command with message id %s from chat id %s."
-                  .formatted(messageMetadata.command().text(), messageMetadata.id(), messageMetadata.chatId()));
+                  .formatted(messageMetadata.command().text(), messageMetadata.getId(), messageMetadata.getChatId()));
 
       final var commandProcessor = telegramCommandProcessorFactory.provideProcessor(messageMetadata);
       executeMessage(commandProcessor.process(messageMetadata));

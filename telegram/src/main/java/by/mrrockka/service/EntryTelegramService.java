@@ -52,12 +52,12 @@ public class EntryTelegramService {
     final var persons = telegramPersonService.storeMissed(messageMetadata);
 
     entriesService.storeBatch(game.getId(), persons.stream().map(Person::getId).toList(), amount,
-                              messageMetadata.createdAt());
+                              messageMetadata.getCreatedAt());
 
     return SendMessage.builder()
-      .chatId(messageMetadata.chatId())
+      .chatId(messageMetadata.getChatId())
       .text(entryResponseBuilder.response(persons, amount))
-      .replyToMessageId(telegramGame.messageMetadata().id())
+      .replyToMessageId(telegramGame.messageMetadata().getId())
       .build();
   }
 }

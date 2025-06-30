@@ -23,7 +23,6 @@ public interface FinalePlacesMapper {
   @Mapping(target = "places", source = "domain.finalPlaces", qualifiedByName = "finalPlaceListToPlacesMap")
   FinalePlacesEntity toEntity(UUID gameId, FinalePlaces domain);
 
-
   @Mapping(target = "finalPlaces", source = "places", qualifiedByName = "placesMapToFinalPlaceList")
   FinalePlaces toDomain(FinalePlacesEntity entity);
 

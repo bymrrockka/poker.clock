@@ -48,7 +48,7 @@ class HelpTelegramServiceTest {
     assertAll(
       () -> assertThat(actual).isNotNull(),
       () -> assertThat(actual.getText()).isEqualTo(COMMAND_DETAILS),
-      () -> assertThat(actual.getChatId()).isEqualTo(metadata.chatId().toString())
+      () -> assertThat(actual.getChatId()).isEqualTo(String.valueOf(metadata.getChatId()))
     );
   }
 
@@ -69,7 +69,7 @@ class HelpTelegramServiceTest {
     assertAll(
       () -> assertThat(actual).isNotNull(),
       () -> assertThat(actual.getText()).isEqualTo(COMMAND_DETAILS),
-      () -> assertThat(actual.getChatId()).isEqualTo(metadata.chatId().toString())
+      () -> assertThat(actual.getChatId()).isEqualTo(String.valueOf(metadata.getChatId()))
     );
   }
 }

@@ -1,5 +1,6 @@
 package by.mrrockka.mapper;
 
+import by.mrrockka.domain.BasicPerson;
 import by.mrrockka.domain.Person;
 import by.mrrockka.repo.person.PersonEntity;
 import org.mapstruct.Mapper;
@@ -11,9 +12,16 @@ public interface PersonMapper {
 
   PersonEntity toEntity(Person domain);
 
-  List<PersonEntity> toEntities(List<Person> domains);
+  List<PersonEntity> toEntities(List<? extends Person> domains);
 
-  Person toDomain(PersonEntity entity);
+  default Person toDomain(PersonEntity entity) {
+    return new BasicPerson(
+      entity.getId(),
+      entity.getFirstname(),
+      entity.getLastname(),
+      entity.getNickname()
+    );
+  }
 
   List<Person> toDomains(List<PersonEntity> entity);
 

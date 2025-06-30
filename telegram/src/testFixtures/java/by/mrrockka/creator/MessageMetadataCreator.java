@@ -12,6 +12,7 @@ import java.util.function.Consumer;
 
 import static java.util.Objects.nonNull;
 
+//todo: remove
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class MessageMetadataCreator {
 

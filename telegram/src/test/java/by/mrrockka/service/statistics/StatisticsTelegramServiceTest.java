@@ -41,7 +41,7 @@ class StatisticsTelegramServiceTest {
       .build();
 
     final var expected = SendMessage.builder()
-      .chatId(metadata.chatId())
+      .chatId(metadata.getChatId())
       .text("game response")
       .build();
 
@@ -64,7 +64,7 @@ class StatisticsTelegramServiceTest {
       .build();
 
     final var expected = SendMessage.builder()
-      .chatId(metadata.chatId())
+      .chatId(metadata.getChatId())
       .text("player response")
       .build();
 
@@ -87,7 +87,7 @@ class StatisticsTelegramServiceTest {
       .build();
 
     final var expected = SendMessage.builder()
-      .chatId(metadata.chatId())
+      .chatId(metadata.getChatId())
       .text("global person response")
       .build();
 

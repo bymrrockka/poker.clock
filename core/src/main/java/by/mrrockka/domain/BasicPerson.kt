@@ -2,14 +2,21 @@ package by.mrrockka.domain
 
 import java.util.*
 
-data class Person(
-        val id: UUID,
-        val firstname: String?,
-        val lastname: String?,
-        val nickname: String?
-) {
+interface Person {
+    val id: UUID
+    val firstname: String?
+    val lastname: String?
+    val nickname: String?
+}
 
-//    todo: remove
+data class BasicPerson(
+        override val id: UUID,
+        override val firstname: String?,
+        override val lastname: String?,
+        override val nickname: String?
+) : Person {
+
+    //    todo: remove
     companion object {
         @JvmStatic
         fun personBuilder(): PersonBuilder = PersonBuilder()
@@ -38,6 +45,6 @@ data class Person(
             this.nickname = nickname; return this
         }
 
-        fun build(): Person = Person(id, firstname, lastname, nickname)
+        fun build(): BasicPerson = BasicPerson(id, firstname, lastname, nickname)
     }
 }

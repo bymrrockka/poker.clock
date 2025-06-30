@@ -47,6 +47,11 @@ dependencies {
     implementation libs.lombokMapstructBinding
     implementation libs.hikariCP
     implementation libs.kotlinStdLib
+    implementation libs.exposedCore
+    implementation libs.exposedJdbc
+    implementation libs.exposedJson
+    implementation libs.exposedJavaTime
+    implementation libs.exposedSpringBoot
 
     compileOnly libs.lombok
     annotationProcessor libs.lombok

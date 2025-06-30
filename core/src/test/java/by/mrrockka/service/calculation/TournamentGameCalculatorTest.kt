@@ -7,14 +7,13 @@ import by.mrrockka.domain.*
 import com.oneeyedmen.okeydoke.Approver
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.fail
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import java.math.BigDecimal
 import java.util.stream.Stream
 
-class GameCalculatorTest : AbstractTest() {
+class TournamentGameCalculatorTest : AbstractTest() {
     private val calculator: GameCalculator = GameCalculator()
 
     @ParameterizedTest
@@ -122,7 +121,7 @@ class GameCalculatorTest : AbstractTest() {
     }
 
     @Test
-    fun `given winners has reentries and prize don't cover debt should calculate payouts`(approver: Approver) {
+    fun `given winners has reentries and prize doesn't cover debt should calculate payouts`(approver: Approver) {
         val buyin = BigDecimal("10")
         val players = listOf(tournamentPlayer(buyin, 3), tournamentPlayer(buyin, 4)) + tournamentPlayers(size = 10, buyin)
 
@@ -164,8 +163,6 @@ class GameCalculatorTest : AbstractTest() {
     }
 
     companion object {
-        private val BUY_IN: BigDecimal = BigDecimal.valueOf(20)
-
         @JvmStatic
         private fun playerSize(): Stream<Arguments?> {
             return Stream.of(
@@ -177,43 +174,15 @@ class GameCalculatorTest : AbstractTest() {
             )
         }
     }
-}
 
-fun tournamentPlayers(size: Int, buyin: BigDecimal = BigDecimal("10")): List<Player> =
-        (0..<size)
-                .asSequence()
-                .map { player { this.buyin = buyin }.tournament() }
-                .toList()
+    fun tournamentPlayers(size: Int, buyin: BigDecimal = BigDecimal("10")): List<Player> =
+            (0..<size)
+                    .asSequence()
+                    .map { player { this.buyin = buyin }.tournament() }
+                    .toList()
 
-fun tournamentPlayer(buyin: BigDecimal = BigDecimal("10"), entries: Int = 1): Player = player {
-    this.buyin = buyin
-    this.size = entries
-}.tournament()
-
-data class SimplePayout(
-        val creditor: String,
-        val entries: BigDecimal,
-        val total: BigDecimal,
-        val debtors: List<SimpleDebtor>,
-)
-
-data class SimpleDebtor(
-        val debtor: String,
-        val debt: BigDecimal,
-        val entries: BigDecimal
-)
-
-internal fun List<Payout>.simplify(): List<SimplePayout> = map { payout ->
-    SimplePayout(
-            creditor = payout.creditor.person.nickname ?: fail("No creditor nickname found"),
-            entries = payout.creditor.entries.total(),
-            total = payout.total,
-            debtors = payout.debtors.map { debtor ->
-                SimpleDebtor(
-                        debtor = debtor.player.person.nickname ?: fail("No debtor nickname found"),
-                        debt = debtor.debt,
-                        entries = debtor.player.entries.total()
-                )
-            }
-    )
+    fun tournamentPlayer(buyin: BigDecimal = BigDecimal("10"), entries: Int = 1): Player = player {
+        this.buyin = buyin
+        this.entriesSize = entries
+    }.tournament()
 }

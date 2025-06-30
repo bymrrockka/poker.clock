@@ -28,21 +28,21 @@ class PrizePoolValidatorTest {
   private static Stream<Arguments> invalidPercentage() {
     return Stream.of(
       Arguments.of(
-        PrizePoolCreator.domain(builder -> builder.positionAndPercentages(Collections.emptyList()))
+        PrizePoolCreator.domain(builder -> builder.positionPrizes(Collections.emptyList()))
       ),
       Arguments.of(
-        PrizePoolCreator.domain(builder -> builder.positionAndPercentages(
+        PrizePoolCreator.domain(builder -> builder.positionPrizes(
           List.of(new PositionPrize(1, BigDecimal.valueOf(99)))))
       ),
       Arguments.of(
-        PrizePoolCreator.domain(builder -> builder.positionAndPercentages(
+        PrizePoolCreator.domain(builder -> builder.positionPrizes(
           List.of(
             new PositionPrize(1, BigDecimal.valueOf(66)),
             new PositionPrize(1, BigDecimal.valueOf(33))
           )))
       ),
       Arguments.of(
-        PrizePoolCreator.domain(builder -> builder.positionAndPercentages(
+        PrizePoolCreator.domain(builder -> builder.positionPrizes(
           List.of(
             new PositionPrize(1, BigDecimal.valueOf(10)),
             new PositionPrize(2, BigDecimal.valueOf(1)),
@@ -64,18 +64,18 @@ class PrizePoolValidatorTest {
   private static Stream<Arguments> invalidPositions() {
     return Stream.of(
       Arguments.of(
-        PrizePoolCreator.domain(builder -> builder.positionAndPercentages(
+        PrizePoolCreator.domain(builder -> builder.positionPrizes(
           List.of(new PositionPrize(2, BigDecimal.valueOf(100)))))
       ),
       Arguments.of(
-        PrizePoolCreator.domain(builder -> builder.positionAndPercentages(
+        PrizePoolCreator.domain(builder -> builder.positionPrizes(
           List.of(
             new PositionPrize(1, BigDecimal.valueOf(66)),
             new PositionPrize(1, BigDecimal.valueOf(34))
           )))
       ),
       Arguments.of(
-        PrizePoolCreator.domain(builder -> builder.positionAndPercentages(
+        PrizePoolCreator.domain(builder -> builder.positionPrizes(
           List.of(
             new PositionPrize(1, BigDecimal.valueOf(70)),
             new PositionPrize(2, BigDecimal.valueOf(20)),

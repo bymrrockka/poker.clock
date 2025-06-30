@@ -53,11 +53,11 @@ public class GlobalPersonStatisticsTelegramServiceTest {
       .build();
     final var expectedMessage = "statistics";
 
-    when(globalPersonStatisticsService.retrieveStatistics(metadata.fromNickname())).thenReturn(globalStatistics);
+    when(globalPersonStatisticsService.retrieveStatistics(metadata.getFromNickname())).thenReturn(globalStatistics);
     when(globalPersonStatisticsResponseBuilder.response(globalStatistics)).thenReturn(expectedMessage);
 
     final var expected = SendMessage.builder()
-      .chatId(metadata.chatId())
+      .chatId(metadata.getChatId())
       .text(expectedMessage)
       .build();
 

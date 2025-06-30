@@ -1,12 +1,10 @@
 package by.mrrockka.service
 
 import by.mrrockka.domain.MessageMetadata
-import by.mrrockka.domain.TelegramPerson
 import by.mrrockka.domain.finaleplaces.FinalPlace
 import by.mrrockka.domain.finaleplaces.FinalePlaces
 import by.mrrockka.parser.finaleplaces.FinalePlacesMessageParser
 import by.mrrockka.service.exception.ChatGameNotFoundException
-import by.mrrockka.service.exception.FinalPlaceContainsNicknameOfNonExistingPlayerException
 import by.mrrockka.service.game.GameTelegramFacadeService
 import by.mrrockka.validation.GameValidator
 import by.mrrockka.validation.collection.CollectionsValidator
@@ -40,15 +38,12 @@ class FinalePlacesTelegramService(
         gameValidator.validateGameIsTournamentType(telegramGame.game)
 
         val telegramPersons = telegramPersonService
-                .getAllByNicknamesAndChatId(
-                        places.values.mapNotNull { it.getNickname() }.toList(),
-                        messageMetadata.chatId
-                )
+                .getAllByNicknamesAndChatId(places.values.toList(), messageMetadata.chatId)
+                .associateBy { it.nickname }
 
-        val finalePlaces = FinalePlaces(
-                places.entries
-                        .map { (position, person) -> FinalPlace(position, telegramPersons find person) }
-                        .toList())
+        val finalePlaces = FinalePlaces(places
+                .map { (position, nickname) -> FinalPlace(position, telegramPersons[nickname]) }
+                .toList())
 
         finalePlacesService.store(telegramGame.game.getId(), finalePlaces)
         return SendMessage.builder()
@@ -59,9 +54,6 @@ class FinalePlacesTelegramService(
                 """.trimIndent())
                 .replyToMessageId(telegramGame.messageMetadata.id)
                 .build()
-    }
 
-    private infix fun List<TelegramPerson>.find(person: TelegramPerson): TelegramPerson =
-            find { it.getNickname() == person.getNickname() }
-                    ?: throw FinalPlaceContainsNicknameOfNonExistingPlayerException(person.getNickname())
+    }
 }

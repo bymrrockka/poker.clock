@@ -15,7 +15,7 @@ public class PersonService {
   private final PersonRepository personRepository;
   private final PersonMapper personMapper;
 
-  public void storeAll(final List<Person> persons) {
+  public void storeAll(final List<? extends Person> persons) {
     personRepository.saveAll(personMapper.toEntities(persons));
   }
 

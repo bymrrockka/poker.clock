@@ -1,7 +1,7 @@
 package by.mrrockka.domain.collection;
 
-import by.mrrockka.domain.bounty.Bounty;
 import by.mrrockka.domain.Person;
+import by.mrrockka.domain.bounty.Bounty;
 import lombok.Builder;
 import lombok.NonNull;
 

@@ -32,9 +32,9 @@ class PlayerInGameStatisticsTelegramService {
     final var playerInGameStatistics = playerInGameStatisticsService.retrieveStatistics(game, nickname);
 
     return SendMessage.builder()
-      .chatId(messageMetadata.chatId())
+      .chatId(messageMetadata.getChatId())
       .text(playerInGameStatisticsResponseBuilder.response(playerInGameStatistics))
-      .replyToMessageId(telegramGame.messageMetadata().id())
+      .replyToMessageId(telegramGame.messageMetadata().getId())
       .build();
   }
 

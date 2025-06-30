@@ -80,7 +80,7 @@ class TaskTelegramService(
     }
 
     private fun MessageMetadata.toPollTaskFinished(): PollTaskFinished =
-            PollTaskFinished(this.replyTo.id, this.createdAt)
+            PollTaskFinished(this.replyTo!!.id, this.createdAt)
 
 }
 

@@ -17,7 +17,7 @@ public class StatisticsMessageParser {
   private static final String ERROR_MESSAGE = "/(game|my|global)_stats";
 
   public StatisticsCommand map(final MessageMetadata messageMetadata) {
-    final var str = messageMetadata.text().toLowerCase().strip();
+    final var str = messageMetadata.getText().toLowerCase().strip();
     final var matcher = Pattern.compile(STATISTICS_REGEX).matcher(str);
 
     if (!matcher.matches()) {

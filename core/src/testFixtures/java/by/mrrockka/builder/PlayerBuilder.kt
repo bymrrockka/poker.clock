@@ -1,6 +1,8 @@
 package by.mrrockka.builder
 
 import by.mrrockka.Randoms
+import by.mrrockka.domain.BountyPlayer
+import by.mrrockka.domain.CashPlayer
 import by.mrrockka.domain.Player
 import by.mrrockka.domain.TournamentPlayer
 import by.mrrockka.sharedRandoms
@@ -14,7 +16,7 @@ class PlayerBuilder(init: (PlayerBuilder.() -> Unit) = {}) {
     var buyin: BigDecimal? = null
     var bounty: BigDecimal? = null
     var entries: List<BigDecimal>? = null
-    var size: Int = 1
+    var entriesSize: Int = 1
 
     init {
         init()
@@ -23,13 +25,37 @@ class PlayerBuilder(init: (PlayerBuilder.() -> Unit) = {}) {
     fun tournament(): Player {
         return TournamentPlayer(
                 person = person(randoms),
-                entries = (0..<size).asSequence().map { buyin ?: defaultBuyin }.toList())
+                entries = (0..<entriesSize).asSequence().map { buyin ?: defaultBuyin }.toList())
     }
 
     fun tournamentBatch(size: Int): List<Player> =
             (0..<size)
                     .asSequence()
                     .map { tournament() }
+                    .toList()
+
+    fun bounty(): BountyPlayer {
+        return BountyPlayer(
+                person = person(randoms),
+                entries = (0..<entriesSize).asSequence().map { buyin ?: defaultBuyin }.toList())
+    }
+
+    fun bountyBatch(size: Int): List<BountyPlayer> =
+            (0..<size)
+                    .asSequence()
+                    .map { bounty() }
+                    .toList()
+
+    fun cash(): CashPlayer {
+        return CashPlayer(
+                person = person(randoms),
+                entries = (0..<entriesSize).asSequence().map { buyin ?: defaultBuyin }.toList())
+    }
+
+    fun cashBatch(size: Int): List<CashPlayer> =
+            (0..<size)
+                    .asSequence()
+                    .map { cash() }
                     .toList()
 
 }

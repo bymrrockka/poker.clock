@@ -22,7 +22,7 @@ class GlobalPersonStatisticsTelegramService {
     final var globalStatistics = globalPersonStatisticsService.retrieveStatistics(nickname);
 
     return SendMessage.builder()
-      .chatId(statisticsCommand.metadata().chatId())
+      .chatId(statisticsCommand.metadata().getChatId())
       .text(globalPersonStatisticsResponseBuilder.response(globalStatistics))
       .build();
   }

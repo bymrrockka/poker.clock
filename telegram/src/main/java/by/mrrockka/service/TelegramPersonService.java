@@ -1,7 +1,7 @@
 package by.mrrockka.service;
 
 import by.mrrockka.domain.MessageMetadata;
-import by.mrrockka.domain.Person;
+import by.mrrockka.domain.BasicPerson;
 import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.mapper.TelegramPersonMapper;
 import by.mrrockka.repo.person.TelegramPersonRepository;
@@ -47,13 +47,13 @@ public class TelegramPersonService {
   public List<TelegramPerson> storeMissed(final MessageMetadata metadata) {
     final var nicknames = metadata.mentions().map(entity -> entity.text().replaceAll("@", "")).toList();
     final var newNicknames = personService.getNewNicknames(nicknames);
-    final var notExistentInChat = telegramPersonRepository.findNotExistentInChat(nicknames, metadata.chatId());
+    final var notExistentInChat = telegramPersonRepository.findNotExistentInChat(nicknames, metadata.getChatId());
 
     final var newPersons = newNicknames.stream()
-      .map(nickname -> Person.personBuilder()
-        .nickname(nickname)
-        .id(UUID.randomUUID())
-        .build())
+      .map(nickname -> BasicPerson.personBuilder()
+                                  .nickname(nickname)
+                                  .id(UUID.randomUUID())
+                                  .build())
       .toList();
 
     if (!newPersons.isEmpty()) {
@@ -62,16 +62,16 @@ public class TelegramPersonService {
 
     if (!notExistentInChat.isEmpty() || !newPersons.isEmpty()) {
       final var allNewPersonIds = Stream.of(
-          newPersons.stream().map(Person::getId).toList(),
+          newPersons.stream().map(BasicPerson::getId).toList(),
           notExistentInChat
         ).flatMap(List::stream)
         .toList();
 
-      telegramPersonRepository.saveAll(allNewPersonIds, metadata.chatId());
+      telegramPersonRepository.saveAll(allNewPersonIds, metadata.getChatId());
     }
 
     return telegramPersonMapper.mapToTelegramPersons(
-      telegramPersonRepository.findAllByChatIdAndNicknames(nicknames, metadata.chatId()));
+      telegramPersonRepository.findAllByChatIdAndNicknames(nicknames, metadata.getChatId()));
   }
 
   private TelegramPerson saveNew(final String nickname, final Long chatId) {

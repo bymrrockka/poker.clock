@@ -23,7 +23,7 @@ public class HelpTelegramService {
       .orElse(botDescriptionProperties.getCommands().get(HELP_COMMAND));
 
     return SendMessage.builder()
-      .chatId(messageMetadata.chatId())
+      .chatId(messageMetadata.getChatId())
       .text(description.details())
       .build();
   }

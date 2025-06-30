@@ -8,9 +8,11 @@ import by.mrrockka.scenario.When
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
+import org.springframework.context.annotation.Profile
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import java.util.stream.Stream
 
+@Profile("integration")
 class GameScenario : AbstractScenarioTest() {
     @ParameterizedTest
     @MethodSource("createGameTypesArguments")

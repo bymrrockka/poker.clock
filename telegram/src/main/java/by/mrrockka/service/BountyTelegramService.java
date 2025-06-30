@@ -1,9 +1,9 @@
 package by.mrrockka.service;
 
-import by.mrrockka.domain.bounty.Bounty;
 import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.Person;
 import by.mrrockka.domain.TelegramPerson;
+import by.mrrockka.domain.bounty.Bounty;
 import by.mrrockka.domain.collection.PersonEntries;
 import by.mrrockka.domain.game.BountyGame;
 import by.mrrockka.parser.BountyMessageParser;
@@ -49,13 +49,13 @@ public class BountyTelegramService {
       .amount(game.asType(BountyGame.class).getBountyAmount())
       .build();
 
-    bountyService.storeBounty(game.getId(), bounty, messageMetadata.createdAt());
+    bountyService.storeBounty(game.getId(), bounty, messageMetadata.getCreatedAt());
 
     return SendMessage.builder()
-      .chatId(messageMetadata.chatId())
+      .chatId(messageMetadata.getChatId())
       .text("Bounty amount %s from %s stored for %s"
               .formatted(game.getBountyAmount(), fromAndTo.getKey().getNickname(), fromAndTo.getValue().getNickname()))
-      .replyToMessageId(telegramGame.messageMetadata().id())
+      .replyToMessageId(telegramGame.messageMetadata().getId())
       .build();
   }
 

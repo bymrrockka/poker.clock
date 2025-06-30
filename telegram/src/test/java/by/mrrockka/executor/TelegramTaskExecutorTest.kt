@@ -89,7 +89,7 @@ class TelegramTaskExecutorTest {
                 TaskCreator.randomPoll().copy(createdAt = Instant.now().minus(Duration.ofHours(1))),
                 TaskCreator.randomPoll().copy(createdAt = Instant.now().minus(Duration.ofHours(1)))
         )
-        val tasksMap = tasks.map { it.id to it }.toMap()
+        val tasksMap = tasks.associate { it.id to it }
         every { taskTelegramService.getTasks() } returns tasks
 
         telegramTaskExecutor.init()

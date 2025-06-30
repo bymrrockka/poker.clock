@@ -26,8 +26,8 @@ public class BountyMessageParser {
   private static final String ERROR_MESSAGE = "/bounty @nickname kicked @nickname";
 
   public Pair<TelegramPerson, TelegramPerson> parse(final MessageMetadata messageMetadata) {
-    final var chatId = messageMetadata.chatId();
-    final var str = messageMetadata.text().toLowerCase().strip();
+    final var chatId = messageMetadata.getChatId();
+    final var str = messageMetadata.getText().toLowerCase().strip();
     final var mentions = messageMetadata.mentions()
       .map(entity -> personMapper.mapMessageToTelegramPerson(entity, chatId))
       .toList();

@@ -3,7 +3,7 @@ package by.mrrockka.service;
 import by.mrrockka.creator.MessageEntityCreator;
 import by.mrrockka.creator.MessageMetadataCreator;
 import by.mrrockka.creator.TelegramPersonCreator;
-import by.mrrockka.domain.Person;
+import by.mrrockka.domain.BasicPerson;
 import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.mapper.TelegramPersonMapper;
 import by.mrrockka.repo.person.TelegramPersonRepository;
@@ -42,7 +42,7 @@ class TelegramPersonServiceTest {
     final var allNicknames = Stream.of(existent, newNicknames, notExistentInChat)
       .flatMap(List::stream).toList();
 
-    final ArgumentCaptor<List<Person>> argument = ArgumentCaptor.forClass(List.class);
+    final ArgumentCaptor<List<BasicPerson>> argument = ArgumentCaptor.forClass(List.class);
 
     final var metadata = MessageMetadataCreator.domain(meta -> meta.entities(
       allNicknames.stream()
@@ -53,12 +53,12 @@ class TelegramPersonServiceTest {
     final var notExistentInChatIds = notExistentInChat.stream().map(nick -> UUID.randomUUID()).toList();
 
     when(personService.getNewNicknames(allNicknames)).thenReturn(newNicknames);
-    when(telegramPersonRepository.findNotExistentInChat(allNicknames, metadata.chatId()))
+    when(telegramPersonRepository.findNotExistentInChat(allNicknames, metadata.getChatId()))
       .thenReturn(notExistentInChatIds);
 
     final var expectedEntities = allNicknames.stream().map(TelegramPersonCreator::entity).toList();
     final var expected = allNicknames.stream().map(TelegramPersonCreator::domain).toList();
-    when(telegramPersonRepository.findAllByChatIdAndNicknames(allNicknames, metadata.chatId()))
+    when(telegramPersonRepository.findAllByChatIdAndNicknames(allNicknames, metadata.getChatId()))
       .thenReturn(expectedEntities);
     when(telegramPersonMapper.mapToTelegramPersons(expectedEntities))
       .thenReturn(expected);
@@ -69,17 +69,17 @@ class TelegramPersonServiceTest {
 
     verify(personService).storeAll(argument.capture());
     final var argValue = argument.getValue();
-    final var newPersons = argValue.stream().map(Person::getNickname).toList();
+    final var newPersons = argValue.stream().map(BasicPerson::getNickname).toList();
     assertThat(newPersons).hasSize(newNicknames.size());
     assertThat(newPersons).containsAll(newNicknames);
 
     verify(telegramPersonRepository).saveAll(
       Stream.of(
-          argValue.stream().map(Person::getId).toList(),
+          argValue.stream().map(BasicPerson::getId).toList(),
           notExistentInChatIds
         ).flatMap(List::stream)
         .toList()
-      , metadata.chatId()
+      , metadata.getChatId()
     );
   }
 

@@ -64,14 +64,14 @@ class PlayerInGameStatisticsTelegramServiceTest {
     final var expectedMessage = "statistics";
 
     when(gameTelegramFacadeService.getGameByMessageMetadata(metadata)).thenReturn(Optional.of(telegramGame));
-    when(playerInGameStatisticsService.retrieveStatistics(telegramGame.game(), metadata.fromNickname())).thenReturn(
+    when(playerInGameStatisticsService.retrieveStatistics(telegramGame.game(), metadata.getFromNickname())).thenReturn(
       playerInGameStatistics);
     when(playerInGameStatisticsResponseBuilder.response(playerInGameStatistics)).thenReturn(expectedMessage);
 
     final var expected = SendMessage.builder()
-      .chatId(metadata.chatId())
+      .chatId(metadata.getChatId())
       .text(expectedMessage)
-      .replyToMessageId(telegramGame.messageMetadata().id())
+      .replyToMessageId(telegramGame.messageMetadata().getId())
       .build();
 
     assertThat(playerInGameStatisticsTelegramService.retrieveStatistics(statsCommand)).isEqualTo(expected);

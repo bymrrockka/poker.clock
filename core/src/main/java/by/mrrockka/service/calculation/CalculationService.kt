@@ -5,7 +5,6 @@ import by.mrrockka.domain.payout.Payout
 import by.mrrockka.service.GameService
 import by.mrrockka.service.MoneyTransferService
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 
@@ -15,7 +14,7 @@ open class CalculationService(
         val gameService: GameService,
         val calculationStrategyFactory: CalculationStrategyFactory,
 ) {
-    @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.REQUIRED)
     open fun calculateAndSave(game: Game): List<Payout> {
         val payouts = calculationStrategyFactory.getStrategy(game).calculate(game)
 //todo: refactor this check

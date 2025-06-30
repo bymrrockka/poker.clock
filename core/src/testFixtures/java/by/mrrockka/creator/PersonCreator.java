@@ -1,6 +1,7 @@
 package by.mrrockka.creator;
 
 import by.mrrockka.FakerProvider;
+import by.mrrockka.domain.BasicPerson;
 import by.mrrockka.domain.Person;
 import by.mrrockka.repo.person.PersonEntity;
 import com.github.javafaker.Faker;
@@ -48,7 +49,7 @@ public final class PersonCreator {
   }
 
   public static Person domain() {
-    return domain((Consumer<Person.PersonBuilder>) null);
+    return domain((Consumer<BasicPerson.PersonBuilder>) null);
   }
 
   public static Person domain(final String nickname) {
@@ -64,8 +65,8 @@ public final class PersonCreator {
       .nickname(FAKER.name().username().replaceAll("\\.", "_")));
   }
 
-  public static Person domain(Consumer<Person.PersonBuilder> builderConsumer) {
-    final var personEntityBuilder = Person.personBuilder()
+  public static Person domain(Consumer<BasicPerson.PersonBuilder> builderConsumer) {
+    final var personEntityBuilder = BasicPerson.personBuilder()
       .id(ID)
       .firstname(FIRSTNAME)
       .lastname(LASTNAME)
