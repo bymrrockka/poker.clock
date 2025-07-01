@@ -10,6 +10,7 @@ import java.math.BigDecimal.ZERO
 @Component
 open class GameCalculator {
 
+    //todo: consider to refactor this class to make it extendable with strategies to figure out payouts
     fun calculate(game: Game): List<Payout> {
         val transferTypeToPlayer = game.players associateByTransferType game.toSummary()
         val creditors = transferTypeToPlayer[CREDIT]?.sortedByDescending { it.total } ?: emptyList()
