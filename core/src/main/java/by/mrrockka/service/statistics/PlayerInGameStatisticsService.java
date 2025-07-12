@@ -1,84 +1,90 @@
 package by.mrrockka.service.statistics;
 
-import by.mrrockka.domain.collection.PersonBounties;
-import by.mrrockka.domain.collection.PersonEntries;
-import by.mrrockka.domain.collection.PersonWithdrawals;
-import by.mrrockka.domain.game.BountyGame;
-import by.mrrockka.domain.game.CashGame;
-import by.mrrockka.domain.game.Game;
+import by.mrrockka.domain.*;
 import by.mrrockka.domain.statistics.PlayerInGameStatistics;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.Optional;
+import java.util.Collections;
+import java.util.List;
 
+//todo: refactor
 @Component
 public class PlayerInGameStatisticsService {
 
   public PlayerInGameStatistics retrieveStatistics(final Game game, final String nickname) {
+    var player = game.getPlayers().stream()
+      .filter(
+        pl -> pl.getPerson().getNickname().equals(nickname))
+      .findFirst()
+      .orElseThrow();
+
     return PlayerInGameStatistics.builder()
-      .personEntries(getPersonEntries(game, nickname))
-      .personWithdrawals(getPersonWithdrawals(game, nickname).orElse(null))
-      .personBounties(getPersonBounties(game, nickname).orElse(null))
+      .player(player)
+      .entries(getPersonEntries(game, nickname))
+      .withdrawals(getPersonWithdrawals(game, nickname))
+      .bounties(getPersonBounties(game, nickname))
       .moneyInGame(calculateMoneyInGame(game, nickname))
       .build();
   }
 
   private BigDecimal calculateMoneyInGame(final Game game, final String nickname) {
     final var personEntries = getPersonEntries(game, nickname);
-    final var personEntriesTotal = personEntries.total();
+    final var personEntriesTotal = personEntries
+      .stream()
+      .reduce(BigDecimal::add)
+      .orElse(BigDecimal.ZERO);
 
-    if (game.isType(CashGame.class)) {
+    if (game instanceof CashGame) {
       final var personWithdrawalsTotal = getPersonWithdrawals(game, nickname)
-        .map(PersonWithdrawals::total)
+        .stream()
+        .reduce(BigDecimal::add)
         .orElse(BigDecimal.ZERO);
       return personEntriesTotal.subtract(personWithdrawalsTotal);
     }
 
-    if (game.isType(BountyGame.class)) {
+    if (game instanceof BountyTournamentGame) {
       final var personBountiesTotal = getPersonBounties(game, nickname)
-        .map(PersonBounties::totalTaken)
+        .stream()
+        .map(Bounty::getAmount)
+        .reduce(BigDecimal::add)
         .orElse(BigDecimal.ZERO);
-      final var bountyTotal = game.asType(BountyGame.class).getBountyAmount()
-        .multiply(BigDecimal.valueOf(personEntries.entries().size()));
+      final var bountyTotal = ((BountyTournamentGame) game).getBounty()
+        .multiply(BigDecimal.valueOf(personEntries.size()));
       return personEntriesTotal.add(bountyTotal).subtract(personBountiesTotal);
     }
 
     return personEntriesTotal;
   }
 
-  private Optional<PersonBounties> getPersonBounties(final Game game, final String nickname) {
-    if (game.isType(BountyGame.class)) {
-      final var person = getPersonEntries(game, nickname).person();
-
-      final var bounties = game.asType(BountyGame.class).getBountyList().stream()
-        .filter(bounty -> bounty.from().equals(person) || bounty.to().equals(person))
+  private List<Bounty> getPersonBounties(final Game game, final String nickname) {
+    if (game instanceof BountyTournamentGame) {
+      return game.getPlayers().stream()
+        .map(player -> (BountyPlayer) player)
+        .flatMap(player -> player.getBounties().stream())
+        .filter(bounty -> bounty.getTo().getNickname().equals(nickname))
         .toList();
-
-      return Optional.of(PersonBounties.builder()
-                           .bounties(bounties)
-                           .person(person)
-                           .build());
     }
-
-    return Optional.empty();
+    return Collections.emptyList();
   }
 
-  private Optional<PersonWithdrawals> getPersonWithdrawals(final Game game, final String nickname) {
-    if (game.isType(CashGame.class)) {
-      return game.asType(CashGame.class).getWithdrawals().stream()
-        .filter(personWithdrawals -> personWithdrawals.person().getNickname().equals(nickname))
-        .findFirst();
+  private List<BigDecimal> getPersonWithdrawals(final Game game, final String nickname) {
+    if (game instanceof CashGame) {
+      return game.getPlayers().stream()
+        .filter(player -> player.getPerson().getNickname().equals(nickname))
+        .map(player -> (CashPlayer) player)
+        .flatMap(cashPlayer -> cashPlayer.getWithdrawals().stream())
+        .toList();
     }
 
-    return Optional.empty();
+    return Collections.emptyList();
   }
 
-  private PersonEntries getPersonEntries(final Game game, final String nickname) {
-    return game.getEntries().stream()
-      .filter(personEntries -> personEntries.person().getNickname().equals(nickname))
-      .findFirst()
-      .orElseThrow(() -> new PersonIsNotInGameException(nickname));
+  private List<BigDecimal> getPersonEntries(final Game game, final String nickname) {
+    return game.getPlayers().stream()
+      .filter(personEntries -> personEntries.getPerson().getNickname().equals(nickname))
+      .flatMap(player -> player.getEntries().stream())
+      .toList();
   }
 
 }

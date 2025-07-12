@@ -1,26 +1,19 @@
 package by.mrrockka.domain.statistics;
 
-import by.mrrockka.domain.collection.PersonBounties;
-import by.mrrockka.domain.collection.PersonEntries;
-import by.mrrockka.domain.collection.PersonWithdrawals;
+import by.mrrockka.domain.Bounty;
+import by.mrrockka.domain.Person;
+import by.mrrockka.domain.Player;
 import lombok.Builder;
 import lombok.NonNull;
 
 import java.math.BigDecimal;
-import java.util.Optional;
+import java.util.List;
 
 @Builder
 public record PlayerInGameStatistics(
-  @NonNull PersonEntries personEntries,
-  PersonWithdrawals personWithdrawals,
-  PersonBounties personBounties,
+  Player player,
+  @NonNull List<BigDecimal> entries,
+  List<BigDecimal> withdrawals,
+  List<Bounty> bounties,
   @NonNull BigDecimal moneyInGame) {
-
-  public Optional<PersonWithdrawals> optPersonWithdrawals() {
-    return Optional.ofNullable(personWithdrawals);
-  }
-
-  public Optional<PersonBounties> optPersonBounties() {
-    return Optional.ofNullable(personBounties);
-  }
 }

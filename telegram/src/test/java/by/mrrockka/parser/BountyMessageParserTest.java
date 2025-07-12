@@ -41,8 +41,8 @@ class BountyMessageParserTest {
     );
 
     final var actual = bountyMessageParser.parse(messageMetadata);
-    assertThat(actual.getLeft().getNickname()).isEqualTo(left);
-    assertThat(actual.getRight().getNickname()).isEqualTo(right);
+    assertThat(actual.getLeft()).isEqualTo(left);
+    assertThat(actual.getRight()).isEqualTo(right);
   }
 
   @Test

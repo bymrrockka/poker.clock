@@ -41,3 +41,12 @@ data class CashGame(
         override val finishedAt: Instant? = null,
         override val players: List<CashPlayer>
 ) : Game
+
+fun Game.toSummary(): List<PrizeSummary> {
+    return when (this) {
+        is TournamentGame -> prizeSummary(finalePlaces = finalePlaces, prizePool = prizePool, players.totalEntries())
+        is BountyTournamentGame -> prizeSummary(finalePlaces = finalePlaces, prizePool = prizePool, players.totalEntries())
+        is CashGame -> emptyList()
+        else -> error("Unknown game type")
+    }
+}

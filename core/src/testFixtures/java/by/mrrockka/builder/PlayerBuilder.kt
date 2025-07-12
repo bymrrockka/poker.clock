@@ -1,11 +1,11 @@
 package by.mrrockka.builder
 
 import by.mrrockka.Randoms
+import by.mrrockka.Randoms.Companion.sharedRandoms
 import by.mrrockka.domain.BountyPlayer
 import by.mrrockka.domain.CashPlayer
 import by.mrrockka.domain.Player
 import by.mrrockka.domain.TournamentPlayer
-import by.mrrockka.sharedRandoms
 import java.math.BigDecimal
 
 internal val defaultBuyin = BigDecimal("10")

@@ -5,15 +5,17 @@ import by.mrrockka.domain.TelegramGame
 import by.mrrockka.mapper.TelegramGameMapper
 import by.mrrockka.repo.game.TelegramGameRepository
 import by.mrrockka.service.GameService
+import by.mrrockka.service.GameServiceKT
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage
-import java.util.*
+import kotlin.jvm.optionals.getOrNull
 
 @Service
 open class GameTelegramFacadeService(
         private val telegramGameRepository: TelegramGameRepository,
         private val gameService: GameService,
+        private val gameServiceKT: GameServiceKT,
         private val telegramGameMapper: TelegramGameMapper,
 ) {
     @Autowired
@@ -37,11 +39,10 @@ open class GameTelegramFacadeService(
         return bountyGameService.storeGame(messageMetadata)
     }
 
-    fun getGameByMessageMetadata(messageMetadata: MessageMetadata): Optional<TelegramGame> {
-//        todo: refactor to kotlin -> remove optionals
-        return messageMetadata.optReplyTo()
-                .map { telegramGameRepository.findByChatAndMessageId(messageMetadata.chatId, it.id) }
-                .orElseGet { telegramGameRepository.findLatestByChatId(messageMetadata.chatId) }
-                .map { telegramGameMapper.toGame(gameService.retrieveGame(it.gameId), it) }
+    fun getGameByMessageMetadata(messageMetadata: MessageMetadata): TelegramGame? {
+        val game = if (messageMetadata.replyTo != null) messageMetadata.replyTo.let { telegramGameRepository.findByChatAndMessageId(it.chatId, it.id) }
+        else telegramGameRepository.findLatestByChatId(messageMetadata.chatId)
+
+        return game.getOrNull()?.let { telegramGameMapper.toGame(gameServiceKT.retrieveGame(it.gameId), messageMetadata) }
     }
 }

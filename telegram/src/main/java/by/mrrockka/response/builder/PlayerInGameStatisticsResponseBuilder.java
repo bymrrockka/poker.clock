@@ -7,15 +7,18 @@ import java.math.BigDecimal;
 
 import static by.mrrockka.response.builder.TextContants.*;
 
+//todo: refactor
 @Component
 public class PlayerInGameStatisticsResponseBuilder {
 
   public String response(final PlayerInGameStatistics statistics) {
     final var strBuilder = new StringBuilder("Player ");
+    var entries = statistics.entries().stream().reduce(BigDecimal::add).orElse(BigDecimal.ZERO).multiply(
+      BigDecimal.valueOf(2));
 
     strBuilder
       .append(AT)
-      .append(statistics.personEntries().person().getNickname())
+      .append(statistics.player().getPerson().getNickname())
       .append(" in game statistics:");
 
     strBuilder
@@ -24,26 +27,26 @@ public class PlayerInGameStatisticsResponseBuilder {
       .append(MINUS.stripLeading())
       .append("entries")
       .append(POINTER)
-      .append(statistics.personEntries().entries().size());
+      .append(statistics.entries().size());
 
-    if (statistics.optPersonBounties().isPresent()) {
+    if (!statistics.bounties().isEmpty()) {
       strBuilder
         .append(NL)
         .append(TAB)
         .append(MINUS.stripLeading())
         .append("bounties taken")
-        .append(POINTER)
-        .append(statistics.personBounties().taken().size());
+        .append(POINTER);
+//        .append(statistics.bounties().taken().size());
 
       strBuilder
         .append(NL)
         .append(TAB)
         .append(MINUS.stripLeading())
         .append("bounties given")
-        .append(POINTER)
-        .append(statistics.personBounties().given().size());
+        .append(POINTER);
+//        .append(statistics.bounties().given().size());
 
-      addTotalBuyInAmount(statistics.personEntries().total().multiply(BigDecimal.valueOf(2)), strBuilder);
+      addTotalBuyInAmount(entries, strBuilder);
 
       strBuilder
         .append(NL)
@@ -53,17 +56,19 @@ public class PlayerInGameStatisticsResponseBuilder {
         .append(POINTER)
         .append(statistics.moneyInGame());
     } else {
-      addTotalBuyInAmount(statistics.personEntries().total(), strBuilder);
+      addTotalBuyInAmount(entries, strBuilder);
     }
 
-    if (statistics.optPersonWithdrawals().isPresent()) {
+    if (!statistics.withdrawals().isEmpty()) {
+      var withdrawals = statistics.withdrawals().stream().reduce(BigDecimal::add).orElse(BigDecimal.ZERO).multiply(
+        BigDecimal.valueOf(2));
       strBuilder
         .append(NL)
         .append(TAB)
         .append(MINUS.stripLeading())
         .append("total withdrawals amount")
         .append(POINTER)
-        .append(statistics.personWithdrawals().total());
+        .append(withdrawals);
 
       strBuilder
         .append(NL)

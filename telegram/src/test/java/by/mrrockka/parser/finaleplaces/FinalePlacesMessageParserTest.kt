@@ -3,6 +3,7 @@ package by.mrrockka.parser.finaleplaces
 import by.mrrockka.creator.MessageEntityCreator
 import by.mrrockka.creator.MessageMetadataCreator
 import by.mrrockka.domain.MessageMetadata
+import by.mrrockka.parser.FinalePlacesMessageParser
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.ThrowableAssert

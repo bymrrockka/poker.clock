@@ -4,6 +4,7 @@ import by.mrrockka.exception.BusinessException;
 
 import java.math.BigDecimal;
 
+@Deprecated(forRemoval = true)
 class InsufficientEntriesAmountException extends BusinessException {
 
   InsufficientEntriesAmountException() {

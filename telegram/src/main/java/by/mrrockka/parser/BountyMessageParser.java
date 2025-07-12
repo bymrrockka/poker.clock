@@ -1,7 +1,6 @@
 package by.mrrockka.parser;
 
 import by.mrrockka.domain.MessageMetadata;
-import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.mapper.TelegramPersonMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
@@ -25,11 +24,10 @@ public class BountyMessageParser {
 
   private static final String ERROR_MESSAGE = "/bounty @nickname kicked @nickname";
 
-  public Pair<TelegramPerson, TelegramPerson> parse(final MessageMetadata messageMetadata) {
-    final var chatId = messageMetadata.getChatId();
+  public Pair<String, String> parse(final MessageMetadata messageMetadata) {
     final var str = messageMetadata.getText().toLowerCase().strip();
     final var mentions = messageMetadata.mentions()
-      .map(entity -> personMapper.mapMessageToTelegramPerson(entity, chatId))
+      .map(entity -> entity.text().replaceAll("@", ""))
       .toList();
     final var matcher = Pattern.compile(BOUNTY_REGEX).matcher(str);
 
@@ -38,12 +36,12 @@ public class BountyMessageParser {
     }
 
     final var from = mentions.stream()
-      .filter(mention -> mention.getNickname().equalsIgnoreCase(matcher.group(FROM_GROUP)))
+      .filter(mention -> mention.equalsIgnoreCase(matcher.group(FROM_GROUP)))
       .findAny()
       .orElseThrow();
 
     final var to = mentions.stream()
-      .filter(mention -> mention.getNickname().equalsIgnoreCase(matcher.group(TO_GROUP)))
+      .filter(mention -> mention.equalsIgnoreCase(matcher.group(TO_GROUP)))
       .findAny()
       .orElseThrow();
 

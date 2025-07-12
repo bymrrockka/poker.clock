@@ -1,8 +1,8 @@
 package by.mrrockka.builder
 
 import by.mrrockka.Randoms
+import by.mrrockka.Randoms.Companion.sharedRandoms
 import by.mrrockka.domain.*
-import by.mrrockka.sharedRandoms
 import java.math.BigDecimal
 import java.time.Instant
 import java.util.*
@@ -22,6 +22,12 @@ class GameBuilder(init: (GameBuilder.() -> Unit) = {}) {
 
     init {
         init()
+    }
+
+    fun prizeForFirst(): GameBuilder {
+        this.prizePool = listOf(PositionPrize(1, BigDecimal("100")))
+        this.finalePlaces = listOf(FinalPlace(1, this.players.first()))
+        return this
     }
 
     fun cash(): CashGame = CashGame(
@@ -54,5 +60,6 @@ class GameBuilder(init: (GameBuilder.() -> Unit) = {}) {
     )
 }
 
+fun game() = GameBuilder()
 fun game(init: (GameBuilder.() -> Unit) = {}) = GameBuilder(init)
-fun game(randoms: Randoms, init: (GameBuilder.() -> Unit) = {}) = game().apply { this.randoms = randoms }.also(init)
+fun game(randoms: Randoms, init: (GameBuilder.() -> Unit) = {}) = GameBuilder { this.randoms = randoms }.also(init)

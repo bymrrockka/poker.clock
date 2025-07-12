@@ -108,14 +108,6 @@ open class GameCalculator {
                 it.associateByTransferType(it.total() + playerPrize)
             }.groupBy({ it.first }, { it.second })
 
-    private fun Game.toSummary(): List<PrizeSummary> {
-        return when (this) {
-            is TournamentGame -> prizeSummary(finalePlaces = finalePlaces, prizePool = prizePool, players.totalEntries())
-            is BountyTournamentGame -> prizeSummary(finalePlaces = finalePlaces, prizePool = prizePool, players.totalEntries())
-            is CashGame -> emptyList()
-            else -> error("Unknown game type")
-        }
-    }
 }
 
 internal class PlayerTotal(val player: Player, val total: BigDecimal)

@@ -43,7 +43,12 @@ public class GameService {
 
   public Game retrieveGame(@NonNull final UUID gameId) {
     final var gameEntity = gameRepository.findById(gameId);
-    return assembleGame(gameEntity);
+
+    return switch (gameEntity.gameType()) {
+      case TOURNAMENT -> assembleTournamentGame(gameEntity);
+      case CASH -> assembleCashGame(gameEntity);
+      case BOUNTY -> assembleBountyGame(gameEntity);
+    };
   }
 
   public List<Game> retrieveAllGames(@NonNull final List<UUID> gameIds) {
@@ -59,6 +64,12 @@ public class GameService {
       case CASH -> assembleCashGame(gameEntity);
       case BOUNTY -> assembleBountyGame(gameEntity);
     };
+  }
+
+  public void finishGame(@NonNull final by.mrrockka.domain.Game game) {
+    if (gameRepository.findById(game.getId()).finishedAt() != null) {
+      gameRepository.finish(game.getId(), Instant.now());
+    }
   }
 
   public void finishGame(@NonNull final Game game) {

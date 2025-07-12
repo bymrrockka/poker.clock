@@ -2,6 +2,7 @@ package by.mrrockka.parser.game;
 
 import by.mrrockka.exception.BusinessException;
 
+@Deprecated(forRemoval = true)
 public class GameFieldIsNotSpecifiedException extends BusinessException {
   private static final String EXCEPTION_MESSAGE = "%s: number";
   private static final String BUY_IN = "buyin";

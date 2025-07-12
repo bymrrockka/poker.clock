@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+//todo: refactor to kotlin
 @Component
 public class PersonMentionsValidator {
 

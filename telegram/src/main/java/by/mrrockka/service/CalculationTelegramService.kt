@@ -1,30 +1,26 @@
 package by.mrrockka.service
 
 import by.mrrockka.domain.MessageMetadata
+import by.mrrockka.domain.Payout
 import by.mrrockka.domain.TelegramGame
-import by.mrrockka.domain.game.CashGame
-import by.mrrockka.domain.payout.Payout
+import by.mrrockka.response.builder.CalculationResponseBuilder
 import by.mrrockka.service.calculation.CalculationService
-import by.mrrockka.service.exception.ChatGameNotFoundException
 import by.mrrockka.service.game.GameTelegramFacadeService
-import by.mrrockka.validation.calculation.CalculationValidator
-import lombok.extern.slf4j.Slf4j
+import by.mrrockka.validation.PreCalculationValidator
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 
-@Slf4j
 @Service
 class CalculationTelegramService(
         val calculationService: CalculationService,
         val gameTelegramFacadeService: GameTelegramFacadeService,
-        val calculationValidator: CalculationValidator,
+        val calculationValidator: PreCalculationValidator,
 ) {
 
     fun calculatePayouts(messageMetadata: MessageMetadata): BotApiMethodMessage? {
-        val telegramGame = gameTelegramFacadeService
-                .getGameByMessageMetadata(messageMetadata)
-                .orElseThrow { ChatGameNotFoundException() }
+        val telegramGame = gameTelegramFacadeService.getGameByMessageMetadata(messageMetadata)
+        check(telegramGame != null) { "Game is not found for this chat" }
         calculationValidator.validateGame(telegramGame.game)
 
         val payouts = calculationService.calculateAndSave(telegramGame.game)
@@ -39,21 +35,6 @@ class CalculationTelegramService(
 }
 
 private fun TelegramGame.payoutsResponse(payouts: List<Payout>): String {
-    if (payouts.isEmpty()) return ""
-
-    return when (this.game) {
-        is CashGame -> payouts.joinToString(separator = "\n") {
-            """
-            -----------------------------
-            Payout to: @${it.person().nickname}
-                Entries: ${it.personEntries.total()}
-                Withdrawals: ${it.personWithdrawals.total()}
-                Total: ${it.total()} (${it.personWithdrawals.total()} - ${it.personEntries.total()})
-            From:
-                ${it.payers.joinToString { "@${it.person().nickname} -> ${it.amount}" }}
-            """.trimIndent()
-        }
-
-        else -> ""
-    }
+    if (payouts.isEmpty()) return "Payouts are not calculated."
+    return CalculationResponseBuilder(this.game, payouts).response()
 }

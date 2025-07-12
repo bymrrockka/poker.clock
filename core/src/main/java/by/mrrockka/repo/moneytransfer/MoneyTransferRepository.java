@@ -1,5 +1,6 @@
 package by.mrrockka.repo.moneytransfer;
 
+import by.mrrockka.domain.MoneyTransfer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -31,6 +32,18 @@ public class MoneyTransferRepository {
       updated_at = :updated_at;
     """;
 
+
+  public void save(final MoneyTransfer moneyTransfer, final Instant createdAt) {
+    final MapSqlParameterSource params = new MapSqlParameterSource()
+      .addValue(MoneyTransferColumnNames.GAME_ID, moneyTransfer.gameId())
+      .addValue(MoneyTransferColumnNames.PERSON_ID, moneyTransfer.personId())
+      .addValue(MoneyTransferColumnNames.AMOUNT, moneyTransfer.amount())
+      .addValue(MoneyTransferColumnNames.TYPE, moneyTransfer.type().name())
+      .addValue(MoneyTransferColumnNames.CREATED_AT, Timestamp.from(createdAt))
+      .addValue(MoneyTransferColumnNames.UPDATED_AT, Timestamp.from(createdAt));
+    jdbcTemplate.update(SAVE_SQL, params);
+  }
+
   public void save(final MoneyTransferEntity moneyTransferEntity, final Instant createdAt) {
     final MapSqlParameterSource params = new MapSqlParameterSource()
       .addValue(MoneyTransferColumnNames.GAME_ID, moneyTransferEntity.gameId())
@@ -45,6 +58,12 @@ public class MoneyTransferRepository {
   @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
   public void saveAll(final List<MoneyTransferEntity> payoutsEntities, final Instant createdAt) {
     payoutsEntities.forEach(entity -> save(entity, createdAt));
+  }
+
+  @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
+  public void saveAll(final List<MoneyTransfer> moneyTransfers) {
+    Instant createdAt = Instant.now();
+    moneyTransfers.forEach(entity -> save(entity, createdAt));
   }
 
   private static final String GET_PERSON_MONEY_TRANSFERS_SQL = """

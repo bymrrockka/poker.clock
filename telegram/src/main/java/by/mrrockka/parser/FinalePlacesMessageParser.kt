@@ -1,13 +1,13 @@
-package by.mrrockka.parser.finaleplaces
+package by.mrrockka.parser
 
 import by.mrrockka.domain.MessageMetadata
 import org.springframework.stereotype.Component
-import kotlin.text.RegexOption.MULTILINE
+import kotlin.text.get
 
 @Component
 class FinalePlacesMessageParser {
 
-    private val finalPlaceRegex = "^(?<place>\\d+)([ .]{1,})(@(?<username>[A-z0-9_-]{5,}))$".toRegex(MULTILINE)
+    private val finalPlaceRegex = "^(?<place>\\d+)([ .]{1,})(@(?<username>[A-z0-9_-]{5,}))$".toRegex(RegexOption.MULTILINE)
 
     fun parse(messageMetadata: MessageMetadata): Map<Int, String> {
         val finalePlaces = finalPlaceRegex.findAll(messageMetadata.text.replace("([, ]+)(?![A-z@])".toRegex(), "\n").trimIndent())

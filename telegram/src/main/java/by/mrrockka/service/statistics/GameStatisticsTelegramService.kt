@@ -13,6 +13,7 @@ import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMess
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import java.math.BigDecimal
 
+//todo: refactor
 @Component
 internal class GameStatisticsTelegramService(
         private val gameTelegramFacadeService: GameTelegramFacadeService,
@@ -20,7 +21,7 @@ internal class GameStatisticsTelegramService(
     fun retrieveStatistics(statisticsCommand: StatisticsCommand): BotApiMethodMessage {
         val telegramGame = gameTelegramFacadeService
                 .getGameByMessageMetadata(statisticsCommand.metadata)
-                .orElseThrow { ChatGameNotFoundException() }
+                ?: throw ChatGameNotFoundException()
 
         return SendMessage().apply {
             chatId = statisticsCommand.metadata.chatId.toString()

@@ -2,6 +2,7 @@ package by.mrrockka.validation.mentions;
 
 import by.mrrockka.exception.BusinessException;
 
+@Deprecated(forRemoval = true)
 public class PlayerHasNoNicknameException extends BusinessException {
 
   public PlayerHasNoNicknameException() {

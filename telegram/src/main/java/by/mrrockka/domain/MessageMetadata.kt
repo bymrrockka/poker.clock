@@ -2,10 +2,8 @@ package by.mrrockka.domain
 
 import by.mrrockka.domain.mesageentity.MessageEntity
 import by.mrrockka.domain.mesageentity.MessageEntityType
-import by.mrrockka.service.exception.ProcessingRestrictedException
 import java.time.Instant
 import java.util.*
-import java.util.function.Supplier
 import java.util.stream.Stream
 
 data class MessageMetadata(
@@ -17,24 +15,20 @@ data class MessageMetadata(
         val entities: List<MessageEntity>,
         val fromNickname: String?
 ) {
-    fun optReplyTo(): Optional<MessageMetadata> {
-        return Optional.ofNullable(replyTo)
-    }
-
     fun optFromNickname(): Optional<String> {
         return Optional.ofNullable(fromNickname)
     }
 
+    @Deprecated("Used by old java code")
     fun mentions(): Stream<MessageEntity> {
         return this.entities.stream()
-                .filter { entity: MessageEntity? -> entity!!.type == MessageEntityType.MENTION }
+                .filter { entity -> entity.type == MessageEntityType.MENTION }
     }
 
-    fun command(): MessageEntity? {
-        return this.entities.stream()
-                .filter { entity: MessageEntity? -> entity!!.type == MessageEntityType.BOT_COMMAND }
-                .findFirst()
-                .orElseThrow<ProcessingRestrictedException?>(Supplier { ProcessingRestrictedException("Message has no command.") })
+    fun command(): MessageEntity {
+        return this.entities
+                .find { entity -> entity.type == MessageEntityType.BOT_COMMAND }
+                ?: error("Message has no command.")
     }
 
     //todo: remove

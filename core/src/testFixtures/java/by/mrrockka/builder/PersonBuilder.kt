@@ -1,8 +1,8 @@
 package by.mrrockka.builder
 
 import by.mrrockka.Randoms
+import by.mrrockka.Randoms.Companion.sharedRandoms
 import by.mrrockka.domain.BasicPerson
-import by.mrrockka.sharedRandoms
 import java.util.*
 
 

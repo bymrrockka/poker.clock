@@ -21,8 +21,9 @@ class PlayerInGameStatisticsTelegramService {
   BotApiMethodMessage retrieveStatistics(final StatisticsCommand statisticsCommand) {
     final var messageMetadata = statisticsCommand.metadata();
     final var telegramGame = gameTelegramFacadeService
-      .getGameByMessageMetadata(messageMetadata)
-      .orElseThrow(ChatGameNotFoundException::new);
+      .getGameByMessageMetadata(messageMetadata);
+    if (telegramGame == null)
+      throw new ChatGameNotFoundException();
 
     final var game = telegramGame.game();
 

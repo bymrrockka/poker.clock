@@ -1,44 +1,21 @@
-package by.mrrockka.parser;
+package by.mrrockka.parser
 
-import by.mrrockka.domain.MessageMetadata;
-import by.mrrockka.domain.TelegramPerson;
-import by.mrrockka.mapper.TelegramPersonMapper;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-
-import java.math.BigDecimal;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
-import static by.mrrockka.parser.CommandRegexConstants.TELEGRAM_NAME_REGEX;
+import by.mrrockka.domain.MessageMetadata
+import org.springframework.stereotype.Component
+import java.math.BigDecimal
 
 @Component
-@RequiredArgsConstructor
-public class WithdrawalMessageParser {
+class WithdrawalMessageParser {
+    private val nicknameRegex = "^@(?<username>[\\d\\w_-]{5,})$".toRegex(RegexOption.MULTILINE)
+    private val amountRegex = "^(?<amount>[\\d]+)$".toRegex(RegexOption.MULTILINE)
 
-  private final TelegramPersonMapper personMapper;
-
-  private static final String WITHDRAWAL_REGEX = "^/withdrawal(( %s)+) ([\\d]+)$".formatted(TELEGRAM_NAME_REGEX);
-  private static final int AMOUNT_GROUP = 4;
-  private static final String ERROR_MESSAGE = "/withdrawal @nickname( @nickname) #amount";
-
-  //  Map to be able to extend withdrawals to have different values for players
-  //todo: refactor to have Pair<BigDecimal, List<TelegramPerson>>
-  public Map<TelegramPerson, BigDecimal> parse(final MessageMetadata metadata) {
-    final var command = metadata.getText().toLowerCase().strip();
-    final var chatId = metadata.getChatId();
-    final var matcher = Pattern.compile(WITHDRAWAL_REGEX).matcher(command);
-    if (matcher.matches()) {
-      final var amount = new BigDecimal(matcher.group(AMOUNT_GROUP));
-
-      return metadata.mentions()
-        .map(entity -> personMapper.mapMessageToTelegramPerson(entity, chatId))
-        .collect(Collectors.toMap(Function.identity(), p -> amount));
+    fun parse(metadata: MessageMetadata): Pair<BigDecimal, Set<String>> {
+        val command = metadata.text.replace(" ", "\n").trimIndent()
+        val nicknames = nicknameRegex.findAll(command)
+                .mapNotNull { it.groups["username"]?.value }
+                .toSet()
+        check(nicknames.isNotEmpty()) { "No nickname found" }
+        val amount = amountRegex.find(command)?.value ?: error("Amount should be provided")
+        return BigDecimal(amount) to nicknames
     }
-
-    throw new InvalidMessageFormatException(ERROR_MESSAGE);
-  }
-
 }

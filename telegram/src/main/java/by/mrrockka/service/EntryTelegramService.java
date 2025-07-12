@@ -40,8 +40,12 @@ public class EntryTelegramService {
     collectionsValidator.validateMapIsNotEmpty(personAndAmountMap, "Entry");
 
     final var telegramGame = gameTelegramFacadeService
-      .getGameByMessageMetadata(messageMetadata)
-      .orElseThrow(ChatGameNotFoundException::new);
+      .getGameByMessageMetadata(messageMetadata);
+
+    if (telegramGame == null) {
+      throw new ChatGameNotFoundException();
+    }
+
     final var game = telegramGame.game();
     final var amount = personAndAmountMap.values().stream()
       .filter(Optional::isPresent)

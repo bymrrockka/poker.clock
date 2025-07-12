@@ -1,7 +1,7 @@
 package by.mrrockka.service.calculation
 
-import by.mrrockka.domain.game.Game
-import by.mrrockka.domain.payout.Payout
+import by.mrrockka.domain.Game
+import by.mrrockka.domain.Payout
 import by.mrrockka.service.GameService
 import by.mrrockka.service.MoneyTransferService
 import org.springframework.stereotype.Service
@@ -10,16 +10,14 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 open class CalculationService(
-        val moneyTransferService: MoneyTransferService,
+        val calculator: GameCalculator,
         val gameService: GameService,
-        val calculationStrategyFactory: CalculationStrategyFactory,
+        val moneyTransferService: MoneyTransferService,
 ) {
     @Transactional(propagation = Propagation.REQUIRED)
     open fun calculateAndSave(game: Game): List<Payout> {
-        val payouts = calculationStrategyFactory.getStrategy(game).calculate(game)
-//todo: refactor this check
-        if (gameService.doesGameHasUpdates(game)) {
-            //  todo: add transactionality service to execute transaction only part of code
+        val payouts = calculator.calculate(game)
+        if (gameService.retrieveGame(game.id).finishedAt == null) {
             gameService.finishGame(game)
             moneyTransferService.storeBatch(game, payouts)
         }

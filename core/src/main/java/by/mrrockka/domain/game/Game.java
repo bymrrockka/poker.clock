@@ -1,7 +1,10 @@
 package by.mrrockka.domain.game;
 
 import by.mrrockka.domain.collection.PersonEntries;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
@@ -11,7 +14,6 @@ import java.util.UUID;
 
 @EqualsAndHashCode
 @ToString
-@Getter
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public abstract class Game {
 
@@ -40,5 +42,16 @@ public abstract class Game {
   public boolean isType(final Class<? extends Game> clazz) {
     return this.getClass().equals(clazz);
   }
+
+  public UUID getId() {return id;}
+
+  public BigDecimal getBuyIn() {return buyIn;}
+
+  public BigDecimal getStack() {return stack;}
+
+  public Instant getFinishedAt() {return finishedAt;}
+
+  public List<PersonEntries> getEntries() {return entries;}
+
 
 }

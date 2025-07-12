@@ -1,13 +1,11 @@
 package by.mrrockka.service
 
+import by.mrrockka.domain.CashGame
 import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.domain.finaleplaces.FinalPlace
 import by.mrrockka.domain.finaleplaces.FinalePlaces
-import by.mrrockka.parser.finaleplaces.FinalePlacesMessageParser
-import by.mrrockka.service.exception.ChatGameNotFoundException
+import by.mrrockka.parser.FinalePlacesMessageParser
 import by.mrrockka.service.game.GameTelegramFacadeService
-import by.mrrockka.validation.GameValidator
-import by.mrrockka.validation.collection.CollectionsValidator
 import by.mrrockka.validation.mentions.PersonMentionsValidator
 import lombok.RequiredArgsConstructor
 import org.springframework.stereotype.Service
@@ -21,21 +19,19 @@ class FinalePlacesTelegramService(
         val finalePlacesMessageParser: FinalePlacesMessageParser,
         val gameTelegramFacadeService: GameTelegramFacadeService,
         val telegramPersonService: TelegramPersonService,
-        val gameValidator: GameValidator,
         val personMentionsValidator: PersonMentionsValidator,
-        val collectionsValidator: CollectionsValidator,
 ) {
 
     fun storePrizePool(messageMetadata: MessageMetadata): BotApiMethodMessage? {
         personMentionsValidator.validateMessageMentions(messageMetadata, 1)
 
         val places = finalePlacesMessageParser.parse(messageMetadata)
-        collectionsValidator.validateMapIsNotEmpty(places, "Finale places")
+        check(places.isNotEmpty()) { "Finale places could not be empty" }
 
         val telegramGame = gameTelegramFacadeService
                 .getGameByMessageMetadata(messageMetadata)
-                .orElseThrow { ChatGameNotFoundException() }
-        gameValidator.validateGameIsTournamentType(telegramGame.game)
+        check(telegramGame != null) { "Game is not found for this chat" }
+        check(telegramGame.game !is CashGame) { "Finale places is not allowed for cash game" }
 
         val telegramPersons = telegramPersonService
                 .getAllByNicknamesAndChatId(places.values.toList(), messageMetadata.chatId)
@@ -45,7 +41,7 @@ class FinalePlacesTelegramService(
                 .map { (position, nickname) -> FinalPlace(position, telegramPersons[nickname]) }
                 .toList())
 
-        finalePlacesService.store(telegramGame.game.getId(), finalePlaces)
+        finalePlacesService.store(telegramGame.game.id, finalePlaces)
         return SendMessage.builder()
                 .chatId(messageMetadata.chatId)
                 .text("""

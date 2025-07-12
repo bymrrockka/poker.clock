@@ -39,10 +39,17 @@ public interface MoneyTransferMapper {
   }
 
   @Mapping(target = "amount", source = "payer.amount")
-  @Mapping(target = "personId", source = "payer.personEntries.person.id")
+  @Mapping(target = "personId", source = "payer.entries.person.id")
   @Mapping(target = "type", constant = "DEBIT")
   @Mapping(target = "gameId", source = "gameId")
-  MoneyTransferEntity map(UUID gameId, Payer payer);
+  default MoneyTransferEntity map(UUID gameId, Payer payer) {
+    return MoneyTransferEntity.builder()
+      .type(TransferType.DEBIT)
+      .amount(payer.amount())
+      .personId(payer.person().getId())
+      .gameId(gameId)
+      .build();
+  }
 
   MoneyTransfer map(MoneyTransferEntity entity);
 
