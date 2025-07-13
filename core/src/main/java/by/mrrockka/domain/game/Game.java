@@ -15,6 +15,7 @@ import java.util.UUID;
 @EqualsAndHashCode
 @ToString
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@Deprecated(forRemoval = true)
 public abstract class Game {
 
   @NonNull

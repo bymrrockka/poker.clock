@@ -38,7 +38,7 @@ class BountyTelegramServiceITest {
   @Autowired
   private BountyTelegramService bountyTelegramService;
   @Autowired
-  private GameService gameService;
+  private GameServiceOld gameService;
   @Autowired
   private BountyRepository bountyRepository;
 

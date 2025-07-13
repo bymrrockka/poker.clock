@@ -16,6 +16,7 @@ import static by.mrrockka.repo.game.GameColumnNames.*;
 
 @Repository
 @RequiredArgsConstructor
+@Deprecated(forRemoval = true)
 public class GameRepository {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;

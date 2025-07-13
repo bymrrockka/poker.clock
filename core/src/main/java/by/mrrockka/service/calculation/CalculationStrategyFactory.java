@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 
 @Component
 @RequiredArgsConstructor
+@Deprecated(forRemoval = true)
 public class CalculationStrategyFactory {
 
   private final ApplicationContext applicationContext;

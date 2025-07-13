@@ -1,0 +1,64 @@
+package by.mrrockka.repo
+
+import by.mrrockka.domain.GameType
+import by.mrrockka.domain.PositionPrize
+import kotlinx.serialization.json.Json
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.javatime.timestamp
+import org.jetbrains.exposed.sql.json.jsonb
+
+object GameTable : Table("game") {
+    val id = uuid("id")
+    val gameType = enumeration<GameType>("game_type")
+    val buyIn = decimal("buy_in", 20, 2)
+    val stack = decimal("stack", 20, 2).nullable()
+    val bounty = decimal("bounty", 20, 2).nullable()
+    val createdAt = timestamp("created_at")
+    val finishedAt = timestamp("finished_at").nullable()
+
+    override val primaryKey = PrimaryKey(id)
+}
+
+object PersonTable : Table("person") {
+    val id = uuid("id")
+    val firstName = varchar("first_name", 100).nullable()
+    val lastName = varchar("last_name", 100).nullable()
+    val nickName = varchar("nick_name", 32).nullable()
+
+    override val primaryKey = PrimaryKey(id)
+}
+
+object EntriesTable : Table("entries") {
+    val gameId = uuid("game_id").references(GameTable.id)
+    val personId = uuid("person_id").references(PersonTable.id)
+    val amount = decimal("amount", 20, 2)
+    val createdAt = timestamp("created_at")
+}
+
+object WithdrawalTable : Table("withdrawal") {
+    val gameId = uuid("game_id").references(GameTable.id)
+    val personId = uuid("person_id").references(PersonTable.id)
+    val amount = decimal("amount", 20, 2)
+    val createdAt = timestamp("created_at")
+}
+
+object BountyTable : Table("bounty") {
+    val gameId = uuid("game_id").references(GameTable.id)
+    val from_person = uuid("from_person").references(PersonTable.id)
+    val to_person = uuid("to_person").references(PersonTable.id)
+    val amount = decimal("amount", 20, 2)
+    val createdAt = timestamp("created_at")
+}
+
+object PrizePoolTable : Table("prize_pool") {
+    val gameId = uuid("game_id").references(GameTable.id)
+    val schema = jsonb<Array<PositionPrize>>("schema", Json.Default)
+
+    override val primaryKey = PrimaryKey(gameId)
+}
+
+object FinalePlacesTable : Table("finale_places") {
+    val gameId = uuid("game_id").references(GameTable.id)
+    val personId = uuid("person_id").references(PersonTable.id)
+    val position = integer("position")
+}

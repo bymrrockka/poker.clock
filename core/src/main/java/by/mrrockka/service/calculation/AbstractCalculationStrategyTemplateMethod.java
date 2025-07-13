@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Deprecated(forRemoval = true)
 public abstract class AbstractCalculationStrategyTemplateMethod<PS extends PlayerSummary, G extends Game> implements
                                                                                                           CalculationStrategy {
   @Override

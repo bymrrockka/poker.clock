@@ -16,6 +16,7 @@ import java.util.List;
 
 
 @Mapper
+@Deprecated(forRemoval = true)
 public interface GameMapper {
 
   @Mapping(target = "bounty", constant = "0")

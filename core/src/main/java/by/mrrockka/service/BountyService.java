@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Deprecated(forRemoval = true)
 @RequiredArgsConstructor
 public class BountyService {
 

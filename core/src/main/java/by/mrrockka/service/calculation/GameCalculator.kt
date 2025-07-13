@@ -104,7 +104,7 @@ open class GameCalculator {
 
     private infix fun List<Player>.associateByTransferType(prizeSummaries: List<PrizeSummary>): Map<TransferType, List<PlayerTotal>> =
             map {
-                val playerPrize = prizeSummaries.find { prize -> it.person == prize.player.person }?.amount ?: ZERO
+                val playerPrize = prizeSummaries.find { prize -> it.person == prize.person }?.amount ?: ZERO
                 it.associateByTransferType(it.total() + playerPrize)
             }.groupBy({ it.first }, { it.second })
 

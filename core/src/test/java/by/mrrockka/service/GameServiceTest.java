@@ -47,7 +47,7 @@ class GameServiceTest {
   private BountyService bountyService;
 
   @InjectMocks
-  private GameService gameService;
+  private GameServiceOld gameService;
 
   @Test
   void givenTournamentGame_whenAttemptToSave_thenShouldStore() {

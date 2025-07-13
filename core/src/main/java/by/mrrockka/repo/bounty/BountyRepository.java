@@ -15,6 +15,7 @@ import static by.mrrockka.repo.bounty.BountyColumnNames.*;
 
 @Repository
 @RequiredArgsConstructor
+@Deprecated(forRemoval = true)
 public class BountyRepository {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;

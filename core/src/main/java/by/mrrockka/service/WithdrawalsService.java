@@ -16,6 +16,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Deprecated(forRemoval = true)
 public class WithdrawalsService {
 
   private final WithdrawalsRepository withdrawalsRepository;

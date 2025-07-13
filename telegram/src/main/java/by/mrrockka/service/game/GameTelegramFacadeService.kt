@@ -1,11 +1,11 @@
 package by.mrrockka.service.game
 
+import by.mrrockka.domain.Game
 import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.domain.TelegramGame
 import by.mrrockka.mapper.TelegramGameMapper
 import by.mrrockka.repo.game.TelegramGameRepository
-import by.mrrockka.service.GameService
-import by.mrrockka.service.GameServiceKT
+import by.mrrockka.service.GameServiceOld
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage
@@ -14,8 +14,7 @@ import kotlin.jvm.optionals.getOrNull
 @Service
 open class GameTelegramFacadeService(
         private val telegramGameRepository: TelegramGameRepository,
-        private val gameService: GameService,
-        private val gameServiceKT: GameServiceKT,
+        private val gameService: GameServiceOld,
         private val telegramGameMapper: TelegramGameMapper,
 ) {
     @Autowired
@@ -43,6 +42,6 @@ open class GameTelegramFacadeService(
         val game = if (messageMetadata.replyTo != null) messageMetadata.replyTo.let { telegramGameRepository.findByChatAndMessageId(it.chatId, it.id) }
         else telegramGameRepository.findLatestByChatId(messageMetadata.chatId)
 
-        return game.getOrNull()?.let { telegramGameMapper.toGame(gameServiceKT.retrieveGame(it.gameId), messageMetadata) }
+        return game.getOrNull()?.let { telegramGameMapper.toGame(gameService.retrieveGame(it.gameId) as Game, messageMetadata) }
     }
 }

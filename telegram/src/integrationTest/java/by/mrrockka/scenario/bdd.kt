@@ -7,7 +7,6 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.EntityType
 import org.telegram.telegrambots.meta.api.objects.MessageEntity
-import kotlin.sequences.forEach
 import kotlin.text.RegexOption.MULTILINE
 
 
@@ -71,8 +70,9 @@ class Expect {
             T::class.java.isAssignableFrom(SendMessage::class.java) -> {
                 this.result = SendMessageCreator.api { it.text(text) }
             }
+
             else -> {
-                throw IllegalStateException("Invalid type ${T::class.java}")
+                error("Invalid type ${T::class.java}")
             }
         }
     }

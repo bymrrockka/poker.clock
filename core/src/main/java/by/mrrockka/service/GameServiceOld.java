@@ -18,9 +18,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+@Deprecated(forRemoval = true)
 @Service
 @RequiredArgsConstructor
-public class GameService {
+public class GameServiceOld {
 
   private final GameMapper gameMapper;
   private final GameRepository gameRepository;

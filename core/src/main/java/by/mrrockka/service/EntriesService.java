@@ -14,6 +14,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Deprecated(forRemoval = true)
 public class EntriesService {
 
   private final EntriesRepository entriesRepository;

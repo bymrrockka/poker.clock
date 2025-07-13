@@ -2,7 +2,7 @@ package by.mrrockka.service.calculation;
 
 import by.mrrockka.creator.GameCreator;
 import by.mrrockka.creator.PayoutCreator;
-import by.mrrockka.service.GameService;
+import by.mrrockka.service.GameServiceOld;
 import by.mrrockka.service.MoneyTransferService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,9 +23,11 @@ class CalculationServiceTest {
   @Mock
   private MoneyTransferService moneyTransferService;
   @Mock
-  private GameService gameService;
+  private GameServiceOld gameService;
   @Mock
   private CalculationStrategyFactory calculationStrategyFactory;
+  @Mock
+  private GameCalculator gameCalculator;
   @InjectMocks
   private CalculationService calculationService;
 
@@ -34,9 +36,9 @@ class CalculationServiceTest {
     final var game = GameCreator.tournament();
     final var expected = List.of(PayoutCreator.payout());
 
-    when(calculationStrategyFactory.getStrategy(game)).thenReturn(strategy);
-    when(strategy.calculate(game)).thenReturn(expected);
-    when(gameService.doesGameHasUpdates(game)).thenReturn(true);
+//    when(calculationStrategyFactory.getStrategy(game)).thenReturn(strategy);
+//    when(strategy.calculate(game)).thenReturn(expected);
+//    when(gameService.doesGameHasUpdates(game)).thenReturn(true);
 
 //    final var actual = calculationService.calculateAndSave(game);
 
@@ -51,9 +53,9 @@ class CalculationServiceTest {
     final var game = GameCreator.tournament();
     final var expected = List.of(PayoutCreator.payout());
 
-    when(calculationStrategyFactory.getStrategy(game)).thenReturn(strategy);
-    when(strategy.calculate(game)).thenReturn(expected);
-    when(gameService.doesGameHasUpdates(game)).thenReturn(false);
+//    when(calculationStrategyFactory.getStrategy(game)).thenReturn(strategy);
+//    when(strategy.calculate(game)).thenReturn(expected);
+//    when(gameService.doesGameHasUpdates(game)).thenReturn(false);
 
 //    final var actual = calculationService.calculateAndSave(game);
 

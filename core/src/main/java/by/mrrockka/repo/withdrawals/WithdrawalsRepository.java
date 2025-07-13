@@ -18,6 +18,7 @@ import static by.mrrockka.repo.withdrawals.WithdrawalColumnNames.*;
 
 @Repository
 @RequiredArgsConstructor
+@Deprecated(forRemoval = true)
 public class WithdrawalsRepository {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;

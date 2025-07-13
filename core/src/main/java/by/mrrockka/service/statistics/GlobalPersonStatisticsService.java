@@ -9,7 +9,7 @@ import by.mrrockka.domain.game.TournamentGame;
 import by.mrrockka.domain.payout.TransferType;
 import by.mrrockka.domain.statistics.GlobalPersonStatistics;
 import by.mrrockka.service.FinalePlacesService;
-import by.mrrockka.service.GameService;
+import by.mrrockka.service.GameServiceOld;
 import by.mrrockka.service.MoneyTransferService;
 import by.mrrockka.service.PersonService;
 import lombok.NonNull;
@@ -30,7 +30,7 @@ public class GlobalPersonStatisticsService {
   private final MoneyTransferService moneyTransferService;
   private final FinalePlacesService finalePlacesService;
   private final PersonService personService;
-  private final GameService gameService;
+  private final GameServiceOld gameService;
 
   public GlobalPersonStatistics retrieveStatistics(final String nickname) {
 

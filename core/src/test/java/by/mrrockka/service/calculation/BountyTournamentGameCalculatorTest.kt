@@ -29,7 +29,7 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
             this.bounty = bounty
             this.players = fromBounties + toBounties
             this.prizePool = listOf(PositionPrize(1, BigDecimal("100")))
-            this.finalePlaces = listOf(FinalPlace(1, toBounties))
+            this.finalePlaces = listOf(FinalPlace(1, toBounties.person))
         }.bountyTournament()
 
         val actual = calculator.calculate(game)
@@ -57,7 +57,7 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
             this.bounty = bounty
             this.players = fromBounties + toBounties
             this.prizePool = listOf(PositionPrize(1, BigDecimal("100")))
-            this.finalePlaces = listOf(FinalPlace(1, toBounties))
+            this.finalePlaces = listOf(FinalPlace(1, toBounties.person))
         }.bountyTournament()
 
         approver.assertApproved(calculator.calculate(game).simplify().toJsonString())
@@ -81,8 +81,8 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
                     PositionPrize(2, BigDecimal("30")),
             )
             this.finalePlaces = listOf(
-                    FinalPlace(1, firstPlace),
-                    FinalPlace(2, secondPlace),
+                    FinalPlace(1, firstPlace.person),
+                    FinalPlace(2, secondPlace.person),
             )
         }.bountyTournament()
 
@@ -103,7 +103,7 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
             this.bounty = bounty
             this.players = noPlaceBounties + firstPlaceBounties + firstPlace
             this.prizePool = listOf(PositionPrize(1, BigDecimal("100")))
-            this.finalePlaces = listOf(FinalPlace(1, firstPlace))
+            this.finalePlaces = listOf(FinalPlace(1, firstPlace.person))
         }.bountyTournament()
 
         approver.assertApproved(calculator.calculate(game).simplify().toJsonString())
@@ -145,8 +145,8 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
                     PositionPrize(2, BigDecimal("50")),
             )
             this.finalePlaces = listOf(
-                    FinalPlace(1, players[0]),
-                    FinalPlace(2, players[1]),
+                    FinalPlace(1, players[0].person),
+                    FinalPlace(2, players[1].person),
             )
         }.bountyTournament()
 
@@ -169,8 +169,8 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
                     PositionPrize(2, BigDecimal("25")),
             )
             this.finalePlaces = listOf(
-                    FinalPlace(1, players[0]),
-                    FinalPlace(2, players[1]),
+                    FinalPlace(1, players[0].person),
+                    FinalPlace(2, players[1].person),
             )
         }.bountyTournament()
 

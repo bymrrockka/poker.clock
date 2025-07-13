@@ -12,6 +12,7 @@ import static java.util.Objects.nonNull;
 
 @Service
 @RequiredArgsConstructor
+@Deprecated(forRemoval = true)
 public class TournamentSummaryService {
 
   private final FinalePlacesService finalePlacesService;

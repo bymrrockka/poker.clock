@@ -9,6 +9,7 @@ interface Game {
     val id: UUID
     val buyIn: BigDecimal
     val stack: BigDecimal?
+    val createdAt: Instant
     val finishedAt: Instant?
     val players: List<Player>
 }
@@ -17,6 +18,7 @@ data class TournamentGame(
         override val id: UUID,
         override val buyIn: BigDecimal,
         override val stack: BigDecimal? = ZERO,
+        override val createdAt: Instant,
         override val finishedAt: Instant? = null,
         override val players: List<TournamentPlayer>,
         val finalePlaces: List<FinalPlace>? = emptyList(),
@@ -28,6 +30,7 @@ data class BountyTournamentGame(
         override val buyIn: BigDecimal,
         val bounty: BigDecimal,
         override val stack: BigDecimal? = ZERO,
+        override val createdAt: Instant,
         override val finishedAt: Instant? = null,
         override val players: List<BountyPlayer>,
         val finalePlaces: List<FinalPlace>? = emptyList(),
@@ -38,6 +41,7 @@ data class CashGame(
         override val id: UUID,
         override val buyIn: BigDecimal,
         override val stack: BigDecimal? = ZERO,
+        override val createdAt: Instant,
         override val finishedAt: Instant? = null,
         override val players: List<CashPlayer>
 ) : Game

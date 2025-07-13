@@ -14,6 +14,7 @@ class GameBuilder(init: (GameBuilder.() -> Unit) = {}) {
     var id: UUID? = null
     var buyIn: BigDecimal? = null
     var stack: BigDecimal? = null
+    var createdAt: Instant? = null
     var finishedAt: Instant? = null
     var players: List<Player> = emptyList()
     var finalePlaces: List<FinalPlace>? = emptyList()
@@ -26,7 +27,7 @@ class GameBuilder(init: (GameBuilder.() -> Unit) = {}) {
 
     fun prizeForFirst(): GameBuilder {
         this.prizePool = listOf(PositionPrize(1, BigDecimal("100")))
-        this.finalePlaces = listOf(FinalPlace(1, this.players.first()))
+        this.finalePlaces = listOf(FinalPlace(1, this.players.first().person))
         return this
     }
 
@@ -36,6 +37,7 @@ class GameBuilder(init: (GameBuilder.() -> Unit) = {}) {
             stack = stack ?: randoms.decimal(from = 1000, to = 30000),
             players = players as List<CashPlayer>,
             finishedAt = finishedAt,
+            createdAt = createdAt ?: Instant.now(),
     )
 
     fun tournament(): TournamentGame = TournamentGame(
@@ -45,6 +47,7 @@ class GameBuilder(init: (GameBuilder.() -> Unit) = {}) {
             players = players as List<TournamentPlayer>,
             finalePlaces = finalePlaces,
             prizePool = prizePool,
+            createdAt = createdAt ?: Instant.now(),
             finishedAt = finishedAt,
     )
 
@@ -56,7 +59,8 @@ class GameBuilder(init: (GameBuilder.() -> Unit) = {}) {
             finalePlaces = finalePlaces,
             prizePool = prizePool,
             finishedAt = finishedAt,
-            bounty = bounty ?: BigDecimal("10")
+            createdAt = createdAt ?: Instant.now(),
+            bounty = bounty ?: BigDecimal("10"),
     )
 }
 

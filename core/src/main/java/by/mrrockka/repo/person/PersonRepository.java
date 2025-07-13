@@ -15,6 +15,7 @@ import static by.mrrockka.repo.person.PersonColumnNames.*;
 
 @Repository
 @RequiredArgsConstructor
+@Deprecated(forRemoval = true)
 public class PersonRepository {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;

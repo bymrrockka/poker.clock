@@ -5,7 +5,7 @@ import by.mrrockka.mapper.TelegramGameMapper
 import by.mrrockka.parser.game.GameMessageParser
 import by.mrrockka.repo.game.TelegramGameRepository
 import by.mrrockka.service.EntriesService
-import by.mrrockka.service.GameService
+import by.mrrockka.service.GameServiceOld
 import by.mrrockka.service.TelegramPersonService
 import lombok.RequiredArgsConstructor
 import org.springframework.stereotype.Service
@@ -16,12 +16,12 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 @Service
 @RequiredArgsConstructor
 internal open class TournamentGameService(
-        private val telegramGameRepository: TelegramGameRepository,
-        private val telegramPersonService: TelegramPersonService,
-        private val gameService: GameService,
-        private val entriesService: EntriesService,
-        private val gameMessageParser: GameMessageParser,
-        private val telegramGameMapper: TelegramGameMapper,
+    private val telegramGameRepository: TelegramGameRepository,
+    private val telegramPersonService: TelegramPersonService,
+    private val gameService: GameServiceOld,
+    private val entriesService: EntriesService,
+    private val gameMessageParser: GameMessageParser,
+    private val telegramGameMapper: TelegramGameMapper,
 ) {
 
     @Transactional

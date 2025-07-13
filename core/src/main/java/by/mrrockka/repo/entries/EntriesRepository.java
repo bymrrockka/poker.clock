@@ -17,6 +17,7 @@ import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
+@Deprecated(forRemoval = true)
 public class EntriesRepository {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;

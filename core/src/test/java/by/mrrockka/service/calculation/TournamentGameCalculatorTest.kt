@@ -26,7 +26,7 @@ class TournamentGameCalculatorTest : AbstractTest() {
             this.buyIn = buyin
             this.players = players
             this.prizePool = listOf(PositionPrize(1, BigDecimal("100")))
-            this.finalePlaces = listOf(FinalPlace(1, players[0]))
+            this.finalePlaces = listOf(FinalPlace(1, players[0].person))
         }.tournament()
 
         val actual = calculator.calculate(game)
@@ -51,7 +51,7 @@ class TournamentGameCalculatorTest : AbstractTest() {
             this.buyIn = buyin
             this.players = players
             this.prizePool = listOf(PositionPrize(1, BigDecimal("100")))
-            this.finalePlaces = listOf(FinalPlace(1, players[0]))
+            this.finalePlaces = listOf(FinalPlace(1, players[0].person))
         }.tournament()
 
         approver.assertApproved(calculator.calculate(game).simplify().toJsonString())
@@ -70,8 +70,8 @@ class TournamentGameCalculatorTest : AbstractTest() {
                     PositionPrize(2, BigDecimal("30")),
             )
             this.finalePlaces = listOf(
-                    FinalPlace(1, players[0]),
-                    FinalPlace(2, players[1]),
+                    FinalPlace(1, players[0].person),
+                    FinalPlace(2, players[1].person),
             )
         }.tournament()
 
@@ -91,8 +91,8 @@ class TournamentGameCalculatorTest : AbstractTest() {
                     PositionPrize(2, BigDecimal("30")),
             )
             this.finalePlaces = listOf(
-                    FinalPlace(1, players[0]),
-                    FinalPlace(2, players[1]),
+                    FinalPlace(1, players[0].person),
+                    FinalPlace(2, players[1].person),
             )
         }.tournament()
 
@@ -112,8 +112,8 @@ class TournamentGameCalculatorTest : AbstractTest() {
                     PositionPrize(2, BigDecimal("30")),
             )
             this.finalePlaces = listOf(
-                    FinalPlace(1, players[0]),
-                    FinalPlace(2, players[1]),
+                    FinalPlace(1, players[0].person),
+                    FinalPlace(2, players[1].person),
             )
         }.tournament()
 
@@ -133,8 +133,8 @@ class TournamentGameCalculatorTest : AbstractTest() {
                     PositionPrize(2, BigDecimal("10")),
             )
             this.finalePlaces = listOf(
-                    FinalPlace(1, players[0]),
-                    FinalPlace(2, players[1]),
+                    FinalPlace(1, players[0].person),
+                    FinalPlace(2, players[1].person),
             )
         }.tournament()
 
@@ -154,8 +154,8 @@ class TournamentGameCalculatorTest : AbstractTest() {
                     PositionPrize(2, BigDecimal("25")),
             )
             this.finalePlaces = listOf(
-                    FinalPlace(1, players[0]),
-                    FinalPlace(2, players[1]),
+                    FinalPlace(1, players[0].person),
+                    FinalPlace(2, players[1].person),
             )
         }.tournament()
 

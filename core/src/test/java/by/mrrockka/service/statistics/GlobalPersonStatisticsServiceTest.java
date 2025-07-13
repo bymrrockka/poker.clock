@@ -4,7 +4,7 @@ import by.mrrockka.creator.*;
 import by.mrrockka.domain.MoneyTransfer;
 import by.mrrockka.domain.statistics.GlobalPersonStatistics;
 import by.mrrockka.service.FinalePlacesService;
-import by.mrrockka.service.GameService;
+import by.mrrockka.service.GameServiceOld;
 import by.mrrockka.service.MoneyTransferService;
 import by.mrrockka.service.PersonService;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ class GlobalPersonStatisticsServiceTest {
   @Mock
   private PersonService personService;
   @Mock
-  private GameService gameService;
+  private GameServiceOld gameService;
   @InjectMocks
   private GlobalPersonStatisticsService globalPersonStatisticsService;
 

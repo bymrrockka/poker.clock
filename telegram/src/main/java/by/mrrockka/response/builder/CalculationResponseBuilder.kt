@@ -30,14 +30,14 @@ class CalculationResponseBuilder(
                 val finalePlacesResponse = """
                 -----------------------------
                 Finale summary:
-                    ${summary.joinToString("\n") { "${it.position}. @${it.player.person.nickname} won ${it.amount}" }}
+                    ${summary.joinToString("\n") { "${it.position}. @${it.person.nickname} won ${it.amount}" }}
                     Total: ${game.players.totalEntries()} (${game.players.flatMap { it.entries }.size} entries * ${game.buyIn} buy in)
                 """.trimIndent()
 
                 val payoutsResponse = payouts.joinToString(separator = "\n") {
                     val player = it.creditor as TournamentPlayer
                     val entries = player.entries.total()
-                    val prize = summary.find { summary -> summary.player.person == it.creditor.person }
+                    val prize = summary.find { summary -> summary.person == it.creditor.person }
                     """
                     -----------------------------
                     Payout to: @${player.person.nickname}
@@ -56,14 +56,14 @@ class CalculationResponseBuilder(
                 val finalePlacesResponse = """
                 -----------------------------
                 Finale summary:
-                    ${summary.joinToString("\n") { "${it.position}. @${it.player.person.nickname} won ${it.amount}" }}
+                    ${summary.joinToString("\n") { "${it.position}. @${it.person.nickname} won ${it.amount}" }}
                     Total: ${game.players.totalEntries()} (${game.players.flatMap { it.entries }.size} entries * ${game.buyIn} buy in)
                 """.trimIndent()
 
                 val payoutsResponse = payouts.joinToString(separator = "\n") {
                     val player = it.creditor as BountyPlayer
                     val entries = player.entries.total()
-                    val prize = summary.find { summary -> summary.player.person == it.creditor.person }
+                    val prize = summary.find { summary -> summary.person == it.creditor.person }
                     val (taken, given) = player.takenToGiven()
                     val bountiesTotal = taken.total() - given.total()
                     """
