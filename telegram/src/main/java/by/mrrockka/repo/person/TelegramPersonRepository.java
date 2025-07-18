@@ -16,6 +16,7 @@ import static by.mrrockka.repo.person.TelegramPersonColumnNames.*;
 
 @Repository
 @RequiredArgsConstructor
+@Deprecated(forRemoval = true)
 public class TelegramPersonRepository {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;

@@ -1,13 +1,12 @@
 package by.mrrockka.service.statistics
 
-import by.mrrockka.domain.TelegramGame
+import by.mrrockka.domain.ChatGame
 import by.mrrockka.domain.collection.PersonEntries
 import by.mrrockka.domain.game.BountyGame
 import by.mrrockka.domain.game.CashGame
 import by.mrrockka.domain.game.TournamentGame
 import by.mrrockka.domain.statistics.StatisticsCommand
-import by.mrrockka.service.exception.ChatGameNotFoundException
-import by.mrrockka.service.game.GameTelegramFacadeService
+import by.mrrockka.service.game.GameTelegramService
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
@@ -16,12 +15,11 @@ import java.math.BigDecimal
 //todo: refactor
 @Component
 internal class GameStatisticsTelegramService(
-        private val gameTelegramFacadeService: GameTelegramFacadeService,
+        private val gameTelegramFacadeService: GameTelegramService,
 ) {
     fun retrieveStatistics(statisticsCommand: StatisticsCommand): BotApiMethodMessage {
         val telegramGame = gameTelegramFacadeService
-                .getGameByMessageMetadata(statisticsCommand.metadata)
-                ?: throw ChatGameNotFoundException()
+                .findGame(statisticsCommand.metadata)
 
         return SendMessage().apply {
             chatId = statisticsCommand.metadata.chatId.toString()
@@ -31,7 +29,7 @@ internal class GameStatisticsTelegramService(
     }
 }
 
-private fun TelegramGame.responseMessage(): String {
+private fun ChatGame.responseMessage(): String {
     return when (val game = this.game) {
         is CashGame -> """
             Cash game statistics:

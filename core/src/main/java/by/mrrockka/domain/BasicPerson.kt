@@ -12,9 +12,9 @@ interface Person {
 //todo refactor telegram wrapper
 data class BasicPerson(
         override val id: UUID,
-        override val firstname: String?,
-        override val lastname: String?,
-        override val nickname: String?
+        override val firstname: String? = null,
+        override val lastname: String? = null,
+        override val nickname: String? = null,
 ) : Person {
 
     //    todo: remove

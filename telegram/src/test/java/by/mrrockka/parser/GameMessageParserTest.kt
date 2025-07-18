@@ -1,156 +1,238 @@
-package by.mrrockka.parser;
+package by.mrrockka.parser
 
-import by.mrrockka.domain.game.Game;
-import by.mrrockka.parser.game.GameFieldIsNotSpecifiedException;
-import by.mrrockka.parser.game.GameMessageParser;
-import lombok.Builder;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import by.mrrockka.builder.message
+import by.mrrockka.domain.*
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
+import java.math.BigDecimal
+import java.util.stream.Stream
 
-import java.math.BigDecimal;
-import java.util.stream.Stream;
+internal class GameMessageParserTest {
+    private val gameMessageParser = GameMessageParser()
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+    @ParameterizedTest
+    @MethodSource("gameMessages")
+    fun `valid message text should create game`(message: MessageMetadata, block: (Game) -> Unit) {
+        assertDoesNotThrow { gameMessageParser.parse(message).let(block) }
+    }
 
-class GameMessageParserTest {
+    @ParameterizedTest
+    @MethodSource("invalidGameMessages")
+    fun `message with missed params should throw exception`(message: MessageMetadata) {
+        assertThrows<IllegalStateException> { gameMessageParser.parse(message) }
+    }
 
-  private final GameMessageParser gameMessageParser = new GameMessageParser();
+    companion object {
+        @JvmStatic
+        private fun gameMessages() = Stream.of(
+                Arguments.of(
+                        message {
+                            text = """
+                          /tournament_game 
+                          buyin: 30  
+                          stack: 30.5k 
+                          players: 
+                            @mrrockka
+                          @ivano 
+                           @andrei 
+                          @me   
+                          """.trimIndent()
+                        },
+                        { game: Game ->
+                            assertThat(game).isInstanceOf(TournamentGame::class.java)
+                            assertThat(game.buyIn).isEqualTo(BigDecimal("30"))
+                            assertThat(game.stack).isEqualTo(BigDecimal("30500"))
+                        },
+                ),
 
-  @Builder
-  private record GameArgument(String message, GameMeta game) {}
+                Arguments.of(
+                        message {
+                            text = """
+                          /tournament_game 
+                          buyin:    15   
+                            @mrrockka
+                          @ivano 
+                           @andrei 
+                          @ivano 
+                           @andrei 
+                          @me   
+                          """.trimIndent()
+                        },
+                        { game: Game ->
+                            assertThat(game).isInstanceOf(TournamentGame::class.java)
+                            assertThat(game.buyIn).isEqualTo(BigDecimal("15"))
+                            assertThat(game.stack).isEqualTo(BigDecimal.ZERO)
+                        },
+                ),
 
-  @Builder
-  private record GameMeta(BigDecimal buyIn, BigDecimal stack) {}
+                Arguments.of(
+                        message {
+                            text = """
+                          /tournament_game
+                          buyin:      100
+                          stack:50000
+                          players:
+                            @mrrockka
+                          @me
+                          """.trimIndent()
+                        },
+                        { game: Game ->
+                            assertThat(game).isInstanceOf(TournamentGame::class.java)
+                            assertThat(game.buyIn).isEqualTo(BigDecimal("100"))
+                            assertThat(game.stack).isEqualTo(BigDecimal("50000"))
+                        },
+                ),
 
-  private static Stream<Arguments> gameMessages() {
-    return Stream.of(
-      Arguments.of(
-        GameArgument.builder()
-          .message("""
-                     /tournament 
-                     buyin: 30  
-                     stack: 30k 
-                     bounty:30
-                     players: 
-                       @mrrockka
-                     @ivano 
-                      @andrei 
-                     @me   
-                         """)
-          .game(GameMeta.builder()
-                  .stack(BigDecimal.valueOf(30000))
-                  .buyIn(BigDecimal.valueOf(30))
-                  .build())
-          .build()
-      ),
-      Arguments.of(
-        GameArgument.builder()
-          .message("""
-                     /tournament  
-                     bounty:30
-                     buyin:      100  
-                     stack:50000 
-                     players: 
-                       @mrrockka
-                     @me   
-                           """)
-          .game(GameMeta.builder()
-                  .stack(BigDecimal.valueOf(50000))
-                  .buyIn(BigDecimal.valueOf(100))
-                  .build())
-          .build()
-      ),
-      Arguments.of(
-        GameArgument.builder()
-          .message("""
-                     /tournament 
-                     buyin:    15   
-                     bounty:30 
-                     stack: 1.5k
-                       @mrrockka
-                     @ivano 
-                      @andrei 
-                     @ivano 
-                      @andrei 
-                     @me   
-                                 """)
-          .game(GameMeta.builder()
-                  .stack(BigDecimal.valueOf(1500))
-                  .buyIn(BigDecimal.valueOf(15))
-                  .build())
-          .build()
-      )
-    );
-  }
+                Arguments.of(
+                        message {
+                            text = """
+                          /bounty_game 
+                          buyin: 30  
+                          stack: 30k 
+                          bounty:30
+                          players: 
+                            @mrrockka
+                          @ivano 
+                           @andrei 
+                          @me   
+                          """.trimIndent()
+                        },
+                        { game: Game ->
+                            assertThat(game).isInstanceOf(BountyTournamentGame::class.java)
+                            assertThat(game.buyIn).isEqualTo(BigDecimal("30"))
+                            assertThat(game.stack).isEqualTo(BigDecimal("30000"))
+                            assertThat((game as BountyTournamentGame).bounty).isEqualTo(BigDecimal("30"))
+                        },
+                ),
 
-  @ParameterizedTest
-  @MethodSource("gameMessages")
-  void givenTournamentMessage_whenMapExecuted_thenShouldCreateGame(final GameArgument argument) {
-    assertThat(gameMessageParser.parseTournamentGame(argument.message()))
-      .usingRecursiveComparison()
-      .ignoringExpectedNullFields()
-      .isEqualTo(argument.game());
-    assertThat((Game) gameMessageParser.parseCashGame(argument.message()))
-      .usingRecursiveComparison()
-      .ignoringExpectedNullFields()
-      .isEqualTo(argument.game());
-    assertThat((Game) gameMessageParser.parseBountyGame(argument.message()))
-      .usingRecursiveComparison()
-      .ignoringExpectedNullFields()
-      .isEqualTo(argument.game());
-  }
+                Arguments.of(
+                        message {
+                            text = """
+                          /bounty_game 
+                          buyin:    15k  
+                          bounty:300 
+                          stack: 1.5k
+                            @mrrockka
+                          @ivano 
+                           @andrei 
+                          @ivano 
+                           @andrei 
+                          @me   
+                          """.trimIndent()
+                        },
+                        { game: Game ->
+                            assertThat(game).isInstanceOf(BountyTournamentGame::class.java)
+                            assertThat(game.buyIn).isEqualTo(BigDecimal("15000"))
+                            assertThat(game.stack).isEqualTo(BigDecimal("1500"))
+                            assertThat((game as BountyTournamentGame).bounty).isEqualTo(BigDecimal("300"))
+                        },
+                ),
 
-  @Test
-  void givenMessage_whenNoStack_thenThrowException() {
-    final var message =
-      """
-        /tournament
-        buyin:    15
-        players: 
-          @mrrockka
-          @me
-        """;
-    assertThatThrownBy(() -> gameMessageParser.parseTournamentGame(message))
-      .isInstanceOf(GameFieldIsNotSpecifiedException.class);
-    assertThatThrownBy(() -> gameMessageParser.parseCashGame(message))
-      .isInstanceOf(GameFieldIsNotSpecifiedException.class);
-    assertThatThrownBy(() -> gameMessageParser.parseBountyGame(message))
-      .isInstanceOf(GameFieldIsNotSpecifiedException.class);
-  }
+                Arguments.of(
+                        message {
+                            text = """
+                          /bounty_game
+                          bounty:30
+                          buyin:      10K
+                          players:
+                            @mrrockka
+                          @me
+                          """.trimIndent()
+                        },
+                        { game: Game ->
+                            assertThat(game).isInstanceOf(BountyTournamentGame::class.java)
+                            assertThat(game.buyIn).isEqualTo(BigDecimal("10000"))
+                            assertThat(game.stack).isEqualTo(BigDecimal.ZERO)
+                            assertThat((game as BountyTournamentGame).bounty).isEqualTo(BigDecimal("30"))
+                        },
+                ),
 
-  @Test
-  void givenMessage_whenNoBuyIn_thenThrowException() {
-    final var message =
-      """
-        /tournament   
-        stack: 1.5k 
-        players: 
-          @mrrockka
-          @me
-        """;
-    assertThatThrownBy(() -> gameMessageParser.parseTournamentGame(message))
-      .isInstanceOf(GameFieldIsNotSpecifiedException.class);
-    assertThatThrownBy(() -> gameMessageParser.parseCashGame(message))
-      .isInstanceOf(GameFieldIsNotSpecifiedException.class);
-    assertThatThrownBy(() -> gameMessageParser.parseBountyGame(message))
-      .isInstanceOf(GameFieldIsNotSpecifiedException.class);
-  }
+                Arguments.of(
+                        message {
+                            text = """
+                          /cash_game 
+                          buyin: 30  
+                          stack: 30k 
+                          players: 
+                            @mrrockka
+                          @ivano 
+                           @andrei 
+                          @me   
+                          """.trimIndent()
+                        },
+                        { game: Game ->
+                            assertThat(game).isInstanceOf(CashGame::class.java)
+                            assertThat(game.buyIn).isEqualTo(BigDecimal("30"))
+                            assertThat(game.stack).isEqualTo(BigDecimal("30000"))
+                        },
+                ),
 
-  @Test
-  void givenMessage_whenNoBounty_thenThrowException() {
-    final var message =
-      """
-        /tournament
-        buyin:    15  
-        stack: 1.5k  
-        players: 
-          @mrrockka
-          @me
-        """;
-    assertThatThrownBy(() -> gameMessageParser.parseBountyGame(message))
-      .isInstanceOf(GameFieldIsNotSpecifiedException.class);
-  }
+                Arguments.of(
+                        message {
+                            text = """
+                          /cash_game 
+                          buyin:    15   
+                          bounty:30 
+                          stack: 1.5k
+                            @mrrockka
+                          @ivano 
+                           @andrei 
+                          @ivano 
+                           @andrei 
+                          @me   
+                          """.trimIndent()
+                        },
+                        { game: Game ->
+                            assertThat(game).isInstanceOf(CashGame::class.java)
+                            assertThat(game.buyIn).isEqualTo(BigDecimal("15"))
+                            assertThat(game.stack).isEqualTo(BigDecimal("1500"))
+                        },
+                ),
+
+                Arguments.of(
+                        message {
+                            text = """
+                          /cash_game
+                          buyin:      100
+                          players:
+                            @mrrockka
+                          @me
+                          """.trimIndent()
+                        },
+                        { game: Game ->
+                            assertThat(game).isInstanceOf(CashGame::class.java)
+                            assertThat(game.buyIn).isEqualTo(BigDecimal("100"))
+                            assertThat(game.stack).isEqualTo(BigDecimal.ZERO)
+                        },
+                ),
+        )
+
+        @JvmStatic
+        private fun invalidGameMessages() = listOf(
+                message {
+                    text = """
+                    /tournament_game   
+                    stack: 1.5k 
+                    players: 
+                      @mrrockka
+                      @me
+                    """.trimIndent()
+                },
+
+                message {
+                    text = """
+                    /bounty_game
+                    buyin:    15  
+                    players: 
+                      @mrrockka
+                      @me
+                    """.trimIndent()
+                },
+        )
+    }
+
 }

@@ -2,8 +2,7 @@ package by.mrrockka.service.statistics;
 
 import by.mrrockka.domain.statistics.StatisticsCommand;
 import by.mrrockka.response.builder.PlayerInGameStatisticsResponseBuilder;
-import by.mrrockka.service.exception.ChatGameNotFoundException;
-import by.mrrockka.service.game.GameTelegramFacadeService;
+import by.mrrockka.service.game.GameTelegramService;
 import by.mrrockka.validation.mentions.PlayerHasNoNicknameException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,18 +14,14 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 class PlayerInGameStatisticsTelegramService {
 
   private final PlayerInGameStatisticsResponseBuilder playerInGameStatisticsResponseBuilder;
-  private final GameTelegramFacadeService gameTelegramFacadeService;
+  private final GameTelegramService gameTelegramService;
   private final PlayerInGameStatisticsService playerInGameStatisticsService;
 
   BotApiMethodMessage retrieveStatistics(final StatisticsCommand statisticsCommand) {
     final var messageMetadata = statisticsCommand.metadata();
-    final var telegramGame = gameTelegramFacadeService
-      .getGameByMessageMetadata(messageMetadata);
-    if (telegramGame == null)
-      throw new ChatGameNotFoundException();
-
-    final var game = telegramGame.game();
-
+    final var telegramGame = gameTelegramService
+      .findGame(messageMetadata);
+    final var game = telegramGame.getGame();
     final var nickname = statisticsCommand.metadata().optFromNickname()
       .orElseThrow(PlayerHasNoNicknameException::new);
 
@@ -35,7 +30,7 @@ class PlayerInGameStatisticsTelegramService {
     return SendMessage.builder()
       .chatId(messageMetadata.getChatId())
       .text(playerInGameStatisticsResponseBuilder.response(playerInGameStatistics))
-      .replyToMessageId(telegramGame.messageMetadata().getId())
+      .replyToMessageId(telegramGame.getMessageMetadata().getId())
       .build();
   }
 

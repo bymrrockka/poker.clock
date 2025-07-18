@@ -28,9 +28,6 @@ import java.time.Instant
 @ActiveProfiles("repository")
 class TelegramTaskExecutorITest {
 
-    @Autowired
-    private lateinit var telegramTaskExecutor: TelegramTaskExecutor
-
     @MockkBean(relaxed = true, clear = MockkClear.BEFORE)
     lateinit var pokerClockAbsSender: PokerClockAbsSender
 

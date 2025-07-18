@@ -5,7 +5,7 @@ import by.mrrockka.creator.SendMessageCreator
 import by.mrrockka.creator.TaskCreator
 import by.mrrockka.domain.PollTask
 import by.mrrockka.parser.PollMessageParser
-import by.mrrockka.repo.poll.PollTaskRepository
+import by.mrrockka.repo.PollTaskRepo
 import by.mrrockka.validation.poll.PollMessageValidator
 import io.mockk.*
 import io.mockk.impl.annotations.InjectMockKs
@@ -26,7 +26,7 @@ class TaskTelegramServiceTest {
     lateinit var pollMessageValidator: PollMessageValidator
 
     @MockK(relaxUnitFun = true)
-    lateinit var pollTaskRepository: PollTaskRepository
+    lateinit var pollTaskRepository: PollTaskRepo
 
     @MockK(relaxUnitFun = true)
     lateinit var pollMessageParser: PollMessageParser
@@ -106,7 +106,7 @@ class TaskTelegramServiceTest {
     @Test
     fun `when received message metadata without reply message to stop poll throws exception`() {
         val metadata = MessageMetadataCreator.domain()
-        assertThrows<NoAttachedMessagesFound> { taskTelegramService.stopPoll(metadata) }
+        assertThrows<IllegalStateException> { taskTelegramService.stopPoll(metadata) }
     }
 
     @Test
@@ -117,7 +117,7 @@ class TaskTelegramServiceTest {
         }
 
         every { pollTaskRepository.finishPoll(replyTo.id, metadata.createdAt) } returns 0
-        assertThrows<NoPollsFound> { taskTelegramService.stopPoll(metadata) }
+        assertThrows<IllegalStateException> { taskTelegramService.stopPoll(metadata) }
     }
 
 }

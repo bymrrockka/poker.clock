@@ -3,7 +3,6 @@ package by.mrrockka.repo
 import by.mrrockka.Random
 import by.mrrockka.extension.TelegramPSQLExtension
 import by.mrrockka.creator.TaskCreator
-import by.mrrockka.repo.poll.PollTaskRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
@@ -19,7 +18,7 @@ import java.time.Instant
 class PollTaskRepositoryITest {
 
     @Autowired
-    lateinit var repository: PollTaskRepository
+    lateinit var repository: PollTaskRepo
 
     @Test
     fun `given poll task when attempt to store to db should store successfully`() {

@@ -35,7 +35,7 @@ class EntryTelegramServiceITest {
   @Autowired
   private EntryTelegramService entryTelegramService;
   @Autowired
-  private TelegramPersonService telegramPersonService;
+  private TelegramPersonServiceOld telegramPersonServiceOld;
   @Autowired
   private EntriesRepository entriesRepository;
 
@@ -66,7 +66,7 @@ class EntryTelegramServiceITest {
         "Entries:\n - @%s -> %s\n".formatted(nickname, expectedAmount))
     );
 
-    final var telegramPerson = telegramPersonService.getByNicknameAndChatId(nickname, CHAT_ID);
+    final var telegramPerson = telegramPersonServiceOld.getByNicknameAndChatId(nickname, CHAT_ID);
     final var actual = entriesRepository.findByGameAndPerson(GAME_ID, telegramPerson.getId());
     assertAll(
       () -> assertThat(actual).isNotEmpty(),
@@ -107,7 +107,7 @@ class EntryTelegramServiceITest {
       () -> assertThat(response.getText()).contains(expectedLines)
     );
 
-    final var telegramPersons = telegramPersonService.getAllByNicknamesAndChatId(telegrams, CHAT_ID).stream()
+    final var telegramPersons = telegramPersonServiceOld.getAllByNicknamesAndChatId(telegrams, CHAT_ID).stream()
       .map(TelegramPerson::getNickname)
       .toList();
 
@@ -157,7 +157,7 @@ class EntryTelegramServiceITest {
         "Entries:\n - @%s -> %s\n".formatted(nickname, expectedAmount))
     );
 
-    final var telegramPerson = telegramPersonService.getByNicknameAndChatId(nickname, CHAT_ID);
+    final var telegramPerson = telegramPersonServiceOld.getByNicknameAndChatId(nickname, CHAT_ID);
     final var actual = entriesRepository.findByGameAndPerson(GAME_ID, telegramPerson.getId());
     assertAll(
       () -> assertThat(actual).isNotEmpty(),

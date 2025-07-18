@@ -33,10 +33,31 @@ class MessageMetadataBuilder(init: (MessageMetadataBuilder.() -> Unit) = {}) {
                 chatId = randoms.chatid(),
                 createdAt = createdAt ?: randoms.instant(),
                 text = text ?: randoms.faker.chuckNorris().fact(),
-                entities = this.entities,
+                entities = if (entities.isEmpty()) text.entities() else entities,
                 replyTo = replyTo,
-                fromNickname = fromNickname
+                fromNickname = fromNickname,
         )
+    }
+
+    private fun String?.entities(): List<MessageEntity> {
+        val commandRegex = "^/([\\w]+)".toRegex(RegexOption.MULTILINE)
+        val mentionRegex = "^@([\\w]+)".toRegex(RegexOption.MULTILINE)
+
+        val command = commandRegex.find(this?.trimIndent() ?: "")
+                .let { match ->
+                    if (match != null) {
+                        val (command) = match.destructured
+                        messageEntity { text = command }.command()
+                    } else null
+                }
+
+        val mentions = mentionRegex.findAll(this?.trimIndent() ?: "")
+                .map { it.groups[1]!!.value }
+                .distinct()
+                .toList()
+                .mentions()
+
+        return (mentions + command).filterNotNull()
     }
 }
 

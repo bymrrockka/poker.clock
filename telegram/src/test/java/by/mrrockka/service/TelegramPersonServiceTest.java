@@ -32,7 +32,7 @@ class TelegramPersonServiceTest {
   @Mock
   private TelegramPersonRepository telegramPersonRepository;
   @InjectMocks
-  private TelegramPersonService telegramPersonService;
+  private TelegramPersonServiceOld telegramPersonServiceOld;
 
   @Test
   void givenMetadataWithMentions_whenStoreMissedCalled_thenShouldReturnTelegramPersonsList() {
@@ -63,7 +63,7 @@ class TelegramPersonServiceTest {
     when(telegramPersonMapper.mapToTelegramPersons(expectedEntities))
       .thenReturn(expected);
 
-    final var actual = telegramPersonService.storeMissed(metadata);
+    final var actual = telegramPersonServiceOld.storeMissed(metadata);
     assertThat(actual).hasSize(allNicknames.size());
     assertThat(actual.stream().map(TelegramPerson::getNickname).toList()).containsAll(allNicknames);
 

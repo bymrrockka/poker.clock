@@ -3,9 +3,8 @@ package by.mrrockka.service
 import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.domain.PollTask
 import by.mrrockka.domain.Task
-import by.mrrockka.exception.BusinessException
 import by.mrrockka.parser.PollMessageParser
-import by.mrrockka.repo.poll.PollTaskRepository
+import by.mrrockka.repo.PollTaskRepo
 import by.mrrockka.validation.poll.PollMessageValidator
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
@@ -19,8 +18,8 @@ import java.util.*
 class TaskTelegramService(
         private val pollMessageValidator: PollMessageValidator,
         private val pollMessageParser: PollMessageParser,
-        private val pollTaskRepository: PollTaskRepository,
-        private val eventPublisher: ApplicationEventPublisher
+        private val pollTaskRepository: PollTaskRepo,
+        private val eventPublisher: ApplicationEventPublisher,
 ) {
 
     fun createPoll(messageMetadata: MessageMetadata): BotApiMethodMessage {
@@ -40,21 +39,24 @@ class TaskTelegramService(
     }
 
     fun stopPoll(messageMetadata: MessageMetadata): BotApiMethodMessage {
-        if (messageMetadata.replyTo == null) throw NoAttachedMessagesFound()
+        check(messageMetadata.replyTo != null) {
+            """
+                Message doesn't contain any attached messages. 
+                Please reply to poll creation message to stop poll
+                """
+        }
+
         val size = pollTaskRepository.finishPoll(
                 messageMetadata.replyTo.id,
-                messageMetadata.createdAt
+                messageMetadata.createdAt,
         )
-        if (size < 1) throw NoPollsFound()
-
+        check(size != 0) { "Poll was not found" }
         eventPublisher.publishEvent(messageMetadata.toPollTaskFinished())
 
         return SendMessage().apply {
             chatId = messageMetadata.chatId.toString()
             replyToMessageId = messageMetadata.replyTo.id
-            text = """
-                Poll stopped.
-            """.trimIndent()
+            text = "Poll stopped."
         }
     }
 
@@ -64,7 +66,6 @@ class TaskTelegramService(
 
     fun getTasks(): List<Task> {
         return pollTaskRepository.selectNotFinished()
-                .orEmpty()
     }
 
     private fun MessageMetadata.toPollTask(): PollTask {
@@ -75,7 +76,7 @@ class TaskTelegramService(
                 cron = pollMessageParser.parseCron(this),
                 message = pollMessageParser.parseMessageText(this),
                 options = pollMessageParser.parseOptions(this),
-                createdAt = this.createdAt
+                createdAt = this.createdAt,
         )
     }
 
@@ -86,12 +87,3 @@ class TaskTelegramService(
 
 data class PollTaskCreated(val task: PollTask)
 data class PollTaskFinished(val messageId: Int, val finishedAt: Instant)
-
-class NoAttachedMessagesFound() : BusinessException(
-        """
-    Message doesn't contain any attached messages. 
-    Please reply to poll creation message to stop poll
-    """
-)
-
-class NoPollsFound() : BusinessException("Poll was not found")

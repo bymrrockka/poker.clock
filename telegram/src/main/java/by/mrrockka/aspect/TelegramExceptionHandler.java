@@ -16,7 +16,7 @@ import java.util.List;
 @Aspect
 @Component
 @RequiredArgsConstructor
-@Profile("!exception-handler")
+@Profile("!no-exception-handler")
 public class TelegramExceptionHandler {
 
   private final PokerClockAbsSender absSender;

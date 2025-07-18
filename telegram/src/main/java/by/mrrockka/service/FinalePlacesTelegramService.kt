@@ -5,7 +5,7 @@ import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.domain.finaleplaces.FinalPlace
 import by.mrrockka.domain.finaleplaces.FinalePlaces
 import by.mrrockka.parser.FinalePlacesMessageParser
-import by.mrrockka.service.game.GameTelegramFacadeService
+import by.mrrockka.service.game.GameTelegramService
 import by.mrrockka.validation.mentions.PersonMentionsValidator
 import lombok.RequiredArgsConstructor
 import org.springframework.stereotype.Service
@@ -17,8 +17,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 class FinalePlacesTelegramService(
         val finalePlacesService: FinalePlacesService,
         val finalePlacesMessageParser: FinalePlacesMessageParser,
-        val gameTelegramFacadeService: GameTelegramFacadeService,
-        val telegramPersonService: TelegramPersonService,
+        val gameTelegramFacadeService: GameTelegramService,
+        val telegramPersonServiceOld: TelegramPersonServiceOld,
         val personMentionsValidator: PersonMentionsValidator,
 ) {
 
@@ -28,12 +28,10 @@ class FinalePlacesTelegramService(
         val places = finalePlacesMessageParser.parse(messageMetadata)
         check(places.isNotEmpty()) { "Finale places could not be empty" }
 
-        val telegramGame = gameTelegramFacadeService
-                .getGameByMessageMetadata(messageMetadata)
-        check(telegramGame != null) { "Game is not found for this chat" }
+        val telegramGame = gameTelegramFacadeService .findGame(messageMetadata)
         check(telegramGame.game !is CashGame) { "Finale places is not allowed for cash game" }
 
-        val telegramPersons = telegramPersonService
+        val telegramPersons = telegramPersonServiceOld
                 .getAllByNicknamesAndChatId(places.values.toList(), messageMetadata.chatId)
                 .associateBy { it.nickname }
 

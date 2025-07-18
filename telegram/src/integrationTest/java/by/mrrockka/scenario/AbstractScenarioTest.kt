@@ -35,7 +35,7 @@ import java.math.BigDecimal
 import java.time.Duration
 
 @ExtendWith(value = [TelegramPSQLExtension::class, TelegramWiremockExtension::class])
-@ActiveProfiles(profiles = ["repository", "exception-handler"])
+@ActiveProfiles(profiles = ["repository", "no-exception-handler"])
 @Testcontainers
 @SpringBootTest(classes = [TestBotConfig::class])
 abstract class AbstractScenarioTest {

@@ -11,6 +11,7 @@ import static by.mrrockka.repo.person.TelegramPersonColumnNames.CHAT_ID;
 
 @Component
 @RequiredArgsConstructor
+@Deprecated(forRemoval = true)
 public class TelegramPersonEntityRowMapper implements RowMapper<TelegramPersonEntity> {
 
   private final PersonEntityRowMapper personEntityRowMapper;

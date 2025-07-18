@@ -4,8 +4,7 @@ import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.Person;
 import by.mrrockka.parser.EntryMessageParser;
 import by.mrrockka.response.builder.EntryResponseBuilder;
-import by.mrrockka.service.exception.ChatGameNotFoundException;
-import by.mrrockka.service.game.GameTelegramFacadeService;
+import by.mrrockka.service.game.GameTelegramService;
 import by.mrrockka.validation.collection.CollectionsValidator;
 import by.mrrockka.validation.mentions.PersonMentionsValidator;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +24,8 @@ public class EntryTelegramService {
 
   private final EntriesService entriesService;
   private final EntryMessageParser entryMessageParser;
-  private final GameTelegramFacadeService gameTelegramFacadeService;
-  private final TelegramPersonService telegramPersonService;
+  private final GameTelegramService gameTelegramService;
+  private final TelegramPersonServiceOld telegramPersonServiceOld;
   private final PersonMentionsValidator personMentionsValidator;
   private final EntryResponseBuilder entryResponseBuilder;
   private final CollectionsValidator collectionsValidator;
@@ -39,21 +38,17 @@ public class EntryTelegramService {
     final var personAndAmountMap = entryMessageParser.parse(messageMetadata);
     collectionsValidator.validateMapIsNotEmpty(personAndAmountMap, "Entry");
 
-    final var telegramGame = gameTelegramFacadeService
-      .getGameByMessageMetadata(messageMetadata);
+    final var telegramGame = gameTelegramService
+      .findGame(messageMetadata);
 
-    if (telegramGame == null) {
-      throw new ChatGameNotFoundException();
-    }
-
-    final var game = telegramGame.game();
+    final var game = telegramGame.getGame();
     final var amount = personAndAmountMap.values().stream()
       .filter(Optional::isPresent)
       .map(Optional::get)
       .findFirst()
       .orElse(game.getBuyIn());
 
-    final var persons = telegramPersonService.storeMissed(messageMetadata);
+    final var persons = telegramPersonServiceOld.storeMissed(messageMetadata);
 
     entriesService.storeBatch(game.getId(), persons.stream().map(Person::getId).toList(), amount,
                               messageMetadata.getCreatedAt());
@@ -61,7 +56,7 @@ public class EntryTelegramService {
     return SendMessage.builder()
       .chatId(messageMetadata.getChatId())
       .text(entryResponseBuilder.response(persons, amount))
-      .replyToMessageId(telegramGame.messageMetadata().getId())
+      .replyToMessageId(telegramGame.getMessageMetadata().getId())
       .build();
   }
 }

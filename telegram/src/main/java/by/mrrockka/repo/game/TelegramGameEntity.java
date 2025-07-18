@@ -6,6 +6,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Builder
+@Deprecated(forRemoval = true)
 public record TelegramGameEntity(
   UUID gameId,
   Long chatId,

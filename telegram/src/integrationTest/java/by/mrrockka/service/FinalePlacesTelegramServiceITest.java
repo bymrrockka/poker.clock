@@ -39,7 +39,7 @@ class FinalePlacesTelegramServiceITest {
   @Autowired
   private FinalePlacesService finalePlacesService;
   @Autowired
-  private TelegramPersonService telegramPersonService;
+  private TelegramPersonServiceOld telegramPersonServiceOld;
 
   @Test
   void givenGameIdAndChatId_whenFinalePlacesMessageConsumed_shouldMapAndStoreFinalePlacesAgainstTheGameId() {
@@ -69,7 +69,7 @@ class FinalePlacesTelegramServiceITest {
     );
 
     final var nicknames = List.of("kinger", "queen", "jackas");
-    final var telegramPersons = telegramPersonService.getAllByNicknamesAndChatId(nicknames, CHAT_ID);
+    final var telegramPersons = telegramPersonServiceOld.getAllByNicknamesAndChatId(nicknames, CHAT_ID);
     final var expected = new FinalePlaces(
       List.of(
         FinalPlace.builder()

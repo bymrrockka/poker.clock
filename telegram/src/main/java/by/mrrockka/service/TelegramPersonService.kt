@@ -1,89 +1,38 @@
-package by.mrrockka.service;
+package by.mrrockka.service
 
-import by.mrrockka.domain.MessageMetadata;
-import by.mrrockka.domain.BasicPerson;
-import by.mrrockka.domain.TelegramPerson;
-import by.mrrockka.mapper.TelegramPersonMapper;
-import by.mrrockka.repo.person.TelegramPersonRepository;
-import by.mrrockka.validation.mentions.PersonMentionsValidator;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import by.mrrockka.domain.BasicPerson
+import by.mrrockka.domain.MessageMetadata
+import by.mrrockka.domain.Person
+import by.mrrockka.repo.ChatPersonsRepo
+import by.mrrockka.repo.PersonRepo
+import org.springframework.stereotype.Component
+import java.util.*
 
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Stream;
+@Component
+class TelegramPersonService(
+        private val personRepo: PersonRepo,
+        private val chatPersonsRepo: ChatPersonsRepo,
+) {
 
-@Service
-@RequiredArgsConstructor
-public class TelegramPersonService {
+    fun findByMentions(messageMetadata: MessageMetadata): List<UUID> {
+        val nicknames = messageMetadata.mentions().map { it.text }
+        val persons = personRepo.findByNicknames(nicknames)
+        val newNicknameToId = nicknames.newNicknames(persons)
+                .let { nicknames ->
+                    val map = nicknames.associate { it to UUID.randomUUID() }
+                    personRepo.upsertBatch(nicknames.map { BasicPerson(nickname = it, id = UUID.randomUUID()) })
+                    map
+                }
 
-  private final TelegramPersonMapper telegramPersonMapper;
-  private final PersonService personService;
-  private final TelegramPersonRepository telegramPersonRepository;
-  private final PersonMentionsValidator personMentionsValidator;
+        val personIds = persons.map { it.id } + newNicknameToId.map { it.value }
+        chatPersonsRepo.upsertBatch(personIds, messageMetadata.chatId)
 
-  @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
-  public List<TelegramPerson> storePersons(final MessageMetadata messageMetadata) {
-    personMentionsValidator.validateMessageMentions(messageMetadata, 1);
-    return storeMissed(messageMetadata);
-  }
-
-  @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
-  public TelegramPerson getByNicknameAndChatId(final String nickname, final Long chatId) {
-    return telegramPersonRepository.findByNickname(chatId, nickname)
-      .map(telegramPersonMapper::mapToTelegramPerson)
-      .orElseGet(() -> saveNew(nickname, chatId));
-  }
-
-  public List<TelegramPerson> getAllByNicknamesAndChatId(final List<String> telegrams, final Long chatId) {
-    return telegramPersonMapper.mapToTelegramPersons(
-      telegramPersonRepository.findAllByChatIdAndNicknames(telegrams, chatId));
-  }
-
-  @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
-  public List<TelegramPerson> storeMissed(final MessageMetadata metadata) {
-    final var nicknames = metadata.mentions().map(entity -> entity.text().replaceAll("@", "")).toList();
-    final var newNicknames = personService.getNewNicknames(nicknames);
-    final var notExistentInChat = telegramPersonRepository.findNotExistentInChat(nicknames, metadata.getChatId());
-
-    final var newPersons = newNicknames.stream()
-      .map(nickname -> BasicPerson.personBuilder()
-                                  .nickname(nickname)
-                                  .id(UUID.randomUUID())
-                                  .build())
-      .toList();
-
-    if (!newPersons.isEmpty()) {
-      personService.storeAll(newPersons);
+        return personIds
     }
 
-    if (!notExistentInChat.isEmpty() || !newPersons.isEmpty()) {
-      final var allNewPersonIds = Stream.of(
-          newPersons.stream().map(BasicPerson::getId).toList(),
-          notExistentInChat
-        ).flatMap(List::stream)
-        .toList();
-
-      telegramPersonRepository.saveAll(allNewPersonIds, metadata.getChatId());
+    private fun List<String>.newNicknames(existing: List<Person>): List<String> {
+        val existingNicknames = existing.map { it.nickname }
+        return filter { !existingNicknames.contains(it) }
     }
-
-    return telegramPersonMapper.mapToTelegramPersons(
-      telegramPersonRepository.findAllByChatIdAndNicknames(nicknames, metadata.getChatId()));
-  }
-
-  private TelegramPerson saveNew(final String nickname, final Long chatId) {
-    final var telegramPerson = TelegramPerson.telegramPersonBuilder()
-      .id(UUID.randomUUID())
-      .nickname(nickname)
-      .chatId(chatId)
-      .build();
-
-    personService.store(telegramPerson);
-    telegramPersonRepository.save(telegramPerson);
-    return telegramPerson;
-  }
 
 }

@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Mapper(imports = {Instant.class, MeMentionUtil.class, Collections.class})
+@Deprecated(forRemoval = true)
 public abstract class MessageMetadataMapper {
   @Autowired
   private MessageEntityMapper messageEntityMapper;

@@ -35,6 +35,6 @@ public class PersonMentionsValidator {
   }
 
   private List<MessageEntity> filterUserMentions(final MessageMetadata messageMetadata) {
-    return messageMetadata.mentions().toList();
+    return messageMetadata.mentionsStream().toList();
   }
 }

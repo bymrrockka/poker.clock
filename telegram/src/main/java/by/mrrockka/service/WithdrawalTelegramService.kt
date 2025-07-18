@@ -3,7 +3,7 @@ package by.mrrockka.service
 import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.domain.game.CashGame
 import by.mrrockka.parser.WithdrawalMessageParser
-import by.mrrockka.service.game.GameTelegramFacadeService
+import by.mrrockka.service.game.GameTelegramService
 import by.mrrockka.validation.mentions.PersonMentionsValidator
 import by.mrrockka.validation.withdrawals.WithdrawalsValidator
 import org.springframework.stereotype.Service
@@ -15,8 +15,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 class WithdrawalTelegramService(
         val withdrawalsService: WithdrawalsService,
         val withdrawalMessageParser: WithdrawalMessageParser,
-        val gameTelegramFacadeService: GameTelegramFacadeService,
-        val telegramPersonService: TelegramPersonService,
+        val gameTelegramFacadeService: GameTelegramService,
+        val telegramPersonServiceOld: TelegramPersonServiceOld,
         val personMentionsValidator: PersonMentionsValidator,
         val withdrawalsValidator: WithdrawalsValidator,
 ) {
@@ -24,8 +24,7 @@ class WithdrawalTelegramService(
         personMentionsValidator.validateMessageMentions(messageMetadata, 1)
 
         val (amount, nicknames) = withdrawalMessageParser.parse(messageMetadata)
-        val telegramGame = gameTelegramFacadeService.getGameByMessageMetadata(messageMetadata)
-        check(telegramGame != null) { "Game is not found for this chat" }
+        val telegramGame = gameTelegramFacadeService.findGame(messageMetadata)
         check(telegramGame.game is CashGame) { "Withdrawals are not allowed for non cash game" }
 
 //        withdrawalsValidator.validateWithdrawalsAgainstEntries(
@@ -33,7 +32,7 @@ class WithdrawalTelegramService(
 //                telegramGame.game.asType<CashGame?>(CashGame::class.java)
 //        )
 
-        val persons = telegramPersonService.getAllByNicknamesAndChatId(
+        val persons = telegramPersonServiceOld.getAllByNicknamesAndChatId(
                 nicknames.toList(),
                 messageMetadata.chatId
         )

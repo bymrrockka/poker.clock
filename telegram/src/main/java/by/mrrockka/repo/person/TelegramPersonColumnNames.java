@@ -1,5 +1,6 @@
 package by.mrrockka.repo.person;
 
+@Deprecated(forRemoval = true)
 interface TelegramPersonColumnNames {
 
   String PERSON_ID = "person_id";

@@ -3,7 +3,6 @@ package by.mrrockka.executor
 import by.mrrockka.bot.PokerClockAbsSender
 import by.mrrockka.domain.PollTask
 import by.mrrockka.domain.Task
-import by.mrrockka.exception.BusinessException
 import by.mrrockka.service.PollTaskCreated
 import by.mrrockka.service.PollTaskFinished
 import by.mrrockka.service.TaskTelegramService
@@ -14,17 +13,16 @@ import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import java.time.Instant
 import java.util.*
-import kotlin.concurrent.Volatile
 
 @Component
 class TelegramTaskExecutor(
         private val taskTelegramService: TaskTelegramService,
-        private val pokerClockAbsSender: PokerClockAbsSender
+        private val pokerClockAbsSender: PokerClockAbsSender,
 ) {
     @Volatile
     private var tasks: MutableMap<UUID, Task> = mutableMapOf()
 
-    @PostConstruct
+//    @PostConstruct
     fun init() {
         tasks = taskTelegramService.getTasks().asMap()
     }
@@ -36,7 +34,7 @@ class TelegramTaskExecutor(
         }
     }
 
-    @Scheduled(fixedRate = 1000L)
+//    @Scheduled(fixedRate = 1000L)
     fun execute() {
         val now = Instant.now()
         synchronized(tasks) {
@@ -78,9 +76,7 @@ class TelegramTaskExecutor(
     private fun Task.updatedAt(time: Instant): Task {
         return when (this) {
             is PollTask -> copy(updatedAt = time)
-            else -> throw UnknownTaskException()
+            else -> error("Unknown task type")
         }
     }
 }
-
-class UnknownTaskException : BusinessException("Unknown task type")

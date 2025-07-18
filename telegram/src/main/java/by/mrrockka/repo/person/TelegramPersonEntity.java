@@ -10,6 +10,7 @@ import java.util.UUID;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Deprecated(forRemoval = true)
 public class TelegramPersonEntity extends PersonEntity {
 
   @NonNull

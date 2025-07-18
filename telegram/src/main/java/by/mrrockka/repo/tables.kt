@@ -1,4 +1,4 @@
-package by.mrrockka.repo.poll
+package by.mrrockka.repo
 
 import by.mrrockka.domain.PollTask
 import kotlinx.serialization.json.Json
@@ -18,4 +18,16 @@ object PollTaskTable : Table("poll_task") {
     val options = jsonb<Array<PollTask.Option>>("options", Json.Default)
 
     override val primaryKey = PrimaryKey(id)
+}
+
+object ChatPersonsTable : Table("chat_persons") {
+    val personId = uuid("person_id").references(PersonTable.id)
+    val chatId = long("chat_id")
+}
+
+object ChatGameTable : Table("chat_games") {
+    val gameId = uuid("game_id").references(GameTable.id)
+    val messageId = integer("message_id")
+    val chatId = long("chat_id")
+    val createdAt = timestamp("created_at")
 }

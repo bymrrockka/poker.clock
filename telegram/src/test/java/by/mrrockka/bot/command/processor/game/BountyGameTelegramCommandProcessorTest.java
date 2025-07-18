@@ -2,7 +2,7 @@ package by.mrrockka.bot.command.processor.game;
 
 import by.mrrockka.creator.MessageMetadataCreator;
 import by.mrrockka.creator.SendMessageCreator;
-import by.mrrockka.service.game.GameTelegramFacadeService;
+import by.mrrockka.service.game.GameTelegramService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,7 +15,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class BountyGameTelegramCommandProcessorTest {
   @Mock
-  private GameTelegramFacadeService gameTelegramFacadeService;
+  private GameTelegramService gameTelegramService;
   @InjectMocks
   private BountyGameTelegramCommandProcessor bountyGameTelegramCommandProcessor;
 
@@ -24,7 +24,7 @@ class BountyGameTelegramCommandProcessorTest {
     final var metadata = MessageMetadataCreator.domain();
     final var expected = SendMessageCreator.api();
 
-    when(gameTelegramFacadeService.storeBountyGame(metadata)).thenReturn(expected);
+    when(gameTelegramService.storeGame(metadata)).thenReturn(expected);
     assertThat(bountyGameTelegramCommandProcessor.process(metadata)).isEqualTo(expected);
   }
 }

@@ -1,9 +1,11 @@
 package by.mrrockka.repo
 
-import by.mrrockka.domain.*
+import by.mrrockka.domain.BountyPlayer
+import by.mrrockka.domain.CashPlayer
+import by.mrrockka.domain.Player
+import by.mrrockka.domain.TournamentPlayer
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
-import java.time.Instant
 import java.util.*
 
 @Repository
@@ -15,11 +17,6 @@ open class PlayerRepo(
         val bountyRepo: BountyRepo,
 ) {
 
-    fun upsert(player: Player, game: Game) {
-        personRepo.upsert(player.person)
-        entriesRepo.upsert(player, game.id, Instant.now())
-    }
-
     inline fun <reified T : Player> findPlayers(gameId: UUID): List<T> {
         val personEntries = entriesRepo.findGameEntries(gameId)
 
@@ -28,7 +25,7 @@ open class PlayerRepo(
                 T::class.java.isAssignableFrom(TournamentPlayer::class.java) -> {
                     TournamentPlayer(
                             person = person,
-                            entries = personEntries[person.id] ?: error("No entries found for ${person.nickname}")
+                            entries = personEntries[person.id] ?: error("No entries found for ${person.nickname}"),
                     )
                 }
 
@@ -36,7 +33,7 @@ open class PlayerRepo(
                     CashPlayer(
                             person = person,
                             entries = personEntries[person.id] ?: error("No entries found for ${person.nickname}"),
-                            withdrawals = withdrawalsRepo.findByPerson(person.id)
+                            withdrawals = withdrawalsRepo.findByPerson(person.id),
                     )
                 }
 
@@ -44,7 +41,7 @@ open class PlayerRepo(
                     BountyPlayer(
                             person = person,
                             entries = personEntries[person.id] ?: error("No entries found for ${person.nickname}"),
-                            bounties = bountyRepo.findByPerson(person.id)
+                            bounties = bountyRepo.findByPerson(person.id),
                     )
                 }
 

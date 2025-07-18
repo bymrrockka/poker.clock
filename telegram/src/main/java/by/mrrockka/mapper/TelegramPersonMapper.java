@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Mapper(imports = UUID.class, uses = PersonMapper.class)
+@Deprecated(forRemoval = true)
 public interface TelegramPersonMapper {
 
   TelegramPerson mapToTelegramPerson(TelegramPersonEntity entity);

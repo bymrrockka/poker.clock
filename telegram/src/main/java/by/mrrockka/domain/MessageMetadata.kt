@@ -13,20 +13,24 @@ data class MessageMetadata(
         val text: String,
         val replyTo: MessageMetadata?,
         val entities: List<MessageEntity>,
-        val fromNickname: String?
+        val fromNickname: String?,
 ) {
     fun optFromNickname(): Optional<String> {
         return Optional.ofNullable(fromNickname)
     }
 
     @Deprecated("Used by old java code")
-    fun mentions(): Stream<MessageEntity> {
-        return this.entities.stream()
+    fun mentionsStream(): Stream<MessageEntity> {
+        return entities.stream()
                 .filter { entity -> entity.type == MessageEntityType.MENTION }
     }
 
+    fun mentions(): List<MessageEntity> {
+        return entities.filter { entity -> entity.type == MessageEntityType.MENTION }
+    }
+
     fun command(): MessageEntity {
-        return this.entities
+        return entities
                 .find { entity -> entity.type == MessageEntityType.BOT_COMMAND }
                 ?: error("Message has no command.")
     }

@@ -4,7 +4,7 @@ import by.mrrockka.domain.Bounty
 import by.mrrockka.domain.BountyTournamentGame
 import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.parser.BountyMessageParser
-import by.mrrockka.service.game.GameTelegramFacadeService
+import by.mrrockka.service.game.GameTelegramService
 import by.mrrockka.validation.BountyValidator
 import by.mrrockka.validation.mentions.PersonMentionsValidator
 import org.springframework.stereotype.Service
@@ -15,7 +15,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 class BountyTelegramService(
         private val bountyService: BountyService,
         private val bountyMessageParser: BountyMessageParser,
-        private val gameTelegramFacadeService: GameTelegramFacadeService,
+        private val gameTelegramFacadeService: GameTelegramService,
         private val personMentionsValidator: PersonMentionsValidator,
         private val bountyValidator: BountyValidator,
 ) {
@@ -24,9 +24,8 @@ class BountyTelegramService(
         personMentionsValidator.validateMessageMentions(messageMetadata, 2)
         val (from, to) = bountyMessageParser.parse(messageMetadata)
         val telegramGame = gameTelegramFacadeService
-                .getGameByMessageMetadata(messageMetadata)
+                .findGame(messageMetadata)
 
-        check(telegramGame != null) { "Game is not found for this chat" }
         val game = telegramGame.game as BountyTournamentGame
         bountyValidator.validate(game, from, to)
         val fromPlayer = game.players.find { it.person.nickname == from }!!

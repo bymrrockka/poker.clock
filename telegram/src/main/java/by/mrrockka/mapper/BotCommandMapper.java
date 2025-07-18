@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 @Mapper
+@Deprecated(forRemoval = true)
 public interface BotCommandMapper {
 
   @Mapping(source = "commandDescription.description", target = "description")
