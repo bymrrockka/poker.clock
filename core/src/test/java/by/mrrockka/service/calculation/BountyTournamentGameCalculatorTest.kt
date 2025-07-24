@@ -33,14 +33,16 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
         }.bountyTournament()
 
         val actual = calculator.calculate(game)
-        val expect = listOf(Payout(
-                creditor = toBounties,
-                debtors = fromBounties
-                        .filterNot { it == toBounties }
-                        .map { Debtor(it, buyin + bounty) }
-                        .reversed(),
-                total = BigDecimal("20") * (players.size - 1).toBigDecimal()
-        ))
+        val expect = listOf(
+                Payout(
+                        creditor = toBounties,
+                        debtors = fromBounties
+                                .filterNot { it == toBounties }
+                                .map { Debtor(it, buyin + bounty) }
+                                .reversed(),
+                        total = BigDecimal("20") * (players.size - 1).toBigDecimal(),
+                ),
+        )
 
         assertThat(actual).isEqualTo(expect)
     }
@@ -185,7 +187,7 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
                     Arguments.of(4),
                     Arguments.of(10),
                     Arguments.of(20),
-                    Arguments.of(100)
+                    Arguments.of(100),
             )
         }
     }
@@ -209,16 +211,18 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
         val fromBounties = this
                 .filter { it != winner }
                 .map { player ->
-                    player.copy(bounties = player.bounties +
-                            player.entries
-                                    .mapIndexed { index, _ ->
-                                        if (entries == -1 || index < entries) {
-                                            Bounty(from = player.person, to = winner.person, amount = bounty)
-                                        } else null
-                                    }
-                                    .filterNotNull())
+                    player.copy(
+                            bounties = player.bounties +
+                                    player.entries
+                                            .mapIndexed { index, _ ->
+                                                if (entries == -1 || index < entries) {
+                                                    Bounty(from = player.person.id, to = winner.person.id, amount = bounty)
+                                                } else null
+                                            }
+                                            .filterNotNull(),
+                    )
                 }
-        val toBounty = winner.copy(bounties = fromBounties.flatMap { it.bounties }.filter { bounty -> bounty.to == winner.person })
+        val toBounty = winner.copy(bounties = fromBounties.flatMap { it.bounties }.filter { bounty -> bounty.to == winner.person.id })
         return toBounty to fromBounties
     }
 

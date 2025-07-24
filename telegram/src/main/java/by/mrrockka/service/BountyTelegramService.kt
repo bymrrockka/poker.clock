@@ -4,7 +4,7 @@ import by.mrrockka.domain.Bounty
 import by.mrrockka.domain.BountyTournamentGame
 import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.parser.BountyMessageParser
-import by.mrrockka.service.game.GameTelegramService
+import by.mrrockka.repo.BountyRepo
 import by.mrrockka.validation.BountyValidator
 import by.mrrockka.validation.mentions.PersonMentionsValidator
 import org.springframework.stereotype.Service
@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 
 @Service
 class BountyTelegramService(
-        private val bountyService: BountyService,
+        private val bountyRepo: BountyRepo,
         private val bountyMessageParser: BountyMessageParser,
         private val gameTelegramFacadeService: GameTelegramService,
         private val personMentionsValidator: PersonMentionsValidator,
@@ -31,8 +31,8 @@ class BountyTelegramService(
         val fromPlayer = game.players.find { it.person.nickname == from }!!
         val toPlayer = game.players.find { it.person.nickname == to }!!
 
-        val bounty = Bounty(from = fromPlayer.person, to = toPlayer.person, amount = game.bounty)
-        bountyService.storeBounty(game.id, bounty, messageMetadata.createdAt)
+        val bounty = Bounty(from = fromPlayer.person.id, to = toPlayer.person.id, amount = game.bounty)
+        bountyRepo.store(game.id, bounty, messageMetadata.createdAt)
 
         return SendMessage.builder()
                 .chatId(messageMetadata.chatId)

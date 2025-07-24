@@ -33,7 +33,7 @@ class PreCalculationValidatorTest {
         private fun validGames(): List<Game> = listOf(
                 game { this.players = player().cashBatch(6).withdrawalsToFirst() }.cash(),
                 game { this.players = player().tournamentBatch(6) }.prizeForFirst().tournament(),
-                game { this.players = player().bountyBatch(6).bountiesToWinner() }.prizeForFirst().bountyTournament()
+                game { this.players = player().bountyBatch(6).bountiesToWinner() }.prizeForFirst().bountyTournament(),
         )
 
         @JvmStatic
@@ -46,7 +46,7 @@ class PreCalculationValidatorTest {
 
                     game { this.players = player().bountyBatch(6) }.bountyTournament(),
                     game { this.players = player().bountyBatch(6).bountiesToWinner(2) }.prizeForFirst().bountyTournament(),
-                    game { this.players = player().bountyBatch(6).bountiesToWinner() }.bountyTournament()
+                    game { this.players = player().bountyBatch(6).bountiesToWinner() }.bountyTournament(),
             )
         }
 
@@ -59,13 +59,17 @@ class PreCalculationValidatorTest {
         private fun List<BountyPlayer>.bountiesToWinner(size: Int = this.size): List<BountyPlayer> {
             val players = this.drop(1)
                     .map { player ->
-                        player.copy(bounties = player.entries
-                                .map { Bounty(from = player.person, to = first().person, amount = BigDecimal.TEN) })
+                        player.copy(
+                                bounties = player.entries
+                                        .map { Bounty(from = player.person.id, to = first().person.id, amount = BigDecimal.TEN) },
+                        )
                     }
-            val winner = first().copy(bounties = players
-                    .filterIndexed { index, _ -> index <= size }
-                    .flatMap { it.bounties }
-                    .filter { it.to == first().person })
+            val winner = first().copy(
+                    bounties = players
+                            .filterIndexed { index, _ -> index <= size }
+                            .flatMap { it.bounties }
+                            .filter { it.to == first().person.id },
+            )
             return players + winner
         }
     }

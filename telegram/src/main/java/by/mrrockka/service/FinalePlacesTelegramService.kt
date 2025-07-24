@@ -5,7 +5,6 @@ import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.domain.finaleplaces.FinalPlace
 import by.mrrockka.domain.finaleplaces.FinalePlaces
 import by.mrrockka.parser.FinalePlacesMessageParser
-import by.mrrockka.service.game.GameTelegramService
 import by.mrrockka.validation.mentions.PersonMentionsValidator
 import lombok.RequiredArgsConstructor
 import org.springframework.stereotype.Service

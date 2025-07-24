@@ -3,7 +3,6 @@ package by.mrrockka.service
 import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.domain.game.CashGame
 import by.mrrockka.parser.WithdrawalMessageParser
-import by.mrrockka.service.game.GameTelegramService
 import by.mrrockka.validation.mentions.PersonMentionsValidator
 import by.mrrockka.validation.withdrawals.WithdrawalsValidator
 import org.springframework.stereotype.Service

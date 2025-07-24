@@ -2,7 +2,7 @@ package by.mrrockka.bot.command.processor.game;
 
 import by.mrrockka.creator.MessageMetadataCreator;
 import by.mrrockka.creator.SendMessageCreator;
-import by.mrrockka.service.game.GameTelegramService;
+import by.mrrockka.service.GameTelegramService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

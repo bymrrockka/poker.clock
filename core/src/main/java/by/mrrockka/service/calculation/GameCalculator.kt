@@ -1,8 +1,17 @@
 package by.mrrockka.service.calculation
 
-import by.mrrockka.domain.*
+import by.mrrockka.domain.BountyPlayer
+import by.mrrockka.domain.CashPlayer
+import by.mrrockka.domain.Debtor
+import by.mrrockka.domain.Game
+import by.mrrockka.domain.Payout
+import by.mrrockka.domain.Player
+import by.mrrockka.domain.PrizeSummary
+import by.mrrockka.domain.TournamentPlayer
 import by.mrrockka.domain.payout.TransferType
-import by.mrrockka.domain.payout.TransferType.*
+import by.mrrockka.domain.takenToGiven
+import by.mrrockka.domain.toSummary
+import by.mrrockka.domain.total
 import org.springframework.stereotype.Component
 import java.math.BigDecimal
 import java.math.BigDecimal.ZERO
@@ -13,9 +22,9 @@ open class GameCalculator {
     //todo: consider to refactor this class to make it extendable with strategies to figure out payouts
     fun calculate(game: Game): List<Payout> {
         val transferTypeToPlayer = game.players associateByTransferType game.toSummary()
-        val creditors = transferTypeToPlayer[CREDIT]?.sortedByDescending { it.total } ?: emptyList()
-        val debtors = transferTypeToPlayer[DEBIT]?.sortedByDescending { it.total } ?: emptyList()
-        val equals = transferTypeToPlayer[EQUAL] ?: emptyList()
+        val creditors = transferTypeToPlayer[TransferType.CREDIT]?.sortedByDescending { it.total } ?: emptyList()
+        val debtors = transferTypeToPlayer[TransferType.DEBIT]?.sortedByDescending { it.total } ?: emptyList()
+        val equals = transferTypeToPlayer[TransferType.EQUAL] ?: emptyList()
 
         validate(game, creditors, debtors, equals)
 
@@ -87,7 +96,7 @@ open class GameCalculator {
             is CashPlayer -> player.withdrawals.total() - player.entries.total()
             is TournamentPlayer -> -player.entries.total()
             is BountyPlayer -> {
-                val (taken, given) = player.bounties.partition { it.to == player.person }
+                val (taken, given) = player.takenToGiven()
                 taken.total() - given.total() - player.entries.total()
             }
 
@@ -97,9 +106,9 @@ open class GameCalculator {
 
     private fun Player.associateByTransferType(total: BigDecimal): Pair<TransferType, PlayerTotal> =
             when {
-                total < ZERO -> DEBIT to PlayerTotal(this, -total)
-                total > ZERO -> CREDIT to PlayerTotal(this, total)
-                else -> EQUAL to PlayerTotal(this, total)
+                total < ZERO -> TransferType.DEBIT to PlayerTotal(this, -total)
+                total > ZERO -> TransferType.CREDIT to PlayerTotal(this, total)
+                else -> TransferType.EQUAL to PlayerTotal(this, total)
             }
 
     private infix fun List<Player>.associateByTransferType(prizeSummaries: List<PrizeSummary>): Map<TransferType, List<PlayerTotal>> =

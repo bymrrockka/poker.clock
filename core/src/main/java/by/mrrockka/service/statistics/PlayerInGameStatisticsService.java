@@ -62,7 +62,7 @@ public class PlayerInGameStatisticsService {
       return game.getPlayers().stream()
         .map(player -> (BountyPlayer) player)
         .flatMap(player -> player.getBounties().stream())
-        .filter(bounty -> bounty.getTo().getNickname().equals(nickname))
+//        .filter(bounty -> bounty.getTo().getNickname().equals(nickname))
         .toList();
     }
     return Collections.emptyList();

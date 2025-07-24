@@ -27,27 +27,27 @@ open class PlayerRepoImpl(
 
         return personRepo.findByIds(personEntries.keys).map { person ->
             val entries = personEntries[person.id] ?: error("No entries found for ${person.nickname}")
-            when {
-                clazz.java.isAssignableFrom(TournamentPlayer::class.java) -> {
+            when (clazz) {
+                TournamentPlayer::class -> {
                     TournamentPlayer(
                             person = person,
                             entries = entries,
                     )
                 }
 
-                clazz.java.isAssignableFrom(CashPlayer::class.java) -> {
+                CashPlayer::class -> {
                     CashPlayer(
                             person = person,
                             entries = entries,
-                            withdrawals = withdrawalsRepo.findByPerson(person.id),
+                            withdrawals = withdrawalsRepo.findByPerson(gameId, person.id),
                     )
                 }
 
-                clazz.java.isAssignableFrom(BountyPlayer::class.java) -> {
+                BountyPlayer::class -> {
                     BountyPlayer(
                             person = person,
                             entries = entries,
-                            bounties = bountyRepo.findByPerson(person.id),
+                            bounties = bountyRepo.findByPerson(gameId, person.id),
                     )
                 }
 

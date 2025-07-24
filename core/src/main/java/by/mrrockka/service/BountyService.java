@@ -20,7 +20,7 @@ public class BountyService {
   private final BountyMapper bountyMapper;
 
   public void storeBounty(final UUID gameId, final by.mrrockka.domain.Bounty bounty, final Instant createdAt) {
-    bountyRepository.save(gameId, bounty.getFrom().getId(), bounty.getTo().getId(), bounty.getAmount(), createdAt);
+    bountyRepository.save(gameId, bounty.getFrom(), bounty.getTo(), bounty.getAmount(), createdAt);
   }
 
   public void storeBounty(final UUID gameId, final Bounty bounty, final Instant createdAt) {

@@ -1,6 +1,13 @@
 package by.mrrockka.repo
 
-import by.mrrockka.domain.*
+import by.mrrockka.domain.BountyPlayer
+import by.mrrockka.domain.BountyTournamentGame
+import by.mrrockka.domain.CashGame
+import by.mrrockka.domain.CashPlayer
+import by.mrrockka.domain.Game
+import by.mrrockka.domain.GameType
+import by.mrrockka.domain.TournamentGame
+import by.mrrockka.domain.TournamentPlayer
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
@@ -10,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 interface GameRepo {
-    fun save(game: Game)
+    fun store(game: Game)
     fun update(game: Game)
     fun findById(id: UUID): Game
 }
@@ -23,7 +30,7 @@ open class GameRepoImpl(
         private val prizePoolRepo: PrizePoolRepo,
 ) : GameRepo {
 
-    override fun save(game: Game) {
+    override fun store(game: Game) {
         GameTable.insert {
             it[id] = game.id
             it[gameType] = game.toType()

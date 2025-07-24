@@ -1,12 +1,13 @@
 package by.mrrockka.service.statistics
 
+import by.mrrockka.domain.BountyTournamentGame
+import by.mrrockka.domain.CashGame
 import by.mrrockka.domain.ChatGame
-import by.mrrockka.domain.collection.PersonEntries
-import by.mrrockka.domain.game.BountyGame
-import by.mrrockka.domain.game.CashGame
-import by.mrrockka.domain.game.TournamentGame
+import by.mrrockka.domain.Game
+import by.mrrockka.domain.TournamentGame
 import by.mrrockka.domain.statistics.StatisticsCommand
-import by.mrrockka.service.game.GameTelegramService
+import by.mrrockka.domain.total
+import by.mrrockka.service.GameTelegramService
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
@@ -33,36 +34,34 @@ private fun ChatGame.responseMessage(): String {
     return when (val game = this.game) {
         is CashGame -> """
             Cash game statistics:
-                - players entered -> ${game.entries.size}
-                - total buy-in amount -> ${game.entries.flatMap { it.entries }.sumOrZero()}
-                - total withdrawal amount -> ${game.withdrawals?.map { it.total() }.sumOrZero()}
+                - players entered -> ${game.players.size}
+                - total buy-in amount -> ${game.moneyInGame()}
+                - total withdrawal amount -> ${game.players.flatMap { it.withdrawals }.total()}
             """.trimIndent()
 
-        is BountyGame -> """
+        is BountyTournamentGame -> """
             Bounty game statistics:
-                - players entered -> ${game.entries.size}
-                - number of entries -> ${game.entries.flatMap { it.entries }.size}
-                - total buy-in amount -> ${game.entries entriesPlusBounties game.bountyAmount}
-                - bounties out of game -> ${game.bountyList.size}
+                - players entered -> ${game.players.size}
+                - number of entries -> ${game.players.flatMap { it.entries }.size}
+                - total buy-in amount -> ${game.moneyInGame()}
+                - bounties out of game -> ${game.players.flatMap { it.bounties }.size / 2}
             """.trimIndent()
 
         is TournamentGame -> """
             Tournament game statistics:
-                - players entered -> ${game.entries.size}
-                - number of entries -> ${game.entries.flatMap { it.entries }.size}
-                - total buy-in amount -> ${game.entries.map { it.total() }.sumOrZero()}
+                - players entered -> ${game.players.size}
+                - number of entries -> ${game.players.flatMap { it.entries }.size}
+                - total buy-in amount -> ${game.moneyInGame()}
             """.trimIndent()
 
         else -> error("Unknown game")
     }
 }
 
-private fun Collection<BigDecimal>?.sumOrZero(): BigDecimal =
-        if (this != null && this.isNotEmpty()) {
-            this.reduce(BigDecimal::add)
-        } else BigDecimal.ZERO
-
-private infix fun List<PersonEntries>.entriesPlusBounties(amount: BigDecimal): BigDecimal {
-    val entries = this.map { it.total() }
-    return entries.sumOrZero() + entries.map { amount }.sumOrZero()
-}
+private fun Game.moneyInGame(): BigDecimal =
+        when (val game = this) {
+            is CashGame -> game.players.flatMap { it.entries }.total()
+            is BountyTournamentGame -> game.players.flatMap { it.entries }.total() + (game.players.sumOf { it.entries.size }.toBigDecimal() * game.bounty)
+            is TournamentGame -> game.players.flatMap { it.entries }.total()
+            else -> error("Unknown game")
+        }

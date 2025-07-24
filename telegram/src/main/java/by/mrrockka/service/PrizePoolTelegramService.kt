@@ -3,7 +3,6 @@ package by.mrrockka.service
 import by.mrrockka.domain.CashGame
 import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.parser.PrizePoolMessageParser
-import by.mrrockka.service.game.GameTelegramService
 import by.mrrockka.validation.prizepool.PrizePoolValidator
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage

@@ -37,7 +37,7 @@ class PreCalculationValidator {
     }
 
     private fun validateBounty(game: BountyTournamentGame) {
-        val bountiesCount = game.players.sumOf { player -> player.bounties.count { bounty -> bounty.to == player.person } } + 1
+        val bountiesCount = game.players.sumOf { player -> player.bounties.count { bounty -> bounty.to == player.person.id } } + 1
         val entriesCount = game.players.flatMap { it.entries }.size
         check(entriesCount == bountiesCount) { "Bounties and entries size are not equal. Deviation is ${entriesCount - bountiesCount}" }
     }

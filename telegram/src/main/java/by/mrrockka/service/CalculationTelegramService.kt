@@ -5,7 +5,6 @@ import by.mrrockka.domain.Payout
 import by.mrrockka.domain.ChatGame
 import by.mrrockka.response.builder.CalculationResponseBuilder
 import by.mrrockka.service.calculation.CalculationService
-import by.mrrockka.service.game.GameTelegramService
 import by.mrrockka.validation.PreCalculationValidator
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage

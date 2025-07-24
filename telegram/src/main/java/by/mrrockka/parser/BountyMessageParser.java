@@ -12,6 +12,7 @@ import static by.mrrockka.parser.CommandRegexConstants.TELEGRAM_NAME_REGEX;
 
 @Component
 @RequiredArgsConstructor
+@Deprecated(forRemoval = true)
 public class BountyMessageParser {
 
   private final TelegramPersonMapper personMapper;

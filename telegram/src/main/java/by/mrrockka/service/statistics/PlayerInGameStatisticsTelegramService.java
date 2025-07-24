@@ -2,7 +2,7 @@ package by.mrrockka.service.statistics;
 
 import by.mrrockka.domain.statistics.StatisticsCommand;
 import by.mrrockka.response.builder.PlayerInGameStatisticsResponseBuilder;
-import by.mrrockka.service.game.GameTelegramService;
+import by.mrrockka.service.GameTelegramService;
 import by.mrrockka.validation.mentions.PlayerHasNoNicknameException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

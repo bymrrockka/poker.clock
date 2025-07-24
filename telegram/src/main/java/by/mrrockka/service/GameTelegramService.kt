@@ -1,11 +1,10 @@
-package by.mrrockka.service.game
+package by.mrrockka.service
 
 import by.mrrockka.domain.*
 import by.mrrockka.parser.GameMessageParser
 import by.mrrockka.repo.ChatGameRepo
 import by.mrrockka.repo.EntriesRepo
 import by.mrrockka.repo.GameRepo
-import by.mrrockka.service.TelegramPersonService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage
@@ -31,7 +30,7 @@ open class GameTelegramServiceImpl(
         check(messageMetadata.mentions().isNotEmpty()) { "Game must have at least one player" }
 
         val game = gameMessageParser.parse(messageMetadata)
-        gameRepo.save(game)
+        gameRepo.store(game)
         val personIds = telegramPersonService.findByMentions(messageMetadata)
         entriesRepo.insertBatch(personIds, game, messageMetadata.createdAt)
         chatGameRepo.store(game.id, messageMetadata)

@@ -4,7 +4,6 @@ import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.Person;
 import by.mrrockka.parser.EntryMessageParser;
 import by.mrrockka.response.builder.EntryResponseBuilder;
-import by.mrrockka.service.game.GameTelegramService;
 import by.mrrockka.validation.collection.CollectionsValidator;
 import by.mrrockka.validation.mentions.PersonMentionsValidator;
 import lombok.RequiredArgsConstructor;
