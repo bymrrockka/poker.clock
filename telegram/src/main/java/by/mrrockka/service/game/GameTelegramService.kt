@@ -27,7 +27,7 @@ open class GameTelegramService(
         val game = gameMessageParser.parse(messageMetadata)
         gameRepo.save(game)
         val personIds = telegramPersonService.findByMentions(messageMetadata)
-        entriesRepo.upsertBatch(personIds, game, messageMetadata.createdAt)
+        entriesRepo.insertBatch(personIds, game, messageMetadata.createdAt)
 
         return SendMessage().apply {
             chatId = messageMetadata.chatId.toString()

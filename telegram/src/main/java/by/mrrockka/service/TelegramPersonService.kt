@@ -20,12 +20,12 @@ class TelegramPersonService(
         val newNicknameToId = nicknames.newNicknames(persons)
                 .let { nicknames ->
                     val map = nicknames.associate { it to UUID.randomUUID() }
-                    personRepo.upsertBatch(nicknames.map { BasicPerson(nickname = it, id = UUID.randomUUID()) })
+                    personRepo.upsertBatch(map.map { (nickname, id) -> BasicPerson(nickname = nickname, id = id) })
                     map
                 }
 
         val personIds = persons.map { it.id } + newNicknameToId.map { it.value }
-        chatPersonsRepo.upsertBatch(personIds, messageMetadata.chatId)
+        chatPersonsRepo.insertBatch(personIds, messageMetadata.chatId)
 
         return personIds
     }

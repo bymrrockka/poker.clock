@@ -1,6 +1,8 @@
 package by.mrrockka.scenario
 
-import by.mrrockka.domain.*
+import by.mrrockka.domain.GameType
+import by.mrrockka.domain.Payout
+import by.mrrockka.domain.total
 import java.math.BigDecimal
 import java.math.BigDecimal.ZERO
 import java.math.RoundingMode
@@ -36,7 +38,7 @@ class UserCommand {
                 buyin: $buyin
                 ${if (type == GameType.BOUNTY) "bounty: $buyin" else ""}
                 ${players.joinToString { "@$it" }}
-            """.trim()
+            """.trimIndent()
         }
 
         fun gameResponse(type: GameType): String {

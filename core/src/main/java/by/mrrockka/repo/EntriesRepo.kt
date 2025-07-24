@@ -1,7 +1,7 @@
 package by.mrrockka.repo
 
 import by.mrrockka.domain.Game
-import org.jetbrains.exposed.sql.batchUpsert
+import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.selectAll
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -20,8 +20,8 @@ open class EntriesRepo {
                 .groupBy({ it.first }, { it.second })
     }
 
-    fun upsertBatch(personIds: List<UUID>, game: Game, createdAt: Instant) {
-        EntriesTable.batchUpsert(personIds) { id ->
+    fun insertBatch(personIds: List<UUID>, game: Game, createdAt: Instant) {
+        EntriesTable.batchInsert(personIds) { id ->
             this[EntriesTable.gameId] = game.id
             this[EntriesTable.personId] = id
             this[EntriesTable.amount] = game.buyIn
