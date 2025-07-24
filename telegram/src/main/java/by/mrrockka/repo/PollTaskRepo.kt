@@ -21,7 +21,7 @@ import java.time.Instant
 @Transactional(propagation = Propagation.REQUIRED)
 open class PollTaskRepo {
 
-    fun upsert(task: PollTask) {
+    open fun upsert(task: PollTask) {
         PollTaskTable.upsert {
             it[id] = task.id
             it[chatId] = task.chatId
@@ -35,7 +35,7 @@ open class PollTaskRepo {
         }
     }
 
-    fun batchUpsert(tasks: List<PollTask>) {
+    open fun batchUpsert(tasks: List<PollTask>) {
         PollTaskTable.batchInsert(tasks) { task ->
             this[id] = task.id
             this[chatId] = task.chatId
@@ -49,28 +49,28 @@ open class PollTaskRepo {
         }
     }
 
-    fun finishPoll(messageId: Int, finishedAt: Instant): Int {
+    open fun finishPoll(messageId: Int, finishedAt: Instant): Int {
         return PollTaskTable
-            .update({ PollTaskTable.messageId eq messageId }) {
-                it[PollTaskTable.finishedAt] = finishedAt
-            }
+                .update({ PollTaskTable.messageId eq messageId }) {
+                    it[PollTaskTable.finishedAt] = finishedAt
+                }
     }
 
-    fun selectNotFinished(): List<PollTask> {
+    open fun selectNotFinished(): List<PollTask> {
         return PollTaskTable.selectAll()
-            .where { finishedAt.isNull() }
-            .map { pollTask(it) }
+                .where { finishedAt.isNull() }
+                .map { pollTask(it) }
     }
 
     private fun pollTask(it: ResultRow) = PollTask(
-        id = it[id],
-        chatId = it[chatId],
-        messageId = it[messageId],
-        cron = CronExpression.parse(it[cron]),
-        createdAt = it[createdAt],
-        updatedAt = it[updatedAt],
-        finishedAt = it[finishedAt],
-        message = it[message],
-        options = it[options].toList(),
+            id = it[id],
+            chatId = it[chatId],
+            messageId = it[messageId],
+            cron = CronExpression.parse(it[cron]),
+            createdAt = it[createdAt],
+            updatedAt = it[updatedAt],
+            finishedAt = it[finishedAt],
+            message = it[message],
+            options = it[options].toList(),
     )
 }

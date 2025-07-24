@@ -8,11 +8,9 @@ import by.mrrockka.scenario.When
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
-import org.springframework.context.annotation.Profile
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import java.util.stream.Stream
 
-@Profile("integration")
 class GameScenario : AbstractScenarioTest() {
     @ParameterizedTest
     @MethodSource("createGameTypesArguments")
@@ -52,31 +50,40 @@ class GameScenario : AbstractScenarioTest() {
                             @nickASDame2
                             @nickname3
                             @nickname3
-                        """.trimIndent()
+                        """.trimIndent(),
         )
 
         @JvmStatic
         fun createGameTypesArguments(): Stream<Arguments> {
             return Stream.of(
-                    Arguments.of(games[GameType.CASH], "Cash game started.", """
+                    Arguments.of(
+                            games[GameType.CASH], "Cash game started.",
+                            """
                         Cash game statistics:
                             - players entered -> 1
                             - total buy-in amount -> 10
                             - total withdrawal amount -> 0
-                    """.trimIndent()),
-                    Arguments.of(games[GameType.TOURNAMENT], "Tournament game started.", """
+                    """.trimIndent(),
+                    ),
+                    Arguments.of(
+                            games[GameType.TOURNAMENT], "Tournament game started.",
+                            """
                         Tournament game statistics:
                             - players entered -> 2
                             - number of entries -> 2
                             - total buy-in amount -> 20
-                    """.trimIndent()),
-                    Arguments.of(games[GameType.BOUNTY], "Bounty tournament game started.", """
+                    """.trimIndent(),
+                    ),
+                    Arguments.of(
+                            games[GameType.BOUNTY], "Bounty tournament game started.",
+                            """
                         Bounty game statistics:
                             - players entered -> 3
                             - number of entries -> 3
                             - total buy-in amount -> 60
                             - bounties out of game -> 0
-                    """.trimIndent()),
+                    """.trimIndent(),
+                    ),
             )
         }
     }
