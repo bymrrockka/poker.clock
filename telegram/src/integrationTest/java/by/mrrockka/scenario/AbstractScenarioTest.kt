@@ -1,6 +1,7 @@
 package by.mrrockka.scenario
 
 import by.mrrockka.Random
+import by.mrrockka.TelegramRandoms.Companion.telegramRandoms
 import by.mrrockka.bot.TelegramBotsProperties
 import by.mrrockka.config.TestBotConfig
 import by.mrrockka.creator.ChatCreator
@@ -10,6 +11,7 @@ import by.mrrockka.domain.GameType
 import by.mrrockka.extension.TelegramPSQLExtension
 import by.mrrockka.extension.TelegramWiremockContainer
 import by.mrrockka.extension.TelegramWiremockExtension
+import by.mrrockka.extension.TextApproverExtension
 import by.mrrockka.scenario.UserCommand.Companion.gameRequest
 import by.mrrockka.scenario.UserCommand.Companion.gameResponse
 import by.mrrockka.scenario.UserCommand.Companion.gameStats
@@ -17,6 +19,7 @@ import by.mrrockka.scenario.UserCommand.Companion.gameStatsResponse
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.http.RequestMethod
+import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder
 import com.marcinziolo.kotlin.wiremock.*
 import org.awaitility.kotlin.await
 import org.junit.jupiter.api.AfterAll
@@ -34,11 +37,15 @@ import org.testcontainers.junit.jupiter.Testcontainers
 import java.math.BigDecimal
 import java.time.Duration
 
-@ExtendWith(value = [TelegramPSQLExtension::class, TelegramWiremockExtension::class])
+@ExtendWith(value = [TelegramPSQLExtension::class, TelegramWiremockExtension::class, TextApproverExtension::class])
 @ActiveProfiles(profiles = ["integration", "repository", "no-exception-handler"])
 @Testcontainers
 @SpringBootTest(classes = [TestBotConfig::class])
 abstract class AbstractScenarioTest {
+
+    val randoms = telegramRandoms("scenario")
+    val chatid = randoms.chatid()
+
     @Autowired
     lateinit var mapper: ObjectMapper
 
@@ -81,7 +88,7 @@ abstract class AbstractScenarioTest {
         }
     }
 
-    fun GivenSpecification.updatesReceived(chatId: Long = Random.chatId()) {
+    fun GivenSpecification.updatesReceived(chatId: Long = chatid) {
         this.commands.mapIndexed { index, command ->
 
             UpdateCreator.update {
@@ -159,19 +166,18 @@ abstract class AbstractScenarioTest {
                 }
             }
         }
+        wireMock.find(RequestPatternBuilder.allRequests())
     }
 
-    fun givenGameCreatedWithChatId(type: GameType, buyin: BigDecimal, players: List<String>): Long {
-        val chatId = Random.chatId()
+    fun givenGameCreatedWithChatId(type: GameType, buyin: BigDecimal, players: List<String>) {
         Given {
             command { message(gameRequest(type, players, buyin)) }
             command { message(gameStats) }
         } When {
-            updatesReceived(chatId)
+            updatesReceived(chatid)
         } Then {
             expect { text<SendMessage>(gameResponse(type)) }
             expect { text<SendMessage>(gameStatsResponse(type, players.size, buyin)) }
         }
-        return chatId
     }
 }

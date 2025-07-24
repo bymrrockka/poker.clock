@@ -1,17 +1,24 @@
 package by.mrrockka.repo
 
 import by.mrrockka.domain.MessageMetadata
+import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
+interface ChatGameRepo {
+    fun findByMessage(messageMetadata: MessageMetadata): UUID?
+    fun findLatestForChat(messageMetadata: MessageMetadata): UUID?
+    fun store(gameId: UUID, message: MessageMetadata)
+}
+
 @Repository
 @Transactional
-open class ChatGameRepo {
-
-    fun findByMessage(messageMetadata: MessageMetadata): UUID? {
+open class DatabaseChatGameRepo : ChatGameRepo {
+    override fun findByMessage(messageMetadata: MessageMetadata): UUID? {
         return ChatGameTable.select(ChatGameTable.gameId)
                 .where {
                     (ChatGameTable.messageId eq messageMetadata.replyTo!!.id) and
@@ -21,10 +28,20 @@ open class ChatGameRepo {
                 .firstOrNull()
     }
 
-    fun findLatestByMessage(messageMetadata: MessageMetadata): UUID? {
+    override fun findLatestForChat(messageMetadata: MessageMetadata): UUID? {
         return ChatGameTable.selectAll()
-                .where { (ChatGameTable.messageId eq messageMetadata.id) and (ChatGameTable.chatId eq messageMetadata.chatId) }
+                .where { (ChatGameTable.chatId eq messageMetadata.chatId) }
+                .orderBy(ChatGameTable.createdAt to SortOrder.DESC)
                 .map { it[ChatGameTable.gameId] }
                 .firstOrNull()
+    }
+
+    override fun store(gameId: UUID, message: MessageMetadata) {
+        ChatGameTable.insert {
+            it[ChatGameTable.chatId] = message.chatId
+            it[ChatGameTable.gameId] = gameId
+            it[ChatGameTable.messageId] = message.id
+            it[ChatGameTable.createdAt] = message.createdAt
+        }
     }
 }

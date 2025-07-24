@@ -7,45 +7,51 @@ import by.mrrockka.domain.TournamentPlayer
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
+import kotlin.reflect.KClass
+
+interface PlayerRepo {
+    fun <T : Player> findPlayers(gameId: UUID, clazz: KClass<T>): List<T>
+}
 
 @Repository
 @Transactional
-open class PlayerRepo(
+open class PlayerRepoImpl(
         val personRepo: PersonRepo,
         val entriesRepo: EntriesRepo,
         val withdrawalsRepo: WithdrawalsRepo,
         val bountyRepo: BountyRepo,
-) {
+) : PlayerRepo {
 
-    inline fun <reified T : Player> findPlayers(gameId: UUID): List<T> {
+    override fun <T : Player> findPlayers(gameId: UUID, clazz: KClass<T>): List<T> {
         val personEntries = entriesRepo.findGameEntries(gameId)
 
         return personRepo.findByIds(personEntries.keys).map { person ->
+            val entries = personEntries[person.id] ?: error("No entries found for ${person.nickname}")
             when {
-                T::class.java.isAssignableFrom(TournamentPlayer::class.java) -> {
+                clazz.java.isAssignableFrom(TournamentPlayer::class.java) -> {
                     TournamentPlayer(
                             person = person,
-                            entries = personEntries[person.id] ?: error("No entries found for ${person.nickname}"),
+                            entries = entries,
                     )
                 }
 
-                T::class.java.isAssignableFrom(CashPlayer::class.java) -> {
+                clazz.java.isAssignableFrom(CashPlayer::class.java) -> {
                     CashPlayer(
                             person = person,
-                            entries = personEntries[person.id] ?: error("No entries found for ${person.nickname}"),
+                            entries = entries,
                             withdrawals = withdrawalsRepo.findByPerson(person.id),
                     )
                 }
 
-                T::class.java.isAssignableFrom(BountyPlayer::class.java) -> {
+                clazz.java.isAssignableFrom(BountyPlayer::class.java) -> {
                     BountyPlayer(
                             person = person,
-                            entries = personEntries[person.id] ?: error("No entries found for ${person.nickname}"),
+                            entries = entries,
                             bounties = bountyRepo.findByPerson(person.id),
                     )
                 }
 
-                else -> error("No such player type ${T::class.java.simpleName}")
+                else -> error("No such player type ${clazz.simpleName}")
             } as T
         }
     }

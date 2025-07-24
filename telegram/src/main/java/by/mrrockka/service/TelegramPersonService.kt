@@ -8,13 +8,17 @@ import by.mrrockka.repo.PersonRepo
 import org.springframework.stereotype.Component
 import java.util.*
 
+interface TelegramPersonService {
+    fun findByMentions(messageMetadata: MessageMetadata): List<UUID>
+}
+
 @Component
-class TelegramPersonService(
+class TelegramPersonServiceImpl(
         private val personRepo: PersonRepo,
         private val chatPersonsRepo: ChatPersonsRepo,
-) {
+) : TelegramPersonService {
 
-    fun findByMentions(messageMetadata: MessageMetadata): List<UUID> {
+    override fun findByMentions(messageMetadata: MessageMetadata): List<UUID> {
         val nicknames = messageMetadata.mentions().map { it.text }
         val persons = personRepo.findByNicknames(nicknames)
         val newNicknameToId = nicknames.newNicknames(persons)

@@ -9,18 +9,23 @@ import java.math.BigDecimal
 import java.time.Instant
 import java.util.*
 
+interface EntriesRepo {
+    fun findGameEntries(gameId: UUID): Map<UUID, List<BigDecimal>>
+    fun insertBatch(personIds: List<UUID>, game: Game, createdAt: Instant)
+}
+
 @Repository
 @Transactional
-open class EntriesRepo {
+open class EntriesRepoImpl : EntriesRepo {
 
-    fun findGameEntries(gameId: UUID): Map<UUID, List<BigDecimal>> {
+    override fun findGameEntries(gameId: UUID): Map<UUID, List<BigDecimal>> {
         return EntriesTable.selectAll()
                 .where { EntriesTable.gameId eq gameId }
                 .map { it[EntriesTable.personId] to it[EntriesTable.amount] }
                 .groupBy({ it.first }, { it.second })
     }
 
-    fun insertBatch(personIds: List<UUID>, game: Game, createdAt: Instant) {
+    override fun insertBatch(personIds: List<UUID>, game: Game, createdAt: Instant) {
         EntriesTable.batchInsert(personIds) { id ->
             this[EntriesTable.gameId] = game.id
             this[EntriesTable.personId] = id

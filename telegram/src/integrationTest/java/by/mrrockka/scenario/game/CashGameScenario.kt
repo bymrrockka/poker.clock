@@ -31,24 +31,26 @@ class CashGameScenario : AbstractScenarioTest() {
                         entries = listOf(buyin),
                         withdrawals = listOf(BigDecimal(20)),
                 ),
-                debtors = listOf(Debtor(
-                        player = CashPlayer(
-                                person = PersonCreator.domain("nickname2"),
-                                entries = listOf(buyin)
+                debtors = listOf(
+                        Debtor(
+                                player = CashPlayer(
+                                        person = PersonCreator.domain("nickname2"),
+                                        entries = listOf(buyin),
+                                ),
+                                debt = buyin,
                         ),
-                        debt = buyin,
-                )),
-                total = buyin
+                ),
+                total = buyin,
         )
 
 
-        val chatId = givenGameCreatedWithChatId(type, buyin, players)
+        givenGameCreatedWithChatId(type, buyin, players)
         Given {
             command { message(withdrawalRequest("nickname1", 20)) }
             command { message(UserCommand.gameStats) }
             command { message(UserCommand.calculate) }
         } When {
-            updatesReceived(chatId)
+            updatesReceived()
         } Then {
             expect { text<SendMessage>(withdrawalResponse("nickname1", 20)) }
             expect { text<SendMessage>(gameStatsResponse(GameType.CASH, players.size, buyin = buyin, withdrawal = 20)) }

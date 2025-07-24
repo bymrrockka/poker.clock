@@ -9,15 +9,21 @@ import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
+interface GameRepo {
+    fun save(game: Game)
+    fun update(game: Game)
+    fun findById(id: UUID): Game
+}
+
 @Repository
 @Transactional(propagation = Propagation.REQUIRED)
-open class GameRepo(
+open class GameRepoImpl(
         private val playerRepo: PlayerRepo,
         private val finalePlacesRepo: FinalePlacesRepo,
         private val prizePoolRepo: PrizePoolRepo,
-) {
+) : GameRepo {
 
-    fun save(game: Game) {
+    override fun save(game: Game) {
         GameTable.insert {
             it[id] = game.id
             it[gameType] = game.toType()
@@ -28,7 +34,7 @@ open class GameRepo(
         }
     }
 
-    fun update(game: Game) {
+    override fun update(game: Game) {
         GameTable.insert {
             it[id] = game.id
             it[gameType] = game.toType()
@@ -40,7 +46,7 @@ open class GameRepo(
         }
     }
 
-    fun findById(id: UUID): Game {
+    override fun findById(id: UUID): Game {
         return GameTable.selectAll()
                 .where { GameTable.id eq id }
                 .map { it.toGame() }
@@ -56,7 +62,7 @@ open class GameRepo(
                     stack = this[GameTable.stack],
                     createdAt = this[GameTable.createdAt],
                     finishedAt = this[GameTable.finishedAt],
-                    players = lazy { playerRepo.findPlayers<TournamentPlayer>(gameId) }.value,
+                    players = lazy { playerRepo.findPlayers(gameId, TournamentPlayer::class) }.value,
                     finalePlaces = lazy { finalePlacesRepo.findById(gameId) }.value,
                     prizePool = lazy { prizePoolRepo.findById(gameId) }.value,
             )
@@ -68,7 +74,7 @@ open class GameRepo(
                     stack = this[GameTable.stack],
                     createdAt = this[GameTable.createdAt],
                     finishedAt = this[GameTable.finishedAt],
-                    players = lazy { playerRepo.findPlayers<BountyPlayer>(gameId) }.value,
+                    players = lazy { playerRepo.findPlayers(gameId, BountyPlayer::class) }.value,
                     finalePlaces = lazy { finalePlacesRepo.findById(gameId) }.value,
                     prizePool = lazy { prizePoolRepo.findById(gameId) }.value,
             )
@@ -79,7 +85,7 @@ open class GameRepo(
                     stack = this[GameTable.stack],
                     createdAt = this[GameTable.createdAt],
                     finishedAt = this[GameTable.finishedAt],
-                    players = lazy { playerRepo.findPlayers<CashPlayer>(gameId) }.value,
+                    players = lazy { playerRepo.findPlayers(gameId, CashPlayer::class) }.value,
             )
         }
     }

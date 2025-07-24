@@ -9,7 +9,7 @@ import org.jetbrains.exposed.sql.json.jsonb
 
 object GameTable : Table("game") {
     val id = uuid("id")
-    val gameType = enumeration<GameType>("game_type")
+    val gameType = enumerationByName<GameType>("game_type", 15)
     val buyIn = decimal("buy_in", 20, 2)
     val stack = decimal("stack", 20, 2).nullable()
     val bounty = decimal("bounty", 20, 2).nullable()

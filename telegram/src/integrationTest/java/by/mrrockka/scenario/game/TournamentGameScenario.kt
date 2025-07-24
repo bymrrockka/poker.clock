@@ -1,7 +1,6 @@
 package by.mrrockka.scenario.game
 
 import by.mrrockka.domain.GameType
-import by.mrrockka.domain.payout.Payout
 import by.mrrockka.scenario.AbstractScenarioTest
 import by.mrrockka.scenario.Given
 import by.mrrockka.scenario.UserCommand.Companion.calculate
@@ -23,17 +22,17 @@ class TournamentGameScenario : AbstractScenarioTest() {
         val type = GameType.TOURNAMENT
         val players = listOf(
                 "nickname1",
-                "nickname2"
+                "nickname2",
         )
         val winners = players.dropLast(1);
 
-        val chatId = givenGameCreatedWithChatId(type, BigDecimal(buyin), players)
+        givenGameCreatedWithChatId(type, BigDecimal(buyin), players)
         Given {
             command { message(prizePoolRequest(1)) }
             command { message(finalePlacesRequest(winners)) }
             command { message(calculate) }
         } When {
-            updatesReceived(chatId)
+            updatesReceived()
         } Then {
             expect { text<SendMessage>(prizePoolResponse(1)) }
             expect { text<SendMessage>(finalePlacesResponse(winners)) }
