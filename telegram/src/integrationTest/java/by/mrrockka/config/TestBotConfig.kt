@@ -20,10 +20,13 @@ open class TestBotConfig {
     @Primary
     open fun testBotOptions(): DefaultBotOptions {
         val botOptions = PokerClockBotOptions(
-                listOf(AllowedUpdates.EDITEDMESSAGE,
+                listOf(
+                        AllowedUpdates.EDITEDMESSAGE,
                         AllowedUpdates.MESSAGE,
                         AllowedUpdates.POLL,
-                        AllowedUpdates.POLLANSWER))
+                        AllowedUpdates.POLLANSWER,
+                ),
+        )
         botOptions.baseUrl = "$wiremockServerBaseUrl/"
         return botOptions
     }

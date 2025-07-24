@@ -184,7 +184,5 @@ bot:
           /stop_poll
 
 spring:
-  profiles:
-    active: integration-test
   liquibase:
     enabled: false
