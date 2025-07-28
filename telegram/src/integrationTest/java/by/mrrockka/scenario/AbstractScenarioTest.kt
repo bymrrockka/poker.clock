@@ -16,11 +16,19 @@ import by.mrrockka.scenario.UserCommand.Companion.gameRequest
 import by.mrrockka.scenario.UserCommand.Companion.gameResponse
 import by.mrrockka.scenario.UserCommand.Companion.gameStats
 import by.mrrockka.scenario.UserCommand.Companion.gameStatsResponse
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.tomakehurst.wiremock.client.WireMock
+import com.github.tomakehurst.wiremock.common.Metadata.metadata
 import com.github.tomakehurst.wiremock.http.RequestMethod
-import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder
-import com.marcinziolo.kotlin.wiremock.*
+import com.marcinziolo.kotlin.wiremock.and
+import com.marcinziolo.kotlin.wiremock.contains
+import com.marcinziolo.kotlin.wiremock.equalTo
+import com.marcinziolo.kotlin.wiremock.post
+import com.marcinziolo.kotlin.wiremock.returnsJson
+import com.marcinziolo.kotlin.wiremock.verify
+import com.oneeyedmen.okeydoke.Approver
+import org.assertj.core.api.Assertions.assertThat
 import org.awaitility.kotlin.await
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
@@ -38,7 +46,7 @@ import java.math.BigDecimal
 import java.time.Duration
 
 @ExtendWith(value = [TelegramPSQLExtension::class, TelegramWiremockExtension::class, TextApproverExtension::class])
-@ActiveProfiles(profiles = ["integration", "repository", "no-exception-handler"])
+@ActiveProfiles(profiles = ["integration", "repository"])
 @Testcontainers
 @SpringBootTest(classes = [TestBotConfig::class])
 abstract class AbstractScenarioTest {
@@ -53,6 +61,7 @@ abstract class AbstractScenarioTest {
     lateinit var botProps: TelegramBotsProperties
 
     fun Any.toJsonString(): String = mapper.writeValueAsString(this)
+    fun String.toJson(): JsonNode = mapper.readTree(this)
 
     @BeforeEach
     fun setUp() {
@@ -61,6 +70,8 @@ abstract class AbstractScenarioTest {
 
     companion object {
         lateinit var wireMock: WireMock
+        const val METADATA_ATTR = "scenario"
+        private val testResponseBuilder = SendMessage.builder().text("TEST OK")
 
         @JvmStatic
         @BeforeAll
@@ -90,7 +101,6 @@ abstract class AbstractScenarioTest {
 
     fun GivenSpecification.updatesReceived(chatId: Long = chatid) {
         this.commands.mapIndexed { index, command ->
-
             UpdateCreator.update {
                 this.message = MessageCreator.message { message ->
                     message.messageId = Random.messageId()
@@ -135,11 +145,56 @@ abstract class AbstractScenarioTest {
             .also { thenAssert(it) }
             .run { wireMock.resetScenarios() }
 
+    infix fun WhenSpecification.ThenApprove(approver: Approver) = this
+            .also {
+                it.commands?.mapIndexed { index, command ->
+                    wireMock.post {
+                        url equalTo "/${botProps.token}/${SendMessage().method}"
+                        whenState = "${scenarioSeed}$index"
+                        withBuilder { withMetadata(metadata().attr("scenario", index)) }
+                    } returnsJson {
+                        body = """
+                            {
+                                "ok": "true",
+                                "result": ${testResponseBuilder.chatId(chatid).build().toJsonString()}
+                            }
+                            """
+                    } and {
+                        toState = "${scenarioSeed}${index + 1}"
+                    }
+                }
+            }
+            .also {
+                await.atMost(Duration.ofSeconds(1))
+                        .until {
+                            check(this.commands != null) { "Commands should be specified" }
+                            val stubs = wireMock.getServeEvents()
+                                    .filter { it.stubMapping.metadata != null && it.stubMapping.metadata.contains(METADATA_ATTR) }
+                                    .associate { it.stubMapping.metadata.getInt(METADATA_ATTR) to it.request.bodyAsString.toJson().findPath("text").asText() }
+                            assertThat(stubs).hasSize(commands.size)
+
+                            if (stubs.size == commands.size) {
+                                commands.mapIndexed { index, command ->
+                                    """
+                                       |### Command $index ###
+                                       |${command.message}
+                                       |--- Response ---
+                                       |${stubs[index] ?: "No message"}                   
+                                       """.trimMargin()
+                                }
+                                        .joinToString("\n\n")
+                                        .also { approver.assertApproved(it) }
+                                true
+                            } else false
+                        }
+            }
+
     private fun thenExecute(thenSpec: ThenSpecification) {
         thenSpec.expects.forEachIndexed { index, expect ->
             wireMock.post {
                 url equalTo "/${botProps.token}/${expect.result.method}"
                 whenState = "${thenSpec.scenarioSeed}$index"
+                withBuilder { withMetadata(metadata().attr("scenario", index)) }
             } returnsJson {
                 body = """
             {
@@ -166,7 +221,6 @@ abstract class AbstractScenarioTest {
                 }
             }
         }
-        wireMock.find(RequestPatternBuilder.allRequests())
     }
 
     fun givenGameCreatedWithChatId(type: GameType, buyin: BigDecimal, players: List<String>) {

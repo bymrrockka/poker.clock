@@ -48,7 +48,7 @@ class GivenSpecification {
     }
 }
 
-class WhenSpecification(val scenarioSeed: String)
+class WhenSpecification(val scenarioSeed: String, val commands: List<Command>? = null) {}
 
 class ThenSpecification(val scenarioSeed: String) {
     var expects: List<Expect> = mutableListOf()
@@ -80,7 +80,8 @@ class Expect {
 
 fun Given(block: GivenSpecification.() -> Unit): GivenSpecification = GivenSpecification().apply(block)
 
-infix fun GivenSpecification.When(block: GivenSpecification.() -> Unit): WhenSpecification = WhenSpecification(this.scenarioSeed)
+//todo: refactor
+infix fun GivenSpecification.When(block: GivenSpecification.() -> Unit): WhenSpecification = WhenSpecification(this.scenarioSeed, this.commands)
         .apply { block() }
 
 infix fun WhenSpecification.Then(block: ThenSpecification.() -> Unit) = ThenSpecification(this.scenarioSeed)

@@ -14,6 +14,7 @@ import java.util.UUID;
 @ToString(callSuper = true)
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Deprecated(forRemoval = true)
 public class TournamentGame extends Game {
 
   FinaleSummary finaleSummary;

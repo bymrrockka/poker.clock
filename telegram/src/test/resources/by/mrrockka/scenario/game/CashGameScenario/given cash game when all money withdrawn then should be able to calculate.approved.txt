@@ -1,0 +1,27 @@
+### Command 0 ###
+/cash_game
+stack: 10k
+buyin: 10
+
+@nickname1, @nickname2
+--- Response ---
+Cash game started.                   
+
+### Command 1 ###
+/withdrawal @nickname1 20
+--- Response ---
+Withdrawals: 
+    - @nickname1 -> 20                   
+
+### Command 2 ###
+/game_stats
+--- Response ---
+Cash game statistics:
+    - players entered -> 2
+    - total buy-in amount -> 20.00
+    - total withdrawal amount -> 0                   
+
+### Command 3 ###
+/calculate
+--- Response ---
+Entries and withdrawal amounts are not equal. Deviation is 20.00                   

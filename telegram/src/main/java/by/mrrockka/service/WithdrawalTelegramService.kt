@@ -1,7 +1,7 @@
 package by.mrrockka.service
 
+import by.mrrockka.domain.CashGame
 import by.mrrockka.domain.MessageMetadata
-import by.mrrockka.domain.game.CashGame
 import by.mrrockka.parser.WithdrawalMessageParser
 import by.mrrockka.validation.mentions.PersonMentionsValidator
 import by.mrrockka.validation.withdrawals.WithdrawalsValidator
@@ -33,22 +33,24 @@ class WithdrawalTelegramService(
 
         val persons = telegramPersonServiceOld.getAllByNicknamesAndChatId(
                 nicknames.toList(),
-                messageMetadata.chatId
+                messageMetadata.chatId,
         )
 
         withdrawalsService.storeBatch(
                 telegramGame.game.id,
                 persons.map { it.id },
                 amount,
-                messageMetadata.createdAt
+                messageMetadata.createdAt,
         )
 
         return SendMessage.builder()
                 .chatId(messageMetadata.chatId)
-                .text("""
+                .text(
+                        """
                     Withdrawals: 
                     ${nicknames.joinToString { "    - @${it} -> $amount" }}
-                """.trimIndent())
+                """.trimIndent(),
+                )
                 .replyToMessageId(telegramGame.messageMetadata.id)
                 .build()
     }
