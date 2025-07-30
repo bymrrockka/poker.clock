@@ -1,43 +1,43 @@
-package by.mrrockka.aspect;
+package by.mrrockka.aspect
 
-import by.mrrockka.bot.PokerClockAbsSender;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.Aspect;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
+import by.mrrockka.bot.PokerClockAbsSender
+import lombok.RequiredArgsConstructor
+import lombok.SneakyThrows
+import org.aspectj.lang.annotation.AfterThrowing
+import org.aspectj.lang.annotation.Aspect
+import org.springframework.context.annotation.Profile
+import org.springframework.stereotype.Component
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage
+import org.telegram.telegrambots.meta.api.objects.Update
 
-import java.util.List;
+interface TelegramExceptionHandler {
+    fun handleExceptions(exception: Throwable, updates: List<Update>)
+}
 
 @Aspect
 @Component
 @RequiredArgsConstructor
 @Profile("!no-exception-handler")
-public class TelegramExceptionHandler {
+class TelegramExceptionHandlerImpl(
+        private val absSender: PokerClockAbsSender,
+) : TelegramExceptionHandler {
 
-  private final PokerClockAbsSender absSender;
+    @SneakyThrows
+    @AfterThrowing(
+            pointcut = "execution(* *.onUpdatesReceived(..)) && args(updates)",
+            argNames = "exception,updates",
+            throwing = "exception",
+    )
+    override fun handleExceptions(exception: Throwable, updates: List<Update>) {
+        val sendMessage = SendMessage().apply {
+            this.chatId = getChatId(updates).toString()
+            this.text = exception.message ?: exception.javaClass.simpleName
+        }
 
-  @SneakyThrows
-  @AfterThrowing(
-    pointcut = "execution(* *.onUpdatesReceived(..)) && args(updates)",
-    argNames = "exception,updates",
-    throwing = "exception")
-  public void handleExceptions(final Throwable exception, final List<Update> updates) {
-    final var sendMessage = SendMessage.builder()
-      .chatId(getChatId(updates))
-      .text(exception.getMessage())
-      .build();
+        absSender.execute(sendMessage)
+    }
 
-    absSender.execute(sendMessage);
-  }
+    private fun getChatId(updates: List<Update>): Long =
+            updates.find { it?.message?.chatId != null }?.message?.chatId ?: error("No chat id found for update")
 
-  private Long getChatId(final List<Update> updates) {
-    return updates.stream()
-      .map(update -> update.getMessage().getChatId())
-      .findFirst()
-      .orElseThrow(ChatIdNotFoundException::new);
-  }
 }

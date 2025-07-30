@@ -2,9 +2,9 @@ package by.mrrockka.scenario.game
 
 import by.mrrockka.domain.GameType
 import by.mrrockka.scenario.AbstractScenarioTest
-import by.mrrockka.scenario.Given
+import by.mrrockka.Given
 import by.mrrockka.scenario.UserCommand
-import by.mrrockka.scenario.When
+import by.mrrockka.When
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource

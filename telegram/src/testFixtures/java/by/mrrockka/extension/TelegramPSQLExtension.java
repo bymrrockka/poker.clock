@@ -14,8 +14,8 @@ public class TelegramPSQLExtension extends CorePSQLExtension {
   public void afterEach(final ExtensionContext context) {
 //    todo: generate data instead of migration scripts usage
     final var jdbcTemplate = SpringExtension.getApplicationContext(context).getBean(NamedParameterJdbcTemplate.class);
-//    jdbcTemplate.execute("truncate chat_persons", PreparedStatement::execute);
-//    jdbcTemplate.execute("truncate chat_games", PreparedStatement::execute);
+    jdbcTemplate.execute("truncate chat_persons", PreparedStatement::execute);
+    jdbcTemplate.execute("truncate chat_games", PreparedStatement::execute);
     jdbcTemplate.execute("truncate poll_task", PreparedStatement::execute);
   }
 }

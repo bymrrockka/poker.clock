@@ -2,14 +2,14 @@ package by.mrrockka.scenario.game
 
 import by.mrrockka.domain.GameType
 import by.mrrockka.scenario.AbstractScenarioTest
-import by.mrrockka.scenario.Given
+import by.mrrockka.Given
 import by.mrrockka.scenario.UserCommand.Companion.calculate
 import by.mrrockka.scenario.UserCommand.Companion.calculateResponse
 import by.mrrockka.scenario.UserCommand.Companion.createFinalePlaces
 import by.mrrockka.scenario.UserCommand.Companion.finalePlacesResponse
 import by.mrrockka.scenario.UserCommand.Companion.createPrizePool
 import by.mrrockka.scenario.UserCommand.Companion.prizePoolResponse
-import by.mrrockka.scenario.When
+import by.mrrockka.When
 import org.junit.jupiter.api.Test
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import java.math.BigDecimal

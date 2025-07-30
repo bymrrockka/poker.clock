@@ -69,10 +69,15 @@ dependencies {
     testImplementation libs.mockitoJupiter
     testImplementation libs.jupiter
     testImplementation libs.assertjCore
-    testImplementation(testFixtures(project))
-    testImplementation(testFixtures(project(":core")))
     testImplementation libs.kotlinStdLib
     testImplementation libs.mockk
+    testImplementation libs.springBootTest
+    testImplementation libs.awaitility
+    testImplementation libs.wiremock
+    testImplementation libs.wiremockKotlinDsl
+    testImplementation libs.wiremockContainer
+    testImplementation(testFixtures(project))
+    testImplementation(testFixtures(project(":core")))
 
     testFixturesCompileOnly libs.lombok
     testFixturesAnnotationProcessor libs.lombok
@@ -123,9 +128,6 @@ testing {
                 implementation libs.mockk
                 implementation libs.springMockk
                 implementation libs.awaitility
-                implementation libs.wiremock
-                implementation libs.wiremockKotlinDsl
-                implementation libs.wiremockContainer
 
                 compileOnly libs.lombok
                 annotationProcessor libs.lombok

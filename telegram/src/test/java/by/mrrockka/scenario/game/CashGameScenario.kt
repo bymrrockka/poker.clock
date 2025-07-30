@@ -2,11 +2,11 @@ package by.mrrockka.scenario.game
 
 import by.mrrockka.domain.GameType
 import by.mrrockka.scenario.AbstractScenarioTest
-import by.mrrockka.scenario.Given
+import by.mrrockka.Given
 import by.mrrockka.scenario.UserCommand
 import by.mrrockka.scenario.UserCommand.Companion.createGame
 import by.mrrockka.scenario.UserCommand.Companion.withdrawal
-import by.mrrockka.scenario.When
+import by.mrrockka.When
 import com.oneeyedmen.okeydoke.Approver
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal

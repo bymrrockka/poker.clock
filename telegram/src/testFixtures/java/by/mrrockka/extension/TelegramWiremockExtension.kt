@@ -10,6 +10,18 @@ class TelegramWiremockExtension : BeforeAllCallback, AfterEachCallback {
         TelegramWiremockContainer.start()
         System.setProperty("wiremock.server.baseUrl", TelegramWiremockContainer.baseUrl)
         TelegramWiremockContainer.waitingFor(Wait.forHealthcheck())
+        TelegramWiremockContainer.waitingFor(
+                Wait
+                        .forHttp("/__admin/health")
+                        .withMethod("GET")
+                        .forStatusCode(200),
+        )
+        TelegramWiremockContainer.waitingFor(
+                Wait
+                        .forHttp("/__admin/mappings")
+                        .withMethod("GET")
+                        .forStatusCode(200),
+        )
     }
 
     override fun afterEach(context: ExtensionContext?) {

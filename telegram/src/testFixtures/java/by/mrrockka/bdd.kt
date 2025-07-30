@@ -1,4 +1,4 @@
-package by.mrrockka.scenario
+package by.mrrockka
 
 import by.mrrockka.creator.MessageEntityCreator
 import by.mrrockka.creator.SendMessageCreator
@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.EntityType
 import org.telegram.telegrambots.meta.api.objects.MessageEntity
 import kotlin.text.RegexOption.MULTILINE
+import kotlin.text.get
 
 
 class Command(init: Command.() -> Unit) {

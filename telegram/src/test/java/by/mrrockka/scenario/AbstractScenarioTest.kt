@@ -1,9 +1,13 @@
 package by.mrrockka.scenario
 
+import by.mrrockka.Given
+import by.mrrockka.GivenSpecification
 import by.mrrockka.Random
 import by.mrrockka.TelegramRandoms.Companion.telegramRandoms
+import by.mrrockka.ThenSpecification
+import by.mrrockka.When
+import by.mrrockka.WhenSpecification
 import by.mrrockka.bot.TelegramBotsProperties
-import by.mrrockka.config.TestBotConfig
 import by.mrrockka.creator.ChatCreator
 import by.mrrockka.creator.MessageCreator
 import by.mrrockka.creator.UpdateCreator
@@ -16,6 +20,7 @@ import by.mrrockka.scenario.UserCommand.Companion.createGame
 import by.mrrockka.scenario.UserCommand.Companion.gameResponse
 import by.mrrockka.scenario.UserCommand.Companion.gameStats
 import by.mrrockka.scenario.UserCommand.Companion.gameStatsResponse
+import by.mrrockka.scenario.config.TestBotConfig
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.tomakehurst.wiremock.client.WireMock
@@ -46,7 +51,7 @@ import java.math.BigDecimal
 import java.time.Duration
 
 @ExtendWith(value = [TelegramPSQLExtension::class, TelegramWiremockExtension::class, TextApproverExtension::class])
-@ActiveProfiles(profiles = ["integration", "repository"])
+@ActiveProfiles(profiles = ["scenario", "no-exception-handler"])
 @Testcontainers
 @SpringBootTest(classes = [TestBotConfig::class])
 abstract class AbstractScenarioTest {

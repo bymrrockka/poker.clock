@@ -25,7 +25,6 @@ open class GameTelegramServiceImpl(
         private val gameMessageParser: GameMessageParser,
 ) : GameTelegramService {
 
-
     override fun storeGame(messageMetadata: MessageMetadata): BotApiMethodMessage {
         check(messageMetadata.mentions().isNotEmpty()) { "Game must have at least one player" }
 

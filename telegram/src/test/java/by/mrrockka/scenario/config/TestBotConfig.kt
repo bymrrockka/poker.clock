@@ -1,4 +1,4 @@
-package by.mrrockka.config
+package by.mrrockka.scenario.config
 
 import by.mrrockka.domain.PokerClockBotOptions
 import org.springframework.beans.factory.annotation.Value
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Profile
 import org.telegram.telegrambots.bots.DefaultBotOptions
 import org.telegram.telegrambots.meta.api.methods.updates.AllowedUpdates
 
-@Profile("integration")
+@Profile("scenario")
 @TestConfiguration
 open class TestBotConfig {
 
