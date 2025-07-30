@@ -10,11 +10,12 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.batchUpsert
 import org.jetbrains.exposed.sql.selectAll
 import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Repository
-@Transactional
+@Transactional(propagation = Propagation.REQUIRED)
 open class PersonRepo {
 
     fun findById(id: UUID): Person? {

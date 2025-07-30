@@ -9,6 +9,7 @@ import java.util.List;
 
 //todo: refactor to kotlin
 @Component
+@Deprecated
 public class PersonMentionsValidator {
 
   public void validateMessageMentions(final MessageMetadata messageMetadata, final int mentionsSize) {

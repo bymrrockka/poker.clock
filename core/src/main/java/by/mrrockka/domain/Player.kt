@@ -15,7 +15,7 @@ data class TournamentPlayer(
 data class CashPlayer(
         override val person: Person,
         override val entries: List<BigDecimal>,
-        val withdrawals: List<BigDecimal> = emptyList()
+        val withdrawals: List<BigDecimal> = emptyList(),
 ) : Player
 
 data class BountyPlayer(
@@ -29,6 +29,7 @@ fun List<BigDecimal>.total(): BigDecimal {
 }
 
 fun List<Player>.totalEntries(): BigDecimal = flatMap { it.entries }.total()
+fun List<CashPlayer>.totalWithdrawals(): BigDecimal = flatMap { it.withdrawals }.total()
 
 fun Player.total(): BigDecimal = let {
     when (val player = this) {

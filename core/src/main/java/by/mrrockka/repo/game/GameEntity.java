@@ -16,9 +16,7 @@ public record GameEntity(
   GameType gameType,
   @NonNull
   BigDecimal buyIn,
-  @NonNull
   BigDecimal stack,
-  @NonNull
   BigDecimal bounty,
 
   Instant finishedAt

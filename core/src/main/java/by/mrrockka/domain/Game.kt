@@ -43,7 +43,7 @@ data class CashGame(
         override val stack: BigDecimal? = ZERO,
         override val createdAt: Instant,
         override val finishedAt: Instant? = null,
-        override val players: List<CashPlayer>
+        override val players: List<CashPlayer>,
 ) : Game
 
 fun Game.toSummary(): List<PrizeSummary> {
@@ -54,3 +54,11 @@ fun Game.toSummary(): List<PrizeSummary> {
         else -> error("Unknown game type")
     }
 }
+
+fun Game.moneyInGame(): BigDecimal =
+        when (val game = this) {
+            is CashGame -> game.players.totalEntries() - game.players.totalWithdrawals()
+            is BountyTournamentGame -> game.players.flatMap { it.entries }.total() + (game.players.sumOf { it.entries.size }.toBigDecimal() * game.bounty)
+            is TournamentGame -> game.players.flatMap { it.entries }.total()
+            else -> error("Unknown game")
+        }

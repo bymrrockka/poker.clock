@@ -5,9 +5,9 @@ import by.mrrockka.scenario.AbstractScenarioTest
 import by.mrrockka.scenario.Given
 import by.mrrockka.scenario.UserCommand.Companion.calculate
 import by.mrrockka.scenario.UserCommand.Companion.calculateResponse
-import by.mrrockka.scenario.UserCommand.Companion.finalePlacesRequest
+import by.mrrockka.scenario.UserCommand.Companion.createFinalePlaces
 import by.mrrockka.scenario.UserCommand.Companion.finalePlacesResponse
-import by.mrrockka.scenario.UserCommand.Companion.prizePoolRequest
+import by.mrrockka.scenario.UserCommand.Companion.createPrizePool
 import by.mrrockka.scenario.UserCommand.Companion.prizePoolResponse
 import by.mrrockka.scenario.When
 import org.junit.jupiter.api.Test
@@ -28,8 +28,8 @@ class TournamentGameScenario : AbstractScenarioTest() {
 
         givenGameCreatedWithChatId(type, BigDecimal(buyin), players)
         Given {
-            command { message(prizePoolRequest(1)) }
-            command { message(finalePlacesRequest(winners)) }
+            command { message(createPrizePool(1)) }
+            command { message(createFinalePlaces(winners)) }
             command { message(calculate) }
         } When {
             updatesReceived()

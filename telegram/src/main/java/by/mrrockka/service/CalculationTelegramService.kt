@@ -14,12 +14,12 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 class CalculationTelegramService(
         val calculationService: CalculationService,
         val gameTelegramFacadeService: GameTelegramService,
-        val calculationValidator: PreCalculationValidator,
+        val preCalculationValidator: PreCalculationValidator,
 ) {
 
     fun calculatePayouts(messageMetadata: MessageMetadata): BotApiMethodMessage? {
         val telegramGame = gameTelegramFacadeService.findGame(messageMetadata)
-        calculationValidator.validateGame(telegramGame.game)
+        preCalculationValidator.validateGame(telegramGame.game)
 
         val payouts = calculationService.calculateAndSave(telegramGame.game)
         check(payouts.isNotEmpty()) { "Payouts are not calculated." }

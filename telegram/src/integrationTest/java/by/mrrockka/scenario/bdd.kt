@@ -21,12 +21,12 @@ class Command(init: Command.() -> Unit) {
     fun message(message: String) {
         this.message = message.trim()
         val botCommandRegex = "^(/[\\w_]+)".toRegex(MULTILINE)
-        val mentionRegex = "(@[\\w\\d_]+)".toRegex(MULTILINE)
+        val mentionRegex = "(@(?<nickname>[\\w\\d_]+))".toRegex(MULTILINE)
         val botCommand = botCommandRegex.find(this.message)!!.groups[0]!!.value
         entity(botCommand, EntityType.BOTCOMMAND)
 
         mentionRegex.findAll(this.message)
-                .map { it.groups[0]!!.value }
+                .mapNotNull { it.groups["nickname"]?.value }
                 .distinct()
                 .forEach { mention -> entity(mention, EntityType.MENTION) }
     }

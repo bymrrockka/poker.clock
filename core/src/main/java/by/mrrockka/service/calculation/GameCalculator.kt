@@ -18,7 +18,6 @@ import java.math.BigDecimal.ZERO
 
 @Component
 open class GameCalculator {
-
     //todo: consider to refactor this class to make it extendable with strategies to figure out payouts
     fun calculate(game: Game): List<Payout> {
         val transferTypeToPlayer = game.players associateByTransferType game.toSummary()
@@ -34,7 +33,7 @@ open class GameCalculator {
     private fun validate(game: Game, creditors: List<PlayerTotal>, debtors: List<PlayerTotal>, equals: List<PlayerTotal>) {
         check(game.players.size == (creditors + debtors + equals).size) { "Players size and payout size are not equal" }
         check((creditors + debtors + equals).isNotEmpty()) { "There must be at least one player in a game" }
-        check(creditors.map { it.total }.total() - debtors.map { it.total }.total() == ZERO) { "Debtors and creditors totals are not equal" }
+        check(creditors.map { it.total }.total() - debtors.map { it.total }.total() == ZERO.setScale(2)) { "Debtors and creditors totals are not equal" }
 
         when {
             debtors.isEmpty() && creditors.isNotEmpty() -> error("There must be at least one debtor")
@@ -66,7 +65,7 @@ open class GameCalculator {
             payouts
         }
 
-        check(this.map { it.total }.total() - payouts.map { it.total }.total() == ZERO) { "${debtorsLeft.size} Debtors left unprocessed" }
+        check(this.map { it.total }.total() - payouts.map { it.total }.total() == ZERO.setScale(2)) { "${debtorsLeft.size} Debtors left unprocessed" }
         return payouts
     }
 

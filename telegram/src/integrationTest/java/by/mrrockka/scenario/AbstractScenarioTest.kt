@@ -12,7 +12,7 @@ import by.mrrockka.extension.TelegramPSQLExtension
 import by.mrrockka.extension.TelegramWiremockContainer
 import by.mrrockka.extension.TelegramWiremockExtension
 import by.mrrockka.extension.TextApproverExtension
-import by.mrrockka.scenario.UserCommand.Companion.gameRequest
+import by.mrrockka.scenario.UserCommand.Companion.createGame
 import by.mrrockka.scenario.UserCommand.Companion.gameResponse
 import by.mrrockka.scenario.UserCommand.Companion.gameStats
 import by.mrrockka.scenario.UserCommand.Companion.gameStatsResponse
@@ -183,7 +183,7 @@ abstract class AbstractScenarioTest {
                                        """.trimMargin()
                                 }
                                         .joinToString("\n\n")
-                                        .also { approver.assertApproved(it) }
+                                        .also { approver.assertApproved(it.trimIndent()) }
                                 true
                             } else false
                         }
@@ -225,7 +225,7 @@ abstract class AbstractScenarioTest {
 
     fun givenGameCreatedWithChatId(type: GameType, buyin: BigDecimal, players: List<String>) {
         Given {
-            command { message(gameRequest(type, players, buyin)) }
+            command { message(players.createGame(type, buyin)) }
             command { message(gameStats) }
         } When {
             updatesReceived(chatid)

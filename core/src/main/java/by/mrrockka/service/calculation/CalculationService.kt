@@ -8,14 +8,19 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 
+interface CalculationService {
+    fun calculateAndSave(game: Game): List<Payout>
+}
+
 @Service
-open class CalculationService(
+@Transactional(propagation = Propagation.REQUIRED)
+open class CalculationServiceImpl(
         val calculator: GameCalculator,
         val gameService: GameServiceOld,
         val moneyTransferService: MoneyTransferService,
-) {
-    @Transactional(propagation = Propagation.REQUIRED)
-    open fun calculateAndSave(game: Game): List<Payout> {
+) : CalculationService {
+
+    override fun calculateAndSave(game: Game): List<Payout> {
         val payouts = calculator.calculate(game)
         if (game.finishedAt == null) {
             gameService.finishGame(game)

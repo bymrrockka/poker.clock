@@ -25,7 +25,7 @@ class UserCommand {
         val createPoll = "/create_poll"
         val stopPoll = "/stop_poll"
 
-        fun gameRequest(type: GameType, players: List<String>, buyin: BigDecimal): String {
+        fun List<String>.createGame(type: GameType, buyin: BigDecimal): String {
             val command = when (type) {
                 GameType.CASH -> cashGame
                 GameType.TOURNAMENT -> tournamentGame
@@ -34,10 +34,9 @@ class UserCommand {
 
             return """
                 $command
-                stack: 10k
                 buyin: $buyin
                 ${if (type == GameType.BOUNTY) "bounty: $buyin" else ""}
-                ${players.joinToString { "@$it" }}
+                ${this.joinToString { "@$it" }}
             """.trimIndent()
         }
 
@@ -88,7 +87,7 @@ class UserCommand {
             return (1..size).associate { it to calculatePercentageForPlace(it) }
         }
 
-        fun prizePoolRequest(size: Int): String {
+        fun createPrizePool(size: Int): String {
             return """
             ${prizePool}
             ${
@@ -108,7 +107,7 @@ class UserCommand {
             """.trimIndent()
         }
 
-        fun finalePlacesRequest(winners: List<String>): String {
+        fun createFinalePlaces(winners: List<String>): String {
             return """
             ${finalePlaces}
             ${
@@ -220,11 +219,7 @@ class UserCommand {
             return payoutsResponse
         }
 
-        fun withdrawalRequest(nickname: String, amount: Int): String = "${withdrawal} @$nickname $amount"
-        fun withdrawalResponse(nickname: String, amount: Int): String = """
-        Withdrawals: 
-            - @$nickname -> $amount
-        """.trimIndent()
+        fun String.withdrawal(amount: Int): String = "${withdrawal} @$this $amount"
     }
 
 }
