@@ -20,7 +20,7 @@ open class TestBotConfig {
     @Primary
     open fun testBotOptions(): DefaultBotOptions {
         val botOptions = PokerClockBotOptions(
-                listOf(
+                updateTypes = listOf(
                         AllowedUpdates.EDITEDMESSAGE,
                         AllowedUpdates.MESSAGE,
                         AllowedUpdates.POLL,

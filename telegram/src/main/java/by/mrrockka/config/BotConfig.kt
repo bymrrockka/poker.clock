@@ -12,10 +12,12 @@ open class BotConfig {
     @Bean
     open fun botOptions(): DefaultBotOptions {
         val botOptions = PokerClockBotOptions(
-                listOf(AllowedUpdates.EDITEDMESSAGE,
+                updateTypes = listOf(
+                        AllowedUpdates.EDITEDMESSAGE,
                         AllowedUpdates.MESSAGE,
                         AllowedUpdates.POLL,
-                        AllowedUpdates.POLLANSWER)
+                        AllowedUpdates.POLLANSWER,
+                ),
         )
         return botOptions
     }

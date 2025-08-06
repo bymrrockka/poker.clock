@@ -51,7 +51,7 @@ import java.math.BigDecimal
 import java.time.Duration
 
 @ExtendWith(value = [TelegramPSQLExtension::class, TelegramWiremockExtension::class, TextApproverExtension::class])
-@ActiveProfiles(profiles = ["scenario", "no-exception-handler"])
+@ActiveProfiles(profiles = ["scenario"])
 @Testcontainers
 @SpringBootTest(classes = [TestBotConfig::class])
 abstract class AbstractScenarioTest {
@@ -181,9 +181,10 @@ abstract class AbstractScenarioTest {
                             if (stubs.size == commands.size) {
                                 commands.mapIndexed { index, command ->
                                     """
-                                       |### Command $index ###
+                                       |******************************
+                                       |-> Request
                                        |${command.message}
-                                       |--- Response ---
+                                       |-> Response
                                        |${stubs[index] ?: "No message"}                   
                                        """.trimMargin()
                                 }

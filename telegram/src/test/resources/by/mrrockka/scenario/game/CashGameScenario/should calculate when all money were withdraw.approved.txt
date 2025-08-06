@@ -1,20 +1,23 @@
-### Command 0 ###
+******************************
+-> Request
 /cash_game
 buyin: 10
 
 @nickname1, @nickname2
---- Response ---
+-> Response
 Cash game started.                   
 
-### Command 1 ###
+******************************
+-> Request
 /withdrawal @nickname1 20
---- Response ---
+-> Response
 Withdrawals: 
   - @nickname1 -> 20                   
 
-### Command 2 ###
+******************************
+-> Request
 /calculate
---- Response ---
+-> Response
 -----------------------------
 Payout to: @nickname1
   Entries: 10.00
