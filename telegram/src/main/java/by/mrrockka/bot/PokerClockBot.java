@@ -15,7 +15,7 @@ import org.telegram.telegrambots.meta.generics.LongPollingBot;
 import org.telegram.telegrambots.util.WebhookUtils;
 
 @Slf4j
-@Component
+//@Component
 @RequiredArgsConstructor
 public class PokerClockBot implements LongPollingBot {
 

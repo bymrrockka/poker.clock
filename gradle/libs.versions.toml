@@ -2,8 +2,10 @@
 #plugins
 springBootVersion = "3.3.2"
 springDepManagementVersion = "1.1.6"
-kotlinJvmVersion = "2.0.21"
-kotlinSerializationVersion = "2.0.21"
+kotlinJvmVersion = "2.2.0"
+kotlinSerializationVersion = "2.2.0"
+googleDevtoolsKspVersion = "2.2.0-2.0.2"
+telegramBotVersion = "8.2.0"
 
 #libs
 postgresqlVersion = "42.7.4"
@@ -34,6 +36,8 @@ kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinJvmVersion" 
 springBootPlugin = { id = "org.springframework.boot", version.ref = "springBootVersion" }
 springDepManagementPlugin = { id = "io.spring.dependency-management", version.ref = "springDepManagementVersion" }
 kotlinSerializationPlugin = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerializationVersion" }
+googleDevtoolsKspPlugin = { id = "com.google.devtools.ksp", version.ref = "googleDevtoolsKspVersion" }
+telegramBotPlugin = { id = "eu.vendeli.telegram-bot", version.ref = "telegramBotVersion" }
 
 [libraries]
 kotlinStdLib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8" }
