@@ -2,8 +2,7 @@
 #plugins
 springBootVersion = "3.3.2"
 springDepManagementVersion = "1.1.6"
-kotlinJvmVersion = "2.2.0"
-kotlinSerializationVersion = "2.2.0"
+kotlinVersion = "2.2.0"
 googleDevtoolsKspVersion = "2.2.0-2.0.2"
 telegramBotVersion = "8.2.0"
 
@@ -32,14 +31,17 @@ wiremockKotlinVersion = "2.1.1"
 okeydokieVersion = "2.0.3"
 
 [plugins]
-kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinJvmVersion" }
+kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinVersion" }
 springBootPlugin = { id = "org.springframework.boot", version.ref = "springBootVersion" }
 springDepManagementPlugin = { id = "io.spring.dependency-management", version.ref = "springDepManagementVersion" }
-kotlinSerializationPlugin = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerializationVersion" }
+kotlinSerializationPlugin = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinVersion" }
 googleDevtoolsKspPlugin = { id = "com.google.devtools.ksp", version.ref = "googleDevtoolsKspVersion" }
-telegramBotPlugin = { id = "eu.vendeli.telegram-bot", version.ref = "telegramBotVersion" }
+#telegramBotPlugin = { id = "eu.vendeli.telegram-bot", version.ref = "telegramBotVersion" }
+kotlinSpring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlinVersion" }
 
 [libraries]
+telegramBot = { module = "eu.vendeli:telegram-bot", version.ref = "telegramBotVersion" }
+vendeliKsp = { module = "eu.vendeli:ksp", version.ref = "telegramBotVersion" }
 kotlinStdLib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8" }
 springBootJdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc" }
 springBootAop = { module = "org.springframework.boot:spring-boot-starter-aop" }

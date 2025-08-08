@@ -10,7 +10,7 @@ plugins {
     alias(libs.plugins.kotlinJvm)
     alias(libs.plugins.kotlinSerializationPlugin)
     alias(libs.plugins.googleDevtoolsKspPlugin)
-    alias(libs.plugins.telegramBotPlugin)
+    alias(libs.plugins.kotlinSpring)
 }
 
 group = 'by.mrrockka'
@@ -63,6 +63,8 @@ dependencies {
     implementation libs.exposedJson
     implementation libs.exposedJavaTime
     implementation libs.exposedSpringBoot
+    implementation libs.telegramBot
+    implementation libs.vendeliKsp
 
     testCompileOnly libs.lombok
     testAnnotationProcessor libs.lombok
@@ -88,6 +90,8 @@ dependencies {
     testFixturesImplementation(project)
     testFixturesImplementation(testFixtures(project(":core")))
     testFixturesImplementation libs.wiremockContainer
+    testFixturesImplementation libs.telegramBot
+    testFixturesImplementation libs.vendeliKsp
 }
 
 application {
