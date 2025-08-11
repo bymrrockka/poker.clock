@@ -90,6 +90,7 @@ dependencies {
     testFixturesAnnotationProcessor(libs.mapstructProcessor)
 }
 
+//todo: crop preview features after removing old repos with string block interpolation usage
 tasks.withType<JavaCompile>().configureEach {
     options.compilerArgs.addAll(
             listOf(
@@ -98,6 +99,14 @@ tasks.withType<JavaCompile>().configureEach {
                     "-Amapstruct.defaultComponentModel=spring",
             ),
     )
+}
+
+tasks.withType<Test>().configureEach {
+    jvmArgs("--enable-preview")
+}
+
+tasks.withType<JavaExec>().configureEach {
+    jvmArgs("--enable-preview")
 }
 
 tasks.getByName<BootJar>("bootJar") {
@@ -113,7 +122,7 @@ application {
 defaultTasks("clean", "assemble")
 
 
-
+//todo: remove after scenario tests complited
 testing {
     suites {
         val test by getting(JvmTestSuite::class) {
