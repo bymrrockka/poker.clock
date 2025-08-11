@@ -2,14 +2,20 @@ package by.mrrockka.bot.command.processor
 
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.CommandHandler
+import eu.vendeli.tgbot.api.message.sendMessage
 import eu.vendeli.tgbot.types.User
 import org.springframework.stereotype.Component
 
+interface HelloCommand {
+    suspend fun hello(user: User, bot: TelegramBot)
+}
+
 @Component
-class HelloCommand {
+class HelloCommandImpl : HelloCommand {
 
     @CommandHandler(["/hello"])
-    fun hello(user: User, bot: TelegramBot) {
-
+    override suspend fun hello(user: User, bot: TelegramBot) {
+        println("Inside hello")
+        sendMessage { "Hello" }.send(user, bot)
     }
 }

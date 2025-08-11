@@ -8,7 +8,6 @@ import org.telegram.telegrambots.meta.api.methods.updates.AllowedUpdates
 
 @Configuration
 open class BotConfig {
-
     @Bean
     open fun botOptions(): DefaultBotOptions {
         val botOptions = PokerClockBotOptions(
@@ -21,5 +20,4 @@ open class BotConfig {
         )
         return botOptions
     }
-
 }

@@ -33,9 +33,12 @@ import com.marcinziolo.kotlin.wiremock.post
 import com.marcinziolo.kotlin.wiremock.returnsJson
 import com.marcinziolo.kotlin.wiremock.verify
 import com.oneeyedmen.okeydoke.Approver
+import eu.vendeli.tgbot.TelegramBot
+import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.awaitility.kotlin.await
 import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
@@ -65,12 +68,20 @@ abstract class AbstractScenarioTest {
     @Autowired
     lateinit var botProps: TelegramBotsProperties
 
+    @Autowired
+    lateinit var bots: List<TelegramBot>
+
     fun Any.toJsonString(): String = mapper.writeValueAsString(this)
     fun String.toJson(): JsonNode = mapper.readTree(this)
 
     @BeforeEach
     fun setUp() {
         wireMock.resetToDefaultMappings()
+    }
+
+    @AfterEach
+    fun after() {
+        bots.forEach { it.update.stopListener() }
     }
 
     companion object {
@@ -141,6 +152,10 @@ abstract class AbstractScenarioTest {
             } and {
                 toState = "${scenarioSeed}0"
             }
+        }
+
+        runBlocking {
+            bots.forEach { it.handleUpdates() }
         }
     }
 

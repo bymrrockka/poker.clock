@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 group = "by.mrrockka"
@@ -91,27 +92,51 @@ dependencies {
 }
 
 //todo: crop preview features after removing old repos with string block interpolation usage
-tasks.withType<JavaCompile>().configureEach {
-    options.compilerArgs.addAll(
-            listOf(
-                    "--enable-preview",
-                    "-Amapstruct.suppressGeneratorTimestamp=true",
-                    "-Amapstruct.defaultComponentModel=spring",
-            ),
-    )
+
+configurations.all {
+    resolutionStrategy.eachDependency {
+        val serdeVer = "1.8.1"
+        when (requested.module.toString()) {
+            // json serialiazaton
+            "org.jetbrains.kotlinx:kotlinx-serialization-json" -> useVersion(serdeVer)
+            "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm" -> useVersion(serdeVer)
+            "org.jetbrains.kotlinx:kotlinx-serialization-core" -> useVersion(serdeVer)
+            "org.jetbrains.kotlinx:kotlinx-serialization-core-jvm" -> useVersion(serdeVer)
+            "org.jetbrains.kotlinx:kotlinx-serialization-bom" -> useVersion(serdeVer)
+        }
+    }
 }
 
-tasks.withType<Test>().configureEach {
-    jvmArgs("--enable-preview")
-}
+tasks {
+    withType<JavaCompile>().configureEach {
+        options.compilerArgs.addAll(
+                listOf(
+                        "--enable-preview",
+                        "-Amapstruct.suppressGeneratorTimestamp=true",
+                        "-Amapstruct.defaultComponentModel=spring",
+                ),
+        )
+    }
 
-tasks.withType<JavaExec>().configureEach {
-    jvmArgs("--enable-preview")
-}
+    withType<KotlinCompile>().configureEach {
+        compilerOptions {
+            freeCompilerArgs = listOf("-Xjsr305=strict")
+        }
+    }
 
-tasks.getByName<BootJar>("bootJar") {
-    enabled = true
-    archiveBaseName = "telegram-bot"
+    withType<Test>().configureEach {
+        jvmArgs("--enable-preview")
+        useJUnitPlatform()
+    }
+
+    withType<JavaExec>().configureEach {
+        jvmArgs("--enable-preview")
+    }
+
+    getByName<BootJar>("bootJar") {
+        enabled = true
+        archiveBaseName = "telegram-bot"
+    }
 }
 
 

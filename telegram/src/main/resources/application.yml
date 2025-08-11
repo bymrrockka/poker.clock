@@ -4,6 +4,12 @@ telegrambots:
   enabled: ${BOT_ENABLED:true}
   token: ${BOT_TOKEN:}
 
+ktgram:
+  autoStartPolling: ${BOT_ENABLED:true}
+  maxHandlingRetries: 2
+  bot:
+    - token: ${BOT_TOKEN:}
+
 bot:
   description:
     commands:

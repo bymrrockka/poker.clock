@@ -36,12 +36,11 @@ springBootPlugin = { id = "org.springframework.boot", version.ref = "springBootV
 springDepManagementPlugin = { id = "io.spring.dependency-management", version.ref = "springDepManagementVersion" }
 kotlinSerializationPlugin = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinVersion" }
 googleDevtoolsKspPlugin = { id = "com.google.devtools.ksp", version.ref = "googleDevtoolsKspVersion" }
-#telegramBotPlugin = { id = "eu.vendeli.telegram-bot", version.ref = "telegramBotVersion" }
-kotlinSpring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlinVersion" }
 
 [libraries]
 telegramBot = { module = "eu.vendeli:telegram-bot", version.ref = "telegramBotVersion" }
 vendeliKsp = { module = "eu.vendeli:ksp", version.ref = "telegramBotVersion" }
+vendeliSpringStarter = { module = "eu.vendeli:spring-ktgram-starter", version.ref = "telegramBotVersion" }
 kotlinStdLib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8" }
 springBootJdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc" }
 springBootAop = { module = "org.springframework.boot:spring-boot-starter-aop" }

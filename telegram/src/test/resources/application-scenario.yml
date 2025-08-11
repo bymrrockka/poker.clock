@@ -9,6 +9,12 @@ spring:
     enabled: true
     change-log: db/changelog/db.changelog-master.yml
 
+ktgram:
+  autoStartPolling: false
+  maxHandlingRetries: 1
+  bot:
+    - token: bottoken
+
 bot:
   description:
     commands:
