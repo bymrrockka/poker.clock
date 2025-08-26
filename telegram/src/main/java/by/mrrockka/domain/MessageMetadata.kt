@@ -6,6 +6,7 @@ import java.time.Instant
 import java.util.*
 import java.util.stream.Stream
 
+//todo check if it's needed
 data class MessageMetadata(
         val chatId: Long,
         val createdAt: Instant,

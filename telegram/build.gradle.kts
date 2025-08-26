@@ -16,6 +16,7 @@ plugins {
     alias(libs.plugins.kotlinJvm)
     alias(libs.plugins.kotlinSerializationPlugin)
     alias(libs.plugins.googleDevtoolsKspPlugin)
+    alias(libs.plugins.telegramBot)
 }
 
 val jvmVersion = 22
@@ -36,42 +37,26 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.springBootJdbc)
-    implementation(libs.springBootWeb)
-    implementation(libs.springBootAop)
-    implementation(libs.springBootTelegrambots)
     implementation(project(":core"))
-    implementation(libs.apacheCommonsLang3)
-    implementation(libs.postgresql)
-    implementation(libs.liquibase)
+    implementation(libs.bundles.logback)
+    implementation(libs.bundles.springBoot)
+    implementation(libs.bundles.db)
+    implementation(libs.bundles.kotlinLibs)
+    implementation(libs.bundles.exposed)
+    //todo remove
     implementation(libs.mapstructCore)
     implementation(libs.lombokMapstructBinding)
-    implementation(libs.kotlinStdLib)
-    implementation(libs.exposedCore)
-    implementation(libs.exposedJdbc)
-    implementation(libs.exposedJson)
-    implementation(libs.exposedJavaTime)
-    implementation(libs.exposedSpringBoot)
-    implementation(libs.telegramBot)
-    implementation(libs.vendeliKsp)
     implementation(libs.vendeliSpringStarter)
+    implementation(libs.apacheCommonsLang3)
 
     runtimeOnly(libs.aspectjWeaver)
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
     annotationProcessor(libs.mapstructProcessor)
 
-    testImplementation(libs.mockitoCore)
-    testImplementation(libs.mockitoJupiter)
-    testImplementation(libs.jupiter)
-    testImplementation(libs.assertjCore)
-    testImplementation(libs.kotlinStdLib)
-    testImplementation(libs.mockk)
-    testImplementation(libs.springBootTest)
-    testImplementation(libs.awaitility)
-    testImplementation(libs.wiremock)
-    testImplementation(libs.wiremockKotlinDsl)
-    testImplementation(libs.wiremockContainer)
+    testImplementation(libs.bundles.test)
+    testImplementation(libs.bundles.wiremock)
+    testImplementation(libs.bundles.kotlinLibs)
     testImplementation(testFixtures(project))
     testImplementation(testFixtures(project(":core")))
 
@@ -84,7 +69,6 @@ dependencies {
     testFixturesImplementation(testFixtures(project(":core")))
     testFixturesImplementation(libs.wiremockContainer)
     testFixturesImplementation(libs.telegramBot)
-    testFixturesImplementation(libs.vendeliKsp)
 
     testFixturesCompileOnly(libs.lombok)
     testFixturesAnnotationProcessor(libs.lombok)
@@ -138,7 +122,6 @@ tasks {
         archiveBaseName = "telegram-bot"
     }
 }
-
 
 application {
     mainClass = "by.mrrockka.TelegramApplication"

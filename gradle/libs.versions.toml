@@ -4,7 +4,7 @@ springBootVersion = "3.3.2"
 springDepManagementVersion = "1.1.6"
 kotlinVersion = "2.2.0"
 googleDevtoolsKspVersion = "2.2.0-2.0.2"
-telegramBotVersion = "8.2.0"
+telegramBotVersion = "8.3.1"
 
 #libs
 postgresqlVersion = "42.7.4"
@@ -17,7 +17,7 @@ apacheCommonsLang3Version = "3.17.0"
 mockitoVersion = "5.14.0"
 liquibaseVersion = "4.29.2"
 javaFakerVersion = "1.0.2"
-jacksonDataformatVersion = "2.18.0"
+jacksonVersion = "2.19.2"
 mapstructVersion = "1.6.2"
 lombokMapstructBindingVersion = "0.2.0"
 hikariCPVersion = "5.1.0"
@@ -29,6 +29,7 @@ wiremockVersion = "3.10.0"
 wiremockContainerVersion = "1.0-alpha-13"
 wiremockKotlinVersion = "2.1.1"
 okeydokieVersion = "2.0.3"
+logbackVersion = "1.5.18"
 
 [plugins]
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinVersion" }
@@ -36,10 +37,10 @@ springBootPlugin = { id = "org.springframework.boot", version.ref = "springBootV
 springDepManagementPlugin = { id = "io.spring.dependency-management", version.ref = "springDepManagementVersion" }
 kotlinSerializationPlugin = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinVersion" }
 googleDevtoolsKspPlugin = { id = "com.google.devtools.ksp", version.ref = "googleDevtoolsKspVersion" }
+telegramBot = { id = "eu.vendeli.telegram-bot", version.ref = "telegramBotVersion" }
 
 [libraries]
 telegramBot = { module = "eu.vendeli:telegram-bot", version.ref = "telegramBotVersion" }
-vendeliKsp = { module = "eu.vendeli:ksp", version.ref = "telegramBotVersion" }
 vendeliSpringStarter = { module = "eu.vendeli:spring-ktgram-starter", version.ref = "telegramBotVersion" }
 kotlinStdLib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8" }
 springBootJdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc" }
@@ -61,7 +62,7 @@ mockitoJupiter = { module = "org.mockito:mockito-junit-jupiter", version.ref = "
 springBootTest = { module = "org.springframework.boot:spring-boot-starter-test" }
 liquibase = { module = "org.liquibase:liquibase-core", version.ref = "liquibaseVersion" }
 javaFaker = { module = "com.github.javafaker:javafaker", version.ref = "javaFakerVersion" }
-jacksonDataformat = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml", version.ref = "jacksonDataformatVersion" }
+jacksonDataformat = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml", version.ref = "jacksonVersion" }
 mapstructCore = { module = "org.mapstruct:mapstruct", version.ref = "mapstructVersion" }
 mapstructProcessor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstructVersion" }
 lombokMapstructBinding = { module = "org.projectlombok:lombok-mapstruct-binding", version.ref = "lombokMapstructBindingVersion" }
@@ -76,3 +77,15 @@ wiremock = { module = "org.wiremock:wiremock-standalone", version.ref = "wiremoc
 wiremockContainer = { module = "org.wiremock.integrations.testcontainers:wiremock-testcontainers-module", version.ref = "wiremockContainerVersion" }
 wiremockKotlinDsl = { module = "com.marcinziolo:kotlin-wiremock", version.ref = "wiremockKotlinVersion" }
 okeydoke = { module = "com.oneeyedmen:okeydoke", version.ref = "okeydokieVersion" }
+kotlinSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinVersion" }
+logbackClassic = { module = "ch.qos.logback:logback-classic", version.ref = "logbackVersion" }
+logbackCore = { module = "ch.qos.logback:logback-core", version.ref = "logbackVersion" }
+
+[bundles]
+logback = ["logbackClassic", "logbackCore"]
+wiremock = ["wiremock", "wiremockContainer", "wiremockKotlinDsl"]
+kotlinLibs = ["kotlinStdLib", "kotlinSerialization"]
+springBoot = ["springBootWeb", "springBootJdbc", "springBootAop", "springBootTelegrambots"]
+exposed = ["exposedCore", "exposedSpringBoot", "exposedJdbc", "exposedJson", "exposedJavaTime"]
+test = ["assertjCore", "jupiter", "mockitoCore", "mockitoJupiter","mockk", "awaitility", "springBootTest"]
+db = ["postgresql", "liquibase"]

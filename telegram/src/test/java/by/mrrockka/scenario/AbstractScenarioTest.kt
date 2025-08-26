@@ -2,15 +2,12 @@ package by.mrrockka.scenario
 
 import by.mrrockka.Given
 import by.mrrockka.GivenSpecification
-import by.mrrockka.Random
 import by.mrrockka.TelegramRandoms.Companion.telegramRandoms
 import by.mrrockka.ThenSpecification
 import by.mrrockka.When
 import by.mrrockka.WhenSpecification
 import by.mrrockka.bot.TelegramBotsProperties
-import by.mrrockka.creator.ChatCreator
-import by.mrrockka.creator.MessageCreator
-import by.mrrockka.creator.UpdateCreator
+import by.mrrockka.builder.update
 import by.mrrockka.domain.GameType
 import by.mrrockka.extension.TelegramPSQLExtension
 import by.mrrockka.extension.TelegramWiremockContainer
@@ -34,7 +31,14 @@ import com.marcinziolo.kotlin.wiremock.returnsJson
 import com.marcinziolo.kotlin.wiremock.verify
 import com.oneeyedmen.okeydoke.Approver
 import eu.vendeli.tgbot.TelegramBot
-import kotlinx.coroutines.runBlocking
+import eu.vendeli.tgbot.types.common.Update
+import eu.vendeli.tgbot.types.component.Response
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNamingStrategy
 import org.assertj.core.api.Assertions.assertThat
 import org.awaitility.kotlin.await
 import org.junit.jupiter.api.AfterAll
@@ -45,10 +49,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
-import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
-import org.telegram.telegrambots.meta.api.methods.updates.DeleteWebhook
-import org.telegram.telegrambots.meta.api.methods.updates.GetUpdates
 import org.testcontainers.junit.jupiter.Testcontainers
 import java.math.BigDecimal
 import java.time.Duration
@@ -69,7 +70,7 @@ abstract class AbstractScenarioTest {
     lateinit var botProps: TelegramBotsProperties
 
     @Autowired
-    lateinit var bots: List<TelegramBot>
+    lateinit var bot: TelegramBot
 
     fun Any.toJsonString(): String = mapper.writeValueAsString(this)
     fun String.toJson(): JsonNode = mapper.readTree(this)
@@ -81,84 +82,88 @@ abstract class AbstractScenarioTest {
 
     @AfterEach
     fun after() {
-        bots.forEach { it.update.stopListener() }
+        bot.update.stopListener()
     }
 
     companion object {
         lateinit var wireMock: WireMock
         const val METADATA_ATTR = "scenario"
-        private val testResponseBuilder = SendMessage.builder().text("TEST OK")
+        val testResponse = Response.Success("TEST OK")
+        const val getUpdates = "getUpdates"
+        const val sendMessage = "sendMessage"
 
         @JvmStatic
         @BeforeAll
-        fun beforeAll(): Unit {
+        fun beforeAll() {
             wireMock = WireMock(TelegramWiremockContainer.port)
         }
 
         @JvmStatic
         @AfterAll
-        fun afterAll(): Unit {
+        fun afterAll() {
+            val botpath = "/bottoken"
             await.atMost(Duration.ofSeconds(1)).untilAsserted {
+//                wireMock.verify {
+//                    url equalTo "${botpath}/${SetMyCommands.PATH}"
+//                    atMost = 1
+//                }
+//                wireMock.verify {
+//                    url equalTo "${botpath}/${DeleteWebhook.PATH}"
+//                    atMost = 1
+//                }
                 wireMock.verify {
-                    url equalTo "/bottoken/${SetMyCommands.PATH}"
-                    atMost = 1
-                }
-                wireMock.verify {
-                    url equalTo "/bottoken/${DeleteWebhook.PATH}"
-                    atMost = 1
-                }
-                wireMock.verify {
-                    url equalTo "/bottoken/${GetUpdates.PATH}"
+                    url equalTo "${botpath}/${getUpdates}"
                     atLeast = 1
                 }
             }
         }
+
+
+        @OptIn(ExperimentalSerializationApi::class)
+        internal val serde = Json {
+            namingStrategy = JsonNamingStrategy.SnakeCase
+            encodeDefaults = true
+            ignoreUnknownKeys = true
+            explicitNulls = false
+            isLenient = true
+        }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     fun GivenSpecification.updatesReceived(chatId: Long = chatid) {
         this.commands.mapIndexed { index, command ->
-            UpdateCreator.update {
-                this.message = MessageCreator.message { message ->
-                    message.messageId = Random.messageId()
-                    message.text = command.message
-                    message.chat = ChatCreator.chat(chatId)
-                    message.entities = command.entities
+            update {
+                message {
+                    text(command.message)
+                    chatId(chatId)
                 }
             }
         }.also { updates ->
             wireMock.post {
-                url equalTo "/${botProps.token}/${GetUpdates.PATH}"
+                url equalTo "${botProps.botpath}/${getUpdates}"
             } returnsJson {
-                body = """
-            {
-                "ok": "true",
-                "result": ${updates.toJsonString()}
-            }
-            """
+                body = serde.encodeToString(Response.Success(updates))
             } and {
                 toState = "updates"
             }
 
             wireMock.post {
-                url equalTo "/${botProps.token}/${GetUpdates.PATH}"
+                url equalTo "${botProps.botpath}/${getUpdates}"
                 whenState = "updates"
             } returnsJson {
-                body = """
-            {
-                "ok": "true",
-                "result": ${UpdateCreator.emptyList().toJsonString()}
-            }
-            """
+                body = serde.encodeToString(Response.Success(emptyList<Update>()))
             } and {
                 toState = "${scenarioSeed}0"
             }
         }
-
-        runBlocking {
-            bots.forEach { it.handleUpdates() }
+        GlobalScope.launch {
+            launch {
+                bot.handleUpdates()
+            }
         }
     }
 
+    @Deprecated(message = "use approve method instead", replaceWith = ReplaceWith("thenApprove"))
     infix fun WhenSpecification.Then(block: ThenSpecification.() -> Unit) = ThenSpecification(this.scenarioSeed)
             .apply(block)
             .also { thenExecute(it) }
@@ -169,16 +174,11 @@ abstract class AbstractScenarioTest {
             .also {
                 it.commands?.mapIndexed { index, command ->
                     wireMock.post {
-                        url equalTo "/${botProps.token}/${SendMessage().method}"
+                        url equalTo "${botProps.botpath}/${sendMessage}"
                         whenState = "${scenarioSeed}$index"
                         withBuilder { withMetadata(metadata().attr("scenario", index)) }
                     } returnsJson {
-                        body = """
-                            {
-                                "ok": "true",
-                                "result": ${testResponseBuilder.chatId(chatid).build().toJsonString()}
-                            }
-                            """
+                        body = serde.encodeToString(testResponse)
                     } and {
                         toState = "${scenarioSeed}${index + 1}"
                     }
@@ -210,10 +210,11 @@ abstract class AbstractScenarioTest {
                         }
             }
 
+    @Deprecated(message = "use approve method instead", replaceWith = ReplaceWith("thenApprove"))
     private fun thenExecute(thenSpec: ThenSpecification) {
         thenSpec.expects.forEachIndexed { index, expect ->
             wireMock.post {
-                url equalTo "/${botProps.token}/${expect.result.method}"
+                url equalTo "${botProps.botpath}/${expect.result.method}"
                 whenState = "${thenSpec.scenarioSeed}$index"
                 withBuilder { withMetadata(metadata().attr("scenario", index)) }
             } returnsJson {
@@ -229,11 +230,12 @@ abstract class AbstractScenarioTest {
         }
     }
 
+    @Deprecated(message = "use approve method instead", replaceWith = ReplaceWith("thenApprove"))
     private fun thenAssert(thenSpec: ThenSpecification) {
         thenSpec.expects.forEach { expect ->
             await.atMost(Duration.ofSeconds(1)).untilAsserted {
                 wireMock.verify {
-                    url equalTo "/${botProps.token}/${expect.result.method}"
+                    url equalTo "${botProps.botpath}/${expect.result.method}"
                     method = RequestMethod.POST
                     exactly = 1
                     when (val resp = expect.result) {

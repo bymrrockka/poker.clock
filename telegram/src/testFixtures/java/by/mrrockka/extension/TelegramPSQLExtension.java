@@ -1,13 +1,11 @@
 package by.mrrockka.extension;
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.sql.PreparedStatement;
 
-@Slf4j
 public class TelegramPSQLExtension extends CorePSQLExtension {
 
   @Override

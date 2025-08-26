@@ -6,7 +6,6 @@ import by.mrrockka.service.UpdateBotCommandsService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
@@ -28,7 +27,7 @@ public class PokerClockBot implements LongPollingBot {
   @Override
   public void onUpdateReceived(final Update update) {
 //    todo: add logic to process edited message
-    if (!telegramBotsProperties.isEnabled()) {
+    if (!telegramBotsProperties.getEnabled()) {
       throw new BotIsNotEnabledException();
     }
     if (isProcessable(update)) {
@@ -54,7 +53,7 @@ public class PokerClockBot implements LongPollingBot {
 
   @Override
   public void clearWebhook() throws TelegramApiRequestException {
-    if (telegramBotsProperties.isEnabled()) {
+    if (telegramBotsProperties.getEnabled()) {
       WebhookUtils.clearWebhook(absSender);
     }
   }
@@ -80,7 +79,7 @@ public class PokerClockBot implements LongPollingBot {
 
   @Override
   public void onRegister() {
-    if (telegramBotsProperties.isEnabled()) {
+    if (telegramBotsProperties.getEnabled()) {
       updateBotCommandsService.updateBotCommands();
     }
   }

@@ -1,7 +1,11 @@
 package by.mrrockka.parser
 
-import by.mrrockka.builder.message
-import by.mrrockka.domain.*
+import by.mrrockka.builder.metadata
+import by.mrrockka.domain.BountyTournamentGame
+import by.mrrockka.domain.CashGame
+import by.mrrockka.domain.Game
+import by.mrrockka.domain.MessageMetadata
+import by.mrrockka.domain.TournamentGame
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
@@ -30,8 +34,9 @@ internal class GameMessageParserTest {
         @JvmStatic
         private fun gameMessages() = Stream.of(
                 Arguments.of(
-                        message {
-                            text = """
+                        metadata {
+                            text(
+                                    """
                           /tournament_game 
                           buyin: 30  
                           stack: 30.5k 
@@ -40,7 +45,8 @@ internal class GameMessageParserTest {
                           @ivano 
                            @andrei 
                           @me   
-                          """.trimIndent()
+                          """.trimIndent(),
+                            )
                         },
                         { game: Game ->
                             assertThat(game).isInstanceOf(TournamentGame::class.java)
@@ -50,8 +56,9 @@ internal class GameMessageParserTest {
                 ),
 
                 Arguments.of(
-                        message {
-                            text = """
+                        metadata {
+                            text(
+                                    """
                           /tournament_game 
                           buyin:    15   
                             @mrrockka
@@ -60,7 +67,8 @@ internal class GameMessageParserTest {
                           @ivano 
                            @andrei 
                           @me   
-                          """.trimIndent()
+                          """.trimIndent(),
+                            )
                         },
                         { game: Game ->
                             assertThat(game).isInstanceOf(TournamentGame::class.java)
@@ -70,15 +78,17 @@ internal class GameMessageParserTest {
                 ),
 
                 Arguments.of(
-                        message {
-                            text = """
+                        metadata {
+                            text(
+                                    """
                           /tournament_game
                           buyin:      100
                           stack:50000
                           players:
                             @mrrockka
                           @me
-                          """.trimIndent()
+                          """.trimIndent(),
+                            )
                         },
                         { game: Game ->
                             assertThat(game).isInstanceOf(TournamentGame::class.java)
@@ -88,8 +98,9 @@ internal class GameMessageParserTest {
                 ),
 
                 Arguments.of(
-                        message {
-                            text = """
+                        metadata {
+                            text(
+                                    """
                           /bounty_game 
                           buyin: 30  
                           stack: 30k 
@@ -99,7 +110,8 @@ internal class GameMessageParserTest {
                           @ivano 
                            @andrei 
                           @me   
-                          """.trimIndent()
+                          """.trimIndent(),
+                            )
                         },
                         { game: Game ->
                             assertThat(game).isInstanceOf(BountyTournamentGame::class.java)
@@ -110,8 +122,9 @@ internal class GameMessageParserTest {
                 ),
 
                 Arguments.of(
-                        message {
-                            text = """
+                        metadata {
+                            text(
+                                    """
                           /bounty_game 
                           buyin:    15k  
                           bounty:300 
@@ -122,7 +135,8 @@ internal class GameMessageParserTest {
                           @ivano 
                            @andrei 
                           @me   
-                          """.trimIndent()
+                          """.trimIndent(),
+                            )
                         },
                         { game: Game ->
                             assertThat(game).isInstanceOf(BountyTournamentGame::class.java)
@@ -133,15 +147,17 @@ internal class GameMessageParserTest {
                 ),
 
                 Arguments.of(
-                        message {
-                            text = """
+                        metadata {
+                            text(
+                                    """
                           /bounty_game
                           bounty:30
                           buyin:      10K
                           players:
                             @mrrockka
                           @me
-                          """.trimIndent()
+                          """.trimIndent(),
+                            )
                         },
                         { game: Game ->
                             assertThat(game).isInstanceOf(BountyTournamentGame::class.java)
@@ -152,8 +168,9 @@ internal class GameMessageParserTest {
                 ),
 
                 Arguments.of(
-                        message {
-                            text = """
+                        metadata {
+                            text(
+                                    """
                           /cash_game 
                           buyin: 30  
                           stack: 30k 
@@ -162,7 +179,8 @@ internal class GameMessageParserTest {
                           @ivano 
                            @andrei 
                           @me   
-                          """.trimIndent()
+                          """.trimIndent(),
+                            )
                         },
                         { game: Game ->
                             assertThat(game).isInstanceOf(CashGame::class.java)
@@ -172,8 +190,9 @@ internal class GameMessageParserTest {
                 ),
 
                 Arguments.of(
-                        message {
-                            text = """
+                        metadata {
+                            text(
+                                    """
                           /cash_game 
                           buyin:    15   
                           bounty:30 
@@ -184,7 +203,8 @@ internal class GameMessageParserTest {
                           @ivano 
                            @andrei 
                           @me   
-                          """.trimIndent()
+                          """.trimIndent(),
+                            )
                         },
                         { game: Game ->
                             assertThat(game).isInstanceOf(CashGame::class.java)
@@ -194,14 +214,16 @@ internal class GameMessageParserTest {
                 ),
 
                 Arguments.of(
-                        message {
-                            text = """
+                        metadata {
+                            text(
+                                    """
                           /cash_game
                           buyin:      100
                           players:
                             @mrrockka
                           @me
-                          """.trimIndent()
+                          """.trimIndent(),
+                            )
                         },
                         { game: Game ->
                             assertThat(game).isInstanceOf(CashGame::class.java)
@@ -213,24 +235,28 @@ internal class GameMessageParserTest {
 
         @JvmStatic
         private fun invalidGameMessages() = listOf(
-                message {
-                    text = """
+                metadata {
+                    text(
+                            """
                     /tournament_game   
                     stack: 1.5k 
                     players: 
                       @mrrockka
                       @me
-                    """.trimIndent()
+                    """.trimIndent(),
+                    )
                 },
 
-                message {
-                    text = """
+                metadata {
+                    text(
+                            """
                     /bounty_game
                     buyin:    15  
                     players: 
                       @mrrockka
                       @me
-                    """.trimIndent()
+                    """.trimIndent(),
+                    )
                 },
         )
     }

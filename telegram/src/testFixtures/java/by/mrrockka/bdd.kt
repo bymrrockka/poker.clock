@@ -7,9 +7,6 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.EntityType
 import org.telegram.telegrambots.meta.api.objects.MessageEntity
-import kotlin.text.RegexOption.MULTILINE
-import kotlin.text.get
-
 
 class Command(init: Command.() -> Unit) {
     lateinit var message: String
@@ -21,22 +18,6 @@ class Command(init: Command.() -> Unit) {
 
     fun message(message: String) {
         this.message = message.trim()
-        val botCommandRegex = "^(/[\\w_]+)".toRegex(MULTILINE)
-        val mentionRegex = "(@(?<nickname>[\\w\\d_]+))".toRegex(MULTILINE)
-        val botCommand = botCommandRegex.find(this.message)!!.groups[0]!!.value
-        entity(botCommand, EntityType.BOTCOMMAND)
-
-        mentionRegex.findAll(this.message)
-                .mapNotNull { it.groups["nickname"]?.value }
-                .distinct()
-                .forEach { mention -> entity(mention, EntityType.MENTION) }
-    }
-
-    fun entity(value: String, type: String) {
-        when (type) {
-            EntityType.BOTCOMMAND -> entities += MessageEntityCreator.apiCommand(message, value)
-            EntityType.MENTION -> entities += MessageEntityCreator.apiMention(message, value)
-        }
     }
 }
 

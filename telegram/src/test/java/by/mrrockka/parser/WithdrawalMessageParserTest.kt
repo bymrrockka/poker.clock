@@ -1,9 +1,8 @@
 package by.mrrockka.parser
 
 import by.mrrockka.AbstractTest
-import by.mrrockka.builder.mentions
-import by.mrrockka.builder.message
-import by.mrrockka.builder.messageEntity
+import by.mrrockka.builder.domainMention
+import by.mrrockka.builder.metadata
 import by.mrrockka.domain.MessageMetadata
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.assertThrows
@@ -20,7 +19,7 @@ class WithdrawalMessageParserTest : AbstractTest() {
     data class WithdrawalArgument(
             val metadata: MessageMetadata,
             val nicknames: Set<String>,
-            val amount: BigDecimal
+            val amount: BigDecimal,
     )
 
     @ParameterizedTest
@@ -34,7 +33,7 @@ class WithdrawalMessageParserTest : AbstractTest() {
     @ParameterizedTest
     @MethodSource("invalidEntryWithMentionsMessage")
     fun givenInvalidEntryMessageWithMentions_whenParseAttempt_shouldThrowException(message: String) {
-        val metadata = message { this.text = message }
+        val metadata = metadata { text(message) }
         assertThrows<IllegalStateException> { withdrawalMessageParser.parse(metadata) }
     }
 
@@ -45,28 +44,28 @@ class WithdrawalMessageParserTest : AbstractTest() {
         private fun withdrawalWithMentionsMessage(): List<WithdrawalArgument> {
             return listOf(
                     WithdrawalArgument(
-                            metadata = message {
-                                this.text = "/withdrawal @kinger 60"
-                                entity(messageEntity { this.text = "@kinger" }.mention())
+                            metadata = metadata {
+                                text("/withdrawal @kinger 60")
+                                entity(domainMention { messageText("@kinger") })
                             },
                             nicknames = setOf("kinger"),
-                            amount = BigDecimal("60")
+                            amount = BigDecimal("60"),
                     ),
                     WithdrawalArgument(
-                            metadata = message {
-                                this.text = "/withdrawal 60 @kinger"
-                                entity(messageEntity { this.text = "@kinger" }.mention())
+                            metadata = metadata {
+                                text("/withdrawal 60 @kinger")
+                                entity(domainMention { messageText("@kinger") })
                             },
                             nicknames = setOf("kinger"),
-                            amount = BigDecimal("60")
+                            amount = BigDecimal("60"),
                     ),
                     WithdrawalArgument(
-                            metadata = message {
-                                this.text = "/withdrawal @kinger @asadf @asdfasdf @koomko 30"
-                                this.entities = listOf("@kinger", "@asadf", "@asdfasdf", "@koomko").mentions()
+                            metadata = metadata {
+                                text("/withdrawal @kinger @asadf @asdfasdf @koomko 30")
+                                entities(listOf("@kinger", "@asadf", "@asdfasdf", "@koomko"))
                             },
                             nicknames = setOf("kinger", "asadf", "asdfasdf", "koomko"),
-                            amount = BigDecimal("30")
+                            amount = BigDecimal("30"),
                     ),
             )
         }
@@ -78,7 +77,7 @@ class WithdrawalMessageParserTest : AbstractTest() {
                     Arguments.of("/withdrawal@kinger"),
                     Arguments.of("/withdrawal@$BOT_NAME"),
                     Arguments.of("/withdrawal"),
-                    Arguments.of("@kinger/withdrawal")
+                    Arguments.of("@kinger/withdrawal"),
             )
         }
     }

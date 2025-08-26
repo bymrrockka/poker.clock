@@ -9,11 +9,11 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.EnableAspectJAutoProxy
 import org.springframework.scheduling.annotation.EnableScheduling
 
-@SpringBootApplication
 @EnableAspectJAutoProxy
 @EnableScheduling
-@ComponentScan("by.mrrockka", "org.telegram.telegrambots", "eu.vendeli")
-@ImportAutoConfiguration(value = [ExposedAutoConfiguration::class, TelegramAutoConfiguration::class])
+@ComponentScan("by.mrrockka", "org.telegram.telegrambots")
+@ImportAutoConfiguration(value = [ExposedAutoConfiguration::class])
+@SpringBootApplication(exclude = [TelegramAutoConfiguration::class])
 open class TelegramApplication {
 
     fun main(args: Array<String>) {

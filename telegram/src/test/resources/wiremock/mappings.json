@@ -35,7 +35,7 @@
     {
       "request": {
         "method": "POST",
-        "url": "/bottoken/getupdates"
+        "url": "/bottoken/getUpdates"
       },
       "response": {
         "status": 200,
@@ -52,7 +52,7 @@
       "priority": 10,
       "request": {
         "method": "ANY",
-        "urlPattern": ".*"
+        "urlPattern": "/*"
       },
       "response": {
         "status": 404,
