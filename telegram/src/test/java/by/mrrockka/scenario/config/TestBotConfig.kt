@@ -25,7 +25,7 @@ open class TestBotConfig(
     @Bean
     @Primary
     open fun bot(appContext: ApplicationContext): TelegramBot {
-        return TelegramBot(botProps.token, "by.mrrockka.bot.command.processor") {
+        return TelegramBot(botProps.token) {
 //            classManager = SpringClassManager(appContext)
             apiHost = wiremockServerBaseUrl
         }

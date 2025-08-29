@@ -29,6 +29,9 @@ java {
 
 kotlin {
     jvmToolchain(jvmVersion)
+    sourceSets.test {
+        kotlin.srcDir("src/main/java/")
+    }
 }
 
 repositories {

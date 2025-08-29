@@ -15,7 +15,6 @@ class HelloCommandImpl : HelloCommand {
 
     @CommandHandler(["/hello"])
     override suspend fun hello(user: User, bot: TelegramBot) {
-        println("Inside hello")
         sendMessage { "Hello" }.send(user, bot)
     }
 }

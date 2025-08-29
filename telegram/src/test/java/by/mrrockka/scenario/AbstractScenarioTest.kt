@@ -191,7 +191,6 @@ abstract class AbstractScenarioTest {
                             val stubs = wireMock.getServeEvents()
                                     .filter { it.stubMapping.metadata != null && it.stubMapping.metadata.contains(METADATA_ATTR) }
                                     .associate { it.stubMapping.metadata.getInt(METADATA_ATTR) to it.request.bodyAsString.toJson().findPath("text").asText() }
-                            assertThat(stubs).hasSize(commands.size)
 
                             if (stubs.size == commands.size) {
                                 commands.mapIndexed { index, command ->

@@ -54,7 +54,7 @@ class MessageEntityBuilder(init: (MessageEntityBuilder.() -> Unit) = {}) : Abstr
         return eu.vendeli.tgbot.types.msg.MessageEntity(
                 type = EntityType.BotCommand,
                 offset = messageText?.indexOf(entityText ?: "") ?: 0,
-                length = entityText?.length?.minus(1) ?: 0,
+                length = entityText?.length ?: 0,
         )
     }
 
@@ -62,7 +62,7 @@ class MessageEntityBuilder(init: (MessageEntityBuilder.() -> Unit) = {}) : Abstr
         return eu.vendeli.tgbot.types.msg.MessageEntity(
                 type = EntityType.Mention,
                 offset = messageText?.indexOf(entityText ?: "") ?: 0,
-                length = entityText?.length?.minus(1) ?: 0,
+                length = entityText?.length ?: 0,
         )
     }
 
