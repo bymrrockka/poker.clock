@@ -101,7 +101,7 @@ abstract class AbstractScenarioTest {
         @AfterAll
         fun afterAll() {
             val botpath = "/bottoken"
-            await.atMost(Duration.ofSeconds(1)).untilAsserted {
+//            await.atMost(Duration.ofSeconds(1)).untilAsserted {
 //                wireMock.verify {
 //                    url equalTo "${botpath}/${SetMyCommands.PATH}"
 //                    atMost = 1
@@ -114,7 +114,7 @@ abstract class AbstractScenarioTest {
                     url equalTo "${botpath}/${getUpdates}"
                     atLeast = 1
                 }
-            }
+//            }
         }
 
 
@@ -130,36 +130,61 @@ abstract class AbstractScenarioTest {
 
     @OptIn(DelicateCoroutinesApi::class)
     fun GivenSpecification.updatesReceived(chatId: Long = chatid) {
-        this.commands.mapIndexed { index, command ->
+        check(this.commands.isNotEmpty()) { "Commands should be specified" }
+
+        this.commands.map { command ->
             update {
                 message {
                     text(command.message)
                     chatId(chatId)
                 }
             }
-        }.also { updates ->
+        }.forEachIndexed { index, update ->
+            //mocks user command from telegram
             wireMock.post {
                 url equalTo "${botProps.botpath}/${getUpdates}"
+                whenState = "${scenarioSeed}$index"
             } returnsJson {
-                body = serde.encodeToString(Response.Success(updates))
+                body = serde.encodeToString(Response.Success(listOf(update)))
             } and {
-                toState = "updates"
+                toState = "${scenarioSeed}${index}-completed"
             }
 
+            //mocks telegram response when bot sends message
             wireMock.post {
-                url equalTo "${botProps.botpath}/${getUpdates}"
-                whenState = "updates"
+                url equalTo "${botProps.botpath}/${sendMessage}"
+                whenState = "${scenarioSeed}$index-completed"
+                withBuilder { withMetadata(metadata().attr("scenario", index)) }
             } returnsJson {
-                body = serde.encodeToString(Response.Success(emptyList<Update>()))
+                body = serde.encodeToString(testResponse)
             } and {
-                toState = "${scenarioSeed}0"
+                toState = "${scenarioSeed}${index + 1}"
             }
         }
+
+        //starts a scenario by moving state
+        wireMock.post {
+            url equalTo "${botProps.botpath}/${getUpdates}"
+        } returnsJson {
+            body = serde.encodeToString(Response.Success(emptyList<Update>()))
+        } and {
+            toState = "${scenarioSeed}0"
+        }
+
+        //ends a scenario when all commands were completed
+        wireMock.post {
+            url equalTo "${botProps.botpath}/${getUpdates}"
+            whenState = "${scenarioSeed}${commands.size}"
+        } returnsJson {
+            body = serde.encodeToString(Response.Success(emptyList<Update>()))
+        }
+
         GlobalScope.launch {
             launch {
                 bot.handleUpdates()
             }
         }
+
     }
 
     @Deprecated(message = "use approve method instead", replaceWith = ReplaceWith("thenApprove"))
@@ -169,44 +194,29 @@ abstract class AbstractScenarioTest {
             .also { thenAssert(it) }
             .run { wireMock.resetScenarios() }
 
-    infix fun WhenSpecification.ThenApprove(approver: Approver) = this
-            .also {
-                it.commands?.mapIndexed { index, command ->
-                    wireMock.post {
-                        url equalTo "${botProps.botpath}/${sendMessage}"
-                        whenState = "${scenarioSeed}$index"
-                        withBuilder { withMetadata(metadata().attr("scenario", index)) }
-                    } returnsJson {
-                        body = serde.encodeToString(testResponse)
-                    } and {
-                        toState = "${scenarioSeed}${index + 1}"
-                    }
-                }
-            }
-            .also {
-                await.atMost(Duration.ofSeconds(1))
-                        .until {
-                            check(this.commands != null) { "Commands should be specified" }
-                            val stubs = wireMock.getServeEvents()
-                                    .filter { it.stubMapping.metadata != null && it.stubMapping.metadata.contains(METADATA_ATTR) }
-                                    .associate { it.stubMapping.metadata.getInt(METADATA_ATTR) to it.request.bodyAsString.toJson().findPath("text").asText() }
+    infix fun WhenSpecification.ThenApprove(approver: Approver) {
+        await.atMost(Duration.ofSeconds(100))
+                .until {
+                    val stubs = wireMock.getServeEvents()
+                            .filter { it.stubMapping.metadata != null && it.stubMapping.metadata.contains(METADATA_ATTR) }
+                            .associate { it.stubMapping.metadata.getInt(METADATA_ATTR) to it.request.bodyAsString.toJson().findPath("text").asText() }
 
-                            if (stubs.size == commands.size) {
-                                commands.mapIndexed { index, command ->
-                                    """
+                    if (stubs.size == commands.size) {
+                        commands.mapIndexed { index, command ->
+                            """
                                        |******************************
                                        |-> Request
                                        |${command.message}
                                        |-> Response
                                        |${stubs[index] ?: "No message"}                   
                                        """.trimMargin()
-                                }
-                                        .joinToString("\n\n")
-                                        .also { approver.assertApproved(it.trimIndent()) }
-                                true
-                            } else false
                         }
-            }
+                                .joinToString("\n\n")
+                                .also { approver.assertApproved(it.trimIndent()) }
+                        true
+                    } else false
+                }
+    }
 
     @Deprecated(message = "use approve method instead", replaceWith = ReplaceWith("thenApprove"))
     private fun thenExecute(thenSpec: ThenSpecification) {

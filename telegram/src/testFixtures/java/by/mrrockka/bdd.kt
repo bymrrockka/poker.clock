@@ -1,11 +1,9 @@
 package by.mrrockka
 
-import by.mrrockka.creator.MessageEntityCreator
 import by.mrrockka.creator.SendMessageCreator
 import org.apache.commons.lang3.RandomStringUtils
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
-import org.telegram.telegrambots.meta.api.objects.EntityType
 import org.telegram.telegrambots.meta.api.objects.MessageEntity
 
 class Command(init: Command.() -> Unit) {
@@ -30,7 +28,7 @@ class GivenSpecification {
     }
 }
 
-class WhenSpecification(val scenarioSeed: String, val commands: List<Command>? = null) {}
+class WhenSpecification(val scenarioSeed: String, val commands: List<Command>)
 
 class ThenSpecification(val scenarioSeed: String) {
     var expects: List<Expect> = mutableListOf()

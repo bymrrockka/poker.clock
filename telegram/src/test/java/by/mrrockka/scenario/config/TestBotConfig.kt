@@ -26,8 +26,12 @@ open class TestBotConfig(
     @Primary
     open fun bot(appContext: ApplicationContext): TelegramBot {
         return TelegramBot(botProps.token) {
-//            classManager = SpringClassManager(appContext)
+            classManager = SpringClassManager(appContext)
             apiHost = wiremockServerBaseUrl
+            commandParsing {
+                commandDelimiter = '\n'
+                restrictSpacesInCommands = true
+            }
         }
     }
 

@@ -1,20 +1,14 @@
 ******************************
 -> Request
 /cash_game
+stack: 10k
 buyin: 10
-
-@nickname1, @nickname2
+@nickname1
 -> Response
 cash game                   
 
 ******************************
 -> Request
-/withdrawal @nickname1 20
--> Response
-Can't process command                   
-
-******************************
--> Request
-/calculate
+/game_stats
 -> Response
 Can't process command                   

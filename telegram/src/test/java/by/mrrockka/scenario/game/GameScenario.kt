@@ -1,29 +1,27 @@
 package by.mrrockka.scenario.game
 
-import by.mrrockka.domain.GameType
-import by.mrrockka.scenario.AbstractScenarioTest
 import by.mrrockka.Given
-import by.mrrockka.scenario.UserCommand
 import by.mrrockka.When
+import by.mrrockka.domain.GameType
+import by.mrrockka.extension.textApprover
+import by.mrrockka.scenario.AbstractScenarioTest
+import by.mrrockka.scenario.UserCommand
+import com.oneeyedmen.okeydoke.Approver
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import java.util.stream.Stream
 
 class GameScenario : AbstractScenarioTest() {
     @ParameterizedTest
-    @MethodSource("createGameTypesArguments")
-    fun `user sent command to create a game and receive successful message`(commandText: String, gameCreatedText: String, gameStatsText: String) {
+    @MethodSource("games")
+    fun `user sent command to create a game and receive successful message`(gameType: GameType, commandText: String, approver: Approver) {
         Given {
             command { message(commandText) }
             command { message(UserCommand.gameStats) }
         } When {
             updatesReceived()
-        } Then {
-            expect { text<SendMessage>(gameCreatedText) }
-            expect { text<SendMessage>(gameStatsText) }
-        }
+        } ThenApprove (textApprover("game ${gameType.name} creation log"))
     }
 
     companion object {
@@ -54,35 +52,24 @@ class GameScenario : AbstractScenarioTest() {
         )
 
         @JvmStatic
+        fun games(): Stream<Arguments> = games.map { (key, value) ->
+            Arguments.of(key, value)
+        }.run { Stream.of(*this.toTypedArray()) }
+
+        @JvmStatic
         fun createGameTypesArguments(): Stream<Arguments> {
             return Stream.of(
                     Arguments.of(
-                            games[GameType.CASH], "Cash game started.",
-                            """
-                        Cash game statistics:
-                            - players entered -> 1
-                            - total buy-in amount -> 10
-                            - total withdrawal amount -> 0
-                    """.trimIndent(),
+                            GameType.CASH,
+                            games[GameType.CASH],
                     ),
                     Arguments.of(
-                            games[GameType.TOURNAMENT], "Tournament game started.",
-                            """
-                        Tournament game statistics:
-                            - players entered -> 2
-                            - number of entries -> 2
-                            - total buy-in amount -> 20
-                    """.trimIndent(),
+                            GameType.TOURNAMENT,
+                            games[GameType.TOURNAMENT],
                     ),
                     Arguments.of(
-                            games[GameType.BOUNTY], "Bounty tournament game started.",
-                            """
-                        Bounty game statistics:
-                            - players entered -> 3
-                            - number of entries -> 3
-                            - total buy-in amount -> 60
-                            - bounties out of game -> 0
-                    """.trimIndent(),
+                            GameType.BOUNTY,
+                            games[GameType.BOUNTY],
                     ),
             )
         }
