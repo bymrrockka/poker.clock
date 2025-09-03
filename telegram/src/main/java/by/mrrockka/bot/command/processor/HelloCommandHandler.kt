@@ -7,6 +7,8 @@ import eu.vendeli.tgbot.types.User
 import eu.vendeli.tgbot.types.component.ProcessedUpdate
 import org.springframework.stereotype.Component
 
+//todo remove
+@Deprecated("Was created only for framework setup")
 interface HelloCommandHandler {
     suspend fun hello(update: ProcessedUpdate, user: User, bot: TelegramBot)
 }
