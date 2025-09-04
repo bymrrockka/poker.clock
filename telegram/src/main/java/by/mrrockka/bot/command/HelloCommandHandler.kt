@@ -1,4 +1,4 @@
-package by.mrrockka.bot.command.processor
+package by.mrrockka.bot.command
 
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.CommandHandler

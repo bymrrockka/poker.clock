@@ -1,39 +1,51 @@
 package by.mrrockka.domain
 
-import by.mrrockka.domain.mesageentity.MessageEntity
-import by.mrrockka.domain.mesageentity.MessageEntityType
+import by.mrrockka.domain.mesageentity.MetadataEntity
+import eu.vendeli.tgbot.types.User
+import eu.vendeli.tgbot.types.msg.EntityType
+import eu.vendeli.tgbot.types.msg.Message
+import eu.vendeli.tgbot.types.msg.MessageEntity
 import java.time.Instant
-import java.util.*
-import java.util.stream.Stream
+import kotlin.time.ExperimentalTime
+import kotlin.time.toJavaInstant
 
-//todo check if it's needed
 data class MessageMetadata(
         val chatId: Long,
         val createdAt: Instant,
-        val id: Int,
+        val id: Long,
         val text: String,
         val replyTo: MessageMetadata?,
         val entities: List<MessageEntity>,
-        val fromNickname: String?,
+        val metadataEntities: List<MetadataEntity>? = null,
+        val fromNickname: String? = null,
+        val from: User? = null,
 ) {
-    fun optFromNickname(): Optional<String> {
-        return Optional.ofNullable(fromNickname)
+
+    val command: MetadataEntity by lazy {
+        //todo: fr backwards compatibility
+        metadataEntities?.find { entity -> entity.type == EntityType.BotCommand }
+                ?: entities.find { entity -> entity.type == EntityType.BotCommand }?.toMetadata(text)
+                ?: error("Message does not contain command")
     }
 
-    @Deprecated("Used by old java code")
-    fun mentionsStream(): Stream<MessageEntity> {
-        return entities.stream()
-                .filter { entity -> entity.type == MessageEntityType.MENTION }
+    val mentions: Set<MetadataEntity> by lazy {
+        //todo: fr backwards compatibility
+        if (!metadataEntities.isNullOrEmpty()) {
+            metadataEntities
+                    .filter { entity -> entity.type == EntityType.Mention }
+                    .toSet()
+        } else
+            entities
+                    .filter { entity -> entity.type == EntityType.Mention }
+                    .map { it.toMetadata(text) }
+                    .toSet()
     }
 
-    fun mentions(): List<MessageEntity> {
-        return entities.filter { entity -> entity.type == MessageEntityType.MENTION }
-    }
-
-    fun command(): MessageEntity {
-        return entities
-                .find { entity -> entity.type == MessageEntityType.BOT_COMMAND }
-                ?: error("Message has no command.")
+    private fun MessageEntity.toMetadata(text: String): MetadataEntity {
+        return MetadataEntity(
+                text = text.substring(offset, offset + length),
+                type = type,
+        )
     }
 
     //todo: remove
@@ -46,13 +58,13 @@ data class MessageMetadata(
     class MessageMetadataBuilder {
         var chatId: Long = -1L
         lateinit var createdAt: Instant
-        var id: Int = -1
+        var id: Long = -1L
         lateinit var text: String
         var replyTo: MessageMetadata? = null
-        lateinit var entities: List<MessageEntity>
+        lateinit var entities: List<MetadataEntity>
         var fromNickname: String? = null
 
-        fun id(id: Int): MessageMetadataBuilder {
+        fun id(id: Long): MessageMetadataBuilder {
             this.id = id; return this
         }
 
@@ -72,7 +84,7 @@ data class MessageMetadata(
             this.replyTo = replyTo; return this
         }
 
-        fun entities(entities: List<MessageEntity>): MessageMetadataBuilder {
+        fun metadataEntities(entities: List<MetadataEntity>): MessageMetadataBuilder {
             this.entities = entities; return this
         }
 
@@ -80,9 +92,10 @@ data class MessageMetadata(
             this.fromNickname = fromNickname; return this
         }
 
+        @OptIn(ExperimentalTime::class)
         fun build(): MessageMetadata {
             check(chatId != -1L) { "chatId must be set" }
-            check(id != -1) { "id must be set" }
+            check(id != -1L) { "id must be set" }
 
             return MessageMetadata(
                     chatId = chatId,
@@ -90,9 +103,22 @@ data class MessageMetadata(
                     id = id,
                     text = text,
                     replyTo = replyTo,
-                    entities = entities,
+                    metadataEntities = entities,
+                    entities = emptyList(),
                     fromNickname = fromNickname,
             )
         }
     }
 }
+
+@OptIn(ExperimentalTime::class)
+fun Message.toMessageMetadata(): MessageMetadata =
+        MessageMetadata(
+                chatId = chat.id,
+                createdAt = this.date.toJavaInstant(),
+                id = this.messageId,
+                text = this.text.orEmpty(),
+                replyTo = this.replyToMessage?.toMessageMetadata(),
+                entities = this.entities ?: emptyList(),
+                from = from,
+        )

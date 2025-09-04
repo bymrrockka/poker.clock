@@ -7,10 +7,14 @@ import by.mrrockka.domain.PollTask
 import by.mrrockka.parser.PollMessageParser
 import by.mrrockka.repo.PollTaskRepo
 import by.mrrockka.validation.poll.PollMessageValidator
-import io.mockk.*
+import io.mockk.Runs
+import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
+import io.mockk.just
+import io.mockk.slot
+import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -58,7 +62,7 @@ class TaskTelegramServiceTest {
         val actual = taskTelegramService.createPoll(metadata)
         val expected = SendMessageCreator.api {
             it.chatId(metadata.chatId)
-            it.replyToMessageId(metadata.id)
+            it.replyToMessageId(metadata.id.toInt())
             it.text(
                     """
                 Poll created.
@@ -90,7 +94,7 @@ class TaskTelegramServiceTest {
         val actual = taskTelegramService.stopPoll(metadata)
         val expected = SendMessageCreator.api {
             it.chatId(metadata.chatId)
-            it.replyToMessageId(metadata.replyTo?.id)
+            it.replyToMessageId(metadata.replyTo?.id?.toInt())
             it.text(
                     """
                 Poll stopped.

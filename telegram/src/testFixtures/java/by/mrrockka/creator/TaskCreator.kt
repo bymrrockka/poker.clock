@@ -13,7 +13,7 @@ class TaskCreator {
         val poll = PollTask(
                 id = UUID.randomUUID(),
                 chatId = ChatCreator.CHAT_ID,
-                messageId = MessageCreator.MESSAGE_ID,
+                messageId = MessageCreator.MESSAGE_ID.toLong(),
                 cron = CronExpression.parse("* * * * * *"),
                 message = "Poll message",
                 options = listOf(Option("Yes", true), Option("No")),
@@ -23,7 +23,7 @@ class TaskCreator {
         fun randomPoll(): PollTask {
             return poll.copy(
                     id = UUID.randomUUID(),
-                    messageId = Random.messageId(),
+                    messageId = Random.messageId().toLong(),
                     chatId = Random.chatId(),
                     createdAt = Instant.now().truncatedTo(ChronoUnit.SECONDS)
             )

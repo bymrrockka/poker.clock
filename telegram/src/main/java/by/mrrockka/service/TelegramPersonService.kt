@@ -21,7 +21,7 @@ open class TelegramPersonServiceImpl(
 ) : TelegramPersonService {
 
     override fun findByMessage(messageMetadata: MessageMetadata): List<UUID> {
-        val nicknames = messageMetadata.mentions().map { it.text }
+        val nicknames = messageMetadata.mentions.map { it.text }
         val persons = personRepo.findByNicknames(nicknames)
         val newNicknameToId = nicknames.newNicknames(persons)
                 .let { nicknames ->

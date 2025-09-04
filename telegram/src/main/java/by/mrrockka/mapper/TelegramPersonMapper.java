@@ -1,7 +1,7 @@
 package by.mrrockka.mapper;
 
 import by.mrrockka.domain.TelegramPerson;
-import by.mrrockka.domain.mesageentity.MessageEntity;
+import by.mrrockka.domain.mesageentity.MetadataEntity;
 import by.mrrockka.repo.person.TelegramPersonEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -19,12 +19,12 @@ public interface TelegramPersonMapper {
 
   @Mapping(target = "id", expression = "java(UUID.randomUUID())")
   @Mapping(target = "chatId", source = "chatId")
-  @Mapping(target = "nickname", expression = "java(entity.text().replaceAll(\"@\", \"\"))")
+  @Mapping(target = "nickname", expression = "java(entity.getText().replaceAll(\"@\", \"\"))")
   @Mapping(target = "lastname", ignore = true)
   @Mapping(target = "firstname", ignore = true)
-  TelegramPerson mapMessageToTelegramPerson(MessageEntity entity, long chatId);
+  TelegramPerson mapMessageToTelegramPerson(MetadataEntity entity, long chatId);
 
-  default List<TelegramPerson> mapMessageToTelegramPersons(final List<MessageEntity> entities, final long chatId) {
+  default List<TelegramPerson> mapMessageToTelegramPersons(final List<MetadataEntity> entities, final long chatId) {
     return entities.stream()
       .map(entity -> mapMessageToTelegramPerson(entity, chatId))
       .toList();

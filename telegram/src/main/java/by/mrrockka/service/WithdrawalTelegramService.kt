@@ -9,7 +9,9 @@ import by.mrrockka.validation.MentionsValidator
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 @Service
 class WithdrawalTelegramService(
         val withdrawalsRepo: WithdrawalsRepo,
@@ -38,7 +40,7 @@ class WithdrawalTelegramService(
                         |${nicknames.joinToString { "|  - @${it} -> $amount" }}
                         """.trimMargin(),
                 )
-                .replyToMessageId(telegramGame.messageMetadata.id)
+                .replyToMessageId(telegramGame.messageMetadata.id.toInt())
                 .build()
     }
 }

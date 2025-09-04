@@ -38,7 +38,7 @@ class PersonMessageMapperTest {
                            @mrrockka
                          @miscusi   
                                  """)
-              .entities(List.of(
+              .metadataEntities(List.of(
                 MessageEntityCreator.domainMention("@mrrockka"),
                 MessageEntityCreator.domainMention("@miscusi")
               ))))
@@ -71,7 +71,7 @@ class PersonMessageMapperTest {
                          @mrrockka
                          @miscusi   
                                  """)
-              .entities(List.of(
+              .metadataEntities(List.of(
                 MessageEntityCreator.domainMention("@mrrockka"),
                 MessageEntityCreator.domainMention("@ivano"),
                 MessageEntityCreator.domainMention("@andrei"),
@@ -110,7 +110,7 @@ class PersonMessageMapperTest {
                          stack: 1.5k
                          @mrrockka, @ivano, @andrei, @ivano, @andrei, @mrrockka, @miscusi
                                  """)
-              .entities(List.of(
+              .metadataEntities(List.of(
                 MessageEntityCreator.domainMention("@mrrockka"),
                 MessageEntityCreator.domainMention("@ivano"),
                 MessageEntityCreator.domainMention("@andrei"),

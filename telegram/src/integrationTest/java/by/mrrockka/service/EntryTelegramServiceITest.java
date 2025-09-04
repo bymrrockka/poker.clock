@@ -1,9 +1,9 @@
 package by.mrrockka.service;
 
-import by.mrrockka.extension.TelegramPSQLExtension;
 import by.mrrockka.creator.MessageEntityCreator;
 import by.mrrockka.creator.MessageMetadataCreator;
 import by.mrrockka.domain.TelegramPerson;
+import by.mrrockka.extension.TelegramPSQLExtension;
 import by.mrrockka.repo.entries.EntriesRepository;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -55,7 +55,7 @@ class EntryTelegramServiceITest {
         .chatId(CHAT_ID)
         .text(text)
         .replyTo(MessageMetadataCreator.domain(replyto -> replyto.id(REPLY_TO_ID)))
-        .entities(List.of(MessageEntityCreator.domainMention("@%s".formatted(nickname))))
+        .metadataEntities(List.of(MessageEntityCreator.domainMention("@%s".formatted(nickname))))
       );
 
     final var response = (SendMessage) entryTelegramService.storeEntry(messageMetadata);
@@ -90,7 +90,7 @@ class EntryTelegramServiceITest {
       .chatId(CHAT_ID)
       .text(text)
       .replyTo(MessageMetadataCreator.domain(replyto -> replyto.id(REPLY_TO_ID)))
-      .entities(telegrams.stream()
+      .metadataEntities(telegrams.stream()
                   .map(tg -> MessageEntityCreator.domainMention("@%s".formatted(tg)))
                   .toList())
     );
@@ -146,7 +146,7 @@ class EntryTelegramServiceITest {
       .chatId(CHAT_ID)
       .text(text)
       .replyTo(MessageMetadataCreator.domain(replyto -> replyto.id(REPLY_TO_ID)))
-      .entities(List.of(MessageEntityCreator.domainMention("@%s".formatted(nickname))))
+      .metadataEntities(List.of(MessageEntityCreator.domainMention("@%s".formatted(nickname))))
     );
 
     final var response = (SendMessage) entryTelegramService.storeEntry(messageMetadata);

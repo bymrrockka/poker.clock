@@ -24,7 +24,7 @@ class GameStatisticsTelegramService(
         return SendMessage().apply {
             chatId = statisticsCommand.metadata.chatId.toString()
             text = telegramGame.responseMessage()
-            replyToMessageId = statisticsCommand.metadata.id
+            replyToMessageId = statisticsCommand.metadata.id.toInt()
         }
     }
 }

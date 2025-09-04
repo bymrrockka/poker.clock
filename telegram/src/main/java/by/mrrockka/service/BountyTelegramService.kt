@@ -10,7 +10,9 @@ import by.mrrockka.validation.mentions.PersonMentionsValidator
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 @Service
 class BountyTelegramService(
         private val bountyRepo: BountyRepo,
@@ -37,7 +39,7 @@ class BountyTelegramService(
         return SendMessage.builder()
                 .chatId(messageMetadata.chatId)
                 .text("Bounty amount ${game.bounty} from @$from stored for @$to")
-                .replyToMessageId(telegramGame.messageMetadata.id)
+                .replyToMessageId(telegramGame.messageMetadata.id.toInt())
                 .build()
     }
 }

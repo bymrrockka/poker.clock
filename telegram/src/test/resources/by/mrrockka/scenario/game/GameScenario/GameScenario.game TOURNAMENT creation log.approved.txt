@@ -6,7 +6,7 @@ buyin: 10
 @nickname1
 @Nickname2
 -> Response
-cash game                   
+Tournament game started.                   
 
 ******************************
 -> Request

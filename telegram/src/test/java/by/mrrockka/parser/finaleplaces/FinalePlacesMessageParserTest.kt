@@ -53,7 +53,7 @@ class FinalePlacesMessageParserTest {
                                       
                                       """.trimIndent()
                                 )
-                                it.entities(listOf(
+                                it.metadataEntities(listOf(
                                         MessageEntityCreator.domainMention("@mrrockka"),
                                         MessageEntityCreator.domainMention("@ararat"),
                                         MessageEntityCreator.domainMention("@andrei")
@@ -72,7 +72,7 @@ class FinalePlacesMessageParserTest {
                                       
                                      """.trimIndent()
                                 )
-                                it.entities(
+                                it.metadataEntities(
                                         listOf(
                                                 MessageEntityCreator.domainMention("@mrrockka"),
                                                 MessageEntityCreator.domainMention("@ararat"),
@@ -93,7 +93,7 @@ class FinalePlacesMessageParserTest {
                                      
                                      """.trimIndent()
                                 )
-                                it.entities(
+                                it.metadataEntities(
                                         listOf(
                                                 MessageEntityCreator.domainMention("@mrrockka"),
                                                 MessageEntityCreator.domainMention("@ararat"),
@@ -107,7 +107,7 @@ class FinalePlacesMessageParserTest {
                     Arguments.of(
                             FinalePlacesArgument(metadata = MessageMetadataCreator.domain {
                                 it.text("/finaleplaces 1 @mrrockka, 2. @ararat,3 @andrei")
-                                it.entities(
+                                it.metadataEntities(
                                         listOf(
                                                 MessageEntityCreator.domainMention("@mrrockka"),
                                                 MessageEntityCreator.domainMention("@ararat"),
@@ -121,7 +121,7 @@ class FinalePlacesMessageParserTest {
                     Arguments.of(
                             FinalePlacesArgument(metadata = MessageMetadataCreator.domain {
                                 it.text("/finaleplaces 1 @mrrockka, 2. @ararat,3 @AnDreI")
-                                it.entities(
+                                it.metadataEntities(
                                         listOf(
                                                 MessageEntityCreator.domainMention("@mrrockka"),
                                                 MessageEntityCreator.domainMention("@ararat"),
@@ -142,7 +142,7 @@ class FinalePlacesMessageParserTest {
                     Arguments.of(
                             FinalePlacesArgument(metadata = MessageMetadataCreator.domain {
                                 it.text("/finaleplaces 1@mrrockka, 2@ararat,3@andrei")
-                                it.entities(
+                                it.metadataEntities(
                                         listOf(
                                                 MessageEntityCreator.domainMention("@mrrockka"),
                                                 MessageEntityCreator.domainMention("@ararat"),
@@ -156,7 +156,7 @@ class FinalePlacesMessageParserTest {
                     Arguments.of(
                             FinalePlacesArgument(metadata = MessageMetadataCreator.domain {
                                 it.text("/finaleplaces\n@mrrockka @ararat")
-                                it.entities(
+                                it.metadataEntities(
                                         listOf(
                                                 MessageEntityCreator.domainMention("@mrrockka"),
                                                 MessageEntityCreator.domainMention("@ararat"),
@@ -169,7 +169,7 @@ class FinalePlacesMessageParserTest {
                     Arguments.of(
                             FinalePlacesArgument(metadata = MessageMetadataCreator.domain {
                                 it.text("/finaleplaces 1-@mrrockka, 2:@ararat, 3=@andrei")
-                                it.entities(
+                                it.metadataEntities(
                                         listOf(
                                                 MessageEntityCreator.domainMention("@mrrockka"),
                                                 MessageEntityCreator.domainMention("@ararat"),
@@ -183,7 +183,7 @@ class FinalePlacesMessageParserTest {
                     Arguments.of(
                             FinalePlacesArgument(metadata = MessageMetadataCreator.domain {
                                 it.text("/finaleplaces 1 @mrrockka, 2 @ararat, 3 @andrei")
-                                it.entities(
+                                it.metadataEntities(
                                         listOf(
                                                 MessageEntityCreator.domainMention("@mrrockka"),
                                                 MessageEntityCreator.domainMention("@ararat"),
@@ -196,7 +196,7 @@ class FinalePlacesMessageParserTest {
                     Arguments.of(
                             FinalePlacesArgument(metadata = MessageMetadataCreator.domain {
                                 it.text("/finaleplaces 1 @ mrrockka, 2 @ ararat, 3 @ andrei")
-                                it.entities(
+                                it.metadataEntities(
                                         listOf(
                                                 MessageEntityCreator.domainMention("@mrrockka"),
                                                 MessageEntityCreator.domainMention("@ararat"),

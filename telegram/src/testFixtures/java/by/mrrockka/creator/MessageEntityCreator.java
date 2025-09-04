@@ -1,7 +1,6 @@
 package by.mrrockka.creator;
 
-import by.mrrockka.domain.mesageentity.MessageEntity;
-import by.mrrockka.domain.mesageentity.MessageEntityType;
+import by.mrrockka.domain.mesageentity.MetadataEntity;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.telegram.telegrambots.meta.api.objects.EntityType;
@@ -11,23 +10,24 @@ import java.util.function.Consumer;
 import static java.util.Objects.nonNull;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Deprecated(forRemoval = true)
 public final class MessageEntityCreator {
 
-  public static MessageEntity domainMention(final String text) {
-    return domainEntity(builder -> builder.type(MessageEntityType.MENTION).text(text));
+  public static MetadataEntity domainMention(final String text) {
+    return domainEntity(builder -> builder.type(eu.vendeli.tgbot.types.msg.EntityType.Mention).text(text));
   }
 
-  public static MessageEntity domainCommand(final String text) {
-    return domainEntity(builder -> builder.type(MessageEntityType.BOT_COMMAND).text(text));
+  public static MetadataEntity domainCommand(final String text) {
+    return domainEntity(builder -> builder.type(eu.vendeli.tgbot.types.msg.EntityType.BotCommand).text(text));
   }
 
-  public static MessageEntity domainEntity() {
+  public static MetadataEntity domainEntity() {
     return domainEntity(null);
   }
 
-  public static MessageEntity domainEntity(final Consumer<MessageEntity.MessageEntityBuilder> domainBuilderConsumer) {
-    final var domainBuilder = MessageEntity.builder()
-      .type(MessageEntityType.BOT_COMMAND)
+  public static MetadataEntity domainEntity(final Consumer<MetadataEntity.MessageEntityBuilder> domainBuilderConsumer) {
+    final var domainBuilder = MetadataEntity.builder()
+      .type(eu.vendeli.tgbot.types.msg.EntityType.BotCommand)
       .text("");
 
     if (nonNull(domainBuilderConsumer)) {

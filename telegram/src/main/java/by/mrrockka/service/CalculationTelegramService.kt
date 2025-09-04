@@ -1,8 +1,8 @@
 package by.mrrockka.service
 
+import by.mrrockka.domain.ChatGame
 import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.domain.Payout
-import by.mrrockka.domain.ChatGame
 import by.mrrockka.response.builder.CalculationResponseBuilder
 import by.mrrockka.service.calculation.CalculationService
 import by.mrrockka.validation.PreCalculationValidator
@@ -27,7 +27,7 @@ class CalculationTelegramService(
         return SendMessage.builder()
                 .chatId(messageMetadata.chatId)
                 .text(telegramGame.payoutsResponse(payouts))
-                .replyToMessageId(telegramGame.messageMetadata.id)
+                .replyToMessageId(telegramGame.messageMetadata.id.toInt())
                 .build()
     }
 }

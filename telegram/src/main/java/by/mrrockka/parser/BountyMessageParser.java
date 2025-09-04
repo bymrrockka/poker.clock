@@ -27,8 +27,8 @@ public class BountyMessageParser {
 
   public Pair<String, String> parse(final MessageMetadata messageMetadata) {
     final var str = messageMetadata.getText().toLowerCase().strip();
-    final var mentions = messageMetadata.mentionsStream()
-      .map(entity -> entity.text().replaceAll("@", ""))
+    final var mentions = messageMetadata.getMentions().stream()
+      .map(entity -> entity.getText().replaceAll("@", ""))
       .toList();
     final var matcher = Pattern.compile(BOUNTY_REGEX).matcher(str);
 

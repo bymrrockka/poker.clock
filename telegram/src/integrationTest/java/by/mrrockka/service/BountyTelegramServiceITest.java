@@ -1,11 +1,11 @@
 package by.mrrockka.service;
 
-import by.mrrockka.extension.TelegramPSQLExtension;
 import by.mrrockka.creator.MessageEntityCreator;
 import by.mrrockka.creator.MessageMetadataCreator;
 import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.domain.game.BountyGame;
-import by.mrrockka.domain.mesageentity.MessageEntity;
+import by.mrrockka.domain.mesageentity.MetadataEntity;
+import by.mrrockka.extension.TelegramPSQLExtension;
 import by.mrrockka.repo.bounty.BountyRepository;
 import lombok.Builder;
 import org.apache.commons.lang3.tuple.Pair;
@@ -43,7 +43,7 @@ class BountyTelegramServiceITest {
   private BountyRepository bountyRepository;
 
   @Builder
-  private record BountyArgument(String message, List<MessageEntity> entities,
+  private record BountyArgument(String message, List<MetadataEntity> entities,
                                 Pair<TelegramPerson, TelegramPerson> fromAndTo) {}
 
   private static Stream<Arguments> bountyMessage() {
@@ -76,7 +76,7 @@ class BountyTelegramServiceITest {
     final var messageMetadata = MessageMetadataCreator.domain(metadata -> metadata
       .chatId(CHAT_ID)
       .text(argument.message())
-      .entities(argument.entities())
+      .metadataEntities(argument.entities())
       .replyTo(MessageMetadataCreator.domain(replyto -> replyto.id(REPLY_TO_ID)))
       .fromNickname(ME_MENTION)
     );

@@ -1,10 +1,9 @@
 package by.mrrockka.builder
 
 import by.mrrockka.TelegramRandoms.Companion.telegramRandoms
-import by.mrrockka.domain.mesageentity.MessageEntity
 import by.mrrockka.domain.mesageentity.MessageEntityType
-import by.mrrockka.domain.mesageentity.MessageEntityType.BOT_COMMAND
 import by.mrrockka.domain.mesageentity.MessageEntityType.MENTION
+import by.mrrockka.domain.mesageentity.MetadataEntity
 import eu.vendeli.tgbot.types.msg.EntityType
 
 class MessageEntityBuilder(init: (MessageEntityBuilder.() -> Unit) = {}) : AbstractBuilder() {
@@ -34,19 +33,17 @@ class MessageEntityBuilder(init: (MessageEntityBuilder.() -> Unit) = {}) : Abstr
         this.entityText = text
     }
 
-    fun domainCommand(): MessageEntity {
-        return MessageEntity(
-                BOT_COMMAND,
+    fun domainCommand(): MetadataEntity {
+        return MetadataEntity(
+                EntityType.BotCommand,
                 messageText ?: "",
-                null,
         )
     }
 
-    fun domainMention(): MessageEntity {
-        return MessageEntity(
-                MENTION,
+    fun domainMention(): MetadataEntity {
+        return MetadataEntity(
+                EntityType.Mention,
                 messageText ?: "",
-                null,
         )
     }
 
@@ -54,7 +51,7 @@ class MessageEntityBuilder(init: (MessageEntityBuilder.() -> Unit) = {}) : Abstr
         return eu.vendeli.tgbot.types.msg.MessageEntity(
                 type = EntityType.BotCommand,
                 offset = messageText?.indexOf(entityText ?: "") ?: 0,
-                length = entityText?.length?.minus(1) ?: 0,
+                length = entityText?.length ?: 0,
         )
     }
 
@@ -62,7 +59,7 @@ class MessageEntityBuilder(init: (MessageEntityBuilder.() -> Unit) = {}) : Abstr
         return eu.vendeli.tgbot.types.msg.MessageEntity(
                 type = EntityType.Mention,
                 offset = messageText?.indexOf(entityText ?: "") ?: 0,
-                length = entityText?.length?.minus(1) ?: 0,
+                length = entityText?.length ?: 0,
         )
     }
 
@@ -70,8 +67,8 @@ class MessageEntityBuilder(init: (MessageEntityBuilder.() -> Unit) = {}) : Abstr
 
 fun domainMention(init: (@BuilderMarker MessageEntityBuilder.() -> Unit) = {}) = MessageEntityBuilder(init).also { check(it.domainType == MENTION) }.domainMention()
 fun domainCommand(init: (@BuilderMarker MessageEntityBuilder.() -> Unit) = {}) = MessageEntityBuilder(init).also { check(it.domainType == MENTION) }.domainCommand()
-fun List<String>.domainMentions(): List<MessageEntity> = map { domainMention { messageText(it) } }
-fun String?.domainEntities(): List<MessageEntity> {
+fun List<String>.domainMentions(): List<MetadataEntity> = map { domainMention { messageText(it) } }
+fun String?.domainEntities(): List<MetadataEntity> {
     check(this != null) { "text is null" }
     val commandRegex = "^/([\\w]+)".toRegex(RegexOption.MULTILINE)
     val mentionRegex = "^@([\\w]+)".toRegex(RegexOption.MULTILINE)

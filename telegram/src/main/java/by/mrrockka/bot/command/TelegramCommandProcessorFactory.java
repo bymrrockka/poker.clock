@@ -21,8 +21,7 @@ public class TelegramCommandProcessorFactory {
   private final ApplicationContext applicationContext;
 
   public TelegramCommandProcessor provideProcessor(final MessageMetadata messageMetadata) {
-    final var commandName = messageMetadata.command()
-      .text()
+    final var commandName = messageMetadata.getCommand().getText()
       .toLowerCase()
       .replaceAll("/", "");
 

@@ -1,8 +1,8 @@
 package by.mrrockka.service;
 
-import by.mrrockka.extension.TelegramPSQLExtension;
 import by.mrrockka.creator.MessageEntityCreator;
 import by.mrrockka.creator.MessageMetadataCreator;
+import by.mrrockka.extension.TelegramPSQLExtension;
 import by.mrrockka.repo.withdrawals.WithdrawalsEntity;
 import by.mrrockka.repo.withdrawals.WithdrawalsRepository;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -54,7 +54,7 @@ class WithdrawalTelegramServiceITest {
         .text(text)
         .fromNickname(nickname)
         .replyTo(MessageMetadataCreator.domain(replyto -> replyto.id(REPLY_TO_ID)))
-        .entities(List.of(MessageEntityCreator.domainMention("@%s".formatted(nickname))))
+        .metadataEntities(List.of(MessageEntityCreator.domainMention("@%s".formatted(nickname))))
       );
 
     final var response = (SendMessage) withdrawalTelegramService.storeWithdrawal(messageMetadata);
@@ -90,7 +90,7 @@ class WithdrawalTelegramServiceITest {
       .chatId(CHAT_ID)
       .text(text)
       .replyTo(MessageMetadataCreator.domain(replyto -> replyto.id(REPLY_TO_ID)))
-      .entities(telegrams.stream()
+      .metadataEntities(telegrams.stream()
                   .map(tg -> MessageEntityCreator.domainMention("@%s".formatted(tg)))
                   .toList())
     );

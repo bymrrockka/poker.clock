@@ -1,10 +1,10 @@
 package by.mrrockka.service;
 
-import by.mrrockka.extension.TelegramPSQLExtension;
 import by.mrrockka.creator.MessageEntityCreator;
 import by.mrrockka.creator.MessageMetadataCreator;
 import by.mrrockka.domain.finaleplaces.FinalPlace;
 import by.mrrockka.domain.finaleplaces.FinalePlaces;
+import by.mrrockka.extension.TelegramPSQLExtension;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,7 +47,7 @@ class FinalePlacesTelegramServiceITest {
       .chatId(CHAT_ID)
       .text(TEXT)
       .replyTo(MessageMetadataCreator.domain(replyto -> replyto.id(REPLY_TO_ID)))
-      .entities(List.of(
+      .metadataEntities(List.of(
         MessageEntityCreator.domainMention("@kinger"),
         MessageEntityCreator.domainMention("@queen"),
         MessageEntityCreator.domainMention("@jackas")

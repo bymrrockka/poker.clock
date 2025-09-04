@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 class GlobalPersonStatisticsTelegramService {
@@ -16,7 +18,7 @@ class GlobalPersonStatisticsTelegramService {
   private final GlobalPersonStatisticsService globalPersonStatisticsService;
 
   BotApiMethodMessage retrieveStatistics(final StatisticsCommand statisticsCommand) {
-    final var nickname = statisticsCommand.metadata().optFromNickname()
+    final var nickname = Optional.ofNullable(statisticsCommand.metadata().getFromNickname())
       .orElseThrow(PlayerHasNoNicknameException::new);
 
     final var globalStatistics = globalPersonStatisticsService.retrieveStatistics(nickname);

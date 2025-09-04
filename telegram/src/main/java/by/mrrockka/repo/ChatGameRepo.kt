@@ -8,6 +8,7 @@ import org.jetbrains.exposed.sql.selectAll
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
+import kotlin.time.ExperimentalTime
 
 interface ChatGameRepo {
     fun findByMessage(messageMetadata: MessageMetadata): UUID?
@@ -15,6 +16,7 @@ interface ChatGameRepo {
     fun store(gameId: UUID, message: MessageMetadata)
 }
 
+@OptIn(ExperimentalTime::class)
 @Repository
 @Transactional
 open class DatabaseChatGameRepo : ChatGameRepo {

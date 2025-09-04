@@ -26,7 +26,7 @@ interface Task {
 data class PollTask(
         override val id: UUID,
         override val chatId: Long,
-        val messageId: Int,
+        val messageId: Long,
         override val cron: CronExpression,
         val message: String,
         val options: List<Option>,

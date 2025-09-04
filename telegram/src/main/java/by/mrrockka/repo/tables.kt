@@ -9,7 +9,7 @@ import org.jetbrains.exposed.sql.json.jsonb
 object PollTaskTable : Table("poll_task") {
     val id = uuid("id")
     val chatId = long("chat_id")
-    val messageId = integer("message_id")
+    val messageId = long("message_id")
     val cron = varchar("cron", 20)
     val createdAt = timestamp("created_at")
     val updatedAt = timestamp("updated_at").nullable()
@@ -27,7 +27,7 @@ object ChatPersonsTable : Table("chat_persons") {
 
 object ChatGameTable : Table("chat_games") {
     val gameId = uuid("game_id").references(GameTable.id)
-    val messageId = integer("message_id")
+    val messageId = long("message_id")
     val chatId = long("chat_id")
     val createdAt = timestamp("created_at")
 }

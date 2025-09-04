@@ -10,7 +10,11 @@ import by.mrrockka.repo.PollTaskTable.message
 import by.mrrockka.repo.PollTaskTable.messageId
 import by.mrrockka.repo.PollTaskTable.options
 import by.mrrockka.repo.PollTaskTable.updatedAt
-import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.batchInsert
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.update
+import org.jetbrains.exposed.sql.upsert
 import org.springframework.scheduling.support.CronExpression
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Propagation
@@ -49,7 +53,7 @@ open class PollTaskRepo {
         }
     }
 
-    open fun finishPoll(messageId: Int, finishedAt: Instant): Int {
+    open fun finishPoll(messageId: Long, finishedAt: Instant): Int {
         return PollTaskTable
                 .update({ PollTaskTable.messageId eq messageId }) {
                     it[PollTaskTable.finishedAt] = finishedAt

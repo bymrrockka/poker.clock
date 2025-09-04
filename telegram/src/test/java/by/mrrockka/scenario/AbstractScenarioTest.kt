@@ -195,7 +195,7 @@ abstract class AbstractScenarioTest {
             .run { wireMock.resetScenarios() }
 
     infix fun WhenSpecification.ThenApprove(approver: Approver) {
-        await.atMost(Duration.ofSeconds(100))
+        await.atMost(Duration.ofSeconds(1))
                 .until {
                     val stubs = wireMock.getServeEvents()
                             .filter { it.stubMapping.metadata != null && it.stubMapping.metadata.contains(METADATA_ATTR) }

@@ -12,7 +12,7 @@ open class Randoms(
         open val faker: Faker = Faker(random)
 ) {
 
-    fun instant(): Instant = Instant.ofEpochMilli(random.nextLong())
+    fun instant(): Instant = Instant.now()
     fun firstname(): String = faker.name().firstName()
     fun lastname(): String = faker.name().lastName()
     fun decimal(from: Int = 10, to: Int = 100): BigDecimal = BigDecimal.valueOf(faker.number().numberBetween(from, to).toLong())

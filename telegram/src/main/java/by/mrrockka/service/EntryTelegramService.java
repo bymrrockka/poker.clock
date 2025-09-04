@@ -55,7 +55,7 @@ public class EntryTelegramService {
     return SendMessage.builder()
       .chatId(messageMetadata.getChatId())
       .text(entryResponseBuilder.response(persons, amount))
-      .replyToMessageId(telegramGame.getMessageMetadata().getId())
+      .replyToMessageId(Long.valueOf(telegramGame.getMessageMetadata().getId()).intValue())
       .build();
   }
 }

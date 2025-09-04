@@ -34,7 +34,7 @@ public class EntryMessageParser {
       final var optAmount = Optional.ofNullable(defaultIfBlank(matcher.group(AMOUNT_GROUP), null))
         .map(BigDecimal::new);
 
-      return metadata.mentionsStream()
+      return metadata.getMentions().stream()
         .map(entity -> personMapper.mapMessageToTelegramPerson(entity, chatId))
         .collect(Collectors.toMap(Function.identity(), p -> optAmount));
     }

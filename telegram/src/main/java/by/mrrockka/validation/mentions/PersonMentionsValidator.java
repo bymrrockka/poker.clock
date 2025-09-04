@@ -1,8 +1,8 @@
 package by.mrrockka.validation.mentions;
 
 import by.mrrockka.domain.MessageMetadata;
-import by.mrrockka.domain.mesageentity.MessageEntity;
-import by.mrrockka.domain.mesageentity.MessageEntityType;
+import by.mrrockka.domain.mesageentity.MetadataEntity;
+import eu.vendeli.tgbot.types.msg.EntityType;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,11 +19,11 @@ public class PersonMentionsValidator {
 
   public void validateMessageHasNoUserTextMention(final MessageMetadata messageMetadata) {
     messageMetadata.getEntities().stream()
-      .filter(entity -> entity.type().equals(MessageEntityType.TEXT_MENTION))
+      .filter(entity -> entity.getType().equals(EntityType.TextMention))
       .findAny()
       .ifPresent(textMention -> {
 //        todo: find another way to do that
-        throw new PlayerHasNoNicknameException(textMention.text());
+        throw new PlayerHasNoNicknameException("");
       });
   }
 
@@ -35,7 +35,7 @@ public class PersonMentionsValidator {
     }
   }
 
-  private List<MessageEntity> filterUserMentions(final MessageMetadata messageMetadata) {
-    return messageMetadata.mentionsStream().toList();
+  private List<MetadataEntity> filterUserMentions(final MessageMetadata messageMetadata) {
+    return messageMetadata.getMentions().stream().toList();
   }
 }

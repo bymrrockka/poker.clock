@@ -1,11 +1,18 @@
 package by.mrrockka.parser
 
-import by.mrrockka.domain.*
+import by.mrrockka.domain.BountyTournamentGame
+import by.mrrockka.domain.CashGame
+import by.mrrockka.domain.Game
+import by.mrrockka.domain.GameType
+import by.mrrockka.domain.MessageMetadata
+import by.mrrockka.domain.TournamentGame
 import org.springframework.stereotype.Component
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 @Component
 class GameMessageParser {
     private val amountRegex = "(?<amount>[.\\d]+)(?<multiplier>[A-z]{0,1})"
@@ -15,7 +22,7 @@ class GameMessageParser {
     private val typeRegex = "([\\w]+)_game$".toRegex(RegexOption.MULTILINE)
 
     fun parse(messageMetadata: MessageMetadata): Game {
-        val type = typeRegex.find(messageMetadata.command().text.trimIndent())!!.destructured
+        val type = typeRegex.find(messageMetadata.command.text.trimIndent())!!.destructured
                 .let { (match) -> GameType.valueOf(match.uppercase()) }
         val buyin = buyInRegex.find(messageMetadata.text.trimIndent())
                 .let { match ->

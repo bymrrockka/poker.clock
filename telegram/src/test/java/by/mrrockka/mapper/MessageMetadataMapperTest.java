@@ -49,7 +49,7 @@ class MessageMetadataMapperTest {
     final var replyTo = MessageMetadataCreator.domain();
     final var root = MessageMetadataCreator.domain(
       builder -> builder.replyTo(replyTo)
-        .entities(List.of(MessageEntityCreator.domainEntity())));
+        .metadataEntities(List.of(MessageEntityCreator.domainEntity())));
 
     assertThat(messageMetadataMapper.map(message)).isEqualTo(root);
   }
@@ -73,7 +73,7 @@ class MessageMetadataMapperTest {
     final var root = MessageMetadataCreator.domain(
       builder -> builder
         .text(messageText)
-        .entities(List.of(
+        .metadataEntities(List.of(
           MessageEntityCreator.domainCommand(COMMAND),
           MessageEntityCreator.domainMention(userMention)
         )));
@@ -89,7 +89,7 @@ class MessageMetadataMapperTest {
     final var expected = MessageMetadataCreator
       .domain(metadata -> metadata
         .text(COMMAND)
-        .entities(List.of(MessageEntityCreator.domainCommand(COMMAND))));
+        .metadataEntities(List.of(MessageEntityCreator.domainCommand(COMMAND))));
 
     assertThat(messageMetadataMapper.map(message)).isEqualTo(expected);
   }

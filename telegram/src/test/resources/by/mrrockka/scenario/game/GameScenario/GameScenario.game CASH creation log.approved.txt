@@ -5,7 +5,7 @@ stack: 10k
 buyin: 10
 @nickname1
 -> Response
-cash game                   
+Cash game started.                   
 
 ******************************
 -> Request

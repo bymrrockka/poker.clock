@@ -45,7 +45,7 @@ class FinalePlacesTelegramService(
                     Finale places stored:
                     ${finalePlaces.finalPlaces.joinToString { "${it.position}. -> @${it.person.nickname}" }}
                 """.trimIndent())
-                .replyToMessageId(telegramGame.messageMetadata.id)
+                .replyToMessageId(telegramGame.messageMetadata.id.toInt())
                 .build()
 
     }

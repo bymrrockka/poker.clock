@@ -44,7 +44,7 @@ class TelegramPersonServiceTest {
 
     final ArgumentCaptor<List<BasicPerson>> argument = ArgumentCaptor.forClass(List.class);
 
-    final var metadata = MessageMetadataCreator.domain(meta -> meta.entities(
+    final var metadata = MessageMetadataCreator.domain(meta -> meta.metadataEntities(
       allNicknames.stream()
         .map(MessageEntityCreator::domainMention)
         .toList()

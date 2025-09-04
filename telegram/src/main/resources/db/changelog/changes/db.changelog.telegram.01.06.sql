@@ -7,3 +7,10 @@ CREATE UNIQUE INDEX IF NOT EXISTS chat_persons_person_to_chat_index
 ALTER TABLE chat_persons DROP CONSTRAINT chat_persons_person_id_chat_id_key;
 ALTER TABLE chat_persons
     ADD CONSTRAINT chat_persons_person_id_chat_id_key UNIQUE USING INDEX chat_persons_person_to_chat_index;
+
+--changeset task#45:2
+ALTER TABLE chat_games
+    ALTER message_id SET DATA TYPE bigint;
+
+ALTER TABLE poll_task
+    ALTER message_id SET DATA TYPE bigint;

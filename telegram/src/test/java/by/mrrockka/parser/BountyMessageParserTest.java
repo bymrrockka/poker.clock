@@ -34,7 +34,7 @@ class BountyMessageParserTest {
                                                                      final String right) {
     final var messageMetadata = MessageMetadataCreator.domain(builder -> builder
       .text(command)
-      .entities(List.of(
+      .metadataEntities(List.of(
         MessageEntityCreator.domainMention("@%s".formatted(left)),
         MessageEntityCreator.domainMention("@%s".formatted(right))
       ))
@@ -50,7 +50,7 @@ class BountyMessageParserTest {
     final var message = "/bounty @kinger kicked";
     final var messageMetadata = MessageMetadataCreator.domain(builder -> builder
       .text(message)
-      .entities(List.of(
+      .metadataEntities(List.of(
         MessageEntityCreator.domainMention("@kinger")
       ))
     );

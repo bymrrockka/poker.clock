@@ -29,7 +29,7 @@ open class PrizePoolTelegramService(
                     Prize pool stored:
                     ${prizePool.positionPrizes.joinToString { "${it.position}. -> ${it.percentage}%" }}
                 """.trimIndent()
-            replyToMessageId = telegramGame.messageMetadata.id
+            replyToMessageId = telegramGame.messageMetadata.id.toInt()
         }
     }
 }

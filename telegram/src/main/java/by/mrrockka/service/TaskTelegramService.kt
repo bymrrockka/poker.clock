@@ -13,7 +13,9 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import java.time.Instant
 import java.time.LocalDateTime
 import java.util.*
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 @Service
 class TaskTelegramService(
         private val pollMessageValidator: PollMessageValidator,
@@ -30,7 +32,7 @@ class TaskTelegramService(
 
         return SendMessage().apply {
             chatId = messageMetadata.chatId.toString()
-            replyToMessageId = messageMetadata.id
+            replyToMessageId = messageMetadata.id.toInt()
             text = """
                 Poll created.
                 Will be triggered at ${pollTask.cron.next(LocalDateTime.now())}
@@ -55,7 +57,7 @@ class TaskTelegramService(
 
         return SendMessage().apply {
             chatId = messageMetadata.chatId.toString()
-            replyToMessageId = messageMetadata.replyTo.id
+            replyToMessageId = messageMetadata.replyTo.id.toInt()
             text = "Poll stopped."
         }
     }
@@ -86,4 +88,4 @@ class TaskTelegramService(
 }
 
 data class PollTaskCreated(val task: PollTask)
-data class PollTaskFinished(val messageId: Int, val finishedAt: Instant)
+data class PollTaskFinished(val messageId: Long, val finishedAt: Instant)

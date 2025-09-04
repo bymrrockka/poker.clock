@@ -1,7 +1,7 @@
 package by.mrrockka.service;
 
-import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.BasicPerson;
+import by.mrrockka.domain.MessageMetadata;
 import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.mapper.TelegramPersonMapper;
 import by.mrrockka.repo.person.TelegramPersonRepository;
@@ -46,15 +46,15 @@ public class TelegramPersonServiceOld {
 
   @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
   public List<TelegramPerson> storeMissed(final MessageMetadata metadata) {
-    final var nicknames = metadata.mentionsStream().map(entity -> entity.text().replaceAll("@", "")).toList();
+    final var nicknames = metadata.getMentions().stream().map(entity -> entity.getText().replaceAll("@", "")).toList();
     final var newNicknames = personService.getNewNicknames(nicknames);
     final var notExistentInChat = telegramPersonRepository.findNotExistentInChat(nicknames, metadata.getChatId());
 
     final var newPersons = newNicknames.stream()
       .map(nickname -> BasicPerson.personBuilder()
-                                  .nickname(nickname)
-                                  .id(UUID.randomUUID())
-                                  .build())
+        .nickname(nickname)
+        .id(UUID.randomUUID())
+        .build())
       .toList();
 
     if (!newPersons.isEmpty()) {

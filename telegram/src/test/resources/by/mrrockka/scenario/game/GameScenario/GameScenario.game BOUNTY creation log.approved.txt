@@ -9,7 +9,7 @@ buyin: 10
 @nickname3
 @nickname3
 -> Response
-cash game                   
+Bounty tournament game started.                   
 
 ******************************
 -> Request

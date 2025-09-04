@@ -2,7 +2,7 @@ package by.mrrockka.builder
 
 import by.mrrockka.TelegramRandoms.Companion.telegramRandoms
 import by.mrrockka.domain.MessageMetadata
-import by.mrrockka.domain.mesageentity.MessageEntity
+import by.mrrockka.domain.mesageentity.MetadataEntity
 import eu.vendeli.tgbot.types.User
 import eu.vendeli.tgbot.types.msg.Message
 import java.time.Instant
@@ -17,7 +17,7 @@ class MessageBuilder(init: (@BuilderMarker MessageBuilder.() -> Unit) = {}) : Ab
     internal var replyToMetadata: MessageMetadata? = null
     internal var replyToMessage: Message? = null
     internal var entities: List<eu.vendeli.tgbot.types.msg.MessageEntity> = mutableListOf()
-    internal var domainEntities: List<MessageEntity> = mutableListOf()
+    internal var domainEntities: List<MetadataEntity> = mutableListOf()
     internal var fromNickname: String? = null
     internal var user: User? = null
 
@@ -53,7 +53,7 @@ class MessageBuilder(init: (@BuilderMarker MessageBuilder.() -> Unit) = {}) : Ab
         this.domainEntities = entities.domainMentions()
     }
 
-    fun entity(entity: MessageEntity) {
+    fun entity(entity: MetadataEntity) {
         this.domainEntities + entity
     }
 
@@ -68,11 +68,11 @@ class MessageBuilder(init: (@BuilderMarker MessageBuilder.() -> Unit) = {}) : Ab
 
     fun metadata(): MessageMetadata {
         return MessageMetadata(
-                id = (id ?: randoms.messageid()).toInt(),
+                id = id ?: randoms.messageid(),
                 chatId = randoms.chatid(),
                 createdAt = createdAt ?: randoms.instant(),
                 text = text ?: randoms.faker.chuckNorris().fact(),
-                entities = if (domainEntities.isEmpty()) text.domainEntities() else domainEntities,
+                entities = if (entities.isEmpty()) text.entities() else entities,
                 replyTo = replyToMetadata,
                 fromNickname = fromNickname,
         )

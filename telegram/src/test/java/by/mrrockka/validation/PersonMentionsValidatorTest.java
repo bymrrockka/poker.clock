@@ -3,16 +3,15 @@ package by.mrrockka.validation;
 import by.mrrockka.creator.MessageEntityCreator;
 import by.mrrockka.creator.MessageMetadataCreator;
 import by.mrrockka.domain.MessageMetadata;
-import by.mrrockka.domain.mesageentity.MessageEntityType;
 import by.mrrockka.exception.BusinessException;
 import by.mrrockka.validation.mentions.InsufficientMentionsSizeSpecifiedException;
 import by.mrrockka.validation.mentions.PersonMentionsValidator;
 import by.mrrockka.validation.mentions.PlayerHasNoNicknameException;
+import eu.vendeli.tgbot.types.msg.EntityType;
 import lombok.Builder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.telegram.telegrambots.meta.api.objects.User;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -39,7 +38,7 @@ class PersonMentionsValidatorTest {
         PersonsMessageArgument.builder()
           .metadata(
             MessageMetadataCreator.domain(builder -> builder
-              .entities(List.of(
+              .metadataEntities(List.of(
                 MessageEntityCreator.domainMention("@mrrockka")
               ))))
           .exception(InsufficientMentionsSizeSpecifiedException.class)
@@ -49,13 +48,13 @@ class PersonMentionsValidatorTest {
         PersonsMessageArgument.builder()
           .metadata(
             MessageMetadataCreator.domain(builder -> builder
-              .entities(List.of(
+              .metadataEntities(List.of(
                 MessageEntityCreator.domainMention("@mrrockka"),
                 MessageEntityCreator.domainMention("@miscusi"),
                 MessageEntityCreator.domainEntity(entityBuilder -> entityBuilder
                   .text("Agnes Timiano")
-                  .type(MessageEntityType.TEXT_MENTION)
-                  .user(new User()))
+                  .type(EntityType.TextMention)
+                )
               ))))
           .exception(PlayerHasNoNicknameException.class)
           .build())

@@ -33,14 +33,14 @@ class EntryMessageParserTest {
       Arguments.of(
         EntryArgument.builder()
           .metadata(MessageMetadataCreator.domain(metadata -> metadata.text("/entry @kinger 60")
-            .entities(List.of(MessageEntityCreator.domainMention("@kinger")))))
+            .metadataEntities(List.of(MessageEntityCreator.domainMention("@kinger")))))
           .nicknames(Set.of("kinger"))
           .amount(BigDecimal.valueOf(60))
           .build()),
       Arguments.of(
         EntryArgument.builder()
           .metadata(MessageMetadataCreator.domain(metadata -> metadata.text("/entry @kinger")
-            .entities(List.of(MessageEntityCreator.domainMention("@kinger")))))
+            .metadataEntities(List.of(MessageEntityCreator.domainMention("@kinger")))))
           .nicknames(Set.of("kinger"))
           .amount(null)
           .build()),
@@ -49,7 +49,7 @@ class EntryMessageParserTest {
           .metadata(
             MessageMetadataCreator.domain(
               metadata -> metadata.text("/entry @kinger @asadf @asdfasdf @koomko 60")
-                .entities(List.of(
+                .metadataEntities(List.of(
                   MessageEntityCreator.domainMention("@kinger"),
                   MessageEntityCreator.domainMention("@asadf"),
                   MessageEntityCreator.domainMention("@asdfasdf"),

@@ -2,8 +2,8 @@ package by.mrrockka.mapper;
 
 import by.mrrockka.bot.TelegramBotsProperties;
 import by.mrrockka.domain.MessageMetadata;
-import by.mrrockka.domain.mesageentity.MessageEntity;
 import by.mrrockka.domain.mesageentity.MessageEntityType;
+import by.mrrockka.domain.mesageentity.MetadataEntity;
 import by.mrrockka.repo.game.TelegramGameEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -29,8 +29,9 @@ public abstract class MessageMetadataMapper {
   @Mapping(source = "messageId", target = "id")
   @Mapping(target = "text", source = "message", qualifiedByName = "filterText")
   @Mapping(target = "replyTo", expression = "java(this.map(message.getReplyToMessage()))")
-  @Mapping(target = "entities", source = "message", qualifiedByName = "mapMessageEntities")
+  @Mapping(target = "metadataEntities", source = "message", qualifiedByName = "mapMessageEntities")
   @Mapping(target = "fromNickname", source = "message.from.userName")
+  @Mapping(target = "entities", expression = "java(Collections.emptyList())")
   public abstract MessageMetadata map(Message message);
 
   @Mapping(source = "createdAt", target = "createdAt")
@@ -43,17 +44,17 @@ public abstract class MessageMetadataMapper {
   public abstract MessageMetadata map(TelegramGameEntity entity);
 
   @Named("mapMessageEntities")
-  public List<MessageEntity> mapMessageEntities(final Message message) {
+  public List<MetadataEntity> mapMessageEntities(final Message message) {
     final var messageEntities = message.getEntities().stream()
       .distinct()
       .filter(this::isBotNotMention)
       .toList();
-    final var entities = new ArrayList<MessageEntity>();
+    final var entities = new ArrayList<MetadataEntity>();
     for (final org.telegram.telegrambots.meta.api.objects.MessageEntity messageEntity : messageEntities) {
       if (MessageEntityType.BOT_COMMAND.value().equals(messageEntity.getType())) {
-        entities.add(MessageEntity.builder()
+        entities.add(MetadataEntity.builder()
                        .text(removeBotNicknameFromCommand(messageEntity.getText()))
-                       .type(MessageEntityType.BOT_COMMAND)
+//                       .type(MessageEntityType.BOT_COMMAND)
                        .build());
         continue;
       }
@@ -63,9 +64,9 @@ public abstract class MessageMetadataMapper {
 
 
     if (MeMentionUtil.hasMeMention(message)) {
-      entities.add(MessageEntity.builder()
+      entities.add(MetadataEntity.builder()
                      .text("@%s".formatted(message.getFrom().getUserName()))
-                     .type(MessageEntityType.MENTION)
+//                     .type(MessageEntityType.MENTION)
                      .build());
     }
 
