@@ -207,6 +207,7 @@ abstract class AbstractScenarioTest {
                                        |******************************
                                        |-> Request
                                        |${command.message}
+                                       |
                                        |-> Response
                                        |${stubs[index] ?: "No message"}                   
                                        """.trimMargin()

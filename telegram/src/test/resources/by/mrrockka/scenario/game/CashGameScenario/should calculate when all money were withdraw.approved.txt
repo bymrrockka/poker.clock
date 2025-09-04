@@ -4,17 +4,20 @@
 buyin: 10
 
 @nickname1, @nickname2
+
 -> Response
-cash game                   
+Cash game started.                   
 
 ******************************
 -> Request
 /withdrawal @nickname1 20
+
 -> Response
 Can't process command                   
 
 ******************************
 -> Request
 /calculate
+
 -> Response
 Can't process command                   

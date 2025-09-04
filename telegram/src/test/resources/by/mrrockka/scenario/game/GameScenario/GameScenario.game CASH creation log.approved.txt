@@ -4,11 +4,13 @@
 stack: 10k
 buyin: 10
 @nickname1
+
 -> Response
 Cash game started.                   
 
 ******************************
 -> Request
 /game_stats
+
 -> Response
 Can't process command                   
