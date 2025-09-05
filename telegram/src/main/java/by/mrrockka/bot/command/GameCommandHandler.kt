@@ -35,7 +35,8 @@ class GameCommandHandlerImpl(
                 }.also { response ->
                     sendMessage { response }.send(to = metadata.chatId, via = bot)
                 }
-
-        //todo: add pin to incomming message
+//todo: find a way to log pinned messages
+//        pinChatMessage(metadata.id, disableNotification = true)
+//                .send(to = metadata.chatId, via = bot)
     }
 }

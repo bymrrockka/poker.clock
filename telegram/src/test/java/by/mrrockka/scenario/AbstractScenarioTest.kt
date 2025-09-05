@@ -132,6 +132,7 @@ abstract class AbstractScenarioTest {
     fun GivenSpecification.updatesReceived(chatId: Long = chatid) {
         check(this.commands.isNotEmpty()) { "Commands should be specified" }
 
+        //todo: find a way to log pinned messages
         this.commands.map { command ->
             update {
                 message {
