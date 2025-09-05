@@ -1,4 +1,4 @@
-package by.mrrockka.domain.mesageentity
+package by.mrrockka.domain
 
 import eu.vendeli.tgbot.types.msg.EntityType
 

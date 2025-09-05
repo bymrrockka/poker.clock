@@ -5,6 +5,7 @@ import by.mrrockka.domain.takenToGiven
 import org.springframework.stereotype.Component
 
 @Component
+@Deprecated("move to service or validations file")
 class BountyValidator {
     fun validate(game: BountyTournamentGame, from: String, to: String) {
         check(from != to) { "Can't use same nickname @$from for bounty transaction" }

@@ -1,9 +1,9 @@
 package by.mrrockka.builder
 
 import by.mrrockka.TelegramRandoms.Companion.telegramRandoms
+import by.mrrockka.domain.MetadataEntity
 import by.mrrockka.domain.mesageentity.MessageEntityType
 import by.mrrockka.domain.mesageentity.MessageEntityType.MENTION
-import by.mrrockka.domain.mesageentity.MetadataEntity
 import eu.vendeli.tgbot.types.msg.EntityType
 
 class MessageEntityBuilder(init: (MessageEntityBuilder.() -> Unit) = {}) : AbstractBuilder() {
@@ -111,8 +111,9 @@ fun command(init: (@BuilderMarker MessageEntityBuilder.() -> Unit) = {}) = Messa
 
 fun String?.entities(): List<eu.vendeli.tgbot.types.msg.MessageEntity> {
     check(this != null) { "text is null" }
+//    val text = this.replace(" ", "\n")
     val commandRegex = "^(/[\\w]+)".toRegex(RegexOption.MULTILINE)
-    val mentionRegex = "^(@[\\w]+)".toRegex(RegexOption.MULTILINE)
+    val mentionRegex = "(@[\\w]+)".toRegex(RegexOption.MULTILINE)
 
     val command = commandRegex.find(this.trimIndent())
             .let { match ->

@@ -2,9 +2,9 @@ package by.mrrockka.service;
 
 import by.mrrockka.creator.MessageEntityCreator;
 import by.mrrockka.creator.MessageMetadataCreator;
+import by.mrrockka.domain.MetadataEntity;
 import by.mrrockka.domain.TelegramPerson;
 import by.mrrockka.domain.game.BountyGame;
-import by.mrrockka.domain.mesageentity.MetadataEntity;
 import by.mrrockka.extension.TelegramPSQLExtension;
 import by.mrrockka.repo.bounty.BountyRepository;
 import lombok.Builder;

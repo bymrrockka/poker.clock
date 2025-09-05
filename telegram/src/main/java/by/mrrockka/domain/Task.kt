@@ -32,7 +32,7 @@ data class PollTask(
         val options: List<Option>,
         override val updatedAt: Instant? = null,
         override val finishedAt: Instant? = null,
-        override val createdAt: Instant
+        override val createdAt: Instant,
 ) : Task {
     @Serializable
     data class Option(
@@ -56,6 +56,7 @@ data class PollTask(
     }
 }
 
+//todo: verify if this is needed
 data class ForcedBetsTask(
         override val id: UUID,
         override val cron: CronExpression,
@@ -69,14 +70,14 @@ data class ForcedBetsTask(
 
     data class Schema(
             val id: UUID,
-            val forcedBets: List<ForcedBets>
+            val forcedBets: List<ForcedBets>,
     )
 
     data class ForcedBets(
             val index: Int,
             val bigBlind: BigDecimal,
             val smallBlind: BigDecimal,
-            val ante: BigDecimal
+            val ante: BigDecimal,
     )
 
     override fun toMessage(): BotApiMethodMessage {

@@ -2,8 +2,8 @@ package by.mrrockka.mapper;
 
 import by.mrrockka.bot.TelegramBotsProperties;
 import by.mrrockka.domain.MessageMetadata;
+import by.mrrockka.domain.MetadataEntity;
 import by.mrrockka.domain.mesageentity.MessageEntityType;
-import by.mrrockka.domain.mesageentity.MetadataEntity;
 import by.mrrockka.repo.game.TelegramGameEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -13,7 +13,8 @@ Cash game started.
 /withdrawal @nickname1 20
 
 -> Response
-Can't process command                   
+Stored withdrawals: 
+  - @nickname1 -> 20                   
 
 ******************************
 -> Request

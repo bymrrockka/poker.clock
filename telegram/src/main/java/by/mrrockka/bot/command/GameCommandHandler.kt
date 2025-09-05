@@ -23,7 +23,8 @@ class GameCommandHandlerImpl(
 
     @CommandHandler(["/tournament_game", "/bounty_game", "/cash_game"])
     override suspend fun store(message: MessageUpdate) {
-        gameService.storeGame(message.message.toMessageMetadata())
+        val metadata = message.message.toMessageMetadata()
+        gameService.storeGame(metadata)
                 .let { game ->
                     when (game) {
                         is CashGame -> "Cash game started."
@@ -32,7 +33,7 @@ class GameCommandHandlerImpl(
                         else -> error("Game type not supported: ${this.javaClass.simpleName}")
                     }
                 }.also { response ->
-                    sendMessage { response }.send(to = message.message.chat.id, bot)
+                    sendMessage { response }.send(to = metadata.chatId, via = bot)
                 }
 
         //todo: add pin to incomming message

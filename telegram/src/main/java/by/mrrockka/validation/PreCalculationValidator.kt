@@ -1,9 +1,14 @@
 package by.mrrockka.validation
 
-import by.mrrockka.domain.*
+import by.mrrockka.domain.BountyTournamentGame
+import by.mrrockka.domain.CashGame
+import by.mrrockka.domain.Game
+import by.mrrockka.domain.TournamentGame
+import by.mrrockka.domain.total
 import org.springframework.stereotype.Component
 
 @Component
+@Deprecated("move to service or validations file")
 class PreCalculationValidator {
     fun validateGame(game: Game) {
         val players = game.players

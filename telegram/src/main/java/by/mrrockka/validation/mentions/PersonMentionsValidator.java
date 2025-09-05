@@ -1,7 +1,7 @@
 package by.mrrockka.validation.mentions;
 
 import by.mrrockka.domain.MessageMetadata;
-import by.mrrockka.domain.mesageentity.MetadataEntity;
+import by.mrrockka.domain.MetadataEntity;
 import eu.vendeli.tgbot.types.msg.EntityType;
 import org.springframework.stereotype.Component;
 

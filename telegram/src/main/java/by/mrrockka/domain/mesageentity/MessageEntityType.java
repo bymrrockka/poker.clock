@@ -2,6 +2,7 @@ package by.mrrockka.domain.mesageentity;
 
 import org.apache.commons.lang3.StringUtils;
 
+@Deprecated(forRemoval = true)
 public enum MessageEntityType {
   MENTION("mention"),
   BOT_COMMAND("bot_command"),

@@ -2,7 +2,7 @@ package by.mrrockka.builder
 
 import by.mrrockka.TelegramRandoms.Companion.telegramRandoms
 import by.mrrockka.domain.MessageMetadata
-import by.mrrockka.domain.mesageentity.MetadataEntity
+import by.mrrockka.domain.MetadataEntity
 import eu.vendeli.tgbot.types.User
 import eu.vendeli.tgbot.types.msg.Message
 import java.time.Instant

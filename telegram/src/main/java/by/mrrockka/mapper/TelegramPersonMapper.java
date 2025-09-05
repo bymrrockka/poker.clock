@@ -1,7 +1,7 @@
 package by.mrrockka.mapper;
 
+import by.mrrockka.domain.MetadataEntity;
 import by.mrrockka.domain.TelegramPerson;
-import by.mrrockka.domain.mesageentity.MetadataEntity;
 import by.mrrockka.repo.person.TelegramPersonEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

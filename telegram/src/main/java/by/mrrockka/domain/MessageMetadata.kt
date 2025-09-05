@@ -1,6 +1,5 @@
 package by.mrrockka.domain
 
-import by.mrrockka.domain.mesageentity.MetadataEntity
 import eu.vendeli.tgbot.types.User
 import eu.vendeli.tgbot.types.msg.EntityType
 import eu.vendeli.tgbot.types.msg.Message
@@ -43,7 +42,7 @@ data class MessageMetadata(
 
     private fun MessageEntity.toMetadata(text: String): MetadataEntity {
         return MetadataEntity(
-                text = text.substring(offset, offset + length),
+                text = text.substring(offset + 1, offset + length),
                 type = type,
         )
     }

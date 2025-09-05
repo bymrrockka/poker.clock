@@ -1,6 +1,6 @@
 package by.mrrockka.creator;
 
-import by.mrrockka.domain.mesageentity.MetadataEntity;
+import by.mrrockka.domain.MetadataEntity;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.telegram.telegrambots.meta.api.objects.EntityType;
