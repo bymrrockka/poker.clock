@@ -21,4 +21,10 @@ Stored withdrawals:
 /calculate
 
 -> Response
-Can't process command                   
+-----------------------------
+Payout to: @nickname1
+  Entries: 10.00
+  Withdrawals: 20.00
+  Total: 10.00 
+From:
+  @nickname2 -> 10.00                   

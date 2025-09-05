@@ -14,10 +14,21 @@ import by.mrrockka.domain.total
 import by.mrrockka.domain.totalEntries
 import java.math.BigDecimal.ZERO
 
-class CalculationResponseBuilder(
-        private val game: Game,
-        private val payouts: List<Payout>,
-) : ResponseBuilder {
+class CalculationResponseBuilder(init: CalculationResponseBuilder.() -> Unit) : ResponseBuilder {
+    private lateinit var game: Game
+    private lateinit var payouts: List<Payout>
+
+    init {
+        init()
+    }
+
+    fun game(game: Game) {
+        this.game = game
+    }
+
+    fun payouts(payouts: List<Payout>) {
+        this.payouts = payouts
+    }
 
     override fun response(): String {
         return when (game) {
@@ -95,3 +106,5 @@ class CalculationResponseBuilder(
         }
     }
 }
+
+fun calculation(init: CalculationResponseBuilder.() -> Unit = {}): CalculationResponseBuilder = CalculationResponseBuilder(init)
