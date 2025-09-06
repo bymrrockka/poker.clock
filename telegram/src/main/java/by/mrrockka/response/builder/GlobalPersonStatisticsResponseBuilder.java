@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import static by.mrrockka.response.builder.TextContants.*;
 
 @Component
+@Deprecated(forRemoval = true)
 public class GlobalPersonStatisticsResponseBuilder {
 
   public String response(final GlobalPersonStatistics details) {

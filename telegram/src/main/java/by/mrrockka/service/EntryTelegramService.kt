@@ -1,61 +1,29 @@
-package by.mrrockka.service;
+package by.mrrockka.service
 
-import by.mrrockka.domain.MessageMetadata;
-import by.mrrockka.domain.Person;
-import by.mrrockka.parser.EntryMessageParser;
-import by.mrrockka.response.builder.EntryResponseBuilder;
-import by.mrrockka.validation.collection.CollectionsValidator;
-import by.mrrockka.validation.mentions.PersonMentionsValidator;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-
-import java.util.Optional;
+import by.mrrockka.domain.MessageMetadata
+import by.mrrockka.parser.EntryMessageParser
+import by.mrrockka.repo.EntriesRepo
+import lombok.RequiredArgsConstructor
+import org.springframework.stereotype.Service
+import java.math.BigDecimal
 
 @Service
 @RequiredArgsConstructor
-public class EntryTelegramService {
+class EntryTelegramService(
+        private val entriesRepo: EntriesRepo,
+        private val entryMessageParser: EntryMessageParser,
+        private val gameTelegramService: GameTelegramService,
+        private val telegramPersonService: TelegramPersonService,
+) {
 
-  private final EntriesService entriesService;
-  private final EntryMessageParser entryMessageParser;
-  private final GameTelegramService gameTelegramService;
-  private final TelegramPersonServiceOld telegramPersonServiceOld;
-  private final PersonMentionsValidator personMentionsValidator;
-  private final EntryResponseBuilder entryResponseBuilder;
-  private final CollectionsValidator collectionsValidator;
+    fun entry(metadata: MessageMetadata): Pair<Set<String>, BigDecimal> {
+        metadata.checkMentions()
+        //todo: add ability to entry without nickname or @me and decline command handler
+        val (nicknames, amount) = entryMessageParser.parse(metadata)
+        val telegramGame = gameTelegramService.findGame(metadata)
+        val personIds = telegramPersonService.findByMessage(metadata)
+        entriesRepo.insertBatch(personIds, telegramGame.game, metadata.createdAt)
 
-  @SneakyThrows
-  @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
-  public BotApiMethodMessage storeEntry(final MessageMetadata messageMetadata) {
-    personMentionsValidator.validateMessageMentions(messageMetadata, 1);
-//    todo: 1 change entries mapping to gather only entry amount and change validation
-    final var personAndAmountMap = entryMessageParser.parse(messageMetadata);
-    collectionsValidator.validateMapIsNotEmpty(personAndAmountMap, "Entry");
-
-    final var telegramGame = gameTelegramService
-      .findGame(messageMetadata);
-
-    final var game = telegramGame.getGame();
-    final var amount = personAndAmountMap.values().stream()
-      .filter(Optional::isPresent)
-      .map(Optional::get)
-      .findFirst()
-      .orElse(game.getBuyIn());
-
-    final var persons = telegramPersonServiceOld.storeMissed(messageMetadata);
-
-    entriesService.storeBatch(game.getId(), persons.stream().map(Person::getId).toList(), amount,
-                              messageMetadata.getCreatedAt());
-
-    return SendMessage.builder()
-      .chatId(messageMetadata.getChatId())
-      .text(entryResponseBuilder.response(persons, amount))
-      .replyToMessageId(Long.valueOf(telegramGame.getMessageMetadata().getId()).intValue())
-      .build();
-  }
+        return nicknames to (amount ?: telegramGame.game.buyIn)
+    }
 }

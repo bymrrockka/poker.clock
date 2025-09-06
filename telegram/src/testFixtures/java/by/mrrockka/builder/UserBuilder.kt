@@ -43,4 +43,4 @@ class UserBuilder(init: (UserBuilder.() -> Unit) = {}) : AbstractBuilder() {
     }
 }
 
-fun user(init: (@BuilderMarker UserBuilder.() -> Unit) = {}) = UserBuilder(init).build()
+fun user(init: (@BuilderDsl UserBuilder.() -> Unit) = {}) = UserBuilder(init).build()

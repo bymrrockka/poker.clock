@@ -1,9 +1,11 @@
 package by.mrrockka.scenario.config
 
+import by.mrrockka.PokerClockExceptionHandler
 import by.mrrockka.bot.TelegramBotsProperties
 import by.mrrockka.domain.PokerClockBotOptions
 import eu.vendeli.spring.starter.SpringClassManager
 import eu.vendeli.tgbot.TelegramBot
+import eu.vendeli.tgbot.types.component.ExceptionHandlingStrategy
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.ApplicationContext
@@ -32,6 +34,7 @@ open class TestBotConfig(
                 commandDelimiter = '\n'
                 restrictSpacesInCommands = true
             }
+            exceptionHandlingStrategy = ExceptionHandlingStrategy.Handle(PokerClockExceptionHandler)
         }
     }
 

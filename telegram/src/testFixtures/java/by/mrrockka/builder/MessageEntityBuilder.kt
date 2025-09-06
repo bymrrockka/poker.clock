@@ -65,8 +65,8 @@ class MessageEntityBuilder(init: (MessageEntityBuilder.() -> Unit) = {}) : Abstr
 
 }
 
-fun domainMention(init: (@BuilderMarker MessageEntityBuilder.() -> Unit) = {}) = MessageEntityBuilder(init).also { check(it.domainType == MENTION) }.domainMention()
-fun domainCommand(init: (@BuilderMarker MessageEntityBuilder.() -> Unit) = {}) = MessageEntityBuilder(init).also { check(it.domainType == MENTION) }.domainCommand()
+fun domainMention(init: (@BuilderDsl MessageEntityBuilder.() -> Unit) = {}) = MessageEntityBuilder(init).also { check(it.domainType == MENTION) }.domainMention()
+fun domainCommand(init: (@BuilderDsl MessageEntityBuilder.() -> Unit) = {}) = MessageEntityBuilder(init).also { check(it.domainType == MENTION) }.domainCommand()
 fun List<String>.domainMentions(): List<MetadataEntity> = map { domainMention { messageText(it) } }
 fun String?.domainEntities(): List<MetadataEntity> {
     check(this != null) { "text is null" }
@@ -97,13 +97,13 @@ fun List<String>.mentions(text: String): List<eu.vendeli.tgbot.types.msg.Message
     }
 }
 
-fun mention(init: (@BuilderMarker MessageEntityBuilder.() -> Unit) = {}) = MessageEntityBuilder(init)
+fun mention(init: (@BuilderDsl MessageEntityBuilder.() -> Unit) = {}) = MessageEntityBuilder(init)
         .also {
             check(it.messageText != null) { "Message text should present" }
             check(it.entityText != null) { "Entity text should present" }
         }.mention()
 
-fun command(init: (@BuilderMarker MessageEntityBuilder.() -> Unit) = {}) = MessageEntityBuilder(init)
+fun command(init: (@BuilderDsl MessageEntityBuilder.() -> Unit) = {}) = MessageEntityBuilder(init)
         .also {
             check(it.messageText != null) { "Message text should present" }
             check(it.entityText != null) { "Entity text should present" }

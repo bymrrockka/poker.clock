@@ -10,16 +10,15 @@ import java.math.BigDecimal
 
 @Service
 class WithdrawalTelegramService(
-        val withdrawalsRepo: WithdrawalsRepo,
-        val withdrawalMessageParser: WithdrawalMessageParser,
-        val gameTelegramService: GameTelegramService,
-        val telegramPersonService: TelegramPersonService,
+        private val withdrawalsRepo: WithdrawalsRepo,
+        private val withdrawalMessageParser: WithdrawalMessageParser,
+        private val gameTelegramService: GameTelegramService,
+        private val telegramPersonService: TelegramPersonService,
 ) {
 
-    fun withdraw(messageMetadata: MessageMetadata): Pair<BigDecimal, Set<String>> {
+    fun withdraw(messageMetadata: MessageMetadata): Pair<Set<String>, BigDecimal> {
         messageMetadata.checkMentions()
-
-        val (amount, nicknames) = withdrawalMessageParser.parse(messageMetadata)
+        val (nicknames, amount) = withdrawalMessageParser.parse(messageMetadata)
         val telegramGame = gameTelegramService.findGame(messageMetadata)
         check(telegramGame.game is CashGame) { "Withdrawals are not allowed for non cash game" }
         check(amount * nicknames.size.toBigDecimal() <= telegramGame.game.moneyInGame()) { "Sum of withdrawals is bigger then ${telegramGame.game.moneyInGame()} active in game" }
@@ -27,6 +26,6 @@ class WithdrawalTelegramService(
         val personsIds = telegramPersonService.findByMessage(messageMetadata)
         withdrawalsRepo.storeBatch(telegramGame.game.id, personsIds, amount, messageMetadata.createdAt)
 
-        return amount to nicknames
+        return nicknames to amount
     }
 }

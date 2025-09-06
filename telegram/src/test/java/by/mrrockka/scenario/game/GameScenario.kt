@@ -6,6 +6,7 @@ import by.mrrockka.domain.GameType
 import by.mrrockka.extension.textApprover
 import by.mrrockka.scenario.AbstractScenarioTest
 import by.mrrockka.scenario.UserCommand
+import by.mrrockka.scenario.UserCommand.Companion.gameStats
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
@@ -16,8 +17,8 @@ class GameScenario : AbstractScenarioTest() {
     @MethodSource("games")
     fun `user sent command to create a game and receive successful message`(gameType: GameType, commandText: String) {
         Given {
-            command { message(commandText) }
-            command { message(UserCommand.gameStats) }
+            command { commandText.message() }
+            command { gameStats.message() }
         } When {
             updatesReceived()
         } ThenApprove (textApprover("game ${gameType.name} creation log"))

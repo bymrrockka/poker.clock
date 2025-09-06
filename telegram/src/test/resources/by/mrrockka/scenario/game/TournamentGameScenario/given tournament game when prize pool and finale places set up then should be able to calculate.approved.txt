@@ -1,0 +1,32 @@
+******************************
+-> Request
+/tournament_game
+buyin: 10
+
+@nickname1, @nickname2
+
+-> Response
+Tournament game started.                   
+
+******************************
+-> Request
+/prize_pool
+1 100%
+
+-> Response
+Can't process command                   
+
+******************************
+-> Request
+/finale_places
+1 nickname1
+
+-> Response
+Can't process command                   
+
+******************************
+-> Request
+/calculate
+
+-> Response
+Exception occurred during handling                   

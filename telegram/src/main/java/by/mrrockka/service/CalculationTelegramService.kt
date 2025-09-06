@@ -13,7 +13,7 @@ class CalculationTelegramService(
         val preCalculationValidator: PreCalculationValidator,
 ) {
 
-    fun calculatePayouts(messageMetadata: MessageMetadata): List<Payout> {
+    fun calculate(messageMetadata: MessageMetadata): List<Payout> {
         val telegramGame = gameTelegramFacadeService.findGame(messageMetadata)
         preCalculationValidator.validateGame(telegramGame.game)
 

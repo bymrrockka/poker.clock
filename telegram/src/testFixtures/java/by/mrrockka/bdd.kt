@@ -1,21 +1,20 @@
 package by.mrrockka
 
+import by.mrrockka.builder.BddDsl
 import by.mrrockka.creator.SendMessageCreator
 import org.apache.commons.lang3.RandomStringUtils
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
-import org.telegram.telegrambots.meta.api.objects.MessageEntity
 
 class Command(init: Command.() -> Unit) {
     lateinit var message: String
-    var entities: List<MessageEntity> = mutableListOf()
 
     init {
         init(this)
     }
 
-    fun message(message: String) {
-        this.message = message.trim()
+    fun String.message() {
+        this@Command.message = this.trim()
     }
 }
 
@@ -58,11 +57,14 @@ class Expect {
     }
 }
 
+@BddDsl
 fun Given(block: GivenSpecification.() -> Unit): GivenSpecification = GivenSpecification().apply(block)
 
 //todo: refactor
+@BddDsl
 infix fun GivenSpecification.When(block: GivenSpecification.() -> Unit): WhenSpecification = WhenSpecification(this.scenarioSeed, this.commands)
         .apply { block() }
 
+@BddDsl
 infix fun WhenSpecification.Then(block: ThenSpecification.() -> Unit) = ThenSpecification(this.scenarioSeed)
         .apply(block)

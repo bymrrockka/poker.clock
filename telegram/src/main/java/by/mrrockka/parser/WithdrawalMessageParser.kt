@@ -9,13 +9,13 @@ class WithdrawalMessageParser {
     private val nicknameRegex = "^@(?<username>[\\d\\w_-]{5,})$".toRegex(RegexOption.MULTILINE)
     private val amountRegex = "^(?<amount>[\\d]+)$".toRegex(RegexOption.MULTILINE)
 
-    fun parse(metadata: MessageMetadata): Pair<BigDecimal, Set<String>> {
+    fun parse(metadata: MessageMetadata): Pair<Set<String>, BigDecimal> {
         val command = metadata.text.replace(" ", "\n").trimIndent()
         val nicknames = nicknameRegex.findAll(command)
                 .mapNotNull { it.groups["username"]?.value }
                 .toSet()
         check(nicknames.isNotEmpty()) { "No nickname found" }
-        val amount = amountRegex.find(command)?.value ?: error("Amount should be provided")
-        return BigDecimal(amount) to nicknames
+        val amount = amountRegex.find(command)?.value?.let { BigDecimal(it) } ?: error("Amount should be provided")
+        return nicknames to amount
     }
 }

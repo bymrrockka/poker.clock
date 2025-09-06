@@ -9,6 +9,7 @@ import static by.mrrockka.response.builder.TextContants.*;
 
 //todo: refactor
 @Component
+@Deprecated(forRemoval = true)
 public class PlayerInGameStatisticsResponseBuilder {
 
   public String response(final PlayerInGameStatistics statistics) {

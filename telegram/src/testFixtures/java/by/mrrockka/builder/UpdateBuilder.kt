@@ -8,7 +8,7 @@ class UpdateBuilder(init: (UpdateBuilder.() -> Unit) = {}) : AbstractBuilder() {
     internal var message: Message? = null
     internal var editedMessage: Message? = null
 
-    fun message(messageBuilder: (@BuilderMarker MessageBuilder.() -> Unit) = {}) {
+    fun message(messageBuilder: (@BuilderDsl MessageBuilder.() -> Unit) = {}) {
         this.message = MessageBuilder(messageBuilder).message()
     }
 
@@ -34,4 +34,4 @@ class UpdateBuilder(init: (UpdateBuilder.() -> Unit) = {}) : AbstractBuilder() {
     }
 }
 
-fun update(init: (@BuilderMarker UpdateBuilder.() -> Unit) = {}) = UpdateBuilder(init).build()
+fun update(init: (@BuilderDsl UpdateBuilder.() -> Unit) = {}) = UpdateBuilder(init).build()

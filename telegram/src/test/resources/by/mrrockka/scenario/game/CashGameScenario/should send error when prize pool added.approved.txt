@@ -1,0 +1,17 @@
+******************************
+-> Request
+/cash_game
+buyin: 10
+
+@nickname1, @nickname2
+
+-> Response
+Cash game started.                   
+
+******************************
+-> Request
+/prize_pool
+1 100%
+
+-> Response
+Can't process command                   

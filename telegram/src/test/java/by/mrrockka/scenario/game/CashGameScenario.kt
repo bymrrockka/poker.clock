@@ -4,8 +4,10 @@ import by.mrrockka.Given
 import by.mrrockka.When
 import by.mrrockka.domain.GameType
 import by.mrrockka.scenario.AbstractScenarioTest
-import by.mrrockka.scenario.UserCommand
+import by.mrrockka.scenario.UserCommand.Companion.calculate
 import by.mrrockka.scenario.UserCommand.Companion.createGame
+import by.mrrockka.scenario.UserCommand.Companion.entry
+import by.mrrockka.scenario.UserCommand.Companion.prizePool
 import by.mrrockka.scenario.UserCommand.Companion.withdrawal
 import com.oneeyedmen.okeydoke.Approver
 import org.junit.jupiter.api.Test
@@ -16,25 +18,75 @@ class CashGameScenario : AbstractScenarioTest() {
     @Test
     fun `should calculate when all money were withdraw`(approver: Approver) {
         val buyin = BigDecimal(10)
-        val players = listOf("nickname1", "nickname2")
+        val players = listOf(
+                "nickname1",
+                "nickname2",
+                "nickname3",
+                "nickname4",
+                "nickname5",
+                "nickname6",
+        )
 
         Given {
-            command { message(players.createGame(GameType.CASH, buyin)) }
-            command { message(players[0].withdrawal(20)) }
-            command { message(UserCommand.calculate) }
+            command { players.createGame(GameType.CASH, buyin).message() }
+            command { players[0].withdrawal(20).message() }
+            command { players[1].withdrawal(30).message() }
+            command { players[2].withdrawal(10).message() }
+            command { calculate.message() }
         } When {
             updatesReceived()
         } ThenApprove (approver)
     }
 
     @Test
-    fun `should send error message when there are still money in game`(approver: Approver) {
+    fun `should create game with one player and calculate when other entries`(approver: Approver) {
+        val buyin = BigDecimal(10)
+        val player1 = "nickname1"
+        val player2 = "nickname2"
+
+        Given {
+            command { listOf(player1).createGame(GameType.CASH, buyin).message() }
+            command { player2.entry().message() }
+            command { player1.withdrawal(20).message() }
+            command { calculate.message() }
+        } When {
+            updatesReceived()
+        } ThenApprove (approver)
+    }
+    @Test
+    fun `should send error when calculation started but there are still money in game`(approver: Approver) {
         val buyin = BigDecimal(10)
         val players = listOf("nickname1", "nickname2")
 
         Given {
-            command { message(players.createGame(GameType.CASH, buyin)) }
-            command { message(UserCommand.calculate) }
+            command { players.createGame(GameType.CASH, buyin).message() }
+            command { calculate.message() }
+        } When {
+            updatesReceived()
+        } ThenApprove (approver)
+    }
+
+    @Test
+    fun `should send error when withdrawal is more then money left in game`(approver: Approver) {
+        val buyin = BigDecimal(10)
+        val players = listOf("nickname1", "nickname2")
+
+        Given {
+            command { players.createGame(GameType.CASH, buyin).message() }
+            command { players[0].withdrawal(40).message() }
+        } When {
+            updatesReceived()
+        } ThenApprove (approver)
+    }
+
+    @Test
+    fun `should send error when prize pool added`(approver: Approver) {
+        val buyin = BigDecimal(10)
+        val players = listOf("nickname1", "nickname2")
+
+        Given {
+            command { players.createGame(GameType.CASH, buyin).message() }
+            command { prizePool(1).message() }
         } When {
             updatesReceived()
         } ThenApprove (approver)

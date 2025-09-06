@@ -13,4 +13,4 @@ Cash game started.
 /calculate
 
 -> Response
-Can't process command                   
+Entries and withdrawal amounts are not equal. Deviation is 20.00                   

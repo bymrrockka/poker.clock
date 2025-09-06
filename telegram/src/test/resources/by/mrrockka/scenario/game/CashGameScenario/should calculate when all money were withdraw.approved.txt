@@ -3,7 +3,7 @@
 /cash_game
 buyin: 10
 
-@nickname1, @nickname2
+@nickname1, @nickname2, @nickname3, @nickname4, @nickname5, @nickname6
 
 -> Response
 Cash game started.                   
@@ -18,13 +18,42 @@ Stored withdrawals:
 
 ******************************
 -> Request
+/withdrawal @nickname2 30
+
+-> Response
+Stored withdrawals: 
+  - @nickname2 -> 30                   
+
+******************************
+-> Request
+/withdrawal @nickname3 10
+
+-> Response
+Stored withdrawals: 
+  - @nickname3 -> 10                   
+
+******************************
+-> Request
 /calculate
 
 -> Response
 -----------------------------
-Payout to: @nickname1
-  Entries: 10.00
-  Withdrawals: 20.00
-  Total: 10.00 
+Payout to: @nickname2
+  Entries: 10
+  Withdrawals: 30
+  Total: 20 
 From:
-  @nickname2 -> 10.00                   
+  @nickname5 -> 10
+  @nickname4 -> 10
+-----------------------------
+Payout to: @nickname1
+  Entries: 10
+  Withdrawals: 20
+  Total: 10 
+From:
+  @nickname6 -> 10
+-----------------------------
+Payout to: @nickname3
+  Entries: 10
+  Withdrawals: 10
+  Total: 0 

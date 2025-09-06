@@ -1,5 +1,22 @@
 package by.mrrockka.builder
 
 @DslMarker
-@Target(AnnotationTarget.TYPE)
-annotation class BuilderMarker
+@Target(
+        AnnotationTarget.CLASS,
+        AnnotationTarget.FUNCTION,
+        AnnotationTarget.TYPE,
+        AnnotationTarget.VALUE_PARAMETER,
+        AnnotationTarget.TYPEALIAS,
+)
+annotation class BuilderDsl
+
+@DslMarker
+@Target(
+        AnnotationTarget.CLASS,
+        AnnotationTarget.FUNCTION,
+        AnnotationTarget.TYPE,
+        AnnotationTarget.VALUE_PARAMETER,
+        AnnotationTarget.TYPEALIAS,
+)
+annotation class BddDsl
+

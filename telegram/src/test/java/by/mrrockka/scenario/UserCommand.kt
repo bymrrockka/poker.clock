@@ -1,10 +1,7 @@
 package by.mrrockka.scenario
 
 import by.mrrockka.domain.GameType
-import by.mrrockka.domain.Payout
-import by.mrrockka.domain.total
 import java.math.BigDecimal
-import java.math.BigDecimal.ZERO
 import java.math.RoundingMode
 
 class UserCommand {
@@ -25,6 +22,8 @@ class UserCommand {
         val createPoll = "/create_poll"
         val stopPoll = "/stop_poll"
 
+        fun String.entry(): String = "${entry} @$this"
+
         fun List<String>.createGame(type: GameType, buyin: BigDecimal): String {
             val command = when (type) {
                 GameType.CASH -> cashGame
@@ -38,36 +37,6 @@ class UserCommand {
                 ${if (type == GameType.BOUNTY) "bounty: $buyin" else ""}
                 ${this.joinToString { "@$it" }}
             """.trimIndent()
-        }
-
-        fun gameResponse(type: GameType): String {
-            val command = when (type) {
-                GameType.CASH -> "Cash"
-                GameType.TOURNAMENT -> "Tournament"
-                GameType.BOUNTY -> "Bounty tournament"
-            }
-
-            return "$command game started."
-        }
-
-        fun gameStatsResponse(type: GameType, playersSize: Int, buyin: BigDecimal, withdrawal: Int = 0, numberOfEntries: Int = playersSize): String {
-            return when (type) {
-                GameType.TOURNAMENT -> """
-                Tournament game statistics:
-                    - players entered -> $playersSize
-                    - number of entries -> $numberOfEntries
-                    - total buy-in amount -> ${buyin * BigDecimal(numberOfEntries)}
-                """.trimIndent()
-
-                GameType.CASH -> """
-                Cash game statistics:
-                    - players entered -> $playersSize
-                    - total buy-in amount -> ${buyin * BigDecimal(playersSize)}
-                    - total withdrawal amount -> $withdrawal
-                """.trimIndent()
-
-                else -> ""
-            }
         }
 
         private fun calculatePrizePool(size: Int): Map<Int, BigDecimal> {
@@ -87,7 +56,7 @@ class UserCommand {
             return (1..size).associate { it to calculatePercentageForPlace(it) }
         }
 
-        fun createPrizePool(size: Int): String {
+        fun prizePool(size: Int): String {
             return """
             ${prizePool}
             ${
@@ -97,126 +66,14 @@ class UserCommand {
             """.trimIndent()
         }
 
-        fun prizePoolResponse(size: Int): String {
-            return """
-            Prize pool stored:
-            ${
-                calculatePrizePool(size).entries
-                        .joinToString { (index, value) -> "${index}. -> ${value}%" }
-            }
-            """.trimIndent()
-        }
-
-        fun createFinalePlaces(winners: List<String>): String {
+        fun finalePlaces(winners: List<String>): String {
             return """
             ${finalePlaces}
             ${
                 winners
                         .mapIndexed { index, nickname -> index to nickname }
                         .joinToString { (index, nickname) -> "${index + 1} ${nickname}" }
-            }
-            """.trimIndent()
-        }
-
-        fun finalePlacesResponse(winners: List<String>): String {
-            return """
-            Finale places stored:
-            ${
-                winners
-                        .mapIndexed { index, nickname -> index to nickname }
-                        .joinToString { (index, nickname) -> "${index + 1}. -> ${nickname}" }
-            }
-            """.trimIndent()
-        }
-
-        fun calculateResponse(type: GameType, nickname: String, entries: Int, payees: Map<String, BigDecimal>? = emptyMap(), withdrawal: Int = 0, bounty: Int = 0): String = when (type) {
-            GameType.TOURNAMENT -> """
-            -----------------------------
-            Payout to: $nickname
-                Entries: $entries
-                Total: ${entries}                
-            """.trimIndent()
-
-            GameType.CASH -> """
-            -----------------------------
-            Payout to: $nickname
-                Entries: $entries
-                Withdrawals: $withdrawal
-                Total: ${withdrawal - entries} ($withdrawal - $entries)
-            """.trimIndent()
-
-            GameType.BOUNTY -> """
-            -----------------------------
-            Payout to: $nickname
-                Entries: $entries
-                Bounty: $bounty
-                Total: ${withdrawal - entries}                
-            """.trimIndent()
-        }
-
-        @Suppress("UNCHECKED_CAST")
-        fun List<Payout>.calculateResponse(): String {
-            val gameSummaryResponse = when {
-                all { it::class.java.isAssignableFrom(Payout::class.java) } -> {
-                    val allEntries = flatMap { it.creditor.entries + it.debtors.flatMap { it.player.entries } }
-                    """
-                    -----------------------------
-                    Finale places:
-                        ${mapIndexed { index, payout -> "${index}. @${payout.creditor.person.nickname} won ${payout.total}" }.joinToString()}
-                        Total: ${allEntries.total()} (${allEntries.size}entries * ${allEntries.first()}buy in)
-                    """.trimIndent()
-                }
-
-                all { it::class.java.isAssignableFrom(Payout::class.java) } -> {
-                    val allEntries = flatMap { it.creditor.entries + it.debtors.flatMap { it.player.entries } }
-                    """
-                    -----------------------------
-                    Finale places:
-                        ${mapIndexed { index, payout -> "${index}. @${payout.creditor.person.nickname} won ${payout.total}" }.joinToString()}
-                        Total: ${allEntries.total()} (${allEntries.size}entries * ${allEntries.first()}buy in)
-                    """.trimIndent()
-                }
-
-                else -> ""
-            }
-
-
-            val payoutsResponse = joinToString {
-                when {
-                    it::class.java.isAssignableFrom(Payout::class.java) -> {
-                        @Suppress("UNCHECKED_CAST")
-                        val payout = it
-                        val entries = payout.creditor.entries.total()
-                        val withdrawals = /* TODO: payout.player.withdrawals.total()*/ ZERO
-                        """
-                            -----------------------------
-                            Payout to: @${payout.creditor.person.nickname}
-                                Entries: ${entries}
-                                Withdrawals: ${withdrawals}
-                                Total: ${withdrawals - entries} ($withdrawals - $entries)
-                            From:
-                                ${it.debtors.joinToString { "@${it.player.person.nickname} -> ${it.debt}" }}
-                            """.trimIndent()
-                    }
-
-                    it::class.java.isAssignableFrom(Payout::class.java) -> {
-                        @Suppress("UNCHECKED_CAST")
-                        val payout = it as Payout
-                        val entries = payout.creditor.entries
-                        gameSummaryResponse + """
-                        -----------------------------
-                        Payout to: @${payout.creditor.person.nickname}
-                            Entries: ${entries}
-                            Total: ${payout.total} (- $entries)
-                        From:
-                            ${it.debtors.joinToString { "@${it.player.person.nickname} -> ${it.debt}" }}
-                        """.trimIndent()
-                    }
-
-                    else -> throw IllegalStateException("No type of payout")
-                }
-            }
-            return payoutsResponse
+            }""".trimIndent()
         }
 
         fun String.withdrawal(amount: Int): String = "${withdrawal} @$this $amount"

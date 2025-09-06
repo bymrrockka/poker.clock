@@ -9,7 +9,7 @@ import java.time.Instant
 import kotlin.time.ExperimentalTime
 import kotlin.time.toKotlinInstant
 
-class MessageBuilder(init: (@BuilderMarker MessageBuilder.() -> Unit) = {}) : AbstractBuilder() {
+class MessageBuilder(init: (@BuilderDsl MessageBuilder.() -> Unit) = {}) : AbstractBuilder() {
     internal var chatId: Long? = null
     internal var createdAt: Instant? = null
     internal var id: Long? = null
@@ -57,7 +57,7 @@ class MessageBuilder(init: (@BuilderMarker MessageBuilder.() -> Unit) = {}) : Ab
         this.domainEntities + entity
     }
 
-    fun from(userBuilder: (@BuilderMarker UserBuilder.() -> Unit) = {}) {
+    fun from(userBuilder: (UserBuilder.() -> Unit) = {}) {
         this.user = UserBuilder(userBuilder).build()
     }
 
@@ -92,5 +92,7 @@ class MessageBuilder(init: (@BuilderMarker MessageBuilder.() -> Unit) = {}) : Ab
     }
 }
 
-fun metadata(init: (@BuilderMarker MessageBuilder.() -> Unit) = {}) = MessageBuilder(init).metadata()
-fun message(init: (@BuilderMarker MessageBuilder.() -> Unit) = {}) = MessageBuilder(init).message()
+@BuilderDsl
+fun metadata(init: (MessageBuilder.() -> Unit) = {}) = MessageBuilder(init).metadata()
+@BuilderDsl
+fun message(init: (MessageBuilder.() -> Unit) = {}) = MessageBuilder(init).message()
