@@ -26,11 +26,19 @@ Stored withdrawals:
 
 ******************************
 -> Request
-/withdrawal @nickname3 10
+/entry @nickname4 20
+
+-> Response
+Stored entries: 
+  - @nickname4 -> 20                   
+
+******************************
+-> Request
+/withdrawal @nickname3 30
 
 -> Response
 Stored withdrawals: 
-  - @nickname3 -> 10                   
+  - @nickname3 -> 30                   
 
 ******************************
 -> Request
@@ -43,17 +51,19 @@ Payout to: @nickname2
   Withdrawals: 30
   Total: 20 
 From:
+  @sergio_cartwright -> 10
   @nickname5 -> 10
-  @nickname4 -> 10
+-----------------------------
+Payout to: @nickname3
+  Entries: 10
+  Withdrawals: 30
+  Total: 20 
+From:
+  @nickname4 -> 20
 -----------------------------
 Payout to: @nickname1
   Entries: 10
   Withdrawals: 20
   Total: 10 
 From:
-  @sergio_cartwright -> 10
------------------------------
-Payout to: @nickname3
-  Entries: 10
-  Withdrawals: 10
-  Total: 0 
+  @nickname4 -> 10                   

@@ -22,7 +22,7 @@ class UserCommand {
         val createPoll = "/create_poll"
         val stopPoll = "/stop_poll"
 
-        fun String.entry(): String = "${entry} @$this"
+        fun String.entry(amount: Int? = null): String = "${entry} @$this ${if (amount == null) "" else amount}"
 
         fun List<String>.createGame(type: GameType, buyin: BigDecimal): String {
             val command = when (type) {

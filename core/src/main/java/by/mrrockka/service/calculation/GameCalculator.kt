@@ -56,7 +56,7 @@ open class GameCalculator {
                         .filter { it.debtors.map { it.debt }.total() - it.total != ZERO }
                         .map { payout ->
                             val leftToPay = payout.total - payout.debtors.map { it.debt }.total()
-                            if (leftToPay >= ZERO) {
+                            if (leftToPay > ZERO) {
                                 debt -= leftToPay
                                 payout.copy(total = payout.total, debtors = payout.debtors + Debtor(debtor.player, leftToPay))
                             } else payout

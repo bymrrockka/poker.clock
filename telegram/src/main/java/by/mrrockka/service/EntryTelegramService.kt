@@ -22,7 +22,7 @@ class EntryTelegramService(
         val (nicknames, amount) = entryMessageParser.parse(metadata)
         val telegramGame = gameTelegramService.findGame(metadata)
         val personIds = telegramPersonService.findByMessage(metadata)
-        entriesRepo.insertBatch(personIds, telegramGame.game, metadata.createdAt)
+        entriesRepo.insertBatch(personIds, (amount ?: telegramGame.game.buyIn), telegramGame.game, metadata.createdAt)
 
         return nicknames to (amount ?: telegramGame.game.buyIn)
     }

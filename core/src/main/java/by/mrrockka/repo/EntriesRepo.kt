@@ -11,7 +11,7 @@ import java.util.*
 
 interface EntriesRepo {
     fun findGameEntries(gameId: UUID): Map<UUID, List<BigDecimal>>
-    fun insertBatch(personIds: List<UUID>, game: Game, createdAt: Instant)
+    fun insertBatch(personIds: List<UUID>, amount: BigDecimal, game: Game, createdAt: Instant)
 }
 
 @Repository
@@ -25,11 +25,11 @@ open class EntriesRepoImpl : EntriesRepo {
                 .groupBy({ it.first }, { it.second })
     }
 
-    override fun insertBatch(personIds: List<UUID>, game: Game, createdAt: Instant) {
+    override fun insertBatch(personIds: List<UUID>, amount: BigDecimal, game: Game, createdAt: Instant) {
         EntriesTable.batchInsert(personIds) { id ->
             this[EntriesTable.gameId] = game.id
             this[EntriesTable.personId] = id
-            this[EntriesTable.amount] = game.buyIn
+            this[EntriesTable.amount] = amount
             this[EntriesTable.createdAt] = createdAt
         }
     }

@@ -31,7 +31,8 @@ class CashGameScenario : AbstractScenarioTest() {
             command { players.createGame(GameType.CASH, buyin).message() }
             command { players[0].withdrawal(20).message() }
             command { players[1].withdrawal(30).message() }
-            command { players[2].withdrawal(10).message() }
+            command { players[3].entry(20).message() }
+            command { players[2].withdrawal(30).message() }
             command { calculate.message() }
         } When {
             updatesReceived()

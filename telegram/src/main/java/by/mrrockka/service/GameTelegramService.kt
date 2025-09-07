@@ -31,7 +31,7 @@ open class GameTelegramServiceImpl(
         val game = gameMessageParser.parse(messageMetadata)
         gameRepo.store(game)
         val personIds = telegramPersonService.findByMessage(messageMetadata)
-        entriesRepo.insertBatch(personIds, game, messageMetadata.createdAt)
+        entriesRepo.insertBatch(personIds, game.buyIn, game, messageMetadata.createdAt)
         chatGameRepo.store(game.id, messageMetadata)
 
         return game
