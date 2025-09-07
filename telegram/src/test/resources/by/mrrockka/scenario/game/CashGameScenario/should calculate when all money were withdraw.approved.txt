@@ -3,7 +3,7 @@
 /cash_game
 buyin: 10
 
-@nickname1, @nickname2, @nickname3, @nickname4, @nickname5, @nickname6
+@nickname1, @nickname2, @nickname3, @nickname4, @nickname5, @me
 
 -> Response
 Cash game started.                   
@@ -51,7 +51,7 @@ Payout to: @nickname1
   Withdrawals: 20
   Total: 10 
 From:
-  @nickname6 -> 10
+  @sergio_cartwright -> 10
 -----------------------------
 Payout to: @nickname3
   Entries: 10

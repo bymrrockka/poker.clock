@@ -21,23 +21,23 @@ data class MessageMetadata(
 ) {
 
     val command: MetadataEntity by lazy {
-        //todo: fr backwards compatibility
-        metadataEntities?.find { entity -> entity.type == EntityType.BotCommand }
-                ?: entities.find { entity -> entity.type == EntityType.BotCommand }?.toMetadata(text)
+        entities.find { entity -> entity.type == EntityType.BotCommand }?.toMetadata(text)
                 ?: error("Message does not contain command")
     }
 
     val mentions: Set<MetadataEntity> by lazy {
-        //todo: fr backwards compatibility
-        if (!metadataEntities.isNullOrEmpty()) {
-            metadataEntities
-                    .filter { entity -> entity.type == EntityType.Mention }
-                    .toSet()
-        } else
-            entities
-                    .filter { entity -> entity.type == EntityType.Mention }
-                    .map { it.toMetadata(text) }
-                    .toSet()
+        entities
+                .filter { entity -> entity.type == EntityType.Mention }
+                .map { it.toMetadata(text) }
+                .toSet()
+                .let {
+                    //@me mention entity adjustment
+                    val hasMe = "(@me(\\W|$))".toRegex(RegexOption.MULTILINE).containsMatchIn(this@MessageMetadata.text)
+                    if (hasMe) {
+                        val username = this.from?.username ?: error("User doesn't have username")
+                        it + MetadataEntity(text = username, type = EntityType.Mention)
+                    } else it
+                }
     }
 
     private fun MessageEntity.toMetadata(text: String): MetadataEntity {

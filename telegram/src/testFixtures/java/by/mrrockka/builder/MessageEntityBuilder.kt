@@ -111,9 +111,8 @@ fun command(init: (@BuilderDsl MessageEntityBuilder.() -> Unit) = {}) = MessageE
 
 fun String?.entities(): List<eu.vendeli.tgbot.types.msg.MessageEntity> {
     check(this != null) { "text is null" }
-//    val text = this.replace(" ", "\n")
     val commandRegex = "^(/[\\w]+)".toRegex(RegexOption.MULTILINE)
-    val mentionRegex = "(@[\\w]+)".toRegex(RegexOption.MULTILINE)
+    val mentionRegex = "(@[\\w]{5,})".toRegex(RegexOption.MULTILINE)
 
     val command = commandRegex.find(this.trimIndent())
             .let { match ->

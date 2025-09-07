@@ -24,7 +24,7 @@ class CashGameScenario : AbstractScenarioTest() {
                 "nickname3",
                 "nickname4",
                 "nickname5",
-                "nickname6",
+                "me",
         )
 
         Given {
