@@ -10,7 +10,7 @@ Cash game started.
 
 ******************************
 -> Request
-/entry @nickname2
+/entry @nickname2 
 
 -> Response
 Stored entries: 

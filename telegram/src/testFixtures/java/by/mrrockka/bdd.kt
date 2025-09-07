@@ -6,24 +6,14 @@ import org.apache.commons.lang3.RandomStringUtils
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 
-class Command(init: Command.() -> Unit) {
-    lateinit var message: String
-
-    init {
-        init(this)
-    }
-
-    fun String.message() {
-        this@Command.message = this.trim()
-    }
-}
+data class Command(var message: String)
 
 class GivenSpecification {
     val scenarioSeed: String = RandomStringUtils.randomAlphabetic(5)
     var commands: List<Command> = mutableListOf()
 
-    fun command(init: Command.() -> Unit) {
-        this.commands += Command(init)
+    fun command(init: () -> String) {
+        this.commands += Command(init.invoke())
     }
 }
 

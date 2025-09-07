@@ -28,12 +28,12 @@ class CashGameScenario : AbstractScenarioTest() {
         )
 
         Given {
-            command { players.createGame(GameType.CASH, buyin).message() }
-            command { players[0].withdrawal(20).message() }
-            command { players[1].withdrawal(30).message() }
-            command { players[3].entry(20).message() }
-            command { players[2].withdrawal(30).message() }
-            command { calculate.message() }
+            command { players.createGame(GameType.CASH, buyin) }
+            command { players[0].withdrawal(20) }
+            command { players[1].withdrawal(30) }
+            command { players[3].entry(20) }
+            command { players[2].withdrawal(30) }
+            command { calculate }
         } When {
             updatesReceived()
         } ThenApprove (approver)
@@ -46,10 +46,10 @@ class CashGameScenario : AbstractScenarioTest() {
         val player2 = "nickname2"
 
         Given {
-            command { listOf(player1).createGame(GameType.CASH, buyin).message() }
-            command { player2.entry().message() }
-            command { player1.withdrawal(20).message() }
-            command { calculate.message() }
+            command { listOf(player1).createGame(GameType.CASH, buyin) }
+            command { player2.entry() }
+            command { player1.withdrawal(20) }
+            command { calculate }
         } When {
             updatesReceived()
         } ThenApprove (approver)
@@ -60,8 +60,8 @@ class CashGameScenario : AbstractScenarioTest() {
         val players = listOf("nickname1", "nickname2")
 
         Given {
-            command { players.createGame(GameType.CASH, buyin).message() }
-            command { calculate.message() }
+            command { players.createGame(GameType.CASH, buyin) }
+            command { calculate }
         } When {
             updatesReceived()
         } ThenApprove (approver)
@@ -73,8 +73,8 @@ class CashGameScenario : AbstractScenarioTest() {
         val players = listOf("nickname1", "nickname2")
 
         Given {
-            command { players.createGame(GameType.CASH, buyin).message() }
-            command { players[0].withdrawal(40).message() }
+            command { players.createGame(GameType.CASH, buyin) }
+            command { players[0].withdrawal(40) }
         } When {
             updatesReceived()
         } ThenApprove (approver)
@@ -86,8 +86,8 @@ class CashGameScenario : AbstractScenarioTest() {
         val players = listOf("nickname1", "nickname2")
 
         Given {
-            command { players.createGame(GameType.CASH, buyin).message() }
-            command { prizePool(1).message() }
+            command { players.createGame(GameType.CASH, buyin) }
+            command { prizePool(1) }
         } When {
             updatesReceived()
         } ThenApprove (approver)

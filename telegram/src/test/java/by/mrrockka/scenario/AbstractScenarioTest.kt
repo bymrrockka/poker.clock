@@ -10,6 +10,7 @@ import by.mrrockka.extension.TelegramPSQLExtension
 import by.mrrockka.extension.TelegramWiremockContainer
 import by.mrrockka.extension.TelegramWiremockExtension
 import by.mrrockka.extension.TextApproverExtension
+import by.mrrockka.resetRandom
 import by.mrrockka.scenario.config.TestBotConfig
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -70,6 +71,7 @@ abstract class AbstractScenarioTest {
     @BeforeEach
     fun setUp() {
         wireMock.resetToDefaultMappings()
+        resetRandom()
     }
 
     @AfterEach

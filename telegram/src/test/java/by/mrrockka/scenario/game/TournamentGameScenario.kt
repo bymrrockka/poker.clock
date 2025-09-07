@@ -16,14 +16,21 @@ class TournamentGameScenario : AbstractScenarioTest() {
     @Test
     fun `given tournament game when prize pool and finale places set up then should be able to calculate`(approver: Approver) {
         val buyin = 10.toBigDecimal()
-        val players = listOf("nickname1", "nickname2")
-        val winners = players.dropLast(1);
+        val players = listOf(
+                "nickname1",
+                "nickname2",
+                "nickname3",
+                "nickname4",
+                "nickname5",
+                "me",
+        )
+        val winners = players.dropLast(4);
 
         Given {
-            command { players.createGame(GameType.TOURNAMENT, buyin).message() }
-            command { prizePool(1).message() }
-            command { finalePlaces(winners).message() }
-            command { calculate.message() }
+            command { players.createGame(GameType.TOURNAMENT, buyin) }
+            command { prizePool(1) }
+            command { finalePlaces(winners) }
+            command { calculate }
         } When {
             updatesReceived()
         } ThenApprove (approver)
