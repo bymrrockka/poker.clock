@@ -14,18 +14,25 @@ import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
+interface PersonRepo {
+    fun findById(id: UUID): Person?
+    fun findByIds(ids: Set<UUID>): List<Person>
+    fun findByNicknames(nicknames: List<String>): List<Person>
+    fun upsertBatch(persons: List<Person>)
+}
+
 @Repository
 @Transactional(propagation = Propagation.REQUIRED)
-open class PersonRepo {
+open class PersonRepoImpl : PersonRepo {
 
-    fun findById(id: UUID): Person? {
+    override fun findById(id: UUID): Person? {
         return PersonTable.selectAll()
                 .where { PersonTable.id eq id }
                 .map { it.toPerson() }
                 .firstOrNull()
     }
 
-    fun findByIds(ids: Set<UUID>): List<Person> {
+    override fun findByIds(ids: Set<UUID>): List<Person> {
         return PersonTable.selectAll()
                 .where { id inList ids }
                 .map { it.toPerson() }
@@ -40,13 +47,13 @@ open class PersonRepo {
         )
     }
 
-    fun findByNicknames(nicknames: List<String>): List<Person> {
+    override fun findByNicknames(nicknames: List<String>): List<Person> {
         return PersonTable.selectAll()
                 .where { nickName inList nicknames }
                 .map { it.toPerson() }
     }
 
-    fun upsertBatch(persons: List<Person>) {
+    override fun upsertBatch(persons: List<Person>) {
         PersonTable.batchUpsert(persons) { person ->
             this[id] = person.id
             this[firstName] = person.firstname

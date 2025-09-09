@@ -1,9 +1,10 @@
 package by.mrrockka.builder
 
+import by.mrrockka.TelegramRandoms
 import by.mrrockka.TelegramRandoms.Companion.telegramRandoms
 import eu.vendeli.tgbot.types.User
 
-class UserBuilder(init: (UserBuilder.() -> Unit) = {}) : AbstractBuilder() {
+class UserBuilder(init: (UserBuilder.() -> Unit) = {}) : AbstractBuilder<TelegramRandoms>(telegramRandoms) {
     internal var id: Long? = null
     internal var firstname: String? = null
     internal var lastname: String? = null
@@ -43,4 +44,4 @@ class UserBuilder(init: (UserBuilder.() -> Unit) = {}) : AbstractBuilder() {
     }
 }
 
-fun user(init: (@BuilderDsl UserBuilder.() -> Unit) = {}) = UserBuilder(init).build()
+fun user(init: (UserBuilder.() -> Unit) = {}) = UserBuilder(init).build()

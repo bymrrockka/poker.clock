@@ -3,7 +3,7 @@
 /tournament_game
 buyin: 10
 
-@nickname1, @nickname2
+@nickname1, @nickname2, @nickname3, @nickname4, @nickname5, @me
 
 -> Response
 Tournament game started.                   
@@ -11,7 +11,7 @@ Tournament game started.
 ******************************
 -> Request
 /prize_pool
-1 100%
+1 50%, 2 50%
 
 -> Response
 Can't process command                   
@@ -19,7 +19,7 @@ Can't process command
 ******************************
 -> Request
 /finale_places
-1 nickname1
+1 nickname1, 2 nickname2
 
 -> Response
 Can't process command                   
@@ -29,4 +29,4 @@ Can't process command
 /calculate
 
 -> Response
-Exception occurred during handling                   
+No finale places specified, can't calculate finale summary.                   

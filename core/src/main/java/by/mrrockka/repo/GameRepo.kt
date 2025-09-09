@@ -69,9 +69,9 @@ open class GameRepoImpl(
                     stack = this[GameTable.stack],
                     createdAt = this[GameTable.createdAt],
                     finishedAt = this[GameTable.finishedAt],
-                    players = lazy { playerRepo.findPlayers(gameId, TournamentPlayer::class) }.value,
-                    finalePlaces = lazy { finalePlacesRepo.findById(gameId) }.value,
-                    prizePool = lazy { prizePoolRepo.findById(gameId) }.value,
+                    playersProvider = { playerRepo.findPlayers(gameId, TournamentPlayer::class) },
+                    finalePlacesProvider = { finalePlacesRepo.findById(gameId) },
+                    prizePoolProvider = { prizePoolRepo.findById(gameId) },
             )
 
             GameType.BOUNTY -> BountyTournamentGame(
@@ -81,9 +81,9 @@ open class GameRepoImpl(
                     stack = this[GameTable.stack],
                     createdAt = this[GameTable.createdAt],
                     finishedAt = this[GameTable.finishedAt],
-                    players = lazy { playerRepo.findPlayers(gameId, BountyPlayer::class) }.value,
-                    finalePlaces = lazy { finalePlacesRepo.findById(gameId) }.value,
-                    prizePool = lazy { prizePoolRepo.findById(gameId) }.value,
+                    playersProvider =  { playerRepo.findPlayers(gameId, BountyPlayer::class) },
+                    finalePlacesProvider =  { finalePlacesRepo.findById(gameId) },
+                    prizePoolProvider =  { prizePoolRepo.findById(gameId) },
             )
 
             GameType.CASH -> CashGame(
@@ -92,7 +92,7 @@ open class GameRepoImpl(
                     stack = this[GameTable.stack],
                     createdAt = this[GameTable.createdAt],
                     finishedAt = this[GameTable.finishedAt],
-                    players = lazy { playerRepo.findPlayers(gameId, CashPlayer::class) }.value,
+                    playersProvider =  { playerRepo.findPlayers(gameId, CashPlayer::class) },
             )
         }
     }

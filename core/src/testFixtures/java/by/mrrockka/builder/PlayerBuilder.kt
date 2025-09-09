@@ -1,7 +1,7 @@
 package by.mrrockka.builder
 
-import by.mrrockka.Randoms
-import by.mrrockka.Randoms.Companion.sharedRandoms
+import by.mrrockka.CoreRandoms
+import by.mrrockka.CoreRandoms.Companion.coreRandoms
 import by.mrrockka.domain.BountyPlayer
 import by.mrrockka.domain.CashPlayer
 import by.mrrockka.domain.Player
@@ -10,9 +10,7 @@ import java.math.BigDecimal
 
 internal val defaultBuyin = BigDecimal("10")
 
-class PlayerBuilder(init: (PlayerBuilder.() -> Unit) = {}) {
-
-    var randoms = sharedRandoms
+class PlayerBuilder(init: (PlayerBuilder.() -> Unit) = {}) : AbstractBuilder<CoreRandoms>(coreRandoms) {
     var buyin: BigDecimal? = null
     var bounty: BigDecimal? = null
     var entries: List<BigDecimal>? = null
@@ -24,8 +22,9 @@ class PlayerBuilder(init: (PlayerBuilder.() -> Unit) = {}) {
 
     fun tournament(): Player {
         return TournamentPlayer(
-                person = person(randoms),
-                entries = (0..<entriesSize).asSequence().map { buyin ?: defaultBuyin }.toList())
+                person = person(),
+                entries = (0..<entriesSize).asSequence().map { buyin ?: defaultBuyin }.toList(),
+        )
     }
 
     fun tournamentBatch(size: Int): List<Player> =
@@ -36,8 +35,9 @@ class PlayerBuilder(init: (PlayerBuilder.() -> Unit) = {}) {
 
     fun bounty(): BountyPlayer {
         return BountyPlayer(
-                person = person(randoms),
-                entries = (0..<entriesSize).asSequence().map { buyin ?: defaultBuyin }.toList())
+                person = person(),
+                entries = (0..<entriesSize).asSequence().map { buyin ?: defaultBuyin }.toList(),
+        )
     }
 
     fun bountyBatch(size: Int): List<BountyPlayer> =
@@ -48,8 +48,9 @@ class PlayerBuilder(init: (PlayerBuilder.() -> Unit) = {}) {
 
     fun cash(): CashPlayer {
         return CashPlayer(
-                person = person(randoms),
-                entries = (0..<entriesSize).asSequence().map { buyin ?: defaultBuyin }.toList())
+                person = person(),
+                entries = (0..<entriesSize).asSequence().map { buyin ?: defaultBuyin }.toList(),
+        )
     }
 
     fun cashBatch(size: Int): List<CashPlayer> =
@@ -61,4 +62,3 @@ class PlayerBuilder(init: (PlayerBuilder.() -> Unit) = {}) {
 }
 
 fun player(init: (PlayerBuilder.() -> Unit) = {}) = PlayerBuilder(init)
-fun player(randoms: Randoms, init: (PlayerBuilder.() -> Unit) = {}) = player().apply { this.randoms = randoms }.also(init)

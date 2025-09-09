@@ -1,16 +1,19 @@
 package by.mrrockka
 
-import by.mrrockka.Randoms.Companion.sharedRandoms
 import com.github.javafaker.Faker
 import java.math.BigDecimal
 import java.time.Instant
 import java.util.*
 
+interface Randoms {
+    val random: Random
+    val faker: Faker
+}
 
-open class Randoms(
-        open val random: Random = sharedRandoms.random,
-        open val faker: Faker = Faker(random)
-) {
+open class CoreRandoms(
+        override val random: Random = coreRandoms.random,
+        override val faker: Faker = Faker(random),
+) : Randoms {
 
     fun instant(): Instant = Instant.now()
     fun firstname(): String = faker.name().firstName()
@@ -26,14 +29,13 @@ open class Randoms(
 
     companion object {
         @JvmStatic
-        val sharedRandoms = randoms()
+        val coreRandoms = randoms()
 
-        fun randoms(): Randoms {
-            val random = Random(0)
-            return Randoms(random)
+        fun randoms(seed: String? = null): CoreRandoms {
+            val random = Random(seed.hashCode().toLong())
+            return CoreRandoms(random)
         }
-
     }
 }
 
-fun resetRandom() = sharedRandoms.random.setSeed(0)
+fun Randoms.resetRandom() = this.random.setSeed(0)

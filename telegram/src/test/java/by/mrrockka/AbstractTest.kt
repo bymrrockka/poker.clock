@@ -1,5 +1,6 @@
 package by.mrrockka
 
+import by.mrrockka.TelegramRandoms.Companion.telegramRandoms
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
@@ -9,7 +10,7 @@ abstract class AbstractTest {
 
     @AfterEach
     fun afterEach() {
-        resetRandom()
+        telegramRandoms.resetRandom()
     }
 
     val objectMapper = ObjectMapper()

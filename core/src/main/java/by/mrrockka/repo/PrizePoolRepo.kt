@@ -6,14 +6,18 @@ import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
+interface PrizePoolRepo {
+    fun findById(gameId: UUID): List<PositionPrize>
+}
+
 @Repository
 @Transactional
-open class PrizePoolRepo {
-    fun findById(gameId: UUID): List<PositionPrize> {
+open class PrizePoolRepoImpl : PrizePoolRepo {
+    override fun findById(gameId: UUID): List<PositionPrize> {
         return PrizePoolTable.selectAll()
                 .where { PrizePoolTable.gameId eq gameId }
-                .first()
-                .let { it[PrizePoolTable.schema].toList() }
+                .firstOrNull()
+                ?.let { it[PrizePoolTable.schema].toList() } ?: emptyList()
     }
 
 }

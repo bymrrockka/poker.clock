@@ -1,5 +1,6 @@
 package by.mrrockka.builder
 
+import by.mrrockka.TelegramRandoms
 import by.mrrockka.TelegramRandoms.Companion.telegramRandoms
 import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.domain.MetadataEntity
@@ -9,7 +10,7 @@ import java.time.Instant
 import kotlin.time.ExperimentalTime
 import kotlin.time.toKotlinInstant
 
-class MessageBuilder(init: (@BuilderDsl MessageBuilder.() -> Unit) = {}) : AbstractBuilder() {
+class MessageBuilder(init: (MessageBuilder.() -> Unit) = {}) : AbstractBuilder<TelegramRandoms>(telegramRandoms) {
     internal var chatId: Long? = null
     internal var createdAt: Instant? = null
     internal var id: Long? = null
@@ -82,7 +83,7 @@ class MessageBuilder(init: (@BuilderDsl MessageBuilder.() -> Unit) = {}) : Abstr
     fun message(): Message {
         return Message(
                 messageId = id ?: randoms.messageid(),
-                chat = chat { id(chatId) },
+                chat = chat { id(this@MessageBuilder.chatId) },
                 date = (createdAt ?: randoms.instant()).toKotlinInstant(),
                 text = text ?: randoms.faker.chuckNorris().fact(),
                 replyToMessage = replyToMessage,
@@ -92,7 +93,5 @@ class MessageBuilder(init: (@BuilderDsl MessageBuilder.() -> Unit) = {}) : Abstr
     }
 }
 
-@BuilderDsl
 fun metadata(init: (MessageBuilder.() -> Unit) = {}) = MessageBuilder(init).metadata()
-@BuilderDsl
 fun message(init: (MessageBuilder.() -> Unit) = {}) = MessageBuilder(init).message()

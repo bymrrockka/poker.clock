@@ -71,7 +71,7 @@ abstract class AbstractScenarioTest {
     @BeforeEach
     fun setUp() {
         wireMock.resetToDefaultMappings()
-        resetRandom()
+        telegramRandoms.resetRandom()
     }
 
     @AfterEach

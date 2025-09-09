@@ -1,5 +1,6 @@
 package by.mrrockka
 
+import by.mrrockka.CoreRandoms.Companion.coreRandoms
 import by.mrrockka.domain.Payout
 import by.mrrockka.domain.total
 import by.mrrockka.extension.JsonApproverExtension
@@ -16,7 +17,7 @@ abstract class AbstractTest {
 
     @AfterEach
     fun afterEach() {
-        resetRandom()
+        coreRandoms.resetRandom()
     }
 
     val objectMapper = ObjectMapper()
@@ -35,7 +36,7 @@ abstract class AbstractTest {
     data class SimpleDebtor(
             val debtor: String,
             val debt: BigDecimal,
-            val entries: BigDecimal
+            val entries: BigDecimal,
     )
 
     internal fun List<Payout>.simplify(): List<SimplePayout> = map { payout ->
@@ -47,9 +48,9 @@ abstract class AbstractTest {
                     SimpleDebtor(
                             debtor = debtor.player.person.nickname ?: fail("No debtor nickname found"),
                             debt = debtor.debt,
-                            entries = debtor.player.entries.total()
+                            entries = debtor.player.entries.total(),
                     )
-                }
+                },
         )
     }
 }

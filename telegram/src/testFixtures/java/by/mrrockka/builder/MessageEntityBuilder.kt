@@ -1,12 +1,13 @@
 package by.mrrockka.builder
 
+import by.mrrockka.TelegramRandoms
 import by.mrrockka.TelegramRandoms.Companion.telegramRandoms
 import by.mrrockka.domain.MetadataEntity
 import by.mrrockka.domain.mesageentity.MessageEntityType
 import by.mrrockka.domain.mesageentity.MessageEntityType.MENTION
 import eu.vendeli.tgbot.types.msg.EntityType
 
-class MessageEntityBuilder(init: (MessageEntityBuilder.() -> Unit) = {}) : AbstractBuilder() {
+class MessageEntityBuilder(init: (MessageEntityBuilder.() -> Unit) = {}) : AbstractBuilder<TelegramRandoms>(telegramRandoms) {
     internal var domainType: MessageEntityType? = null
     internal var type: EntityType? = null
     internal var messageText: String? = null
@@ -65,9 +66,13 @@ class MessageEntityBuilder(init: (MessageEntityBuilder.() -> Unit) = {}) : Abstr
 
 }
 
+@Deprecated("Should be removed by functions without `domain` word")
 fun domainMention(init: (@BuilderDsl MessageEntityBuilder.() -> Unit) = {}) = MessageEntityBuilder(init).also { check(it.domainType == MENTION) }.domainMention()
+@Deprecated("Should be removed by functions without `domain` word")
 fun domainCommand(init: (@BuilderDsl MessageEntityBuilder.() -> Unit) = {}) = MessageEntityBuilder(init).also { check(it.domainType == MENTION) }.domainCommand()
+@Deprecated("Should be removed by functions without `domain` word")
 fun List<String>.domainMentions(): List<MetadataEntity> = map { domainMention { messageText(it) } }
+@Deprecated("Should be removed by functions without `domain` word")
 fun String?.domainEntities(): List<MetadataEntity> {
     check(this != null) { "text is null" }
     val commandRegex = "^/([\\w]+)".toRegex(RegexOption.MULTILINE)
@@ -97,13 +102,13 @@ fun List<String>.mentions(text: String): List<eu.vendeli.tgbot.types.msg.Message
     }
 }
 
-fun mention(init: (@BuilderDsl MessageEntityBuilder.() -> Unit) = {}) = MessageEntityBuilder(init)
+fun mention(init: (MessageEntityBuilder.() -> Unit) = {}) = MessageEntityBuilder(init)
         .also {
             check(it.messageText != null) { "Message text should present" }
             check(it.entityText != null) { "Entity text should present" }
         }.mention()
 
-fun command(init: (@BuilderDsl MessageEntityBuilder.() -> Unit) = {}) = MessageEntityBuilder(init)
+fun command(init: (MessageEntityBuilder.() -> Unit) = {}) = MessageEntityBuilder(init)
         .also {
             check(it.messageText != null) { "Message text should present" }
             check(it.entityText != null) { "Entity text should present" }

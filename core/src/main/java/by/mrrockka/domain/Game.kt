@@ -20,10 +20,14 @@ data class TournamentGame(
         override val stack: BigDecimal? = ZERO,
         override val createdAt: Instant,
         override val finishedAt: Instant? = null,
-        override val players: List<TournamentPlayer>,
-        val finalePlaces: List<FinalPlace>? = emptyList(),
-        val prizePool: List<PositionPrize>? = emptyList(),
-) : Game
+        val playersProvider: () -> List<TournamentPlayer>,
+        private val finalePlacesProvider: () -> List<FinalPlace>? = { null },
+        private val prizePoolProvider: () -> List<PositionPrize>? = { null },
+) : Game {
+    override val players: List<TournamentPlayer> by lazy { playersProvider() }
+    val finalePlaces: List<FinalPlace>? by lazy { finalePlacesProvider() }
+    val prizePool: List<PositionPrize>? by lazy { prizePoolProvider() }
+}
 
 data class BountyTournamentGame(
         override val id: UUID,
@@ -32,10 +36,14 @@ data class BountyTournamentGame(
         override val stack: BigDecimal? = ZERO,
         override val createdAt: Instant,
         override val finishedAt: Instant? = null,
-        override val players: List<BountyPlayer>,
-        val finalePlaces: List<FinalPlace>? = emptyList(),
-        val prizePool: List<PositionPrize>? = emptyList(),
-) : Game
+        val playersProvider: () -> List<BountyPlayer>,
+        private val finalePlacesProvider: () -> List<FinalPlace>? = { null },
+        private val prizePoolProvider: () -> List<PositionPrize>? = { null },
+) : Game {
+    override val players: List<BountyPlayer> by lazy { playersProvider() }
+    val finalePlaces: List<FinalPlace>? by lazy { finalePlacesProvider() }
+    val prizePool: List<PositionPrize>? by lazy { prizePoolProvider() }
+}
 
 data class CashGame(
         override val id: UUID,
@@ -43,8 +51,10 @@ data class CashGame(
         override val stack: BigDecimal? = ZERO,
         override val createdAt: Instant,
         override val finishedAt: Instant? = null,
-        override val players: List<CashPlayer>,
-) : Game
+        val playersProvider: () -> List<CashPlayer>,
+) : Game {
+    override val players: List<CashPlayer> by lazy { playersProvider() }
+}
 
 fun Game.toSummary(): List<PrizeSummary> {
     return when (this) {

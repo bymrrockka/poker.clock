@@ -1,15 +1,14 @@
 package by.mrrockka.builder
 
-import by.mrrockka.Randoms
-import by.mrrockka.Randoms.Companion.sharedRandoms
+import by.mrrockka.CoreRandoms
+import by.mrrockka.CoreRandoms.Companion.coreRandoms
 import by.mrrockka.domain.BasicPerson
 import java.util.*
 
 
 class PersonBuilder(
-        init: PersonBuilder.() -> Unit
-) {
-    var randoms = sharedRandoms
+        init: PersonBuilder.() -> Unit,
+) : AbstractBuilder<CoreRandoms>(coreRandoms) {
     var id: UUID? = null
     var firstname: String? = null
     var lastname: String? = null
@@ -33,8 +32,4 @@ class PersonBuilder(
 
 fun person(builder: PersonBuilder.() -> Unit = {}): BasicPerson {
     return PersonBuilder(builder).build()
-}
-
-fun person(randoms: Randoms): BasicPerson {
-    return PersonBuilder { this.randoms = randoms }.build()
 }

@@ -56,7 +56,7 @@ class GameMessageParser {
                         id = UUID.randomUUID(),
                         buyIn = buyin.defaultScale(),
                         stack = stack.defaultScale(),
-                        players = emptyList(),
+                        playersProvider = { emptyList() },
                         createdAt = messageMetadata.createdAt,
                 )
 
@@ -65,7 +65,7 @@ class GameMessageParser {
                         id = UUID.randomUUID(),
                         buyIn = buyin.defaultScale(),
                         stack = stack.defaultScale(),
-                        players = emptyList(),
+                        playersProvider = { emptyList() },
                         createdAt = messageMetadata.createdAt,
                 )
 
@@ -76,7 +76,7 @@ class GameMessageParser {
                         buyIn = buyin.defaultScale(),
                         stack = stack.defaultScale(),
                         bounty = bounty.defaultScale(),
-                        players = emptyList(),
+                        playersProvider = { emptyList() },
                         createdAt = messageMetadata.createdAt,
                 )
             }

@@ -1,10 +1,11 @@
 package by.mrrockka.builder
 
+import by.mrrockka.TelegramRandoms
 import by.mrrockka.TelegramRandoms.Companion.telegramRandoms
 import eu.vendeli.tgbot.types.chat.Chat
 import eu.vendeli.tgbot.types.chat.ChatType
 
-class ChatBuilder(init: (@BuilderDsl ChatBuilder.() -> Unit) = {}) : AbstractBuilder() {
+class ChatBuilder(init: (ChatBuilder.() -> Unit) = {}) : AbstractBuilder<TelegramRandoms>(telegramRandoms) {
     internal var id: Long? = null
     fun id(id: Long?) {
         this.id = id
@@ -23,5 +24,4 @@ class ChatBuilder(init: (@BuilderDsl ChatBuilder.() -> Unit) = {}) : AbstractBui
     }
 }
 
-@BuilderDsl
 fun chat(init: (ChatBuilder.() -> Unit) = {}) = ChatBuilder(init).build()

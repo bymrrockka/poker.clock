@@ -28,7 +28,7 @@ class TournamentGameScenario : AbstractScenarioTest() {
 
         Given {
             command { players.createGame(GameType.TOURNAMENT, buyin) }
-            command { prizePool(1) }
+            command { prizePool(2) }
             command { finalePlaces(winners) }
             command { calculate }
         } When {

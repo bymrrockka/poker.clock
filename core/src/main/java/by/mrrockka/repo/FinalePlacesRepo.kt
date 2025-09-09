@@ -7,12 +7,17 @@ import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
+interface FinalePlacesRepo {
+
+    fun findById(gameId: UUID): List<FinalPlace>
+}
+
 @Repository
 @Transactional
-open class FinalePlacesRepo(
+open class FinalePlacesRepoImpl(
         private val personRepo: PersonRepo,
-) {
-    fun findById(gameId: UUID): List<FinalPlace> {
+) : FinalePlacesRepo {
+    override fun findById(gameId: UUID): List<FinalPlace> {
         return FinalePlacesTable.selectAll()
                 .where { FinalePlacesTable.gameId eq gameId }
                 .map { it.toFinalPlace() }

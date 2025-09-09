@@ -1,5 +1,14 @@
 package by.mrrockka.builder
 
+import by.mrrockka.Randoms
+
+@BuilderDsl
+abstract class AbstractBuilder<Ran : Randoms>(protected var randoms: Ran) {
+    fun randoms(randoms: Ran) {
+        this.randoms = randoms
+    }
+}
+
 @DslMarker
 @Target(
         AnnotationTarget.CLASS,
@@ -8,5 +17,4 @@ package by.mrrockka.builder
         AnnotationTarget.VALUE_PARAMETER,
         AnnotationTarget.TYPEALIAS,
 )
-annotation class BddDsl
-
+annotation class BuilderDsl
