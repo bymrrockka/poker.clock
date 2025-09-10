@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 
 @RequiredArgsConstructor
+@Deprecated(forRemoval = true)
 public abstract class AbstractStatisticsTelegramCommandProcessor implements TelegramCommandProcessor {
 
   private final StatisticsTelegramFacadeService statisticsTelegramService;

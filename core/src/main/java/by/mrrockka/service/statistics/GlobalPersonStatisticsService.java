@@ -1,17 +1,16 @@
 package by.mrrockka.service.statistics;
 
+import by.mrrockka.domain.BasicPerson;
 import by.mrrockka.domain.MoneyTransfer;
 import by.mrrockka.domain.Person;
 import by.mrrockka.domain.collection.PersonEntries;
+import by.mrrockka.domain.finaleplaces.FinalePlaces;
 import by.mrrockka.domain.game.BountyGame;
 import by.mrrockka.domain.game.Game;
 import by.mrrockka.domain.game.TournamentGame;
 import by.mrrockka.domain.payout.TransferType;
 import by.mrrockka.domain.statistics.GlobalPersonStatistics;
-import by.mrrockka.service.FinalePlacesService;
-import by.mrrockka.service.GameServiceOld;
 import by.mrrockka.service.MoneyTransferService;
-import by.mrrockka.service.PersonService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -19,25 +18,24 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.UUID;
 
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.summingLong;
 
 @Component
 @RequiredArgsConstructor
+@Deprecated
 public class GlobalPersonStatisticsService {
 
   private final MoneyTransferService moneyTransferService;
-  private final FinalePlacesService finalePlacesService;
-  private final PersonService personService;
-  private final GameServiceOld gameService;
 
   public GlobalPersonStatistics retrieveStatistics(final String nickname) {
 
-    final var person = personService.getByNickname(nickname);
+    final var person = BasicPerson.personBuilder().id(UUID.randomUUID()).build(); //todo: add person service
     final var moneyTransfers = moneyTransferService.getForPerson(person);
-    final var games = gameService.retrieveAllGames(moneyTransfers.stream().map(MoneyTransfer::gameId).toList());
-    final var finalePlacesForPerson = finalePlacesService.getAllByPersonId(person.getId());
+    final var games = List.<Game>of();//todo: add game service
+    final var finalePlacesForPerson = List.<FinalePlaces>of(); // todo add finale places service
 
     final var tournamentGamesCount = games.stream()
       .filter(game -> game instanceof TournamentGame)

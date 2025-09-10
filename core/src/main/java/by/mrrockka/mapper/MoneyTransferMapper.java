@@ -13,6 +13,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Mapper(imports = TransferType.class)
+@Deprecated(forRemoval = true)
 public interface MoneyTransferMapper {
 
   default List<MoneyTransferEntity> map(final UUID gameId, final Payout payout) {

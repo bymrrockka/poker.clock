@@ -1,41 +1,26 @@
-package by.mrrockka.parser;
+package by.mrrockka.parser
 
-import by.mrrockka.domain.prize.PositionPrize;
-import by.mrrockka.domain.prize.PrizePool;
-import org.springframework.stereotype.Component;
-
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import by.mrrockka.domain.MessageMetadata
+import by.mrrockka.domain.PositionPrize
+import org.springframework.stereotype.Component
+import java.math.BigDecimal
 
 @Component
-public class PrizePoolMessageParser {
+class PrizePoolMessageParser : MessageParser<List<PositionPrize>> {
 
-  private static final String PRIZE_POOL_REGEX = "^(\\d)([. :\\-=]{1,3})([\\d]{1,3})$";
-  private static final int POSITION_GROUP = 1;
-  private static final int AMOUNT_GROUP = 3;
-  private static final String ERROR_MESSAGE = "/prizepool 1. 100 (, #places #amount)";
+    private val prizePoolRegex = "^(?<place>\\d+)([ .]{1,2})(?<percentage>[0-9]{1,10})(%|)$".toRegex(RegexOption.MULTILINE)
 
-  public PrizePool parse(final String command) {
-    final var strings = command.toLowerCase().strip().replaceFirst("/prizepool([ \n]*)", "").split("[\n,;%]");
-    final var prizePattern = Pattern.compile(PRIZE_POOL_REGEX);
-    final var result = new PrizePool(
-      Arrays.stream(strings)
-        .map(String::strip)
-        .map(prizePattern::matcher)
-        .filter(Matcher::matches)
-        .map(matcher -> PositionPrize.builder()
-          .position(Integer.parseInt(matcher.group(POSITION_GROUP)))
-          .percentage(new BigDecimal(matcher.group(AMOUNT_GROUP)))
-          .build())
-        .toList()
-    );
+    override fun parse(metadata: MessageMetadata): List<PositionPrize> {
+        val prizePool = prizePoolRegex.findAll(metadata.text.replace(", ", "\n").trimIndent())
+                .associate { it.groups["place"]?.value to it.groups["percentage"]?.value }
+                .filter { it.value != null || it.key != null }
+                .map { PositionPrize(it.key!!.trim().toInt(), BigDecimal(it.value!!.trim())) }
+                .sortedBy { it.position }
 
-    if (result.positionPrizes().isEmpty()) {
-      throw new InvalidMessageFormatException(ERROR_MESSAGE);
+        check(prizePool.isNotEmpty()) { "Example: /prize_pool 1. 100% (, #position percentage%)" }
+        prizePool.forEachIndexed { index, positionPrize ->
+            check(positionPrize.position == index + 1) { "Missed $index place" }
+        }
+        return prizePool
     }
-
-    return result;
-  }
 }

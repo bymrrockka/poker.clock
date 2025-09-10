@@ -1,9 +1,7 @@
-package by.mrrockka.service.calculation
+package by.mrrockka.service
 
 import by.mrrockka.domain.Game
 import by.mrrockka.domain.Payout
-import by.mrrockka.service.GameServiceOld
-import by.mrrockka.service.MoneyTransferService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional

@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Builder
+@Deprecated(forRemoval = true)
 public record PersonWithdrawals(@NonNull Person person, @NonNull List<BigDecimal> withdrawals) {
 
   public BigDecimal total() {

@@ -8,6 +8,7 @@ import lombok.NonNull;
 import java.math.BigDecimal;
 import java.util.List;
 
+@Deprecated(forRemoval = true)
 public record FinaleSummary(@NonNull List<FinalePlaceSummary> finaleSummaries) {
 
   public static FinaleSummary of(@NonNull final PrizePool prizePool, @NonNull final FinalePlaces finalePlaces,

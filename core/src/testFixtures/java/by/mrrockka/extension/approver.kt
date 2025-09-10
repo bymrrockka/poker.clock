@@ -1,17 +1,25 @@
 package by.mrrockka.extension
 
-import com.oneeyedmen.okeydoke.*
+import com.oneeyedmen.okeydoke.Approver
+import com.oneeyedmen.okeydoke.Checker
+import com.oneeyedmen.okeydoke.Name
+import com.oneeyedmen.okeydoke.Reporters
+import com.oneeyedmen.okeydoke.Serializer
+import com.oneeyedmen.okeydoke.Sources
 import com.oneeyedmen.okeydoke.internal.IO
 import com.oneeyedmen.okeydoke.sources.FileSystemSourceOfApproval
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.extension.*
+import org.junit.jupiter.api.extension.AfterTestExecutionCallback
+import org.junit.jupiter.api.extension.BeforeTestExecutionCallback
+import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.ExtensionContext.Namespace
 import org.junit.jupiter.api.extension.ExtensionContext.Store
+import org.junit.jupiter.api.extension.ParameterContext
+import org.junit.jupiter.api.extension.ParameterResolver
 import org.junit.jupiter.api.fail
 import java.io.File
 import java.lang.reflect.Method
 
-val testNamer = TestNamer()
 val sourceRoot = File("src/test/resources")
 
 class TestNamer {

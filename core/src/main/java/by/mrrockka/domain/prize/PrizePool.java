@@ -9,6 +9,7 @@ import java.util.List;
 import static java.math.RoundingMode.HALF_DOWN;
 
 @Builder
+@Deprecated(forRemoval = true)
 public record PrizePool(@NonNull List<PositionPrize> positionPrizes) {
 
   public BigDecimal calculatePrizeAmountFor(final int position, @NonNull final BigDecimal totalAmount) {

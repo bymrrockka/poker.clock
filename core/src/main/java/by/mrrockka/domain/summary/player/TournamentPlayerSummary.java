@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 
 @Getter
 @EqualsAndHashCode(callSuper = true)
+@Deprecated(forRemoval = true)
 public final class TournamentPlayerSummary extends PlayerSummary {
 
   @Builder(builderMethodName = "tournamentSummaryBuilder", access = AccessLevel.PRIVATE)

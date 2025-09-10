@@ -8,6 +8,7 @@ import org.mapstruct.Mapper;
 import java.util.List;
 
 @Mapper
+@Deprecated(forRemoval = true)
 public interface PersonMapper {
 
   PersonEntity toEntity(Person domain);

@@ -7,5 +7,6 @@ import lombok.NonNull;
 import java.math.BigDecimal;
 
 @Builder
+@Deprecated(forRemoval = true)
 public record FinalePlaceSummary(@NonNull Integer position, @NonNull Person person, @NonNull BigDecimal amount) {
 }

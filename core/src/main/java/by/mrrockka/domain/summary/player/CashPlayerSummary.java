@@ -11,6 +11,7 @@ import java.util.List;
 
 @Getter
 @EqualsAndHashCode(callSuper = true)
+@Deprecated(forRemoval = true)
 public final class CashPlayerSummary extends PlayerSummary {
 
   @NonNull

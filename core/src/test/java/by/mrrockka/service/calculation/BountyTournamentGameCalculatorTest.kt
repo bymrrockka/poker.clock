@@ -3,7 +3,13 @@ package by.mrrockka.service.calculation
 import by.mrrockka.AbstractTest
 import by.mrrockka.builder.game
 import by.mrrockka.builder.player
-import by.mrrockka.domain.*
+import by.mrrockka.domain.Bounty
+import by.mrrockka.domain.BountyPlayer
+import by.mrrockka.domain.Debtor
+import by.mrrockka.domain.FinalPlace
+import by.mrrockka.domain.Payout
+import by.mrrockka.domain.PositionPrize
+import by.mrrockka.service.GameCalculator
 import com.oneeyedmen.okeydoke.Approver
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

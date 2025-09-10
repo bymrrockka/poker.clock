@@ -16,7 +16,7 @@ class FinalePlacesMessageParser {
                 .sortedBy { it.first }
                 .toMap()
 
-        check(finalePlaces.size != 0) { "/finaleplaces 1 @nickname (, #position @nickname)" }
+        check(finalePlaces.size != 0) { "/finale_places 1 @nickname (, #position @nickname)" }
         check(finalePlaces.size == messageMetadata.mentions.size) { "Finale places do not match mentions size." }
         (1..finalePlaces.size).forEach { index ->
             check(finalePlaces[index] != null) { "Missed $index place" }

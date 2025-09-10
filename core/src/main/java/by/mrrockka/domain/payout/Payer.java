@@ -10,6 +10,7 @@ import lombok.NonNull;
 import java.math.BigDecimal;
 
 @Builder(toBuilder = true)
+@Deprecated(forRemoval = true)
 public record Payer(@NonNull PersonEntries personEntries, PersonWithdrawals personWithdrawals,
                     PersonBounties personBounties, BigDecimal amount) {
 

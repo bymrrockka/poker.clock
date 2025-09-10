@@ -16,9 +16,10 @@ import java.time.Instant
 import java.util.*
 
 @Service
+@Deprecated("Requires refactoring")
 open class MoneyTransferService(
         val moneyTransferRepository: MoneyTransferRepository,
-        val moneyTransferMapper: MoneyTransferMapper
+        val moneyTransferMapper: MoneyTransferMapper,
 ) {
 
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)

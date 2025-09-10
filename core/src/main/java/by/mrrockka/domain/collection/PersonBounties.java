@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Builder
+@Deprecated(forRemoval = true)
 public record PersonBounties(@NonNull Person person, @NonNull List<Bounty> bounties) {
 
   public List<Bounty> taken() {

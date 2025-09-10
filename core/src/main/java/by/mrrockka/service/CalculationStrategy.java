@@ -1,4 +1,4 @@
-package by.mrrockka.service.calculation;
+package by.mrrockka.service;
 
 import by.mrrockka.domain.game.Game;
 import by.mrrockka.domain.payout.Payout;

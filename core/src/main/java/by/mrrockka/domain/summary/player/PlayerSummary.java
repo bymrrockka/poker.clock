@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @Getter
 @EqualsAndHashCode
+@Deprecated(forRemoval = true)
 public abstract sealed class PlayerSummary implements Comparable<PlayerSummary>
   permits TournamentPlayerSummary, CashPlayerSummary, BountyPlayerSummary {
 

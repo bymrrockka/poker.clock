@@ -1,4 +1,4 @@
-package by.mrrockka.service.calculation
+package by.mrrockka.service
 
 import by.mrrockka.domain.BountyPlayer
 import by.mrrockka.domain.CashPlayer

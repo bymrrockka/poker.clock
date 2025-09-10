@@ -15,6 +15,7 @@ import static java.util.Objects.isNull;
 
 @Component
 @RequiredArgsConstructor
+@Deprecated(forRemoval = true)
 public class TelegramCommandProcessorFactory {
 
   private final BotDescriptionProperties botDescriptionProperties;

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 
 import static by.mrrockka.extension.TestPSQLContainer.*;
 
+//todo: refactor to use tables
 public class CorePSQLExtension implements BeforeAllCallback, AfterEachCallback {
   @Override
   public void beforeAll(final ExtensionContext context) {

@@ -16,6 +16,7 @@ import org.telegram.telegrambots.util.WebhookUtils;
 @Slf4j
 //@Component
 @RequiredArgsConstructor
+@Deprecated(forRemoval = true)
 public class PokerClockBot implements LongPollingBot {
 
   private final PokerClockAbsSender absSender;

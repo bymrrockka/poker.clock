@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Builder(toBuilder = true)
+@Deprecated(forRemoval = true)
 public record Payout(@NonNull PersonEntries personEntries, PersonWithdrawals personWithdrawals,
                      PersonBounties personBounties, List<Payer> payers) {
   public BigDecimal total() {

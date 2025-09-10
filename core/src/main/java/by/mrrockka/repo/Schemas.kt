@@ -2,15 +2,16 @@ package by.mrrockka.repo
 
 import by.mrrockka.domain.GameType
 import by.mrrockka.domain.PositionPrize
-import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.core.type.TypeReference
-import com.fasterxml.jackson.databind.json.JsonMapper
+import com.fasterxml.jackson.module.kotlin.KotlinModule
+import com.fasterxml.jackson.module.kotlin.jsonMapper
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.timestamp
 import org.jetbrains.exposed.sql.json.jsonb
 
-private val objectMapper = JsonMapper()
-        .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+private val objectMapper = jsonMapper {
+    addModule(KotlinModule())
+}
 
 object GameTable : Table("game") {
     val id = uuid("id")

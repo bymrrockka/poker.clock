@@ -10,6 +10,7 @@ import java.util.List;
 
 //todo: refactor
 @Component
+@Deprecated
 public class PlayerInGameStatisticsService {
 
   public PlayerInGameStatistics retrieveStatistics(final Game game, final String nickname) {

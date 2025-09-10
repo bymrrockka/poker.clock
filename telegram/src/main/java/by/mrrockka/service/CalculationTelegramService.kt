@@ -2,7 +2,6 @@ package by.mrrockka.service
 
 import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.domain.Payout
-import by.mrrockka.service.calculation.CalculationService
 import by.mrrockka.validation.PreCalculationValidator
 import org.springframework.stereotype.Service
 

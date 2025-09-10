@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMess
 
 @Component
 @RequiredArgsConstructor
+@Deprecated(forRemoval = true)
 public class HelpTelegramCommandProcessor implements TelegramCommandProcessor {
   private final HelpTelegramService helpTelegramService;
 

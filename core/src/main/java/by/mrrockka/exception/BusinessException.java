@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 @Getter
 @Builder
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@Deprecated(forRemoval = true)
 public class BusinessException extends RuntimeException {
 
   @NonNull
