@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 interface TelegramPersonService {
-    fun findByMessage(messageMetadata: MessageMetadata): List<UUID>
+    fun findByMessage(messageMetadata: MessageMetadata): List<Person>
 }
 
 @Component
@@ -20,20 +20,20 @@ open class TelegramPersonServiceImpl(
         private val chatPersonsRepo: ChatPersonsRepo,
 ) : TelegramPersonService {
 
-    override fun findByMessage(messageMetadata: MessageMetadata): List<UUID> {
+    override fun findByMessage(messageMetadata: MessageMetadata): List<Person> {
         val nicknames = messageMetadata.mentions.map { it.text }
         val persons = personRepo.findByNicknames(nicknames)
-        val newNicknameToId = nicknames.newNicknames(persons)
+        val newPersons = nicknames.newNicknames(persons)
                 .let { nicknames ->
-                    val map = nicknames.associate { it to UUID.randomUUID() }
-                    personRepo.upsertBatch(map.map { (nickname, id) -> BasicPerson(nickname = nickname, id = id) })
-                    map
+                    val newPersons = nicknames.map { nickname -> BasicPerson(nickname = nickname, id = UUID.randomUUID()) }
+                    personRepo.upsertBatch(newPersons)
+                    newPersons
                 }
 
-        val personIds = persons.map { it.id } + newNicknameToId.map { it.value }
-        chatPersonsRepo.insertBatch(personIds, messageMetadata.chatId)
+        val allPersons = persons + newPersons
+        chatPersonsRepo.insertBatch(allPersons.map { it.id }, messageMetadata.chatId)
 
-        return personIds
+        return allPersons
     }
 
     private fun List<String>.newNicknames(existing: List<Person>): List<String> {

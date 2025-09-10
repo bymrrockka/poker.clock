@@ -2,7 +2,6 @@ package by.mrrockka.parser
 
 import by.mrrockka.domain.MessageMetadata
 import org.springframework.stereotype.Component
-import kotlin.text.get
 
 @Component
 class FinalePlacesMessageParser {
@@ -18,7 +17,7 @@ class FinalePlacesMessageParser {
                 .toMap()
 
         check(finalePlaces.size != 0) { "/finaleplaces 1 @nickname (, #position @nickname)" }
-        check(finalePlaces.size == messageMetadata.entities.size) { "Finale places do not match mentions size." }
+        check(finalePlaces.size == messageMetadata.mentions.size) { "Finale places do not match mentions size." }
         (1..finalePlaces.size).forEach { index ->
             check(finalePlaces[index] != null) { "Missed $index place" }
         }

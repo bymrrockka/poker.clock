@@ -14,6 +14,7 @@ import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
+@Deprecated(forRemoval = true)
 public class FinalePlacesRepository {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;

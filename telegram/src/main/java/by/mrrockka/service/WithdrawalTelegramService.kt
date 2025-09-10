@@ -23,7 +23,7 @@ class WithdrawalTelegramService(
         check(telegramGame.game is CashGame) { "Withdrawals are not allowed for non cash game" }
         check(amount * nicknames.size.toBigDecimal() <= telegramGame.game.moneyInGame()) { "Sum of withdrawals is bigger then ${telegramGame.game.moneyInGame()} active in game" }
 
-        val personsIds = telegramPersonService.findByMessage(messageMetadata)
+        val personsIds = telegramPersonService.findByMessage(messageMetadata).map { it.id }
         withdrawalsRepo.storeBatch(telegramGame.game.id, personsIds, amount, messageMetadata.createdAt)
 
         return nicknames to amount

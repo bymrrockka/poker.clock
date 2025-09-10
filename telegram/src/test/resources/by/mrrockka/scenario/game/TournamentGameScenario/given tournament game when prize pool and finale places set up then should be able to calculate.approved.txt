@@ -19,14 +19,16 @@ Can't process command
 ******************************
 -> Request
 /finale_places
-1 nickname1, 2 nickname2
+1 @nickname1, 2 @nickname2
 
 -> Response
-Can't process command                   
+Finale places stored:
+1. @nickname1
+2. @nickname2                   
 
 ******************************
 -> Request
 /calculate
 
 -> Response
-No finale places specified, can't calculate finale summary.                   
+No prize pool specified, can't calculate finale summary.                   

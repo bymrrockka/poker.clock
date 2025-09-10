@@ -58,11 +58,8 @@ class UserCommand {
 
         fun prizePool(size: Int): String {
             return """
-            ${prizePool}
-            ${
-                calculatePrizePool(size).entries
-                        .joinToString { (index, value) -> "${index} ${value}%" }
-            }
+            $prizePool
+            ${calculatePrizePool(size).entries.joinToString { (index, value) -> "${index} ${value}%" }}
             """.trimIndent()
         }
 
@@ -72,7 +69,7 @@ class UserCommand {
             ${
                 winners
                         .mapIndexed { index, nickname -> index to nickname }
-                        .joinToString { (index, nickname) -> "${index + 1} ${nickname}" }
+                        .joinToString { (index, nickname) -> "${index + 1} @${nickname}" }
             }""".trimIndent()
         }
 

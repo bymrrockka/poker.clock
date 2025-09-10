@@ -2,10 +2,15 @@ package by.mrrockka.repo
 
 import by.mrrockka.domain.GameType
 import by.mrrockka.domain.PositionPrize
-import kotlinx.serialization.json.Json
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.core.type.TypeReference
+import com.fasterxml.jackson.databind.json.JsonMapper
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.timestamp
 import org.jetbrains.exposed.sql.json.jsonb
+
+private val objectMapper = JsonMapper()
+        .setSerializationInclusion(JsonInclude.Include.NON_NULL)
 
 object GameTable : Table("game") {
     val id = uuid("id")
@@ -52,7 +57,7 @@ object BountyTable : Table("bounty") {
 
 object PrizePoolTable : Table("prize_pool") {
     val gameId = uuid("game_id").references(GameTable.id)
-    val schema = jsonb<Array<PositionPrize>>("schema", Json.Default)
+    val schema = jsonb<Array<PositionPrize>>("schema", { objectMapper.writeValueAsString(it) }, { objectMapper.readValue(it, object : TypeReference<Array<PositionPrize>>() {}) })
 
     override val primaryKey = PrimaryKey(gameId)
 }

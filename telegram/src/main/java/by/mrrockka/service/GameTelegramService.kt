@@ -26,11 +26,10 @@ open class GameTelegramServiceImpl(
 ) : GameTelegramService {
 
     override fun storeGame(messageMetadata: MessageMetadata): Game {
-        check(messageMetadata.mentions.isNotEmpty()) { "Game must have at least one player" }
-
+        messageMetadata.checkMentions()
         val game = gameMessageParser.parse(messageMetadata)
         gameRepo.store(game)
-        val personIds = telegramPersonService.findByMessage(messageMetadata)
+        val personIds = telegramPersonService.findByMessage(messageMetadata).map { it.id }
         entriesRepo.insertBatch(personIds, game.buyIn, game, messageMetadata.createdAt)
         chatGameRepo.store(game.id, messageMetadata)
 

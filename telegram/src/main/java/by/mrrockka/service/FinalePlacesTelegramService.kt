@@ -1,52 +1,40 @@
 package by.mrrockka.service
 
 import by.mrrockka.domain.CashGame
+import by.mrrockka.domain.FinalPlace
 import by.mrrockka.domain.MessageMetadata
-import by.mrrockka.domain.finaleplaces.FinalPlace
-import by.mrrockka.domain.finaleplaces.FinalePlaces
 import by.mrrockka.parser.FinalePlacesMessageParser
-import by.mrrockka.validation.mentions.PersonMentionsValidator
+import by.mrrockka.repo.FinalePlacesRepo
 import lombok.RequiredArgsConstructor
 import org.springframework.stereotype.Service
-import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 
 @Service
 @RequiredArgsConstructor
 class FinalePlacesTelegramService(
-        val finalePlacesService: FinalePlacesService,
-        val finalePlacesMessageParser: FinalePlacesMessageParser,
-        val gameTelegramFacadeService: GameTelegramService,
-        val telegramPersonServiceOld: TelegramPersonServiceOld,
-        val personMentionsValidator: PersonMentionsValidator,
+        private val finalePlacesRepo: FinalePlacesRepo,
+        private val finalePlacesParser: FinalePlacesMessageParser,
+        private val gameService: GameTelegramService,
+        private val personService: TelegramPersonService,
 ) {
 
-    fun storePrizePool(messageMetadata: MessageMetadata): BotApiMethodMessage? {
-        personMentionsValidator.validateMessageMentions(messageMetadata, 1)
+    fun store(message: MessageMetadata): List<FinalPlace> {
+        message.checkMentions()
 
-        val places = finalePlacesMessageParser.parse(messageMetadata)
+        val places = finalePlacesParser.parse(message)
         check(places.isNotEmpty()) { "Finale places could not be empty" }
 
-        val telegramGame = gameTelegramFacadeService .findGame(messageMetadata)
+        val telegramGame = gameService.findGame(message)
         check(telegramGame.game !is CashGame) { "Finale places is not allowed for cash game" }
 
-        val telegramPersons = telegramPersonServiceOld
-                .getAllByNicknamesAndChatId(places.values.toList(), messageMetadata.chatId)
+        val persons = personService.findByMessage(message)
                 .associateBy { it.nickname }
 
-        val finalePlaces = FinalePlaces(places
-                .map { (position, nickname) -> FinalPlace(position, telegramPersons[nickname]) }
-                .toList())
+        val finalePlaces = places
+                .map { (position, nickname) ->
+                    FinalPlace(position, persons[nickname] ?: error("Person not found for $nickname"))
+                }
+        finalePlacesRepo.store(telegramGame.game.id, finalePlaces)
 
-        finalePlacesService.store(telegramGame.game.id, finalePlaces)
-        return SendMessage.builder()
-                .chatId(messageMetadata.chatId)
-                .text("""
-                    Finale places stored:
-                    ${finalePlaces.finalPlaces.joinToString { "${it.position}. -> @${it.person.nickname}" }}
-                """.trimIndent())
-                .replyToMessageId(telegramGame.messageMetadata.id.toInt())
-                .build()
-
+        return finalePlaces
     }
 }
