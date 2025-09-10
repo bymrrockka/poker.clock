@@ -17,7 +17,7 @@ apacheCommonsLang3Version = "3.17.0"
 mockitoVersion = "5.14.0"
 liquibaseVersion = "4.29.2"
 javaFakerVersion = "1.0.2"
-jacksonVersion = "2.19.2"
+jacksonVersion = "2.20.0"
 mapstructVersion = "1.6.2"
 lombokMapstructBindingVersion = "0.2.0"
 hikariCPVersion = "5.1.0"
@@ -63,6 +63,7 @@ springBootTest = { module = "org.springframework.boot:spring-boot-starter-test" 
 liquibase = { module = "org.liquibase:liquibase-core", version.ref = "liquibaseVersion" }
 javaFaker = { module = "com.github.javafaker:javafaker", version.ref = "javaFakerVersion" }
 jacksonDataformat = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml", version.ref = "jacksonVersion" }
+jacksonKotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jacksonVersion" }
 mapstructCore = { module = "org.mapstruct:mapstruct", version.ref = "mapstructVersion" }
 mapstructProcessor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstructVersion" }
 lombokMapstructBinding = { module = "org.projectlombok:lombok-mapstruct-binding", version.ref = "lombokMapstructBindingVersion" }
@@ -87,5 +88,7 @@ wiremock = ["wiremock", "wiremockContainer", "wiremockKotlinDsl"]
 kotlinLibs = ["kotlinStdLib", "kotlinSerialization"]
 springBoot = ["springBootWeb", "springBootJdbc", "springBootAop", "springBootTelegrambots"]
 exposed = ["exposedCore", "exposedSpringBoot", "exposedJdbc", "exposedJson", "exposedJavaTime"]
-test = ["assertjCore", "jupiter", "mockitoCore", "mockitoJupiter", "mockk", "awaitility", "springBootTest"]
+test = ["assertjCore", "jupiter", "mockitoCore", "mockitoJupiter", "mockk", "awaitility", "springBootTest", "okeydoke"]
 db = ["postgresql", "liquibase"]
+jackson = ["jacksonDataformat", "jacksonKotlin"]
+testContainer = ["testContainerJupiter", "testContainerPostgresql"]

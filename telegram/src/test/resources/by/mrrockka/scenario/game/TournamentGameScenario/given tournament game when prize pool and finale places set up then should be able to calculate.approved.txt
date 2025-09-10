@@ -10,11 +10,45 @@ Tournament game started.
 
 ******************************
 -> Request
+/entry @nickname3 
+
+-> Response
+Stored entries: 
+  - @nickname3 -> 10                   
+
+******************************
+-> Request
+/entry @nickname3 
+
+-> Response
+Stored entries: 
+  - @nickname3 -> 10                   
+
+******************************
+-> Request
 /prize_pool
 1 50%, 2 50%
 
 -> Response
-Can't process command                   
+Prize pool stored:
+1. 50%
+2. 50%                   
+
+******************************
+-> Request
+/entry @nickname1 
+
+-> Response
+Stored entries: 
+  - @nickname1 -> 10                   
+
+******************************
+-> Request
+/entry @nickname1 
+
+-> Response
+Stored entries: 
+  - @nickname1 -> 10                   
 
 ******************************
 -> Request
@@ -28,7 +62,50 @@ Finale places stored:
 
 ******************************
 -> Request
+/entry @nickname1 
+
+-> Response
+Stored entries: 
+  - @nickname1 -> 10                   
+
+******************************
+-> Request
+/entry @nickname1 
+
+-> Response
+Stored entries: 
+  - @nickname1 -> 10                   
+
+******************************
+-> Request
+/entry @nickname1 
+
+-> Response
+Stored entries: 
+  - @nickname1 -> 10                   
+
+******************************
+-> Request
 /calculate
 
 -> Response
-No prize pool specified, can't calculate finale summary.                   
+-----------------------------
+Finale summary:
+  1. @nickname1 won 65
+  2. @nickname2 won 65
+Total: 130 (13 entries * 10 buy in)
+-----------------------------
+Payout to: @nickname2
+  Entries: 1
+  Total: 55 (won 65 - entries 10)
+From:
+  @nickname3 -> 30
+  @nickname5 -> 10
+  @nickname4 -> 10
+  @sergio_cartwright -> 5
+-----------------------------
+Payout to: @nickname1
+  Entries: 6
+  Total: 5 (won 65 - entries 60)
+From:
+  @sergio_cartwright -> 5                   

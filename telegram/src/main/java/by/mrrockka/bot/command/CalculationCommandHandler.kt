@@ -114,8 +114,9 @@ class CalculationCommandHandlerImpl(
         return """
                 |-----------------------------
                 |Finale summary:
-                |  ${summary.joinToString("\n") { "${it.position}. @${it.person.nickname} won ${it.amount.setScale(0)}" }}
-                |  Total: ${players.totalEntries().setScale(0)} (${players.flatMap { it.entries }.size} entries * ${buyIn.setScale(0)} buy in)
+                |${summary.joinToString("\n") { "  ${it.position}. @${it.person.nickname} won ${it.amount.setScale(0)}" }}
+                |Total: ${players.totalEntries().setScale(0)} (${players.flatMap { it.entries }.size} entries * ${buyIn.setScale(0)} buy in)
+                |
                 """.trimMargin()
     }
 

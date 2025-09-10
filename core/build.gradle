@@ -39,19 +39,14 @@ repositories {
 }
 
 dependencies {
+    implementation libs.bundles.db
+    implementation libs.bundles.jackson
+    implementation libs.bundles.exposed
+    implementation libs.kotlinStdLib
     implementation libs.springBootJdbc
-    implementation libs.postgresql
-    implementation libs.liquibase
-    implementation libs.jacksonDataformat
     implementation libs.mapstructCore
     implementation libs.lombokMapstructBinding
     implementation libs.hikariCP
-    implementation libs.kotlinStdLib
-    implementation libs.exposedCore
-    implementation libs.exposedJdbc
-    implementation libs.exposedJson
-    implementation libs.exposedJavaTime
-    implementation libs.exposedSpringBoot
 
     compileOnly libs.lombok
     annotationProcessor libs.lombok
@@ -68,15 +63,12 @@ dependencies {
     testFixturesCompileOnly libs.lombok
     testFixturesAnnotationProcessor libs.lombok
     testFixturesAnnotationProcessor libs.mapstructProcessor
+    testFixturesApi libs.bundles.test
     testFixturesApi libs.springBootJdbc
-    testFixturesApi libs.springBootTest
-    testFixturesApi libs.testContainerPostgresql
-    testFixturesApi libs.testContainerJupiter
-    testFixturesApi libs.jupiter
+    testFixturesApi libs.bundles.testContainer
     testFixturesApi(libs.javaFaker) {
         exclude group: 'org.yaml'
     }
-    testFixturesApi libs.okeydoke
 }
 
 testing {

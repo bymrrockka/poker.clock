@@ -2,15 +2,17 @@ package by.mrrockka.repo
 
 import by.mrrockka.domain.GameType
 import by.mrrockka.domain.PositionPrize
-import com.fasterxml.jackson.core.type.TypeReference
-import com.fasterxml.jackson.module.kotlin.KotlinModule
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.module.kotlin.jsonMapper
+import com.fasterxml.jackson.module.kotlin.kotlinModule
+import com.fasterxml.jackson.module.kotlin.readValue
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.timestamp
 import org.jetbrains.exposed.sql.json.jsonb
 
 private val objectMapper = jsonMapper {
-    addModule(KotlinModule())
+    addModule(kotlinModule())
+    serializationInclusion(JsonInclude.Include.NON_NULL)
 }
 
 object GameTable : Table("game") {
@@ -58,7 +60,7 @@ object BountyTable : Table("bounty") {
 
 object PrizePoolTable : Table("prize_pool") {
     val gameId = uuid("game_id").references(GameTable.id)
-    val schema = jsonb<Array<PositionPrize>>("schema", { objectMapper.writeValueAsString(it) }, { objectMapper.readValue(it, object : TypeReference<Array<PositionPrize>>() {}) })
+    val schema = jsonb("schema", { objectMapper.writeValueAsString(it) }, { objectMapper.readValue<Array<PositionPrize>>(it) })
 
     override val primaryKey = PrimaryKey(gameId)
 }

@@ -26,7 +26,7 @@ class PrizePoolCommandHandlerImpl(
                     sendMessage {
                         """
                         |Prize pool stored:
-                        |${prizePool.joinToString("\n") { "${it.position}. -> ${it.percentage}%" }}
+                        |${prizePool.joinToString("\n") { "${it.position}. ${it.percentage}%" }}
                         """.trimMargin()
                     }.send(to = metadata.chatId, via = bot)
                 }

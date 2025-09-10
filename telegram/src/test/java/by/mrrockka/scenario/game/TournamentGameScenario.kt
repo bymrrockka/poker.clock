@@ -6,6 +6,7 @@ import by.mrrockka.domain.GameType
 import by.mrrockka.scenario.AbstractScenarioTest
 import by.mrrockka.scenario.UserCommand.Companion.calculate
 import by.mrrockka.scenario.UserCommand.Companion.createGame
+import by.mrrockka.scenario.UserCommand.Companion.entry
 import by.mrrockka.scenario.UserCommand.Companion.finalePlaces
 import by.mrrockka.scenario.UserCommand.Companion.prizePool
 import com.oneeyedmen.okeydoke.Approver
@@ -28,8 +29,15 @@ class TournamentGameScenario : AbstractScenarioTest() {
 
         Given {
             command { players.createGame(GameType.TOURNAMENT, buyin) }
+            command { "nickname3".entry() }
+            command { "nickname3".entry() }
             command { prizePool(2) }
+            command { "nickname1".entry() }
+            command { "nickname1".entry() }
             command { finalePlaces(winners) }
+            command { "nickname1".entry() }
+            command { "nickname1".entry() }
+            command { "nickname1".entry() }
             command { calculate }
         } When {
             updatesReceived()
