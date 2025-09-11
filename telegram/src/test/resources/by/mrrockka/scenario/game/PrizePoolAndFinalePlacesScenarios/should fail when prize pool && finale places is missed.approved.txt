@@ -1,0 +1,16 @@
+******************************
+-> Request
+/tournament_game
+buyin: 10
+
+@nickname1, @nickname2, @nickname3, @nickname4, @nickname5, @me
+
+-> Response
+Tournament game started.                   
+
+******************************
+-> Request
+/calculate
+
+-> Response
+No finale places specified, can't calculate finale summary.

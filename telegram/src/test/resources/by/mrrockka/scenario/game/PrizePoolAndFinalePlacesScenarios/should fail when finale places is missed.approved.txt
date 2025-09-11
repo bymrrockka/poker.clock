@@ -1,0 +1,26 @@
+******************************
+-> Request
+/tournament_game
+buyin: 10
+
+@nickname1, @nickname2, @nickname3, @nickname4, @nickname5, @me
+
+-> Response
+Tournament game started.                   
+
+******************************
+-> Request
+/prize_pool
+1 50%, 2 50%
+
+-> Response
+Prize pool stored:
+1. 50%
+2. 50%                   
+
+******************************
+-> Request
+/calculate
+
+-> Response
+No finale places specified, can't calculate finale summary.

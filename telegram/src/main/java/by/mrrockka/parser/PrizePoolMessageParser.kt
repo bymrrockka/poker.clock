@@ -2,6 +2,7 @@ package by.mrrockka.parser
 
 import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.domain.PositionPrize
+import by.mrrockka.domain.total
 import org.springframework.stereotype.Component
 import java.math.BigDecimal
 
@@ -21,6 +22,9 @@ class PrizePoolMessageParser : MessageParser<List<PositionPrize>> {
         prizePool.forEachIndexed { index, positionPrize ->
             check(positionPrize.position == index + 1) { "Missed $index place" }
         }
+        val totalPercentage = prizePool.map { it.percentage }.total()
+        check(totalPercentage == BigDecimal(100)) { "Prize pool total percentage should be 100%. Current $totalPercentage%" }
+
         return prizePool
     }
 }
