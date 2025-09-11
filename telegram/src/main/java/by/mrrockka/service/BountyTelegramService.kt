@@ -34,7 +34,7 @@ class BountyTelegramService(
     }
 
     private fun validate(game: BountyTournamentGame, from: String, to: String) {
-        check(from != to) { "Can't use same nickname @$from for bounty transaction" }
+        check(from != to) { "You can't kick yourself off for bounty" }
 
         val fromPlayer = game.players.find { it.person.nickname == from }
                 ?: error("@$from person hadn't enter game")

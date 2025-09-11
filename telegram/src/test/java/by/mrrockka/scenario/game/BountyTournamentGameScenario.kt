@@ -91,4 +91,61 @@ class BountyTournamentGameScenario : GameScenario() {
         } ThenApprove (approver)
     }
 
+    @Test
+    fun `should fail when trying to kick yourself`(approver: Approver) {
+        val buyin = 10.toBigDecimal()
+        val player = "me"
+
+        Given {
+            command { player.createGame(GameType.BOUNTY, buyin) }
+            command { "me" kicked "me" }
+            command { calculate }
+        } When {
+            updatesReceived()
+        } ThenApprove (approver)
+    }
+
+    @Test
+    fun `should fail when kicking player and not in game`(approver: Approver) {
+        val buyin = 10.toBigDecimal()
+        val player = "me"
+
+        Given {
+            command { player.createGame(GameType.BOUNTY, buyin) }
+            command { "nickname" kicked "me" }
+            command { calculate }
+        } When {
+            updatesReceived()
+        } ThenApprove (approver)
+    }
+
+    @Test
+    fun `should fail when kicking player that already kicked`(approver: Approver) {
+        val buyin = 10.toBigDecimal()
+        val players = listOf("me", "nickname")
+
+        Given {
+            command { players.createGame(GameType.BOUNTY, buyin) }
+            command { "me" kicked "nickname" }
+            command { "me" kicked "nickname" }
+            command { calculate }
+        } When {
+            updatesReceived()
+        } ThenApprove (approver)
+    }
+
+    @Test
+    fun `should fail when is kicked and want to kick another player`(approver: Approver) {
+        val buyin = 10.toBigDecimal()
+        val players = listOf("me", "nickname")
+
+        Given {
+            command { players.createGame(GameType.BOUNTY, buyin) }
+            command { "nickname" kicked "me" }
+            command { "me" kicked "nickname" }
+            command { calculate }
+        } When {
+            updatesReceived()
+        } ThenApprove (approver)
+    }
 }
