@@ -62,6 +62,10 @@ class MessageBuilder(init: (MessageBuilder.() -> Unit) = {}) : AbstractBuilder<T
         this.user = UserBuilder(userBuilder).build()
     }
 
+    fun from(user: User) {
+        this.user = user
+    }
+
     init {
         randoms(telegramRandoms)
         init()

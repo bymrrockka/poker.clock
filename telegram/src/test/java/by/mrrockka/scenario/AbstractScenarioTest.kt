@@ -6,6 +6,7 @@ import by.mrrockka.WhenSpecification
 import by.mrrockka.bot.TelegramBotsProperties
 import by.mrrockka.builder.BddDsl
 import by.mrrockka.builder.update
+import by.mrrockka.builder.user
 import by.mrrockka.extension.TelegramPSQLExtension
 import by.mrrockka.extension.TelegramWiremockContainer
 import by.mrrockka.extension.TelegramWiremockExtension
@@ -132,6 +133,7 @@ abstract class AbstractScenarioTest {
     @OptIn(DelicateCoroutinesApi::class)
     fun GivenSpecification.updatesReceived(chatId: Long = chatid) {
         check(this.commands.isNotEmpty()) { "Commands should be specified" }
+        val user = user()
 
         //todo: find a way to log pinned messages
         this.commands.map { command ->
@@ -139,6 +141,7 @@ abstract class AbstractScenarioTest {
                 message {
                     text(command.message)
                     chatId(chatId)
+                    from(user)
                 }
             }
         }.forEachIndexed { index, update ->
@@ -209,7 +212,7 @@ abstract class AbstractScenarioTest {
                                        """.trimMargin()
                         }
                                 .joinToString("\n\n")
-                                .also { approver.assertApproved(it.trimIndent()) }
+                                .also { approver.assertApproved(it.trim()) }
                         true
                     } else false
                 }

@@ -6,23 +6,28 @@ import org.springframework.stereotype.Component
 @Component
 class FinalePlacesMessageParser {
 
-    private val finalPlaceRegex = "^(?<place>\\d+)([ .]{1,})(@(?<username>[A-z0-9_-]{5,}))$".toRegex(RegexOption.MULTILINE)
+    private val finalPlaceRegex = "^(?<place>\\d+)([ .]{1,})(@(?<username>[A-z0-9_-]{5,}|me))$".toRegex(RegexOption.MULTILINE)
 
-    fun parse(messageMetadata: MessageMetadata): Map<Int, String> {
-        val finalePlaces = finalPlaceRegex.findAll(messageMetadata.text.replace("([, ]+)(?![A-z@])".toRegex(), "\n").trimIndent())
+    fun parse(metadata: MessageMetadata): Map<Int, String> {
+        val finalePlaces = finalPlaceRegex.findAll(metadata.text.replace("([, ]+)(?![A-z@])".toRegex(), "\n").trimIndent())
                 .associate { it.groups["place"]?.value to it.groups["username"]?.value }
                 .filter { it.value != null || it.key != null }
-                .map { it.key!!.trim().toInt() to it.value!!.trim() }
+                .map { it.key!!.trim().toInt() to it.value!!.trim().ifMe(metadata) }
                 .sortedBy { it.first }
                 .toMap()
 
         check(finalePlaces.size != 0) { "/finale_places 1 @nickname (, #position @nickname)" }
-        check(finalePlaces.size == messageMetadata.mentions.size) { "Finale places do not match mentions size." }
+        check(finalePlaces.size == metadata.mentions.size) { "Finale places do not match mentions size." }
         (1..finalePlaces.size).forEach { index ->
             check(finalePlaces[index] != null) { "Missed $index place" }
         }
 
         return finalePlaces
+    }
+
+    private fun String.ifMe(metadata: MessageMetadata): String {
+        check(metadata.from?.username != null) { "Only user can use @me mention" }
+        return if (this == "me") metadata.from.username!! else this
     }
 
 }

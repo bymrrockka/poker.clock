@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test
 class TournamentGameScenario : AbstractScenarioTest() {
 
     @Test
-    fun `given tournament game when prize pool and finale places set up then should be able to calculate`(approver: Approver) {
+    fun `create game with players and some reentries`(approver: Approver) {
         val buyin = 10.toBigDecimal()
         val players = listOf(
                 "nickname1",
@@ -34,7 +34,7 @@ class TournamentGameScenario : AbstractScenarioTest() {
             command { prizePool(2) }
             command { "nickname1".entry() }
             command { "nickname1".entry() }
-            command { finalePlaces(winners) }
+            command { winners.finalePlaces() }
             command { "nickname1".entry() }
             command { "nickname1".entry() }
             command { "nickname1".entry() }
@@ -45,4 +45,21 @@ class TournamentGameScenario : AbstractScenarioTest() {
     }
 
 
+    @Test
+    fun `create game with one player and later entries`(approver: Approver) {
+        val buyin = 10.toBigDecimal()
+        val player = "me"
+
+        Given {
+            command { player.createGame(GameType.TOURNAMENT, buyin) }
+            command { "nickname3".entry() }
+            command { prizePool(1) }
+            command { "nickname1".entry() }
+            command { player.finalePlaces() }
+            command { "nickname2".entry() }
+            command { calculate }
+        } When {
+            updatesReceived()
+        } ThenApprove (approver)
+    }
 }
