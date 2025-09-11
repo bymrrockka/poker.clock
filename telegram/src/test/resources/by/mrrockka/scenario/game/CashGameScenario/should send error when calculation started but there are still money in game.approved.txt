@@ -13,4 +13,4 @@ Cash game started.
 /calculate
 
 -> Response
-Entries and withdrawal amounts are not equal. Deviation is 20.00                   
+Entries and withdrawal amounts are not equal. Deviation is 20.00

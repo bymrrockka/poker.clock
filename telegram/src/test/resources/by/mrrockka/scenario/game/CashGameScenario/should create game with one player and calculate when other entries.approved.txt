@@ -35,4 +35,4 @@ Payout to: @nickname1
   Withdrawals: 20
   Total: 10 
 From:
-  @nickname2 -> 10                   
+  @nickname2 -> 10

@@ -13,4 +13,4 @@ Cash game started.
 /withdrawal @nickname1 40
 
 -> Response
-Sum of withdrawals is bigger then 20.00 active in game                   
+Sum of withdrawals is bigger then 20.00 active in game

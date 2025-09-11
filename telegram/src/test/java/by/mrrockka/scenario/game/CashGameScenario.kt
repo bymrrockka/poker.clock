@@ -15,6 +15,7 @@ import java.math.BigDecimal
 
 
 class CashGameScenario : AbstractScenarioTest() {
+
     @Test
     fun `should calculate when all money were withdraw`(approver: Approver) {
         val buyin = BigDecimal(10)
@@ -54,6 +55,7 @@ class CashGameScenario : AbstractScenarioTest() {
             updatesReceived()
         } ThenApprove (approver)
     }
+
     @Test
     fun `should send error when calculation started but there are still money in game`(approver: Approver) {
         val buyin = BigDecimal(10)

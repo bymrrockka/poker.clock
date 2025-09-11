@@ -12,7 +12,8 @@ import by.mrrockka.scenario.UserCommand.Companion.prizePool
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
-class PrizePoolAndFinalePlacesScenarios : AbstractScenarioTest() {
+abstract class GameScenario : AbstractScenarioTest() {
+    abstract fun gameType(): GameType
 
     @ParameterizedTest
     @ValueSource(ints = [1, 3])
@@ -29,7 +30,7 @@ class PrizePoolAndFinalePlacesScenarios : AbstractScenarioTest() {
         val winners = players.dropLast(4)
 
         Given {
-            command { players.createGame(GameType.TOURNAMENT, buyin) }
+            command { players.createGame(gameType(), buyin) }
             command { prizePool(size) }
             command { winners.finalePlaces() }
             command { calculate }
@@ -53,7 +54,7 @@ class PrizePoolAndFinalePlacesScenarios : AbstractScenarioTest() {
         val winners = players.dropLast(4)
 
         Given {
-            command { players.createGame(GameType.TOURNAMENT, buyin) }
+            command { players.createGame(gameType(), buyin) }
             if (!missed.contains("prize pool")) command { prizePool(2) }
             if (!missed.contains("finale places")) command { winners.finalePlaces() }
             command { calculate }
@@ -103,7 +104,7 @@ class PrizePoolAndFinalePlacesScenarios : AbstractScenarioTest() {
                 .trim()
 
         Given {
-            command { players.createGame(GameType.TOURNAMENT, buyin) }
+            command { players.createGame(gameType(), buyin) }
             command { prizePool.trimMargin() }
             command { winner.finalePlaces() }
             command { calculate }

@@ -100,12 +100,12 @@ Payout to: @nickname2
   Total: 55 (won 65 - entries 10)
 From:
   @nickname3 -> 30
-  @nickname5 -> 10
   @nickname4 -> 10
-  @sergio_cartwright -> 5
+  @jackie_rau -> 10
+  @nickname5 -> 5
 -----------------------------
 Payout to: @nickname1
   Entries: 6
   Total: 5 (won 65 - entries 60)
 From:
-  @sergio_cartwright -> 5                   
+  @nickname5 -> 5

@@ -51,8 +51,8 @@ Payout to: @nickname2
   Withdrawals: 30
   Total: 20 
 From:
-  @sergio_cartwright -> 10
   @nickname5 -> 10
+  @jackie_rau -> 10
 -----------------------------
 Payout to: @nickname3
   Entries: 10
@@ -66,4 +66,4 @@ Payout to: @nickname1
   Withdrawals: 20
   Total: 10 
 From:
-  @nickname4 -> 10                   
+  @nickname4 -> 10

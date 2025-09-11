@@ -3,7 +3,6 @@ package by.mrrockka.scenario.game
 import by.mrrockka.Given
 import by.mrrockka.When
 import by.mrrockka.domain.GameType
-import by.mrrockka.scenario.AbstractScenarioTest
 import by.mrrockka.scenario.UserCommand.Companion.calculate
 import by.mrrockka.scenario.UserCommand.Companion.createGame
 import by.mrrockka.scenario.UserCommand.Companion.entry
@@ -12,8 +11,7 @@ import by.mrrockka.scenario.UserCommand.Companion.prizePool
 import com.oneeyedmen.okeydoke.Approver
 import org.junit.jupiter.api.Test
 
-class TournamentGameScenario : AbstractScenarioTest() {
-
+class TournamentGameScenario : GameScenario() {
     @Test
     fun `create game with players and some reentries`(approver: Approver) {
         val buyin = 10.toBigDecimal()
@@ -62,4 +60,6 @@ class TournamentGameScenario : AbstractScenarioTest() {
             updatesReceived()
         } ThenApprove (approver)
     }
+
+    override fun gameType(): GameType = GameType.TOURNAMENT
 }

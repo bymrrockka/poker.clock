@@ -14,4 +14,4 @@ Cash game started.
 1 100%
 
 -> Response
-Can't process command                   
+Prize pool is not allowed for cash game

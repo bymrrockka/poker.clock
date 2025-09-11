@@ -95,12 +95,12 @@ class TextApproverExtension(
         fileExtension: String = ".txt",
 ) : AbstractApproverExtension(storeKey, enabledKey, fileExtension)
 
-inline fun <reified A> A.textApprover(name: String) = Approver(
+fun Any.textApprover(name: String) = Approver(
         name,
         CustomSourceOfApproval(
                 File(
-                        File(File("src/test/resources"), Sources.pathForPackage(A::class.java.`package`)),
-                        A::class.java.simpleName,
+                        File(File("src/test/resources"), Sources.pathForPackage(this::class.java.`package`)),
+                        this::class.java.simpleName,
                 ),
                 ".txt",
         ),
@@ -113,12 +113,12 @@ class JsonApproverExtension(
 ) : AbstractApproverExtension(storeKey, enabledKey, fileExtension)
 
 
-inline fun <reified A> A.jsonApprover(name: String) = Approver(
+fun Any.jsonApprover(name: String) = Approver(
         name,
         CustomSourceOfApproval(
                 File(
-                        File(File("src/test/resources"), Sources.pathForPackage(A::class.java.`package`)),
-                        A::class.java.simpleName,
+                        File(File("src/test/resources"), Sources.pathForPackage(this::class.java.`package`)),
+                        this::class.java.simpleName,
                 ),
                 ".json",
         ),
