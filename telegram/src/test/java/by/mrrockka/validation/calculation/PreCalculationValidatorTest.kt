@@ -13,6 +13,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.math.BigDecimal
 
+@Deprecated("Move tests to scenario level")
 class PreCalculationValidatorTest {
     private val preCalculationValidator = PreCalculationValidator()
 

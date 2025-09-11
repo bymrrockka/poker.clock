@@ -40,6 +40,8 @@ class UserCommand {
             """.trimIndent()
         }
 
+        fun String.createGame(type: GameType, buyin: BigDecimal): String = listOf(this).createGame(type, buyin)
+
         private fun calculatePrizePool(size: Int): Map<Int, BigDecimal> {
             var total = BigDecimal(100)
             val calculatePercentageForPlace = fun(index: Int): BigDecimal {
@@ -64,15 +66,17 @@ class UserCommand {
             """.trimIndent()
         }
 
-        fun finalePlaces(winners: List<String>): String {
+        fun List<String>.finalePlaces(): String {
             return """
             ${finalePlaces}
             ${
-                winners
+                this
                         .mapIndexed { index, nickname -> index to nickname }
                         .joinToString { (index, nickname) -> "${index + 1} @${nickname}" }
             }""".trimIndent()
         }
+
+        fun String.finalePlaces(): String = listOf(this).finalePlaces()
 
         fun String.withdrawal(amount: Int): String = "${withdrawal} @$this $amount"
     }

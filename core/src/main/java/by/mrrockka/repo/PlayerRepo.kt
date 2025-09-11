@@ -53,6 +53,6 @@ open class PlayerRepoImpl(
 
                 else -> error("No such player type ${clazz.simpleName}")
             } as T
-        }
+        }.sortedBy { it.person.nickname }
     }
 }
