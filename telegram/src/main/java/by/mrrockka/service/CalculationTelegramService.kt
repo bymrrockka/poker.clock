@@ -42,14 +42,15 @@ class CalculationTelegramService(
     private fun Game.validateTournament() {
         when (this) {
             is TournamentGame -> {
-                check(!this.finalePlaces.isNullOrEmpty()) { "No finale places specified, can't calculate finale summary." }
-                check(!this.prizePool.isNullOrEmpty()) { "No prize pool specified, can't calculate finale summary." }
+                check(!finalePlaces.isNullOrEmpty()) { "No finale places specified, can't calculate finale summary." }
+                check(!prizePool.isNullOrEmpty()) { "No prize pool specified, can't calculate finale summary." }
+                check(finalePlaces!!.size == prizePool!!.size) { "Finale places and prize pool should be same size" }
             }
 
             is BountyTournamentGame -> {
-                check(!this.finalePlaces.isNullOrEmpty()) { "No finale places specified, can't calculate finale summary." }
-                check(!this.prizePool.isNullOrEmpty()) { "No prize pool specified, can't calculate finale summary." }
-
+                check(!finalePlaces.isNullOrEmpty()) { "No finale places specified, can't calculate finale summary." }
+                check(!prizePool.isNullOrEmpty()) { "No prize pool specified, can't calculate finale summary." }
+                check(finalePlaces!!.size == prizePool!!.size) { "Finale places and prize pool should be same size" }
             }
 
             else -> error("Not a tournament")

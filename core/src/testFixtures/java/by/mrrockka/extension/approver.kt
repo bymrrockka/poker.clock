@@ -96,7 +96,7 @@ class TextApproverExtension(
 ) : AbstractApproverExtension(storeKey, enabledKey, fileExtension)
 
 inline fun <reified A> A.textApprover(name: String) = Approver(
-        "${A::class.java.simpleName}.${name}",
+        name,
         CustomSourceOfApproval(
                 File(
                         File(File("src/test/resources"), Sources.pathForPackage(A::class.java.`package`)),
@@ -114,7 +114,7 @@ class JsonApproverExtension(
 
 
 inline fun <reified A> A.jsonApprover(name: String) = Approver(
-        "${A::class.java.simpleName}.${name}",
+        name,
         CustomSourceOfApproval(
                 File(
                         File(File("src/test/resources"), Sources.pathForPackage(A::class.java.`package`)),
