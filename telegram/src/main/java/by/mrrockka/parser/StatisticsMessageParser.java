@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 @Component
 @RequiredArgsConstructor
+@Deprecated
 public class StatisticsMessageParser {
 
   private static final String STATISTICS_REGEX = "^/(game|my|global)_stats$";

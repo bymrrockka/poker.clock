@@ -1,16 +1,14 @@
 package by.mrrockka.parser
 
 import by.mrrockka.domain.MessageMetadata
-import lombok.RequiredArgsConstructor
 import org.springframework.stereotype.Component
 import java.math.BigDecimal
 
 @Component
-@RequiredArgsConstructor
-class EntryMessageParser {
+class EntryMessageParser: MessageParser<Pair<Set<String>, BigDecimal?>> {
     private val amountRegex = "^(?<amount>[\\d]+)$".toRegex(RegexOption.MULTILINE)
 
-    fun parse(metadata: MessageMetadata): Pair<Set<String>, BigDecimal?> {
+    override fun parse(metadata: MessageMetadata): Pair<Set<String>, BigDecimal?> {
         val command = metadata.text.replace(" ", "\n").trimIndent()
         check(metadata.mentions.isNotEmpty()) { "No mentions found" }
         val amount = amountRegex.find(command)?.value?.let { BigDecimal(it) }

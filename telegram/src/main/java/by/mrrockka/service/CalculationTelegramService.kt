@@ -26,9 +26,6 @@ class CalculationTelegramService(
     }
 
     private fun Game.validateGame() {
-        val players = this.players
-        check(players.isNotEmpty()) { "There should be players to calculate game" }
-
         when (this) {
             is CashGame -> validateCash()
             is TournamentGame -> validateTournament()
@@ -58,7 +55,7 @@ class CalculationTelegramService(
     }
 
     private fun BountyTournamentGame.validateBounty() {
-        val bountiesCount = this.players.sumOf { player -> player.bounties.count { bounty -> bounty.to == player.person.id } } + 1
+        val bountiesCount = this.players.sumOf { player -> player.bounties.count { bounty -> bounty.to == player.person } } + 1
         val entriesCount = this.players.flatMap { it.entries }.size
         check(entriesCount == bountiesCount) { "Bounties and entries size are not equal. Deviation is ${entriesCount - bountiesCount}" }
     }

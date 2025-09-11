@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 @Component
 @RequiredArgsConstructor
+@Deprecated
 public class HelpMessageParser {
 
   private static final String HELP_REGEX = "^/help([ ]*)(.*)$";

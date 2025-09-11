@@ -222,13 +222,13 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
                                     player.entries
                                             .mapIndexed { index, _ ->
                                                 if (entries == -1 || index < entries) {
-                                                    Bounty(from = player.person.id, to = winner.person.id, amount = bounty)
+                                                    Bounty(from = player.person, to = winner.person, amount = bounty)
                                                 } else null
                                             }
                                             .filterNotNull(),
                     )
                 }
-        val toBounty = winner.copy(bounties = fromBounties.flatMap { it.bounties }.filter { bounty -> bounty.to == winner.person.id })
+        val toBounty = winner.copy(bounties = fromBounties.flatMap { it.bounties }.filter { bounty -> bounty.to == winner.person })
         return toBounty to fromBounties
     }
 

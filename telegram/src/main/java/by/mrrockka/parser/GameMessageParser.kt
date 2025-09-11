@@ -14,17 +14,17 @@ import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
 @Component
-class GameMessageParser {
+class GameMessageParser : MessageParser<Game> {
     private val amountRegex = "(?<amount>[.\\d]+)(?<multiplier>[A-z]{0,1})"
     private val buyInRegex = "^buyin:\\s*$amountRegex".toRegex(RegexOption.MULTILINE)
     private val stackRegex = "^stack:\\s*$amountRegex".toRegex(RegexOption.MULTILINE)
     private val bountyRegex = "^bounty:\\s*$amountRegex".toRegex(RegexOption.MULTILINE)
     private val typeRegex = "([\\w]+)_game$".toRegex(RegexOption.MULTILINE)
 
-    fun parse(messageMetadata: MessageMetadata): Game {
-        val type = typeRegex.find(messageMetadata.command.text.trimIndent())!!.destructured
+    override fun parse(metadata: MessageMetadata): Game {
+        val type = typeRegex.find(metadata.command.text.trimIndent())!!.destructured
                 .let { (match) -> GameType.valueOf(match.uppercase()) }
-        val buyin = buyInRegex.find(messageMetadata.text.trimIndent())
+        val buyin = buyInRegex.find(metadata.text.trimIndent())
                 .let { match ->
                     val amount = match?.groups["amount"]?.value
                     val modifier = match?.groups["multiplier"]?.value.multiplierAsDecimal()
@@ -32,7 +32,7 @@ class GameMessageParser {
                     BigDecimal(amount) * modifier
                 }
 
-        val stack = stackRegex.find(messageMetadata.text.trimIndent())
+        val stack = stackRegex.find(metadata.text.trimIndent())
                 .let { match ->
                     if (match != null) {
                         val amount = match.groups["amount"]?.value
@@ -41,7 +41,7 @@ class GameMessageParser {
                     } else BigDecimal.ZERO
                 }
 
-        val bounty = bountyRegex.find(messageMetadata.text.trimIndent())
+        val bounty = bountyRegex.find(metadata.text.trimIndent())
                 .let { match ->
                     if (match != null) {
                         val amount = match.groups["amount"]?.value
@@ -57,7 +57,7 @@ class GameMessageParser {
                         buyIn = buyin.defaultScale(),
                         stack = stack.defaultScale(),
                         playersProvider = { emptyList() },
-                        createdAt = messageMetadata.createdAt,
+                        createdAt = metadata.createdAt,
                 )
 
             GameType.CASH ->
@@ -66,7 +66,7 @@ class GameMessageParser {
                         buyIn = buyin.defaultScale(),
                         stack = stack.defaultScale(),
                         playersProvider = { emptyList() },
-                        createdAt = messageMetadata.createdAt,
+                        createdAt = metadata.createdAt,
                 )
 
             GameType.BOUNTY -> {
@@ -77,7 +77,7 @@ class GameMessageParser {
                         stack = stack.defaultScale(),
                         bounty = bounty.defaultScale(),
                         playersProvider = { emptyList() },
-                        createdAt = messageMetadata.createdAt,
+                        createdAt = metadata.createdAt,
                 )
             }
         }

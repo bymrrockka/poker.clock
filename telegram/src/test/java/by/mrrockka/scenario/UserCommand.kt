@@ -70,8 +70,7 @@ class UserCommand {
             return """
             ${finalePlaces}
             ${
-                this
-                        .mapIndexed { index, nickname -> index to nickname }
+                this.mapIndexed { index, nickname -> index to nickname }
                         .joinToString { (index, nickname) -> "${index + 1} @${nickname}" }
             }""".trimIndent()
         }
@@ -79,6 +78,8 @@ class UserCommand {
         fun String.finalePlaces(): String = listOf(this).finalePlaces()
 
         fun String.withdrawal(amount: Int): String = "${withdrawal} @$this $amount"
+
+        infix fun String.kicked(kicked: String): String = "/bounty @$this kicked @$kicked"
     }
 
 }

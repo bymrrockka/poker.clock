@@ -1,52 +1,20 @@
-package by.mrrockka.parser;
+package by.mrrockka.parser
 
-import by.mrrockka.domain.MessageMetadata;
-import by.mrrockka.mapper.TelegramPersonMapper;
-import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.stereotype.Component;
-
-import java.util.regex.Pattern;
-
-import static by.mrrockka.parser.CommandRegexConstants.TELEGRAM_NAME_REGEX;
+import by.mrrockka.domain.MessageMetadata
+import org.springframework.stereotype.Component
 
 @Component
-@RequiredArgsConstructor
-@Deprecated(forRemoval = true)
-public class BountyMessageParser {
+class BountyMessageParser : MessageParser<Pair<String, String>> {
+    private val bountyRegex = "^(@(?<to>[A-z0-9_-]{5,}|me)) +kicked +(@(?<from>[A-z0-9_-]{5,}|me))$".toRegex()
 
-  private final TelegramPersonMapper personMapper;
-
-  private static final String BOUNTY_REGEX = "^/bounty([ ]+)%s([ ]+)kicked([ ]+)%s$".formatted(
-    TELEGRAM_NAME_REGEX, TELEGRAM_NAME_REGEX);
-
-  private static final int FROM_GROUP = 5;
-  private static final int TO_GROUP = 2;
-
-  private static final String ERROR_MESSAGE = "/bounty @nickname kicked @nickname";
-
-  public Pair<String, String> parse(final MessageMetadata messageMetadata) {
-    final var str = messageMetadata.getText().toLowerCase().strip();
-    final var mentions = messageMetadata.getMentions().stream()
-      .map(entity -> entity.getText().replaceAll("@", ""))
-      .toList();
-    final var matcher = Pattern.compile(BOUNTY_REGEX).matcher(str);
-
-    if (!matcher.matches()) {
-      throw new InvalidMessageFormatException(ERROR_MESSAGE);
+    override fun parse(metadata: MessageMetadata): Pair<String, String> {
+        val command = metadata.text.replace("/([\\w]+) ".toRegex(), "\n").trim()
+        check(metadata.mentions.isNotEmpty()) { "No mentions found" }
+        val pair = bountyRegex.find(command)?.groups
+                .let {
+                    check(it?.get("to")?.value != null || it?.get("from")?.value != null) { "Example /bounty @to kicked @from" }
+                    it["from"]!!.value.ifMe(metadata) to it["to"]!!.value.ifMe(metadata)
+                }
+        return pair
     }
-
-    final var from = mentions.stream()
-      .filter(mention -> mention.equalsIgnoreCase(matcher.group(FROM_GROUP)))
-      .findAny()
-      .orElseThrow();
-
-    final var to = mentions.stream()
-      .filter(mention -> mention.equalsIgnoreCase(matcher.group(TO_GROUP)))
-      .findAny()
-      .orElseThrow();
-
-    return Pair.of(from, to);
-  }
-
 }

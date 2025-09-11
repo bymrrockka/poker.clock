@@ -56,7 +56,7 @@ class CalculationCommandHandlerImpl(
                 |  Withdrawals: ${player.withdrawals.total().setScale(0)}
                 |  Total: ${it.total.setScale(0)} 
                 |${it.debtors.message()}
-                """.trimMargin()
+                """.trimMargin() + this.equalResponse()
             }
 
             is TournamentGame -> {
@@ -73,31 +73,42 @@ class CalculationCommandHandlerImpl(
                     """.trimMargin()
                 }
 
-                return game.finalePlacesMessage() + payoutsResponse
+                return game.finalePlacesMessage() + payoutsResponse + this.equalResponse()
             }
 
             is BountyTournamentGame -> {
-                val summaries = game.toSummary().associateBy { it.person }
-                val payoutsResponse = this.joinToString(separator = "\n") {
-                    val player = it.creditor as BountyPlayer
-                    val prize = summaries[it.creditor.person]?.amount ?: error("No prize for ${it.creditor.person}")
+                val summaries = game.toSummary().sortedBy { it.position }
+                val payouts = this.associateBy { it.creditor.person }
+                val payoutsResponse = summaries.joinToString("\n") { summary ->
+                    val payout = payouts[summary.person] ?: error("No payout for @${summary.person.nickname}")
+                    val player = payout.creditor as BountyPlayer
                     val (taken, given) = player.takenToGiven()
                     val bountiesTotal = taken.total() - given.total()
                     """
                     |-----------------------------
-                    |Payout to: @${player.person.nickname}
+                    |Payout to: @${summary.person.nickname}
                     |  Entries: ${player.entries.size}
                     |  Bounties: ${bountiesTotal.setScale(0)} (taken ${taken.size} - given ${given.size} ) 
-                    |  Total: ${it.total.setScale(0)} (won ${prize.setScale(0)} - entries ${player.entries.total().setScale(0)} ${if (bountiesTotal < ZERO) "-" else "+"} bounties ${bountiesTotal.setScale(0)})
-                    |${it.debtors.message()}
+                    |  Total: ${payout.total.setScale(0)} (won ${summary.amount.setScale(0)} - entries ${player.entries.total().setScale(0)} ${if (bountiesTotal < ZERO) "-" else "+"} bounties ${bountiesTotal.setScale(0)})
+                    |${payout.debtors.message()}
                     """.trimMargin()
                 }
 
-                return game.finalePlacesMessage() + payoutsResponse
+                return game.finalePlacesMessage() + payoutsResponse + this.equalResponse()
             }
 
             else -> error("Unknown game type")
         }
+    }
+
+    private fun List<Payout>.equalResponse(): String {
+        val zeros = filter { it.total == ZERO }
+        return if (zeros.isNotEmpty()) """
+            |
+            |-----------------------------
+            |Players played equally
+            |${zeros.joinToString("\n") { "|  @${it.creditor.person.nickname}" }}
+        """.trimMargin() else ""
     }
 
     private fun List<Debtor>.message(): String {

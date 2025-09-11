@@ -3,43 +3,49 @@ package by.mrrockka.service
 import by.mrrockka.domain.Bounty
 import by.mrrockka.domain.BountyTournamentGame
 import by.mrrockka.domain.MessageMetadata
+import by.mrrockka.domain.takenToGiven
 import by.mrrockka.parser.BountyMessageParser
 import by.mrrockka.repo.BountyRepo
-import by.mrrockka.validation.BountyValidator
-import by.mrrockka.validation.mentions.PersonMentionsValidator
 import org.springframework.stereotype.Service
-import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalTime::class)
 @Service
 class BountyTelegramService(
         private val bountyRepo: BountyRepo,
         private val bountyMessageParser: BountyMessageParser,
-        private val gameTelegramFacadeService: GameTelegramService,
-        private val personMentionsValidator: PersonMentionsValidator,
-        private val bountyValidator: BountyValidator,
+        private val gameService: GameTelegramService,
 ) {
 
-    fun storeBounty(messageMetadata: MessageMetadata): BotApiMethodMessage? {
-        personMentionsValidator.validateMessageMentions(messageMetadata, 2)
-        val (from, to) = bountyMessageParser.parse(messageMetadata)
-        val telegramGame = gameTelegramFacadeService
-                .findGame(messageMetadata)
+    fun store(metadata: MessageMetadata): Bounty {
+        metadata.checkMentions()
+        val (from, to) = bountyMessageParser.parse(metadata)
+        val telegramGame = gameService.findGame(metadata)
+        check(telegramGame.game is BountyTournamentGame) { "Bounties can be submitted only for Bounty tournament" }
 
-        val game = telegramGame.game as BountyTournamentGame
-        bountyValidator.validate(game, from, to)
-        val fromPlayer = game.players.find { it.person.nickname == from }!!
-        val toPlayer = game.players.find { it.person.nickname == to }!!
+        validate(telegramGame.game, from, to)
 
-        val bounty = Bounty(from = fromPlayer.person.id, to = toPlayer.person.id, amount = game.bounty)
-        bountyRepo.store(game.id, bounty, messageMetadata.createdAt)
+        val players = telegramGame.game.players.associateBy { it.person.nickname }
+        val fromPlayer = players[from]!!
+        val toPlayer = players[to]!!
 
-        return SendMessage.builder()
-                .chatId(messageMetadata.chatId)
-                .text("Bounty amount ${game.bounty} from @$from stored for @$to")
-                .replyToMessageId(telegramGame.messageMetadata.id.toInt())
-                .build()
+        val bounty = Bounty(from = fromPlayer.person, to = toPlayer.person, amount = telegramGame.game.bounty)
+        bountyRepo.store(telegramGame.game.id, bounty, metadata.createdAt)
+
+        return bounty
+    }
+
+    private fun validate(game: BountyTournamentGame, from: String, to: String) {
+        check(from != to) { "Can't use same nickname @$from for bounty transaction" }
+
+        val fromPlayer = game.players.find { it.person.nickname == from }
+                ?: error("@$from person hadn't enter game")
+        val toPlayer = game.players.find { it.person.nickname == to }
+                ?: error("@$to person hadn't enter game")
+        val fromEntries = fromPlayer.entries
+        val toEntries = toPlayer.entries
+        val (_, fromGiven) = fromPlayer.takenToGiven()
+        val (_, toGiven) = toPlayer.takenToGiven()
+
+        check(fromEntries.size - fromGiven.size > 0) { "@$from knocked off from the game" }
+        check(toEntries.size - toGiven.size > 0) { "@$to knocked off from the game" }
     }
 }

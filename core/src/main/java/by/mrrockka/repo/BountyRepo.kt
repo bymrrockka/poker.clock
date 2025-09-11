@@ -19,7 +19,9 @@ interface BountyRepo {
 
 @Repository
 @Transactional(propagation = Propagation.REQUIRED)
-open class BountyRepoImpl : BountyRepo {
+open class BountyRepoImpl(
+        private val personRepo: PersonRepo,
+) : BountyRepo {
     override fun findByPerson(gameId: UUID, personId: UUID): List<Bounty> {
         return BountyTable.selectAll()
                 .where {
@@ -31,17 +33,22 @@ open class BountyRepoImpl : BountyRepo {
     override fun store(gameId: UUID, bounty: Bounty, createdAt: Instant) {
         BountyTable.insert {
             it[BountyTable.gameId] = gameId
-            it[BountyTable.from_person] = bounty.from
-            it[BountyTable.to_person] = bounty.to
+            it[BountyTable.from_person] = bounty.from.id
+            it[BountyTable.to_person] = bounty.to.id
             it[BountyTable.createdAt] = createdAt
             it[BountyTable.amount] = bounty.amount
         }
     }
 
     private fun ResultRow.toBounty(): Bounty {
+        val fromId = this[BountyTable.from_person]
+        val toId = this[BountyTable.to_person]
+        val persons = personRepo.findByIds(setOf(fromId, toId))
+                .associateBy { it.id }
+        check(persons.size == 2) { "Persons are not found" }
         return Bounty(
-                from = this[BountyTable.from_person],
-                to = this[BountyTable.to_person],
+                from = persons[fromId]!!,
+                to = persons[toId]!!,
                 amount = this[BountyTable.amount],
         )
     }

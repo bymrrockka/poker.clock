@@ -4,11 +4,10 @@ import by.mrrockka.domain.MessageMetadata
 import org.springframework.stereotype.Component
 
 @Component
-class FinalePlacesMessageParser {
-
+class FinalePlacesMessageParser : MessageParser<Map<Int, String>> {
     private val finalPlaceRegex = "^(?<place>\\d+)([ .]{1,})(@(?<username>[A-z0-9_-]{5,}|me))$".toRegex(RegexOption.MULTILINE)
 
-    fun parse(metadata: MessageMetadata): Map<Int, String> {
+    override fun parse(metadata: MessageMetadata): Map<Int, String> {
         val finalePlaces = finalPlaceRegex.findAll(metadata.text.replace("([, ]+)(?![A-z@])".toRegex(), "\n").trimIndent())
                 .associate { it.groups["place"]?.value to it.groups["username"]?.value }
                 .filter { it.value != null || it.key != null }
@@ -23,11 +22,6 @@ class FinalePlacesMessageParser {
         }
 
         return finalePlaces
-    }
-
-    private fun String.ifMe(metadata: MessageMetadata): String {
-        check(metadata.from?.username != null) { "Only user can use @me mention" }
-        return if (this == "me") metadata.from.username!! else this
     }
 
 }

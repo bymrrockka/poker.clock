@@ -32,12 +32,6 @@ class GameBuilder(init: (GameBuilder.() -> Unit) = {}) : AbstractBuilder<CoreRan
         init()
     }
 
-    fun prizeForFirst(): GameBuilder {
-        this.prizePool = listOf(PositionPrize(1, BigDecimal("100")))
-        this.finalePlaces = listOf(FinalPlace(1, this.players.first().person))
-        return this
-    }
-
     fun cash(): CashGame = CashGame(
             id = id ?: randoms.uuid(),
             buyIn = buyIn ?: BigDecimal("10"),
