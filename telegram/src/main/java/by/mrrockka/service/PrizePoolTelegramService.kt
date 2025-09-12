@@ -7,13 +7,18 @@ import by.mrrockka.parser.PrizePoolMessageParser
 import by.mrrockka.repo.PrizePoolRepo
 import org.springframework.stereotype.Service
 
+interface PrizePoolTelegramService {
+    fun store(messageMetadata: MessageMetadata): List<PositionPrize>
+}
+
 @Service
-open class PrizePoolTelegramService(
+open class PrizePoolTelegramServiceImpl(
         private val prizePoolRepo: PrizePoolRepo,
         private val prizePoolMessageParser: PrizePoolMessageParser,
         private val gameService: GameTelegramService,
-) {
-    fun store(messageMetadata: MessageMetadata): List<PositionPrize> {
+) : PrizePoolTelegramService {
+
+    override fun store(messageMetadata: MessageMetadata): List<PositionPrize> {
         val prizePool = prizePoolMessageParser.parse(messageMetadata)
 
         val telegramGame = gameService.findGame(messageMetadata)

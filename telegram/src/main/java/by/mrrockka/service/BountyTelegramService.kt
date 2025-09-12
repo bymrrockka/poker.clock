@@ -8,14 +8,18 @@ import by.mrrockka.parser.BountyMessageParser
 import by.mrrockka.repo.BountyRepo
 import org.springframework.stereotype.Service
 
+interface BountyTelegramService {
+    fun store(metadata: MessageMetadata): Bounty
+}
+
 @Service
-class BountyTelegramService(
+class BountyTelegramServiceImpl(
         private val bountyRepo: BountyRepo,
         private val bountyMessageParser: BountyMessageParser,
         private val gameService: GameTelegramService,
-) {
+) : BountyTelegramService {
 
-    fun store(metadata: MessageMetadata): Bounty {
+    override fun store(metadata: MessageMetadata): Bounty {
         metadata.checkMentions()
         val (from, to) = bountyMessageParser.parse(metadata)
         val telegramGame = gameService.findGame(metadata)

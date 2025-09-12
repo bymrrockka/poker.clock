@@ -8,15 +8,19 @@ import by.mrrockka.repo.WithdrawalsRepo
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 
+interface WithdrawalTelegramService {
+    fun withdraw(messageMetadata: MessageMetadata): Pair<Set<String>, BigDecimal>
+}
+
 @Service
-class WithdrawalTelegramService(
+class WithdrawalTelegramServiceImpl(
         private val withdrawalsRepo: WithdrawalsRepo,
         private val withdrawalMessageParser: WithdrawalMessageParser,
         private val gameTelegramService: GameTelegramService,
         private val telegramPersonService: TelegramPersonService,
-) {
+) : WithdrawalTelegramService {
 
-    fun withdraw(messageMetadata: MessageMetadata): Pair<Set<String>, BigDecimal> {
+    override fun withdraw(messageMetadata: MessageMetadata): Pair<Set<String>, BigDecimal> {
         messageMetadata.checkMentions()
         val (nicknames, amount) = withdrawalMessageParser.parse(messageMetadata)
         val telegramGame = gameTelegramService.findGame(messageMetadata)

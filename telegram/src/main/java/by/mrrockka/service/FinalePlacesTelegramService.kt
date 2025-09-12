@@ -5,19 +5,21 @@ import by.mrrockka.domain.FinalPlace
 import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.parser.FinalePlacesMessageParser
 import by.mrrockka.repo.FinalePlacesRepo
-import lombok.RequiredArgsConstructor
 import org.springframework.stereotype.Service
 
+interface FinalePlacesTelegramService {
+    fun store(message: MessageMetadata): List<FinalPlace>
+}
+
 @Service
-@RequiredArgsConstructor
-class FinalePlacesTelegramService(
+class FinalePlacesTelegramServiceImpl(
         private val finalePlacesRepo: FinalePlacesRepo,
         private val finalePlacesParser: FinalePlacesMessageParser,
         private val gameService: GameTelegramService,
         private val personService: TelegramPersonService,
-) {
+) : FinalePlacesTelegramService {
 
-    fun store(message: MessageMetadata): List<FinalPlace> {
+    override fun store(message: MessageMetadata): List<FinalPlace> {
         message.checkMentions()
 
         val places = finalePlacesParser.parse(message)

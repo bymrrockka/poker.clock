@@ -9,13 +9,17 @@ import by.mrrockka.domain.TournamentGame
 import by.mrrockka.domain.total
 import org.springframework.stereotype.Service
 
+interface CalculationTelegramService {
+    fun calculate(messageMetadata: MessageMetadata): List<Payout>
+}
+
 @Service
-class CalculationTelegramService(
+class CalculationTelegramServiceImpl(
         val calculationService: CalculationService,
         val gameService: GameTelegramService,
-) {
+) : CalculationTelegramService {
 
-    fun calculate(messageMetadata: MessageMetadata): List<Payout> {
+    override fun calculate(messageMetadata: MessageMetadata): List<Payout> {
         val telegramGame = gameService.findGame(messageMetadata)
         telegramGame.game.validateGame()
 
