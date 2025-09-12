@@ -5,7 +5,6 @@ import by.mrrockka.bot.command.processor.TelegramCommandProcessor;
 import by.mrrockka.creator.*;
 import by.mrrockka.domain.PokerClockBotOptions;
 import by.mrrockka.mapper.MessageMetadataMapper;
-import by.mrrockka.service.UpdateBotCommandsService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -35,8 +34,6 @@ class PokerClockBotTest {
 
   @Mock
   private PokerClockAbsSender pokerClockAbsSender;
-  @Mock
-  private UpdateBotCommandsService updateBotCommandsService;
   @Mock
   private TelegramBotsProperties telegramBotsProperties;
   @Mock
@@ -79,7 +76,6 @@ class PokerClockBotTest {
   void givenBotCommands_whenOnRegisterExecuted_thenShouldRegisterBotCommands() {
     when(telegramBotsProperties.getEnabled()).thenReturn(true);
     pokerClockBot.onRegister();
-    verify(updateBotCommandsService).updateBotCommands();
   }
 
   @Test

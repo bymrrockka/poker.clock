@@ -24,6 +24,7 @@ class UserCommand {
 
         fun String.entry(amount: Int? = null): String = "${entry} @$this ${if (amount == null) "" else amount}"
         fun entry(amount: Int? = null): String = "${entry} @me ${if (amount == null) "" else amount}"
+        fun help(command: String? = null): String = "$help ${command ?: ""}"
 
         fun List<String>.createGame(type: GameType, buyin: BigDecimal): String {
             val command = when (type) {

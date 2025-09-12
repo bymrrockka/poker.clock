@@ -1,19 +1,19 @@
-telegrambots:
-  enabled: true
-  token: token
-  name: Bot
-  nickname: bot
-
 spring:
   liquibase:
     enabled: true
     change-log: db/changelog/db.changelog-master.yml
 
 bot:
+  properties:
+    enabled: true
+    token: token
+    name: Bot
+    nickname: bot
   description:
     commands:
       bounty_game:
         enabled: true
+        alias: bg
         description: Starts bounty tournament game
         details: |
           You could create a bounty tournament game using /bounty_game command with list of players nicknames that separated with a space.
@@ -28,6 +28,7 @@ bot:
           @nickname
       tournament_game:
         enabled: true
+        alias: tg
         description: Starts a tournament game
         details: |
           You could create a tournament game using /tournament_game command with list of players nicknames that separated with a space.
@@ -41,6 +42,7 @@ bot:
           @nickname
       cash_game:
         enabled: true
+        alias: cg
         description: Starts a cash game
         details: |
           You could create a cash game using /cash_game command with list of players nicknames that separated with a space.
@@ -75,6 +77,7 @@ bot:
           /bounty @nickname kicked @nickname
       withdrawal:
         enabled: true
+        alias: withdraw
         description: Player withdrawal from a cash game
         details: |
           For players withdrawals use /withdrawal command with nickname and amount to save it against the last started game.
@@ -85,6 +88,7 @@ bot:
           /withdrawal @nickname @nickname 20
       prize_pool:
         enabled: true
+        alias: pp
         description: Stores a prize pool for a tournament
         details: |
           When you ready to specify prize pool for tournament game use /prize_pool command to store position and percentage map.
@@ -99,6 +103,7 @@ bot:
           2 30%
       finale_places:
         enabled: true
+        alias: fp
         description: Stores a finale places for a tournament
         details: |
           When tournament is finished you could specify places for players who won the pot with /finale_places command.

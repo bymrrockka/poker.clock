@@ -1,16 +1,13 @@
-telegrambots:
-  name: ${BOT_NAME:Poker calculator bot}
-  nickname: ${BOT_NICKNAME:bot}
-  enabled: ${BOT_ENABLED:true}
-  token: ${BOT_TOKEN:}
-
-ktgram:
-  autoStartPolling: ${BOT_ENABLED:true}
-  maxHandlingRetries: 2
-  bot:
-    - token: ${BOT_TOKEN:}
+spring:
+  profiles:
+    active: ${PROFILES:postgres}
 
 bot:
+  properties:
+    name: ${BOT_NAME:Poker calculator bot}
+    nickname: ${BOT_NICKNAME:bot}
+    enabled: ${BOT_ENABLED:true}
+    token: ${BOT_TOKEN:}
   description:
     commands:
       bounty_game:
@@ -189,7 +186,4 @@ bot:
           Examples: 
           /stop_poll
 
-spring:
-  profiles:
-    active: ${PROFILES:postgres}
 

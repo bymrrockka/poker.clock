@@ -1,31 +1,25 @@
-package by.mrrockka.service.help;
+package by.mrrockka.service
 
-import by.mrrockka.domain.MessageMetadata;
-import by.mrrockka.parser.HelpMessageParser;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import by.mrrockka.bot.BotDescriptionProperties
+import by.mrrockka.bot.CommandDescription
+import by.mrrockka.domain.MessageMetadata
+import by.mrrockka.parser.HelpMessageParser
+import org.springframework.stereotype.Service
 
-@Slf4j
+interface HelpTelegramService {
+    fun help(metadata: MessageMetadata): CommandDescription
+}
+
 @Service
-@RequiredArgsConstructor
-public class HelpTelegramService {
-  private static final String HELP_COMMAND = "help";
+class HelpTelegramServiceImpl(
+        private val descriptions: BotDescriptionProperties,
+        private val helpMessageParser: HelpMessageParser,
+) : HelpTelegramService {
 
-  private final BotDescriptionProperties botDescriptionProperties;
-  private final HelpMessageParser helpMessageParser;
+    override fun help(metadata: MessageMetadata): CommandDescription {
+        val description = helpMessageParser.parse(metadata)
+                .let { text -> descriptions.byNamesAndAliases[text] }
 
-  public BotApiMethodMessage sendHelpInformation(final MessageMetadata messageMetadata) {
-    final var description = helpMessageParser.parse(messageMetadata)
-      .map(command -> botDescriptionProperties.getCommands().get(command))
-      .orElse(botDescriptionProperties.getCommands().get(HELP_COMMAND));
-
-    return SendMessage.builder()
-      .chatId(messageMetadata.getChatId())
-      .text(description.details())
-      .build();
-  }
-
+        return description ?: descriptions.byNamesAndAliases["help"]!!
+    }
 }

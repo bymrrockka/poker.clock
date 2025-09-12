@@ -1,8 +1,8 @@
 package by.mrrockka.bot.command;
 
+import by.mrrockka.bot.BotDescriptionProperties;
 import by.mrrockka.bot.command.processor.TelegramCommandProcessor;
 import by.mrrockka.domain.MessageMetadata;
-import by.mrrockka.service.help.BotDescriptionProperties;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -32,9 +32,6 @@ public class TelegramCommandProcessorFactory {
       throw new NoCommandProcessorFoundException();
     }
 
-    if (!commandDescription.enabled()) {
-      throw new CommandProcessingIsDisabledException();
-    }
 
     final var interfaceClass = TelegramCommandProcessor.class;
 

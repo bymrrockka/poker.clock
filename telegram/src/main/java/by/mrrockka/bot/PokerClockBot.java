@@ -2,7 +2,6 @@ package by.mrrockka.bot;
 
 import by.mrrockka.bot.command.TelegramCommandProcessorFactory;
 import by.mrrockka.mapper.MessageMetadataMapper;
-import by.mrrockka.service.UpdateBotCommandsService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +19,6 @@ import org.telegram.telegrambots.util.WebhookUtils;
 public class PokerClockBot implements LongPollingBot {
 
   private final PokerClockAbsSender absSender;
-  private final UpdateBotCommandsService updateBotCommandsService;
   private final TelegramBotsProperties telegramBotsProperties;
   private final TelegramCommandProcessorFactory telegramCommandProcessorFactory;
   private final MessageMetadataMapper messageMetadataMapper;
@@ -79,10 +77,4 @@ public class PokerClockBot implements LongPollingBot {
     return update.hasMessage() && update.getMessage().isCommand();
   }
 
-  @Override
-  public void onRegister() {
-    if (telegramBotsProperties.getEnabled()) {
-      updateBotCommandsService.updateBotCommands();
-    }
-  }
 }
