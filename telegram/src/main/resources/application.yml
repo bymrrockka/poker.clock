@@ -8,6 +8,8 @@ bot:
     nickname: ${BOT_NICKNAME:bot}
     enabled: ${BOT_ENABLED:true}
     token: ${BOT_TOKEN:}
+  scheduler:
+    cron: "* * * * * *"
   description:
     commands:
       bounty_game:

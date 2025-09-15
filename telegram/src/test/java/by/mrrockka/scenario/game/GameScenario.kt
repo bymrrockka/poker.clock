@@ -30,10 +30,10 @@ abstract class GameScenario : AbstractScenarioTest() {
         val winners = players.dropLast(4)
 
         Given {
-            command { players.createGame(gameType(), buyin) }
-            command { prizePool(size) }
-            command { winners.finalePlaces() }
-            command { calculate }
+            message { players.createGame(gameType(), buyin) }
+            message { prizePool(size) }
+            message { winners.finalePlaces() }
+            message { calculate }
         } When {
             updatesReceived()
         } ThenApprove (textApprover("should fail when prize pool is different size then finale places $size"))
@@ -54,10 +54,10 @@ abstract class GameScenario : AbstractScenarioTest() {
         val winners = players.dropLast(4)
 
         Given {
-            command { players.createGame(gameType(), buyin) }
-            if (!missed.contains("prize pool")) command { prizePool(2) }
-            if (!missed.contains("finale places")) command { winners.finalePlaces() }
-            command { calculate }
+            message { players.createGame(gameType(), buyin) }
+            if (!missed.contains("prize pool")) message { prizePool(2) }
+            if (!missed.contains("finale places")) message { winners.finalePlaces() }
+            message { calculate }
         } When {
             updatesReceived()
         } ThenApprove (textApprover("should fail when $missed is missed"))
@@ -104,10 +104,10 @@ abstract class GameScenario : AbstractScenarioTest() {
                 .trim()
 
         Given {
-            command { players.createGame(gameType(), buyin) }
-            command { prizePool.trimMargin() }
-            command { winner.finalePlaces() }
-            command { calculate }
+            message { players.createGame(gameType(), buyin) }
+            message { prizePool.trimMargin() }
+            message { winner.finalePlaces() }
+            message { calculate }
         } When {
             updatesReceived()
         } ThenApprove (textApprover("should fail when prize pool sum is not equal 100 percent. $fileName"))

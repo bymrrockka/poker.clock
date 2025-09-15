@@ -9,6 +9,8 @@ bot:
     token: token
     name: Bot
     nickname: bot
+  scheduler:
+    cron: "* * * * * *"
   description:
     commands:
       bounty_game:

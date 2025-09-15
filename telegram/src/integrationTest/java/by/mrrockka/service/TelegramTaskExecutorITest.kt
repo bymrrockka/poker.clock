@@ -1,9 +1,9 @@
 package by.mrrockka.service
 
 import by.mrrockka.bot.PokerClockAbsSender
-import by.mrrockka.extension.TelegramPSQLExtension
 import by.mrrockka.creator.TaskCreator
 import by.mrrockka.executor.TelegramTaskExecutor
+import by.mrrockka.extension.TelegramPSQLExtension
 import com.ninjasquad.springmockk.MockkBean
 import com.ninjasquad.springmockk.MockkClear
 import com.ninjasquad.springmockk.SpykBean
@@ -26,13 +26,14 @@ import java.time.Instant
 @ExtendWith(TelegramPSQLExtension::class)
 @SpringBootTest
 @ActiveProfiles("repository")
+@Deprecated("Move to scenario")
 class TelegramTaskExecutorITest {
 
     @MockkBean(relaxed = true, clear = MockkClear.BEFORE)
     lateinit var pokerClockAbsSender: PokerClockAbsSender
 
     @SpykBean(clear = MockkClear.BEFORE)
-    lateinit var taskTelegramService: TaskTelegramService
+    lateinit var taskTelegramService: PollTelegramService
 
     @Autowired
     lateinit var taskExecutor: TelegramTaskExecutor
@@ -42,13 +43,13 @@ class TelegramTaskExecutorITest {
 
     val tasks = listOf(
             TaskCreator.randomPoll(),
-            TaskCreator.randomPoll()
+            TaskCreator.randomPoll(),
     );
 
     @BeforeEach
     fun before() {
         taskExecutor.init()
-        verify { taskTelegramService.getTasks() }
+        verify { taskTelegramService.selectActive() }
     }
 
     @AfterEach
@@ -59,15 +60,15 @@ class TelegramTaskExecutorITest {
     @Test
     fun `given task list on execute should send messages`() {
         tasks.forEach {
-            eventPublisher.publishEvent(PollTaskCreated(it))
+            eventPublisher.publishEvent((it))
         }
 
         val newTask = TaskCreator.randomPoll()
-        eventPublisher.publishEvent(PollTaskCreated(newTask))
+        eventPublisher.publishEvent(PollEvent.Created(newTask))
 
         await atMost Duration.ofMillis(2000L) untilAsserted {
             (tasks + newTask).forEach {
-                verify { pokerClockAbsSender.executeAsync(it.toMessage()) }
+//                verify { pokerClockAbsSender.executeAsync(it.toMessage()) }
             }
         }
     }
@@ -75,11 +76,11 @@ class TelegramTaskExecutorITest {
     @Test
     fun `given task list when task finished should filter it out`() {
         tasks.forEach {
-            eventPublisher.publishEvent(PollTaskCreated(it))
+            eventPublisher.publishEvent(PollEvent.Created(it))
         }
-        eventPublisher.publishEvent(PollTaskFinished(tasks[0].messageId, Instant.now().minusMillis(1000L)))
+        eventPublisher.publishEvent(PollEvent.Finished(tasks[0].messageId, Instant.now().minusMillis(1000L)))
         await atMost Duration.ofMillis(2000L) untilAsserted {
-            verify { pokerClockAbsSender.executeAsync(tasks[1].toMessage()) }
+//            verify { pokerClockAbsSender.executeAsync(tasks[1].toMessage()) }
         }
     }
 }

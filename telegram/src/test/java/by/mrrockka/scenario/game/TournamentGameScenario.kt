@@ -26,17 +26,17 @@ class TournamentGameScenario : GameScenario() {
         val winners = players.dropLast(4);
 
         Given {
-            command { players.createGame(GameType.TOURNAMENT, buyin) }
-            command { "nickname3".entry() }
-            command { "nickname3".entry() }
-            command { prizePool(2) }
-            command { "nickname1".entry() }
-            command { "nickname1".entry() }
-            command { winners.finalePlaces() }
-            command { "nickname1".entry() }
-            command { "nickname1".entry() }
-            command { "nickname1".entry() }
-            command { calculate }
+            message { players.createGame(GameType.TOURNAMENT, buyin) }
+            message { "nickname3".entry() }
+            message { "nickname3".entry() }
+            message { prizePool(2) }
+            message { "nickname1".entry() }
+            message { "nickname1".entry() }
+            message { winners.finalePlaces() }
+            message { "nickname1".entry() }
+            message { "nickname1".entry() }
+            message { "nickname1".entry() }
+            message { calculate }
         } When {
             updatesReceived()
         } ThenApprove (approver)
@@ -49,13 +49,13 @@ class TournamentGameScenario : GameScenario() {
         val player = "me"
 
         Given {
-            command { player.createGame(GameType.TOURNAMENT, buyin) }
-            command { "nickname3".entry() }
-            command { prizePool(1) }
-            command { "nickname1".entry() }
-            command { player.finalePlaces() }
-            command { "nickname2".entry() }
-            command { calculate }
+            message { player.createGame(GameType.TOURNAMENT, buyin) }
+            message { "nickname3".entry() }
+            message { prizePool(1) }
+            message { "nickname1".entry() }
+            message { player.finalePlaces() }
+            message { "nickname2".entry() }
+            message { calculate }
         } When {
             updatesReceived()
         } ThenApprove (approver)

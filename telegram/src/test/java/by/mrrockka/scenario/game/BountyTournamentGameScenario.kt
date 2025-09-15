@@ -29,25 +29,25 @@ class BountyTournamentGameScenario : GameScenario() {
         val winners = players.dropLast(4);
 
         Given {
-            command { players.createGame(GameType.BOUNTY, buyin) }
-            command { "me" kicked "nickname3" }
-            command { "nickname3".entry() }
-            command { "me" kicked "nickname3" }
-            command { "nickname3".entry() }
-            command { "nickname1" kicked "nickname4" }
-            command { "nickname1" kicked "nickname5" }
-            command { prizePool(2) }
-            command { "nickname3" kicked "nickname1" }
-            command { "nickname1".entry() }
-            command { "nickname3" kicked "nickname1" }
-            command { "nickname1".entry() }
-            command { winners.finalePlaces() }
-            command { "nickname2" kicked "nickname1" }
-            command { "nickname1".entry() }
-            command { "nickname2" kicked "nickname3" }
-            command { "nickname2" kicked "me" }
-            command { "nickname1" kicked "nickname2" }
-            command { calculate }
+            message { players.createGame(GameType.BOUNTY, buyin) }
+            message { "me" kicked "nickname3" }
+            message { "nickname3".entry() }
+            message { "me" kicked "nickname3" }
+            message { "nickname3".entry() }
+            message { "nickname1" kicked "nickname4" }
+            message { "nickname1" kicked "nickname5" }
+            message { prizePool(2) }
+            message { "nickname3" kicked "nickname1" }
+            message { "nickname1".entry() }
+            message { "nickname3" kicked "nickname1" }
+            message { "nickname1".entry() }
+            message { winners.finalePlaces() }
+            message { "nickname2" kicked "nickname1" }
+            message { "nickname1".entry() }
+            message { "nickname2" kicked "nickname3" }
+            message { "nickname2" kicked "me" }
+            message { "nickname1" kicked "nickname2" }
+            message { calculate }
         } When {
             updatesReceived()
         } ThenApprove (approver)
@@ -60,18 +60,18 @@ class BountyTournamentGameScenario : GameScenario() {
         val player = "me"
 
         Given {
-            command { player.createGame(GameType.BOUNTY, buyin) }
-            command { "nickname3".entry() }
-            command { "me" kicked "nickname3" }
-            command { "nickname3".entry() }
-            command { prizePool(1) }
-            command { "nickname2".entry() }
-            command { "nickname2" kicked "nickname3" }
-            command { "nickname1".entry() }
-            command { "nickname2" kicked "nickname1" }
-            command { player.finalePlaces() }
-            command { "me" kicked "nickname2" }
-            command { calculate }
+            message { player.createGame(GameType.BOUNTY, buyin) }
+            message { "nickname3".entry() }
+            message { "me" kicked "nickname3" }
+            message { "nickname3".entry() }
+            message { prizePool(1) }
+            message { "nickname2".entry() }
+            message { "nickname2" kicked "nickname3" }
+            message { "nickname1".entry() }
+            message { "nickname2" kicked "nickname1" }
+            message { player.finalePlaces() }
+            message { "me" kicked "nickname2" }
+            message { calculate }
         } When {
             updatesReceived()
         } ThenApprove (approver)
@@ -83,9 +83,9 @@ class BountyTournamentGameScenario : GameScenario() {
         val player = "me"
 
         Given {
-            command { player.createGame(GameType.BOUNTY, buyin) }
-            command { "me" kicked "nickname3" }
-            command { calculate }
+            message { player.createGame(GameType.BOUNTY, buyin) }
+            message { "me" kicked "nickname3" }
+            message { calculate }
         } When {
             updatesReceived()
         } ThenApprove (approver)
@@ -97,9 +97,9 @@ class BountyTournamentGameScenario : GameScenario() {
         val player = "me"
 
         Given {
-            command { player.createGame(GameType.BOUNTY, buyin) }
-            command { "me" kicked "me" }
-            command { calculate }
+            message { player.createGame(GameType.BOUNTY, buyin) }
+            message { "me" kicked "me" }
+            message { calculate }
         } When {
             updatesReceived()
         } ThenApprove (approver)
@@ -111,9 +111,9 @@ class BountyTournamentGameScenario : GameScenario() {
         val player = "me"
 
         Given {
-            command { player.createGame(GameType.BOUNTY, buyin) }
-            command { "nickname" kicked "me" }
-            command { calculate }
+            message { player.createGame(GameType.BOUNTY, buyin) }
+            message { "nickname" kicked "me" }
+            message { calculate }
         } When {
             updatesReceived()
         } ThenApprove (approver)
@@ -125,10 +125,10 @@ class BountyTournamentGameScenario : GameScenario() {
         val players = listOf("me", "nickname")
 
         Given {
-            command { players.createGame(GameType.BOUNTY, buyin) }
-            command { "me" kicked "nickname" }
-            command { "me" kicked "nickname" }
-            command { calculate }
+            message { players.createGame(GameType.BOUNTY, buyin) }
+            message { "me" kicked "nickname" }
+            message { "me" kicked "nickname" }
+            message { calculate }
         } When {
             updatesReceived()
         } ThenApprove (approver)
@@ -140,10 +140,10 @@ class BountyTournamentGameScenario : GameScenario() {
         val players = listOf("me", "nickname")
 
         Given {
-            command { players.createGame(GameType.BOUNTY, buyin) }
-            command { "nickname" kicked "me" }
-            command { "me" kicked "nickname" }
-            command { calculate }
+            message { players.createGame(GameType.BOUNTY, buyin) }
+            message { "nickname" kicked "me" }
+            message { "me" kicked "nickname" }
+            message { calculate }
         } When {
             updatesReceived()
         } ThenApprove (approver)

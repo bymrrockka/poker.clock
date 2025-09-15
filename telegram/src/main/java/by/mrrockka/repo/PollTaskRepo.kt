@@ -60,7 +60,7 @@ open class PollTaskRepo {
                 }
     }
 
-    open fun selectNotFinished(): List<PollTask> {
+    open fun selectActive(): List<PollTask> {
         return PollTaskTable.selectAll()
                 .where { finishedAt.isNull() }
                 .map { pollTask(it) }

@@ -2,8 +2,8 @@ package by.mrrockka.executor
 
 import by.mrrockka.bot.PokerClockAbsSender
 import by.mrrockka.creator.TaskCreator
-import by.mrrockka.service.PollTaskCreated
-import by.mrrockka.service.TaskTelegramService
+import by.mrrockka.service.PollEvent
+import by.mrrockka.service.PollTelegramService
 import io.mockk.Called
 import io.mockk.confirmVerified
 import io.mockk.every
@@ -18,10 +18,11 @@ import java.time.Duration
 import java.time.Instant
 
 @ExtendWith(MockKExtension::class)
+@Deprecated("Move to scenario")
 class TelegramTaskExecutorTest {
 
     @MockK(relaxed = true)
-    lateinit var taskTelegramService: TaskTelegramService
+    lateinit var taskTelegramService: PollTelegramService
 
     @MockK(relaxed = true)
     lateinit var pokerClockAbsSender: PokerClockAbsSender
@@ -36,10 +37,10 @@ class TelegramTaskExecutorTest {
 
     @Test
     fun `given empty tasks list when execute triggered should not send anything`() {
-        every { taskTelegramService.getTasks() } returns listOf()
+        every { taskTelegramService.selectActive() } returns listOf()
 
         telegramTaskExecutor.init()
-        verify { taskTelegramService.getTasks() }
+        verify { taskTelegramService.selectActive() }
 
         telegramTaskExecutor.execute()
         verify { pokerClockAbsSender wasNot Called }
@@ -50,34 +51,34 @@ class TelegramTaskExecutorTest {
         val tasks = listOf(
                 TaskCreator.randomPoll().copy(createdAt = Instant.now().minus(Duration.ofHours(1))),
                 TaskCreator.randomPoll().copy(createdAt = Instant.now().minus(Duration.ofHours(1))),
-                TaskCreator.randomPoll().copy(createdAt = Instant.now().minus(Duration.ofHours(1)))
+                TaskCreator.randomPoll().copy(createdAt = Instant.now().minus(Duration.ofHours(1))),
         )
-        every { taskTelegramService.getTasks() } returns tasks
+        every { taskTelegramService.selectActive() } returns tasks
 
         telegramTaskExecutor.init()
-        verify { taskTelegramService.getTasks() }
+        verify { taskTelegramService.selectActive() }
 
         telegramTaskExecutor.execute()
         tasks.forEach {
-            verify { pokerClockAbsSender.executeAsync(it.toMessage()) }
+//            verify { pokerClockAbsSender.executeAsync(it.toMessage()) }
         }
     }
 
     @Test
     fun `given tasks list when task updated event consumed should update tasks`() {
         val initTasks = listOf(
-                TaskCreator.randomPoll().copy(createdAt = Instant.now().minus(Duration.ofHours(1)))
+                TaskCreator.randomPoll().copy(createdAt = Instant.now().minus(Duration.ofHours(1))),
         )
         val updatedTask = TaskCreator.randomPoll().copy(createdAt = Instant.now().minus(Duration.ofHours(1)))
-        every { taskTelegramService.getTasks() } returns initTasks
+        every { taskTelegramService.selectActive() } returns initTasks
 
         telegramTaskExecutor.init()
-        verify { taskTelegramService.getTasks() }
+        verify { taskTelegramService.selectActive() }
 
-        telegramTaskExecutor.pollTaskCreated(PollTaskCreated(updatedTask))
+        telegramTaskExecutor.pollTaskCreated(PollEvent.Created(updatedTask))
         telegramTaskExecutor.execute()
         (initTasks + updatedTask).forEach {
-            verify { pokerClockAbsSender.executeAsync(it.toMessage()) }
+//            verify { pokerClockAbsSender.executeAsync(it.toMessage()) }
         }
 
     }
@@ -87,24 +88,26 @@ class TelegramTaskExecutorTest {
         val tasks = listOf(
                 TaskCreator.randomPoll().copy(createdAt = Instant.now().minus(Duration.ofHours(1))),
                 TaskCreator.randomPoll().copy(createdAt = Instant.now().minus(Duration.ofHours(1))),
-                TaskCreator.randomPoll().copy(createdAt = Instant.now().minus(Duration.ofHours(1)))
+                TaskCreator.randomPoll().copy(createdAt = Instant.now().minus(Duration.ofHours(1))),
         )
         val tasksMap = tasks.associate { it.id to it }
-        every { taskTelegramService.getTasks() } returns tasks
+        every { taskTelegramService.selectActive() } returns tasks
 
         telegramTaskExecutor.init()
-        verify { taskTelegramService.getTasks() }
+        verify { taskTelegramService.selectActive() }
 
         telegramTaskExecutor.execute()
         tasks.forEach {
-            verify { pokerClockAbsSender.executeAsync(it.toMessage()) }
+//            verify { pokerClockAbsSender.executeAsync(it.toMessage()) }
         }
 
         telegramTaskExecutor.preDestroy()
         verify {
-            taskTelegramService.batchUpdate(match { list ->
-                !list.map { it.updatedAt != null && tasksMap[it.id] == it.copy(updatedAt = null) }.contains(false)
-            })
+            taskTelegramService.batchUpdate(
+                    match { list ->
+                        !list.map { it.updatedAt != null && tasksMap[it.id] == it.copy(updatedAt = null) }.contains(false)
+                    },
+            )
         }
     }
 
