@@ -1,0 +1,10 @@
+******************************
+-> Request
+/create_poll
+message: Test poll
+cron: * * * * * *
+options:
+                
+
+-> Response
+No options found

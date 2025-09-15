@@ -29,20 +29,21 @@ class PollMessageParser : MessageParser<PollTask> {
 
     private fun parseCron(messageMetadata: MessageMetadata): CronExpression {
         val match = cronRegex.find(messageMetadata.text.trimIndent())
-        check(match != null) { "poll schedule should be populated" }
+        check(match != null) { "Schedule cron should be populated" }
         val (_, cron) = match.destructured
         return CronExpression.parse(cron.trim())
     }
 
     private fun parseMessageText(messageMetadata: MessageMetadata): String {
         val match = textRegex.find(messageMetadata.text.trimIndent())
-        check(match != null) { "poll message should be populated" }
+        check(match != null) { "Message should be populated" }
         val (_, text) = match.destructured
         return text.trim()
     }
 
-    private fun parseOptions(messageMetadata: MessageMetadata): List<PollTask.Option> {
-        return messageMetadata.text.trimIndent()
+    private fun parseOptions(metadata: MessageMetadata): List<PollTask.Option> {
+        check(metadata.text.contains(optionsText)) { "Options block should be specified" }
+        return metadata.text.trimIndent()
                 .run { substringAfterLast(optionsText).lines() }
                 .filter { it.isNotBlank() }
                 .mapNotNull {

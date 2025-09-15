@@ -13,7 +13,7 @@ Bounty tournament game started.
 /bounty @me kicked @nickname
 
 -> Response
-Bounty amount 10.00 from @nickname stored for @jackie_rau                   
+Bounty amount 10.00 from @nickname stored for @hong_beer                   
 
 ******************************
 -> Request

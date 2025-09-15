@@ -45,3 +45,4 @@ class UserBuilder(init: (UserBuilder.() -> Unit) = {}) : AbstractBuilder<Telegra
 }
 
 fun user(init: (UserBuilder.() -> Unit) = {}) = UserBuilder(init).build()
+fun user(randoms: TelegramRandoms) = UserBuilder { randoms(randoms) }.build()

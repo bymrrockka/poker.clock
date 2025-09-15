@@ -101,7 +101,7 @@ Payout to: @nickname2
 From:
   @nickname3 -> 30
   @nickname4 -> 10
-  @jackie_rau -> 10
+  @hong_beer -> 10
   @nickname5 -> 5
 -----------------------------
 Payout to: @nickname1

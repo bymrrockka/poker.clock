@@ -7,14 +7,12 @@ import by.mrrockka.parser.PollMessageParser
 import by.mrrockka.repo.PollTaskRepo
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
-import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import java.time.Instant
 import kotlin.time.ExperimentalTime
 
 interface PollTelegramService {
-    fun create(messageMetadata: MessageMetadata): PollTask
-    fun stop(messageMetadata: MessageMetadata): BotApiMethodMessage
+    fun create(metadata: MessageMetadata): PollTask
+    fun stop(metadata: MessageMetadata)
     fun batchUpdate(tasks: List<PollTask>)
     fun selectActive(): List<Task>
 }
@@ -27,35 +25,22 @@ class PollTelegramServiceImpl(
         private val eventPublisher: ApplicationEventPublisher,
 ) : PollTelegramService {
 
-    override fun create(messageMetadata: MessageMetadata): PollTask {
-        val pollTask = pollMessageParser.parse(messageMetadata)
-        check(pollTask.options.isNotEmpty()) { "Poll options should be specified" }
+    override fun create(metadata: MessageMetadata): PollTask {
+        val pollTask = pollMessageParser.parse(metadata)
+        check(pollTask.options.isNotEmpty()) { "No options found" }
         pollTaskRepository.upsert(pollTask)
         eventPublisher.publishEvent(PollEvent.Created(pollTask))
 
         return pollTask
     }
 
-    override fun stop(messageMetadata: MessageMetadata): BotApiMethodMessage {
-        check(messageMetadata.replyTo != null) {
-            """
-                Message doesn't contain any attached messages. 
-                Please reply to poll creation message to stop poll
-                """
-        }
-
+    override fun stop(metadata: MessageMetadata) {
         val size = pollTaskRepository.finishPoll(
-                messageMetadata.replyTo.id,
-                messageMetadata.createdAt,
+                metadata.replyTo!!.id,
+                metadata.createdAt,
         )
         check(size != 0) { "Poll was not found" }
-        eventPublisher.publishEvent(messageMetadata.toPollTaskFinished())
-
-        return SendMessage().apply {
-            chatId = messageMetadata.chatId.toString()
-            replyToMessageId = messageMetadata.replyTo.id.toInt()
-            text = "Poll stopped."
-        }
+        eventPublisher.publishEvent(metadata.toPollTaskFinished())
     }
 
     override fun batchUpdate(tasks: List<PollTask>) {

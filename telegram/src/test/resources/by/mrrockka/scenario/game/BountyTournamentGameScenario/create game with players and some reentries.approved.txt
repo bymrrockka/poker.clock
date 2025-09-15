@@ -13,7 +13,7 @@ Bounty tournament game started.
 /bounty @me kicked @nickname3
 
 -> Response
-Bounty amount 10.00 from @nickname3 stored for @jackie_rau                   
+Bounty amount 10.00 from @nickname3 stored for @hong_beer                   
 
 ******************************
 -> Request
@@ -28,7 +28,7 @@ Stored entries:
 /bounty @me kicked @nickname3
 
 -> Response
-Bounty amount 10.00 from @nickname3 stored for @jackie_rau                   
+Bounty amount 10.00 from @nickname3 stored for @hong_beer                   
 
 ******************************
 -> Request
@@ -129,7 +129,7 @@ Bounty amount 10.00 from @nickname3 stored for @nickname2
 /bounty @nickname2 kicked @me
 
 -> Response
-Bounty amount 10.00 from @jackie_rau stored for @nickname2                   
+Bounty amount 10.00 from @hong_beer stored for @nickname2                   
 
 ******************************
 -> Request
@@ -166,4 +166,4 @@ From:
   @nickname5 -> 5
 -----------------------------
 Players played equally
-  @jackie_rau
+  @hong_beer

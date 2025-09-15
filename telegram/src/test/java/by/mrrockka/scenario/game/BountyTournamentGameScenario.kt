@@ -26,7 +26,7 @@ class BountyTournamentGameScenario : GameScenario() {
                 "nickname5",
                 "me",
         )
-        val winners = players.dropLast(4);
+        val winners = players.dropLast(4)
 
         Given {
             message { players.createGame(GameType.BOUNTY, buyin) }

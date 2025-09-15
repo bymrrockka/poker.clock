@@ -10,7 +10,6 @@ plugins {
     application
     `maven-publish`
     `java-test-fixtures`
-    `jvm-test-suite`
     alias(libs.plugins.springBootPlugin)
     alias(libs.plugins.springDepManagementPlugin)
     alias(libs.plugins.kotlinJvm)
@@ -49,7 +48,6 @@ dependencies {
     //todo remove
     implementation(libs.mapstructCore)
     implementation(libs.lombokMapstructBinding)
-    implementation(libs.vendeliSpringStarter)
     implementation(libs.apacheCommonsLang3)
 
     runtimeOnly(libs.aspectjWeaver)
@@ -131,55 +129,3 @@ application {
 }
 
 defaultTasks("clean", "assemble")
-
-
-//todo: remove after scenario tests complited
-testing {
-    suites {
-        val test by getting(JvmTestSuite::class) {
-            useJUnitJupiter()
-        }
-        register<JvmTestSuite>("integrationTest") {
-
-            targets {
-                all {
-                    testTask.configure {
-                        jvmArgs("--enable-preview")
-                        testLogging {
-                            events("passed", "failed")
-
-                        }
-                    }
-                }
-            }
-
-            dependencies {
-                implementation(libs.springBootJdbc)
-                implementation(libs.springBootWeb)
-                implementation(libs.springBootAop)
-                implementation(libs.springBootTelegrambots)
-                implementation(libs.exposedCore)
-                implementation(libs.exposedJdbc)
-                implementation(libs.exposedJson)
-                implementation(libs.exposedJavaTime)
-                implementation(libs.exposedSpringBoot)
-                implementation(libs.assertjCore)
-                implementation(libs.springBootTest)
-                implementation(libs.liquibase)
-                runtimeOnly(libs.aspectjWeaver)
-                implementation(libs.kotlinStdLib)
-                implementation(libs.mockk)
-                implementation(libs.springMockk)
-                implementation(libs.awaitility)
-
-                compileOnly(libs.lombok)
-                annotationProcessor(libs.lombok)
-                annotationProcessor(libs.mapstructProcessor)
-
-                implementation(project())
-                implementation(testFixtures(project()))
-                implementation(testFixtures(project(":core")))
-            }
-        }
-    }
-}

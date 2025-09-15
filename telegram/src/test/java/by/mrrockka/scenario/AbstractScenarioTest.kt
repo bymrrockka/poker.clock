@@ -11,7 +11,7 @@ import by.mrrockka.extension.TelegramPSQLExtension
 import by.mrrockka.extension.TelegramWiremockContainer
 import by.mrrockka.extension.TelegramWiremockExtension
 import by.mrrockka.extension.TextApproverExtension
-import by.mrrockka.resetRandom
+import by.mrrockka.reset
 import by.mrrockka.scenario.config.TestBotConfig
 import by.mrrockka.scenario.config.TestClock
 import com.fasterxml.jackson.databind.JsonNode
@@ -59,7 +59,8 @@ abstract class AbstractScenarioTest {
 
     private val randoms = telegramRandoms("scenario")
     private val chatid = randoms.chatid()
-    private val user = user()
+    private val user = user(randoms)
+    private val messageLog = mutableMapOf<String, Long>()
 
     @Autowired
     lateinit var mapper: ObjectMapper
@@ -79,12 +80,12 @@ abstract class AbstractScenarioTest {
 
     @BeforeEach
     fun setUp() {
-        telegramRandoms.resetRandom()
         wireMock.resetToDefaultMappings()
     }
 
     @AfterEach
     fun after() {
+        randoms.reset()
         bot.update.stopListener()
         wireMock.verify {
             url equalTo "${botProps.botpath}/${getUpdates}"
@@ -168,7 +169,7 @@ abstract class AbstractScenarioTest {
     }
 
     infix fun WhenSpecification.ThenApprove(approver: Approver) {
-        await.atMost(Duration.ofSeconds(1))
+        await.atMost(Duration.ofSeconds(2))
                 .until {
                     val stubs = wireMock.serveEvents
                             .filter { it.stubMapping.metadata != null && it.stubMapping.metadata.contains(METADATA_ATTR) }
@@ -177,7 +178,6 @@ abstract class AbstractScenarioTest {
                     if (stubs.size == commands.size) {
                         commands
                                 .mapIndexed { index, command ->
-                                    println("### $index $command")
                                     when (command) {
                                         is Command.Message ->
                                             """
@@ -211,8 +211,16 @@ abstract class AbstractScenarioTest {
                 text(this@stub.message)
                 chatId(chatId)
                 from(this@AbstractScenarioTest.user)
+                if (replyTo != null && messageLog[replyTo] != null) {
+                    replyTo {
+                        chatId(chatId)
+                        id(messageLog[replyTo]!!)
+                    }
+                }
             }
         }
+
+        messageLog += botcommand to update.message!!.messageId
         //mocks user command from telegram
         wireMock.post {
             url equalTo "${botProps.botpath}/${getUpdates}"

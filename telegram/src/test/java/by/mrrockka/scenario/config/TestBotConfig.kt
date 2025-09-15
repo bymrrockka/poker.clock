@@ -2,8 +2,8 @@ package by.mrrockka.scenario.config
 
 import by.mrrockka.PokerClockExceptionHandler
 import by.mrrockka.bot.TelegramBotsProperties
+import by.mrrockka.config.SpringClassManager
 import by.mrrockka.domain.PokerClockBotOptions
-import eu.vendeli.spring.starter.SpringClassManager
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.types.component.ExceptionHandlingStrategy
 import kotlinx.coroutines.DelicateCoroutinesApi

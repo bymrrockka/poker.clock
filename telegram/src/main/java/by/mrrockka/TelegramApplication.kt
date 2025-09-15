@@ -1,6 +1,5 @@
 package by.mrrockka
 
-import eu.vendeli.spring.starter.TelegramAutoConfiguration
 import org.jetbrains.exposed.spring.autoconfigure.ExposedAutoConfiguration
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -13,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling
 @EnableScheduling
 @ComponentScan("by.mrrockka", "org.telegram.telegrambots")
 @ImportAutoConfiguration(value = [ExposedAutoConfiguration::class])
-@SpringBootApplication(exclude = [TelegramAutoConfiguration::class])
+@SpringBootApplication
 open class TelegramApplication {
 
     fun main(args: Array<String>) {

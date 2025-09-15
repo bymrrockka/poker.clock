@@ -17,7 +17,7 @@ abstract class AbstractTest {
 
     @AfterEach
     fun afterEach() {
-        coreRandoms.resetRandom()
+        coreRandoms.reset()
     }
 
     val objectMapper = ObjectMapper()

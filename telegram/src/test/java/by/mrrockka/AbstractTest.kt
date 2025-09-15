@@ -10,7 +10,7 @@ abstract class AbstractTest {
 
     @AfterEach
     fun afterEach() {
-        telegramRandoms.resetRandom()
+        telegramRandoms.reset()
     }
 
     val objectMapper = ObjectMapper()

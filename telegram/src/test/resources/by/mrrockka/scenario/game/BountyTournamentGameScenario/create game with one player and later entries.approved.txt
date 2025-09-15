@@ -21,7 +21,7 @@ Stored entries:
 /bounty @me kicked @nickname3
 
 -> Response
-Bounty amount 10.00 from @nickname3 stored for @jackie_rau                   
+Bounty amount 10.00 from @nickname3 stored for @hong_beer                   
 
 ******************************
 -> Request
@@ -77,14 +77,14 @@ Bounty amount 10.00 from @nickname1 stored for @nickname2
 
 -> Response
 Finale places stored:
-1. @jackie_rau                   
+1. @hong_beer                   
 
 ******************************
 -> Request
 /bounty @me kicked @nickname2
 
 -> Response
-Bounty amount 10.00 from @nickname2 stored for @jackie_rau                   
+Bounty amount 10.00 from @nickname2 stored for @hong_beer                   
 
 ******************************
 -> Request
@@ -93,10 +93,10 @@ Bounty amount 10.00 from @nickname2 stored for @jackie_rau
 -> Response
 -----------------------------
 Finale summary:
-  1. @jackie_rau won 50
+  1. @hong_beer won 50
 Total: 50 (5 entries * 10 buy in)
 -----------------------------
-Payout to: @jackie_rau
+Payout to: @hong_beer
   Entries: 1
   Bounties: 20 (taken 2 - given 0 ) 
   Total: 60 (won 50 - entries 10 + bounties 20)

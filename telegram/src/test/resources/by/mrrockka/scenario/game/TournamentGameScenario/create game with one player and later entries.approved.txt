@@ -40,7 +40,7 @@ Stored entries:
 
 -> Response
 Finale places stored:
-1. @jackie_rau                   
+1. @hong_beer                   
 
 ******************************
 -> Request
@@ -57,10 +57,10 @@ Stored entries:
 -> Response
 -----------------------------
 Finale summary:
-  1. @jackie_rau won 40
+  1. @hong_beer won 40
 Total: 40 (4 entries * 10 buy in)
 -----------------------------
-Payout to: @jackie_rau
+Payout to: @hong_beer
   Entries: 1
   Total: 30 (won 40 - entries 10)
 From:

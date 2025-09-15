@@ -52,7 +52,7 @@ Payout to: @nickname2
   Total: 20 
 From:
   @nickname5 -> 10
-  @jackie_rau -> 10
+  @hong_beer -> 10
 -----------------------------
 Payout to: @nickname3
   Entries: 10

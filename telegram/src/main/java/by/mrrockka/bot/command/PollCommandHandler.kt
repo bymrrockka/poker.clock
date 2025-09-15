@@ -27,9 +27,9 @@ class PollCommandHandlerImpl(
                 .also { poll ->
                     sendMessage {
                         """
-                            Poll created.
-                            Will be triggered next ${poll.cron.next(LocalDateTime.now())?.dayOfWeek?.name}
-                        """.trimIndent()
+                            |Poll created.
+                            |Will be triggered next ${poll.cron.next(LocalDateTime.now())?.dayOfWeek?.name}
+                        """.trimMargin()
                     }.send(to = metadata.chatId, bot)
                 }
     }
@@ -37,11 +37,15 @@ class PollCommandHandlerImpl(
     @CommandHandler(["/stop_poll", "/sp"])
     override suspend fun stop(message: MessageUpdate) {
         val metadata = message.message.toMessageMetadata()
+        check(metadata.replyTo != null) {
+            """
+                |Message doesn't contain any attached messages. 
+                |Please reply to poll creation message to stop poll
+                """.trimMargin()
+        }
+
         pollService.stop(metadata)
-                .also {
-                    sendMessage { "poll stopped" }
-                            .send(to = metadata.chatId, bot)
-                }
+                .also { sendMessage { "Poll stopped" }.send(to = metadata.chatId, bot) }
     }
 
 }

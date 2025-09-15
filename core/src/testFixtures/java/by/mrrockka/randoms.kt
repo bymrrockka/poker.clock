@@ -8,11 +8,13 @@ import java.util.*
 interface Randoms {
     val random: Random
     val faker: Faker
+    val seed: String?
 }
 
 open class CoreRandoms(
         override val random: Random = coreRandoms.random,
         override val faker: Faker = Faker(random),
+        override val seed: String? = null,
 ) : Randoms {
 
     fun instant(): Instant = Instant.now()
@@ -38,4 +40,4 @@ open class CoreRandoms(
     }
 }
 
-fun Randoms.resetRandom() = this.random.setSeed(0)
+fun Randoms.reset() = random.setSeed(seed.hashCode().toLong())
