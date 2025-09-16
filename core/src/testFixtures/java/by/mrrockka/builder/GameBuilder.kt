@@ -18,18 +18,62 @@ import java.util.*
 @Suppress("UNCHECKED_CAST")
 class GameBuilder(init: (GameBuilder.() -> Unit) = {}) : AbstractBuilder<CoreRandoms>(coreRandoms) {
 
-    var id: UUID? = null
-    var buyIn: BigDecimal? = null
-    var stack: BigDecimal? = null
-    var createdAt: Instant? = null
-    var finishedAt: Instant? = null
-    var players: List<Player> = emptyList()
-    var finalePlaces: List<FinalPlace> = emptyList()
-    var prizePool: List<PositionPrize> = emptyList()
-    var bounty: BigDecimal? = null
+    private var id: UUID? = null
+    private var buyIn: BigDecimal? = null
+    private var stack: BigDecimal? = null
+    private var createdAt: Instant? = null
+    private var finishedAt: Instant? = null
+    private var players: List<Player> = emptyList()
+    private var finalePlaces: List<FinalPlace> = emptyList()
+    private var prizePool: List<PositionPrize> = emptyList()
+    private var bounty: BigDecimal? = null
 
     init {
         init()
+    }
+
+    fun id(id: UUID) {
+        this.id = id
+    }
+
+    fun buyIn(buyIn: BigDecimal) {
+        this.buyIn = buyIn
+    }
+
+    fun stack(stack: BigDecimal) {
+        this.stack = stack
+    }
+
+    fun createdAt(createdAt: Instant) {
+        this.createdAt = createdAt
+    }
+
+    fun finishedAt(finishedAt: Instant) {
+        this.finishedAt = finishedAt
+    }
+
+    fun players(players: List<Player>) {
+        this.players = players
+    }
+
+    fun finalePlaces(finalePlaces: List<FinalPlace>) {
+        this.finalePlaces = finalePlaces
+    }
+
+    fun finalePlaces(vararg finalePlaces: FinalPlace) {
+        this.finalePlaces = finalePlaces.toList()
+    }
+
+    fun prizePool(prizePool: List<PositionPrize>) {
+        this.prizePool = prizePool
+    }
+
+    fun prizePool(vararg prizePool: PositionPrize) {
+        this.prizePool = prizePool.toList()
+    }
+
+    fun bounty(bounty: BigDecimal) {
+        this.bounty = bounty
     }
 
     fun cash(): CashGame = CashGame(
@@ -65,5 +109,7 @@ class GameBuilder(init: (GameBuilder.() -> Unit) = {}) : AbstractBuilder<CoreRan
     )
 }
 
-fun game() = GameBuilder()
 fun game(init: (GameBuilder.() -> Unit) = {}) = GameBuilder(init)
+fun bountyGame(init: (GameBuilder.() -> Unit) = {}) = GameBuilder(init).bountyTournament()
+fun tournamentGame(init: (GameBuilder.() -> Unit) = {}) = GameBuilder(init).tournament()
+fun cashGame(init: (GameBuilder.() -> Unit) = {}) = GameBuilder(init).cash()

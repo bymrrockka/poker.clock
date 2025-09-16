@@ -1,8 +1,10 @@
 package by.mrrockka.service.calculation
 
 import by.mrrockka.AbstractTest
-import by.mrrockka.builder.game
-import by.mrrockka.builder.player
+import by.mrrockka.builder.cashGame
+import by.mrrockka.builder.cashPlayer
+import by.mrrockka.builder.cashPlayers
+import by.mrrockka.builder.plus
 import by.mrrockka.domain.CashPlayer
 import by.mrrockka.domain.Debtor
 import by.mrrockka.domain.Payout
@@ -24,22 +26,24 @@ class CashGameCalculatorTest : AbstractTest() {
     fun `given equal entries and one player wins pot should calculate`(size: Int) {
         val buyin = BigDecimal("10")
         val withdrawal = BigDecimal("10")
-        val players = cashPlayers(size, buyin)
+        val players = cashPlayers(size) { buyin(buyin) }
         val withdrawalPlayer = players[0].addWithdrawals(withdrawal, size)
 
-        val game = game {
-            this.buyIn = buyin
-            this.players = players.drop(1) + withdrawalPlayer
-        }.cash()
+        val game = cashGame {
+            buyIn(buyin)
+            players(players.drop(1) + withdrawalPlayer)
+        }
 
         val actual = calculator.calculate(game)
-        val expect = listOf(Payout(
-                creditor = withdrawalPlayer,
-                debtors = players.drop(1)
-                        .map { Debtor(it, buyin) }
-                        .reversed(),
-                total = BigDecimal("10") * (players.size - 1).toBigDecimal()
-        ))
+        val expect = listOf(
+                Payout(
+                        creditor = withdrawalPlayer,
+                        debtors = players.drop(1)
+                                .map { Debtor(it, buyin) }
+                                .reversed(),
+                        total = BigDecimal("10") * (players.size - 1).toBigDecimal(),
+                ),
+        )
 
         assertThat(actual).isEqualTo(expect)
     }
@@ -48,14 +52,14 @@ class CashGameCalculatorTest : AbstractTest() {
     fun `given equal entries and two players win pot should calculate`(approver: Approver) {
         val buyin = BigDecimal("10")
         val withdrawal = BigDecimal("10")
-        val players = cashPlayers(size = 10, buyin)
+        val players = cashPlayers(10) { buyin(buyin) }
         val first = players[0].addWithdrawals(withdrawal, 5)
         val second = players[1].addWithdrawals(withdrawal, 5)
 
-        val game = game {
-            this.buyIn = buyin
-            this.players = players.drop(2) + first + second
-        }.cash()
+        val game = cashGame {
+            buyIn(buyin)
+            players(players.drop(2) + first + second)
+        }
 
         approver.assertApproved(calculator.calculate(game).simplify().toJsonString())
     }
@@ -64,13 +68,13 @@ class CashGameCalculatorTest : AbstractTest() {
     fun `given equal entries and withdrawals should calculate`(approver: Approver) {
         val buyin = BigDecimal("10")
         val withdrawal = BigDecimal("10")
-        val players = cashPlayers(size = 10, buyin)
+        val players = cashPlayers(10) { buyin(buyin) }
                 .map { it.addWithdrawals(withdrawal, 1) }
 
-        val game = game {
-            this.buyIn = buyin
-            this.players = players
-        }.cash()
+        val game = cashGame {
+            buyIn(buyin)
+            players(players)
+        }
 
         approver.assertApproved(calculator.calculate(game).simplify().toJsonString())
     }
@@ -79,13 +83,19 @@ class CashGameCalculatorTest : AbstractTest() {
     fun `given player enters many times and wins a pot should calculate`(approver: Approver) {
         val buyin = BigDecimal("10")
         val withdrawal = BigDecimal("10")
-        val players = listOf(cashPlayer(buyin, 5), cashPlayer(buyin, 1))
+        val players = cashPlayer {
+            buyin(buyin)
+            entries(5)
+        } + cashPlayer {
+            buyin(buyin)
+            entries(1)
+        }
         val winner = players[0].addWithdrawals(withdrawal, 6)
 
-        val game = game {
-            this.buyIn = buyin
-            this.players = players.drop(1) + winner
-        }.cash()
+        val game = cashGame {
+            buyIn(buyin)
+            players(players.drop(1) + winner)
+        }
 
         approver.assertApproved(calculator.calculate(game).simplify().toJsonString())
     }
@@ -98,24 +108,10 @@ class CashGameCalculatorTest : AbstractTest() {
                     Arguments.of(4),
                     Arguments.of(10),
                     Arguments.of(20),
-                    Arguments.of(100)
+                    Arguments.of(100),
             )
         }
     }
 
-    fun cashPlayer(buyin: BigDecimal = BigDecimal("10"), entries: Int): CashPlayer =
-            player {
-                this.buyin = buyin
-                this.bounty = bounty
-                this.entriesSize = entries
-            }.cash()
-
-    fun cashPlayers(size: Int, buyin: BigDecimal = BigDecimal("10")): List<CashPlayer> =
-            player {
-                this.buyin = buyin
-                this.bounty = bounty
-            }.cashBatch(size)
-
     fun CashPlayer.addWithdrawals(withdrawal: BigDecimal, size: Int): CashPlayer = this.copy(withdrawals = (0..<size).map { withdrawal })
-
 }

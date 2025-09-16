@@ -15,6 +15,7 @@ import static java.util.Objects.nonNull;
 
 //todo: refactor to kotlin dsl
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Deprecated
 public final class PersonCreator {
 
   private final static Faker FAKER = FakerProvider.faker();

@@ -11,19 +11,35 @@ import java.math.BigDecimal
 internal val defaultBuyin = BigDecimal("10")
 
 class PlayerBuilder(init: (PlayerBuilder.() -> Unit) = {}) : AbstractBuilder<CoreRandoms>(coreRandoms) {
-    var buyin: BigDecimal? = null
-    var bounty: BigDecimal? = null
-    var entries: List<BigDecimal>? = null
-    var entriesSize: Int = 1
+    private var buyin: BigDecimal? = null
+    private var bounty: BigDecimal? = null
+    private var moneys: List<BigDecimal>? = null
+    private var entries: Int = 1
 
     init {
         init()
     }
 
+    fun buyin(buyin: BigDecimal) {
+        this.buyin = buyin
+    }
+
+    fun bounty(bounty: BigDecimal) {
+        this.bounty = bounty
+    }
+
+    fun moneys(moneys: List<BigDecimal>) {
+        this.moneys = moneys
+    }
+
+    fun entries(entries: Int) {
+        this.entries = entries
+    }
+
     fun tournament(): Player {
         return TournamentPlayer(
                 person = person(),
-                entries = (0..<entriesSize).asSequence().map { buyin ?: defaultBuyin }.toList(),
+                entries = (0..<entries).asSequence().map { buyin ?: defaultBuyin }.toList(),
         )
     }
 
@@ -36,7 +52,7 @@ class PlayerBuilder(init: (PlayerBuilder.() -> Unit) = {}) : AbstractBuilder<Cor
     fun bounty(): BountyPlayer {
         return BountyPlayer(
                 person = person(),
-                entries = (0..<entriesSize).asSequence().map { buyin ?: defaultBuyin }.toList(),
+                entries = (0..<entries).asSequence().map { buyin ?: defaultBuyin }.toList(),
         )
     }
 
@@ -49,7 +65,7 @@ class PlayerBuilder(init: (PlayerBuilder.() -> Unit) = {}) : AbstractBuilder<Cor
     fun cash(): CashPlayer {
         return CashPlayer(
                 person = person(),
-                entries = (0..<entriesSize).asSequence().map { buyin ?: defaultBuyin }.toList(),
+                entries = (0..<entries).asSequence().map { buyin ?: defaultBuyin }.toList(),
         )
     }
 
@@ -62,3 +78,12 @@ class PlayerBuilder(init: (PlayerBuilder.() -> Unit) = {}) : AbstractBuilder<Cor
 }
 
 fun player(init: (PlayerBuilder.() -> Unit) = {}) = PlayerBuilder(init)
+fun cashPlayer(init: (PlayerBuilder.() -> Unit) = {}) = PlayerBuilder(init).cash()
+fun tournamentPlayer(init: (PlayerBuilder.() -> Unit) = {}) = PlayerBuilder(init).tournament()
+fun bountyPlayer(init: (PlayerBuilder.() -> Unit) = {}) = PlayerBuilder(init).bounty()
+fun cashPlayers(size: Int, init: (PlayerBuilder.() -> Unit) = {}) = PlayerBuilder(init).cashBatch(size)
+fun tournamentPlayers(size: Int, init: (PlayerBuilder.() -> Unit) = {}) = PlayerBuilder(init).tournamentBatch(size)
+fun bountyPlayers(size: Int, init: (PlayerBuilder.() -> Unit) = {}) = PlayerBuilder(init).bountyBatch(size)
+
+infix operator fun <P : Player> P.plus(player: P): List<P> = listOf(this, player)
+infix operator fun <P : Player> P.plus(players: Collection<P>): List<P> = listOf(this) + players

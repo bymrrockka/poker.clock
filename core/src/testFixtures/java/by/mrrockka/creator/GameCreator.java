@@ -1,6 +1,7 @@
 package by.mrrockka.creator;
 
 import by.mrrockka.FakerProvider;
+import by.mrrockka.domain.GameType;
 import by.mrrockka.domain.bounty.Bounty;
 import by.mrrockka.domain.collection.PersonEntries;
 import by.mrrockka.domain.collection.PersonWithdrawals;
@@ -9,7 +10,6 @@ import by.mrrockka.domain.game.CashGame;
 import by.mrrockka.domain.game.TournamentGame;
 import by.mrrockka.domain.summary.finale.FinaleSummary;
 import by.mrrockka.repo.game.GameEntity;
-import by.mrrockka.domain.GameType;
 import com.github.javafaker.Faker;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -21,6 +21,7 @@ import java.util.function.Consumer;
 
 import static java.util.Objects.nonNull;
 
+@Deprecated
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class GameCreator {
 

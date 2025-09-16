@@ -13,6 +13,7 @@ import java.util.stream.IntStream;
 import static java.util.Objects.nonNull;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Deprecated
 public final class EntriesCreator {
 
   public static List<PersonEntries> entriesList(final int size, BigDecimal buyin) {

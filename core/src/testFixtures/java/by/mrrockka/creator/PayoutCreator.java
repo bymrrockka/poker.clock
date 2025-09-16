@@ -10,6 +10,7 @@ import java.util.function.Consumer;
 import static java.util.Objects.nonNull;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Deprecated
 public final class PayoutCreator {
 
   public static Payout payout() {

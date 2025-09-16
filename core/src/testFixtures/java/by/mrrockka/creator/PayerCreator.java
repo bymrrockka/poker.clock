@@ -10,6 +10,7 @@ import java.util.function.Consumer;
 import static java.util.Objects.nonNull;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Deprecated
 public final class PayerCreator {
 
   public static final BigDecimal DEBT_AMOUNT = BigDecimal.ONE;

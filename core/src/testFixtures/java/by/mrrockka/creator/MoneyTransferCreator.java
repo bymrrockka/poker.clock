@@ -13,6 +13,7 @@ import java.util.function.Consumer;
 import static java.util.Objects.nonNull;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Deprecated
 public final class MoneyTransferCreator {
 
   public static final UUID PERSON_ID = UUID.randomUUID();

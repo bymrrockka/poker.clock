@@ -30,6 +30,4 @@ class PersonBuilder(
     }
 }
 
-fun person(builder: PersonBuilder.() -> Unit = {}): BasicPerson {
-    return PersonBuilder(builder).build()
-}
+fun person(builder: PersonBuilder.() -> Unit = {}): BasicPerson = PersonBuilder(builder).build()
