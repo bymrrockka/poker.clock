@@ -1,39 +1,49 @@
-package by.mrrockka.extension;
+package by.mrrockka.extension
 
-import org.junit.jupiter.api.extension.AfterEachCallback;
-import org.junit.jupiter.api.extension.BeforeAllCallback;
-import org.junit.jupiter.api.extension.ExtensionContext;
+import by.mrrockka.extension.TestPSQLContainer.Companion.container
+import by.mrrockka.extension.TestPSQLContainer.Companion.dbName
+import by.mrrockka.extension.TestPSQLContainer.Companion.password
+import by.mrrockka.extension.TestPSQLContainer.Companion.username
+import by.mrrockka.extension.TestPSQLContainer.Companion.version
+import by.mrrockka.repo.BountyTable
+import by.mrrockka.repo.EntriesTable
+import by.mrrockka.repo.FinalePlacesTable
+import by.mrrockka.repo.GameTable
+import by.mrrockka.repo.PersonTable
+import by.mrrockka.repo.PrizePoolTable
+import by.mrrockka.repo.WithdrawalTable
+import org.jetbrains.exposed.sql.deleteAll
+import org.junit.jupiter.api.extension.AfterEachCallback
+import org.junit.jupiter.api.extension.BeforeAllCallback
+import org.junit.jupiter.api.extension.ExtensionContext
+import org.springframework.beans.factory.getBean
+import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.transaction.PlatformTransactionManager
+import org.springframework.transaction.support.TransactionTemplate
 
-import static by.mrrockka.extension.TestPSQLContainer.*;
+open class CorePSQLExtension : BeforeAllCallback, AfterEachCallback {
+    override fun beforeAll(context: ExtensionContext?) {
+        container.start()
+        System.setProperty("spring.datasource.url", "jdbc:tc:postgresql:$version:///%$dbName")
+        System.setProperty("spring.datasource.username", username)
+        System.setProperty("spring.datasource.password", password)
+    }
 
-//todo: refactor to use tables
-public class CorePSQLExtension implements BeforeAllCallback, AfterEachCallback {
-  @Override
-  public void beforeAll(final ExtensionContext context) {
-    container.start();
-    datasourceProperties();
-  }
+    override fun afterEach(context: ExtensionContext) {
+        context.transactionally {
+            BountyTable.deleteAll()
+            EntriesTable.deleteAll()
+            FinalePlacesTable.deleteAll()
+            GameTable.deleteAll()
+            PersonTable.deleteAll()
+            PrizePoolTable.deleteAll()
+            WithdrawalTable.deleteAll()
+//  todo          MoneyTransferTable.deleteAll()
+        }
+    }
 
-  private void datasourceProperties() {
-    System.setProperty("spring.datasource.url", "jdbc:tc:postgresql:%s:///%s".formatted(VERSION, DB_NAME));
-    System.setProperty("spring.datasource.username", container.getUsername());
-    System.setProperty("spring.datasource.password", container.getPassword());
-  }
-
-  @Override
-  public void afterEach(final ExtensionContext context) {
-//    todo: generate data for ITests instead of prepopulating throughout migration scripts
-//    final var jdbcTemplate = SpringExtension.getApplicationContext(context).getBean(NamedParameterJdbcTemplate.class);
-//    jdbcTemplate.execute("truncate bounty", PreparedStatement::execute);
-//    jdbcTemplate.execute("truncate entries", PreparedStatement::execute);
-//    jdbcTemplate.execute("truncate finale_places", PreparedStatement::execute);
-//    jdbcTemplate.execute("truncate game", PreparedStatement::execute);
-//    jdbcTemplate.execute("truncate money_transfer", PreparedStatement::execute);
-//    jdbcTemplate.execute("truncate person", PreparedStatement::execute);
-//    jdbcTemplate.execute("truncate poll_task", PreparedStatement::execute);
-//    jdbcTemplate.execute("truncate prize_pool", PreparedStatement::execute);
-//    jdbcTemplate.execute("truncate withdrawal", PreparedStatement::execute);
-  }
-
+    fun ExtensionContext.transactionally(block: () -> Unit) =
+            TransactionTemplate(SpringExtension.getApplicationContext(this).getBean<PlatformTransactionManager>())
+                    .executeWithoutResult { block() }
 
 }

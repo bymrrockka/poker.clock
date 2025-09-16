@@ -1,19 +1,17 @@
-package by.mrrockka.extension;
+package by.mrrockka.extension
 
-import org.junit.jupiter.api.extension.ExtensionContext;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import by.mrrockka.repo.ChatGameTable
+import by.mrrockka.repo.ChatPersonsTable
+import by.mrrockka.repo.PollTaskTable
+import org.jetbrains.exposed.sql.deleteAll
+import org.junit.jupiter.api.extension.ExtensionContext
 
-import java.sql.PreparedStatement;
-
-public class TelegramPSQLExtension extends CorePSQLExtension {
-
-  @Override
-  public void afterEach(final ExtensionContext context) {
-//    todo: generate data instead of migration scripts usage
-    final var jdbcTemplate = SpringExtension.getApplicationContext(context).getBean(NamedParameterJdbcTemplate.class);
-    jdbcTemplate.execute("truncate chat_persons", PreparedStatement::execute);
-    jdbcTemplate.execute("truncate chat_games", PreparedStatement::execute);
-    jdbcTemplate.execute("truncate poll_task", PreparedStatement::execute);
-  }
+class TelegramPSQLExtension : CorePSQLExtension() {
+    override fun afterEach(context: ExtensionContext) {
+        context.transactionally {
+            ChatPersonsTable.deleteAll()
+            ChatGameTable.deleteAll()
+            PollTaskTable.deleteAll()
+        }
+    }
 }

@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 group = "by.mrrockka"
-version = "1.4.3-SNAPSHOT"
+version = "1.5.0-SNAPSHOT"
 
 plugins {
     java
@@ -68,6 +68,7 @@ dependencies {
     testFixturesApi(libs.springBootTelegrambots)
     testFixturesImplementation(project)
     testFixturesImplementation(testFixtures(project(":core")))
+    testFixturesImplementation(libs.bundles.exposed)
     testFixturesImplementation(libs.wiremockContainer)
     testFixturesImplementation(libs.telegramBot)
 
@@ -75,8 +76,6 @@ dependencies {
     testFixturesAnnotationProcessor(libs.lombok)
     testFixturesAnnotationProcessor(libs.mapstructProcessor)
 }
-
-//todo: crop preview features after removing old repos with string block interpolation usage
 
 configurations.all {
     resolutionStrategy.eachDependency {
@@ -92,6 +91,7 @@ configurations.all {
     }
 }
 
+//todo: crop preview features after removing old repos with string block interpolation usage
 tasks {
     withType<JavaCompile>().configureEach {
         options.compilerArgs.addAll(

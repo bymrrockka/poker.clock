@@ -1,23 +1,21 @@
-package by.mrrockka.extension;
+package by.mrrockka.extension
 
-import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.containers.PostgreSQLContainer
 
-class TestPSQLContainer extends PostgreSQLContainer<TestPSQLContainer> {
+class TestPSQLContainer : PostgreSQLContainer<TestPSQLContainer?>() {
+    //  todo: found out that testcontainer creates two containers, one with default values another one with overriden - needs investigation
+    companion object {
+        const val version: String = "16.1"
+        const val imageAndVersion: String = "postgres:$version"
+        const val dbName: String = "pokerclock"
+        const val username = "itest"
+        const val password = "itest123"
 
-  //  todo: found out that testcontainer creates two containers, one with default values another one with overriden - needs investigation
-  public static final String VERSION = "16.1";
-  public static final String IMAGE_AND_VERSION = "postgres:%s".formatted(VERSION);
-  public static final String DB_NAME = "pokerclock";
-  private static final String USERNAME = "itest";
-  private static final String PASSWORD = "itest123";
+        val container: TestPSQLContainer = TestPSQLContainer()
+                .withDatabaseName(dbName)
+                ?.withUsername(username)
+                ?.withPassword(password)
+                ?: error("Can't start postgres container")
 
-  static final TestPSQLContainer container = new TestPSQLContainer()
-    .withDatabaseName(DB_NAME)
-    .withUsername(USERNAME)
-    .withPassword(PASSWORD);
-
-  TestPSQLContainer() {
-    super(IMAGE_AND_VERSION);
-  }
-
+    }
 }

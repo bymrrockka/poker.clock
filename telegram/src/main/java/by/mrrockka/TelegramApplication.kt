@@ -4,13 +4,11 @@ import org.jetbrains.exposed.spring.autoconfigure.ExposedAutoConfiguration
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.EnableAspectJAutoProxy
 import org.springframework.scheduling.annotation.EnableScheduling
 
 @EnableAspectJAutoProxy
 @EnableScheduling
-@ComponentScan("by.mrrockka", "org.telegram.telegrambots")
 @ImportAutoConfiguration(value = [ExposedAutoConfiguration::class])
 @SpringBootApplication
 open class TelegramApplication {
