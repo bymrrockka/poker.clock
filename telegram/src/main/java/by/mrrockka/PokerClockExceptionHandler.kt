@@ -9,7 +9,10 @@ object PokerClockExceptionHandler : ExceptionHandler {
     override suspend fun handle(exception: Throwable, update: ProcessedUpdate, bot: TelegramBot) {
         val chatid = update.origin.message?.chat?.id ?: error("Update chat id is missing")
 
-        sendMessage { exception.message ?: "Exception occurred during handling" }
-                .send(chatid, bot)
+        val message = when (exception) {
+            is IllegalStateException -> exception.message
+            else -> "Exception occurred during handling"
+        } ?: "Exception occurred during handling"
+        sendMessage { message }.send(chatid, bot)
     }
 }

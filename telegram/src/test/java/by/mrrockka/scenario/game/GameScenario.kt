@@ -36,7 +36,7 @@ abstract class GameScenario : AbstractScenarioTest() {
             message { calculate }
         } When {
             updatesReceived()
-        } ThenApprove (textApprover("should fail when prize pool is different size then finale places $size"))
+        } ThenApproveWith textApprover("should fail when prize pool is different size then finale places $size")
     }
 
     @ParameterizedTest
@@ -60,7 +60,7 @@ abstract class GameScenario : AbstractScenarioTest() {
             message { calculate }
         } When {
             updatesReceived()
-        } ThenApprove (textApprover("should fail when $missed is missed"))
+        } ThenApproveWith textApprover("should fail when $missed is missed")
     }
 
 
@@ -110,7 +110,7 @@ abstract class GameScenario : AbstractScenarioTest() {
             message { calculate }
         } When {
             updatesReceived()
-        } ThenApprove (textApprover("should fail when prize pool sum is not equal 100 percent. $fileName"))
+        } ThenApproveWith textApprover("should fail when prize pool sum is not equal 100 percent. $fileName")
     }
 
 }

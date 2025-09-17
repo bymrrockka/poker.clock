@@ -37,7 +37,7 @@ class CashGameScenario : AbstractScenarioTest() {
             message { calculate }
         } When {
             updatesReceived()
-        } ThenApprove (approver)
+        } ThenApproveWith approver
     }
 
     @Test
@@ -53,7 +53,7 @@ class CashGameScenario : AbstractScenarioTest() {
             message { calculate }
         } When {
             updatesReceived()
-        } ThenApprove (approver)
+        } ThenApproveWith approver
     }
 
     @Test
@@ -66,7 +66,7 @@ class CashGameScenario : AbstractScenarioTest() {
             message { calculate }
         } When {
             updatesReceived()
-        } ThenApprove (approver)
+        } ThenApproveWith approver
     }
 
     @Test
@@ -79,7 +79,7 @@ class CashGameScenario : AbstractScenarioTest() {
             message { players[0].withdrawal(40) }
         } When {
             updatesReceived()
-        } ThenApprove (approver)
+        } ThenApproveWith approver
     }
 
     @Test
@@ -92,6 +92,6 @@ class CashGameScenario : AbstractScenarioTest() {
             message { prizePool(1) }
         } When {
             updatesReceived()
-        } ThenApprove (approver)
+        } ThenApproveWith approver
     }
 }

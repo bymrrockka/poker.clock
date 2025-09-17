@@ -1,7 +1,7 @@
 ******************************
 -> Request
 /create_poll
-cron: 0 0 0 * * 3
+cron: 0 0 0 * * WED
 message: Test poll
 options: 
 1. Yes - participant
@@ -17,7 +17,11 @@ Will be triggered next WEDNESDAY
 ******************************
 -> Received
 Test poll
-1. 'Yes'                   
+1. 'Yes'
+2. 'Noooooo'
+3. 'Hell yeah 12123'
+4. ';.!@#$%^&*()(_+=<>.,/{}[]`~'
+5. 'I don't know'                   
 
 ******************************
 -> Request

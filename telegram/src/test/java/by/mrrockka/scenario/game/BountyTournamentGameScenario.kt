@@ -50,7 +50,7 @@ class BountyTournamentGameScenario : GameScenario() {
             message { calculate }
         } When {
             updatesReceived()
-        } ThenApprove (approver)
+        } ThenApproveWith approver
     }
 
 
@@ -74,7 +74,7 @@ class BountyTournamentGameScenario : GameScenario() {
             message { calculate }
         } When {
             updatesReceived()
-        } ThenApprove (approver)
+        } ThenApproveWith approver
     }
 
     @Test
@@ -88,7 +88,7 @@ class BountyTournamentGameScenario : GameScenario() {
             message { calculate }
         } When {
             updatesReceived()
-        } ThenApprove (approver)
+        } ThenApproveWith approver
     }
 
     @Test
@@ -102,7 +102,7 @@ class BountyTournamentGameScenario : GameScenario() {
             message { calculate }
         } When {
             updatesReceived()
-        } ThenApprove (approver)
+        } ThenApproveWith approver
     }
 
     @Test
@@ -116,7 +116,7 @@ class BountyTournamentGameScenario : GameScenario() {
             message { calculate }
         } When {
             updatesReceived()
-        } ThenApprove (approver)
+        } ThenApproveWith approver
     }
 
     @Test
@@ -131,7 +131,7 @@ class BountyTournamentGameScenario : GameScenario() {
             message { calculate }
         } When {
             updatesReceived()
-        } ThenApprove (approver)
+        } ThenApproveWith approver
     }
 
     @Test
@@ -146,6 +146,6 @@ class BountyTournamentGameScenario : GameScenario() {
             message { calculate }
         } When {
             updatesReceived()
-        } ThenApprove (approver)
+        } ThenApproveWith approver
     }
 }

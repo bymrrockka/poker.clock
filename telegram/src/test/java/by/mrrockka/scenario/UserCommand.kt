@@ -8,8 +8,8 @@ class UserCommand {
     companion object {
         val calculate = "/calculate"
         val gameStats = "/game_stats"
+        val playerStats = "/player_stats"
         val myStats = "/my_stats"
-        val globalStats = "/global_stats"
         val help = "/help"
         val cashGame = "/cash_game"
         val tournamentGame = "/tournament_game"

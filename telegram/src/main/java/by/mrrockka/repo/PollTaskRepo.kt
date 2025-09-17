@@ -21,11 +21,18 @@ import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
 
+interface PollTaskRepo {
+    fun upsert(task: PollTask)
+    fun batchUpsert(tasks: List<PollTask>)
+    fun selectActive(): List<PollTask>
+    fun finishPoll(messageId: Long, finishedAt: Instant): Int
+}
+
 @Repository
 @Transactional(propagation = Propagation.REQUIRED)
-open class PollTaskRepo {
+open class PollTaskRepoImpl : PollTaskRepo {
 
-    open fun upsert(task: PollTask) {
+    override fun upsert(task: PollTask) {
         PollTaskTable.upsert {
             it[id] = task.id
             it[chatId] = task.chatId
@@ -39,7 +46,7 @@ open class PollTaskRepo {
         }
     }
 
-    open fun batchUpsert(tasks: List<PollTask>) {
+    override fun batchUpsert(tasks: List<PollTask>) {
         PollTaskTable.batchInsert(tasks) { task ->
             this[id] = task.id
             this[chatId] = task.chatId
@@ -53,14 +60,14 @@ open class PollTaskRepo {
         }
     }
 
-    open fun finishPoll(messageId: Long, finishedAt: Instant): Int {
+    override fun finishPoll(messageId: Long, finishedAt: Instant): Int {
         return PollTaskTable
                 .update({ PollTaskTable.messageId eq messageId }) {
                     it[PollTaskTable.finishedAt] = finishedAt
                 }
     }
 
-    open fun selectActive(): List<PollTask> {
+    override fun selectActive(): List<PollTask> {
         return PollTaskTable.selectAll()
                 .where { finishedAt.isNull() }
                 .map { pollTask(it) }

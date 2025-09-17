@@ -1,39 +1,23 @@
-package by.mrrockka.service.statistics;
+package by.mrrockka.service.statistics
 
-import by.mrrockka.domain.statistics.StatisticsCommand;
-import by.mrrockka.response.builder.PlayerInGameStatisticsResponseBuilder;
-import by.mrrockka.service.GameTelegramService;
-import by.mrrockka.validation.mentions.PlayerHasNoNicknameException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import by.mrrockka.domain.MessageMetadata
+import by.mrrockka.domain.Player
+import by.mrrockka.service.GameTelegramService
+import org.springframework.stereotype.Component
 
-import java.util.Optional;
+interface PlayerStatisticsTelegramService {
+    fun statistics(metadata: MessageMetadata): Player
+}
 
 @Component
-@RequiredArgsConstructor
-class PlayerInGameStatisticsTelegramService {
+class PlayerStatisticsTelegramServiceImpl(
+        private val gameService: GameTelegramService,
+) : PlayerStatisticsTelegramService {
 
-  private final PlayerInGameStatisticsResponseBuilder playerInGameStatisticsResponseBuilder;
-  private final GameTelegramService gameTelegramService;
-  private final PlayerInGameStatisticsService playerInGameStatisticsService;
-
-  BotApiMethodMessage retrieveStatistics(final StatisticsCommand statisticsCommand) {
-    final var messageMetadata = statisticsCommand.metadata();
-    final var telegramGame = gameTelegramService
-      .findGame(messageMetadata);
-    final var game = telegramGame.getGame();
-    final var nickname = Optional.ofNullable(statisticsCommand.metadata().getFromNickname())
-      .orElseThrow(PlayerHasNoNicknameException::new);
-
-    final var playerInGameStatistics = playerInGameStatisticsService.retrieveStatistics(game, nickname);
-
-    return SendMessage.builder()
-      .chatId(messageMetadata.getChatId())
-      .text(playerInGameStatisticsResponseBuilder.response(playerInGameStatistics))
-      .replyToMessageId((int) telegramGame.getMessageMetadata().getId())
-      .build();
-  }
-
+    override fun statistics(metadata: MessageMetadata): Player {
+        check(metadata.from?.username != null) { "User might have username" }
+        val telegramGame = gameService.findGame(metadata)
+        return telegramGame.game.players.find { it.person.nickname == metadata.from.username }
+                ?: error("User ${metadata.from.username} hasn't enter the game")
+    }
 }

@@ -23,7 +23,7 @@ class StatisticsTelegramServiceTest {
   @Mock
   private PersonMentionsValidator personMentionsValidator;
   @Mock
-  private PlayerInGameStatisticsTelegramService playerInGameStatisticsTelegramService;
+  private PlayerStatisticsTelegramService playerInGameStatisticsTelegramService;
   @Mock
   private GlobalPersonStatisticsTelegramService globalPersonStatisticsTelegramService;
   @Mock
@@ -69,7 +69,7 @@ class StatisticsTelegramServiceTest {
       .build();
 
     when(statisticsMessageParser.map(metadata)).thenReturn(statisticsCommand);
-    when(playerInGameStatisticsTelegramService.retrieveStatistics(statisticsCommand)).thenReturn(expected);
+//    when(playerInGameStatisticsTelegramService.retrieveStatistics(statisticsCommand)).thenReturn(expected);
 
     assertThat(statisticsService.retrieveStatistics(metadata)).isEqualTo(expected);
     verify(personMentionsValidator, only()).validateMessageHasNoUserTextMention(metadata);

@@ -1,0 +1,16 @@
+******************************
+-> Request
+/tournament_game
+buyin: 10
+
+@nickname2, @nickname1
+
+-> Response
+Tournament game started.                   
+
+******************************
+-> Request
+/player_stats
+
+-> Response
+User hong_beer hasn't enter the game

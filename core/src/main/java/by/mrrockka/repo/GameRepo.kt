@@ -11,6 +11,7 @@ import by.mrrockka.domain.TournamentPlayer
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.upsert
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
@@ -42,7 +43,7 @@ open class GameRepoImpl(
     }
 
     override fun update(game: Game) {
-        GameTable.insert {
+        GameTable.upsert {
             it[id] = game.id
             it[gameType] = game.toType()
             it[buyIn] = game.buyIn

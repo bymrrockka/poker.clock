@@ -35,10 +35,10 @@ fun Player.total(): BigDecimal = let {
     when (val player = this) {
         is CashPlayer -> player.withdrawals.total() - player.entries.total()
         is TournamentPlayer -> -player.entries.total()
-        is BountyPlayer -> {
-            val (taken, given) = player.takenToGiven()
-            taken.total() - given.total() - player.entries.total()
-        }
+        is BountyPlayer -> player.takenToGiven()
+                .let { (taken, given) ->
+                    taken.total() - given.total() - player.entries.total()
+                }
 
         else -> error("Unknown player type")
     }

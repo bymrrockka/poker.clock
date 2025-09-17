@@ -1,0 +1,111 @@
+******************************
+-> Request
+/bounty_game
+buyin: 10
+bounty: 10
+@me, @nickname1
+
+-> Response
+Bounty tournament game started.                   
+
+******************************
+-> Request
+/player_stats
+
+-> Response
+@hong_beer game statistics:
+entries: 10.00
+entries number: 1
+bounties:
+  taken: 0
+  given: 0
+game total: -10.00                   
+
+******************************
+-> Request
+/bounty @me kicked @nickname1
+
+-> Response
+Bounty amount 10.00 from @nickname1 stored for @hong_beer                   
+
+******************************
+-> Request
+/player_stats
+
+-> Response
+@hong_beer game statistics:
+entries: 10.00
+entries number: 1
+bounties:
+  taken: 1
+  given: 0
+game total: 0.00                   
+
+******************************
+-> Request
+/entry @nickname1 
+
+-> Response
+Stored entries: 
+  - @nickname1 -> 10                   
+
+******************************
+-> Request
+/bounty @nickname1 kicked @me
+
+-> Response
+Bounty amount 10.00 from @hong_beer stored for @nickname1                   
+
+******************************
+-> Request
+/player_stats
+
+-> Response
+@hong_beer game statistics:
+entries: 10.00
+entries number: 1
+bounties:
+  taken: 1
+  given: 1
+game total: -10.00                   
+
+******************************
+-> Request
+/entry @me 
+
+-> Response
+Stored entries: 
+  - @hong_beer -> 10                   
+
+******************************
+-> Request
+/player_stats
+
+-> Response
+@hong_beer game statistics:
+entries: 20.00
+entries number: 2
+bounties:
+  taken: 1
+  given: 1
+game total: -20.00                   
+
+******************************
+-> Request
+/bounty @nickname1 kicked @me
+
+-> Response
+Bounty amount 10.00 from @hong_beer stored for @nickname1                   
+
+******************************
+-> Request
+/player_stats
+
+-> Response
+@hong_beer game statistics:
+entries: 20.00
+entries number: 2
+bounties:
+  taken: 1
+  given: 2
+game total: -30.00

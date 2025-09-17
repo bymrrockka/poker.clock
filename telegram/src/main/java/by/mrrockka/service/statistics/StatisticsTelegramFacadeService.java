@@ -15,7 +15,7 @@ public class StatisticsTelegramFacadeService {
 
   private final StatisticsMessageParser statisticsMessageParser;
   private final PersonMentionsValidator personMentionsValidator;
-  private final PlayerInGameStatisticsTelegramService playerInGameStatisticsTelegramService;
+  private final PlayerStatisticsTelegramService playerInGameStatisticsTelegramService;
   private final GlobalPersonStatisticsTelegramService globalPersonStatisticsTelegramService;
   private final GameStatisticsTelegramService gameStatisticsTelegramService;
 
@@ -24,8 +24,9 @@ public class StatisticsTelegramFacadeService {
     final var statistics = statisticsMessageParser.map(messageMetadata);
     return switch (statistics.type()) {
       case GAME -> gameStatisticsTelegramService.retrieveStatistics(statistics);
-      case PLAYER_IN_GAME -> playerInGameStatisticsTelegramService.retrieveStatistics(statistics);
+//      case PLAYER_IN_GAME -> playerInGameStatisticsTelegramService.retrieveStatistics(statistics);
       case PERSON_GLOBAL -> globalPersonStatisticsTelegramService.retrieveStatistics(statistics);
+      default -> throw new RuntimeException("asdasd");
     };
   }
 

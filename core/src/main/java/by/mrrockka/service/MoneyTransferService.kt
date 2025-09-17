@@ -34,7 +34,7 @@ open class MoneyTransferService(
 
     fun getForPerson(person: Person): MutableList<MoneyTransfer> {
         return moneyTransferRepository.getForPerson(person.id).stream()
-                .map<MoneyTransfer?> { moneyTransferMapper.map(it) }
+                .map { moneyTransferMapper.map(it) }
                 .toList()
     }
 

@@ -14,7 +14,7 @@ class HelpScenario : AbstractScenarioTest() {
             message { help() }
         } When {
             updatesReceived()
-        } ThenApprove (approver)
+        } ThenApproveWith approver
     }
 
     @Test
@@ -23,7 +23,7 @@ class HelpScenario : AbstractScenarioTest() {
             message { help("tournament_game") }
         } When {
             updatesReceived()
-        } ThenApprove (approver)
+        } ThenApproveWith approver
     }
 
     @Test
@@ -32,6 +32,6 @@ class HelpScenario : AbstractScenarioTest() {
             message { help("pp") }
         } When {
             updatesReceived()
-        } ThenApprove (approver)
+        } ThenApproveWith approver
     }
 }

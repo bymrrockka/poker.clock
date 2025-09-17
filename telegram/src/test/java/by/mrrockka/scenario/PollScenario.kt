@@ -13,17 +13,20 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import kotlin.time.Duration.Companion.days
 import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 @OptIn(ExperimentalTime::class)
 class PollScenario : AbstractScenarioTest() {
 
     @Test
     fun `create and stop poll should send message`(approver: Approver) {
+        val time = Instant.parse("2025-09-16T12:34:56Z") //Tuesday
+        clock.set(time)
         Given {
             message {
                 """
                 |${createPoll}
-                |cron: 0 0 0 * * 3
+                |cron: 0 0 0 * * WED
                 |message: Test poll
                 |options: 
                 |1. Yes - participant
@@ -33,12 +36,12 @@ class PollScenario : AbstractScenarioTest() {
                 |5. I don't know
                 """.trimMargin()
             }
-            clock.set(clock.now() + 8.days)
+            clock.set(time + 1.days)
             pollPosted()
             message(replyTo = createPoll) { stopPoll }
         } When {
             updatesReceived()
-        } ThenApprove (approver)
+        } ThenApproveWith approver
     }
 
     @ParameterizedTest
@@ -56,7 +59,7 @@ class PollScenario : AbstractScenarioTest() {
             }
         } When {
             updatesReceived()
-        } ThenApprove (textApprover("fail when doesn't have required fields, field set ${if (actual.isNotBlank()) actual else "empty"}"))
+        } ThenApproveWith (textApprover("fail when doesn't have required fields, field set ${if (actual.isNotBlank()) actual else "empty"}"))
     }
 
     @ParameterizedTest
@@ -76,7 +79,7 @@ class PollScenario : AbstractScenarioTest() {
             message(replyTo = command) { stopPoll }
         } When {
             updatesReceived()
-        } ThenApprove (textApprover("stop poll fail when ${if (command.isNotBlank()) "wrong" else "no"} reply message specified"))
+        } ThenApproveWith textApprover("stop poll fail when ${if (command.isNotBlank()) "wrong" else "no"} reply message specified")
     }
 
 }

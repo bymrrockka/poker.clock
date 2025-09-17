@@ -39,7 +39,7 @@ class TournamentGameScenario : GameScenario() {
             message { calculate }
         } When {
             updatesReceived()
-        } ThenApprove (approver)
+        } ThenApproveWith approver
     }
 
 
@@ -58,7 +58,7 @@ class TournamentGameScenario : GameScenario() {
             message { calculate }
         } When {
             updatesReceived()
-        } ThenApprove (approver)
+        } ThenApproveWith approver
     }
 
     override fun gameType(): GameType = GameType.TOURNAMENT

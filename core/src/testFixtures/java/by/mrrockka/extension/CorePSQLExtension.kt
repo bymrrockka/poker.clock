@@ -8,18 +8,13 @@ import by.mrrockka.extension.TestPSQLContainer.Companion.version
 import by.mrrockka.repo.BountyTable
 import by.mrrockka.repo.EntriesTable
 import by.mrrockka.repo.FinalePlacesTable
-import by.mrrockka.repo.GameTable
-import by.mrrockka.repo.PersonTable
 import by.mrrockka.repo.PrizePoolTable
 import by.mrrockka.repo.WithdrawalTable
 import org.jetbrains.exposed.sql.deleteAll
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.jupiter.api.extension.AfterEachCallback
 import org.junit.jupiter.api.extension.BeforeAllCallback
 import org.junit.jupiter.api.extension.ExtensionContext
-import org.springframework.beans.factory.getBean
-import org.springframework.test.context.junit.jupiter.SpringExtension
-import org.springframework.transaction.PlatformTransactionManager
-import org.springframework.transaction.support.TransactionTemplate
 
 open class CorePSQLExtension : BeforeAllCallback, AfterEachCallback {
     override fun beforeAll(context: ExtensionContext?) {
@@ -30,20 +25,18 @@ open class CorePSQLExtension : BeforeAllCallback, AfterEachCallback {
     }
 
     override fun afterEach(context: ExtensionContext) {
-        context.transactionally {
-            BountyTable.deleteAll()
-            EntriesTable.deleteAll()
-            FinalePlacesTable.deleteAll()
-            GameTable.deleteAll()
-            PersonTable.deleteAll()
-            PrizePoolTable.deleteAll()
-            WithdrawalTable.deleteAll()
-//  todo          MoneyTransferTable.deleteAll()
-        }
+        transaction{ cleanCoreTable() }
     }
 
-    fun ExtensionContext.transactionally(block: () -> Unit) =
-            TransactionTemplate(SpringExtension.getApplicationContext(this).getBean<PlatformTransactionManager>())
-                    .executeWithoutResult { block() }
+    protected fun cleanCoreTable() {
+//  todo          MoneyTransferTable.deleteAll()
+        BountyTable.deleteAll()
+        EntriesTable.deleteAll()
+        WithdrawalTable.deleteAll()
+        PrizePoolTable.deleteAll()
+        FinalePlacesTable.deleteAll()
+//        PersonTable.deleteAll()
+//        GameTable.deleteAll()
+    }
 
 }

@@ -168,7 +168,7 @@ abstract class AbstractScenarioTest {
         }
     }
 
-    infix fun WhenSpecification.ThenApprove(approver: Approver) {
+    infix fun WhenSpecification.ThenApproveWith(approver: Approver) {
         await.atMost(Duration.ofSeconds(2))
                 .until {
                     val stubs = wireMock.serveEvents
