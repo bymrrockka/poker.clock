@@ -1,0 +1,37 @@
+******************************
+-> Request
+/tournament_game
+buyin: 10
+
+@me, @nickname1
+
+-> Response
+Tournament game started.                   
+
+******************************
+-> Request
+/game_stats
+
+-> Response
+Tournament game statistics:
+  - players entered -> 2
+  - number of entries -> 2
+  - total in game -> 20.00                   
+
+******************************
+-> Request
+/entry @me 
+
+-> Response
+Stored entries: 
+  - @hong_beer -> 10                   
+
+******************************
+-> Request
+/game_stats
+
+-> Response
+Tournament game statistics:
+  - players entered -> 2
+  - number of entries -> 3
+  - total in game -> 30.00

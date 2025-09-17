@@ -1,4 +1,4 @@
-package by.mrrockka.scenario.config
+package by.mrrockka.scenario
 
 import by.mrrockka.PokerClockExceptionHandler
 import by.mrrockka.bot.TelegramBotsProperties
@@ -45,6 +45,7 @@ open class TestBotConfig(
 
     @Bean
     @Primary
+    @Deprecated("Removed with old framework")
     open fun testBotOptions(): DefaultBotOptions {
         val botOptions = PokerClockBotOptions(
                 updateTypes = listOf(

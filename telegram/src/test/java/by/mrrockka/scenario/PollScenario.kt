@@ -4,9 +4,9 @@ import by.mrrockka.Given
 import by.mrrockka.When
 import by.mrrockka.domain.GameType
 import by.mrrockka.extension.textApprover
-import by.mrrockka.scenario.UserCommand.Companion.createGame
-import by.mrrockka.scenario.UserCommand.Companion.createPoll
-import by.mrrockka.scenario.UserCommand.Companion.stopPoll
+import by.mrrockka.scenario.Commands.Companion.createGame
+import by.mrrockka.scenario.Commands.Companion.createPoll
+import by.mrrockka.scenario.Commands.Companion.stopPoll
 import com.oneeyedmen.okeydoke.Approver
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest

@@ -16,6 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@Deprecated
 class StatisticsTelegramServiceTest {
 
   @Mock
@@ -46,7 +47,7 @@ class StatisticsTelegramServiceTest {
       .build();
 
     when(statisticsMessageParser.map(metadata)).thenReturn(statisticsCommand);
-    when(gameStatisticsTelegramService.retrieveStatistics(statisticsCommand)).thenReturn(expected);
+//    when(gameStatisticsTelegramService.retrieveStatistics(statisticsCommand)).thenReturn(expected);
 
     assertThat(statisticsService.retrieveStatistics(metadata)).isEqualTo(expected);
     verify(personMentionsValidator, only()).validateMessageHasNoUserTextMention(metadata);

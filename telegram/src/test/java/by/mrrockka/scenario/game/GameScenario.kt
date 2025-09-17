@@ -5,10 +5,10 @@ import by.mrrockka.When
 import by.mrrockka.domain.GameType
 import by.mrrockka.extension.textApprover
 import by.mrrockka.scenario.AbstractScenarioTest
-import by.mrrockka.scenario.UserCommand.Companion.calculate
-import by.mrrockka.scenario.UserCommand.Companion.createGame
-import by.mrrockka.scenario.UserCommand.Companion.finalePlaces
-import by.mrrockka.scenario.UserCommand.Companion.prizePool
+import by.mrrockka.scenario.Commands.Companion.calculate
+import by.mrrockka.scenario.Commands.Companion.createGame
+import by.mrrockka.scenario.Commands.Companion.finalePlaces
+import by.mrrockka.scenario.Commands.Companion.prizePool
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 

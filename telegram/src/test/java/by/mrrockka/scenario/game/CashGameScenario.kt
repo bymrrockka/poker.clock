@@ -4,11 +4,11 @@ import by.mrrockka.Given
 import by.mrrockka.When
 import by.mrrockka.domain.GameType
 import by.mrrockka.scenario.AbstractScenarioTest
-import by.mrrockka.scenario.UserCommand.Companion.calculate
-import by.mrrockka.scenario.UserCommand.Companion.createGame
-import by.mrrockka.scenario.UserCommand.Companion.entry
-import by.mrrockka.scenario.UserCommand.Companion.prizePool
-import by.mrrockka.scenario.UserCommand.Companion.withdrawal
+import by.mrrockka.scenario.Commands.Companion.calculate
+import by.mrrockka.scenario.Commands.Companion.createGame
+import by.mrrockka.scenario.Commands.Companion.entry
+import by.mrrockka.scenario.Commands.Companion.prizePool
+import by.mrrockka.scenario.Commands.Companion.withdrawal
 import com.oneeyedmen.okeydoke.Approver
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal

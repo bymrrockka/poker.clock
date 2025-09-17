@@ -2,7 +2,7 @@ package by.mrrockka.scenario
 
 import by.mrrockka.Given
 import by.mrrockka.When
-import by.mrrockka.scenario.UserCommand.Companion.help
+import by.mrrockka.scenario.Commands.Companion.help
 import com.oneeyedmen.okeydoke.Approver
 import org.junit.jupiter.api.Test
 

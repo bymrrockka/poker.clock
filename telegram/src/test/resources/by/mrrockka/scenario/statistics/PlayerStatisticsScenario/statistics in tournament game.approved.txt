@@ -15,8 +15,7 @@ Tournament game started.
 -> Response
 @hong_beer game statistics:
 entries: 10.00
-entries number: 1
-                   
+entries number: 1                   
 
 ******************************
 -> Request

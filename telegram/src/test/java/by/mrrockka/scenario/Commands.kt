@@ -4,7 +4,7 @@ import by.mrrockka.domain.GameType
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class UserCommand {
+class Commands private constructor() {
     companion object {
         val calculate = "/calculate"
         val gameStats = "/game_stats"

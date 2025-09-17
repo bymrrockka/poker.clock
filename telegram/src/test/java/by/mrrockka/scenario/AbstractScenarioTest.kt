@@ -12,8 +12,6 @@ import by.mrrockka.extension.TelegramWiremockContainer
 import by.mrrockka.extension.TelegramWiremockExtension
 import by.mrrockka.extension.TextApproverExtension
 import by.mrrockka.reset
-import by.mrrockka.scenario.config.TestBotConfig
-import by.mrrockka.scenario.config.TestClock
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.tomakehurst.wiremock.client.WireMock

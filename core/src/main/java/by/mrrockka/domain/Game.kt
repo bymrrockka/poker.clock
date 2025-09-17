@@ -66,9 +66,9 @@ fun Game.toSummary(): List<PrizeSummary> {
 }
 
 fun Game.moneyInGame(): BigDecimal =
-        when (val game = this) {
-            is CashGame -> game.players.totalEntries() - game.players.totalWithdrawals()
-            is BountyTournamentGame -> game.players.flatMap { it.entries }.total() + (game.players.sumOf { it.entries.size }.toBigDecimal() * game.bounty)
-            is TournamentGame -> game.players.flatMap { it.entries }.total()
+        when (this) {
+            is CashGame -> players.totalEntries() - players.totalWithdrawals()
+            is BountyTournamentGame -> players.totalEntries() + (players.sumOf { it.entries.size }.toBigDecimal() * bounty)
+            is TournamentGame -> players.totalEntries()
             else -> error("Unknown game")
         }

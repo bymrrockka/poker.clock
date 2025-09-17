@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMess
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Deprecated
 public class StatisticsTelegramFacadeService {
 
   private final StatisticsMessageParser statisticsMessageParser;
@@ -23,7 +24,7 @@ public class StatisticsTelegramFacadeService {
     personMentionsValidator.validateMessageHasNoUserTextMention(messageMetadata);
     final var statistics = statisticsMessageParser.map(messageMetadata);
     return switch (statistics.type()) {
-      case GAME -> gameStatisticsTelegramService.retrieveStatistics(statistics);
+//      case GAME -> gameStatisticsTelegramService.retrieveStatistics(statistics);
 //      case PLAYER_IN_GAME -> playerInGameStatisticsTelegramService.retrieveStatistics(statistics);
       case PERSON_GLOBAL -> globalPersonStatisticsTelegramService.retrieveStatistics(statistics);
       default -> throw new RuntimeException("asdasd");
