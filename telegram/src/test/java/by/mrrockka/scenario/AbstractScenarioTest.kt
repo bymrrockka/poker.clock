@@ -2,9 +2,9 @@ package by.mrrockka.scenario
 
 import by.mrrockka.Command
 import by.mrrockka.GivenSpecification
+import by.mrrockka.TelegramBotsProperties
 import by.mrrockka.TelegramRandoms.Companion.telegramRandoms
 import by.mrrockka.WhenSpecification
-import by.mrrockka.bot.TelegramBotsProperties
 import by.mrrockka.builder.update
 import by.mrrockka.builder.user
 import by.mrrockka.extension.TelegramPSQLExtension

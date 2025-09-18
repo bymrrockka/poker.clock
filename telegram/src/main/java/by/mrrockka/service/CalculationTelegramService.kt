@@ -22,10 +22,9 @@ open class CalculationTelegramServiceImpl(
 ) : CalculationTelegramService {
 
     override fun calculate(messageMetadata: MessageMetadata): List<Payout> {
-        val telegramGame = gameService.findGame(messageMetadata)
-        telegramGame.game.validateGame()
-
-        val payouts = calculationService.calculateAndSave(telegramGame.game)
+        val game = gameService.findGame(messageMetadata)
+        game.validateGame()
+        val payouts = calculationService.calculate(game)
         check(payouts.isNotEmpty()) { "Payouts are not calculated." }
 
         return payouts

@@ -22,17 +22,16 @@ class BountyTelegramServiceImpl(
     override fun store(metadata: MessageMetadata): Bounty {
         metadata.checkMentions()
         val (from, to) = bountyMessageParser.parse(metadata)
-        val telegramGame = gameService.findGame(metadata)
-        check(telegramGame.game is BountyTournamentGame) { "Bounties can be submitted only for Bounty tournament" }
+        val game = gameService.findGame(metadata)
+        check(game is BountyTournamentGame) { "Bounties can be submitted only for Bounty tournament" }
+        validate(game, from, to)
 
-        validate(telegramGame.game, from, to)
-
-        val players = telegramGame.game.players.associateBy { it.person.nickname }
+        val players = game.players.associateBy { it.person.nickname }
         val fromPlayer = players[from]!!
         val toPlayer = players[to]!!
 
-        val bounty = Bounty(from = fromPlayer.person, to = toPlayer.person, amount = telegramGame.game.bounty)
-        bountyRepo.store(telegramGame.game.id, bounty, metadata.createdAt)
+        val bounty = Bounty(from = fromPlayer.person, to = toPlayer.person, amount = game.bounty)
+        bountyRepo.store(game.id, bounty, metadata.createdAt)
 
         return bounty
     }

@@ -5,7 +5,6 @@ import by.mrrockka.domain.Task
 import by.mrrockka.service.PollEvent
 import by.mrrockka.service.PollTelegramService
 import eu.vendeli.tgbot.TelegramBot
-import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import kotlinx.coroutines.runBlocking
 import org.springframework.context.event.EventListener
@@ -27,9 +26,12 @@ class TelegramTaskExecutor(
     @Volatile
     private var tasks: MutableMap<UUID, Task> = mutableMapOf()
 
-    @PostConstruct
     fun init() {
-        tasks = taskTelegramService.selectActive().asMap()
+        if (tasks.isEmpty()) {
+            synchronized(tasks) {
+                tasks = taskTelegramService.selectActive().asMap()
+            }
+        }
     }
 
     @PreDestroy
@@ -41,6 +43,7 @@ class TelegramTaskExecutor(
 
     @Scheduled(cron = "\${bot.scheduler.cron}")
     fun execute() {
+        init()
         val now = clock.now().toJavaInstant()
         synchronized(tasks) {
             tasks.toExecute(now)

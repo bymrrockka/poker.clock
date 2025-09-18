@@ -16,7 +16,7 @@ class GameStatisticsTelegramService(
         private val gameService: GameTelegramService,
 ) : StatisticsService {
     override fun statistics(metadata: MessageMetadata): String {
-        return gameService.findGame(metadata).game.toMessage()
+        return gameService.findGame(metadata).toMessage()
     }
 }
 

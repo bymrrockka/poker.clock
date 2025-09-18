@@ -11,7 +11,8 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 interface TelegramPersonService {
-    fun findByMessage(messageMetadata: MessageMetadata): List<Person>
+    fun findByMessage(metadata: MessageMetadata): List<Person>
+    fun findByFrom(metadata: MessageMetadata): Person
 }
 
 @Component
@@ -21,20 +22,28 @@ open class TelegramPersonServiceImpl(
         private val chatPersonsRepo: ChatPersonsRepo,
 ) : TelegramPersonService {
 
-    override fun findByMessage(messageMetadata: MessageMetadata): List<Person> {
-        val nicknames = messageMetadata.mentions.map { it.text }
+    override fun findByMessage(metadata: MessageMetadata): List<Person> {
+        val nicknames = metadata.mentions.map { it.text }
         val persons = personRepo.findByNicknames(nicknames)
         val newPersons = nicknames.newNicknames(persons)
                 .let { nicknames ->
                     val newPersons = nicknames.map { nickname -> BasicPerson(nickname = nickname, id = UUID.randomUUID()) }
-                    personRepo.upsertBatch(newPersons)
+                    personRepo.store(newPersons)
                     newPersons
                 }
 
         val allPersons = persons + newPersons
-        chatPersonsRepo.insertBatch(allPersons.map { it.id }, messageMetadata.chatId)
+        chatPersonsRepo.store(allPersons.map { it.id }, metadata.chatId)
 
         return allPersons
+    }
+
+    override fun findByFrom(metadata: MessageMetadata): Person {
+        check(metadata.from?.username != null) { "User must have nickname to execute command" }
+        val person = personRepo.findByNicknames(listOf(metadata.from.username!!)).firstOrNull()
+        check(person != null) { "Person does not found" }
+        check(chatPersonsRepo.personChats(person.id).contains(metadata.chatId)) { "Person in not found in this chat" }
+        return person
     }
 
     private fun List<String>.newNicknames(existing: List<Person>): List<String> {

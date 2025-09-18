@@ -22,17 +22,17 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
 
 interface PollTaskRepo {
-    fun upsert(task: PollTask)
-    fun batchUpsert(tasks: List<PollTask>)
+    fun store(task: PollTask)
+    fun store(tasks: List<PollTask>)
     fun selectActive(): List<PollTask>
-    fun finishPoll(messageId: Long, finishedAt: Instant): Int
+    fun finish(messageId: Long, finishedAt: Instant): Int
 }
 
 @Repository
 @Transactional(propagation = Propagation.REQUIRED)
 open class PollTaskRepoImpl : PollTaskRepo {
 
-    override fun upsert(task: PollTask) {
+    override fun store(task: PollTask) {
         PollTaskTable.upsert {
             it[id] = task.id
             it[chatId] = task.chatId
@@ -46,7 +46,7 @@ open class PollTaskRepoImpl : PollTaskRepo {
         }
     }
 
-    override fun batchUpsert(tasks: List<PollTask>) {
+    override fun store(tasks: List<PollTask>) {
         PollTaskTable.batchInsert(tasks) { task ->
             this[id] = task.id
             this[chatId] = task.chatId
@@ -60,7 +60,7 @@ open class PollTaskRepoImpl : PollTaskRepo {
         }
     }
 
-    override fun finishPoll(messageId: Long, finishedAt: Instant): Int {
+    override fun finish(messageId: Long, finishedAt: Instant): Int {
         return PollTaskTable
                 .update({ PollTaskTable.messageId eq messageId }) {
                     it[PollTaskTable.finishedAt] = finishedAt
@@ -70,18 +70,18 @@ open class PollTaskRepoImpl : PollTaskRepo {
     override fun selectActive(): List<PollTask> {
         return PollTaskTable.selectAll()
                 .where { finishedAt.isNull() }
-                .map { pollTask(it) }
+                .map { it.toPollTask() }
     }
 
-    private fun pollTask(it: ResultRow) = PollTask(
-            id = it[id],
-            chatId = it[chatId],
-            messageId = it[messageId],
-            cron = CronExpression.parse(it[cron]),
-            createdAt = it[createdAt],
-            updatedAt = it[updatedAt],
-            finishedAt = it[finishedAt],
-            message = it[message],
-            options = it[options].toList(),
+    private fun ResultRow.toPollTask() = PollTask(
+            id = this[id],
+            chatId = this[chatId],
+            messageId = this[messageId],
+            cron = CronExpression.parse(this[cron]),
+            createdAt = this[createdAt],
+            updatedAt = this[updatedAt],
+            finishedAt = this[finishedAt],
+            message = this[message],
+            options = this[options].toList(),
     )
 }

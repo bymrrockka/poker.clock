@@ -22,10 +22,10 @@ class EntryTelegramServiceImpl(
         metadata.checkMentions()
         //todo: add ability to entry without nickname or @me and decline command handler
         val (nicknames, amount) = entryMessageParser.parse(metadata)
-        val telegramGame = gameTelegramService.findGame(metadata)
+        val game = gameTelegramService.findGame(metadata)
         val personIds = telegramPersonService.findByMessage(metadata).map { it.id }
-        entriesRepo.insertBatch(personIds, (amount ?: telegramGame.game.buyIn), telegramGame.game, metadata.createdAt)
+        entriesRepo.store(personIds, (amount ?: game.buyIn), game, metadata.createdAt)
 
-        return nicknames to (amount ?: telegramGame.game.buyIn)
+        return nicknames to (amount ?: game.buyIn)
     }
 }

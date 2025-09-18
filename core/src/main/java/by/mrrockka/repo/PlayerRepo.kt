@@ -5,6 +5,7 @@ import by.mrrockka.domain.CashPlayer
 import by.mrrockka.domain.Player
 import by.mrrockka.domain.TournamentPlayer
 import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 import kotlin.reflect.KClass
@@ -14,7 +15,7 @@ interface PlayerRepo {
 }
 
 @Repository
-@Transactional
+@Transactional(propagation = Propagation.REQUIRED)
 open class PlayerRepoImpl(
         val personRepo: PersonRepo,
         val entriesRepo: EntriesRepo,
@@ -23,7 +24,7 @@ open class PlayerRepoImpl(
 ) : PlayerRepo {
 
     override fun <T : Player> findPlayers(gameId: UUID, clazz: KClass<T>): List<T> {
-        val personEntries = entriesRepo.findGameEntries(gameId)
+        val personEntries = entriesRepo.findByGame(gameId)
 
         return personRepo.findByIds(personEntries.keys).map { person ->
             val entries = personEntries[person.id] ?: error("No entries found for ${person.nickname}")

@@ -10,9 +10,7 @@ import org.springframework.stereotype.Component
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalTime::class)
 @Component
 class GameMessageParser : MessageParser<Game> {
     private val amountRegex = "(?<amount>[.\\d]+)(?<multiplier>[A-z]{0,1})"

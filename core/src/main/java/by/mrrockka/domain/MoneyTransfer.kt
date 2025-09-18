@@ -1,21 +1,15 @@
-package by.mrrockka.domain;
+package by.mrrockka.domain
 
-import by.mrrockka.domain.payout.TransferType;
-import lombok.Builder;
-import lombok.NonNull;
+import java.math.BigDecimal
+import java.util.*
 
-import java.math.BigDecimal;
-import java.util.UUID;
+data class MoneyTransfer(
+        val personId: UUID,
+        val gameId: UUID,
+        val amount: BigDecimal,
+        val type: TransferType,
+)
 
-@Builder
-public record MoneyTransfer(
-  @NonNull
-  UUID personId,
-  @NonNull
-  UUID gameId,
-  @NonNull
-  BigDecimal amount,
-  @NonNull
-  TransferType type
-) {
+enum class TransferType {
+    DEBIT, CREDIT, EQUAL
 }

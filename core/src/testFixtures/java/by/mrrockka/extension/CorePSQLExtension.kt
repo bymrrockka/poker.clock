@@ -8,6 +8,9 @@ import by.mrrockka.extension.TestPSQLContainer.Companion.version
 import by.mrrockka.repo.BountyTable
 import by.mrrockka.repo.EntriesTable
 import by.mrrockka.repo.FinalePlacesTable
+import by.mrrockka.repo.GameTable
+import by.mrrockka.repo.MoneyTransferTable
+import by.mrrockka.repo.PersonTable
 import by.mrrockka.repo.PrizePoolTable
 import by.mrrockka.repo.WithdrawalTable
 import org.jetbrains.exposed.sql.deleteAll
@@ -25,18 +28,18 @@ open class CorePSQLExtension : BeforeAllCallback, AfterEachCallback {
     }
 
     override fun afterEach(context: ExtensionContext) {
-        transaction{ cleanCoreTable() }
+        transaction { cleanCoreTable() }
     }
 
     protected fun cleanCoreTable() {
-//  todo          MoneyTransferTable.deleteAll()
+        MoneyTransferTable.deleteAll()
         BountyTable.deleteAll()
         EntriesTable.deleteAll()
         WithdrawalTable.deleteAll()
         PrizePoolTable.deleteAll()
         FinalePlacesTable.deleteAll()
-//        PersonTable.deleteAll()
-//        GameTable.deleteAll()
+        PersonTable.deleteAll()
+        GameTable.deleteAll()
     }
 
 }

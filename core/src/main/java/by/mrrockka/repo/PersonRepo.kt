@@ -18,7 +18,7 @@ interface PersonRepo {
     fun findById(id: UUID): Person?
     fun findByIds(ids: Set<UUID>): List<Person>
     fun findByNicknames(nicknames: List<String>): List<Person>
-    fun upsertBatch(persons: List<Person>)
+    fun store(persons: List<Person>)
 }
 
 @Repository
@@ -53,7 +53,7 @@ open class PersonRepoImpl : PersonRepo {
                 .map { it.toPerson() }
     }
 
-    override fun upsertBatch(persons: List<Person>) {
+    override fun store(persons: List<Person>) {
         PersonTable.batchUpsert(persons) { person ->
             this[id] = person.id
             this[firstName] = person.firstname

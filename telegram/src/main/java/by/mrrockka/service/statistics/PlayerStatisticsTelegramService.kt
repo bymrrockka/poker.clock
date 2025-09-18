@@ -17,8 +17,8 @@ class PlayerStatisticsTelegramService(
 
     override fun statistics(metadata: MessageMetadata): String {
         check(metadata.from?.username != null) { "User might have username" }
-        val telegramGame = gameService.findGame(metadata)
-        return telegramGame.game.players.find { it.person.nickname == metadata.from.username }?.toMessage()
+        val game = gameService.findGame(metadata)
+        return game.players.find { it.person.nickname == metadata.from.username }?.toMessage()
                 ?: error("User ${metadata.from.username} hasn't enter the game")
     }
 }

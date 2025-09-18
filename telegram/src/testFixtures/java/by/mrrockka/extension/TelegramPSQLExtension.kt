@@ -12,8 +12,8 @@ class TelegramPSQLExtension : CorePSQLExtension() {
         transaction {
             ChatPersonsTable.deleteAll()
             ChatGameTable.deleteAll()
-            cleanCoreTable()
             PollTaskTable.deleteAll()
+            cleanCoreTable()
         }
     }
 }

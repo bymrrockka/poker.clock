@@ -1,7 +1,7 @@
 package by.mrrockka.service
 
-import by.mrrockka.bot.BotDescriptionProperties
-import by.mrrockka.bot.CommandDescription
+import by.mrrockka.BotDescriptionProperties
+import by.mrrockka.CommandDescription
 import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.parser.HelpMessageParser
 import org.springframework.stereotype.Service

@@ -17,8 +17,9 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 interface GameRepo {
-    fun upsert(game: Game)
+    fun store(game: Game)
     fun findById(id: UUID): Game
+    fun findByIds(ids: List<UUID>): List<Game>
 }
 
 @Repository
@@ -29,7 +30,7 @@ open class GameRepoImpl(
         private val prizePoolRepo: PrizePoolRepo,
 ) : GameRepo {
 
-    override fun upsert(game: Game) {
+    override fun store(game: Game) {
         GameTable.upsert {
             it[id] = game.id
             it[gameType] = game.toType()
@@ -46,6 +47,12 @@ open class GameRepoImpl(
                 .where { GameTable.id eq id }
                 .map { it.toGame() }
                 .first()
+    }
+
+    override fun findByIds(ids: List<UUID>): List<Game> {
+        return GameTable.selectAll()
+                .where { GameTable.id inList ids }
+                .map { it.toGame() }
     }
 
     private fun ResultRow.toGame(): Game {

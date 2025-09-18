@@ -14,6 +14,10 @@ interface Game {
     val players: List<Player>
 }
 
+enum class GameType {
+    CASH, TOURNAMENT, BOUNTY
+}
+
 data class TournamentGame(
         override val id: UUID,
         override val buyIn: BigDecimal,

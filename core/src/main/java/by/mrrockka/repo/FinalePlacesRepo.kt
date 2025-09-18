@@ -5,6 +5,7 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.selectAll
 import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
@@ -14,7 +15,7 @@ interface FinalePlacesRepo {
 }
 
 @Repository
-@Transactional
+@Transactional(propagation = Propagation.REQUIRED)
 open class FinalePlacesRepoImpl(
         private val personRepo: PersonRepo,
 ) : FinalePlacesRepo {

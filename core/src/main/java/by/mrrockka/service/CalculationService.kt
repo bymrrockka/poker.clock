@@ -6,29 +6,30 @@ import by.mrrockka.domain.Game
 import by.mrrockka.domain.Payout
 import by.mrrockka.domain.TournamentGame
 import by.mrrockka.repo.GameRepo
+import by.mrrockka.repo.MoneyTransferRepo
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
 
 interface CalculationService {
-    fun calculateAndSave(game: Game): List<Payout>
+    fun calculate(game: Game): List<Payout>
 }
 
 @Service
 open class CalculationServiceImpl(
-        val calculator: GameCalculator,
-        val gameRepo: GameRepo,
-        val moneyTransferService: MoneyTransferService,
+        private val calculator: GameCalculator,
+        private val gameRepo: GameRepo,
+        private val moneyTransferRepo: MoneyTransferRepo,
 ) : CalculationService {
 
     @Transactional(propagation = Propagation.REQUIRED)
-    override fun calculateAndSave(game: Game): List<Payout> {
+    override fun calculate(game: Game): List<Payout> {
         val payouts = calculator.calculate(game)
         if (game.finishedAt == null) {
-            gameRepo.upsert(game.finish())
+            gameRepo.store(game.finish())
         }
-        moneyTransferService.storeBatch(game, payouts)
+        moneyTransferRepo.store(game, payouts)
         return payouts
     }
 

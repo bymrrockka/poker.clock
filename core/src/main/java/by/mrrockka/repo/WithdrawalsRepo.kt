@@ -12,7 +12,7 @@ import java.util.*
 
 interface WithdrawalsRepo {
     fun findByPerson(gameId: UUID, personId: UUID): List<BigDecimal>
-    fun storeBatch(gameId: UUID, personIds: List<UUID>, amount: BigDecimal, createdAt: Instant)
+    fun store(gameId: UUID, personIds: List<UUID>, amount: BigDecimal, createdAt: Instant)
 }
 
 @Repository
@@ -27,8 +27,8 @@ open class WithdrawalsRepoImpl : WithdrawalsRepo {
                 .map { it[WithdrawalTable.amount] }
     }
 
-    override fun storeBatch(gameId: UUID, personIds: List<UUID>, amount: BigDecimal, createdAt: Instant) {
-        WithdrawalTable.batchInsert(personIds) { personId->
+    override fun store(gameId: UUID, personIds: List<UUID>, amount: BigDecimal, createdAt: Instant) {
+        WithdrawalTable.batchInsert(personIds) { personId ->
             this[WithdrawalTable.personId] = personId
             this[WithdrawalTable.amount] = amount
             this[WithdrawalTable.gameId] = gameId

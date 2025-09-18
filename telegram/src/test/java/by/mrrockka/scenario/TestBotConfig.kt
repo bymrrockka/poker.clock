@@ -1,20 +1,16 @@
 package by.mrrockka.scenario
 
 import by.mrrockka.PokerClockExceptionHandler
-import by.mrrockka.bot.TelegramBotsProperties
-import by.mrrockka.config.SpringClassManager
-import by.mrrockka.domain.PokerClockBotOptions
+import by.mrrockka.SpringClassManager
+import by.mrrockka.TelegramBotsProperties
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.types.component.ExceptionHandlingStrategy
-import kotlinx.coroutines.DelicateCoroutinesApi
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Primary
 import org.springframework.context.annotation.Profile
-import org.telegram.telegrambots.bots.DefaultBotOptions
-import org.telegram.telegrambots.meta.api.methods.updates.AllowedUpdates
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
@@ -28,7 +24,6 @@ open class TestBotConfig(
     @Value("\${wiremock.server.baseUrl:}")
     lateinit var wiremockServerBaseUrl: String
 
-    @OptIn(DelicateCoroutinesApi::class)
     @Bean
     @Primary
     open fun testBot(appContext: ApplicationContext): TelegramBot {
@@ -41,22 +36,6 @@ open class TestBotConfig(
             }
             exceptionHandlingStrategy = ExceptionHandlingStrategy.Handle(PokerClockExceptionHandler)
         }
-    }
-
-    @Bean
-    @Primary
-    @Deprecated("Removed with old framework")
-    open fun testBotOptions(): DefaultBotOptions {
-        val botOptions = PokerClockBotOptions(
-                updateTypes = listOf(
-                        AllowedUpdates.EDITEDMESSAGE,
-                        AllowedUpdates.MESSAGE,
-                        AllowedUpdates.POLL,
-                        AllowedUpdates.POLLANSWER,
-                ),
-        )
-        botOptions.baseUrl = "$wiremockServerBaseUrl/"
-        return botOptions
     }
 
     @Bean

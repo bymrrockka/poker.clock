@@ -1,6 +1,5 @@
 package by.mrrockka.service
 
-import by.mrrockka.domain.ChatGame
 import by.mrrockka.domain.Game
 import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.parser.GameMessageParser
@@ -12,8 +11,9 @@ import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 
 interface GameTelegramService {
-    fun storeGame(messageMetadata: MessageMetadata): Game
-    fun findGame(messageMetadata: MessageMetadata): ChatGame
+    fun store(metadata: MessageMetadata): Game
+    fun findGame(metadata: MessageMetadata): Game
+    fun findByChat(metadata: MessageMetadata): List<Game>
 }
 
 @Service
@@ -26,24 +26,27 @@ open class GameTelegramServiceImpl(
         private val gameMessageParser: GameMessageParser,
 ) : GameTelegramService {
 
-    override fun storeGame(messageMetadata: MessageMetadata): Game {
-        messageMetadata.checkMentions()
-        val game = gameMessageParser.parse(messageMetadata)
-        gameRepo.upsert(game)
-        chatGameRepo.store(game.id, messageMetadata)
+    override fun store(metadata: MessageMetadata): Game {
+        metadata.checkMentions()
+        val game = gameMessageParser.parse(metadata)
+        gameRepo.store(game)
+        chatGameRepo.store(game.id, metadata)
 
-        val personIds = telegramPersonService.findByMessage(messageMetadata).map { it.id }
-        entriesRepo.insertBatch(personIds, game.buyIn, game, messageMetadata.createdAt)
+        val personIds = telegramPersonService.findByMessage(metadata).map { it.id }
+        entriesRepo.store(personIds, game.buyIn, game, metadata.createdAt)
         return game
     }
 
-    override fun findGame(messageMetadata: MessageMetadata): ChatGame {
-        val chatGameId = if (messageMetadata.replyTo != null) chatGameRepo.findByMessage(messageMetadata)
-        else chatGameRepo.findLatestForChat(messageMetadata)
+    override fun findGame(metadata: MessageMetadata): Game {
+        val chatGameId = if (metadata.replyTo != null) chatGameRepo.findByMessage(metadata)
+        else chatGameRepo.findLatestForChat(metadata)
 
         check(chatGameId != null) { "Game was not found for the chat." }
 
-        return ChatGame(game = gameRepo.findById(chatGameId), messageMetadata = messageMetadata)
+        return gameRepo.findById(chatGameId)
     }
 
+    override fun findByChat(metadata: MessageMetadata): List<Game> {
+        return gameRepo.findByIds(chatGameRepo.findByChat(metadata))
+    }
 }

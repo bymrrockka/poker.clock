@@ -23,12 +23,12 @@ class WithdrawalTelegramServiceImpl(
     override fun withdraw(messageMetadata: MessageMetadata): Pair<Set<String>, BigDecimal> {
         messageMetadata.checkMentions()
         val (nicknames, amount) = withdrawalMessageParser.parse(messageMetadata)
-        val telegramGame = gameTelegramService.findGame(messageMetadata)
-        check(telegramGame.game is CashGame) { "Withdrawals are not allowed for non cash game" }
-        check(amount * nicknames.size.toBigDecimal() <= telegramGame.game.moneyInGame()) { "Sum of withdrawals is bigger then ${telegramGame.game.moneyInGame()} active in game" }
+        val game = gameTelegramService.findGame(messageMetadata)
+        check(game is CashGame) { "Withdrawals are not allowed for non cash game" }
+        check(amount * nicknames.size.toBigDecimal() <= game.moneyInGame()) { "Sum of withdrawals is bigger then ${game.moneyInGame()} active in game" }
 
         val personsIds = telegramPersonService.findByMessage(messageMetadata).map { it.id }
-        withdrawalsRepo.storeBatch(telegramGame.game.id, personsIds, amount, messageMetadata.createdAt)
+        withdrawalsRepo.store(game.id, personsIds, amount, messageMetadata.createdAt)
 
         return nicknames to amount
     }

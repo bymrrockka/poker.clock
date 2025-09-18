@@ -2,6 +2,7 @@ package by.mrrockka.repo
 
 import by.mrrockka.domain.GameType
 import by.mrrockka.domain.PositionPrize
+import by.mrrockka.domain.TransferType
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.module.kotlin.jsonMapper
 import com.fasterxml.jackson.module.kotlin.kotlinModule
@@ -69,4 +70,13 @@ object FinalePlacesTable : Table("finale_places") {
     val gameId = uuid("game_id").references(GameTable.id)
     val personId = uuid("person_id").references(PersonTable.id)
     val position = integer("position")
+}
+
+object MoneyTransferTable : Table("money_transfer") {
+    val gameId = uuid("game_id").references(GameTable.id)
+    val personId = uuid("person_id").references(PersonTable.id)
+    val amount = decimal("amount", 20, 2)
+    val type = enumerationByName<TransferType>("type", 6)
+    val createdAt = timestamp("created_at")
+    val updatedAt = timestamp("updated_at")
 }

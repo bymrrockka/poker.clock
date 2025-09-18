@@ -8,7 +8,6 @@ import by.mrrockka.repo.PollTaskRepo
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import java.time.Instant
-import kotlin.time.ExperimentalTime
 
 interface PollTelegramService {
     fun create(metadata: MessageMetadata): PollTask
@@ -18,7 +17,6 @@ interface PollTelegramService {
 }
 
 @Service
-@OptIn(ExperimentalTime::class)
 class PollTelegramServiceImpl(
         private val pollMessageParser: PollMessageParser,
         private val pollTaskRepository: PollTaskRepo,
@@ -28,14 +26,14 @@ class PollTelegramServiceImpl(
     override fun create(metadata: MessageMetadata): PollTask {
         val pollTask = pollMessageParser.parse(metadata)
         check(pollTask.options.isNotEmpty()) { "No options found" }
-        pollTaskRepository.upsert(pollTask)
+        pollTaskRepository.store(pollTask)
         eventPublisher.publishEvent(PollEvent.Created(pollTask))
 
         return pollTask
     }
 
     override fun stop(metadata: MessageMetadata) {
-        val size = pollTaskRepository.finishPoll(
+        val size = pollTaskRepository.finish(
                 metadata.replyTo!!.id,
                 metadata.createdAt,
         )
@@ -44,7 +42,7 @@ class PollTelegramServiceImpl(
     }
 
     override fun batchUpdate(tasks: List<PollTask>) {
-        pollTaskRepository.batchUpsert(tasks)
+        pollTaskRepository.store(tasks)
     }
 
     override fun selectActive(): List<Task> {

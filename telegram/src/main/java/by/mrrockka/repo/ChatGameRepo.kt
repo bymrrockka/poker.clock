@@ -13,6 +13,7 @@ interface ChatGameRepo {
     fun findByMessage(messageMetadata: MessageMetadata): UUID?
     fun findLatestForChat(messageMetadata: MessageMetadata): UUID?
     fun store(gameId: UUID, message: MessageMetadata)
+    fun findByChat(metadata: MessageMetadata): List<UUID>
 }
 
 @Repository
@@ -45,5 +46,12 @@ open class ChatGameRepoImpl : ChatGameRepo {
             it[ChatGameTable.messageId] = message.id
             it[ChatGameTable.createdAt] = message.createdAt
         }
+    }
+
+    override fun findByChat(metadata: MessageMetadata): List<UUID> {
+        return ChatGameTable.select(ChatGameTable.gameId)
+                .where { ChatGameTable.chatId eq metadata.chatId }
+                .map { it[ChatGameTable.gameId] }
+                .toList()
     }
 }

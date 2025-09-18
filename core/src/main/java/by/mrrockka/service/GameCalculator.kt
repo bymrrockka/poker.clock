@@ -8,7 +8,7 @@ import by.mrrockka.domain.Payout
 import by.mrrockka.domain.Player
 import by.mrrockka.domain.PrizeSummary
 import by.mrrockka.domain.TournamentPlayer
-import by.mrrockka.domain.payout.TransferType
+import by.mrrockka.domain.TransferType
 import by.mrrockka.domain.takenToGiven
 import by.mrrockka.domain.toSummary
 import by.mrrockka.domain.total
@@ -18,7 +18,7 @@ import java.math.BigDecimal.ZERO
 
 @Component
 open class GameCalculator {
-    //todo: consider to refactor this class to make it extendable with strategies to figure out payouts
+    //todo: consider to refactor this class to make it extendable with strategies to calculate out payouts
     fun calculate(game: Game): List<Payout> {
         val transferTypeToPlayer = game.players associateByTransferType game.toSummary()
         val creditors = transferTypeToPlayer[TransferType.CREDIT]?.sortedByDescending { it.total } ?: emptyList()
@@ -27,7 +27,7 @@ open class GameCalculator {
 
         validate(game, creditors, debtors, equals)
 
-        return creditors.calculatePayouts(debtors) + equals.asEqualPayouts()
+        return creditors.calculatePayouts(debtors) + equals.toEqualPayouts()
     }
 
     private fun validate(game: Game, creditors: List<PlayerTotal>, debtors: List<PlayerTotal>, equals: List<PlayerTotal>) {
@@ -79,7 +79,7 @@ open class GameCalculator {
         }
     }
 
-    private fun List<PlayerTotal>.asEqualPayouts(): List<Payout> {
+    private fun List<PlayerTotal>.toEqualPayouts(): List<Payout> {
         return map {
             when (val player = it.player) {
                 is CashPlayer -> Payout(player, ZERO, emptyList())

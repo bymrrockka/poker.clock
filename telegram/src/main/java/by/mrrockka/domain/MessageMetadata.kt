@@ -26,8 +26,7 @@ data class MessageMetadata(
     }
 
     val mentions: Set<MetadataEntity> by lazy {
-        entities
-                .filter { entity -> entity.type == EntityType.Mention }
+        entities.filter { entity -> entity.type == EntityType.Mention }
                 .map { it.toMetadata(text) }
                 .toSet()
                 .let {
@@ -46,69 +45,9 @@ data class MessageMetadata(
                 type = type,
         )
     }
-
-    //todo: remove
-    companion object {
-        @JvmStatic
-        fun builder(): MessageMetadataBuilder = MessageMetadataBuilder()
-    }
-
-    @Deprecated(message = "Use constructor instead.")
-    class MessageMetadataBuilder {
-        var chatId: Long = -1L
-        lateinit var createdAt: Instant
-        var id: Long = -1L
-        lateinit var text: String
-        var replyTo: MessageMetadata? = null
-        lateinit var entities: List<MetadataEntity>
-        var fromNickname: String? = null
-
-        fun id(id: Long): MessageMetadataBuilder {
-            this.id = id; return this
-        }
-
-        fun chatId(chatId: Long): MessageMetadataBuilder {
-            this.chatId = chatId; return this
-        }
-
-        fun createdAt(createdAt: Instant): MessageMetadataBuilder {
-            this.createdAt = createdAt; return this
-        }
-
-        fun text(text: String): MessageMetadataBuilder {
-            this.text = text; return this
-        }
-
-        fun replyTo(replyTo: MessageMetadata?): MessageMetadataBuilder {
-            this.replyTo = replyTo; return this
-        }
-
-        fun metadataEntities(entities: List<MetadataEntity>): MessageMetadataBuilder {
-            this.entities = entities; return this
-        }
-
-        fun fromNickname(fromNickname: String?): MessageMetadataBuilder {
-            this.fromNickname = fromNickname; return this
-        }
-
-        @OptIn(ExperimentalTime::class)
-        fun build(): MessageMetadata {
-            check(chatId != -1L) { "chatId must be set" }
-            check(id != -1L) { "id must be set" }
-
-            return MessageMetadata(
-                    chatId = chatId,
-                    createdAt = createdAt,
-                    id = id,
-                    text = text,
-                    replyTo = replyTo,
-                    metadataEntities = entities,
-                    entities = emptyList(),
-                    fromNickname = fromNickname,
-            )
-        }
-    }
 }
+
+data class MetadataEntity(val type: EntityType, val text: String)
 
 @OptIn(ExperimentalTime::class)
 fun Message.toMessageMetadata(): MessageMetadata =

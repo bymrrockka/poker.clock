@@ -21,9 +21,9 @@ open class PrizePoolTelegramServiceImpl(
     override fun store(messageMetadata: MessageMetadata): List<PositionPrize> {
         val prizePool = prizePoolMessageParser.parse(messageMetadata)
 
-        val telegramGame = gameService.findGame(messageMetadata)
-        check(telegramGame.game !is CashGame) { "Prize pool is not allowed for cash game" }
-        prizePoolRepo.store(telegramGame.game.id, prizePool)
+        val game = gameService.findGame(messageMetadata)
+        check(game !is CashGame) { "Prize pool is not allowed for cash game" }
+        prizePoolRepo.store(game.id, prizePool)
 
         return prizePool
     }

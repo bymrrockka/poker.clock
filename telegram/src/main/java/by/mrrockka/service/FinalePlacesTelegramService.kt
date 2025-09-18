@@ -21,21 +21,18 @@ class FinalePlacesTelegramServiceImpl(
 
     override fun store(message: MessageMetadata): List<FinalPlace> {
         message.checkMentions()
-
         val places = finalePlacesParser.parse(message)
         check(places.isNotEmpty()) { "Finale places could not be empty" }
 
-        val telegramGame = gameService.findGame(message)
-        check(telegramGame.game !is CashGame) { "Finale places is not allowed for cash game" }
-
+        val game = gameService.findGame(message)
+        check(game !is CashGame) { "Finale places is not allowed for cash game" }
         val persons = personService.findByMessage(message)
                 .associateBy { it.nickname }
-
         val finalePlaces = places
                 .map { (position, nickname) ->
                     FinalPlace(position, persons[nickname] ?: error("Person not found for $nickname"))
                 }
-        finalePlacesRepo.store(telegramGame.game.id, finalePlaces)
+        finalePlacesRepo.store(game.id, finalePlaces)
 
         return finalePlaces
     }
