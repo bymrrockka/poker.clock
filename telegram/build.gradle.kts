@@ -74,18 +74,7 @@ configurations.all {
     }
 }
 
-//todo: crop preview features after removing old repos with string block interpolation usage
 tasks {
-    withType<JavaCompile>().configureEach {
-        options.compilerArgs.addAll(
-                listOf(
-                        "--enable-preview",
-                        "-Amapstruct.suppressGeneratorTimestamp=true",
-                        "-Amapstruct.defaultComponentModel=spring",
-                ),
-        )
-    }
-
     withType<KotlinCompile>().configureEach {
         compilerOptions {
             freeCompilerArgs = listOf("-Xjsr305=strict")
@@ -93,12 +82,7 @@ tasks {
     }
 
     withType<Test>().configureEach {
-        jvmArgs("--enable-preview")
         useJUnitPlatform()
-    }
-
-    withType<JavaExec>().configureEach {
-        jvmArgs("--enable-preview")
     }
 
     bootJar {

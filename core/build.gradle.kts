@@ -51,23 +51,8 @@ dependencies {
 }
 
 tasks {
-    withType<JavaCompile>().configureEach {
-        options.compilerArgs.addAll(
-                listOf(
-                        "--enable-preview",
-                        "-Amapstruct.suppressGeneratorTimestamp=true",
-                        "-Amapstruct.defaultComponentModel=spring",
-                ),
-        )
-    }
-
     withType<Test>().configureEach {
-        jvmArgs("--enable-preview")
         useJUnitPlatform()
-    }
-
-    withType<JavaExec>().configureEach {
-        jvmArgs("--enable-preview")
     }
 
     withType<KotlinCompile>().configureEach {
