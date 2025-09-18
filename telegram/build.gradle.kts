@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 group = "by.mrrockka"
 version = "1.5.0-SNAPSHOT"
@@ -18,7 +17,7 @@ plugins {
     alias(libs.plugins.telegramBot)
 }
 
-val jvmVersion = 22
+val jvmVersion = 21
 
 java {
     toolchain {
@@ -45,15 +44,8 @@ dependencies {
     implementation(libs.bundles.db)
     implementation(libs.bundles.kotlinLibs)
     implementation(libs.bundles.exposed)
-    //todo remove
-    implementation(libs.mapstructCore)
-    implementation(libs.lombokMapstructBinding)
-    implementation(libs.apacheCommonsLang3)
 
     runtimeOnly(libs.aspectjWeaver)
-    compileOnly(libs.lombok)
-    annotationProcessor(libs.lombok)
-    annotationProcessor(libs.mapstructProcessor)
 
     testImplementation(libs.bundles.test)
     testImplementation(libs.bundles.wiremock)
@@ -61,20 +53,11 @@ dependencies {
     testImplementation(testFixtures(project))
     testImplementation(testFixtures(project(":core")))
 
-    testCompileOnly(libs.lombok)
-    testAnnotationProcessor(libs.lombok)
-    testAnnotationProcessor(libs.mapstructProcessor)
-
-    testFixturesApi(libs.springBootTelegrambots)
     testFixturesImplementation(project)
     testFixturesImplementation(testFixtures(project(":core")))
     testFixturesImplementation(libs.bundles.exposed)
     testFixturesImplementation(libs.wiremockContainer)
     testFixturesImplementation(libs.telegramBot)
-
-    testFixturesCompileOnly(libs.lombok)
-    testFixturesAnnotationProcessor(libs.lombok)
-    testFixturesAnnotationProcessor(libs.mapstructProcessor)
 }
 
 configurations.all {
@@ -118,7 +101,7 @@ tasks {
         jvmArgs("--enable-preview")
     }
 
-    getByName<BootJar>("bootJar") {
+    bootJar {
         enabled = true
         archiveBaseName = "telegram-bot"
     }

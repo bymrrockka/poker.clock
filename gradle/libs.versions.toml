@@ -1,29 +1,21 @@
 [versions]
 #plugins
-springBootVersion = "3.3.2"
-springDepManagementVersion = "1.1.6"
-kotlinVersion = "2.2.0"
-googleDevtoolsKspVersion = "2.2.0-2.0.2"
+springBootVersion = "3.5.5"
+springDepManagementVersion = "1.1.7"
+kotlinVersion = "2.2.20"
+googleDevtoolsKspVersion = "2.2.20-2.0.3"
 telegramBotVersion = "8.3.1"
 
 #libs
 postgresqlVersion = "42.7.4"
-lombockVersion = "1.18.34"
 jupiterVersion = "5.11.1"
 assertjCoreVersion = "3.26.3"
 testContainerVersion = "1.20.1"
-springBootTelegrambotsVersion = "6.9.7.1"
-apacheCommonsLang3Version = "3.17.0"
-mockitoVersion = "5.14.0"
 liquibaseVersion = "4.29.2"
 javaFakerVersion = "1.0.2"
 jacksonVersion = "2.20.0"
-mapstructVersion = "1.6.2"
-lombokMapstructBindingVersion = "0.2.0"
 hikariCPVersion = "5.1.0"
 jetbrainsExposedVersion = "0.55.0"
-mockkVersion = "1.13.13"
-springMockkVersion = "4.0.2"
 awaitilityVersion = "4.2.2"
 wiremockVersion = "3.10.0"
 wiremockContainerVersion = "1.0-alpha-13"
@@ -41,32 +33,21 @@ telegramBot = { id = "eu.vendeli.telegram-bot", version.ref = "telegramBotVersio
 
 [libraries]
 telegramBot = { module = "eu.vendeli:telegram-bot", version.ref = "telegramBotVersion" }
-vendeliSpringStarter = { module = "eu.vendeli:spring-ktgram-starter", version.ref = "telegramBotVersion" }
 kotlinStdLib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8" }
 springBootJdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc" }
 springBootAop = { module = "org.springframework.boot:spring-boot-starter-aop" }
 aspectjWeaver = { module = "org.aspectj:aspectjweaver" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresqlVersion" }
-lombok = { module = "org.projectlombok:lombok", version.ref = "lombockVersion" }
 jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "jupiterVersion" }
 assertjCore = { module = "org.assertj:assertj-core", version.ref = "assertjCoreVersion" }
 testContainerPostgresql = { module = "org.testcontainers:postgresql", version.ref = "testContainerVersion" }
 testContainerJupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "testContainerVersion" }
 springBootWeb = { module = "org.springframework.boot:spring-boot-starter-web" }
-springBootTelegrambots = { module = "org.telegram:telegrambots-spring-boot-starter", version.ref = "springBootTelegrambotsVersion" }
-apacheCommonsLang3 = { module = "org.apache.commons:commons-lang3", version.ref = "apacheCommonsLang3Version" }
-mockitoCore = { module = "org.mockito:mockito-core", version.ref = "mockitoVersion" }
-mockk = { module = "io.mockk:mockk", version.ref = "mockkVersion" }
-springMockk = { module = "com.ninja-squad:springmockk", version.ref = "springMockkVersion" }
-mockitoJupiter = { module = "org.mockito:mockito-junit-jupiter", version.ref = "mockitoVersion" }
 springBootTest = { module = "org.springframework.boot:spring-boot-starter-test" }
 liquibase = { module = "org.liquibase:liquibase-core", version.ref = "liquibaseVersion" }
 javaFaker = { module = "com.github.javafaker:javafaker", version.ref = "javaFakerVersion" }
 jacksonDataformat = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml", version.ref = "jacksonVersion" }
 jacksonKotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jacksonVersion" }
-mapstructCore = { module = "org.mapstruct:mapstruct", version.ref = "mapstructVersion" }
-mapstructProcessor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstructVersion" }
-lombokMapstructBinding = { module = "org.projectlombok:lombok-mapstruct-binding", version.ref = "lombokMapstructBindingVersion" }
 hikariCP = { module = "com.zaxxer:HikariCP", version.ref = "hikariCPVersion" }
 exposedCore = { module = "org.jetbrains.exposed:exposed-core", version.ref = "jetbrainsExposedVersion" }
 exposedJdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "jetbrainsExposedVersion" }
@@ -87,9 +68,9 @@ junitLauncher = { module = "org.junit.platform:junit-platform-launcher" }
 logback = ["logbackClassic", "logbackCore"]
 wiremock = ["wiremock", "wiremockContainer", "wiremockKotlinDsl"]
 kotlinLibs = ["kotlinStdLib", "kotlinSerialization"]
-springBoot = ["springBootWeb", "springBootJdbc", "springBootAop", "springBootTelegrambots"]
+springBoot = ["springBootWeb", "springBootJdbc", "springBootAop"]
 exposed = ["exposedCore", "exposedSpringBoot", "exposedJdbc", "exposedJson", "exposedJavaTime"]
-test = ["assertjCore", "jupiter", "junitLauncher", "mockitoCore", "mockitoJupiter", "mockk", "awaitility", "springBootTest", "okeydoke"]
+test = ["assertjCore", "jupiter", "junitLauncher", "awaitility", "springBootTest", "okeydoke"]
 db = ["postgresql", "liquibase"]
 jackson = ["jacksonDataformat", "jacksonKotlin"]
 testContainer = ["testContainerJupiter", "testContainerPostgresql"]

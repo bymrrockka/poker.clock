@@ -1,6 +1,4 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.springframework.boot.gradle.tasks.bundling.BootJar
-import org.springframework.boot.gradle.tasks.run.BootRun
 
 group = "by.mrrockka"
 version = "1.5.0-SNAPSHOT"
@@ -16,7 +14,7 @@ plugins {
     alias(libs.plugins.kotlinSerializationPlugin)
 }
 
-val jvmVersion = 22
+val jvmVersion = 21
 
 java {
     toolchain {
@@ -34,30 +32,14 @@ repositories {
 }
 
 dependencies {
-//    implementation(libs.bundles.logback)
     implementation(libs.bundles.db)
     implementation(libs.kotlinStdLib)
     implementation(libs.bundles.exposed)
     implementation(libs.bundles.jackson)
-    //todo remove
-    implementation(libs.mapstructCore)
-    implementation(libs.lombokMapstructBinding)
     implementation(libs.hikariCP)
-
-    compileOnly(libs.lombok)
-    annotationProcessor(libs.lombok)
-    annotationProcessor(libs.mapstructProcessor)
-
-    testCompileOnly(libs.lombok)
-    testAnnotationProcessor(libs.lombok)
-    testAnnotationProcessor(libs.mapstructProcessor)
 
     testImplementation(libs.bundles.test)
     testImplementation(libs.kotlinStdLib)
-
-    testFixturesCompileOnly(libs.lombok)
-    testFixturesAnnotationProcessor(libs.lombok)
-    testFixturesAnnotationProcessor(libs.mapstructProcessor)
 
     testFixturesImplementation(libs.bundles.exposed)
     testFixturesApi(libs.bundles.test)
@@ -94,15 +76,16 @@ tasks {
         }
     }
 
-    getByName<BootJar>("bootJar") {
+    bootJar {
+        enabled = true
+        archiveBaseName = "telegram-bot"
+    }
+
+    bootRun {
         enabled = false
     }
 
-    getByName<BootRun>("bootRun") {
-        enabled = false
-    }
-
-    getByName<Jar>("jar") {
+    jar {
         enabled = true
     }
 }
