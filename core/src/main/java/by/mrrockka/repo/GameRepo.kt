@@ -9,7 +9,6 @@ import by.mrrockka.domain.GameType
 import by.mrrockka.domain.TournamentGame
 import by.mrrockka.domain.TournamentPlayer
 import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.upsert
 import org.springframework.stereotype.Repository
@@ -18,8 +17,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 interface GameRepo {
-    fun store(game: Game)
-    fun update(game: Game)
+    fun upsert(game: Game)
     fun findById(id: UUID): Game
 }
 
@@ -31,24 +29,13 @@ open class GameRepoImpl(
         private val prizePoolRepo: PrizePoolRepo,
 ) : GameRepo {
 
-    override fun store(game: Game) {
-        GameTable.insert {
-            it[id] = game.id
-            it[gameType] = game.toType()
-            it[buyIn] = game.buyIn
-            it[bounty] = game.let { if (it is BountyTournamentGame) it.bounty else null }
-            it[stack] = game.stack
-            it[createdAt] = game.createdAt
-        }
-    }
-
-    override fun update(game: Game) {
+    override fun upsert(game: Game) {
         GameTable.upsert {
             it[id] = game.id
             it[gameType] = game.toType()
             it[buyIn] = game.buyIn
-            it[bounty] = game.let { if (it is BountyTournamentGame) it.bounty else null }
             it[stack] = game.stack
+            it[bounty] = game.let { if (it is BountyTournamentGame) it.bounty else null }
             it[createdAt] = game.createdAt
             it[finishedAt] = game.finishedAt
         }
@@ -82,9 +69,9 @@ open class GameRepoImpl(
                     stack = this[GameTable.stack],
                     createdAt = this[GameTable.createdAt],
                     finishedAt = this[GameTable.finishedAt],
-                    playersProvider =  { playerRepo.findPlayers(gameId, BountyPlayer::class) },
-                    finalePlacesProvider =  { finalePlacesRepo.findById(gameId) },
-                    prizePoolProvider =  { prizePoolRepo.findById(gameId) },
+                    playersProvider = { playerRepo.findPlayers(gameId, BountyPlayer::class) },
+                    finalePlacesProvider = { finalePlacesRepo.findById(gameId) },
+                    prizePoolProvider = { prizePoolRepo.findById(gameId) },
             )
 
             GameType.CASH -> CashGame(
@@ -93,7 +80,7 @@ open class GameRepoImpl(
                     stack = this[GameTable.stack],
                     createdAt = this[GameTable.createdAt],
                     finishedAt = this[GameTable.finishedAt],
-                    playersProvider =  { playerRepo.findPlayers(gameId, CashPlayer::class) },
+                    playersProvider = { playerRepo.findPlayers(gameId, CashPlayer::class) },
             )
         }
     }

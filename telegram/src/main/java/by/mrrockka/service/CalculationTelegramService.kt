@@ -8,13 +8,15 @@ import by.mrrockka.domain.Payout
 import by.mrrockka.domain.TournamentGame
 import by.mrrockka.domain.total
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 interface CalculationTelegramService {
     fun calculate(messageMetadata: MessageMetadata): List<Payout>
 }
 
 @Service
-class CalculationTelegramServiceImpl(
+@Transactional
+open class CalculationTelegramServiceImpl(
         val calculationService: CalculationService,
         val gameService: GameTelegramService,
 ) : CalculationTelegramService {

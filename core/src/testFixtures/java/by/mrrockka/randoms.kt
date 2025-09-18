@@ -9,6 +9,8 @@ interface Randoms {
     val random: Random
     val faker: Faker
     val seed: String?
+
+    fun reset()
 }
 
 open class CoreRandoms(
@@ -21,12 +23,14 @@ open class CoreRandoms(
     fun firstname(): String = faker.name().firstName()
     fun lastname(): String = faker.name().lastName()
     fun decimal(from: Int = 10, to: Int = 100): BigDecimal = BigDecimal.valueOf(faker.number().numberBetween(from, to).toLong())
-    fun int(from: Int = 10, to: Int = 100): Int = faker.number().numberBetween(from, to)
-    fun long(from: Long = 10, to: Long = 100): Long = faker.number().numberBetween(from, to)
     fun uuid(): UUID {
         val bytes = ByteArray(16)
         random.nextBytes(bytes)
         return UUID.nameUUIDFromBytes(bytes)
+    }
+
+    override fun reset() {
+        random.setSeed(seed.hashCode().toLong())
     }
 
     companion object {
@@ -39,5 +43,3 @@ open class CoreRandoms(
         }
     }
 }
-
-fun Randoms.reset() = random.setSeed(seed.hashCode().toLong())

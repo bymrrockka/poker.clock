@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component
 interface StatisticsCommandHandler {
     suspend fun playerStats(message: MessageUpdate)
     suspend fun gameStats(message: MessageUpdate)
+    suspend fun myStats(message: MessageUpdate)
 }
 
 @Component
@@ -40,4 +41,12 @@ class StatisticsCommandHandlerImpl(
                 }
     }
 
+    @CommandHandler(["/my_stats"])
+    override suspend fun myStats(message: MessageUpdate) {
+        val metadata = message.message.toMessageMetadata()
+        sendMessage { "My stats" }
+                .send(to = metadata.chatId, via = bot)
+//        gameStatisticsService.statistics(metadata)
+//                .also { message -> }
+    }
 }

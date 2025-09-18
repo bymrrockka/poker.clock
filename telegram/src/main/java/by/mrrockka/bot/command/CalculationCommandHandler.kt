@@ -7,6 +7,8 @@ import by.mrrockka.domain.CashPlayer
 import by.mrrockka.domain.Debtor
 import by.mrrockka.domain.Game
 import by.mrrockka.domain.Payout
+import by.mrrockka.domain.Person
+import by.mrrockka.domain.PrizeSummary
 import by.mrrockka.domain.TournamentGame
 import by.mrrockka.domain.TournamentPlayer
 import by.mrrockka.domain.takenToGiven
@@ -47,7 +49,7 @@ class CalculationCommandHandlerImpl(
 
     private fun List<Payout>.response(game: Game): String {
         return when (game) {
-            is CashGame -> this.joinToString(separator = "\n") {
+            is CashGame -> joinToString(separator = "\n") {
                 val player = it.creditor as CashPlayer
                 """
                 |-----------------------------
@@ -56,43 +58,46 @@ class CalculationCommandHandlerImpl(
                 |  Withdrawals: ${player.withdrawals.total().setScale(0)}
                 |  Total: ${it.total.setScale(0)} 
                 |${it.debtors.message()}
-                """.trimMargin() + this.equalResponse()
+                """.trimMargin() + equalResponse()
             }
 
             is TournamentGame -> {
                 val summaries = game.toSummary().associateBy { it.person }
-                val payoutsResponse = this.joinToString(separator = "\n") {
-                    val player = it.creditor as TournamentPlayer
-                    val prize = summaries[it.creditor.person]?.amount ?: error("No prize for ${it.creditor.person}")
-                    """
-                    |-----------------------------
-                    |Payout to: @${player.person.nickname}
-                    |  Entries: ${player.entries.size}
-                    |  Total: ${it.total.setScale(0)} (won ${prize.setScale(0)} - entries ${player.entries.total().setScale(0)})
-                    |${it.debtors.message()}
-                    """.trimMargin()
-                }
+                val payoutsResponse = prepare(summaries)
+                        .joinToString(separator = "\n") {
+                            val player = it.creditor as TournamentPlayer
+                            val prize = summaries[it.creditor.person]?.amount
+                                    ?: error("No prize for ${it.creditor.person}")
+                            """
+                            |-----------------------------
+                            |Payout to: @${player.person.nickname}
+                            |  Entries: ${player.entries.size}
+                            |  Total: ${it.total.setScale(0)} (won ${prize.setScale(0)} - entries ${player.entries.total().setScale(0)})
+                            |${it.debtors.message()}
+                            """.trimMargin()
+                        }
 
-                return game.finalePlacesMessage() + payoutsResponse + this.equalResponse()
+                return game.finalePlacesMessage() + payoutsResponse + equalResponse()
             }
 
             is BountyTournamentGame -> {
-                val summaries = game.toSummary().sortedBy { it.position }
-                val payouts = this.associateBy { it.creditor.person }
-                val payoutsResponse = summaries.joinToString("\n") { summary ->
-                    val payout = payouts[summary.person] ?: error("No payout for @${summary.person.nickname}")
-                    val player = payout.creditor as BountyPlayer
-                    val (taken, given) = player.takenToGiven()
-                    val bountiesTotal = taken.total() - given.total()
-                    """
-                    |-----------------------------
-                    |Payout to: @${summary.person.nickname}
-                    |  Entries: ${player.entries.size}
-                    |  Bounties: ${bountiesTotal.setScale(0)} (taken ${taken.size} - given ${given.size} ) 
-                    |  Total: ${payout.total.setScale(0)} (won ${summary.amount.setScale(0)} - entries ${player.entries.total().setScale(0)} ${if (bountiesTotal < ZERO) "-" else "+"} bounties ${bountiesTotal.setScale(0)})
-                    |${payout.debtors.message()}
-                    """.trimMargin()
-                }
+                val summaries = game.toSummary().associateBy { it.person }
+                val payoutsResponse = prepare(summaries)
+                        .joinToString(separator = "\n") {
+                            val player = it.creditor as BountyPlayer
+                            val prize = summaries[it.creditor.person]?.amount
+                                    ?: error("No prize for ${it.creditor.person}")
+                            val (taken, given) = player.takenToGiven()
+                            val bountiesTotal = taken.total() - given.total()
+                            """
+                            |-----------------------------
+                            |Payout to: @${player.person.nickname}
+                            |  Entries: ${player.entries.size}
+                            |  Bounties: ${bountiesTotal.setScale(0)} (taken ${taken.size} - given ${given.size}) 
+                            |  Total: ${it.total.setScale(0)} (won ${prize.setScale(0)} - entries ${player.entries.total().setScale(0)} ${if (bountiesTotal < ZERO) "-" else "+"} bounties ${bountiesTotal.setScale(0)})
+                            |${it.debtors.message()}
+                            """.trimMargin()
+                        }
 
                 return game.finalePlacesMessage() + payoutsResponse + this.equalResponse()
             }
@@ -130,5 +135,9 @@ class CalculationCommandHandlerImpl(
                 |
                 """.trimMargin()
     }
+
+    private fun List<Payout>.prepare(summaries: Map<Person, PrizeSummary>): List<Payout> = filter { it.total > ZERO }
+            .sortedBy { summaries[it.creditor.person]?.position }
+            .reversed()
 
 }

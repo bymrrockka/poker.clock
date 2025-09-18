@@ -4,11 +4,10 @@ import by.mrrockka.domain.MessageMetadata
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.selectAll
 import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
-import kotlin.time.ExperimentalTime
 
 interface ChatGameRepo {
     fun findByMessage(messageMetadata: MessageMetadata): UUID?
@@ -16,10 +15,10 @@ interface ChatGameRepo {
     fun store(gameId: UUID, message: MessageMetadata)
 }
 
-@OptIn(ExperimentalTime::class)
 @Repository
-@Transactional
-open class DatabaseChatGameRepo : ChatGameRepo {
+@Transactional(propagation = Propagation.REQUIRED)
+open class ChatGameRepoImpl : ChatGameRepo {
+
     override fun findByMessage(messageMetadata: MessageMetadata): UUID? {
         return ChatGameTable.select(ChatGameTable.gameId)
                 .where {
@@ -31,9 +30,10 @@ open class DatabaseChatGameRepo : ChatGameRepo {
     }
 
     override fun findLatestForChat(messageMetadata: MessageMetadata): UUID? {
-        return ChatGameTable.selectAll()
+        return ChatGameTable.select(ChatGameTable.gameId)
                 .where { (ChatGameTable.chatId eq messageMetadata.chatId) }
-                .orderBy(ChatGameTable.createdAt to SortOrder.DESC)
+                .orderBy(ChatGameTable.messageId to SortOrder.DESC)
+                .limit(1)
                 .map { it[ChatGameTable.gameId] }
                 .firstOrNull()
     }

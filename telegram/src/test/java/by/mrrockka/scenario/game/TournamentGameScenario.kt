@@ -10,11 +10,12 @@ import by.mrrockka.scenario.Commands.Companion.finalePlaces
 import by.mrrockka.scenario.Commands.Companion.prizePool
 import com.oneeyedmen.okeydoke.Approver
 import org.junit.jupiter.api.Test
+import java.math.BigDecimal
 
 class TournamentGameScenario : GameScenario() {
     @Test
     fun `create game with players and some reentries`(approver: Approver) {
-        val buyin = 10.toBigDecimal()
+        val buyin = BigDecimal(10)
         val players = listOf(
                 "nickname1",
                 "nickname2",
@@ -45,7 +46,7 @@ class TournamentGameScenario : GameScenario() {
 
     @Test
     fun `create game with one player and later entries`(approver: Approver) {
-        val buyin = 10.toBigDecimal()
+        val buyin = BigDecimal(10)
         val player = "me"
 
         Given {

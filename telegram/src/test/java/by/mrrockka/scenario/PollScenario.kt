@@ -36,10 +36,10 @@ class PollScenario : AbstractScenarioTest() {
                 |5. I don't know
                 """.trimMargin()
             }
-            clock.set(time + 1.days)
             pollPosted()
             message(replyTo = createPoll) { stopPoll }
         } When {
+            clock.set(time + 8.days)
             updatesReceived()
         } ThenApproveWith approver
     }

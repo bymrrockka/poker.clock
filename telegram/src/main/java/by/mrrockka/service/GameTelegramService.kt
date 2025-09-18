@@ -8,6 +8,7 @@ import by.mrrockka.repo.ChatGameRepo
 import by.mrrockka.repo.EntriesRepo
 import by.mrrockka.repo.GameRepo
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 
 interface GameTelegramService {
@@ -16,7 +17,7 @@ interface GameTelegramService {
 }
 
 @Service
-@Transactional
+@Transactional(propagation = Propagation.REQUIRED)
 open class GameTelegramServiceImpl(
         private val telegramPersonService: TelegramPersonService,
         private val gameRepo: GameRepo,
@@ -28,11 +29,11 @@ open class GameTelegramServiceImpl(
     override fun storeGame(messageMetadata: MessageMetadata): Game {
         messageMetadata.checkMentions()
         val game = gameMessageParser.parse(messageMetadata)
-        gameRepo.store(game)
-        val personIds = telegramPersonService.findByMessage(messageMetadata).map { it.id }
-        entriesRepo.insertBatch(personIds, game.buyIn, game, messageMetadata.createdAt)
+        gameRepo.upsert(game)
         chatGameRepo.store(game.id, messageMetadata)
 
+        val personIds = telegramPersonService.findByMessage(messageMetadata).map { it.id }
+        entriesRepo.insertBatch(personIds, game.buyIn, game, messageMetadata.createdAt)
         return game
     }
 

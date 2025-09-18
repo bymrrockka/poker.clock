@@ -6,6 +6,7 @@ import by.mrrockka.domain.Person
 import by.mrrockka.repo.ChatPersonsRepo
 import by.mrrockka.repo.PersonRepo
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
@@ -14,7 +15,7 @@ interface TelegramPersonService {
 }
 
 @Component
-@Transactional
+@Transactional(propagation = Propagation.REQUIRED)
 open class TelegramPersonServiceImpl(
         private val personRepo: PersonRepo,
         private val chatPersonsRepo: ChatPersonsRepo,

@@ -149,21 +149,21 @@ Finale summary:
   2. @nickname2 won 55
 Total: 110 (11 entries * 10 buy in)
 -----------------------------
-Payout to: @nickname1
-  Entries: 4
-  Bounties: 0 (taken 3 - given 3 ) 
-  Total: 15 (won 55 - entries 40 + bounties 0)
-From:
-  @nickname5 -> 15
------------------------------
 Payout to: @nickname2
   Entries: 1
-  Bounties: 20 (taken 3 - given 1 ) 
+  Bounties: 20 (taken 3 - given 1) 
   Total: 65 (won 55 - entries 10 + bounties 20)
 From:
   @nickname3 -> 40
   @nickname4 -> 20
   @nickname5 -> 5
+-----------------------------
+Payout to: @nickname1
+  Entries: 4
+  Bounties: 0 (taken 3 - given 3) 
+  Total: 15 (won 55 - entries 40 + bounties 0)
+From:
+  @nickname5 -> 15
 -----------------------------
 Players played equally
   @hong_beer

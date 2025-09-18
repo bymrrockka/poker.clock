@@ -114,10 +114,10 @@ data class MessageMetadata(
 fun Message.toMessageMetadata(): MessageMetadata =
         MessageMetadata(
                 chatId = chat.id,
-                createdAt = this.date.toJavaInstant(),
-                id = this.messageId,
-                text = this.text.orEmpty(),
-                replyTo = this.replyToMessage?.toMessageMetadata(),
-                entities = this.entities ?: emptyList(),
+                createdAt = date.toJavaInstant(),
+                id = messageId,
+                text = text.orEmpty(),
+                replyTo = replyToMessage?.toMessageMetadata(),
+                entities = entities ?: emptyList(),
                 from = from,
         )

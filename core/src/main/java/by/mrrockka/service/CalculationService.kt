@@ -16,17 +16,17 @@ interface CalculationService {
 }
 
 @Service
-@Transactional(propagation = Propagation.REQUIRED)
 open class CalculationServiceImpl(
         val calculator: GameCalculator,
         val gameRepo: GameRepo,
         val moneyTransferService: MoneyTransferService,
 ) : CalculationService {
 
+    @Transactional(propagation = Propagation.REQUIRED)
     override fun calculateAndSave(game: Game): List<Payout> {
         val payouts = calculator.calculate(game)
         if (game.finishedAt == null) {
-            gameRepo.update(game.finish())
+            gameRepo.upsert(game.finish())
         }
         moneyTransferService.storeBatch(game, payouts)
         return payouts

@@ -30,10 +30,10 @@ class CashGameScenario : AbstractScenarioTest() {
 
         Given {
             message { players.createGame(GameType.CASH, buyin) }
-            message { players[0].withdrawal(20) }
-            message { players[1].withdrawal(30) }
-            message { players[3].entry(20) }
-            message { players[2].withdrawal(30) }
+            message { "nickname1".withdrawal(20) }
+            message { "nickname2".withdrawal(30) }
+            message { "nickname4".entry(20) }
+            message { "nickname3".withdrawal(30) }
             message { calculate }
         } When {
             updatesReceived()
@@ -43,13 +43,11 @@ class CashGameScenario : AbstractScenarioTest() {
     @Test
     fun `should create game with one player and calculate when other entries`(approver: Approver) {
         val buyin = BigDecimal(10)
-        val player1 = "nickname1"
-        val player2 = "nickname2"
 
         Given {
-            message { listOf(player1).createGame(GameType.CASH, buyin) }
-            message { player2.entry() }
-            message { player1.withdrawal(20) }
+            message { "nickname1".createGame(GameType.CASH, buyin) }
+            message { "nickname2".entry() }
+            message { "nickname1".withdrawal(20) }
             message { calculate }
         } When {
             updatesReceived()
@@ -76,7 +74,7 @@ class CashGameScenario : AbstractScenarioTest() {
 
         Given {
             message { players.createGame(GameType.CASH, buyin) }
-            message { players[0].withdrawal(40) }
+            message { "nickname1".withdrawal(40) }
         } When {
             updatesReceived()
         } ThenApproveWith approver

@@ -11,7 +11,6 @@ import by.mrrockka.extension.TelegramPSQLExtension
 import by.mrrockka.extension.TelegramWiremockContainer
 import by.mrrockka.extension.TelegramWiremockExtension
 import by.mrrockka.extension.TextApproverExtension
-import by.mrrockka.reset
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.tomakehurst.wiremock.client.WireMock
@@ -73,8 +72,7 @@ abstract class AbstractScenarioTest {
     @OptIn(ExperimentalTime::class)
     lateinit var clock: TestClock
 
-    fun Any.toJsonString(): String = mapper.writeValueAsString(this)
-    fun String.toJson(): JsonNode = mapper.readTree(this)
+    private fun String.toJson(): JsonNode = mapper.readTree(this)
 
     @BeforeEach
     fun setUp() {

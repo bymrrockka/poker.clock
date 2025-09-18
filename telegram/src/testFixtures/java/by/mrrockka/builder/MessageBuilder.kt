@@ -4,18 +4,19 @@ import by.mrrockka.TelegramRandoms
 import by.mrrockka.TelegramRandoms.Companion.telegramRandoms
 import eu.vendeli.tgbot.types.User
 import eu.vendeli.tgbot.types.msg.Message
+import eu.vendeli.tgbot.types.msg.MessageEntity
 import java.time.Instant
 import kotlin.time.ExperimentalTime
 import kotlin.time.toKotlinInstant
 
 class MessageBuilder(init: (MessageBuilder.() -> Unit) = {}) : AbstractBuilder<TelegramRandoms>(telegramRandoms) {
-    internal var chatId: Long? = null
-    internal var createdAt: Instant? = null
-    internal var id: Long? = null
-    internal var text: String? = null
-    internal var replyToMessage: Message? = null
-    internal var entities: List<eu.vendeli.tgbot.types.msg.MessageEntity> = mutableListOf()
-    internal var user: User? = null
+    private var chatId: Long? = null
+    private var createdAt: Instant? = null
+    private var id: Long? = null
+    private var text: String? = null
+    private var replyToMessage: Message? = null
+    private var entities: List<MessageEntity> = mutableListOf()
+    private var user: User? = null
 
     fun chatId(chatId: Long) {
         this.chatId = chatId
