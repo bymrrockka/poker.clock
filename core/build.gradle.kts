@@ -62,8 +62,7 @@ tasks {
     }
 
     bootJar {
-        enabled = true
-        archiveBaseName = "telegram-bot"
+        enabled = false
     }
 
     bootRun {
