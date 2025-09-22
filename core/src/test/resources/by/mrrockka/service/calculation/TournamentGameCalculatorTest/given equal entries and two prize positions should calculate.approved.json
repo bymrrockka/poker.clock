@@ -1,0 +1,43 @@
+[ {
+  "creditor" : "jackie_rau",
+  "entries" : 10,
+  "total" : 60,
+  "debtors" : [ {
+    "debtor" : "deb_becker",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "perry_hessel",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "hope_wehner",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "stanton_boyer",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "ashlee_lang",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "santo_welch",
+    "debt" : 10,
+    "entries" : 10
+  } ]
+}, {
+  "creditor" : "terisa_johnston",
+  "entries" : 10,
+  "total" : 20,
+  "debtors" : [ {
+    "debtor" : "ronnie_schuppe",
+    "debt" : 10,
+    "entries" : 10
+  }, {
+    "debtor" : "refugia_koss",
+    "debt" : 10,
+    "entries" : 10
+  } ]
+} ]

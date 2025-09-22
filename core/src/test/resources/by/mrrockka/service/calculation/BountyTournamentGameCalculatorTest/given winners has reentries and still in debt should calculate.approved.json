@@ -1,0 +1,19 @@
+[ {
+  "creditor" : "santo_welch",
+  "entries" : 10,
+  "total" : 20,
+  "debtors" : [ {
+    "debtor" : "jackie_rau",
+    "debt" : 20,
+    "entries" : 50
+  } ]
+}, {
+  "creditor" : "terisa_johnston",
+  "entries" : 10,
+  "total" : 15,
+  "debtors" : [ {
+    "debtor" : "jackie_rau",
+    "debt" : 15,
+    "entries" : 50
+  } ]
+} ]

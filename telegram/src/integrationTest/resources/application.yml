@@ -1,9 +1,0 @@
-telegrambots:
-  enabled: false
-  token:
-  name: Bot
-  nickname: bot
-
-spring:
-  liquibase:
-    enabled: false

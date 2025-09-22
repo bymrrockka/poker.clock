@@ -1,0 +1,23 @@
+******************************
+-> Request
+/bounty_game
+buyin: 10
+bounty: 10
+@me
+
+-> Response
+Bounty tournament game started.                   
+
+******************************
+-> Request
+/bounty @me kicked @nickname3
+
+-> Response
+@nickname3 person hadn't enter game                   
+
+******************************
+-> Request
+/calculate
+
+-> Response
+No finale places specified, can't calculate finale summary.

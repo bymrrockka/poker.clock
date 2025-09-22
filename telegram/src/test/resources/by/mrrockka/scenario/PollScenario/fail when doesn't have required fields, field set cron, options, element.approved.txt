@@ -1,0 +1,10 @@
+******************************
+-> Request
+/create_poll
+                
+cron: * * * * * *
+options:
+Yes - participant
+
+-> Response
+Message should be populated

@@ -1,32 +1,38 @@
 package by.mrrockka.executor
 
-import by.mrrockka.bot.PokerClockAbsSender
 import by.mrrockka.domain.PollTask
 import by.mrrockka.domain.Task
-import by.mrrockka.exception.BusinessException
-import by.mrrockka.service.PollTaskCreated
-import by.mrrockka.service.PollTaskFinished
-import by.mrrockka.service.TaskTelegramService
-import jakarta.annotation.PostConstruct
+import by.mrrockka.service.PollEvent
+import by.mrrockka.service.PollTelegramService
+import eu.vendeli.tgbot.TelegramBot
 import jakarta.annotation.PreDestroy
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 import org.springframework.context.event.EventListener
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import java.time.Instant
 import java.util.*
-import kotlin.concurrent.Volatile
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
+import kotlin.time.toJavaInstant
 
+@OptIn(ExperimentalTime::class)
 @Component
 class TelegramTaskExecutor(
-        private val taskTelegramService: TaskTelegramService,
-        private val pokerClockAbsSender: PokerClockAbsSender
+        private val taskTelegramService: PollTelegramService,
+        private val bot: TelegramBot,
+        private val clock: Clock,
 ) {
     @Volatile
     private var tasks: MutableMap<UUID, Task> = mutableMapOf()
 
-    @PostConstruct
     fun init() {
-        tasks = taskTelegramService.getTasks().asMap()
+        if (tasks.isEmpty()) {
+            synchronized(tasks) {
+                tasks = taskTelegramService.selectActive().asMap()
+            }
+        }
     }
 
     @PreDestroy
@@ -36,31 +42,36 @@ class TelegramTaskExecutor(
         }
     }
 
-    @Scheduled(fixedRate = 1000L)
+    @Scheduled(cron = "\${bot.scheduler.cron}")
     fun execute() {
-        val now = Instant.now()
+        init()
+        val now = clock.now().toJavaInstant()
         synchronized(tasks) {
             tasks.toExecute(now)
                     .forEach { task ->
-                        pokerClockAbsSender.executeAsync(task.toMessage())
-                        tasks[task.id] = task.updatedAt(now)
+                        runBlocking {
+                            async {
+                                task.toMessage().send(to = task.chatId, bot)
+                                tasks[task.id] = task.updatedAt(now)
+                            }
+                        }
                     }
         }
     }
 
     @EventListener
-    fun pollTaskCreated(event: PollTaskCreated) {
+    fun pollTaskCreated(event: PollEvent.Created) {
         synchronized(tasks) {
             tasks += event.task.id to event.task
         }
     }
 
     @EventListener
-    fun pollTaskFinished(event: PollTaskFinished) {
+    fun pollTaskFinished(event: PollEvent.Finished) {
         synchronized(tasks) {
-            tasks.polls().filter {
+            tasks.polls().first {
                 it.messageId == event.messageId
-            }.first().let {
+            }.let {
                 tasks[it.id] = it.copy(finishedAt = event.finishedAt)
             }
         }
@@ -78,9 +89,7 @@ class TelegramTaskExecutor(
     private fun Task.updatedAt(time: Instant): Task {
         return when (this) {
             is PollTask -> copy(updatedAt = time)
-            else -> throw UnknownTaskException()
+            else -> error("Unknown task type")
         }
     }
 }
-
-class UnknownTaskException : BusinessException("Unknown task type")

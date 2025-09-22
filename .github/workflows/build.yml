@@ -15,7 +15,7 @@ jobs:
       - name: Set up Java version
         uses: actions/setup-java@v3
         with:
-          java-version: '22'
+          java-version: '21'
           distribution: 'adopt'
           architecture: 'x64'
           cache: 'gradle'
@@ -31,7 +31,3 @@ jobs:
         with:
           name: telegram-bot.jar
           path: 'telegram/build/libs/telegram-bot-*.jar'
-
-      - name: Run integration tests
-        run: ./gradlew integrationTest
-

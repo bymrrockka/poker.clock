@@ -1,0 +1,69 @@
+******************************
+-> Request
+/tournament_game
+buyin: 10
+
+@me
+
+-> Response
+Tournament game started.                   
+
+******************************
+-> Request
+/entry @nickname3 
+
+-> Response
+Stored entries: 
+  - @nickname3 -> 10                   
+
+******************************
+-> Request
+/prize_pool
+1 100%
+
+-> Response
+Prize pool stored:
+1. 100%                   
+
+******************************
+-> Request
+/entry @nickname1 
+
+-> Response
+Stored entries: 
+  - @nickname1 -> 10                   
+
+******************************
+-> Request
+/finale_places
+1 @me
+
+-> Response
+Finale places stored:
+1. @hong_beer                   
+
+******************************
+-> Request
+/entry @nickname2 
+
+-> Response
+Stored entries: 
+  - @nickname2 -> 10                   
+
+******************************
+-> Request
+/calculate
+
+-> Response
+-----------------------------
+Finale summary:
+  1. @hong_beer won 40
+Total: 40 (4 entries * 10 buy in)
+-----------------------------
+Payout to: @hong_beer
+  Entries: 1
+  Total: 30 (won 40 - entries 10)
+From:
+  @nickname3 -> 10
+  @nickname2 -> 10
+  @nickname1 -> 10

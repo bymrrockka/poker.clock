@@ -1,6 +1,7 @@
-telegrambots:
-  enabled: false
-  token:
+bot:
+  properties:
+    enabled: false
+    token:
 
 spring:
   liquibase:

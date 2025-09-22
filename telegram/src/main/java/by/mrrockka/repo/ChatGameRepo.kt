@@ -1,0 +1,57 @@
+package by.mrrockka.repo
+
+import by.mrrockka.domain.MessageMetadata
+import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.insert
+import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Propagation
+import org.springframework.transaction.annotation.Transactional
+import java.util.*
+
+interface ChatGameRepo {
+    fun findByMessage(messageMetadata: MessageMetadata): UUID?
+    fun findLatestForChat(messageMetadata: MessageMetadata): UUID?
+    fun store(gameId: UUID, message: MessageMetadata)
+    fun findByChat(metadata: MessageMetadata): List<UUID>
+}
+
+@Repository
+@Transactional(propagation = Propagation.REQUIRED)
+open class ChatGameRepoImpl : ChatGameRepo {
+
+    override fun findByMessage(messageMetadata: MessageMetadata): UUID? {
+        return ChatGameTable.select(ChatGameTable.gameId)
+                .where {
+                    (ChatGameTable.messageId eq messageMetadata.replyTo!!.id) and
+                            (ChatGameTable.chatId eq messageMetadata.chatId)
+                }
+                .map { it[ChatGameTable.gameId] }
+                .firstOrNull()
+    }
+
+    override fun findLatestForChat(messageMetadata: MessageMetadata): UUID? {
+        return ChatGameTable.select(ChatGameTable.gameId)
+                .where { (ChatGameTable.chatId eq messageMetadata.chatId) }
+                .orderBy(ChatGameTable.messageId to SortOrder.DESC)
+                .limit(1)
+                .map { it[ChatGameTable.gameId] }
+                .firstOrNull()
+    }
+
+    override fun store(gameId: UUID, message: MessageMetadata) {
+        ChatGameTable.insert {
+            it[ChatGameTable.chatId] = message.chatId
+            it[ChatGameTable.gameId] = gameId
+            it[ChatGameTable.messageId] = message.id
+            it[ChatGameTable.createdAt] = message.createdAt
+        }
+    }
+
+    override fun findByChat(metadata: MessageMetadata): List<UUID> {
+        return ChatGameTable.select(ChatGameTable.gameId)
+                .where { ChatGameTable.chatId eq metadata.chatId }
+                .map { it[ChatGameTable.gameId] }
+                .toList()
+    }
+}

@@ -1,0 +1,108 @@
+******************************
+-> Request
+/bounty_game
+buyin: 10
+bounty: 10
+@me
+
+-> Response
+Bounty tournament game started.                   
+
+******************************
+-> Request
+/entry @nickname3 
+
+-> Response
+Stored entries: 
+  - @nickname3 -> 10                   
+
+******************************
+-> Request
+/bounty @me kicked @nickname3
+
+-> Response
+Bounty amount 10.00 from @nickname3 stored for @hong_beer                   
+
+******************************
+-> Request
+/entry @nickname3 
+
+-> Response
+Stored entries: 
+  - @nickname3 -> 10                   
+
+******************************
+-> Request
+/prize_pool
+1 100%
+
+-> Response
+Prize pool stored:
+1. 100%                   
+
+******************************
+-> Request
+/entry @nickname2 
+
+-> Response
+Stored entries: 
+  - @nickname2 -> 10                   
+
+******************************
+-> Request
+/bounty @nickname2 kicked @nickname3
+
+-> Response
+Bounty amount 10.00 from @nickname3 stored for @nickname2                   
+
+******************************
+-> Request
+/entry @nickname1 
+
+-> Response
+Stored entries: 
+  - @nickname1 -> 10                   
+
+******************************
+-> Request
+/bounty @nickname2 kicked @nickname1
+
+-> Response
+Bounty amount 10.00 from @nickname1 stored for @nickname2                   
+
+******************************
+-> Request
+/finale_places
+1 @me
+
+-> Response
+Finale places stored:
+1. @hong_beer                   
+
+******************************
+-> Request
+/bounty @me kicked @nickname2
+
+-> Response
+Bounty amount 10.00 from @nickname2 stored for @hong_beer                   
+
+******************************
+-> Request
+/calculate
+
+-> Response
+-----------------------------
+Finale summary:
+  1. @hong_beer won 50
+Total: 50 (5 entries * 10 buy in)
+-----------------------------
+Payout to: @hong_beer
+  Entries: 1
+  Bounties: 20 (taken 2 - given 0) 
+  Total: 60 (won 50 - entries 10 + bounties 20)
+From:
+  @nickname3 -> 40
+  @nickname1 -> 20
+-----------------------------
+Players played equally
+  @nickname2

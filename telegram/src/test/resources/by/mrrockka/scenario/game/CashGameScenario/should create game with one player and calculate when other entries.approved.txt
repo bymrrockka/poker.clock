@@ -1,0 +1,38 @@
+******************************
+-> Request
+/cash_game
+buyin: 10
+
+@nickname1
+
+-> Response
+Cash game started.                   
+
+******************************
+-> Request
+/entry @nickname2 
+
+-> Response
+Stored entries: 
+  - @nickname2 -> 10                   
+
+******************************
+-> Request
+/withdrawal @nickname1 20
+
+-> Response
+Stored withdrawals: 
+  - @nickname1 -> 20                   
+
+******************************
+-> Request
+/calculate
+
+-> Response
+-----------------------------
+Payout to: @nickname1
+  Entries: 10
+  Withdrawals: 20
+  Total: 10 
+From:
+  @nickname2 -> 10

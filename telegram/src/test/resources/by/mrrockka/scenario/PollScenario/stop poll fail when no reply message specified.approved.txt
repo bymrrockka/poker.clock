@@ -1,0 +1,36 @@
+******************************
+-> Request
+/create_poll
+cron: 0 0 0 * * 3
+message: Test poll
+options: 
+1. Yes - participant
+
+-> Response
+Poll created.
+Will be triggered next WEDNESDAY                   
+
+******************************
+-> Request
+/tournament_game
+buyin: 30
+
+@me
+
+-> Response
+Tournament game started.                   
+
+******************************
+-> Request
+/stop_poll
+
+-> Response
+Message doesn't contain any attached messages. 
+Please reply to poll creation message to stop poll                   
+
+******************************
+-> Request
+/stop_poll - reply to /create_poll
+
+-> Response
+Poll stopped

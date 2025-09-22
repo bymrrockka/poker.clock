@@ -1,0 +1,16 @@
+******************************
+-> Request
+/cash_game
+buyin: 10
+
+@nickname1, @nickname2
+
+-> Response
+Cash game started.                   
+
+******************************
+-> Request
+/withdrawal @nickname1 40
+
+-> Response
+Sum of withdrawals is bigger then 20.00 active in game

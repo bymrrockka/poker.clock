@@ -1,0 +1,101 @@
+******************************
+-> Request
+/bounty_game
+buyin: 10
+bounty: 10
+@me, @nickname1
+
+-> Response
+Bounty tournament game started.                   
+
+******************************
+-> Request
+/game_stats
+
+-> Response
+Bounty game statistics:
+  - players entered -> 2
+  - number of entries -> 2
+  - bounties out of game -> 0
+  - total in game -> 40.00                   
+
+******************************
+-> Request
+/bounty @me kicked @nickname1
+
+-> Response
+Bounty amount 10.00 from @nickname1 stored for @hong_beer                   
+
+******************************
+-> Request
+/game_stats
+
+-> Response
+Bounty game statistics:
+  - players entered -> 2
+  - number of entries -> 2
+  - bounties out of game -> 1
+  - total in game -> 40.00                   
+
+******************************
+-> Request
+/entry @nickname1 
+
+-> Response
+Stored entries: 
+  - @nickname1 -> 10                   
+
+******************************
+-> Request
+/bounty @nickname1 kicked @me
+
+-> Response
+Bounty amount 10.00 from @hong_beer stored for @nickname1                   
+
+******************************
+-> Request
+/game_stats
+
+-> Response
+Bounty game statistics:
+  - players entered -> 2
+  - number of entries -> 3
+  - bounties out of game -> 2
+  - total in game -> 60.00                   
+
+******************************
+-> Request
+/entry @me 
+
+-> Response
+Stored entries: 
+  - @hong_beer -> 10                   
+
+******************************
+-> Request
+/game_stats
+
+-> Response
+Bounty game statistics:
+  - players entered -> 2
+  - number of entries -> 4
+  - bounties out of game -> 2
+  - total in game -> 80.00                   
+
+******************************
+-> Request
+/bounty @nickname1 kicked @me
+
+-> Response
+Bounty amount 10.00 from @hong_beer stored for @nickname1                   
+
+******************************
+-> Request
+/game_stats
+
+-> Response
+Bounty game statistics:
+  - players entered -> 2
+  - number of entries -> 4
+  - bounties out of game -> 3
+  - total in game -> 80.00

@@ -1,0 +1,10 @@
+******************************
+-> Request
+/create_poll
+                
+                
+                
+                
+
+-> Response
+Schedule cron should be populated

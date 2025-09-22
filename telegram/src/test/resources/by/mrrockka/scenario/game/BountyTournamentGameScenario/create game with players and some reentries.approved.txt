@@ -1,0 +1,169 @@
+******************************
+-> Request
+/bounty_game
+buyin: 10
+bounty: 10
+@nickname1, @nickname2, @nickname3, @nickname4, @nickname5, @me
+
+-> Response
+Bounty tournament game started.                   
+
+******************************
+-> Request
+/bounty @me kicked @nickname3
+
+-> Response
+Bounty amount 10.00 from @nickname3 stored for @hong_beer                   
+
+******************************
+-> Request
+/entry @nickname3 
+
+-> Response
+Stored entries: 
+  - @nickname3 -> 10                   
+
+******************************
+-> Request
+/bounty @me kicked @nickname3
+
+-> Response
+Bounty amount 10.00 from @nickname3 stored for @hong_beer                   
+
+******************************
+-> Request
+/entry @nickname3 
+
+-> Response
+Stored entries: 
+  - @nickname3 -> 10                   
+
+******************************
+-> Request
+/bounty @nickname1 kicked @nickname4
+
+-> Response
+Bounty amount 10.00 from @nickname4 stored for @nickname1                   
+
+******************************
+-> Request
+/bounty @nickname1 kicked @nickname5
+
+-> Response
+Bounty amount 10.00 from @nickname5 stored for @nickname1                   
+
+******************************
+-> Request
+/prize_pool
+1 50%, 2 50%
+
+-> Response
+Prize pool stored:
+1. 50%
+2. 50%                   
+
+******************************
+-> Request
+/bounty @nickname3 kicked @nickname1
+
+-> Response
+Bounty amount 10.00 from @nickname1 stored for @nickname3                   
+
+******************************
+-> Request
+/entry @nickname1 
+
+-> Response
+Stored entries: 
+  - @nickname1 -> 10                   
+
+******************************
+-> Request
+/bounty @nickname3 kicked @nickname1
+
+-> Response
+Bounty amount 10.00 from @nickname1 stored for @nickname3                   
+
+******************************
+-> Request
+/entry @nickname1 
+
+-> Response
+Stored entries: 
+  - @nickname1 -> 10                   
+
+******************************
+-> Request
+/finale_places
+1 @nickname1, 2 @nickname2
+
+-> Response
+Finale places stored:
+1. @nickname1
+2. @nickname2                   
+
+******************************
+-> Request
+/bounty @nickname2 kicked @nickname1
+
+-> Response
+Bounty amount 10.00 from @nickname1 stored for @nickname2                   
+
+******************************
+-> Request
+/entry @nickname1 
+
+-> Response
+Stored entries: 
+  - @nickname1 -> 10                   
+
+******************************
+-> Request
+/bounty @nickname2 kicked @nickname3
+
+-> Response
+Bounty amount 10.00 from @nickname3 stored for @nickname2                   
+
+******************************
+-> Request
+/bounty @nickname2 kicked @me
+
+-> Response
+Bounty amount 10.00 from @hong_beer stored for @nickname2                   
+
+******************************
+-> Request
+/bounty @nickname1 kicked @nickname2
+
+-> Response
+Bounty amount 10.00 from @nickname2 stored for @nickname1                   
+
+******************************
+-> Request
+/calculate
+
+-> Response
+-----------------------------
+Finale summary:
+  1. @nickname1 won 55
+  2. @nickname2 won 55
+Total: 110 (11 entries * 10 buy in)
+-----------------------------
+Payout to: @nickname2
+  Entries: 1
+  Bounties: 20 (taken 3 - given 1) 
+  Total: 65 (won 55 - entries 10 + bounties 20)
+From:
+  @nickname3 -> 40
+  @nickname4 -> 20
+  @nickname5 -> 5
+-----------------------------
+Payout to: @nickname1
+  Entries: 4
+  Bounties: 0 (taken 3 - given 3) 
+  Total: 15 (won 55 - entries 40 + bounties 0)
+From:
+  @nickname5 -> 15
+-----------------------------
+Players played equally
+  @hong_beer

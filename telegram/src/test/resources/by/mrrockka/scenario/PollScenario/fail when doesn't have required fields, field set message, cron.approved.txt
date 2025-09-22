@@ -1,0 +1,10 @@
+******************************
+-> Request
+/create_poll
+message: Test poll
+cron: * * * * * *
+                
+                
+
+-> Response
+Options block should be specified
