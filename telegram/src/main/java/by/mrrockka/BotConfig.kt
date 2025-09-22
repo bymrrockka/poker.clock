@@ -1,6 +1,8 @@
 package by.mrrockka
 
+import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.interfaces.ctx.ClassManager
+import eu.vendeli.tgbot.types.component.ExceptionHandlingStrategy
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
@@ -11,7 +13,21 @@ import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
 @Configuration
-open class BotConfig {
+open class BotConfig(
+        private val botProps: BotProperties,
+) {
+
+    @Bean
+    open fun bot(appContext: ApplicationContext): TelegramBot {
+        return TelegramBot(botProps.token) {
+            classManager = SpringClassManager(appContext)
+            commandParsing {
+                commandDelimiter = '\n'
+                restrictSpacesInCommands = true
+            }
+            exceptionHandlingStrategy = ExceptionHandlingStrategy.Handle(PokerClockExceptionHandler)
+        }
+    }
 
     @Bean
     @OptIn(ExperimentalTime::class)
@@ -30,7 +46,7 @@ open class SpringClassManager(
 
 @Component
 @ConfigurationProperties(prefix = "bot.description")
-class BotDescriptionProperties {
+class BotCommandDescriptions {
     lateinit var commands: Map<String, CommandDescription>
     val byNamesAndAliases: Map<String, CommandDescription> by lazy {
         commands.entries
@@ -45,7 +61,7 @@ class BotDescriptionProperties {
 
 @Component
 @ConfigurationProperties(prefix = "bot.properties")
-class TelegramBotsProperties {
+class BotProperties {
     lateinit var name: String
     lateinit var nickname: String
     lateinit var token: String

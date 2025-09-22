@@ -1,8 +1,8 @@
 package by.mrrockka.scenario
 
+import by.mrrockka.BotProperties
 import by.mrrockka.PokerClockExceptionHandler
 import by.mrrockka.SpringClassManager
-import by.mrrockka.TelegramBotsProperties
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.types.component.ExceptionHandlingStrategy
 import org.springframework.beans.factory.annotation.Value
@@ -18,7 +18,7 @@ import kotlin.time.Instant
 @Profile("scenario")
 @TestConfiguration
 open class TestBotConfig(
-        private val botProps: TelegramBotsProperties,
+        private val botProps: BotProperties,
 ) {
 
     @Value("\${wiremock.server.baseUrl:}")

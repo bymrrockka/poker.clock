@@ -1,8 +1,8 @@
 package by.mrrockka.scenario
 
+import by.mrrockka.BotProperties
 import by.mrrockka.Command
 import by.mrrockka.GivenSpecification
-import by.mrrockka.TelegramBotsProperties
 import by.mrrockka.TelegramRandoms.Companion.telegramRandoms
 import by.mrrockka.WhenSpecification
 import by.mrrockka.builder.update
@@ -63,7 +63,7 @@ abstract class AbstractScenarioTest {
     lateinit var mapper: ObjectMapper
 
     @Autowired
-    lateinit var botProps: TelegramBotsProperties
+    lateinit var botProps: BotProperties
 
     @Autowired
     lateinit var bot: TelegramBot

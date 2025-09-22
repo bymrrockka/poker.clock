@@ -1,6 +1,6 @@
 package by.mrrockka.service
 
-import by.mrrockka.BotDescriptionProperties
+import by.mrrockka.BotCommandDescriptions
 import by.mrrockka.CommandDescription
 import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.parser.HelpMessageParser
@@ -12,7 +12,7 @@ interface HelpTelegramService {
 
 @Service
 class HelpTelegramServiceImpl(
-        private val descriptions: BotDescriptionProperties,
+        private val descriptions: BotCommandDescriptions,
         private val helpMessageParser: HelpMessageParser,
 ) : HelpTelegramService {
 
