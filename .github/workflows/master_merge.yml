@@ -1,7 +1,10 @@
 name: Poker Clock App docker image deployment
 
 on:
-  push:
+  workflow_run:
+    workflows: [ "Poker Clock App build" ]
+    types:
+      - completed
     branches:
       - master
 
