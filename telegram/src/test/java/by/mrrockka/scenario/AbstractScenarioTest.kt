@@ -91,10 +91,6 @@ abstract class AbstractScenarioTest {
 //                    url equalTo "${botpath}/${SetMyCommands.PATH}"
 //                    atMost = 1
 //                }
-//                wireMock.verify {
-//                    url equalTo "${botpath}/${DeleteWebhook.PATH}"
-//                    atMost = 1
-//                }
     }
 
     companion object {
@@ -179,7 +175,7 @@ abstract class AbstractScenarioTest {
                                             """
                                                |******************************
                                                |-> Request
-                                               |${command.message}
+                                               |${command.toAssertionString()}
                                                |
                                                |-> Response
                                                |${stubs[index] ?: "No message"}                   
@@ -200,6 +196,8 @@ abstract class AbstractScenarioTest {
                     } else false
                 }
     }
+
+    private fun Command.Message.toAssertionString(): String = message + if (!replyTo.isNullOrBlank()) " - reply to ${replyTo}" else ""
 
     private fun Command.Message.stub(index: Int, seed: String, chatId: Long) {
         val update = update {

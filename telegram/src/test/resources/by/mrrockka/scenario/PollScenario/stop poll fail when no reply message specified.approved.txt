@@ -26,4 +26,11 @@ Tournament game started.
 
 -> Response
 Message doesn't contain any attached messages. 
-Please reply to poll creation message to stop poll
+Please reply to poll creation message to stop poll                   
+
+******************************
+-> Request
+/stop_poll - reply to /create_poll
+
+-> Response
+Poll stopped

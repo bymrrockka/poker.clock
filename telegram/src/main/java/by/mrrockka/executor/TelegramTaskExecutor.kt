@@ -6,6 +6,7 @@ import by.mrrockka.service.PollEvent
 import by.mrrockka.service.PollTelegramService
 import eu.vendeli.tgbot.TelegramBot
 import jakarta.annotation.PreDestroy
+import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import org.springframework.context.event.EventListener
 import org.springframework.scheduling.annotation.Scheduled
@@ -49,8 +50,10 @@ class TelegramTaskExecutor(
             tasks.toExecute(now)
                     .forEach { task ->
                         runBlocking {
-                            task.toMessage().send(to = task.chatId, bot)
-                            tasks[task.id] = task.updatedAt(now)
+                            async {
+                                task.toMessage().send(to = task.chatId, bot)
+                                tasks[task.id] = task.updatedAt(now)
+                            }
                         }
                     }
         }

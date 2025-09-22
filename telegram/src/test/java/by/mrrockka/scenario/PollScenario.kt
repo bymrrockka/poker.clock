@@ -76,7 +76,8 @@ class PollScenario : AbstractScenarioTest() {
                 """.trimMargin()
             }
             message { "me".createGame(GameType.TOURNAMENT, 30.toBigDecimal()) }
-            message(replyTo = command) { stopPoll }
+            message(replyTo = command) { stopPoll } // should fail
+            message(replyTo = createPoll) { stopPoll } // should stop task execution to not affect other tests
         } When {
             updatesReceived()
         } ThenApproveWith textApprover("stop poll fail when ${if (command.isNotBlank()) "wrong" else "no"} reply message specified")

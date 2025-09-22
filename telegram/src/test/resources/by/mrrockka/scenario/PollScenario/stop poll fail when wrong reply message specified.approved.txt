@@ -22,7 +22,14 @@ Tournament game started.
 
 ******************************
 -> Request
-/stop_poll
+/stop_poll - reply to /tournament_game
 
 -> Response
-Poll was not found
+Poll was not found                   
+
+******************************
+-> Request
+/stop_poll - reply to /create_poll
+
+-> Response
+Poll stopped
