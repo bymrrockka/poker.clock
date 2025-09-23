@@ -11,7 +11,7 @@ import by.mrrockka.repo.PollTaskTable.messageId
 import by.mrrockka.repo.PollTaskTable.options
 import by.mrrockka.repo.PollTaskTable.updatedAt
 import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.batchInsert
+import org.jetbrains.exposed.sql.batchUpsert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.update
 import org.jetbrains.exposed.sql.upsert
@@ -47,7 +47,13 @@ open class PollTaskRepoImpl : PollTaskRepo {
     }
 
     override fun store(tasks: List<PollTask>) {
-        PollTaskTable.batchInsert(tasks) { task ->
+        PollTaskTable.batchUpsert(
+                data = tasks,
+                onUpdate = {
+                    it[finishedAt] = insertValue(finishedAt)
+                    it[updatedAt] = insertValue(updatedAt)
+                },
+        ) { task ->
             this[id] = task.id
             this[chatId] = task.chatId
             this[messageId] = task.messageId

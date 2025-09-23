@@ -72,7 +72,10 @@ class TelegramTaskExecutor(
             tasks.polls().first {
                 it.messageId == event.messageId
             }.let {
-                tasks[it.id] = it.copy(finishedAt = event.finishedAt)
+                tasks[it.id] = it.copy(
+                        finishedAt = event.finishedAt,
+                        updatedAt = clock.now().toJavaInstant(),
+                )
             }
         }
     }
