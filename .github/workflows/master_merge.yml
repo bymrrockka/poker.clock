@@ -22,6 +22,7 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           protocol: ${{ secrets.SSH_PROTOCOL }}
+          proxy_protocol: ${{ secrets.SSH_PROTOCOL }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
