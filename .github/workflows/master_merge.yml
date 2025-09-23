@@ -25,5 +25,6 @@ jobs:
           proxy_protocol: ${{ secrets.SSH_PROTOCOL }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          capture_stdout: true
           script: |
             whoami
