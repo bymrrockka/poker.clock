@@ -19,7 +19,7 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
-          protocol: ${{ SSH_PROTOCOL }}
+          protocol: ${{ secrets.SSH_PROTOCOL }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
