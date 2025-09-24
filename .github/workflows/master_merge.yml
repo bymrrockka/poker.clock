@@ -20,12 +20,12 @@ jobs:
       - name: Deploy using ssh
         uses: appleboy/ssh-action@v1
         with:
-          host: ${{ secrets.SSH_HOST }}
+          host: "${{ secrets.SSH_HOST }}"
           protocol: ${{ secrets.SSH_PROTOCOL }}
-          proxy_protocol: ${{ secrets.SSH_PROTOCOL }}
+#          proxy_protocol: ${{ secrets.SSH_PROTOCOL }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           capture_stdout: true
-          debug: true
+#          debug: true
           script: |
             whoami
