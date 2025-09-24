@@ -26,5 +26,6 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           capture_stdout: true
+          debug: true
           script: |
             whoami
