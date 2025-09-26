@@ -14,7 +14,6 @@ on:
   workflow_dispatch:
 
 env:
-#  GH_TOKEN: $${{ github.token }}
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
@@ -25,7 +24,7 @@ jobs:
       - name: test
         run: |
             echo "Run list"
-            echo $(gh run list -R ${{ github.repository }} -w "Poker Clock App build"  -L 1 --json conclusion,createdAt,databaseId,name,number,status)
+            echo $(gh run list -R ${{ github.repository }} -w "Poker Clock App build"  -L 1 --json databaseId -q '.[].databaseId)
 #            echo "API call"
 #            echo $(gh api repos/mrrockka/poker.clock/actions/workflows/build.yml/runs?event=push&branch=master)
 
