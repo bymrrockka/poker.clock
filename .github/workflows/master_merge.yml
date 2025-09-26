@@ -14,14 +14,14 @@ on:
   workflow_dispatch:
 
 env:
-  RUNID: $(gh run list -R ${{ github.repository }})
+  RUNID: gh run list -R ${{ github.repository }}
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - name: test
-        run: echo "$RUNID"
+        run: echo $(exec $RUNID)
 
       - name: Set up WARP
         uses: fscarmen/warp-on-actions@v1.1
