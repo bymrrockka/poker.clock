@@ -1,4 +1,4 @@
-name: Deploy to remote
+name: Deploy
 
 on:
   #  workflow_run:
@@ -16,7 +16,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy using ssh
+      - name: Deploy using ssh deploy
         uses: easingthemes/ssh-deploy@main
         with:
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
