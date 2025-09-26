@@ -1,20 +1,20 @@
 name: Deploy to remote
 
 on:
-  workflow_run:
-    workflows: [ "Poker Clock App build" ]
-    types:
-      - completed
+#  workflow_run:
+#    workflows: [ "Poker Clock App build" ]
+#    types:
+#      - completed
+#    branches:
+#      - master
+
+  push:
     branches:
       - master
-
-  #  push:
-  #    branches:
-  #      - master
   workflow_dispatch:
 
 env:
-  RUNID: gh run list -R ${{ github.repository }}
+  RUNID: $(gh run list -R ${{ github.repository }})
 
 jobs:
   deploy:
