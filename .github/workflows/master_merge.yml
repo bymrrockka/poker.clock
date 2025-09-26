@@ -1,21 +1,22 @@
 name: Deploy to remote
 
 on:
-  workflow_run:
-    workflows: [ "Poker Clock App build" ]
-    types:
-      - completed
+#  workflow_run:
+#    workflows: [ "Poker Clock App build" ]
+#    types:
+#      - completed
+#    branches:
+#      - master
+
+  push:
     branches:
       - master
-
-  #  push:
-  #    branches:
-  #      - master
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    needs: build
     steps:
       - name: Set up WARP
         uses: fscarmen/warp-on-actions@v1.1
