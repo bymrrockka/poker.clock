@@ -20,13 +20,15 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-#        run: echo $(gh api repos/$GITHUB_REPOSITORY/actions/workflows/build/runs | jq -r '.check_runs[] | select(.name == "NAME_OF_YOUR_GITHUB_ACTIONS_WORKFLOW") | .html_url | capture("/runs/(?<number>[0-9]+)/jobs") | .number' | sed 's/"//g' | head -n 1)
       - name: test
         run: |
             echo "Run list"
-            echo $(gh run list -R ${{ github.repository }} -w "Poker Clock App build"  -L 1 --json databaseId -q '.[].databaseId')
+            echo $(gh run list -R ${{ github.repository }} -w "Poker Clock App build"  -L 1 --json databaseId -q '.[].databaseId') >> $RUNID
 #            echo "API call"
 #            echo $(gh api repos/mrrockka/poker.clock/actions/workflows/build.yml/runs?event=push&branch=master)
+
+      - name: test2
+        run: echo $RUNID
 
       - name: Set up WARP
         uses: fscarmen/warp-on-actions@v1.1
