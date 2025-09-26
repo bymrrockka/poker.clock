@@ -14,24 +14,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  # This workflow contains a single job called "build"
   deploy:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      #      - name: Deploy using ssh
-      #        uses: appleboy/ssh-action@v1
-      #        with:
-      #          host: ${{ secrets.SSH_HOST }}
-      #          proxy_protocol: ${{ secrets.SSH_PROTOCOL }}
-      #          username: ${{ secrets.SSH_USERNAME }}
-      #          key: ${{ secrets.SSH_PRIVATE_KEY }}
-      ##          capture_stdout: true
-      ##          debug: true
-      #          script: |
-      #            whoamio
-
       - name: Set up WARP
         uses: fscarmen/warp-on-actions@v1.1
         with:
@@ -52,3 +37,4 @@ jobs:
           command_timeout: 30s
           script: |
             whoami
+            ls -l
