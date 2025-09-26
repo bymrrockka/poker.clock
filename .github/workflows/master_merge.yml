@@ -25,11 +25,11 @@ jobs:
       - name: test
         run: |
             echo "Run list"
-            echo $(gh run list -R ${{ github.repository }} --json -L 5)
+            echo $(gh run list -R ${{ github.repository }} -L 3 --json conclusion,createdAt,databaseId,name,number,status,workflowDatabaseId,workflowName)
             echo "Workflow list"
             echo $(gh workflow list -R ${{ github.repository }} -L 5 --json id,name,state)
             echo "API call"
-            echo $(gh api repos/mrrockka/poker.clock/actions/workflows/build.yml/runs)
+            echo $(gh api repos/mrrockka/poker.clock/actions/workflows/build.yml/runs?event=push&branch=master)
 
       - name: Set up WARP
         uses: fscarmen/warp-on-actions@v1.1
