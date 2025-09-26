@@ -8,9 +8,9 @@ on:
     branches:
       - master
 
-#  push:
-#    branches:
-#      - master
+  #  push:
+  #    branches:
+  #      - master
   workflow_dispatch:
 
 jobs:
@@ -23,9 +23,11 @@ jobs:
           stack: dual
 
       - name: Download telegram bot jar
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
-          name: telegram-bot.jar
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: telegram-bot
+          path: ./
 
       - name: Copying files to server
         uses: appleboy/scp-action@master
