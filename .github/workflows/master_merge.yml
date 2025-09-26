@@ -23,9 +23,9 @@ jobs:
           stack: dual
 
       - name: Download telegram bot jar
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v4
         with:
-          name: telegram-bot
+          name: telegram-bot.jar
 
       - name: Copying files to server
         uses: appleboy/scp-action@master
