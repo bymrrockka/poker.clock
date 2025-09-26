@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: test
-        run: echo $(gh workflow list -L 5 --json id,name,state)
+        run: echo $(gh workflow list -R ${{ github.repository }} -L 5 --json id,name,state)
 
       - name: Set up WARP
         uses: fscarmen/warp-on-actions@v1.1
