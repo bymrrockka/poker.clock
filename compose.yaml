@@ -1,16 +1,4 @@
 services:
-  telegram:
-    image: 'vrokka/poker-clock-tg-bot:latest'
-    environment:
-      - 'DB_PASSWORD=r8E6&r3>'
-      - 'DB_URL=jdbc:postgresql://postgres:5432/pokerclock?sslmode=disable'
-      - 'DB_USER=psuser'
-      - 'PROFILES=production,postgres'
-      - 'BOT_TOKEN=6602349464:AAHXWR1pnkqmfUj0YRiY1Jy7EmfyMQToYO8'
-      - 'BOT_NAME=Poker calculator bot'
-      - 'BOT_NICKNAME=pokerclc_bot'
-    depends_on:
-      - postgres
   postgres:
     image: 'postgres:16.1'
     ports:

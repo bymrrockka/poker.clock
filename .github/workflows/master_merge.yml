@@ -1,16 +1,16 @@
 name: Deploy to remote
 
 on:
-  #  workflow_run:
-  #    workflows: [ "Poker Clock App build" ]
-  #    types:
-  #      - completed
-  #    branches:
-  #      - master
-
-  push:
+  workflow_run:
+    workflows: [ "Poker Clock App build" ]
+    types:
+      - completed
     branches:
       - master
+
+#  push:
+#    branches:
+#      - master
   workflow_dispatch:
 
 jobs:
@@ -22,9 +22,21 @@ jobs:
         with:
           stack: dual
 
-#      - name: testing ipv6 for command
-#        run: |
-#          curl -m 9 --ipv6 --verbose https://google.com
+      - name: Download telegram bot jar
+        uses: actions/download-artifact@v4
+        with:
+          name: telegram-bot
+
+      - name: Copying files to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          protocol: tcp6
+          rm: false
+          source: "telegram-bot-*.jar"
+          target: "~/app"
 
       - name: execute scripts
         uses: appleboy/ssh-action@master
