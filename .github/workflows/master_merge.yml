@@ -23,9 +23,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: test
-#        run: echo $(gh run list -R ${{ github.repository }} -L 5 --json id,name,state)
+        run: echo $(gh run list -R ${{ github.repository }})
+#        run: echo $(gh workflow list -R ${{ github.repository }} -L 5 --json id,name,state)
 #        run: echo $(gh api repos/$GITHUB_REPOSITORY/actions/workflows/build/runs | jq -r '.check_runs[] | select(.name == "NAME_OF_YOUR_GITHUB_ACTIONS_WORKFLOW") | .html_url | capture("/runs/(?<number>[0-9]+)/jobs") | .number' | sed 's/"//g' | head -n 1)
-        run: echo $(gh api repos/mrrockka/poker.clock/actions/workflows/build/runs)
+#        run: echo $(gh api repos/mrrockka/poker.clock/actions/workflows/build/runs)
 
       - name: Set up WARP
         uses: fscarmen/warp-on-actions@v1.1
