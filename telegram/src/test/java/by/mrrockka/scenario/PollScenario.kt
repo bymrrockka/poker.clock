@@ -39,8 +39,8 @@ class PollScenario : AbstractScenarioTest() {
             pollPosted()
             message(replyTo = createPoll) { stopPoll }
         } When {
-            clock.set(time + 8.days)
             updatesReceived()
+            clock.set(time + 8.days)
         } ThenApproveWith approver
     }
 

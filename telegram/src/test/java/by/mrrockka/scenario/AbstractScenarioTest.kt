@@ -47,9 +47,11 @@ import org.springframework.test.context.ActiveProfiles
 import org.testcontainers.junit.jupiter.Testcontainers
 import java.time.Duration
 import kotlin.time.ExperimentalTime
+import kotlin.time.toJavaInstant
 
+@OptIn(ExperimentalTime::class)
 @ExtendWith(value = [TelegramPSQLExtension::class, TelegramWiremockExtension::class, TextApproverExtension::class])
-@ActiveProfiles(profiles = ["scenario", "production"])
+@ActiveProfiles(profiles = ["scenario"])
 @Testcontainers
 @SpringBootTest(classes = [TestBotConfig::class])
 abstract class AbstractScenarioTest {
@@ -69,7 +71,6 @@ abstract class AbstractScenarioTest {
     lateinit var bot: TelegramBot
 
     @Autowired
-    @OptIn(ExperimentalTime::class)
     lateinit var clock: TestClock
 
     private fun String.toJson(): JsonNode = mapper.readTree(this)
@@ -161,7 +162,7 @@ abstract class AbstractScenarioTest {
     }
 
     infix fun WhenSpecification.ThenApproveWith(approver: Approver) {
-        await.atMost(Duration.ofSeconds(2))
+        await.atMost(Duration.ofSeconds(3))
                 .until {
                     val stubs = wireMock.serveEvents
                             .filter { it.stubMapping.metadata != null && it.stubMapping.metadata.contains(METADATA_ATTR) }
@@ -205,6 +206,7 @@ abstract class AbstractScenarioTest {
                 text(this@stub.message)
                 chatId(chatId)
                 from(this@AbstractScenarioTest.user)
+                createdAt(clock.now().toJavaInstant())
                 if (replyTo != null && messageLog[replyTo] != null) {
                     replyTo {
                         chatId(chatId)

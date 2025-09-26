@@ -5,9 +5,11 @@ import by.mrrockka.domain.Task
 import by.mrrockka.service.PollEvent
 import by.mrrockka.service.PollTelegramService
 import eu.vendeli.tgbot.TelegramBot
+import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
+import org.springframework.context.annotation.DependsOn
 import org.springframework.context.event.EventListener
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
@@ -19,6 +21,7 @@ import kotlin.time.toJavaInstant
 
 @OptIn(ExperimentalTime::class)
 @Component
+@DependsOn("liquibase")
 class TelegramTaskExecutor(
         private val taskTelegramService: PollTelegramService,
         private val bot: TelegramBot,
@@ -27,11 +30,10 @@ class TelegramTaskExecutor(
     @Volatile
     private var tasks: MutableMap<UUID, Task> = mutableMapOf()
 
+    @PostConstruct
     fun init() {
-        if (tasks.isEmpty()) {
-            synchronized(tasks) {
-                tasks = taskTelegramService.selectActive().asMap()
-            }
+        synchronized(tasks) {
+            tasks = taskTelegramService.selectActive().asMap()
         }
     }
 
@@ -44,18 +46,17 @@ class TelegramTaskExecutor(
 
     @Scheduled(cron = "\${bot.scheduler.cron}")
     fun execute() {
-        init()
         val now = clock.now().toJavaInstant()
         synchronized(tasks) {
-            tasks.toExecute(now)
-                    .forEach { task ->
-                        runBlocking {
+            runBlocking {
+                tasks.toExecute(now)
+                        .forEach { task ->
                             async {
                                 task.toMessage().send(to = task.chatId, bot)
                                 tasks[task.id] = task.updatedAt(now)
                             }
                         }
-                    }
+            }
         }
     }
 

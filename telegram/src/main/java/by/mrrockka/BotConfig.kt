@@ -3,10 +3,14 @@ package by.mrrockka
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.interfaces.ctx.ClassManager
 import eu.vendeli.tgbot.types.component.ExceptionHandlingStrategy
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 import kotlin.reflect.KClass
 import kotlin.time.Clock
@@ -18,8 +22,10 @@ open class BotConfig(
 ) {
 
     @Bean
+    @Profile("production")
+    @OptIn(DelicateCoroutinesApi::class)
     open fun bot(appContext: ApplicationContext): TelegramBot {
-        return TelegramBot(botProps.token) {
+        val bot = TelegramBot(botProps.token) {
             classManager = SpringClassManager(appContext)
             commandParsing {
                 commandDelimiter = '\n'
@@ -27,6 +33,12 @@ open class BotConfig(
             }
             exceptionHandlingStrategy = ExceptionHandlingStrategy.Handle(PokerClockExceptionHandler)
         }
+
+        GlobalScope.launch {
+            bot.handleUpdates()
+        }
+
+        return bot
     }
 
     @Bean

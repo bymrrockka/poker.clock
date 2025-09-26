@@ -35,7 +35,6 @@ telegramBot = { id = "eu.vendeli.telegram-bot", version.ref = "telegramBotVersio
 telegramBot = { module = "eu.vendeli:telegram-bot", version.ref = "telegramBotVersion" }
 kotlinStdLib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8" }
 springBootJdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc" }
-springBootAop = { module = "org.springframework.boot:spring-boot-starter-aop" }
 aspectjWeaver = { module = "org.aspectj:aspectjweaver" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresqlVersion" }
 jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "jupiterVersion" }
@@ -68,7 +67,7 @@ junitLauncher = { module = "org.junit.platform:junit-platform-launcher" }
 logback = ["logbackClassic", "logbackCore"]
 wiremock = ["wiremock", "wiremockContainer", "wiremockKotlinDsl"]
 kotlinLibs = ["kotlinStdLib", "kotlinSerialization"]
-springBoot = ["springBootWeb", "springBootJdbc", "springBootAop"]
+springBoot = ["springBootWeb", "springBootJdbc"]
 exposed = ["exposedCore", "exposedSpringBoot", "exposedJdbc", "exposedJson", "exposedJavaTime"]
 test = ["assertjCore", "jupiter", "junitLauncher", "awaitility", "springBootTest", "okeydoke"]
 db = ["postgresql", "liquibase"]
