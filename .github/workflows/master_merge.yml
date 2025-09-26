@@ -20,7 +20,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: test
+      - id: setup
         run: |
             echo "Run list"
             echo "runid=$(gh run list -R ${{ github.repository }} -w "Poker Clock App build"  -L 1 --json databaseId -q '.[].databaseId')" >> "$GITHUB_OUTPUT"
@@ -28,7 +28,7 @@ jobs:
 #            echo $(gh api repos/mrrockka/poker.clock/actions/workflows/build.yml/runs?event=push&branch=master)
 
       - name: test2
-        run: echo $runid
+        run: echo ${{ steps.setup.outputs.runid }}
 
       - name: Set up WARP
         uses: fscarmen/warp-on-actions@v1.1
