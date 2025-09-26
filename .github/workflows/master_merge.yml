@@ -23,7 +23,7 @@ jobs:
           stack: dual
 
       - name: Download telegram bot jar
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: telegram-bot
 
