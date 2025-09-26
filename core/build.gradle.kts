@@ -74,4 +74,4 @@ tasks {
     }
 }
 
-defaultTasks("clean", "assemble")
+defaultTasks("clean")

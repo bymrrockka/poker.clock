@@ -91,8 +91,4 @@ tasks {
     }
 }
 
-application {
-    mainClass = "by.mrrockka.TelegramApplication"
-}
-
-defaultTasks("clean", "assemble")
+defaultTasks("clean")

@@ -1,23 +1,23 @@
 [versions]
 #plugins
-springBootVersion = "3.5.5"
+springBootVersion = "3.5.6"
 springDepManagementVersion = "1.1.7"
 kotlinVersion = "2.2.20"
 googleDevtoolsKspVersion = "2.2.20-2.0.3"
-telegramBotVersion = "8.3.1"
+telegramBotVersion = "8.4.0"
 
 #libs
-postgresqlVersion = "42.7.4"
-jupiterVersion = "5.11.1"
-assertjCoreVersion = "3.26.3"
-testContainerVersion = "1.20.1"
-liquibaseVersion = "4.29.2"
+postgresqlVersion = "42.7.8"
+jupiterVersion = "5.13.4"
+assertjCoreVersion = "3.27.6"
+testContainerVersion = "1.21.3"
+liquibaseVersion = "4.33.0"
 javaFakerVersion = "1.0.2"
 jacksonVersion = "2.20.0"
-hikariCPVersion = "5.1.0"
-jetbrainsExposedVersion = "0.55.0"
-awaitilityVersion = "4.2.2"
-wiremockVersion = "3.10.0"
+hikariCPVersion = "7.0.2"
+exposedVersion = "0.61.0"
+awaitilityVersion = "4.3.0"
+wiremockVersion = "3.13.1"
 wiremockContainerVersion = "1.0-alpha-13"
 wiremockKotlinVersion = "2.1.1"
 okeydokieVersion = "2.0.3"
@@ -49,11 +49,11 @@ javaFaker = { module = "com.github.javafaker:javafaker", version.ref = "javaFake
 jacksonDataformat = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml", version.ref = "jacksonVersion" }
 jacksonKotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jacksonVersion" }
 hikariCP = { module = "com.zaxxer:HikariCP", version.ref = "hikariCPVersion" }
-exposedCore = { module = "org.jetbrains.exposed:exposed-core", version.ref = "jetbrainsExposedVersion" }
-exposedJdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "jetbrainsExposedVersion" }
-exposedJavaTime = { module = "org.jetbrains.exposed:exposed-java-time", version.ref = "jetbrainsExposedVersion" }
-exposedJson = { module = "org.jetbrains.exposed:exposed-json", version.ref = "jetbrainsExposedVersion" }
-exposedSpringBoot = { module = "org.jetbrains.exposed:exposed-spring-boot-starter", version.ref = "jetbrainsExposedVersion" }
+exposedCore = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposedVersion" }
+exposedJdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposedVersion" }
+exposedJavaTime = { module = "org.jetbrains.exposed:exposed-java-time", version.ref = "exposedVersion" }
+exposedJson = { module = "org.jetbrains.exposed:exposed-json", version.ref = "exposedVersion" }
+exposedSpringBoot = { module = "org.jetbrains.exposed:exposed-spring-boot-starter", version.ref = "exposedVersion" }
 awaitility = { module = "org.awaitility:awaitility-kotlin", version.ref = "awaitilityVersion" }
 wiremock = { module = "org.wiremock:wiremock-standalone", version.ref = "wiremockVersion" }
 wiremockContainer = { module = "org.wiremock.integrations.testcontainers:wiremock-testcontainers-module", version.ref = "wiremockContainerVersion" }
