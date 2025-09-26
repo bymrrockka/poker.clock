@@ -14,7 +14,8 @@ on:
   workflow_dispatch:
 
 env:
-  GH_TOKEN: $${{ github.token }}
+#  GH_TOKEN: $${{ github.token }}
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   RUNID: gh run list -R ${{ github.repository }}
 
 jobs:
