@@ -25,7 +25,7 @@ jobs:
       - name: test
         run: |
             echo "Run list"
-            echo $(gh run list -R ${{ github.repository }})
+            echo $(gh run list -R ${{ github.repository }} --json -L 5)
             echo "Workflow list"
             echo $(gh workflow list -R ${{ github.repository }} -L 5 --json id,name,state)
             echo "API call"
