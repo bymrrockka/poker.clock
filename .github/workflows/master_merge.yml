@@ -1,16 +1,13 @@
 name: Deploy to remote
 
 on:
-#  workflow_run:
-#    workflows: [ "Poker Clock App build" ]
-#    types:
-#      - completed
-#    branches:
-#      - master
-
-  push:
+  workflow_run:
+    workflows: [ "Poker Clock App build" ]
+    types:
+      - completed
     branches:
       - master
+
   workflow_dispatch:
 
 env:
@@ -27,13 +24,15 @@ jobs:
 #            echo "API call"
 #            echo $(gh api repos/mrrockka/poker.clock/actions/workflows/build.yml/runs?event=push&branch=master)
 
-      - name: test2
-        run: echo ${{ steps.setup.outputs.runid }}
+#      - name: test2
+#        run: echo ${{ steps.setup.outputs.runid }}
+#
+#      - name: Set up WARP
+#        uses: fscarmen/warp-on-actions@v1.1
+#        with:
+#          stack: dual
 
-      - name: Set up WARP
-        uses: fscarmen/warp-on-actions@v1.1
-        with:
-          stack: dual
+      - uses: actions/checkout@v4
 
       - name: Download telegram bot jar
         uses: actions/download-artifact@v5
@@ -41,7 +40,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           run-id: ${{ steps.setup.outputs.runid }}
           name: telegram-bot
-          path: ./
+          path: ./app/
 
       - name: Copying files to server
         uses: appleboy/scp-action@master
@@ -51,7 +50,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           protocol: tcp6
           rm: false
-          source: "telegram-bot-*.jar"
+          source: "./app/telegram-bot-*.jar,./scripts"
           target: "~/app"
 
       - name: execute scripts
