@@ -21,16 +21,11 @@ jobs:
         run: |
             echo "Run list"
             echo "runid=$(gh run list -R ${{ github.repository }} -w "Poker Clock App build"  -L 1 --json databaseId -q '.[].databaseId')" >> "$GITHUB_OUTPUT"
-#            echo "API call"
-#            echo $(gh api repos/mrrockka/poker.clock/actions/workflows/build.yml/runs?event=push&branch=master)
 
-#      - name: test2
-#        run: echo ${{ steps.setup.outputs.runid }}
-#
-#      - name: Set up WARP
-#        uses: fscarmen/warp-on-actions@v1.1
-#        with:
-#          stack: dual
+      - name: Set up WARP
+        uses: fscarmen/warp-on-actions@v1.1
+        with:
+          stack: dual
 
       - uses: actions/checkout@v4
 
@@ -49,7 +44,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           protocol: tcp6
-          rm: false
+          overwrite: true
           source: "./app/telegram-bot-*.jar,./scripts"
           target: "~/app"
 
