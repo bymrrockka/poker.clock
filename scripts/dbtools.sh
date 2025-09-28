@@ -7,7 +7,7 @@ dbBackup(){
   fileSize=$(find ~/backup/ -type f | wc -l)-3
 
 
-  if (( a > b )); then
+  if [ "$fileSize" -gt 0 ]; then
     find ~/backup/ -type f -printf "%Cx.%CX %p\n" | sort -n | awk '{print $3}' | head -$fileSize | xargs -0 rm
   else
     echo "Backups contain less than 3 files"
