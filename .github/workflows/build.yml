@@ -2,8 +2,8 @@ name: Poker Clock App build
 
 on:
   push:
-
   workflow_call:
+  workflow_dispatch:
 
 jobs:
   build:
