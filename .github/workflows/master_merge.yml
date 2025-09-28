@@ -1,27 +1,17 @@
 name: Deploy to remote
 
 on:
-  workflow_run:
-    workflows: [ "Poker Clock App build" ]
-    types:
-      - completed
+  workflow_dispatch:
+  push:
     branches:
       - master
 
-  workflow_dispatch:
-
-env:
-  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 jobs:
+  build:
+    uses: ./.github/workflows/build.yml
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - id: setup
-        run: |
-            echo "Run list"
-            echo "runid=$(gh run list -R ${{ github.repository }} -w "Poker Clock App build"  -L 1 --json databaseId -q '.[].databaseId')" >> "$GITHUB_OUTPUT"
-
       - name: Set up WARP
         uses: fscarmen/warp-on-actions@v1.1
         with:
@@ -32,8 +22,6 @@ jobs:
       - name: Download telegram bot jar
         uses: actions/download-artifact@v5
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          run-id: ${{ steps.setup.outputs.runid }}
           name: telegram-bot
 
       - name: Copying files to server
@@ -64,5 +52,5 @@ jobs:
           protocol: tcp6
           port: 22
           command_timeout: 30s
-          envs: BOT_NAME,BOT_NICKNAME,BOT_TOKEN,DB_PASSWORD,DB_URL,DB_USER,_PROFILES
+          envs: BOT_NAME,BOT_NICKNAME,BOT_TOKEN,DB_PASSWORD,DB_URL,DB_USER,PROFILES
           script_path: "app/scripts/run.sh"

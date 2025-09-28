@@ -2,6 +2,8 @@ name: Poker Clock App build
 
 on:
   push:
+    branches:
+      - "!master"
   workflow_call:
   workflow_dispatch:
 
@@ -31,4 +33,3 @@ jobs:
         with:
           name: telegram-bot
           path: 'telegram/build/libs/telegram-bot-*.jar'
-          retention-days: 7
