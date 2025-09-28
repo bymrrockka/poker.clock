@@ -65,4 +65,4 @@ jobs:
           port: 22
           command_timeout: 30s
           envs: BOT_NAME,BOT_NICKNAME,BOT_TOKEN,DB_PASSWORD,DB_URL,DB_USER,_PROFILES
-          script_path: "~/app/scripts/run.sh"
+          script_path: "app/scripts/run.sh"
