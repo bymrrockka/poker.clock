@@ -29,14 +29,13 @@ startApp() {
 
   if [ "$fileSize" -gt 0 ]; then
     find ~/app/*.jar -type f -printf "%Cx.%CX %p\n" | sort -n | awk '{print $3}' | head -$fileSize | xargs -0 rm
-  else
-    echo "Backups contain less than 3 files"
   fi
+  commandOpts="-Xmx512m -Djava.net.preferIPv6Addresses=true "
 
-  `nohup java --enable-preview -Xmx512m -Djava.net.preferIPv6Addresses=true -jar ~/app/$bootfile </dev/null >/dev/null 2>&1 &` echo "Telegram bot started"
+  `nohup java $commandOpts -jar ~/app/*.jar </dev/null >/dev/null 2>&1 &` echo "Telegram bot started"
 }
 
 stopApp
-./dbtools.sh
+source ~/app/scripts/dbtools.sh
 startApp
 
