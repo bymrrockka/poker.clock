@@ -19,7 +19,7 @@ stopApp() {
               ((counter++))
           else
               echo "Telegram bot with PROCESS_ID:$processId is stopped now.."
-              exit 0;
+              counter=151
           fi
   done
 }
