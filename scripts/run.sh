@@ -2,8 +2,13 @@
 
 stopApp() {
   processId=$(ps ax | grep java | grep telegram-bot | awk '{print $1}')
-  echo "Processid is $processId"
-  kill "$processId";
+  if [ -z "${processId}" ]; then
+    echo "Telegram bot wasn't started"
+    return 0
+  else
+    echo "Processid is $processId"
+    kill "$processId";
+  fi
 
   counter=1
   until [ $counter -gt 150 ]
@@ -20,12 +25,15 @@ stopApp() {
 }
 
 startApp() {
-  jars=`find ~/app/ -maxdepth 1 -type f -exec stat --format="%w %n" {} + | sort -n | awk {'print $4'}`
-  bootfile=${jars[0]}
-  unset -v 'jars[0]'
-  rm "${jars[@]}"
+  fileSize=$(($(find ~/app/*.jar -type f | wc -l)-1))
 
- `nohup java --enable-preview -Xmx512m -Djava.net.preferIPv6Addresses=true -jar ~/app/$bootfile </dev/null >/dev/null 2>&1 &` echo "Telegram bot started"
+  if [ "$fileSize" -gt 0 ]; then
+    find ~/app/*.jar -type f -printf "%Cx.%CX %p\n" | sort -n | awk '{print $3}' | head -$fileSize | xargs -0 rm
+  else
+    echo "Backups contain less than 3 files"
+  fi
+
+  `nohup java --enable-preview -Xmx512m -Djava.net.preferIPv6Addresses=true -jar ~/app/$bootfile </dev/null >/dev/null 2>&1 &` echo "Telegram bot started"
 }
 
 stopApp
