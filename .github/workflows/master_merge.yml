@@ -49,6 +49,14 @@ jobs:
 
       - name: execute scripts
         uses: appleboy/ssh-action@master
+        env:
+          BOT_NAME: ${{ secrets.BOT_NAME }}
+          BOT_NICKNAME: ${{ secrets.BOT_NICKNAME }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_URL: ${{ secrets.DB_URL }}
+          DB_USER: ${{ secrets.DB_USER }}
+          PROFILES: ${{ secrets.PROFILES }}
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
@@ -56,5 +64,5 @@ jobs:
           protocol: tcp6
           port: 22
           command_timeout: 30s
-          script: |
-            ls -l
+          envs: BOT_NAME,BOT_NICKNAME,BOT_TOKEN,DB_PASSWORD,DB_URL,DB_USER,_PROFILES
+          script_path: "~/app/scripts/run.sh"

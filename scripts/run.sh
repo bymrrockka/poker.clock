@@ -19,7 +19,7 @@ stopApp() {
               ((counter++))
           else
               echo "Telegram bot with PROCESS_ID:$processId is stopped now.."
-              counter=151
+              return 0
           fi
   done
 }
@@ -30,7 +30,7 @@ startApp() {
   if [ "$fileSize" -gt 0 ]; then
     find ~/app/*.jar -type f -printf "%Cx.%CX %p\n" | sort -n | awk '{print $3}' | head -$fileSize | xargs -0 rm
   fi
-  commandOpts="-Xmx512m -Djava.net.preferIPv6Addresses=true "
+  commandOpts="-Xmx512m -Djava.net.preferIPv6Addresses=true"
 
   `nohup java $commandOpts -jar ~/app/*.jar </dev/null >/dev/null 2>&1 &` echo "Telegram bot started"
 }
