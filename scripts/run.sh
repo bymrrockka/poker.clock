@@ -1,7 +1,7 @@
 #!/bin/bash
 
 stopApp() {
-  processId=$(ps ax | grep java | grep telegram-bot | awk {'print $1'})
+  processId=$(ps ax | grep java | grep telegram-bot | awk '{print $1}')
   echo "Processid is $processId"
   kill "$processId";
 
@@ -29,6 +29,6 @@ startApp() {
 }
 
 stopApp
-dbtools.sh
+./dbtools.sh
 startApp
 
