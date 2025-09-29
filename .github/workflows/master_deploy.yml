@@ -13,6 +13,8 @@ jobs:
     needs: [ build ]
     runs-on: ubuntu-latest
     environment: 'Prod'
+    concurrency:
+      group: 'Prod'
     steps:
       - name: Set up WARP
         uses: fscarmen/warp-on-actions@v1.1
