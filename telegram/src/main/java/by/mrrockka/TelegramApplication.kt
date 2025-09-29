@@ -3,10 +3,12 @@ package by.mrrockka
 import org.jetbrains.exposed.spring.autoconfigure.ExposedAutoConfiguration
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 import org.springframework.scheduling.annotation.EnableScheduling
 
 @EnableScheduling
+@EnableConfigurationProperties
 @ImportAutoConfiguration(value = [ExposedAutoConfiguration::class])
 @SpringBootApplication
 open class TelegramApplication

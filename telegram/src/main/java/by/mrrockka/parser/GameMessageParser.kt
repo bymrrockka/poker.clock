@@ -1,10 +1,12 @@
 package by.mrrockka.parser
 
+import by.mrrockka.BotCommands
 import by.mrrockka.domain.BountyTournamentGame
 import by.mrrockka.domain.CashGame
 import by.mrrockka.domain.Game
 import by.mrrockka.domain.GameType
 import by.mrrockka.domain.MessageMetadata
+import by.mrrockka.domain.MetadataEntity
 import by.mrrockka.domain.TournamentGame
 import org.springframework.stereotype.Component
 import java.math.BigDecimal
@@ -12,7 +14,9 @@ import java.math.RoundingMode
 import java.util.*
 
 @Component
-class GameMessageParser : MessageParser<Game> {
+class GameMessageParser(
+        private val commands: BotCommands,
+) : MessageParser<Game> {
     private val amountRegex = "(?<amount>[.\\d]+)(?<multiplier>[A-z]{0,1})"
     private val buyInRegex = "^buyin:\\s*$amountRegex".toRegex(RegexOption.MULTILINE)
     private val stackRegex = "^stack:\\s*$amountRegex".toRegex(RegexOption.MULTILINE)
@@ -20,8 +24,7 @@ class GameMessageParser : MessageParser<Game> {
     private val typeRegex = "([\\w]+)_game$".toRegex(RegexOption.MULTILINE)
 
     override fun parse(metadata: MessageMetadata): Game {
-        val type = typeRegex.find(metadata.command.text.trimIndent())!!.destructured
-                .let { (match) -> GameType.valueOf(match.uppercase()) }
+        val type = metadata.command.toType()
         val buyin = buyInRegex.find(metadata.text.trimIndent())
                 .let { match ->
                     val amount = match?.groups["amount"]?.value
@@ -92,4 +95,11 @@ class GameMessageParser : MessageParser<Game> {
 
     private fun BigDecimal.defaultScale(): BigDecimal = this.setScale(0, RoundingMode.HALF_DOWN)
 
+    private fun MetadataEntity.toType(): GameType {
+        val description = commands.byNameAndAlias[text]
+        check(description != null) { "Can't find game by command" }
+
+        return typeRegex.find(description.name.trimIndent())!!.destructured
+                .let { (match) -> GameType.valueOf(match.uppercase()) }
+    }
 }

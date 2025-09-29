@@ -21,7 +21,7 @@ class GameCommandHandlerImpl(
         private val gameService: GameTelegramService,
 ) : GameCommandHandler {
 
-    @CommandHandler(["/tournament_game", "/bounty_game", "/cash_game"])
+    @CommandHandler(["/tournament_game", "/bounty_game", "/cash_game", "/tg", "/bg", "/cg"])
     override suspend fun store(message: MessageUpdate) {
         val metadata = message.message.toMessageMetadata()
         gameService.store(metadata)

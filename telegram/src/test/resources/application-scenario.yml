@@ -13,7 +13,7 @@ bot:
     cron: "* * * * * *"
   description:
     commands:
-      bounty_game:
+      - name: bounty_game
         enabled: true
         alias: bg
         description: Starts bounty tournament game
@@ -28,7 +28,7 @@ bot:
           bounty: 10
           @nickname 
           @nickname
-      tournament_game:
+      - name: tournament_game
         enabled: true
         alias: tg
         description: Starts a tournament game
@@ -42,7 +42,7 @@ bot:
           stack: 10
           @nickname 
           @nickname
-      cash_game:
+      - name: cash_game
         enabled: true
         alias: cg
         description: Starts a cash game
@@ -56,7 +56,7 @@ bot:
           stack: 10
           @nickname 
           @nickname
-      entry:
+      - name: entry
         enabled: true
         description: Player entry to game
         details: |
@@ -68,7 +68,7 @@ bot:
           /entry @nickname 20 
           /entry @nickname @nickname
           /entry @nickname @nickname 20
-      bounty:
+      - name: bounty
         enabled: true
         description: Bounty transaction in game
         details: |
@@ -77,9 +77,9 @@ bot:
           You could forward game message in case there are multiple games happen in parallel to store against it.
           Examples: 
           /bounty @nickname kicked @nickname
-      withdrawal:
+      - name: withdrawal
         enabled: true
-        alias: withdraw
+        alias: wdrl
         description: Player withdrawal from a cash game
         details: |
           For players withdrawals use /withdrawal command with nickname and amount to save it against the last started game.
@@ -88,7 +88,7 @@ bot:
           Examples: 
           /withdrawal @nickname 20
           /withdrawal @nickname @nickname 20
-      prize_pool:
+      - name: prize_pool
         enabled: true
         alias: pp
         description: Stores a prize pool for a tournament
@@ -103,7 +103,7 @@ bot:
           /prize_pool 
           1 70%
           2 30%
-      finale_places:
+      - name: finale_places
         enabled: true
         alias: fp
         description: Stores a finale places for a tournament
@@ -115,7 +115,7 @@ bot:
           /finale_places 
           1. @nickname
           /finale_places 1 @nickname, 2 @nickname
-      calculate:
+      - name: calculate
         enabled: true
         description: Calculate game payouts
         details: |
@@ -133,7 +133,7 @@ bot:
             - withdrawals
           Examples: 
           /calculate
-      game_stats:
+      - name: game_stats
         enabled: true
         description: Game statistics
         details: |
@@ -141,22 +141,22 @@ bot:
           You could forward game message in case there are multiple games happen in parallel to store against it.
           Examples: 
           /game_stats
-      my_stats:
+      - name: player_stats
         enabled: true
         description: Player in game statistics
         details: |
-          When you want to see your statistics as player in game you could use /my_stats command.
-          You could forward game message in case there are multiple games happen in parallel to store against it.
+          When you want to see your statistics as player in game you could use /player_stats command.
+          You could forward game message in case there are multiple games happen in parallel to select against it.
+          Examples: 
+          /player_stats
+      - name: my_stats
+        enabled: true
+        description: Person chat statistics
+        details: |
+          When you want to see your chat statistics for all the games you were into you could use /my_stats command.
           Examples: 
           /my_stats
-      global_stats:
-        enabled: true
-        description: Player global statistics
-        details: |
-          When you want to see your global statistics for all the games you were into you could use /global_stats command.
-          Examples: 
-          /global_stats
-      help:
+      - name: help
         enabled: true
         description: Post it with a command name for command details
         details: |
@@ -165,7 +165,7 @@ bot:
           Examples: 
           /help
           /help calculate
-      create_poll:
+      - name: create_poll
         enabled: true
         description: Created a scheduled poll with specific message and repeat time for chat
         details: |
@@ -186,7 +186,7 @@ bot:
           1. Yes - participant
           2. No
           3. Maybe
-      stop_poll:
+      - name: stop_poll
         enabled: true
         description: Stops already created scheduled poll
         details: |
