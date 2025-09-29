@@ -1,7 +1,7 @@
 #!/bin/bash
 
 stopApp() {
-  processId=$(ps ax | grep java | grep telegram-bot | awk '{print $1}')
+  processId=$(ps aux | grep java | grep telegram-bot | awk '{print $1}')
   if [ -z "${processId}" ]; then
     echo "Telegram bot wasn't started"
     return 0

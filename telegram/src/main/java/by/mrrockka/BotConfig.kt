@@ -10,6 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.DependsOn
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 import kotlin.reflect.KClass
@@ -23,6 +24,7 @@ open class BotConfig(
 
     @Bean
     @Profile("production")
+    @DependsOn("liquibase")
     @OptIn(DelicateCoroutinesApi::class)
     open fun bot(appContext: ApplicationContext): TelegramBot {
         val bot = TelegramBot(botProps.token) {
