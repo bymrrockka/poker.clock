@@ -2,8 +2,8 @@ name: Poker Clock App build
 
 on:
   push:
-    branches:
-      - "!master"
+    branches-ignore:
+      - "master"
   workflow_call:
   workflow_dispatch:
 
