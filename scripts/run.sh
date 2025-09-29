@@ -35,6 +35,8 @@ startApp() {
   `nohup java $commandOpts -jar ~/app/*.jar </dev/null >/dev/null 2>&1 &` echo "Telegram bot started"
 }
 
+echo "$(env)" > ~/app/.env.github
+
 stopApp
 source ~/app/scripts/dbtools.sh
 startApp
