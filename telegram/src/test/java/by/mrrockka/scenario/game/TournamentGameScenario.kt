@@ -3,6 +3,7 @@ package by.mrrockka.scenario.game
 import by.mrrockka.Given
 import by.mrrockka.When
 import by.mrrockka.domain.GameType
+import by.mrrockka.extension.textApprover
 import by.mrrockka.scenario.Commands.Companion.calculate
 import by.mrrockka.scenario.Commands.Companion.createGame
 import by.mrrockka.scenario.Commands.Companion.entry
@@ -10,11 +11,15 @@ import by.mrrockka.scenario.Commands.Companion.finalePlaces
 import by.mrrockka.scenario.Commands.Companion.prizePool
 import com.oneeyedmen.okeydoke.Approver
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 import java.math.BigDecimal
 
 class TournamentGameScenario : GameScenario() {
-    @Test
-    fun `create game with players and some reentries`(approver: Approver) {
+
+    @ParameterizedTest
+    @ValueSource(booleans = [false, true])
+    fun `create game with players and some reentries`(withAlias: Boolean) {
         val buyin = BigDecimal(10)
         val players = listOf(
                 "nickname1",
@@ -27,7 +32,7 @@ class TournamentGameScenario : GameScenario() {
         val winners = players.dropLast(4);
 
         Given {
-            message { players.createGame(GameType.TOURNAMENT, buyin) }
+            message { players.createGame(GameType.TOURNAMENT, buyin, withAlias) }
             message { "nickname3".entry() }
             message { "nickname3".entry() }
             message { prizePool(2) }
@@ -40,7 +45,7 @@ class TournamentGameScenario : GameScenario() {
             message { calculate }
         } When {
             updatesReceived()
-        } ThenApproveWith approver
+        } ThenApproveWith textApprover("create game with players and some reentries${if (withAlias) " with alias" else ""}")
     }
 
 
