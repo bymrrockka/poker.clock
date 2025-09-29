@@ -1,7 +1,9 @@
 package by.mrrockka
 
 import eu.vendeli.tgbot.TelegramBot
+import eu.vendeli.tgbot.api.botactions.setMyCommands
 import eu.vendeli.tgbot.interfaces.ctx.ClassManager
+import eu.vendeli.tgbot.types.bot.BotCommand
 import eu.vendeli.tgbot.types.component.ExceptionHandlingStrategy
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -26,7 +28,7 @@ open class BotConfig(
     @Profile("production")
     @DependsOn("liquibase")
     @OptIn(DelicateCoroutinesApi::class)
-    open fun bot(appContext: ApplicationContext): TelegramBot {
+    open fun bot(appContext: ApplicationContext, botCommands: BotCommands): TelegramBot {
         val bot = TelegramBot(botProps.token) {
             classManager = SpringClassManager(appContext)
             commandParsing {
@@ -37,6 +39,11 @@ open class BotConfig(
         }
 
         GlobalScope.launch {
+            setMyCommands(
+                    command = botCommands.commands.map {
+                        BotCommand(command = it.name, description = it.description ?: "")
+                    },
+            ).send(bot)
             bot.handleUpdates()
         }
 

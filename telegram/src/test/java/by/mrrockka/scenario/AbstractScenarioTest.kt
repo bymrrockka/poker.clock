@@ -25,7 +25,6 @@ import com.oneeyedmen.okeydoke.Approver
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.internal.KtGramInternal
 import eu.vendeli.tgbot.api.botactions.GetUpdatesAction
-import eu.vendeli.tgbot.api.botactions.setMyCommands
 import eu.vendeli.tgbot.api.common.poll
 import eu.vendeli.tgbot.api.message.sendMessage
 import eu.vendeli.tgbot.types.common.Update
@@ -88,10 +87,6 @@ abstract class AbstractScenarioTest {
             url equalTo "${botProps.botpath}/${getUpdates}"
             atLeast = 1
         }
-//                wireMock.verify {
-//                    url equalTo "${botpath}/${SetMyCommands.PATH}"
-//                    atMost = 1
-//                }
     }
 
     companion object {
@@ -107,9 +102,6 @@ abstract class AbstractScenarioTest {
 
         @OptIn(KtGramInternal::class)
         val sendPoll = poll("", emptyList()).run { methodName }
-
-        @OptIn(KtGramInternal::class)
-        val setMyCommands = setMyCommands { }.run { methodName }
 
         @JvmStatic
         @BeforeAll
