@@ -18,7 +18,7 @@ class WithdrawalCommandHandlerImpl(
         private val withdrawalService: WithdrawalTelegramService,
 ) : WithdrawalCommandHandler {
 
-    @CommandHandler(["/withdraw", "/withdrawal"])
+    @CommandHandler(["/withdrawal", "/wdrl"])
     override suspend fun withdraw(message: MessageUpdate) {
         val metadata = message.message.toMessageMetadata()
         withdrawalService.withdraw(metadata)

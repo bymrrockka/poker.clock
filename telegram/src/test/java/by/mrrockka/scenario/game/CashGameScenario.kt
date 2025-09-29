@@ -3,6 +3,7 @@ package by.mrrockka.scenario.game
 import by.mrrockka.Given
 import by.mrrockka.When
 import by.mrrockka.domain.GameType
+import by.mrrockka.extension.textApprover
 import by.mrrockka.scenario.AbstractScenarioTest
 import by.mrrockka.scenario.Commands.Companion.calculate
 import by.mrrockka.scenario.Commands.Companion.createGame
@@ -11,13 +12,16 @@ import by.mrrockka.scenario.Commands.Companion.prizePool
 import by.mrrockka.scenario.Commands.Companion.withdrawal
 import com.oneeyedmen.okeydoke.Approver
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 import java.math.BigDecimal
 
 
 class CashGameScenario : AbstractScenarioTest() {
 
-    @Test
-    fun `should calculate when all money were withdraw`(approver: Approver) {
+    @ParameterizedTest
+    @ValueSource(booleans = [false, true])
+    fun `should calculate when all money were withdraw`(withAlias: Boolean) {
         val buyin = BigDecimal(10)
         val players = listOf(
                 "nickname1",
@@ -29,7 +33,7 @@ class CashGameScenario : AbstractScenarioTest() {
         )
 
         Given {
-            message { players.createGame(GameType.CASH, buyin) }
+            message { players.createGame(GameType.CASH, buyin, withAlias) }
             message { "nickname1".withdrawal(20) }
             message { "nickname2".withdrawal(30) }
             message { "nickname4".entry(20) }
@@ -37,7 +41,7 @@ class CashGameScenario : AbstractScenarioTest() {
             message { calculate }
         } When {
             updatesReceived()
-        } ThenApproveWith approver
+        } ThenApproveWith textApprover("should calculate when all money were withdraw${if (withAlias) " with alias" else ""}")
     }
 
     @Test

@@ -12,8 +12,11 @@ class Commands private constructor() {
         val myStats = "/my_stats"
         val help = "/help"
         val cashGame = "/cash_game"
+        val cashGameAlias = "/cg"
         val tournamentGame = "/tournament_game"
+        val tournamentGameAlias = "/tg"
         val bountyGame = "/bounty_game"
+        val bountyGameAlias = "/bg"
         val withdrawal = "/withdrawal"
         val entry = "/entry"
         val bounty = "/bounty"
@@ -26,11 +29,11 @@ class Commands private constructor() {
         fun entry(amount: Int? = null): String = "${entry} @me ${if (amount == null) "" else amount}"
         fun help(command: String? = null): String = "$help ${command ?: ""}"
 
-        fun List<String>.createGame(type: GameType, buyin: BigDecimal): String {
+        fun List<String>.createGame(type: GameType, buyin: BigDecimal, alias: Boolean = false): String {
             val command = when (type) {
-                GameType.CASH -> cashGame
-                GameType.TOURNAMENT -> tournamentGame
-                GameType.BOUNTY -> bountyGame
+                GameType.CASH -> if (alias) cashGameAlias else cashGame
+                GameType.TOURNAMENT -> if (alias) tournamentGameAlias else tournamentGame
+                GameType.BOUNTY -> if (alias) bountyGameAlias else bountyGame
             }
 
             return """

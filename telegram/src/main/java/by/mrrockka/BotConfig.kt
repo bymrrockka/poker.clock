@@ -58,17 +58,13 @@ open class SpringClassManager(
 
 @Component
 @ConfigurationProperties(prefix = "bot.description")
-class BotCommandDescriptions {
-    lateinit var commands: Map<String, CommandDescription>
-    val byNamesAndAliases: Map<String, CommandDescription> by lazy {
-        commands.entries
-                .flatMap { (key, value) ->
-                    if (value.alias != null)
-                        setOf(value.alias to value, key to value)
-                    else setOf(key to value)
-                }
-                .toMap()
+class BotCommands {
+    lateinit var commands: List<Description>
+    val byNameAndAlias: Map<String, Description> by lazy {
+        commands.flatMap { setOf(it.name to it) + if (it.alias != null) setOf(it.alias to it) else emptySet() }.toMap()
     }
+
+    data class Description(val name: String, val enabled: Boolean, val description: String?, val details: String?, val alias: String?)
 }
 
 @Component
@@ -81,4 +77,3 @@ class BotProperties {
     val botpath: String by lazy { "/bot$token" }
 }
 
-data class CommandDescription(val enabled: Boolean, val description: String?, val details: String?, val alias: String?)
