@@ -4,8 +4,11 @@ import by.mrrockka.domain.toMessageMetadata
 import by.mrrockka.service.PollTelegramService
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.CommandHandler
+import eu.vendeli.tgbot.annotations.UpdateHandler
 import eu.vendeli.tgbot.api.message.sendMessage
 import eu.vendeli.tgbot.types.component.MessageUpdate
+import eu.vendeli.tgbot.types.component.PollAnswerUpdate
+import eu.vendeli.tgbot.types.component.UpdateType
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 
@@ -46,6 +49,12 @@ class PollCommandHandlerImpl(
 
         pollService.stop(metadata)
                 .also { sendMessage { "Poll stopped" }.send(to = metadata.chatId, bot) }
+    }
+
+
+    @UpdateHandler([UpdateType.POLL_ANSWER])
+    suspend fun answer(update: PollAnswerUpdate) {
+        println("Answer ${update.pollAnswer.user?.username} -> ${update.pollAnswer.optionIds}")
     }
 
 }

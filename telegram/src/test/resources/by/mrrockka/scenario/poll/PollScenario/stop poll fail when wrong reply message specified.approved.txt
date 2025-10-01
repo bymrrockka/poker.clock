@@ -22,15 +22,16 @@ Tournament game started.
 
 ******************************
 -> Request
+[reply to /tournament_game]
 /stop_poll
 
 -> Response
-Message doesn't contain any attached messages. 
-Please reply to poll creation message to stop poll                   
+Poll was not found                   
 
 ******************************
 -> Request
-/stop_poll - reply to /create_poll
+[reply to /create_poll]
+/stop_poll
 
 -> Response
 Poll stopped

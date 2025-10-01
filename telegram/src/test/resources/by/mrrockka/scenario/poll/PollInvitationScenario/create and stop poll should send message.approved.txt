@@ -1,0 +1,58 @@
+******************************
+-> Request
+/create_poll
+cron: 0 0 0 * * WED
+message: Test poll
+options: 
+1. Yes - participant
+2. No
+3. I don't know
+
+-> Response
+Poll created.
+Will be triggered next WEDNESDAY                   
+
+******************************
+-> Received
+Test poll
+1. 'Yes'
+2. 'No'
+3. 'I don't know'                   
+
+******************************
+-> Poll interaction
+jackie_rau chosen 1
+
+******************************
+-> Poll interaction
+terisa_johnston chosen 1
+
+******************************
+-> Poll interaction
+santo_welch chosen 2
+
+******************************
+-> Poll interaction
+ashlee_lang chosen 2
+
+******************************
+-> Poll interaction
+stanton_boyer chosen 3
+
+******************************
+-> Request
+[reply to /create_poll]
+/tournament_game
+buyin: 10
+
+
+-> Response
+Message should contain at least one person mention                   
+
+******************************
+-> Request
+[reply to /create_poll]
+/stop_poll
+
+-> Response
+Poll stopped

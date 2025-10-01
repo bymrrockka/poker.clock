@@ -12,7 +12,8 @@ class UnprocessedCommandHandler(
 ) {
 
     @UnprocessedHandler
-    suspend fun unprocessed(message: MessageUpdate) {
-        sendMessage { "Can't process command" }.send(message.message.chat.id, bot)
+    suspend fun unprocessed(message: MessageUpdate?) {
+        if (message != null)
+            sendMessage { "Can't process command" }.send(message.message.chat.id, bot)
     }
 }

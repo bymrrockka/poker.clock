@@ -2,6 +2,7 @@ package by.mrrockka.builder
 
 import by.mrrockka.TelegramRandoms
 import by.mrrockka.TelegramRandoms.Companion.telegramRandoms
+import by.mrrockka.domain.Person
 import eu.vendeli.tgbot.types.User
 
 class UserBuilder(init: (UserBuilder.() -> Unit) = {}) : AbstractBuilder<TelegramRandoms>(telegramRandoms) {
@@ -46,3 +47,8 @@ class UserBuilder(init: (UserBuilder.() -> Unit) = {}) : AbstractBuilder<Telegra
 
 fun user(init: (UserBuilder.() -> Unit) = {}) = UserBuilder(init).build()
 fun user(randoms: TelegramRandoms) = UserBuilder { randoms(randoms) }.build()
+fun Person.toUser(): User = user {
+    firstname(this@toUser.firstname ?: "")
+    lastname(this@toUser.lastname ?: "")
+    username(this@toUser.nickname ?: "")
+}

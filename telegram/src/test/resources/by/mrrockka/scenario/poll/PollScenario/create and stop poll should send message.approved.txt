@@ -25,7 +25,8 @@ Test poll
 
 ******************************
 -> Request
-/stop_poll - reply to /create_poll
+[reply to /create_poll]
+/stop_poll
 
 -> Response
 Poll stopped
