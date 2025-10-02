@@ -31,3 +31,14 @@ object ChatGameTable : Table("chat_games") {
     val chatId = long("chat_id")
     val createdAt = timestamp("created_at")
 }
+
+object ChatPollsTable : Table("chat_polls") {
+    val pollId = uuid("poll_id").references(PollTaskTable.id)
+    val tgPollId = varchar("telegram_poll_id", 50)
+}
+
+object PollAnswersTable : Table("poll_answers") {
+    val pollId = varchar("telegram_poll_id", 50)
+    val personId = uuid("person_id").references(PersonTable.id)
+    val answer = integer("answer")
+}

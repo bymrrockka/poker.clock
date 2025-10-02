@@ -41,13 +41,13 @@ stanton_boyer chosen 3
 
 ******************************
 -> Request
-[reply to /create_poll]
+[reply to chatPoll]
 /tournament_game
 buyin: 10
 
 
 -> Response
-Message should contain at least one person mention                   
+Tournament game started.                   
 
 ******************************
 -> Request

@@ -5,6 +5,7 @@ import by.mrrockka.TelegramRandoms.Companion.telegramRandoms
 import eu.vendeli.tgbot.types.User
 import eu.vendeli.tgbot.types.msg.Message
 import eu.vendeli.tgbot.types.msg.MessageEntity
+import eu.vendeli.tgbot.types.poll.Poll
 import java.time.Instant
 import kotlin.time.ExperimentalTime
 import kotlin.time.toKotlinInstant
@@ -17,6 +18,7 @@ class MessageBuilder(init: (MessageBuilder.() -> Unit) = {}) : AbstractBuilder<T
     private var replyToMessage: Message? = null
     private var entities: List<MessageEntity> = mutableListOf()
     private var user: User? = null
+    private var poll: Poll? = null
 
     fun chatId(chatId: Long) {
         this.chatId = chatId
@@ -50,6 +52,10 @@ class MessageBuilder(init: (MessageBuilder.() -> Unit) = {}) : AbstractBuilder<T
         this.user = user
     }
 
+    fun poll(pollBuilder: (PollBuilder.() -> Unit) = {}) {
+        this.poll = PollBuilder(pollBuilder).poll()
+    }
+
     init {
         randoms(telegramRandoms)
         init()
@@ -57,15 +63,15 @@ class MessageBuilder(init: (MessageBuilder.() -> Unit) = {}) : AbstractBuilder<T
 
     @OptIn(ExperimentalTime::class)
     fun message(): Message {
-        text = text ?: randoms.faker.chuckNorris().fact()
         return Message(
                 messageId = id ?: randoms.messageid(),
                 chat = chat { id(this@MessageBuilder.chatId) },
                 date = (createdAt ?: randoms.instant()).toKotlinInstant(),
-                text = text,
+                text = text ?: randoms.faker.chuckNorris().fact(),
                 replyToMessage = replyToMessage,
-                entities = if (entities.isEmpty()) text.entities() else entities,
+                entities = if (entities.isEmpty() && text != null) text.entities() else entities,
                 from = user ?: user(),
+                poll = poll,
         )
     }
 }

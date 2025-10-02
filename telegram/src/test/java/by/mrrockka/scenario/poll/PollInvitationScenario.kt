@@ -5,6 +5,7 @@ import by.mrrockka.When
 import by.mrrockka.builder.person
 import by.mrrockka.domain.GameType
 import by.mrrockka.scenario.AbstractScenarioTest
+import by.mrrockka.scenario.Commands.Companion.chatPoll
 import by.mrrockka.scenario.Commands.Companion.createGame
 import by.mrrockka.scenario.Commands.Companion.createPoll
 import by.mrrockka.scenario.Commands.Companion.stopPoll
@@ -48,7 +49,7 @@ class PollInvitationScenario : AbstractScenarioTest() {
             }
             person().pollAnswer(3)
 
-            message(replyTo = createPoll) {
+            message(replyTo = chatPoll) {
                 createGame(type = GameType.TOURNAMENT, BigDecimal(10))
             }
             message(replyTo = createPoll) { stopPoll }

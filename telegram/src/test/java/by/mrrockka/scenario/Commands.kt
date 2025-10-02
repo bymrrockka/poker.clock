@@ -24,6 +24,7 @@ class Commands private constructor() {
         val finalePlaces = "/finale_places"
         val createPoll = "/create_poll"
         val stopPoll = "/stop_poll"
+        val chatPoll = "chatPoll"
 
         fun String.entry(amount: Int? = null): String = "${entry} @$this ${if (amount == null) "" else amount}"
         fun entry(amount: Int? = null): String = "${entry} @me ${if (amount == null) "" else amount}"

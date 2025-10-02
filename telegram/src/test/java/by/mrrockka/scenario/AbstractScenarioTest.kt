@@ -5,6 +5,7 @@ import by.mrrockka.Command
 import by.mrrockka.GivenSpecification
 import by.mrrockka.TelegramRandoms.Companion.telegramRandoms
 import by.mrrockka.WhenSpecification
+import by.mrrockka.builder.message
 import by.mrrockka.builder.toUser
 import by.mrrockka.builder.update
 import by.mrrockka.builder.user
@@ -12,6 +13,7 @@ import by.mrrockka.extension.TelegramPSQLExtension
 import by.mrrockka.extension.TelegramWiremockContainer
 import by.mrrockka.extension.TelegramWiremockExtension
 import by.mrrockka.extension.TextApproverExtension
+import by.mrrockka.scenario.Commands.Companion.chatPoll
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.tomakehurst.wiremock.client.WireMock
@@ -30,6 +32,7 @@ import eu.vendeli.tgbot.api.common.poll
 import eu.vendeli.tgbot.api.message.sendMessage
 import eu.vendeli.tgbot.types.common.Update
 import eu.vendeli.tgbot.types.component.Response
+import eu.vendeli.tgbot.types.msg.Message
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -59,7 +62,7 @@ abstract class AbstractScenarioTest {
     private val randoms = telegramRandoms("scenario")
     private val chatid = randoms.chatid()
     private val user = user(randoms)
-    private val messageLog = mutableMapOf<String, Long>()
+    private val messageLog = mutableMapOf<String, Message>()
 
     @Autowired
     lateinit var mapper: ObjectMapper
@@ -93,7 +96,8 @@ abstract class AbstractScenarioTest {
     companion object {
         lateinit var wireMock: WireMock
         const val METADATA_ATTR = "scenario"
-        val testResponse = Response.Success("TEST OK")
+        val mockMessageResponse = Response.Success("TEST OK")
+        val mockPollResponse = Response.Success(message { poll() })
 
         @OptIn(KtGramInternal::class)
         val getUpdates = GetUpdatesAction().run { methodName }
@@ -161,7 +165,7 @@ abstract class AbstractScenarioTest {
                 .until {
                     val stubs = wireMock.serveEvents
                             .filter { it.stubMapping.metadata != null && it.stubMapping.metadata.contains(METADATA_ATTR) }
-                            .associate { it.stubMapping.metadata.getInt(METADATA_ATTR) to it.request.asText() }
+                            .associate { it.stubMapping.metadata.getInt(METADATA_ATTR) to it.request.toText() }
 
                     if (stubs.size == commands.filter { it !is Command.PollAnswer }.size) {
                         commands
@@ -222,15 +226,12 @@ abstract class AbstractScenarioTest {
                 from(user)
                 createdAt(clock.now().toJavaInstant())
                 if (replyTo != null && messageLog[replyTo] != null) {
-                    replyTo {
-                        chatId(chatId)
-                        id(messageLog[replyTo]!!)
-                    }
+                    replyTo(messageLog[replyTo]!!)
                 }
             }
         }
 
-        messageLog += botcommand to update.message!!.messageId
+        messageLog += botcommand to update.message!!
         //mocks user command from telegram
         wireMock.post {
             url equalTo "${botProps.botpath}/${getUpdates}"
@@ -246,7 +247,7 @@ abstract class AbstractScenarioTest {
             whenState = "${seed}$index-completed"
             withBuilder { withMetadata(metadata().attr("scenario", index)) }
         } returnsJson {
-            body = serde.encodeToString(testResponse)
+            body = serde.encodeToString(mockMessageResponse)
         } and {
             toState = "${seed}${index + 1}"
         }
@@ -255,7 +256,7 @@ abstract class AbstractScenarioTest {
     private fun Command.PollAnswer.stub(index: Int, seed: String) {
         val update = update {
             pollAnswer {
-                pollId("") //todo figure out how to get poll id
+                pollId(mockPollResponse.result.poll!!.id)
                 option(option - 1)
                 user(person.toUser())
             }
@@ -273,19 +274,20 @@ abstract class AbstractScenarioTest {
     }
 
     private fun Command.Poll.stub(index: Int, seed: String) {
+        messageLog += chatPoll to mockPollResponse.result
         //mocks telegram response when bot sends message
         wireMock.post {
             url equalTo "${botProps.botpath}/${sendPoll}"
             whenState = "${seed}${index}"
             withBuilder { withMetadata(metadata().attr("scenario", index)) }
         } returnsJson {
-            body = serde.encodeToString(testResponse)
+            body = serde.encodeToString(mockPollResponse)
         } and {
             toState = "${seed}${index + 1}"
         }
     }
 
-    private fun LoggedRequest.asText(): String {
+    private fun LoggedRequest.toText(): String {
         return when {
             url.contains(sendMessage) -> bodyAsString.toJson().findPath("text").asText()
             url.contains(sendPoll) -> {

@@ -9,7 +9,7 @@ import kotlin.time.ExperimentalTime
 class PollAnswerBuilder(init: (PollAnswerBuilder.() -> Unit) = {}) : AbstractBuilder<TelegramRandoms>(telegramRandoms) {
     private var user: User? = null
     private var pollId: String? = null
-    private var options: List<Int> = emptyList()
+    private var options: List<Int> = mutableListOf()
 
     fun user(user: User) {
         this.user = user

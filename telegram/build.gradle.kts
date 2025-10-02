@@ -39,7 +39,7 @@ repositories {
 
 dependencies {
     implementation(project(":core"))
-    implementation(libs.bundles.logback)
+    implementation(libs.bundles.logging)
     implementation(libs.bundles.springBoot)
     implementation(libs.bundles.db)
     implementation(libs.bundles.kotlinLibs)
@@ -64,7 +64,7 @@ configurations.all {
     resolutionStrategy.eachDependency {
         val serdeVer = "1.8.1"
         when (requested.module.toString()) {
-            // json serialiazaton
+            // json serialization
             "org.jetbrains.kotlinx:kotlinx-serialization-json" -> useVersion(serdeVer)
             "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm" -> useVersion(serdeVer)
             "org.jetbrains.kotlinx:kotlinx-serialization-core" -> useVersion(serdeVer)

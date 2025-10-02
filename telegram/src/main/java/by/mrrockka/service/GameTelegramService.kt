@@ -23,17 +23,28 @@ open class GameTelegramServiceImpl(
         private val gameRepo: GameRepo,
         private val entriesRepo: EntriesRepo,
         private val chatGameRepo: ChatGameRepo,
+        private val pollService: PollTelegramService,
         private val gameMessageParser: GameMessageParser,
 ) : GameTelegramService {
 
     override fun store(metadata: MessageMetadata): Game {
-        metadata.checkMentions()
         val game = gameMessageParser.parse(metadata)
         gameRepo.store(game)
         chatGameRepo.store(game.id, metadata)
 
-        val personIds = telegramPersonService.findByMessage(metadata).map { it.id }
-        entriesRepo.store(personIds, game.buyIn, game, metadata.createdAt)
+        if (metadata.replyTo?.poll != null) {
+            pollService.findParticipants(metadata.replyTo.poll.id)
+                    .also { personIds ->
+                        entriesRepo.store(personIds, game.buyIn, game, metadata.createdAt)
+                    }
+        } else {
+            metadata.checkMentions()
+            telegramPersonService.findByMessage(metadata).map { it.id }
+                    .also { personIds ->
+                        entriesRepo.store(personIds, game.buyIn, game, metadata.createdAt)
+                    }
+        }
+
         return game
     }
 
