@@ -10,10 +10,10 @@ import by.mrrockka.builder.message
 import by.mrrockka.builder.toUser
 import by.mrrockka.builder.update
 import by.mrrockka.builder.user
+import by.mrrockka.extension.MdApproverExtension
 import by.mrrockka.extension.TelegramPSQLExtension
 import by.mrrockka.extension.TelegramWiremockContainer
 import by.mrrockka.extension.TelegramWiremockExtension
-import by.mrrockka.extension.TextApproverExtension
 import by.mrrockka.scenario.Commands.Companion.chatPoll
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -54,7 +54,7 @@ import kotlin.time.ExperimentalTime
 import kotlin.time.toJavaInstant
 
 @OptIn(ExperimentalTime::class)
-@ExtendWith(value = [TelegramPSQLExtension::class, TelegramWiremockExtension::class, TextApproverExtension::class])
+@ExtendWith(value = [TelegramPSQLExtension::class, TelegramWiremockExtension::class, MdApproverExtension::class])
 @ActiveProfiles(profiles = ["scenario"])
 @Testcontainers
 @SpringBootTest(classes = [TestBotConfig::class])
@@ -175,29 +175,43 @@ abstract class AbstractScenarioTest {
                                     when (command) {
                                         is Command.Message ->
                                             """
-                                               |******************************
-                                               |-> Request
-                                               |${command.toText()}
+                                               |### ${index + 1}. Interaction
                                                |
-                                               |-> Response
-                                               |${stubs[index] ?: "No message"}                   
+                                               |&rarr; <ins>User message</ins>
+                                               |
+                                               |```
+                                               |${command.toText()} 
+                                               |```
+                                               |
+                                               |&rarr; <ins>Bot message</ins>
+                                               |
+                                               |``` 
+                                               |${stubs[index] ?: "No message"} 
+                                               |``` 
+                                               |___
                                                """.trimMargin()
 
                                         is Command.Poll ->
                                             """
-                                               |******************************
-                                               |-> Received
-                                               |${stubs[index] ?: "No message"}                   
+                                               |### ${index + 1}. Posted
+                                               |
+                                               |``` 
+                                               |${stubs[index] ?: "No message"}
+                                               |``` 
+                                               |___
                                                """.trimMargin()
 
                                         is Command.PollAnswer ->
                                             """
-                                               |******************************
-                                               |-> Poll interaction
+                                               |### ${index + 1}. Poll answer
+                                               |
+                                               |``` 
                                                |${command.toText()}
+                                               |``` 
+                                               |___
                                                """.trimMargin()
 
-                                        else -> "Command type is not found"
+                                        else -> error("Command type is not found")
                                     }
                                 }.joinToString("\n\n")
                                 .also { approver.assertApproved(it.trim()) }

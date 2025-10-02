@@ -3,7 +3,7 @@ package by.mrrockka.scenario.game
 import by.mrrockka.Given
 import by.mrrockka.When
 import by.mrrockka.domain.GameType
-import by.mrrockka.extension.textApprover
+import by.mrrockka.extension.mdApprover
 import by.mrrockka.scenario.AbstractScenarioTest
 import by.mrrockka.scenario.Commands.Companion.calculate
 import by.mrrockka.scenario.Commands.Companion.createGame
@@ -41,7 +41,7 @@ class CashGameScenario : AbstractScenarioTest() {
             message { calculate }
         } When {
             updatesReceived()
-        } ThenApproveWith textApprover("should calculate when all money were withdraw${if (withAlias) " with alias" else ""}")
+        } ThenApproveWith mdApprover("should calculate when all money were withdraw${if (withAlias) " with alias" else ""}")
     }
 
     @Test

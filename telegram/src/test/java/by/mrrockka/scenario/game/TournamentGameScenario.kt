@@ -3,7 +3,7 @@ package by.mrrockka.scenario.game
 import by.mrrockka.Given
 import by.mrrockka.When
 import by.mrrockka.domain.GameType
-import by.mrrockka.extension.textApprover
+import by.mrrockka.extension.mdApprover
 import by.mrrockka.scenario.Commands.Companion.calculate
 import by.mrrockka.scenario.Commands.Companion.createGame
 import by.mrrockka.scenario.Commands.Companion.entry
@@ -45,7 +45,7 @@ class TournamentGameScenario : GameScenario() {
             message { calculate }
         } When {
             updatesReceived()
-        } ThenApproveWith textApprover("create game with players and some reentries${if (withAlias) " with alias" else ""}")
+        } ThenApproveWith mdApprover("create game with players and some reentries${if (withAlias) " with alias" else ""}")
     }
 
 

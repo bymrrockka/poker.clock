@@ -3,7 +3,7 @@ package by.mrrockka.scenario.poll
 import by.mrrockka.Given
 import by.mrrockka.When
 import by.mrrockka.domain.GameType
-import by.mrrockka.extension.textApprover
+import by.mrrockka.extension.mdApprover
 import by.mrrockka.scenario.AbstractScenarioTest
 import by.mrrockka.scenario.Commands.Companion.createGame
 import by.mrrockka.scenario.Commands.Companion.createPoll
@@ -60,7 +60,7 @@ class PollScenario : AbstractScenarioTest() {
             }
         } When {
             updatesReceived()
-        } ThenApproveWith (textApprover("fail when doesn't have required fields, field set ${if (actual.isNotBlank()) actual else "empty"}"))
+        } ThenApproveWith mdApprover("fail when doesn't have required fields, field set ${if (actual.isNotBlank()) actual else "empty"}")
     }
 
     @ParameterizedTest
@@ -81,7 +81,7 @@ class PollScenario : AbstractScenarioTest() {
             message(replyTo = createPoll) { stopPoll } // should stop task execution to not affect other tests
         } When {
             updatesReceived()
-        } ThenApproveWith textApprover("stop poll fail when ${if (command.isNotBlank()) "wrong" else "no"} reply message specified")
+        } ThenApproveWith mdApprover("stop poll fail when ${if (command.isNotBlank()) "wrong" else "no"} reply message specified")
     }
 
 }

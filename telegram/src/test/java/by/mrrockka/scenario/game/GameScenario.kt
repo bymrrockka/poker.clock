@@ -3,7 +3,7 @@ package by.mrrockka.scenario.game
 import by.mrrockka.Given
 import by.mrrockka.When
 import by.mrrockka.domain.GameType
-import by.mrrockka.extension.textApprover
+import by.mrrockka.extension.mdApprover
 import by.mrrockka.scenario.AbstractScenarioTest
 import by.mrrockka.scenario.Commands.Companion.calculate
 import by.mrrockka.scenario.Commands.Companion.createGame
@@ -36,7 +36,7 @@ abstract class GameScenario : AbstractScenarioTest() {
             message { calculate }
         } When {
             updatesReceived()
-        } ThenApproveWith textApprover("should fail when prize pool is different size then finale places $size")
+        } ThenApproveWith mdApprover("should fail when prize pool is different size then finale places $size")
     }
 
     @ParameterizedTest
@@ -60,7 +60,7 @@ abstract class GameScenario : AbstractScenarioTest() {
             message { calculate }
         } When {
             updatesReceived()
-        } ThenApproveWith textApprover("should fail when $missed is missed")
+        } ThenApproveWith mdApprover("should fail when $missed is missed")
     }
 
 
@@ -110,7 +110,7 @@ abstract class GameScenario : AbstractScenarioTest() {
             message { calculate }
         } When {
             updatesReceived()
-        } ThenApproveWith textApprover("should fail when prize pool sum is not equal 100 percent. $fileName")
+        } ThenApproveWith mdApprover("should fail when prize pool sum is not equal 100 percent. $fileName")
     }
 
 }
