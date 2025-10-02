@@ -5,6 +5,7 @@ import eu.vendeli.tgbot.api.botactions.setMyCommands
 import eu.vendeli.tgbot.interfaces.ctx.ClassManager
 import eu.vendeli.tgbot.types.bot.BotCommand
 import eu.vendeli.tgbot.types.component.ExceptionHandlingStrategy
+import eu.vendeli.tgbot.types.component.UpdateType
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -44,7 +45,13 @@ open class BotConfig(
                         BotCommand(command = it.name, description = it.description ?: "")
                     },
             ).send(bot)
-            bot.handleUpdates()
+            bot.handleUpdates(
+                    listOf(
+                            UpdateType.MESSAGE,
+//                    UpdateType.EDITED_MESSAGE,
+                            UpdateType.POLL_ANSWER,
+                    ),
+            )
         }
 
         return bot
