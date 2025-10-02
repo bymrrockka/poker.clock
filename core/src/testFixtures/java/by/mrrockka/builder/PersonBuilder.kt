@@ -31,3 +31,6 @@ class PersonBuilder(
 }
 
 fun person(builder: PersonBuilder.() -> Unit = {}): BasicPerson = PersonBuilder(builder).build()
+fun person(randoms: CoreRandoms, builder: PersonBuilder.() -> Unit = {}): BasicPerson = PersonBuilder { randoms(randoms) }
+        .apply(builder)
+        .build()

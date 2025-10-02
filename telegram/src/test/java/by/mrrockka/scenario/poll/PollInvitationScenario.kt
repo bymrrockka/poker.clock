@@ -20,11 +20,8 @@ import kotlin.time.Instant
 class PollInvitationScenario : AbstractScenarioTest() {
 
     @Test
-    fun `create and stop poll should send message`(approver: Approver) {
+    fun `create game based on poll answers`(approver: Approver) {
         val time = Instant.parse("2025-09-16T12:34:56Z") //Tuesday
-
-        val participants = listOf(person(), person())
-        val others = listOf(person(), person())
 
         Given {
             clock.set(time)
@@ -41,10 +38,68 @@ class PollInvitationScenario : AbstractScenarioTest() {
             }
             pollPosted()
 
-            participants.forEach { person ->
+            //participants
+            listOf(person(), person()).forEach { person ->
                 person.pollAnswer(1)
             }
-            others.forEach { person ->
+            //no
+            listOf(person(), person()).forEach { person ->
+                person.pollAnswer(2)
+            }
+            //maybe
+            person().pollAnswer(3)
+
+            message(replyTo = chatPoll) {
+                createGame(type = GameType.TOURNAMENT, BigDecimal(10))
+            }
+            message(replyTo = createPoll) { stopPoll }
+        } When {
+            updatesReceived()
+            clock.set(time + 8.days)
+        } ThenApproveWith approver
+    }
+
+    @Test
+    fun `should fail to create game when there are no participants`(approver: Approver) {
+        val time = Instant.parse("2025-09-16T12:34:56Z") //Tuesday
+
+        Given {
+            clock.set(time)
+            message {
+                """
+                |${createPoll}
+                |cron: 0 0 0 * * WED
+                |message: Test poll
+                |options: 
+                |1. Yes - participant
+                |2. No
+                |3. I don't know
+                """.trimMargin()
+            }
+            pollPosted()
+
+            listOf(person(), person()).forEach { person ->
+                person.pollAnswer(2)
+            }
+            person().pollAnswer(3)
+
+            message(replyTo = chatPoll) {
+                createGame(type = GameType.TOURNAMENT, BigDecimal(10))
+            }
+            message(replyTo = createPoll) { stopPoll }
+        } When {
+            updatesReceived()
+            clock.set(time + 8.days)
+        } ThenApproveWith approver
+    }
+
+    @Test
+    fun `should fail to create game when there are no poll`(approver: Approver) {
+        val time = Instant.parse("2025-09-16T12:34:56Z") //Tuesday
+
+        Given {
+            clock.set(time)
+            listOf(person(), person()).forEach { person ->
                 person.pollAnswer(2)
             }
             person().pollAnswer(3)

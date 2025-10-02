@@ -2,6 +2,7 @@ package by.mrrockka.scenario
 
 import by.mrrockka.BotProperties
 import by.mrrockka.Command
+import by.mrrockka.CoreRandoms.Companion.coreRandoms
 import by.mrrockka.GivenSpecification
 import by.mrrockka.TelegramRandoms.Companion.telegramRandoms
 import by.mrrockka.WhenSpecification
@@ -85,7 +86,8 @@ abstract class AbstractScenarioTest {
 
     @AfterEach
     fun after() {
-        randoms.reset()
+        coreRandoms.reset()
+        telegramRandoms.reset()
         bot.update.stopListener()
         wireMock.verify {
             url equalTo "${botProps.botpath}/${getUpdates}"

@@ -23,11 +23,12 @@ class TelegramRandoms(
 
     companion object {
         @JvmStatic
-        val telegramRandoms = telegramRandoms()
+        var telegramRandoms = telegramRandoms()
 
         fun telegramRandoms(seed: String? = null): TelegramRandoms {
             val random = Random(seed.hashCode().toLong())
-            return TelegramRandoms(random)
+            telegramRandoms = TelegramRandoms(random)
+            return telegramRandoms
         }
     }
 }
