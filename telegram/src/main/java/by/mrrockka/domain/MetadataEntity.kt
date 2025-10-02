@@ -1,2 +1,0 @@
-package by.mrrockka.domain
-

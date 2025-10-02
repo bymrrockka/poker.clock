@@ -123,3 +123,20 @@ fun Any.jsonApprover(name: String) = Approver(
                 ".json",
         ),
 )
+
+class MdApproverExtension(
+        storeKey: String = "md.approver",
+        enabledKey: String = "md.approver.enabled",
+        fileExtension: String = ".md",
+) : AbstractApproverExtension(storeKey, enabledKey, fileExtension)
+
+fun Any.mdApprover(name: String) = Approver(
+        name,
+        CustomSourceOfApproval(
+                File(
+                        File(File("src/test/resources"), Sources.pathForPackage(this::class.java.`package`)),
+                        this::class.java.simpleName,
+                ),
+                ".md",
+        ),
+)

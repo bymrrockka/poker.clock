@@ -40,7 +40,7 @@ open class TelegramPersonServiceImpl(
 
     override fun findByFrom(metadata: MessageMetadata): Person {
         check(metadata.from?.username != null) { "User must have nickname to execute command" }
-        val person = personRepo.findByNicknames(listOf(metadata.from.username!!)).firstOrNull()
+        val person = personRepo.findByNickname(metadata.from.username!!)
         check(person != null) { "Person does not found" }
         check(chatPersonsRepo.personChats(person.id).contains(metadata.chatId)) { "Person in not found in this chat" }
         return person

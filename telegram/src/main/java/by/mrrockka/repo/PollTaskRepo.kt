@@ -25,6 +25,7 @@ interface PollTaskRepo {
     fun store(task: PollTask)
     fun store(tasks: List<PollTask>)
     fun selectActive(): List<PollTask>
+    fun selectByTgId(telegramId: String): PollTask?
     fun finish(messageId: Long, finishedAt: Instant): Int
 }
 
@@ -77,6 +78,14 @@ open class PollTaskRepoImpl : PollTaskRepo {
         return PollTaskTable.selectAll()
                 .where { finishedAt.isNull() }
                 .map { it.toPollTask() }
+    }
+
+    override fun selectByTgId(telegramId: String): PollTask? {
+        return (PollTaskTable innerJoin ChatPollsTable)
+                .selectAll()
+                .where { ChatPollsTable.tgPollId eq telegramId }
+                .map { it.toPollTask() }
+                .firstOrNull()
     }
 
     private fun ResultRow.toPollTask() = PollTask(

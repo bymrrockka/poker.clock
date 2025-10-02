@@ -2,9 +2,12 @@ package by.mrrockka.executor
 
 import by.mrrockka.domain.PollTask
 import by.mrrockka.domain.Task
+import by.mrrockka.repo.ChatPollsRepo
 import by.mrrockka.service.PollEvent
 import by.mrrockka.service.PollTelegramService
 import eu.vendeli.tgbot.TelegramBot
+import eu.vendeli.tgbot.types.component.onFailure
+import eu.vendeli.tgbot.types.msg.Message
 import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import kotlinx.coroutines.async
@@ -23,7 +26,8 @@ import kotlin.time.toJavaInstant
 @Component
 @DependsOn("liquibase")
 class TelegramTaskExecutor(
-        private val taskTelegramService: PollTelegramService,
+        private val pollService: PollTelegramService,
+        private val chatPollsRepo: ChatPollsRepo,
         private val bot: TelegramBot,
         private val clock: Clock,
 ) {
@@ -33,14 +37,14 @@ class TelegramTaskExecutor(
     @PostConstruct
     fun init() {
         synchronized(tasks) {
-            tasks = taskTelegramService.selectActive().asMap()
+            tasks = pollService.selectActive().asMap()
         }
     }
 
     @PreDestroy
     fun preDestroy() {
         synchronized(tasks) {
-            taskTelegramService.batchUpdate(tasks.polls())
+            pollService.batchUpdate(tasks.polls())
         }
     }
 
@@ -52,8 +56,15 @@ class TelegramTaskExecutor(
                 tasks.toExecute(now)
                         .forEach { task ->
                             async {
-                                task.toMessage().send(to = task.chatId, bot)
-                                tasks[task.id] = task.updatedAt(now)
+                                task.toAction()
+                                        .sendReturning(to = task.chatId, bot)
+                                        .onFailure { error("Failed to store poll id, game invitation poll wouldn't work") }
+                                        .also { resp ->
+                                            tasks[task.id] = task.updatedAt(now)
+                                            val tgPollId = (resp as Message).poll?.id
+                                                    ?: error("Poll message doesn't contain poll id")
+                                            chatPollsRepo.store(task.id, tgPollId)
+                                        }
                             }
                         }
             }

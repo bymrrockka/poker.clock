@@ -18,7 +18,7 @@ interface Task {
     val finishedAt: Instant?
     val chatId: Long
 
-    fun toMessage(): Action<*>
+    fun toAction(): Action<*>
     fun shouldBeExecuted(time: Instant): Boolean
 }
 
@@ -36,10 +36,10 @@ data class PollTask(
     @Serializable
     data class Option(
         val text: String,
-        val participant: Boolean? = false,
+        val participant: Boolean = false,
     )
 
-    override fun toMessage(): Action<*> {
+    override fun toAction(): Action<*> {
         return sendPoll(message) {
             options.forEach {
                 option { it.text }

@@ -4,20 +4,20 @@ import eu.vendeli.tgbot.types.User
 import eu.vendeli.tgbot.types.msg.EntityType
 import eu.vendeli.tgbot.types.msg.Message
 import eu.vendeli.tgbot.types.msg.MessageEntity
+import eu.vendeli.tgbot.types.poll.Poll
 import java.time.Instant
 import kotlin.time.ExperimentalTime
 import kotlin.time.toJavaInstant
 
 data class MessageMetadata(
-        val chatId: Long,
-        val createdAt: Instant,
         val id: Long,
+        val chatId: Long,
         val text: String,
-        val replyTo: MessageMetadata?,
         val entities: List<MessageEntity>,
-        val metadataEntities: List<MetadataEntity>? = null,
-        val fromNickname: String? = null,
         val from: User? = null,
+        val replyTo: MessageMetadata?,
+        val createdAt: Instant,
+        val poll: Poll?,
 ) {
 
     val command: MetadataEntity by lazy {
@@ -59,4 +59,5 @@ fun Message.toMessageMetadata(): MessageMetadata =
                 replyTo = replyToMessage?.toMessageMetadata(),
                 entities = entities ?: emptyList(),
                 from = from,
+                poll = poll
         )

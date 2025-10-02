@@ -1,7 +1,7 @@
 package by.mrrockka
 
 import com.github.javafaker.Faker
-import java.util.Random
+import java.util.*
 
 class TelegramRandoms(
         override val random: Random = telegramRandoms.random,
@@ -14,6 +14,7 @@ class TelegramRandoms(
     fun messageid(): Long = messageId++
     fun chatid(from: Long = 10, to: Long = 100): Long = faker.number().numberBetween(from, to)
     fun userid(from: Long = 10, to: Long = 100): Long = faker.number().numberBetween(from, to)
+    fun pollid(): String = faker.numerify("#".repeat(20))
 
     override fun reset() {
         super.reset()
@@ -22,11 +23,12 @@ class TelegramRandoms(
 
     companion object {
         @JvmStatic
-        val telegramRandoms = telegramRandoms()
+        var telegramRandoms = telegramRandoms()
 
         fun telegramRandoms(seed: String? = null): TelegramRandoms {
             val random = Random(seed.hashCode().toLong())
-            return TelegramRandoms(random)
+            telegramRandoms = TelegramRandoms(random)
+            return telegramRandoms
         }
     }
 }

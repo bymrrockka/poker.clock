@@ -24,20 +24,15 @@ class Commands private constructor() {
         val finalePlaces = "/finale_places"
         val createPoll = "/create_poll"
         val stopPoll = "/stop_poll"
+        val chatPoll = "chatPoll"
 
         fun String.entry(amount: Int? = null): String = "${entry} @$this ${if (amount == null) "" else amount}"
         fun entry(amount: Int? = null): String = "${entry} @me ${if (amount == null) "" else amount}"
         fun help(command: String? = null): String = "$help ${command ?: ""}"
 
         fun List<String>.createGame(type: GameType, buyin: BigDecimal, alias: Boolean = false): String {
-            val command = when (type) {
-                GameType.CASH -> if (alias) cashGameAlias else cashGame
-                GameType.TOURNAMENT -> if (alias) tournamentGameAlias else tournamentGame
-                GameType.BOUNTY -> if (alias) bountyGameAlias else bountyGame
-            }
-
             return """
-                $command
+                ${type.toCommand(alias)}
                 buyin: $buyin
                 ${if (type == GameType.BOUNTY) "bounty: $buyin" else ""}
                 ${this.joinToString { "@$it" }}
@@ -45,6 +40,18 @@ class Commands private constructor() {
         }
 
         fun String.createGame(type: GameType, buyin: BigDecimal): String = listOf(this).createGame(type, buyin)
+
+        fun createGame(type: GameType, buyin: BigDecimal): String = """
+                ${type.toCommand()}
+                buyin: $buyin
+                ${if (type == GameType.BOUNTY) "bounty: $buyin" else ""}
+        """.trimIndent()
+
+        private fun GameType.toCommand(alias: Boolean = false): String = when (this) {
+            GameType.CASH -> if (alias) cashGameAlias else cashGame
+            GameType.TOURNAMENT -> if (alias) tournamentGameAlias else tournamentGame
+            GameType.BOUNTY -> if (alias) bountyGameAlias else bountyGame
+        }
 
         private fun calculatePrizePool(size: Int): Map<Int, BigDecimal> {
             var total = BigDecimal(100)

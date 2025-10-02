@@ -2,15 +2,19 @@ package by.mrrockka.scenario
 
 import by.mrrockka.BotProperties
 import by.mrrockka.Command
+import by.mrrockka.CoreRandoms.Companion.coreRandoms
 import by.mrrockka.GivenSpecification
 import by.mrrockka.TelegramRandoms.Companion.telegramRandoms
 import by.mrrockka.WhenSpecification
+import by.mrrockka.builder.message
+import by.mrrockka.builder.toUser
 import by.mrrockka.builder.update
 import by.mrrockka.builder.user
+import by.mrrockka.extension.MdApproverExtension
 import by.mrrockka.extension.TelegramPSQLExtension
 import by.mrrockka.extension.TelegramWiremockContainer
 import by.mrrockka.extension.TelegramWiremockExtension
-import by.mrrockka.extension.TextApproverExtension
+import by.mrrockka.scenario.Commands.Companion.chatPoll
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.tomakehurst.wiremock.client.WireMock
@@ -29,6 +33,7 @@ import eu.vendeli.tgbot.api.common.poll
 import eu.vendeli.tgbot.api.message.sendMessage
 import eu.vendeli.tgbot.types.common.Update
 import eu.vendeli.tgbot.types.component.Response
+import eu.vendeli.tgbot.types.msg.Message
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -49,7 +54,7 @@ import kotlin.time.ExperimentalTime
 import kotlin.time.toJavaInstant
 
 @OptIn(ExperimentalTime::class)
-@ExtendWith(value = [TelegramPSQLExtension::class, TelegramWiremockExtension::class, TextApproverExtension::class])
+@ExtendWith(value = [TelegramPSQLExtension::class, TelegramWiremockExtension::class, MdApproverExtension::class])
 @ActiveProfiles(profiles = ["scenario"])
 @Testcontainers
 @SpringBootTest(classes = [TestBotConfig::class])
@@ -58,7 +63,7 @@ abstract class AbstractScenarioTest {
     private val randoms = telegramRandoms("scenario")
     private val chatid = randoms.chatid()
     private val user = user(randoms)
-    private val messageLog = mutableMapOf<String, Long>()
+    private val messageLog = mutableMapOf<String, Message>()
 
     @Autowired
     lateinit var mapper: ObjectMapper
@@ -81,7 +86,8 @@ abstract class AbstractScenarioTest {
 
     @AfterEach
     fun after() {
-        randoms.reset()
+        coreRandoms.reset()
+        telegramRandoms.reset()
         bot.update.stopListener()
         wireMock.verify {
             url equalTo "${botProps.botpath}/${getUpdates}"
@@ -92,7 +98,8 @@ abstract class AbstractScenarioTest {
     companion object {
         lateinit var wireMock: WireMock
         const val METADATA_ATTR = "scenario"
-        val testResponse = Response.Success("TEST OK")
+        val mockMessageResponse = Response.Success("TEST OK")
+        val mockPollResponse = Response.Success(message { poll() })
 
         @OptIn(KtGramInternal::class)
         val getUpdates = GetUpdatesAction().run { methodName }
@@ -145,9 +152,11 @@ abstract class AbstractScenarioTest {
             when (command) {
                 is Command.Message -> command.stub(index, scenarioSeed, chatId)
                 is Command.Poll -> command.stub(index, scenarioSeed)
+                is Command.PollAnswer -> command.stub(index, scenarioSeed)
             }
         }
 
+        //placed here bot init as it falling with serialization exception if run in parallel during stub config
         GlobalScope.launch {
             bot.handleUpdates()
         }
@@ -158,30 +167,51 @@ abstract class AbstractScenarioTest {
                 .until {
                     val stubs = wireMock.serveEvents
                             .filter { it.stubMapping.metadata != null && it.stubMapping.metadata.contains(METADATA_ATTR) }
-                            .associate { it.stubMapping.metadata.getInt(METADATA_ATTR) to it.request.asText() }
+                            .associate { it.stubMapping.metadata.getInt(METADATA_ATTR) to it.request.toText() }
 
-                    if (stubs.size == commands.size) {
+                    if (stubs.size == commands.filter { it !is Command.PollAnswer }.size) {
                         commands
                                 .mapIndexed { index, command ->
                                     when (command) {
                                         is Command.Message ->
                                             """
-                                               |******************************
-                                               |-> Request
-                                               |${command.toAssertionString()}
+                                               |### ${index + 1}. Interaction
                                                |
-                                               |-> Response
-                                               |${stubs[index] ?: "No message"}                   
+                                               |&rarr; <ins>User message</ins>
+                                               |
+                                               |```
+                                               |${command.toText()} 
+                                               |```
+                                               |
+                                               |&rarr; <ins>Bot message</ins>
+                                               |
+                                               |``` 
+                                               |${stubs[index] ?: "No message"} 
+                                               |``` 
+                                               |___
                                                """.trimMargin()
 
                                         is Command.Poll ->
                                             """
-                                               |******************************
-                                               |-> Received
-                                               |${stubs[index] ?: "No message"}                   
+                                               |### ${index + 1}. Posted
+                                               |
+                                               |``` 
+                                               |${stubs[index] ?: "No message"}
+                                               |``` 
+                                               |___
                                                """.trimMargin()
 
-                                        else -> "Command type is not found"
+                                        is Command.PollAnswer ->
+                                            """
+                                               |### ${index + 1}. Poll answer
+                                               |
+                                               |``` 
+                                               |${command.toText()}
+                                               |``` 
+                                               |___
+                                               """.trimMargin()
+
+                                        else -> error("Command type is not found")
                                     }
                                 }.joinToString("\n\n")
                                 .also { approver.assertApproved(it.trim()) }
@@ -190,25 +220,34 @@ abstract class AbstractScenarioTest {
                 }
     }
 
-    private fun Command.Message.toAssertionString(): String = message + if (!replyTo.isNullOrBlank()) " - reply to ${replyTo}" else ""
+    //todo: find a way to complete poll tasks without assertions
+    fun WhenSpecification.verifyPosted(command: String) {
+        await.atMost(Duration.ofSeconds(10))
+                .until {
+                    val stubs = wireMock.serveEvents
+                            .filter { it.stubMapping.metadata != null && it.stubMapping.metadata.contains(METADATA_ATTR) }
+                            .map { it.request }
+                    false
+                }
+    }
+
+    private fun Command.Message.toText(): String = "${if (!replyTo.isNullOrBlank()) "[reply to ${replyTo}]\n" else ""}$message"
+    private fun Command.PollAnswer.toText(): String = "${this.person.nickname} chosen ${this.option}"
 
     private fun Command.Message.stub(index: Int, seed: String, chatId: Long) {
         val update = update {
             message {
-                text(this@stub.message)
+                text(message)
                 chatId(chatId)
-                from(this@AbstractScenarioTest.user)
+                from(user)
                 createdAt(clock.now().toJavaInstant())
                 if (replyTo != null && messageLog[replyTo] != null) {
-                    replyTo {
-                        chatId(chatId)
-                        id(messageLog[replyTo]!!)
-                    }
+                    replyTo(messageLog[replyTo]!!)
                 }
             }
         }
 
-        messageLog += botcommand to update.message!!.messageId
+        messageLog += botcommand to update.message!!
         //mocks user command from telegram
         wireMock.post {
             url equalTo "${botProps.botpath}/${getUpdates}"
@@ -224,26 +263,47 @@ abstract class AbstractScenarioTest {
             whenState = "${seed}$index-completed"
             withBuilder { withMetadata(metadata().attr("scenario", index)) }
         } returnsJson {
-            body = serde.encodeToString(testResponse)
+            body = serde.encodeToString(mockMessageResponse)
+        } and {
+            toState = "${seed}${index + 1}"
+        }
+    }
+
+    private fun Command.PollAnswer.stub(index: Int, seed: String) {
+        val update = update {
+            pollAnswer {
+                pollId(mockPollResponse.result.poll!!.id)
+                option(option - 1)
+                user(person.toUser())
+            }
+        }
+
+        //mocks user command from telegram
+        wireMock.post {
+            url equalTo "${botProps.botpath}/${getUpdates}"
+            whenState = "${seed}$index"
+        } returnsJson {
+            body = serde.encodeToString(Response.Success(listOf(update)))
         } and {
             toState = "${seed}${index + 1}"
         }
     }
 
     private fun Command.Poll.stub(index: Int, seed: String) {
+        messageLog += chatPoll to mockPollResponse.result
         //mocks telegram response when bot sends message
         wireMock.post {
             url equalTo "${botProps.botpath}/${sendPoll}"
             whenState = "${seed}${index}"
             withBuilder { withMetadata(metadata().attr("scenario", index)) }
         } returnsJson {
-            body = serde.encodeToString(testResponse)
+            body = serde.encodeToString(mockPollResponse)
         } and {
             toState = "${seed}${index + 1}"
         }
     }
 
-    private fun LoggedRequest.asText(): String {
+    private fun LoggedRequest.toText(): String {
         return when {
             url.contains(sendMessage) -> bodyAsString.toJson().findPath("text").asText()
             url.contains(sendPoll) -> {
