@@ -4,7 +4,6 @@ import by.mrrockka.Given
 import by.mrrockka.When
 import by.mrrockka.domain.GameType
 import by.mrrockka.extension.mdApprover
-import by.mrrockka.scenario.AbstractScenarioTest
 import by.mrrockka.scenario.Commands.Companion.chatPoll
 import by.mrrockka.scenario.Commands.Companion.createGame
 import by.mrrockka.scenario.Commands.Companion.createPoll
@@ -18,7 +17,7 @@ import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
 @OptIn(ExperimentalTime::class)
-class PollScenario : AbstractScenarioTest() {
+class PollScenario : AbstractPollScenario() {
 
     @Test
     fun `create and stop poll should send message`(approver: Approver) {
@@ -64,9 +63,10 @@ class PollScenario : AbstractScenarioTest() {
                 |5. I don't know
                 """.trimMargin()
             }
-            pollPosted(time + 8.days)
-//            chatPoll.pinned()
-            message(replyTo = createPoll) { stopPoll }
+            pollPosted(time + 1.days)
+            chatPoll.pinned()
+            pollPosted(time + 2.days)
+            chatPoll.pinned()
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -105,7 +105,6 @@ class PollScenario : AbstractScenarioTest() {
             }
             message { "me".createGame(GameType.TOURNAMENT, 30.toBigDecimal()) }
             message(replyTo = command) { stopPoll } // should fail
-            message(replyTo = createPoll) { stopPoll } // should stop task execution to not affect other tests
         } When {
             updatesReceived()
         } ThenApproveWith mdApprover("stop poll fail when ${if (command.isNotBlank()) "wrong" else "no"} reply message specified")

@@ -32,42 +32,49 @@ Test poll
 ``` 
 ___
 
-### 3. Poll answer
+### 3. Posted
 
 ``` 
-jackie_rau chosen 1
+chatPoll pinned
 ``` 
 ___
 
 ### 4. Poll answer
 
 ``` 
-terisa_johnston chosen 1
+jackie_rau chosen 1
 ``` 
 ___
 
 ### 5. Poll answer
 
 ``` 
-santo_welch chosen 2
+terisa_johnston chosen 1
 ``` 
 ___
 
 ### 6. Poll answer
 
 ``` 
-ashlee_lang chosen 2
+santo_welch chosen 2
 ``` 
 ___
 
 ### 7. Poll answer
 
 ``` 
+ashlee_lang chosen 2
+``` 
+___
+
+### 8. Poll answer
+
+``` 
 stanton_boyer chosen 3
 ``` 
 ___
 
-### 8. Interaction
+### 9. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -85,7 +92,7 @@ Tournament game started.
 ``` 
 ___
 
-### 9. Interaction
+### 10. Interaction
 
 &rarr; <ins>User message</ins>
 

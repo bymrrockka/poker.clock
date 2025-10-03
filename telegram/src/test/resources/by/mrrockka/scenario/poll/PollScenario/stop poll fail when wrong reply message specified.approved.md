@@ -51,19 +51,3 @@ ___
 Poll was not found 
 ``` 
 ___
-
-### 4. Interaction
-
-&rarr; <ins>User message</ins>
-
-```
-[reply to /create_poll]
-/stop_poll 
-```
-
-&rarr; <ins>Bot message</ins>
-
-``` 
-Poll stopped 
-``` 
-___

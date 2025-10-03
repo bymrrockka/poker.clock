@@ -103,7 +103,6 @@ abstract class AbstractScenarioTest {
         lateinit var wireMock: WireMock
         const val METADATA_ATTR = "scenario"
         val mockMessageResponse = Response.Success("TEST OK")
-        val mockPollResponse = Response.Success(message { poll() })
 
         @OptIn(KtGramInternal::class)
         val getUpdates = GetUpdatesAction().run { methodName }
@@ -286,7 +285,7 @@ abstract class AbstractScenarioTest {
     private fun Command.PollAnswer.stub(index: Int, seed: String) {
         val update = update {
             pollAnswer {
-                pollId(mockPollResponse.result.poll!!.id)
+                pollId(messageLog[chatPoll]!!.poll!!.id)
                 option(option - 1)
                 user(person.toUser())
             }
@@ -304,7 +303,8 @@ abstract class AbstractScenarioTest {
     }
 
     private fun Command.Poll.stub(index: Int, seed: String) {
-        messageLog += chatPoll to mockPollResponse.result
+        val message = message { poll() }
+        messageLog += chatPoll to message
         clock.set(time)
         //mocks telegram response when bot sends message
         wireMock.post {
@@ -312,7 +312,7 @@ abstract class AbstractScenarioTest {
             whenState = "${seed}${index}"
             withBuilder { withMetadata(metadata().attr("scenario", index)) }
         } returnsJson {
-            body = serde.encodeToString(mockPollResponse)
+            body = serde.encodeToString(Response.Success(message))
         } and {
             toState = "${seed}${index + 1}"
         }

@@ -51,19 +51,3 @@ Message doesn't contain any attached messages.
 Please reply to poll creation message to stop poll 
 ``` 
 ___
-
-### 4. Interaction
-
-&rarr; <ins>User message</ins>
-
-```
-[reply to /create_poll]
-/stop_poll 
-```
-
-&rarr; <ins>Bot message</ins>
-
-``` 
-Poll stopped 
-``` 
-___

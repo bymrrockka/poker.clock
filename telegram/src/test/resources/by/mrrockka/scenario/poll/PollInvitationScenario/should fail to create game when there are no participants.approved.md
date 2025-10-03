@@ -32,28 +32,35 @@ Test poll
 ``` 
 ___
 
-### 3. Poll answer
+### 3. Posted
 
 ``` 
-jackie_rau chosen 2
+chatPoll pinned
 ``` 
 ___
 
 ### 4. Poll answer
 
 ``` 
-terisa_johnston chosen 2
+jackie_rau chosen 2
 ``` 
 ___
 
 ### 5. Poll answer
 
 ``` 
+terisa_johnston chosen 2
+``` 
+___
+
+### 6. Poll answer
+
+``` 
 santo_welch chosen 3
 ``` 
 ___
 
-### 6. Interaction
+### 7. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -68,21 +75,5 @@ buyin: 10
 
 ``` 
 Game participants not found according to poll 
-``` 
-___
-
-### 7. Interaction
-
-&rarr; <ins>User message</ins>
-
-```
-[reply to /create_poll]
-/stop_poll 
-```
-
-&rarr; <ins>Bot message</ins>
-
-``` 
-Poll stopped 
 ``` 
 ___
