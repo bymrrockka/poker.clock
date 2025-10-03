@@ -14,7 +14,7 @@ options:
 
 ``` 
 Poll created.
-Will be triggered next WEDNESDAY 
+Will be triggered next WEDNESDAY 00:00 
 ``` 
 ___
 

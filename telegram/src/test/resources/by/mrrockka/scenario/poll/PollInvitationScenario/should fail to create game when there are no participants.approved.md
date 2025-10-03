@@ -16,11 +16,13 @@ options:
 
 ``` 
 Poll created.
-Will be triggered next WEDNESDAY 
+Will be triggered next WEDNESDAY 00:00 
 ``` 
 ___
 
 ### 2. Posted
+
+&rarr; <ins>2025-09-24 - WEDNESDAY</ins>
 
 ``` 
 Test poll

@@ -36,7 +36,7 @@ class PollInvitationScenario : AbstractScenarioTest() {
                 |3. I don't know
                 """.trimMargin()
             }
-            pollPosted()
+            pollPosted(time + 8.days)
 
             //participants
             listOf(person(), person()).forEach { person ->
@@ -55,7 +55,6 @@ class PollInvitationScenario : AbstractScenarioTest() {
             message(replyTo = createPoll) { stopPoll }
         } When {
             updatesReceived()
-            clock.set(time + 8.days)
         } ThenApproveWith approver
     }
 
@@ -76,7 +75,7 @@ class PollInvitationScenario : AbstractScenarioTest() {
                 |3. I don't know
                 """.trimMargin()
             }
-            pollPosted()
+            pollPosted(time + 8.days)
 
             listOf(person(), person()).forEach { person ->
                 person.pollAnswer(2)
@@ -89,7 +88,6 @@ class PollInvitationScenario : AbstractScenarioTest() {
             message(replyTo = createPoll) { stopPoll }
         } When {
             updatesReceived()
-            clock.set(time + 8.days)
         } ThenApproveWith approver
     }
 

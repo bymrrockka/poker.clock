@@ -35,9 +35,10 @@ class PollCommandHandlerImpl(
         pollService.create(metadata)
                 .let { poll ->
                     sendMessage {
+                        val next = poll.cron.next(LocalDateTime.now())
                         """
                             |Poll created.
-                            |Will be triggered next ${poll.cron.next(LocalDateTime.now())?.dayOfWeek?.name}
+                            |Will be triggered next ${next?.dayOfWeek?.name} ${next?.toLocalTime()}
                         """.trimMargin()
                     }.send(to = metadata.chatId, bot)
                 }

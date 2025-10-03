@@ -37,11 +37,37 @@ class PollScenario : AbstractScenarioTest() {
                 |5. I don't know
                 """.trimMargin()
             }
-            pollPosted()
+            pollPosted(time + 8.days)
+//            pollPinned()
             message(replyTo = createPoll) { stopPoll }
         } When {
             updatesReceived()
-            clock.set(time + 8.days)
+        } ThenApproveWith approver
+    }
+
+    @Test
+    fun `pinned posted poll becomes unpinned when new poll posted`(approver: Approver) {
+        val time = Instant.parse("2025-09-16T12:34:56Z") //Tuesday
+        clock.set(time)
+        Given {
+            message {
+                """
+                |${createPoll}
+                |cron: 0 0 0 * * *
+                |message: Test poll
+                |options: 
+                |1. Yes - participant
+                |2. Noooooo
+                |3. Hell yeah 12123
+                |4. ;.!@#$%^&*()(_+=<>.,/{}[]`~
+                |5. I don't know
+                """.trimMargin()
+            }
+            pollPosted(time + 8.days)
+//            pollPinned()
+            message(replyTo = createPoll) { stopPoll }
+        } When {
+            updatesReceived()
         } ThenApproveWith approver
     }
 

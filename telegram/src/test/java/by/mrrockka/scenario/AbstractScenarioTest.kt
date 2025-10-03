@@ -50,6 +50,8 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import org.testcontainers.junit.jupiter.Testcontainers
 import java.time.Duration
+import java.time.LocalDateTime
+import java.time.ZoneId
 import kotlin.time.ExperimentalTime
 import kotlin.time.toJavaInstant
 
@@ -191,15 +193,19 @@ abstract class AbstractScenarioTest {
                                                |___
                                                """.trimMargin()
 
-                                        is Command.Poll ->
+                                        is Command.Poll -> {
+                                            val dateTime = LocalDateTime.ofInstant(command.time.toJavaInstant(), ZoneId.systemDefault())
                                             """
                                                |### ${index + 1}. Posted
+                                               |
+                                               |&rarr; <ins>${dateTime.toLocalDate()} - ${dateTime.dayOfWeek}</ins>
                                                |
                                                |``` 
                                                |${stubs[index] ?: "No message"}
                                                |``` 
                                                |___
                                                """.trimMargin()
+                                        }
 
                                         is Command.PollAnswer ->
                                             """
@@ -291,6 +297,7 @@ abstract class AbstractScenarioTest {
 
     private fun Command.Poll.stub(index: Int, seed: String) {
         messageLog += chatPoll to mockPollResponse.result
+        clock.set(time)
         //mocks telegram response when bot sends message
         wireMock.post {
             url equalTo "${botProps.botpath}/${sendPoll}"

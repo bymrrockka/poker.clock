@@ -2,13 +2,17 @@ package by.mrrockka
 
 import by.mrrockka.domain.Person
 import org.apache.commons.lang3.RandomStringUtils
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 interface Command {
     data class Message(val replyTo: String? = null, var message: String) : Command {
         val botcommand: String by lazy { "^(/([\\w]+))".toRegex(RegexOption.MULTILINE).find(message)!!.destructured.component1() }
     }
 
-    class Poll : Command
+    @OptIn(ExperimentalTime::class)
+    data class Poll(val time: Instant) : Command
+
     data class PollAnswer(val person: Person, val optionName: String? = null, val option: Int) : Command
 }
 
@@ -20,12 +24,9 @@ class GivenSpecification {
         this.commands += Command.Message(replyTo, init())
     }
 
-    fun pollPosted() {
-        this.commands += Command.Poll()
-    }
-
-    fun Person.pollAnswer(option: String) {
-        this@GivenSpecification.commands += Command.PollAnswer(this, option, 0)
+    @OptIn(ExperimentalTime::class)
+    fun pollPosted(time: Instant) {
+        this.commands += Command.Poll(time)
     }
 
     fun Person.pollAnswer(option: Int) {

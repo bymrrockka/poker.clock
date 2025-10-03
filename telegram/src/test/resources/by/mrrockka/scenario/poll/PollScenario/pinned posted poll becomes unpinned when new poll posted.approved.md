@@ -4,7 +4,7 @@
 
 ```
 /create_poll
-cron: 0 0 0 * * WED
+cron: 0 0 0 * * *
 message: Test poll
 options: 
 1. Yes - participant
@@ -18,7 +18,7 @@ options:
 
 ``` 
 Poll created.
-Will be triggered next WEDNESDAY 00:00 
+Will be triggered next SATURDAY 00:00 
 ``` 
 ___
 
