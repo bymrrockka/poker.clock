@@ -36,13 +36,17 @@ import eu.vendeli.tgbot.api.message.sendMessage
 import eu.vendeli.tgbot.types.common.Update
 import eu.vendeli.tgbot.types.component.Response
 import eu.vendeli.tgbot.types.msg.Message
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
+import org.awaitility.kotlin.atMost
 import org.awaitility.kotlin.await
+import org.awaitility.kotlin.has
+import org.awaitility.kotlin.untilCallTo
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
@@ -56,6 +60,8 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import kotlin.time.ExperimentalTime
 import kotlin.time.toJavaInstant
+
+private val logger = KotlinLogging.logger {}
 
 @OptIn(ExperimentalTime::class)
 @ExtendWith(value = [TelegramPSQLExtension::class, TelegramWiremockExtension::class, MdApproverExtension::class])
@@ -170,8 +176,15 @@ abstract class AbstractScenarioTest {
     }
 
     infix fun WhenSpecification.ThenApproveWith(approver: Approver) {
-        await.atMost(Duration.ofSeconds(3))
-                .until { requests().size == commands.filter { it !is Command.PollAnswer }.size }
+        try {
+            await atMost Duration.ofSeconds(3) untilCallTo {
+                requests()
+            } has {
+                size == commands.filter { it !is Command.PollAnswer }.size
+            }
+        } catch (ex: Exception) {
+            logger.error { "Await timeout failed" }
+        }
 
         commands.toText(requests())
                 .also { approver.assertApproved(it.trim()) }
@@ -182,7 +195,7 @@ abstract class AbstractScenarioTest {
             .associate { it.stubMapping.metadata.getInt(METADATA_ATTR) to it.request.toText() }
 
     private fun List<Command>.toText(stubs: Map<Int, String>): String {
-        val errorMessage = "<p style=\"color:red\">No message</p>"
+        val errorMessage = "No message"
         return mapIndexed { index, command ->
             when (command) {
                 is Command.Message ->
@@ -232,7 +245,7 @@ abstract class AbstractScenarioTest {
                    |### ${index + 1}. Posted
                    |
                    |``` 
-                   |${command.toText()} ${stubs[index]}
+                   |${command.toText()} ${stubs[index] ?: errorMessage}
                    |``` 
                    |___
                    """.trimMargin()
@@ -325,7 +338,6 @@ abstract class AbstractScenarioTest {
             whenState = "${seed}${index}"
             withBuilder { withMetadata(metadata().attr("scenario", index)) }
             body contains "message_id" equalTo (messageLog[message]?.messageId ?: error("$message not found in log"))
-
         } returnsJson {
             body = serde.encodeToString(mockMessageResponse)
         } and {

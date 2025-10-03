@@ -18,13 +18,13 @@ options:
 
 ``` 
 Poll created.
-Will be triggered next SATURDAY 00:00 
+Will be triggered next SUNDAY 00:00 
 ``` 
 ___
 
 ### 2. Posted
 
-&rarr; <ins>2025-09-24 - WEDNESDAY</ins>
+&rarr; <ins>2025-09-17 - WEDNESDAY</ins>
 
 ``` 
 Test poll
@@ -36,18 +36,25 @@ Test poll
 ``` 
 ___
 
-### 3. Interaction
-
-&rarr; <ins>User message</ins>
-
-```
-[reply to /create_poll]
-/stop_poll 
-```
-
-&rarr; <ins>Bot message</ins>
+### 3. Posted
 
 ``` 
-Poll stopped 
+chatPoll pinned
+``` 
+___
+
+### 4. Posted
+
+&rarr; <ins>2025-09-18 - THURSDAY</ins>
+
+``` 
+No message
+``` 
+___
+
+### 5. Posted
+
+``` 
+chatPoll No message
 ``` 
 ___

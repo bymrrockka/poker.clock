@@ -22,8 +22,8 @@ class PollScenario : AbstractPollScenario() {
     @Test
     fun `create and stop poll should send message`(approver: Approver) {
         val time = Instant.parse("2025-09-16T12:34:56Z") //Tuesday
-        clock.set(time)
         Given {
+            clock.set(time)
             message {
                 """
                 |${createPoll}
@@ -48,8 +48,8 @@ class PollScenario : AbstractPollScenario() {
     @Test
     fun `pinned posted poll becomes unpinned when new poll posted`(approver: Approver) {
         val time = Instant.parse("2025-09-16T12:34:56Z") //Tuesday
-        clock.set(time)
         Given {
+            clock.set(time)
             message {
                 """
                 |${createPoll}
