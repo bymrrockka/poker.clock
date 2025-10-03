@@ -6,6 +6,7 @@ import by.mrrockka.repo.ChatPollsRepo
 import by.mrrockka.service.PollEvent
 import by.mrrockka.service.PollTelegramService
 import eu.vendeli.tgbot.TelegramBot
+import eu.vendeli.tgbot.api.chat.pinChatMessage
 import eu.vendeli.tgbot.types.component.onFailure
 import eu.vendeli.tgbot.types.msg.Message
 import jakarta.annotation.PostConstruct
@@ -61,9 +62,14 @@ class TelegramTaskExecutor(
                                         .onFailure { error("Failed to store poll id, game invitation poll wouldn't work") }
                                         .also { resp ->
                                             tasks[task.id] = task.updatedAt(now)
-                                            val tgPollId = (resp as Message).poll?.id
-                                                    ?: error("Poll message doesn't contain poll id")
-                                            chatPollsRepo.store(task.id, tgPollId)
+                                            val message = (resp as Message)
+
+                                            chatPollsRepo.store(
+                                                    task.id,
+                                                    message.poll?.id ?: error("Poll message doesn't contain poll id"),
+                                            )
+
+                                            pinChatMessage(message.messageId).send(to = message.chat.id, bot)
                                         }
                             }
                         }

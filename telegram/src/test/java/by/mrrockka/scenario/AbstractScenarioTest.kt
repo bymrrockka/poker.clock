@@ -21,6 +21,7 @@ import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.common.Metadata.metadata
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
 import com.marcinziolo.kotlin.wiremock.and
+import com.marcinziolo.kotlin.wiremock.contains
 import com.marcinziolo.kotlin.wiremock.equalTo
 import com.marcinziolo.kotlin.wiremock.post
 import com.marcinziolo.kotlin.wiremock.returnsJson
@@ -29,6 +30,7 @@ import com.oneeyedmen.okeydoke.Approver
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.internal.KtGramInternal
 import eu.vendeli.tgbot.api.botactions.GetUpdatesAction
+import eu.vendeli.tgbot.api.chat.pinChatMessage
 import eu.vendeli.tgbot.api.common.poll
 import eu.vendeli.tgbot.api.message.sendMessage
 import eu.vendeli.tgbot.types.common.Update
@@ -112,6 +114,9 @@ abstract class AbstractScenarioTest {
         @OptIn(KtGramInternal::class)
         val sendPoll = poll("", emptyList()).run { methodName }
 
+        @OptIn(KtGramInternal::class)
+        val pinChatMessage = pinChatMessage(-1L).run { methodName }
+
         @JvmStatic
         @BeforeAll
         fun beforeAll() {
@@ -155,6 +160,7 @@ abstract class AbstractScenarioTest {
                 is Command.Message -> command.stub(index, scenarioSeed, chatId)
                 is Command.Poll -> command.stub(index, scenarioSeed)
                 is Command.PollAnswer -> command.stub(index, scenarioSeed)
+                is Command.PinMessage -> command.stub(index, scenarioSeed)
             }
         }
 
@@ -166,79 +172,81 @@ abstract class AbstractScenarioTest {
 
     infix fun WhenSpecification.ThenApproveWith(approver: Approver) {
         await.atMost(Duration.ofSeconds(3))
-                .until {
-                    val stubs = wireMock.serveEvents
-                            .filter { it.stubMapping.metadata != null && it.stubMapping.metadata.contains(METADATA_ATTR) }
-                            .associate { it.stubMapping.metadata.getInt(METADATA_ATTR) to it.request.toText() }
+                .until { requests().size == commands.filter { it !is Command.PollAnswer }.size }
 
-                    if (stubs.size == commands.filter { it !is Command.PollAnswer }.size) {
-                        commands
-                                .mapIndexed { index, command ->
-                                    when (command) {
-                                        is Command.Message ->
-                                            """
-                                               |### ${index + 1}. Interaction
-                                               |
-                                               |&rarr; <ins>User message</ins>
-                                               |
-                                               |```
-                                               |${command.toText()} 
-                                               |```
-                                               |
-                                               |&rarr; <ins>Bot message</ins>
-                                               |
-                                               |``` 
-                                               |${stubs[index] ?: "No message"} 
-                                               |``` 
-                                               |___
-                                               """.trimMargin()
-
-                                        is Command.Poll -> {
-                                            val dateTime = LocalDateTime.ofInstant(command.time.toJavaInstant(), ZoneId.systemDefault())
-                                            """
-                                               |### ${index + 1}. Posted
-                                               |
-                                               |&rarr; <ins>${dateTime.toLocalDate()} - ${dateTime.dayOfWeek}</ins>
-                                               |
-                                               |``` 
-                                               |${stubs[index] ?: "No message"}
-                                               |``` 
-                                               |___
-                                               """.trimMargin()
-                                        }
-
-                                        is Command.PollAnswer ->
-                                            """
-                                               |### ${index + 1}. Poll answer
-                                               |
-                                               |``` 
-                                               |${command.toText()}
-                                               |``` 
-                                               |___
-                                               """.trimMargin()
-
-                                        else -> error("Command type is not found")
-                                    }
-                                }.joinToString("\n\n")
-                                .also { approver.assertApproved(it.trim()) }
-                        true
-                    } else false
-                }
+        commands.toText(requests())
+                .also { approver.assertApproved(it.trim()) }
     }
 
-    //todo: find a way to complete poll tasks without assertions
-    fun WhenSpecification.verifyPosted(command: String) {
-        await.atMost(Duration.ofSeconds(10))
-                .until {
-                    val stubs = wireMock.serveEvents
-                            .filter { it.stubMapping.metadata != null && it.stubMapping.metadata.contains(METADATA_ATTR) }
-                            .map { it.request }
-                    false
+    private fun requests(): Map<Int, String> = wireMock.serveEvents
+            .filter { it.stubMapping.metadata != null && it.stubMapping.metadata.contains(METADATA_ATTR) }
+            .associate { it.stubMapping.metadata.getInt(METADATA_ATTR) to it.request.toText() }
+
+    private fun List<Command>.toText(stubs: Map<Int, String>): String {
+        val errorMessage = "<p style=\"color:red\">No message</p>"
+        return mapIndexed { index, command ->
+            when (command) {
+                is Command.Message ->
+                    """
+                   |### ${index + 1}. Interaction
+                   |
+                   |&rarr; <ins>User message</ins>
+                   |
+                   |```
+                   |${command.toText()} 
+                   |```
+                   |
+                   |&rarr; <ins>Bot message</ins>
+                   |
+                   |``` 
+                   |${stubs[index] ?: errorMessage} 
+                   |``` 
+                   |___
+                   """.trimMargin()
+
+                is Command.Poll -> {
+                    val dateTime = LocalDateTime.ofInstant(command.time.toJavaInstant(), ZoneId.systemDefault())
+                    """
+                   |### ${index + 1}. Posted
+                   |
+                   |&rarr; <ins>${dateTime.toLocalDate()} - ${dateTime.dayOfWeek}</ins>
+                   |
+                   |``` 
+                   |${stubs[index] ?: errorMessage}
+                   |``` 
+                   |___
+                   """.trimMargin()
                 }
+
+                is Command.PollAnswer ->
+                    """
+                   |### ${index + 1}. Poll answer
+                   |
+                   |``` 
+                   |${command.toText()}
+                   |``` 
+                   |___
+                   """.trimMargin()
+
+                is Command.PinMessage ->
+                    """
+                   |### ${index + 1}. Posted
+                   |
+                   |``` 
+                   |${command.toText()} ${stubs[index]}
+                   |``` 
+                   |___
+                   """.trimMargin()
+
+                else -> error("<p style=\"color:red\">Command type is not found</p>")
+            }
+        }.joinToString("\n\n")
     }
+
 
     private fun Command.Message.toText(): String = "${if (!replyTo.isNullOrBlank()) "[reply to ${replyTo}]\n" else ""}$message"
     private fun Command.PollAnswer.toText(): String = "${this.person.nickname} chosen ${this.option}"
+    private fun Command.PinMessage.toText(): String = message
 
     private fun Command.Message.stub(index: Int, seed: String, chatId: Long) {
         val update = update {
@@ -310,6 +318,21 @@ abstract class AbstractScenarioTest {
         }
     }
 
+    private fun Command.PinMessage.stub(index: Int, seed: String) {
+        //mocks telegram response when bot sends message
+        wireMock.post {
+            url equalTo "${botProps.botpath}/${pinChatMessage}"
+            whenState = "${seed}${index}"
+            withBuilder { withMetadata(metadata().attr("scenario", index)) }
+            body contains "message_id" equalTo (messageLog[message]?.messageId ?: error("$message not found in log"))
+
+        } returnsJson {
+            body = serde.encodeToString(mockMessageResponse)
+        } and {
+            toState = "${seed}${index + 1}"
+        }
+    }
+
     private fun LoggedRequest.toText(): String {
         return when {
             url.contains(sendMessage) -> bodyAsString.toJson().findPath("text").asText()
@@ -320,11 +343,13 @@ abstract class AbstractScenarioTest {
                         .mapIndexed { index, option -> "${index + 1}. '${option.findPath("text").asText()}'" }
                         .joinToString("\n")
 
-                return """
+                """
                     |$question
                     |$options
                 """.trimMargin()
             }
+
+            url.contains(pinChatMessage) -> "pinned"
 
             else -> "Unsupported message type"
         }

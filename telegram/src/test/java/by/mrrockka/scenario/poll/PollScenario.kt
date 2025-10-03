@@ -5,6 +5,7 @@ import by.mrrockka.When
 import by.mrrockka.domain.GameType
 import by.mrrockka.extension.mdApprover
 import by.mrrockka.scenario.AbstractScenarioTest
+import by.mrrockka.scenario.Commands.Companion.chatPoll
 import by.mrrockka.scenario.Commands.Companion.createGame
 import by.mrrockka.scenario.Commands.Companion.createPoll
 import by.mrrockka.scenario.Commands.Companion.stopPoll
@@ -38,7 +39,7 @@ class PollScenario : AbstractScenarioTest() {
                 """.trimMargin()
             }
             pollPosted(time + 8.days)
-//            pollPinned()
+            chatPoll.pinned()
             message(replyTo = createPoll) { stopPoll }
         } When {
             updatesReceived()
@@ -64,7 +65,7 @@ class PollScenario : AbstractScenarioTest() {
                 """.trimMargin()
             }
             pollPosted(time + 8.days)
-//            pollPinned()
+//            chatPoll.pinned()
             message(replyTo = createPoll) { stopPoll }
         } When {
             updatesReceived()

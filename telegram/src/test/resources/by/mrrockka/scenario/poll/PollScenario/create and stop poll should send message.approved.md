@@ -36,7 +36,14 @@ Test poll
 ``` 
 ___
 
-### 3. Interaction
+### 3. Posted
+
+``` 
+chatPoll pinned
+``` 
+___
+
+### 4. Interaction
 
 &rarr; <ins>User message</ins>
 

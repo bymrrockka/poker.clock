@@ -14,6 +14,8 @@ interface Command {
     data class Poll(val time: Instant) : Command
 
     data class PollAnswer(val person: Person, val optionName: String? = null, val option: Int) : Command
+
+    data class PinMessage(val message: String) : Command
 }
 
 class GivenSpecification {
@@ -31,6 +33,10 @@ class GivenSpecification {
 
     fun Person.pollAnswer(option: Int) {
         this@GivenSpecification.commands += Command.PollAnswer(this, option = option)
+    }
+
+    fun String.pinned() {
+        this@GivenSpecification.commands += Command.PinMessage(this)
     }
 }
 
