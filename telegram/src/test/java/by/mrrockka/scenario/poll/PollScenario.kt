@@ -52,7 +52,7 @@ class PollScenario : AbstractPollScenario() {
             clock.set(time)
             message {
                 """
-                |${createPoll}
+                |$createPoll
                 |cron: 0 0 0 * * *
                 |message: Test poll
                 |options: 
