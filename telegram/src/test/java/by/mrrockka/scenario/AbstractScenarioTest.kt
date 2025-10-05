@@ -25,7 +25,6 @@ import com.marcinziolo.kotlin.wiremock.contains
 import com.marcinziolo.kotlin.wiremock.equalTo
 import com.marcinziolo.kotlin.wiremock.post
 import com.marcinziolo.kotlin.wiremock.returnsJson
-import com.marcinziolo.kotlin.wiremock.verify
 import com.oneeyedmen.okeydoke.Approver
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.internal.KtGramInternal
@@ -38,15 +37,13 @@ import eu.vendeli.tgbot.types.component.Response
 import eu.vendeli.tgbot.types.msg.Message
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
+import mockwebserver3.MockWebServer
 import org.awaitility.kotlin.atMost
 import org.awaitility.kotlin.await
-import org.awaitility.kotlin.has
-import org.awaitility.kotlin.untilCallTo
+import org.awaitility.kotlin.until
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
@@ -55,6 +52,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import org.testcontainers.junit.jupiter.Testcontainers
+import java.net.InetAddress
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -70,10 +68,15 @@ private val logger = KotlinLogging.logger {}
 @SpringBootTest(classes = [TestBotConfig::class])
 abstract class AbstractScenarioTest {
 
+    private val tg = MockWebServer()
+
     private val randoms = telegramRandoms("scenario")
     private val chatid = randoms.chatid()
     private val user = user(randoms)
     private val messageLog = mutableMapOf<String, Message>()
+
+    @Autowired
+    lateinit var dispatcher: MockDispatcher
 
     @Autowired
     lateinit var mapper: ObjectMapper
@@ -89,25 +92,30 @@ abstract class AbstractScenarioTest {
 
     private fun String.toJson(): JsonNode = mapper.readTree(this)
 
+    @OptIn(DelicateCoroutinesApi::class)
     @BeforeEach
     fun setUp() {
-        wireMock.resetToDefaultMappings()
+        tg.dispatcher = dispatcher
+        tg.start(InetAddress.getByName("localhost"), 45678)
     }
 
     @AfterEach
     fun after() {
         coreRandoms.reset()
         telegramRandoms.reset()
-        bot.update.stopListener()
-        wireMock.verify {
-            url equalTo "${botProps.botpath}/${getUpdates}"
-            atLeast = 1
-        }
+//        runBlocking {
+//            bot.update.stopListener()
+//            job.cancelAndJoin()
+//        }
+//        wireMock.verify {
+//            url equalTo "${botProps.botpath}/${getUpdates}"
+//            atLeast = 1
+//        }
+//        tg.close()
     }
 
     companion object {
         lateinit var wireMock: WireMock
-        const val METADATA_ATTR = "scenario"
         val mockMessageResponse = Response.Success("TEST OK")
 
         @OptIn(KtGramInternal::class)
@@ -160,7 +168,7 @@ abstract class AbstractScenarioTest {
         }
 
         //todo: find a way to log pinned messages
-        this.commands.forEachIndexed { index, command ->
+        commands.forEachIndexed { index, command ->
             when (command) {
                 is Command.Message -> command.stub(index, scenarioSeed, chatId)
                 is Command.Poll -> command.stub(index, scenarioSeed)
@@ -169,32 +177,25 @@ abstract class AbstractScenarioTest {
             }
         }
 
-        //placed here bot init as it falling with serialization exception if run in parallel during stub config
-        GlobalScope.launch {
-            bot.handleUpdates()
-        }
     }
 
     infix fun WhenSpecification.ThenApproveWith(approver: Approver) {
+        val filteredCommands = commands.filter { it !is Command.PollAnswer }
         try {
-            await atMost Duration.ofSeconds(3) untilCallTo {
-                requests()
-            } has {
-                size == commands.filter { it !is Command.PollAnswer }.size
+            await atMost Duration.ofSeconds(3) until {
+                dispatcher.requests.size == filteredCommands.size
             }
         } catch (ex: Exception) {
             logger.error { "Await timeout failed" }
         }
 
-        commands.toText(requests())
+        commands.toText()
                 .also { approver.assertApproved(it.trim()) }
     }
 
-    private fun requests(): Map<Int, String> = wireMock.serveEvents
-            .filter { it.stubMapping.metadata != null && it.stubMapping.metadata.contains(METADATA_ATTR) }
-            .associate { it.stubMapping.metadata.getInt(METADATA_ATTR) to it.request.toText() }
+//    private fun requests(): Map<Int, String> = tg.takeRequest()
 
-    private fun List<Command>.toText(stubs: Map<Int, String>): String {
+    private fun List<Command>.toText(): String {
         val errorMessage = "No message"
         return mapIndexed { index, command ->
             when (command) {
@@ -211,7 +212,7 @@ abstract class AbstractScenarioTest {
                    |&rarr; <ins>Bot message</ins>
                    |
                    |``` 
-                   |${stubs[index] ?: errorMessage} 
+                   |${dispatcher.requests[index] ?: errorMessage} 
                    |``` 
                    |___
                    """.trimMargin()
@@ -224,7 +225,7 @@ abstract class AbstractScenarioTest {
                    |&rarr; <ins>${dateTime.toLocalDate()} - ${dateTime.dayOfWeek}</ins>
                    |
                    |``` 
-                   |${stubs[index] ?: errorMessage}
+                   |${tg.takeRequest().body ?: errorMessage}
                    |``` 
                    |___
                    """.trimMargin()
@@ -245,7 +246,7 @@ abstract class AbstractScenarioTest {
                    |### ${index + 1}. Posted
                    |
                    |``` 
-                   |${command.toText()} ${stubs[index] ?: errorMessage}
+                   |${command.toText()} ${tg.takeRequest().body ?: errorMessage}
                    |``` 
                    |___
                    """.trimMargin()
@@ -274,25 +275,9 @@ abstract class AbstractScenarioTest {
         }
 
         messageLog += botcommand to update.message!!
-        //mocks user command from telegram
-        wireMock.post {
-            url equalTo "${botProps.botpath}/${getUpdates}"
-            whenState = "${seed}$index"
-        } returnsJson {
-            body = serde.encodeToString(Response.Success(listOf(update)))
-        } and {
-            toState = "${seed}${index}-completed"
-        }
-        //mocks telegram response when bot sends message
-        wireMock.post {
-            url equalTo "${botProps.botpath}/${sendMessage}"
-            whenState = "${seed}$index-completed"
-            withBuilder { withMetadata(metadata().attr("scenario", index)) }
-        } returnsJson {
-            body = serde.encodeToString(mockMessageResponse)
-        } and {
-            toState = "${seed}${index + 1}"
-        }
+
+        dispatcher.update(update)
+        dispatcher.response(scenarioIndex = index)
     }
 
     private fun Command.PollAnswer.stub(index: Int, seed: String) {

@@ -1,69 +1,71 @@
 [versions]
 #plugins
-springBootVersion = "3.5.6"
-springDepManagementVersion = "1.1.7"
-kotlinVersion = "2.2.20"
-googleDevtoolsKspVersion = "2.2.20-2.0.3"
-telegramBotVersion = "8.4.0"
+springBoot = "3.5.6"
+springDepManagement = "1.1.7"
+kotlin = "2.2.20"
+googleKsp = "2.2.20-2.0.3"
+telegramBot = "8.4.0"
 
 #libs
-postgresqlVersion = "42.7.8"
-jupiterVersion = "5.13.4"
-assertjCoreVersion = "3.27.6"
-testContainerVersion = "1.21.3"
-liquibaseVersion = "4.33.0"
-javaFakerVersion = "1.0.2"
-jacksonVersion = "2.20.0"
-hikariCPVersion = "7.0.2"
-exposedVersion = "0.61.0"
-awaitilityVersion = "4.3.0"
-wiremockVersion = "3.13.1"
-wiremockContainerVersion = "1.0-alpha-13"
-wiremockKotlinVersion = "2.1.1"
-okeydokieVersion = "2.0.3"
-logbackVersion = "1.5.18"
+postgresql = "42.7.8"
+jupiter = "5.13.4"
+assertjCore = "3.27.6"
+testContainer = "1.21.3"
+liquibase = "4.33.0"
+javaFaker = "1.0.2"
+jackson = "2.20.0"
+hikariCP = "7.0.2"
+exposed = "0.61.0"
+awaitility = "4.3.0"
+wiremock = "3.13.1"
+wiremockContainer = "1.0-alpha-13"
+wiremockKotlin = "2.1.1"
+okeydokie = "2.0.3"
+logback = "1.5.18"
 kotlin-logging = "7.0.13"
+mockwebserver = "5.1.0"
 
 [plugins]
-kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinVersion" }
-springBootPlugin = { id = "org.springframework.boot", version.ref = "springBootVersion" }
-springDepManagementPlugin = { id = "io.spring.dependency-management", version.ref = "springDepManagementVersion" }
-kotlinSerializationPlugin = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinVersion" }
-googleDevtoolsKspPlugin = { id = "com.google.devtools.ksp", version.ref = "googleDevtoolsKspVersion" }
-telegramBot = { id = "eu.vendeli.telegram-bot", version.ref = "telegramBotVersion" }
+kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+springBootPlugin = { id = "org.springframework.boot", version.ref = "springBoot" }
+springDepManagementPlugin = { id = "io.spring.dependency-management", version.ref = "springDepManagement" }
+kotlinSerializationPlugin = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+googleDevtoolsKspPlugin = { id = "com.google.devtools.ksp", version.ref = "googleKsp" }
+telegramBot = { id = "eu.vendeli.telegram-bot", version.ref = "telegramBot" }
 
 [libraries]
-telegramBot = { module = "eu.vendeli:telegram-bot", version.ref = "telegramBotVersion" }
+telegramBot = { module = "eu.vendeli:telegram-bot", version.ref = "telegramBot" }
 kotlinStdLib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8" }
 springBootJdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc" }
 aspectjWeaver = { module = "org.aspectj:aspectjweaver" }
-postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresqlVersion" }
-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "jupiterVersion" }
-assertjCore = { module = "org.assertj:assertj-core", version.ref = "assertjCoreVersion" }
-testContainerPostgresql = { module = "org.testcontainers:postgresql", version.ref = "testContainerVersion" }
-testContainerJupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "testContainerVersion" }
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "jupiter" }
+assertjCore = { module = "org.assertj:assertj-core", version.ref = "assertjCore" }
+testContainerPostgresql = { module = "org.testcontainers:postgresql", version.ref = "testContainer" }
+testContainerJupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "testContainer" }
 springBootWeb = { module = "org.springframework.boot:spring-boot-starter-web" }
 springBootTest = { module = "org.springframework.boot:spring-boot-starter-test" }
-liquibase = { module = "org.liquibase:liquibase-core", version.ref = "liquibaseVersion" }
-javaFaker = { module = "com.github.javafaker:javafaker", version.ref = "javaFakerVersion" }
-jacksonDataformat = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml", version.ref = "jacksonVersion" }
-jacksonKotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jacksonVersion" }
-hikariCP = { module = "com.zaxxer:HikariCP", version.ref = "hikariCPVersion" }
-exposedCore = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposedVersion" }
-exposedJdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposedVersion" }
-exposedJavaTime = { module = "org.jetbrains.exposed:exposed-java-time", version.ref = "exposedVersion" }
-exposedJson = { module = "org.jetbrains.exposed:exposed-json", version.ref = "exposedVersion" }
-exposedSpringBoot = { module = "org.jetbrains.exposed:exposed-spring-boot-starter", version.ref = "exposedVersion" }
-awaitility = { module = "org.awaitility:awaitility-kotlin", version.ref = "awaitilityVersion" }
-wiremock = { module = "org.wiremock:wiremock-standalone", version.ref = "wiremockVersion" }
-wiremockContainer = { module = "org.wiremock.integrations.testcontainers:wiremock-testcontainers-module", version.ref = "wiremockContainerVersion" }
-wiremockKotlinDsl = { module = "com.marcinziolo:kotlin-wiremock", version.ref = "wiremockKotlinVersion" }
-okeydoke = { module = "com.oneeyedmen:okeydoke", version.ref = "okeydokieVersion" }
-kotlinSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinVersion" }
-logbackClassic = { module = "ch.qos.logback:logback-classic", version.ref = "logbackVersion" }
-logbackCore = { module = "ch.qos.logback:logback-core", version.ref = "logbackVersion" }
+liquibase = { module = "org.liquibase:liquibase-core", version.ref = "liquibase" }
+javaFaker = { module = "com.github.javafaker:javafaker", version.ref = "javaFaker" }
+jacksonDataformat = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml", version.ref = "jackson" }
+jacksonKotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
+hikariCP = { module = "com.zaxxer:HikariCP", version.ref = "hikariCP" }
+exposedCore = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
+exposedJdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
+exposedJavaTime = { module = "org.jetbrains.exposed:exposed-java-time", version.ref = "exposed" }
+exposedJson = { module = "org.jetbrains.exposed:exposed-json", version.ref = "exposed" }
+exposedSpringBoot = { module = "org.jetbrains.exposed:exposed-spring-boot-starter", version.ref = "exposed" }
+awaitility = { module = "org.awaitility:awaitility-kotlin", version.ref = "awaitility" }
+wiremock = { module = "org.wiremock:wiremock-standalone", version.ref = "wiremock" }
+wiremockContainer = { module = "org.wiremock.integrations.testcontainers:wiremock-testcontainers-module", version.ref = "wiremockContainer" }
+wiremockKotlinDsl = { module = "com.marcinziolo:kotlin-wiremock", version.ref = "wiremockKotlin" }
+okeydoke = { module = "com.oneeyedmen:okeydoke", version.ref = "okeydokie" }
+kotlinSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlin" }
+logbackClassic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+logbackCore = { module = "ch.qos.logback:logback-core", version.ref = "logback" }
 junitLauncher = { module = "org.junit.platform:junit-platform-launcher" }
 kotlinLogging = { module = "io.github.oshai:kotlin-logging", version.ref = "kotlin-logging" }
+mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "mockwebserver" }
 
 [bundles]
 logging = ["kotlinLogging", "logbackClassic", "logbackCore"]
@@ -71,7 +73,7 @@ wiremock = ["wiremock", "wiremockContainer", "wiremockKotlinDsl"]
 kotlinLibs = ["kotlinStdLib", "kotlinSerialization"]
 springBoot = ["springBootWeb", "springBootJdbc"]
 exposed = ["exposedCore", "exposedSpringBoot", "exposedJdbc", "exposedJson", "exposedJavaTime"]
-test = ["assertjCore", "jupiter", "junitLauncher", "awaitility", "springBootTest", "okeydoke"]
+test = ["assertjCore", "jupiter", "junitLauncher", "awaitility", "springBootTest", "okeydoke", "mockwebserver"]
 db = ["postgresql", "liquibase"]
 jackson = ["jacksonDataformat", "jacksonKotlin"]
 testContainer = ["testContainerJupiter", "testContainerPostgresql"]
