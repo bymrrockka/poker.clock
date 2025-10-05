@@ -26,7 +26,6 @@ import com.marcinziolo.kotlin.wiremock.equalTo
 import com.marcinziolo.kotlin.wiremock.post
 import com.marcinziolo.kotlin.wiremock.returnsJson
 import com.oneeyedmen.okeydoke.Approver
-import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.internal.KtGramInternal
 import eu.vendeli.tgbot.api.botactions.GetUpdatesAction
 import eu.vendeli.tgbot.api.chat.pinChatMessage
@@ -44,6 +43,7 @@ import mockwebserver3.MockWebServer
 import org.awaitility.kotlin.atMost
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
@@ -67,9 +67,6 @@ private val logger = KotlinLogging.logger {}
 @Testcontainers
 @SpringBootTest(classes = [TestBotConfig::class])
 abstract class AbstractScenarioTest {
-
-    private val tg = MockWebServer()
-
     private val randoms = telegramRandoms("scenario")
     private val chatid = randoms.chatid()
     private val user = user(randoms)
@@ -85,9 +82,6 @@ abstract class AbstractScenarioTest {
     lateinit var botProps: BotProperties
 
     @Autowired
-    lateinit var bot: TelegramBot
-
-    @Autowired
     lateinit var clock: TestClock
 
     private fun String.toJson(): JsonNode = mapper.readTree(this)
@@ -96,26 +90,21 @@ abstract class AbstractScenarioTest {
     @BeforeEach
     fun setUp() {
         tg.dispatcher = dispatcher
-        tg.start(InetAddress.getByName("localhost"), 45678)
+        if (!tg.started) {
+            tg.start(InetAddress.getByName("localhost"), 45678)
+        }
     }
 
     @AfterEach
     fun after() {
         coreRandoms.reset()
         telegramRandoms.reset()
-//        runBlocking {
-//            bot.update.stopListener()
-//            job.cancelAndJoin()
-//        }
-//        wireMock.verify {
-//            url equalTo "${botProps.botpath}/${getUpdates}"
-//            atLeast = 1
-//        }
-//        tg.close()
+        dispatcher.reset()
     }
 
     companion object {
         lateinit var wireMock: WireMock
+        lateinit var tg: MockWebServer
         val mockMessageResponse = Response.Success("TEST OK")
 
         @OptIn(KtGramInternal::class)
@@ -134,6 +123,18 @@ abstract class AbstractScenarioTest {
         @BeforeAll
         fun beforeAll() {
             wireMock = WireMock(TelegramWiremockContainer.port)
+            tg = MockWebServer()
+        }
+
+        @JvmStatic
+        @AfterAll
+        fun afterAll() {
+            try {
+                tg
+                tg.close()
+
+            } catch (e: AssertionError) {
+            }
         }
 
         @OptIn(ExperimentalSerializationApi::class)

@@ -40,7 +40,7 @@ class MockDispatcher(
     private val responseQueue = LinkedBlockingQueue<MockResponse>()
     private val pollQueue = LinkedBlockingQueue<MockResponse>()
     private val scenarioHeader = "Scenario"
-    var requests: Map<Int, String> = mutableMapOf()
+    var requests: MutableMap<Int, String> = mutableMapOf()
 
     fun update(update: Update) {
         updateQueue += MockResponse(body = serde.encodeToString(Response.Success(listOf(update))))
@@ -75,8 +75,14 @@ class MockDispatcher(
         }
     }
 
-    private fun RecordedRequest.toJson(): JsonNode = mapper.readTree(this.body?.toByteArray())
+    fun reset() {
+        responseQueue.clear()
+        pollQueue.clear()
+        updateQueue.clear()
+        requests.clear()
+    }
 
+    private fun RecordedRequest.toJson(): JsonNode = mapper.readTree(this.body?.toByteArray())
 
     companion object {
         @JvmStatic
