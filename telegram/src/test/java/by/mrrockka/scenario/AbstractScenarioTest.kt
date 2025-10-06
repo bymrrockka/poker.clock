@@ -18,10 +18,8 @@ import by.mrrockka.scenario.Commands.Companion.chatPoll
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.tomakehurst.wiremock.client.WireMock
-import com.github.tomakehurst.wiremock.common.Metadata.metadata
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
 import com.marcinziolo.kotlin.wiremock.and
-import com.marcinziolo.kotlin.wiremock.contains
 import com.marcinziolo.kotlin.wiremock.equalTo
 import com.marcinziolo.kotlin.wiremock.post
 import com.marcinziolo.kotlin.wiremock.returnsJson
@@ -159,10 +157,10 @@ abstract class AbstractScenarioTest {
         //todo: find a way to log pinned messages
         commands.forEachIndexed { index, command ->
             when (command) {
-                is Command.Message -> command.stub(index, scenarioSeed, chatId)
-                is Command.Poll -> command.stub(index, scenarioSeed)
-                is Command.PollAnswer -> command.stub(index, scenarioSeed)
-                is Command.PinMessage -> command.stub(index, scenarioSeed)
+                is Command.Message -> command.stub(index, chatId)
+                is Command.Poll -> command.stub(index)
+                is Command.PollAnswer -> command.stub(index)
+                is Command.PinMessage -> command.stub(index)
             }
         }
 
@@ -250,7 +248,7 @@ abstract class AbstractScenarioTest {
     private fun Command.PollAnswer.toText(): String = "${this.person.nickname} chosen ${this.option}"
     private fun Command.PinMessage.toText(): String = message
 
-    private fun Command.Message.stub(index: Int, seed: String, chatId: Long) {
+    private fun Command.Message.stub(index: Int, chatId: Long) {
         val update = update {
             message {
                 text(message)
@@ -265,17 +263,14 @@ abstract class AbstractScenarioTest {
 
         messageLog += botcommand to update.message!!
 
-//        dispatcher.update(update)
-//        dispatcher.response(scenarioIndex = index)
-
         dispatcher.scenario {
             index(index)
             update(update)
-            response()
+            message()
         }
     }
 
-    private fun Command.PollAnswer.stub(index: Int, seed: String) {
+    private fun Command.PollAnswer.stub(index: Int) {
         val update = update {
             pollAnswer {
                 pollId(messageLog[chatPoll]!!.poll!!.id)
@@ -284,44 +279,27 @@ abstract class AbstractScenarioTest {
             }
         }
 
-        //mocks user command from telegram
-        wireMock.post {
-            url equalTo "${botProps.botpath}/${getUpdates}"
-            whenState = "${seed}$index"
-        } returnsJson {
-            body = serde.encodeToString(Response.Success(listOf(update)))
-        } and {
-            toState = "${seed}${index + 1}"
+        dispatcher.scenario {
+            index(index)
+            update(update)
         }
     }
 
-    private fun Command.Poll.stub(index: Int, seed: String) {
+    private fun Command.Poll.stub(index: Int) {
         val message = message { poll() }
         messageLog += chatPoll to message
         clock.set(time)
-        //mocks telegram response when bot sends message
-        wireMock.post {
-            url equalTo "${botProps.botpath}/${sendPoll}"
-            whenState = "${seed}${index}"
-            withBuilder { withMetadata(metadata().attr("scenario", index)) }
-        } returnsJson {
-            body = serde.encodeToString(Response.Success(message))
-        } and {
-            toState = "${seed}${index + 1}"
+
+        dispatcher.scenario {
+            index(index)
+            poll(message)
         }
     }
 
-    private fun Command.PinMessage.stub(index: Int, seed: String) {
-        //mocks telegram response when bot sends message
-        wireMock.post {
-            url equalTo "${botProps.botpath}/${pinChatMessage}"
-            whenState = "${seed}${index}"
-            withBuilder { withMetadata(metadata().attr("scenario", index)) }
-            body contains "message_id" equalTo (messageLog[message]?.messageId ?: error("$message not found in log"))
-        } returnsJson {
-            body = serde.encodeToString(mockMessageResponse)
-        } and {
-            toState = "${seed}${index + 1}"
+    private fun Command.PinMessage.stub(index: Int) {
+        dispatcher.scenario {
+            index(index)
+            pin()
         }
     }
 
@@ -345,11 +323,5 @@ abstract class AbstractScenarioTest {
 
             else -> "Unsupported message type"
         }
-    }
-
-    private fun scenario(index: Int, init: () -> Unit) {
-
-//        dispatcher.update(update)
-//        dispatcher.response(scenarioIndex = index)
     }
 }

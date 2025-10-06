@@ -11,7 +11,7 @@ import eu.vendeli.tgbot.api.common.poll
 import eu.vendeli.tgbot.api.message.sendMessage
 import eu.vendeli.tgbot.types.common.Update
 import eu.vendeli.tgbot.types.component.Response
-import eu.vendeli.tgbot.types.poll.Poll
+import eu.vendeli.tgbot.types.msg.Message
 import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -86,17 +86,23 @@ class MockDispatcher(
 
             "${botProps.botpath}/$sendPoll" -> {
                 synchronized(scenario) {
-                    if (scenario.polls.isNotEmpty())
-                        scenario.polls.take()
-                    else MockResponse(code = 404, body = "No polls found")
+                    if (scenario.polls.isNotEmpty()) {
+                        val resp = scenario.polls.take()
+                        val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
+                        requests += scenarioIndex to request.toPollText()
+                        resp
+                    } else MockResponse(code = 404, body = "No polls found")
                 }
             }
 
             "${botProps.botpath}/$pinChatMessage" ->
                 synchronized(scenario) {
-                    if (scenario.pins.isNotEmpty())
-                        scenario.pins.take()
-                    else MockResponse(code = 404, body = "No pins found")
+                    if (scenario.pins.isNotEmpty()) {
+                        val resp = scenario.pins.take()
+                        val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
+                        requests += scenarioIndex to "pinned"
+                        resp
+                    } else MockResponse(code = 404, body = "No pins found")
                 }
 
             else -> MockResponse(code = 404, body = "No mocks found")
@@ -109,6 +115,19 @@ class MockDispatcher(
     }
 
     private fun RecordedRequest.toJson(): JsonNode = mapper.readTree(this.body?.toByteArray())
+
+    private fun RecordedRequest.toPollText(): String {
+        val json = this.toJson()
+        val question = json.findPath("question").asText()
+        val options = json.findPath("options")
+                .mapIndexed { index, option -> "${index + 1}. '${option.findPath("text").asText()}'" }
+                .joinToString("\n")
+
+        return """
+                |$question
+                |$options
+            """.trimMargin()
+    }
 
     companion object {
         @JvmStatic
@@ -168,6 +187,7 @@ data class Scenario(
         private val responses = LinkedBlockingQueue<MockResponse>()
         private val polls = LinkedBlockingQueue<MockResponse>()
         private val pins = LinkedBlockingQueue<MockResponse>()
+        private val defaultBody = serde.encodeToString(Response.Success("TEST OK"))
 
         init {
             init()
@@ -181,16 +201,28 @@ data class Scenario(
             updates += MockResponse(body = serde.encodeToString(Response.Success(listOf(update))))
         }
 
-        fun response(message: String = "TEST OK") {
+        fun message() {
             check(index > -1) { "Scenario index should be specified and positive" }
             responses += MockResponse(
+                    body = defaultBody,
+                    headers = headersOf(scenarioHeader, "$index"),
+            )
+        }
+
+        fun poll(message: Message) {
+            check(index > -1) { "Scenario index should be specified and positive" }
+            polls += MockResponse(
                     body = serde.encodeToString(Response.Success(message)),
                     headers = headersOf(scenarioHeader, "$index"),
             )
         }
 
-        fun poll(poll: Poll) {
-            polls += MockResponse(body = serde.encodeToString(Response.Success(poll)))
+        fun pin() {
+            check(index > -1) { "Scenario index should be specified and positive" }
+            pins += MockResponse(
+                    body = defaultBody,
+                    headers = headersOf(scenarioHeader, "$index"),
+            )
         }
 
         fun build(): Scenario {
