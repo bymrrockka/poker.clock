@@ -39,7 +39,6 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
-import mockwebserver3.MockWebServer
 import org.awaitility.kotlin.atMost
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
@@ -50,9 +49,9 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.context.annotation.DependsOn
 import org.springframework.test.context.ActiveProfiles
 import org.testcontainers.junit.jupiter.Testcontainers
-import java.net.InetAddress
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -64,6 +63,7 @@ private val logger = KotlinLogging.logger {}
 @OptIn(ExperimentalTime::class)
 @ExtendWith(value = [TelegramPSQLExtension::class, TelegramWiremockExtension::class, MdApproverExtension::class])
 @ActiveProfiles(profiles = ["scenario"])
+@DependsOn("mockWebServer")
 @Testcontainers
 @SpringBootTest(classes = [TestBotConfig::class])
 abstract class AbstractScenarioTest {
@@ -89,10 +89,6 @@ abstract class AbstractScenarioTest {
     @OptIn(DelicateCoroutinesApi::class)
     @BeforeEach
     fun setUp() {
-        tg.dispatcher = dispatcher
-        if (!tg.started) {
-            tg.start(InetAddress.getByName("localhost"), 45678)
-        }
     }
 
     @AfterEach
@@ -104,7 +100,6 @@ abstract class AbstractScenarioTest {
 
     companion object {
         lateinit var wireMock: WireMock
-        lateinit var tg: MockWebServer
         val mockMessageResponse = Response.Success("TEST OK")
 
         @OptIn(KtGramInternal::class)
@@ -123,18 +118,11 @@ abstract class AbstractScenarioTest {
         @BeforeAll
         fun beforeAll() {
             wireMock = WireMock(TelegramWiremockContainer.port)
-            tg = MockWebServer()
         }
 
         @JvmStatic
         @AfterAll
         fun afterAll() {
-            try {
-                tg
-                tg.close()
-
-            } catch (e: AssertionError) {
-            }
         }
 
         @OptIn(ExperimentalSerializationApi::class)
@@ -226,7 +214,7 @@ abstract class AbstractScenarioTest {
                    |&rarr; <ins>${dateTime.toLocalDate()} - ${dateTime.dayOfWeek}</ins>
                    |
                    |``` 
-                   |${tg.takeRequest().body ?: errorMessage}
+                   |${dispatcher.requests[index] ?: errorMessage}
                    |``` 
                    |___
                    """.trimMargin()
@@ -247,7 +235,7 @@ abstract class AbstractScenarioTest {
                    |### ${index + 1}. Posted
                    |
                    |``` 
-                   |${command.toText()} ${tg.takeRequest().body ?: errorMessage}
+                   |${command.toText()} ${dispatcher.requests[index] ?: errorMessage}
                    |``` 
                    |___
                    """.trimMargin()
@@ -277,8 +265,14 @@ abstract class AbstractScenarioTest {
 
         messageLog += botcommand to update.message!!
 
-        dispatcher.update(update)
-        dispatcher.response(scenarioIndex = index)
+//        dispatcher.update(update)
+//        dispatcher.response(scenarioIndex = index)
+
+        dispatcher.scenario {
+            index(index)
+            update(update)
+            response()
+        }
     }
 
     private fun Command.PollAnswer.stub(index: Int, seed: String) {
@@ -351,5 +345,11 @@ abstract class AbstractScenarioTest {
 
             else -> "Unsupported message type"
         }
+    }
+
+    private fun scenario(index: Int, init: () -> Unit) {
+
+//        dispatcher.update(update)
+//        dispatcher.response(scenarioIndex = index)
     }
 }

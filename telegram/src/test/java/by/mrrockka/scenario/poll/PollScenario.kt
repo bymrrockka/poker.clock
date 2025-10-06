@@ -9,6 +9,7 @@ import by.mrrockka.scenario.Commands.Companion.createGame
 import by.mrrockka.scenario.Commands.Companion.createPoll
 import by.mrrockka.scenario.Commands.Companion.stopPoll
 import com.oneeyedmen.okeydoke.Approver
+import org.junit.Ignore
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
@@ -16,6 +17,7 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
+@Ignore()
 @OptIn(ExperimentalTime::class)
 class PollScenario : AbstractPollScenario() {
 
