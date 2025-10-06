@@ -112,7 +112,7 @@ class CalculationCommandHandlerImpl(
             |
             |-----------------------------
             |Players played equally
-            |${zeros.joinToString("\n") { "|  @${it.creditor.person.nickname}" }}
+            ${zeros.joinToString("\n") { "|  @${it.creditor.person.nickname}" }}
         """.trimMargin() else ""
     }
 
@@ -121,7 +121,7 @@ class CalculationCommandHandlerImpl(
 
         return """
             |From:
-            |${joinToString("\n") { "|  @${it.player.person.nickname} -> ${it.debt.setScale(0)}" }}
+            ${joinToString("\n") { "|  @${it.player.person.nickname} -> ${it.debt.setScale(0)}" }}
         """.trimMargin()
     }
 
@@ -130,7 +130,7 @@ class CalculationCommandHandlerImpl(
         return """
                 |-----------------------------
                 |Finale summary:
-                |${summary.joinToString("\n") { "  ${it.position}. @${it.person.nickname} won ${it.amount.setScale(0)}" }}
+                ${summary.joinToString("\n") { "|  ${it.position}. @${it.person.nickname} won ${it.amount.setScale(0)}" }}
                 |Total: ${players.totalEntries().setScale(0)} (${players.flatMap { it.entries }.size} entries * ${buyIn.setScale(0)} buy in)
                 |
                 """.trimMargin()
