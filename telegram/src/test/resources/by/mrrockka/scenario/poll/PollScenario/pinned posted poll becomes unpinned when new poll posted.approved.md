@@ -18,7 +18,7 @@ options:
 
 ``` 
 Poll created.
-Will be triggered next SUNDAY 00:00 
+Will be triggered next TUESDAY 00:00 
 ``` 
 ___
 
@@ -48,13 +48,18 @@ ___
 &rarr; <ins>2025-09-18 - THURSDAY</ins>
 
 ``` 
-No message
+Test poll
+1. 'Yes'
+2. 'Noooooo'
+3. 'Hell yeah 12123'
+4. ';.!@#$%^&*()(_+=<>.,/{}[]`~'
+5. 'I don't know'
 ``` 
 ___
 
 ### 5. Posted
 
 ``` 
-chatPoll No message
+chatPoll pinned
 ``` 
 ___

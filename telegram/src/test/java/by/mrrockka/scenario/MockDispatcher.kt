@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalTime::class)
+
 package by.mrrockka.scenario
 
 import by.mrrockka.BotProperties
@@ -26,6 +28,8 @@ import okhttp3.internal.closeQuietly
 import org.springframework.stereotype.Component
 import java.net.InetAddress
 import java.util.concurrent.LinkedBlockingQueue
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 @OptIn(ExperimentalSerializationApi::class)
 private val serde = Json {
@@ -36,16 +40,17 @@ private val serde = Json {
     isLenient = true
 }
 
-internal val scenarioHeader = "Scenario"
+private val scenarioHeader = "Scenario"
 
 @Component
 class MockDispatcher(
         private val botProps: BotProperties,
         private val mapper: ObjectMapper,
+        private val clock: TestClock,
 ) : Dispatcher() {
 
     var requests: MutableMap<Int, String> = mutableMapOf()
-    var scenarios: ArrayDeque<Scenario> = ArrayDeque()
+    private var scenarios: ArrayDeque<Scenario> = ArrayDeque()
 
     private val emptyScenario = Scenario.Builder {}.build()
 
@@ -62,6 +67,10 @@ class MockDispatcher(
                 if (scenarios.isNotEmpty()) scenarios.first()
                 else emptyScenario
             }
+        }
+
+        if (scenario.time != null) {
+            clock.set(scenario.time)
         }
 
         return when (request.url.encodedPath) {
@@ -172,6 +181,7 @@ data class Scenario(
         val responses: LinkedBlockingQueue<MockResponse>,
         val polls: LinkedBlockingQueue<MockResponse>,
         val pins: LinkedBlockingQueue<MockResponse>,
+        val time: Instant? = null,
 ) {
 
     fun isEmpty(): Boolean {
@@ -188,6 +198,7 @@ data class Scenario(
         private val polls = LinkedBlockingQueue<MockResponse>()
         private val pins = LinkedBlockingQueue<MockResponse>()
         private val defaultBody = serde.encodeToString(Response.Success("TEST OK"))
+        private var time: Instant? = null
 
         init {
             init()
@@ -225,12 +236,17 @@ data class Scenario(
             )
         }
 
+        fun time(time: Instant) {
+            this.time = time
+        }
+
         fun build(): Scenario {
             return Scenario(
                     updates = updates,
                     responses = responses,
                     polls = polls,
                     pins = pins,
+                    time = time,
             )
         }
     }

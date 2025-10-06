@@ -1,7 +1,6 @@
 package by.mrrockka
 
 import by.mrrockka.domain.Person
-import org.apache.commons.lang3.RandomStringUtils
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
@@ -19,7 +18,6 @@ interface Command {
 }
 
 class GivenSpecification {
-    val scenarioSeed: String = RandomStringUtils.randomAlphabetic(5)
     var commands: List<Command> = mutableListOf()
 
     fun message(replyTo: String? = null, init: () -> String) {

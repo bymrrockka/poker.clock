@@ -1,6 +1,5 @@
 package by.mrrockka.scenario
 
-import by.mrrockka.BotProperties
 import by.mrrockka.Command
 import by.mrrockka.CoreRandoms.Companion.coreRandoms
 import by.mrrockka.GivenSpecification
@@ -12,38 +11,15 @@ import by.mrrockka.builder.update
 import by.mrrockka.builder.user
 import by.mrrockka.extension.MdApproverExtension
 import by.mrrockka.extension.TelegramPSQLExtension
-import by.mrrockka.extension.TelegramWiremockContainer
-import by.mrrockka.extension.TelegramWiremockExtension
 import by.mrrockka.scenario.Commands.Companion.chatPoll
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.github.tomakehurst.wiremock.client.WireMock
-import com.github.tomakehurst.wiremock.verification.LoggedRequest
-import com.marcinziolo.kotlin.wiremock.and
-import com.marcinziolo.kotlin.wiremock.equalTo
-import com.marcinziolo.kotlin.wiremock.post
-import com.marcinziolo.kotlin.wiremock.returnsJson
 import com.oneeyedmen.okeydoke.Approver
-import eu.vendeli.tgbot.annotations.internal.KtGramInternal
-import eu.vendeli.tgbot.api.botactions.GetUpdatesAction
-import eu.vendeli.tgbot.api.chat.pinChatMessage
-import eu.vendeli.tgbot.api.common.poll
-import eu.vendeli.tgbot.api.message.sendMessage
-import eu.vendeli.tgbot.types.common.Update
-import eu.vendeli.tgbot.types.component.Response
 import eu.vendeli.tgbot.types.msg.Message
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonNamingStrategy
 import org.awaitility.kotlin.atMost
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
-import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -59,7 +35,7 @@ import kotlin.time.toJavaInstant
 private val logger = KotlinLogging.logger {}
 
 @OptIn(ExperimentalTime::class)
-@ExtendWith(value = [TelegramPSQLExtension::class, TelegramWiremockExtension::class, MdApproverExtension::class])
+@ExtendWith(value = [TelegramPSQLExtension::class, MdApproverExtension::class])
 @ActiveProfiles(profiles = ["scenario"])
 @DependsOn("mockWebServer")
 @Testcontainers
@@ -74,20 +50,7 @@ abstract class AbstractScenarioTest {
     lateinit var dispatcher: MockDispatcher
 
     @Autowired
-    lateinit var mapper: ObjectMapper
-
-    @Autowired
-    lateinit var botProps: BotProperties
-
-    @Autowired
     lateinit var clock: TestClock
-
-    private fun String.toJson(): JsonNode = mapper.readTree(this)
-
-    @OptIn(DelicateCoroutinesApi::class)
-    @BeforeEach
-    fun setUp() {
-    }
 
     @AfterEach
     fun after() {
@@ -96,80 +59,16 @@ abstract class AbstractScenarioTest {
         dispatcher.reset()
     }
 
-    companion object {
-        lateinit var wireMock: WireMock
-        val mockMessageResponse = Response.Success("TEST OK")
-
-        @OptIn(KtGramInternal::class)
-        val getUpdates = GetUpdatesAction().run { methodName }
-
-        @OptIn(KtGramInternal::class)
-        val sendMessage = sendMessage("").run { methodName }
-
-        @OptIn(KtGramInternal::class)
-        val sendPoll = poll("", emptyList()).run { methodName }
-
-        @OptIn(KtGramInternal::class)
-        val pinChatMessage = pinChatMessage(-1L).run { methodName }
-
-        @JvmStatic
-        @BeforeAll
-        fun beforeAll() {
-            wireMock = WireMock(TelegramWiremockContainer.port)
-        }
-
-        @JvmStatic
-        @AfterAll
-        fun afterAll() {
-        }
-
-        @OptIn(ExperimentalSerializationApi::class)
-        internal val serde = Json {
-            namingStrategy = JsonNamingStrategy.SnakeCase
-            encodeDefaults = true
-            ignoreUnknownKeys = true
-            explicitNulls = false
-            isLenient = true
-        }
-    }
-
     @OptIn(DelicateCoroutinesApi::class)
-    fun GivenSpecification.updatesReceived(chatId: Long = chatid) {
+    fun GivenSpecification.updatesReceived() {
         check(this.commands.isNotEmpty()) { "Commands should be specified" }
-
-        //starts a scenario by moving state
-        wireMock.post {
-            url equalTo "${botProps.botpath}/${getUpdates}"
-        } returnsJson {
-            body = serde.encodeToString(Response.Success(emptyList<Update>()))
-        } and {
-            toState = "${scenarioSeed}0"
-        }
-
-        //ends a scenario when all commands were completed
-        wireMock.post {
-            url equalTo "${botProps.botpath}/${getUpdates}"
-            whenState = "${scenarioSeed}${commands.size}"
-        } returnsJson {
-            body = serde.encodeToString(Response.Success(emptyList<Update>()))
-        }
-
-        //todo: find a way to log pinned messages
-        commands.forEachIndexed { index, command ->
-            when (command) {
-                is Command.Message -> command.stub(index, chatId)
-                is Command.Poll -> command.stub(index)
-                is Command.PollAnswer -> command.stub(index)
-                is Command.PinMessage -> command.stub(index)
-            }
-        }
-
+        commands.forEachIndexed { index, command -> command.stub(index) }
     }
 
     infix fun WhenSpecification.ThenApproveWith(approver: Approver) {
         val filteredCommands = commands.filter { it !is Command.PollAnswer }
         try {
-            await atMost Duration.ofSeconds(3) until {
+            await atMost Duration.ofSeconds(5) until {
                 dispatcher.requests.size == filteredCommands.size
             }
         } catch (ex: Exception) {
@@ -179,8 +78,6 @@ abstract class AbstractScenarioTest {
         commands.toText()
                 .also { approver.assertApproved(it.trim()) }
     }
-
-//    private fun requests(): Map<Int, String> = tg.takeRequest()
 
     private fun List<Command>.toText(): String {
         val errorMessage = "No message"
@@ -243,85 +140,73 @@ abstract class AbstractScenarioTest {
         }.joinToString("\n\n")
     }
 
+    private fun Command.toText(): String {
+        return when (this) {
+            is Command.Message -> "${if (!replyTo.isNullOrBlank()) "[reply to ${replyTo}]\n" else ""}$message"
+            is Command.PinMessage -> message
+            is Command.PollAnswer -> "${this.person.nickname} chosen ${this.option}"
+            else -> error("Command type does not found")
+        }
+    }
 
-    private fun Command.Message.toText(): String = "${if (!replyTo.isNullOrBlank()) "[reply to ${replyTo}]\n" else ""}$message"
-    private fun Command.PollAnswer.toText(): String = "${this.person.nickname} chosen ${this.option}"
-    private fun Command.PinMessage.toText(): String = message
+    private fun Command.stub(index: Int) {
+        when (this) {
+            is Command.PollAnswer -> {
+                val update = update {
+                    pollAnswer {
+                        pollId(messageLog[chatPoll]!!.poll!!.id)
+                        option(option - 1)
+                        user(person.toUser())
+                    }
+                }
 
-    private fun Command.Message.stub(index: Int, chatId: Long) {
-        val update = update {
-            message {
-                text(message)
-                chatId(chatId)
-                from(user)
-                createdAt(clock.now().toJavaInstant())
-                if (replyTo != null && messageLog[replyTo] != null) {
-                    replyTo(messageLog[replyTo]!!)
+                dispatcher.scenario {
+                    index(index)
+                    update(update)
                 }
             }
-        }
 
-        messageLog += botcommand to update.message!!
+            is Command.Message -> {
+                val update = update {
+                    message {
+                        text(message)
+                        chatId(chatid)
+                        from(user)
+                        createdAt(clock.now().toJavaInstant())
+                        if (replyTo != null && messageLog[replyTo] != null) {
+                            replyTo(messageLog[replyTo]!!)
+                        }
+                    }
+                }
 
-        dispatcher.scenario {
-            index(index)
-            update(update)
-            message()
-        }
-    }
+                messageLog += botcommand to update.message!!
 
-    private fun Command.PollAnswer.stub(index: Int) {
-        val update = update {
-            pollAnswer {
-                pollId(messageLog[chatPoll]!!.poll!!.id)
-                option(option - 1)
-                user(person.toUser())
-            }
-        }
-
-        dispatcher.scenario {
-            index(index)
-            update(update)
-        }
-    }
-
-    private fun Command.Poll.stub(index: Int) {
-        val message = message { poll() }
-        messageLog += chatPoll to message
-        clock.set(time)
-
-        dispatcher.scenario {
-            index(index)
-            poll(message)
-        }
-    }
-
-    private fun Command.PinMessage.stub(index: Int) {
-        dispatcher.scenario {
-            index(index)
-            pin()
-        }
-    }
-
-    private fun LoggedRequest.toText(): String {
-        return when {
-            url.contains(sendMessage) -> bodyAsString.toJson().findPath("text").asText()
-            url.contains(sendPoll) -> {
-                val json = bodyAsString.toJson()
-                val question = json.findPath("question").asText()
-                val options = json.findPath("options")
-                        .mapIndexed { index, option -> "${index + 1}. '${option.findPath("text").asText()}'" }
-                        .joinToString("\n")
-
-                """
-                    |$question
-                    |$options
-                """.trimMargin()
+                dispatcher.scenario {
+                    index(index)
+                    update(update)
+                    message()
+                }
             }
 
-            url.contains(pinChatMessage) -> "pinned"
+            is Command.Poll -> {
+                val message = message { poll() }
+                messageLog += chatPoll to message
 
-            else -> "Unsupported message type"
+                dispatcher.scenario {
+                    index(index)
+                    poll(message)
+                    time(time)
+                }
+            }
+
+            is Command.PinMessage -> {
+                dispatcher.scenario {
+                    index(index)
+                    pin()
+                }
+            }
+
+            else -> error("Command type haven't recognised")
         }
     }
 }
