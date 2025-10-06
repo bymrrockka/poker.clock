@@ -75,7 +75,7 @@ class MockDispatcher(
 
         return when (request.url.encodedPath) {
             "${botProps.botpath}/$getUpdates" -> {
-                synchronized(scenario) {
+                synchronized(scenario.updates) {
                     if (scenario.updates.isNotEmpty())
                         scenario.updates.take()
                     else MockResponse(body = serde.encodeToString(Response.Success(emptyList<Update>())))
@@ -83,7 +83,7 @@ class MockDispatcher(
             }
 
             "${botProps.botpath}/$sendMessage" -> {
-                synchronized(scenario) {
+                synchronized(scenario.responses) {
                     if (scenario.responses.isNotEmpty()) {
                         val resp = scenario.responses.take()
                         val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
@@ -94,7 +94,7 @@ class MockDispatcher(
             }
 
             "${botProps.botpath}/$sendPoll" -> {
-                synchronized(scenario) {
+                synchronized(scenario.polls) {
                     if (scenario.polls.isNotEmpty()) {
                         val resp = scenario.polls.take()
                         val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
@@ -105,7 +105,7 @@ class MockDispatcher(
             }
 
             "${botProps.botpath}/$pinChatMessage" ->
-                synchronized(scenario) {
+                synchronized(scenario.pins) {
                     if (scenario.pins.isNotEmpty()) {
                         val resp = scenario.pins.take()
                         val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
