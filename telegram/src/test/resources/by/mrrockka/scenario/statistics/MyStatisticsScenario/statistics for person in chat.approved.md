@@ -3,6 +3,7 @@
 &rarr; <ins>User message</ins>
 
 ```
+message id: 0
 /tournament_game
 buyin: 10
 
@@ -21,6 +22,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 1
 /prize_pool
 1 50%, 2 50% 
 ```
@@ -39,6 +41,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 2
 /finale_places
 1 @me, 2 @nickname1 
 ```
@@ -57,6 +60,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 3
 /calculate 
 ```
 
@@ -88,6 +92,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 4
 /my_stats 
 ```
 
@@ -108,6 +113,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 5
 /cash_game
 buyin: 10
 
@@ -126,6 +132,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 6
 /withdrawal @nickname2 30 
 ```
 
@@ -142,6 +149,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 7
 /calculate 
 ```
 
@@ -164,6 +172,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 8
 /my_stats 
 ```
 
@@ -184,6 +193,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 9
 /bounty_game
 buyin: 10
 bounty: 10
@@ -202,6 +212,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 10
 /bounty @nickname1 kicked @nickname2 
 ```
 
@@ -217,6 +228,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 11
 /bounty @nickname1 kicked @me 
 ```
 
@@ -232,6 +244,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 12
 /prize_pool
 1 50%, 2 50% 
 ```
@@ -250,6 +263,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 13
 /finale_places
 1 @nickname1, 2 @me 
 ```
@@ -268,6 +282,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 14
 /calculate 
 ```
 
@@ -295,6 +310,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 15
 /my_stats 
 ```
 
@@ -315,6 +331,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 16
 /tournament_game
 buyin: 10
 
@@ -333,6 +350,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 17
 /prize_pool
 1 50%, 2 50% 
 ```
@@ -351,6 +369,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 18
 /finale_places
 1 @nickname1, 2 @nickname2 
 ```
@@ -369,6 +388,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 19
 /calculate 
 ```
 
@@ -400,6 +420,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 20
 /my_stats 
 ```
 

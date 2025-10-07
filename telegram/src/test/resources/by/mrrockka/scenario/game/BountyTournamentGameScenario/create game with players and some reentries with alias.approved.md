@@ -3,6 +3,7 @@
 &rarr; <ins>User message</ins>
 
 ```
+message id: 0
 /bg
 buyin: 10
 bounty: 10
@@ -21,6 +22,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 1
 /bounty @me kicked @nickname3 
 ```
 
@@ -36,6 +38,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 2
 /entry @nickname3  
 ```
 
@@ -52,6 +55,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 3
 /bounty @me kicked @nickname3 
 ```
 
@@ -67,6 +71,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 4
 /entry @nickname3  
 ```
 
@@ -83,6 +88,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 5
 /bounty @nickname1 kicked @nickname4 
 ```
 
@@ -98,6 +104,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 6
 /bounty @nickname1 kicked @nickname5 
 ```
 
@@ -113,6 +120,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 7
 /prize_pool
 1 50%, 2 50% 
 ```
@@ -131,6 +139,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 8
 /bounty @nickname3 kicked @nickname1 
 ```
 
@@ -146,6 +155,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 9
 /entry @nickname1  
 ```
 
@@ -162,6 +172,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 10
 /bounty @nickname3 kicked @nickname1 
 ```
 
@@ -177,6 +188,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 11
 /entry @nickname1  
 ```
 
@@ -193,6 +205,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 12
 /finale_places
 1 @nickname1, 2 @nickname2 
 ```
@@ -211,6 +224,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 13
 /bounty @nickname2 kicked @nickname1 
 ```
 
@@ -226,6 +240,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 14
 /entry @nickname1  
 ```
 
@@ -242,6 +257,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 15
 /bounty @nickname2 kicked @nickname3 
 ```
 
@@ -257,6 +273,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 16
 /bounty @nickname2 kicked @me 
 ```
 
@@ -272,6 +289,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 17
 /bounty @nickname1 kicked @nickname2 
 ```
 
@@ -287,6 +305,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 18
 /calculate 
 ```
 

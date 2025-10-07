@@ -3,6 +3,7 @@
 &rarr; <ins>User message</ins>
 
 ```
+message id: 0
 /tg
 buyin: 10
 
@@ -21,6 +22,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 1
 /entry @nickname3  
 ```
 
@@ -37,6 +39,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 2
 /entry @nickname3  
 ```
 
@@ -53,6 +56,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 3
 /prize_pool
 1 50%, 2 50% 
 ```
@@ -71,6 +75,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 4
 /entry @nickname1  
 ```
 
@@ -87,6 +92,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 5
 /entry @nickname1  
 ```
 
@@ -103,6 +109,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 6
 /finale_places
 1 @nickname1, 2 @nickname2 
 ```
@@ -121,6 +128,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 7
 /entry @nickname1  
 ```
 
@@ -137,6 +145,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 8
 /entry @nickname1  
 ```
 
@@ -153,6 +162,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 9
 /entry @nickname1  
 ```
 
@@ -169,6 +179,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 10
 /calculate 
 ```
 

@@ -3,6 +3,7 @@
 &rarr; <ins>User message</ins>
 
 ```
+message id: 0
 /tournament_game
 buyin: 10
 
@@ -21,6 +22,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 1
 /finale_places
 1 @nickname1, 2 @nickname2 
 ```
@@ -39,6 +41,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 2
 /calculate 
 ```
 

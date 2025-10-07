@@ -4,7 +4,6 @@ import by.mrrockka.Given
 import by.mrrockka.When
 import by.mrrockka.builder.person
 import by.mrrockka.domain.GameType
-import by.mrrockka.scenario.Commands.Companion.chatPoll
 import by.mrrockka.scenario.Commands.Companion.createGame
 import by.mrrockka.scenario.Commands.Companion.createPoll
 import by.mrrockka.scenario.Commands.Companion.stopPoll
@@ -24,7 +23,7 @@ class PollInvitationScenario : AbstractPollScenario() {
 
         Given {
             clock.set(time)
-            message {
+            val createPoll = message {
                 """
                 |${createPoll}
                 |cron: 0 0 0 * * WED
@@ -35,21 +34,21 @@ class PollInvitationScenario : AbstractPollScenario() {
                 |3. I don't know
                 """.trimMargin()
             }
-            pollPosted(time + 8.days)
-            chatPoll.pinned()
+            val poll = pollPosted(time + 8.days)
+            poll.pinned()
 
             //participants
             listOf(person(), person()).forEach { person ->
-                person.pollAnswer(1)
+                poll.pollAnswer(person, 1)
             }
             //no
             listOf(person(), person()).forEach { person ->
-                person.pollAnswer(2)
+                poll.pollAnswer(person, 2)
             }
             //maybe
-            person().pollAnswer(3)
+            poll.pollAnswer(person(), 3)
 
-            message(replyTo = chatPoll) {
+            message(replyTo = poll) {
                 createGame(type = GameType.TOURNAMENT, BigDecimal(10))
             }
             message(replyTo = createPoll) { stopPoll }
@@ -75,15 +74,15 @@ class PollInvitationScenario : AbstractPollScenario() {
                 |3. I don't know
                 """.trimMargin()
             }
-            pollPosted(time + 8.days)
-            chatPoll.pinned()
+            val poll = pollPosted(time + 8.days)
+            poll.pinned()
 
             listOf(person(), person()).forEach { person ->
-                person.pollAnswer(2)
+                poll.pollAnswer(person, 2)
             }
-            person().pollAnswer(3)
+            poll.pollAnswer(person(), 3)
 
-            message(replyTo = chatPoll) {
+            message(replyTo = poll) {
                 createGame(type = GameType.TOURNAMENT, BigDecimal(10))
             }
         } When {

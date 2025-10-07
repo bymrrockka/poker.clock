@@ -3,6 +3,7 @@
 &rarr; <ins>User message</ins>
 
 ```
+message id: 0
 /bounty_game
 buyin: 10
 bounty: 10
@@ -21,6 +22,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 1
 /game_stats 
 ```
 
@@ -40,6 +42,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 2
 /bounty @me kicked @nickname1 
 ```
 
@@ -55,6 +58,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 3
 /game_stats 
 ```
 
@@ -74,6 +78,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 4
 /entry @nickname1  
 ```
 
@@ -90,6 +95,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 5
 /bounty @nickname1 kicked @me 
 ```
 
@@ -105,6 +111,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 6
 /game_stats 
 ```
 
@@ -124,6 +131,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 7
 /entry @me  
 ```
 
@@ -140,6 +148,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 8
 /game_stats 
 ```
 
@@ -159,6 +168,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 9
 /bounty @nickname1 kicked @me 
 ```
 
@@ -174,6 +184,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 10
 /game_stats 
 ```
 

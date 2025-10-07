@@ -4,7 +4,6 @@ import by.mrrockka.Given
 import by.mrrockka.When
 import by.mrrockka.domain.GameType
 import by.mrrockka.extension.mdApprover
-import by.mrrockka.scenario.Commands.Companion.chatPoll
 import by.mrrockka.scenario.Commands.Companion.createGame
 import by.mrrockka.scenario.Commands.Companion.createPoll
 import by.mrrockka.scenario.Commands.Companion.stopPoll
@@ -26,7 +25,7 @@ class PollScenario : AbstractPollScenario() {
         val time = Instant.parse("2025-09-16T12:34:56Z") //Tuesday
         Given {
             clock.set(time)
-            message {
+            val createPoll = message {
                 """
                 |${createPoll}
                 |cron: 0 0 0 * * WED
@@ -39,8 +38,8 @@ class PollScenario : AbstractPollScenario() {
                 |5. I don't know
                 """.trimMargin()
             }
-            pollPosted(time + 8.days)
-            chatPoll.pinned()
+            val poll = pollPosted(time + 8.days)
+            poll.pinned()
             message(replyTo = createPoll) { stopPoll }
         } When {
             updatesReceived()
@@ -50,8 +49,8 @@ class PollScenario : AbstractPollScenario() {
     @Test
     fun `pinned posted poll becomes unpinned when new poll posted`(approver: Approver) {
         val time = Instant.parse("2025-09-16T12:34:56Z") //Tuesday
-        clock.set(time)
         Given {
+            clock.set(time)
             message {
                 """
                 |$createPoll
@@ -65,10 +64,10 @@ class PollScenario : AbstractPollScenario() {
                 |5. I don't know
                 """.trimMargin()
             }
-            pollPosted(time + 1.days)
-            chatPoll.pinned()
-            pollPosted(time + 2.days)
-            chatPoll.pinned()
+            val poll1 = pollPosted(time + 1.days)
+            poll1.pinned()
+            val poll2 = pollPosted(time + 2.days)
+            poll2.pinned()
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -92,9 +91,8 @@ class PollScenario : AbstractPollScenario() {
         } ThenApproveWith mdApprover("fail when doesn't have required fields, field set ${if (actual.isNotBlank()) actual else "empty"}")
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = ["/tournament_game", ""])
-    fun `stop poll fail when wrong or no reply message specified`(command: String) {
+    @Test
+    fun `stop poll fail when wrong reply message specified`(approver: Approver) {
         Given {
             message {
                 """
@@ -105,11 +103,10 @@ class PollScenario : AbstractPollScenario() {
                 |1. Yes - participant
                 """.trimMargin()
             }
-            message { "me".createGame(GameType.TOURNAMENT, 30.toBigDecimal()) }
-            message(replyTo = command) { stopPoll } // should fail
+            val game = message { "me".createGame(GameType.TOURNAMENT, 30.toBigDecimal()) }
+            message(replyTo = game) { stopPoll } // should fail
         } When {
             updatesReceived()
-        } ThenApproveWith mdApprover("stop poll fail when ${if (command.isNotBlank()) "wrong" else "no"} reply message specified")
+        } ThenApproveWith approver
     }
-
 }

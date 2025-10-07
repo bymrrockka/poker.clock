@@ -3,6 +3,7 @@
 &rarr; <ins>User message</ins>
 
 ```
+message id: 0
 /create_poll
 cron: 0 0 0 * * 3
 message: Test poll
@@ -23,6 +24,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 1
 /tournament_game
 buyin: 30
 
@@ -41,7 +43,8 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
-[reply to /tournament_game]
+[reply to message id 1]
+message id: 2
 /stop_poll 
 ```
 

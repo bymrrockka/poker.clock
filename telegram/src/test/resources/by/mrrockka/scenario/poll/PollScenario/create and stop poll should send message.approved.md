@@ -3,6 +3,7 @@
 &rarr; <ins>User message</ins>
 
 ```
+message id: 0
 /create_poll
 cron: 0 0 0 * * WED
 message: Test poll
@@ -27,6 +28,7 @@ ___
 &rarr; <ins>2025-09-24 - WEDNESDAY</ins>
 
 ``` 
+message id 1
 Test poll
 1. 'Yes'
 2. 'Noooooo'
@@ -39,7 +41,7 @@ ___
 ### 3. Posted
 
 ``` 
-chatPoll pinned
+message id 1 pinned
 ``` 
 ___
 
@@ -48,7 +50,8 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
-[reply to /create_poll]
+[reply to message id 0]
+message id: 2
 /stop_poll 
 ```
 

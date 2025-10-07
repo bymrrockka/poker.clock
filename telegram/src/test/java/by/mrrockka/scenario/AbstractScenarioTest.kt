@@ -11,7 +11,6 @@ import by.mrrockka.builder.update
 import by.mrrockka.builder.user
 import by.mrrockka.extension.MdApproverExtension
 import by.mrrockka.extension.TelegramPSQLExtension
-import by.mrrockka.scenario.Commands.Companion.chatPoll
 import com.oneeyedmen.okeydoke.Approver
 import eu.vendeli.tgbot.types.msg.Message
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -44,7 +43,7 @@ abstract class AbstractScenarioTest {
     private val randoms = telegramRandoms("scenario")
     private val chatid = randoms.chatid()
     private val user = user(randoms)
-    private val messageLog = mutableMapOf<String, Message>()
+    private val messageLog = mutableMapOf<Command, Message>()
 
     @Autowired
     lateinit var dispatcher: MockDispatcher
@@ -109,6 +108,7 @@ abstract class AbstractScenarioTest {
                    |&rarr; <ins>${dateTime.toLocalDate()} - ${dateTime.dayOfWeek}</ins>
                    |
                    |``` 
+                   |${command.toText()}
                    |${dispatcher.requests[index] ?: errorMessage}
                    |``` 
                    |___
@@ -142,9 +142,17 @@ abstract class AbstractScenarioTest {
 
     private fun Command.toText(): String {
         return when (this) {
-            is Command.Message -> "${if (!replyTo.isNullOrBlank()) "[reply to ${replyTo}]\n" else ""}$message"
-            is Command.PinMessage -> message
+            is Command.Message -> {
+                val replyMessage = if (replyTo != null && messageLog[replyTo] != null) "[reply to message id ${messageLog[replyTo]!!.messageId}]\n" else ""
+                replyMessage + """
+                            |message id: ${messageLog[this]!!.messageId}
+                            |$message
+                        """.trimMargin()
+            }
+
+            is Command.PinMessage -> "message id ${messageLog[command]?.messageId ?: error("Command was not found in log")}"
             is Command.PollAnswer -> "${this.person.nickname} chosen ${this.option}"
+            is Command.Poll -> "message id ${messageLog[this]?.messageId ?: error("Command was not found in log")}"
             else -> error("Command type does not found")
         }
     }
@@ -154,7 +162,7 @@ abstract class AbstractScenarioTest {
             is Command.PollAnswer -> {
                 val update = update {
                     pollAnswer {
-                        pollId(messageLog[chatPoll]!!.poll!!.id)
+                        pollId(messageLog[this@stub.poll]!!.poll!!.id)
                         option(option - 1)
                         user(person.toUser())
                     }
@@ -179,7 +187,7 @@ abstract class AbstractScenarioTest {
                     }
                 }
 
-                messageLog += botcommand to update.message!!
+                messageLog += this to update.message!!
 
                 dispatcher.scenario {
                     index(index)
@@ -190,7 +198,7 @@ abstract class AbstractScenarioTest {
 
             is Command.Poll -> {
                 val message = message { poll() }
-                messageLog += chatPoll to message
+                messageLog += this to message
 
                 dispatcher.scenario {
                     index(index)

@@ -3,6 +3,7 @@
 &rarr; <ins>User message</ins>
 
 ```
+message id: 0
 /bounty_game
 buyin: 10
 bounty: 10
@@ -21,6 +22,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 1
 /prize_pool
 1 50%, 2 50% 
 ```
@@ -39,6 +41,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 2
 /calculate 
 ```
 
