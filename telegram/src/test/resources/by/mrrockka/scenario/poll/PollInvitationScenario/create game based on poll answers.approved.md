@@ -34,7 +34,7 @@ Test poll
 ``` 
 ___
 
-### 3. Posted
+### 3. Pinned
 
 ``` 
 message id 1 pinned

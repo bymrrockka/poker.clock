@@ -127,7 +127,17 @@ abstract class AbstractScenarioTest {
 
                 is Command.PinMessage ->
                     """
-                   |### ${index + 1}. Posted
+                   |### ${index + 1}. Pinned
+                   |
+                   |``` 
+                   |${command.toText()} ${dispatcher.requests[index] ?: errorMessage}
+                   |``` 
+                   |___
+                   """.trimMargin()
+
+                is Command.UnpinMessage ->
+                    """
+                   |### ${index + 1}. Unpinned
                    |
                    |``` 
                    |${command.toText()} ${dispatcher.requests[index] ?: errorMessage}
@@ -151,6 +161,7 @@ abstract class AbstractScenarioTest {
             }
 
             is Command.PinMessage -> "message id ${messageLog[command]?.messageId ?: error("Command was not found in log")}"
+            is Command.UnpinMessage -> "message id ${messageLog[command]?.messageId ?: error("Command was not found in log")}"
             is Command.PollAnswer -> "${this.person.nickname} chosen ${this.option}"
             is Command.Poll -> "message id ${messageLog[this]?.messageId ?: error("Command was not found in log")}"
             else -> error("Command type does not found")
@@ -211,6 +222,13 @@ abstract class AbstractScenarioTest {
                 dispatcher.scenario {
                     index(index)
                     pin()
+                }
+            }
+
+            is Command.UnpinMessage -> {
+                dispatcher.scenario {
+                    index(index)
+                    unpin()
                 }
             }
 

@@ -38,7 +38,7 @@ Test poll
 ``` 
 ___
 
-### 3. Posted
+### 3. Pinned
 
 ``` 
 message id 1 pinned
@@ -60,7 +60,14 @@ Test poll
 ``` 
 ___
 
-### 5. Posted
+### 5. Unpinned
+
+``` 
+message id 1 No message
+``` 
+___
+
+### 6. Pinned
 
 ``` 
 message id 2 pinned

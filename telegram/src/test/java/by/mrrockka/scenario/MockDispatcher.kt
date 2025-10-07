@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import eu.vendeli.tgbot.annotations.internal.KtGramInternal
 import eu.vendeli.tgbot.api.botactions.GetUpdatesAction
 import eu.vendeli.tgbot.api.chat.pinChatMessage
+import eu.vendeli.tgbot.api.chat.unpinChatMessage
 import eu.vendeli.tgbot.api.common.poll
 import eu.vendeli.tgbot.api.message.sendMessage
 import eu.vendeli.tgbot.types.common.Update
@@ -114,6 +115,16 @@ class MockDispatcher(
                     } else MockResponse(code = 404, body = "No pins found")
                 }
 
+            "${botProps.botpath}/$unpinChatMessage" ->
+                synchronized(scenario.unpins) {
+                    if (scenario.unpins.isNotEmpty()) {
+                        val resp = scenario.unpins.take()
+                        val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
+                        requests += scenarioIndex to "unpinned"
+                        resp
+                    } else MockResponse(code = 404, body = "No unpins found")
+                }
+
             else -> MockResponse(code = 404, body = "No mocks found")
         }
     }
@@ -154,6 +165,10 @@ class MockDispatcher(
         @JvmStatic
         @OptIn(KtGramInternal::class)
         private val pinChatMessage = pinChatMessage(-1L).run { methodName }
+
+        @JvmStatic
+        @OptIn(KtGramInternal::class)
+        private val unpinChatMessage = unpinChatMessage(-1L).run { methodName }
     }
 }
 
@@ -182,6 +197,7 @@ data class Scenario(
         val polls: LinkedBlockingQueue<MockResponse>,
         val pins: LinkedBlockingQueue<MockResponse>,
         val time: Instant? = null,
+        val unpins: LinkedBlockingQueue<MockResponse>,
 ) {
 
     fun isEmpty(): Boolean {
@@ -197,6 +213,7 @@ data class Scenario(
         private val responses = LinkedBlockingQueue<MockResponse>()
         private val polls = LinkedBlockingQueue<MockResponse>()
         private val pins = LinkedBlockingQueue<MockResponse>()
+        private val unpins = LinkedBlockingQueue<MockResponse>()
         private val defaultBody = serde.encodeToString(Response.Success("TEST OK"))
         private var time: Instant? = null
 
@@ -236,6 +253,14 @@ data class Scenario(
             )
         }
 
+        fun unpin() {
+            check(index > -1) { "Scenario index should be specified and positive" }
+            unpins += MockResponse(
+                    body = defaultBody,
+                    headers = headersOf(scenarioHeader, "$index"),
+            )
+        }
+
         fun time(time: Instant) {
             this.time = time
         }
@@ -246,6 +271,7 @@ data class Scenario(
                     responses = responses,
                     polls = polls,
                     pins = pins,
+                    unpins = unpins,
                     time = time,
             )
         }

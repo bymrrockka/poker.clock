@@ -18,6 +18,8 @@ interface Command {
 
     data class PinMessage(val command: Command, override val unique: String = unique()) : Command
 
+    data class UnpinMessage(val command: Command, override val unique: String = unique()) : Command
+
     companion object {
         fun unique(): String = telegramRandoms.faker.regexify("\\w{10,12}")
     }
@@ -45,6 +47,10 @@ class GivenSpecification {
 
     fun Command.pinned() {
         this@GivenSpecification.commands += Command.PinMessage(this)
+    }
+
+    fun Command.unpinned() {
+        this@GivenSpecification.commands += Command.UnpinMessage(this)
     }
 }
 

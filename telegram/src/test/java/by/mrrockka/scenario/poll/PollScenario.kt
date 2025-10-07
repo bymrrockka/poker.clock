@@ -68,6 +68,7 @@ class PollScenario : AbstractPollScenario() {
             poll1.pinned()
             val poll2 = pollPosted(time + 2.days)
             poll2.pinned()
+            poll1.unpinned()
         } When {
             updatesReceived()
         } ThenApproveWith approver
