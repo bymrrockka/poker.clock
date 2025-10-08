@@ -3,6 +3,7 @@ package by.mrrockka.executor
 import by.mrrockka.domain.PollTask
 import by.mrrockka.domain.Task
 import by.mrrockka.repo.ChatPollsRepo
+import by.mrrockka.repo.PinType
 import by.mrrockka.service.PinMessageService
 import by.mrrockka.service.PollEvent
 import by.mrrockka.service.PollTelegramService
@@ -72,8 +73,8 @@ class TelegramTaskExecutor(
                                                 message.poll?.id ?: error("Poll message doesn't contain poll"),
                                         )
 
-                                        pinMessageService.unpinIrrelevantPolls(message)
-                                        pinMessageService.pinPoll(message)
+                                        pinMessageService.unpinAll(message, PinType.POLL)
+                                        pinMessageService.pin(message, PinType.POLL)
                                     }
                         }
                     }

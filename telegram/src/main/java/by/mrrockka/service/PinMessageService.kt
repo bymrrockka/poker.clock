@@ -13,8 +13,8 @@ import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 
 interface PinMessageService {
-    fun pinPoll(message: Message)
-    fun unpinIrrelevantPolls(message: Message)
+    fun pin(message: Message, pinType: PinType)
+    fun unpinAll(message: Message, pinType: PinType)
 }
 
 @Service
@@ -24,18 +24,18 @@ open class PinMessageServiceImpl(
         private val pinMessageRepo: PinMessageRepo,
 ) : PinMessageService {
 
-    override fun pinPoll(message: Message) {
+    override fun pin(message: Message, pinType: PinType) {
         runBlocking {
             pinChatMessage(message.messageId)
                     .sendReturning(to = message.chat.id, bot)
                     .onFailure { error("Failed to pin message \n ${message.text}") }
-                    .also { pinMessageRepo.store(message, PinType.POLL) }
+                    .also { pinMessageRepo.store(message, pinType) }
         }
     }
 
-    override fun unpinIrrelevantPolls(message: Message) {
+    override fun unpinAll(message: Message, pinType: PinType) {
         runBlocking {
-            val messageIds = pinMessageRepo.selectByChat(message.chat.id, PinType.POLL)
+            val messageIds = pinMessageRepo.selectByChat(message.chat.id, pinType)
             messageIds
                     .forEach { messageId -> unpinChatMessage(messageId).send(to = message.chat.id, bot) }
             pinMessageRepo.delete(messageIds)

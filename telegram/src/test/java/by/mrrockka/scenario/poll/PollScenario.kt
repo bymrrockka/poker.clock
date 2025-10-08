@@ -38,8 +38,8 @@ class PollScenario : AbstractPollScenario() {
                 |5. I don't know
                 """.trimMargin()
             }
-            val poll = pollPosted(time + 8.days)
-            poll.pinned()
+            pollPosted(time + 8.days)
+                    .pinned()
             message(replyTo = createPoll) { stopPoll }
         } When {
             updatesReceived()
