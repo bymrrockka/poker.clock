@@ -16,14 +16,20 @@ import by.mrrockka.domain.toMessageMetadata
 import by.mrrockka.domain.toSummary
 import by.mrrockka.domain.total
 import by.mrrockka.domain.totalEntries
+import by.mrrockka.repo.PinType
 import by.mrrockka.service.CalculationTelegramService
 import by.mrrockka.service.GameTelegramService
+import by.mrrockka.service.PinMessageService
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.CommandHandler
 import eu.vendeli.tgbot.api.message.sendMessage
 import eu.vendeli.tgbot.types.component.MessageUpdate
+import eu.vendeli.tgbot.types.component.onFailure
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.stereotype.Component
 import java.math.BigDecimal.ZERO
+
+private val logger = KotlinLogging.logger {}
 
 interface CalculationCommandHandler {
     suspend fun calculate(message: MessageUpdate)
@@ -32,8 +38,9 @@ interface CalculationCommandHandler {
 @Component
 class CalculationCommandHandlerImpl(
         private val bot: TelegramBot,
-        private val calculationService: CalculationTelegramService,
         private val gameService: GameTelegramService,
+        private val pinMessageService: PinMessageService,
+        private val calculationService: CalculationTelegramService,
 ) : CalculationCommandHandler {
 
     @CommandHandler(["/calculate"])
@@ -41,10 +48,15 @@ class CalculationCommandHandlerImpl(
         val metadata = message.message.toMessageMetadata()
         val game = gameService.findGame(metadata)
         calculationService.calculate(metadata)
-                .also { payouts ->
-                    sendMessage { payouts.response(game) }.send(metadata.chatId, via = bot)
+                .let { payouts ->
+                    sendMessage { payouts.response(game) }
+                            .sendReturning(to = metadata.chatId, via = bot)
+                            .onFailure { error("Failed to send payouts message") }
+                            ?: error("No message returned from telegram api")
+                }.also { message ->
+                    pinMessageService.pin(message)
+                    pinMessageService.unpinAll(message, PinType.GAME)
                 }
-//  todo:  pin message
     }
 
     private fun List<Payout>.response(game: Game): String {

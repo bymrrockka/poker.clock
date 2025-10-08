@@ -17,7 +17,14 @@ Bounty tournament game started.
 ``` 
 ___
 
-### 2. Interaction
+### 2. Pinned
+
+``` 
+message id 0 pinned
+``` 
+___
+
+### 3. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -33,7 +40,7 @@ Bounty amount 10.00 from @nickname3 stored for @hong_beer
 ``` 
 ___
 
-### 3. Interaction
+### 4. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -50,7 +57,7 @@ Stored entries:
 ``` 
 ___
 
-### 4. Interaction
+### 5. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -66,7 +73,7 @@ Bounty amount 10.00 from @nickname3 stored for @hong_beer
 ``` 
 ___
 
-### 5. Interaction
+### 6. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -83,7 +90,7 @@ Stored entries:
 ``` 
 ___
 
-### 6. Interaction
+### 7. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -99,7 +106,7 @@ Bounty amount 10.00 from @nickname4 stored for @nickname1
 ``` 
 ___
 
-### 7. Interaction
+### 8. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -115,7 +122,7 @@ Bounty amount 10.00 from @nickname5 stored for @nickname1
 ``` 
 ___
 
-### 8. Interaction
+### 9. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -134,7 +141,14 @@ Prize pool stored:
 ``` 
 ___
 
-### 9. Interaction
+### 10. Pinned
+
+``` 
+message id 7 pinned
+``` 
+___
+
+### 11. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -150,7 +164,7 @@ Bounty amount 10.00 from @nickname1 stored for @nickname3
 ``` 
 ___
 
-### 10. Interaction
+### 12. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -167,7 +181,7 @@ Stored entries:
 ``` 
 ___
 
-### 11. Interaction
+### 13. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -183,7 +197,7 @@ Bounty amount 10.00 from @nickname1 stored for @nickname3
 ``` 
 ___
 
-### 12. Interaction
+### 14. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -200,7 +214,7 @@ Stored entries:
 ``` 
 ___
 
-### 13. Interaction
+### 15. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -219,7 +233,14 @@ Finale places stored:
 ``` 
 ___
 
-### 14. Interaction
+### 16. Pinned
+
+``` 
+message id 12 pinned
+``` 
+___
+
+### 17. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -235,7 +256,7 @@ Bounty amount 10.00 from @nickname1 stored for @nickname2
 ``` 
 ___
 
-### 15. Interaction
+### 18. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -252,7 +273,7 @@ Stored entries:
 ``` 
 ___
 
-### 16. Interaction
+### 19. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -268,7 +289,7 @@ Bounty amount 10.00 from @nickname3 stored for @nickname2
 ``` 
 ___
 
-### 17. Interaction
+### 20. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -284,7 +305,7 @@ Bounty amount 10.00 from @hong_beer stored for @nickname2
 ``` 
 ___
 
-### 18. Interaction
+### 21. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -300,7 +321,7 @@ Bounty amount 10.00 from @nickname2 stored for @nickname1
 ``` 
 ___
 
-### 19. Interaction
+### 22. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -336,5 +357,33 @@ From:
 -----------------------------
 Players played equally
   @hong_beer 
+``` 
+___
+
+### 23. Pinned
+
+``` 
+message id 18 pinned
+``` 
+___
+
+### 24. Unpinned
+
+``` 
+message id 0 unpinned
+``` 
+___
+
+### 25. Unpinned
+
+``` 
+message id 7 unpinned
+``` 
+___
+
+### 26. Unpinned
+
+``` 
+message id 12 unpinned
 ``` 
 ___

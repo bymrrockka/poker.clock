@@ -235,10 +235,10 @@ data class Scenario(
             updates += MockResponse(body = serde.encodeToString(Response.Success(listOf(update))))
         }
 
-        fun message() {
+        fun message(message: Message) {
             check(index > -1) { "Scenario index should be specified and positive" }
             responses += MockResponse(
-                    body = defaultMessageBody,
+                    body = serde.encodeToString(Response.Success(message)),
                     headers = headersOf(scenarioHeader, "$index"),
             )
         }

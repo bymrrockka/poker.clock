@@ -52,6 +52,12 @@ class GivenSpecification {
     fun Command.unpinned() {
         this@GivenSpecification.commands += Command.UnpinMessage(this)
     }
+
+    fun unpinned(vararg commands: Command) {
+        commands.forEach { command ->
+            this@GivenSpecification.commands += Command.UnpinMessage(command)
+        }
+    }
 }
 
 class WhenSpecification(val commands: List<Command>)
