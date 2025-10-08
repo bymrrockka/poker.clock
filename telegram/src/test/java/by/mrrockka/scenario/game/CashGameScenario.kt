@@ -33,12 +33,15 @@ class CashGameScenario : AbstractScenarioTest() {
         )
 
         Given {
-            message { players.createGame(GameType.CASH, buyin, withAlias) }
+            val game = message { players.createGame(GameType.CASH, buyin, withAlias) }
+            game.pinned()
             message { "nickname1".withdrawal(20) }
             message { "nickname2".withdrawal(30) }
             message { "nickname4".entry(20) }
             message { "nickname3".withdrawal(30) }
             message { calculate }
+                    .pinned()
+            game.unpinned()
         } When {
             updatesReceived()
         } ThenApproveWith mdApprover("should calculate when all money were withdraw${if (withAlias) " with alias" else ""}")

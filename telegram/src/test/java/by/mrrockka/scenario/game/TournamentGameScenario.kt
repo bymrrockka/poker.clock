@@ -32,17 +32,21 @@ class TournamentGameScenario : GameScenario() {
         val winners = players.dropLast(4);
 
         Given {
-            message { players.createGame(GameType.TOURNAMENT, buyin, withAlias) }
+            val game = message { players.createGame(GameType.TOURNAMENT, buyin, withAlias) }
+            game.pinned()
             message { "nickname3".entry() }
             message { "nickname3".entry() }
-            message { prizePool(2) }
+            val prizePool = message { prizePool(2) }
+            prizePool.pinned()
             message { "nickname1".entry() }
             message { "nickname1".entry() }
-            message { winners.finalePlaces() }
+            val finalePlaces = message { winners.finalePlaces() }
+            finalePlaces.pinned()
             message { "nickname1".entry() }
             message { "nickname1".entry() }
             message { "nickname1".entry() }
-            message { calculate }
+            message { calculate }.pinned()
+            unpinned(game, prizePool, finalePlaces)
         } When {
             updatesReceived()
         } ThenApproveWith mdApprover("create game with players and some reentries${if (withAlias) " with alias" else ""}")

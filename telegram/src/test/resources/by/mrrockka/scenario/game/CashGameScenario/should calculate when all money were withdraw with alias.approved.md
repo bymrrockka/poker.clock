@@ -17,7 +17,14 @@ Cash game started.
 ``` 
 ___
 
-### 2. Interaction
+### 2. Pinned
+
+``` 
+message id 0 pinned
+``` 
+___
+
+### 3. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -34,7 +41,7 @@ Stored withdrawals:
 ``` 
 ___
 
-### 3. Interaction
+### 4. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -51,7 +58,7 @@ Stored withdrawals:
 ``` 
 ___
 
-### 4. Interaction
+### 5. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -68,7 +75,7 @@ Stored entries:
 ``` 
 ___
 
-### 5. Interaction
+### 6. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -85,7 +92,7 @@ Stored withdrawals:
 ``` 
 ___
 
-### 6. Interaction
+### 7. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -119,5 +126,19 @@ Payout to: @nickname1
   Total: 10 
 From:
   @nickname4 -> 10 
+``` 
+___
+
+### 8. Pinned
+
+``` 
+message id 5 pinned
+``` 
+___
+
+### 9. Unpinned
+
+``` 
+message id 0 unpinned
 ``` 
 ___

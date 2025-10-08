@@ -17,7 +17,14 @@ Tournament game started.
 ``` 
 ___
 
-### 2. Interaction
+### 2. Pinned
+
+``` 
+message id 0 pinned
+``` 
+___
+
+### 3. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -34,7 +41,7 @@ Stored entries:
 ``` 
 ___
 
-### 3. Interaction
+### 4. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -51,7 +58,7 @@ Stored entries:
 ``` 
 ___
 
-### 4. Interaction
+### 5. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -70,7 +77,14 @@ Prize pool stored:
 ``` 
 ___
 
-### 5. Interaction
+### 6. Pinned
+
+``` 
+message id 3 pinned
+``` 
+___
+
+### 7. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -87,7 +101,7 @@ Stored entries:
 ``` 
 ___
 
-### 6. Interaction
+### 8. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -104,7 +118,7 @@ Stored entries:
 ``` 
 ___
 
-### 7. Interaction
+### 9. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -123,7 +137,14 @@ Finale places stored:
 ``` 
 ___
 
-### 8. Interaction
+### 10. Pinned
+
+``` 
+message id 6 pinned
+``` 
+___
+
+### 11. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -140,7 +161,7 @@ Stored entries:
 ``` 
 ___
 
-### 9. Interaction
+### 12. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -157,7 +178,7 @@ Stored entries:
 ``` 
 ___
 
-### 10. Interaction
+### 13. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -174,7 +195,7 @@ Stored entries:
 ``` 
 ___
 
-### 11. Interaction
+### 14. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -206,5 +227,33 @@ Payout to: @nickname1
   Total: 5 (won 65 - entries 60)
 From:
   @nickname5 -> 5 
+``` 
+___
+
+### 15. Pinned
+
+``` 
+message id 10 pinned
+``` 
+___
+
+### 16. Unpinned
+
+``` 
+message id 0 unpinned
+``` 
+___
+
+### 17. Unpinned
+
+``` 
+message id 3 unpinned
+``` 
+___
+
+### 18. Unpinned
+
+``` 
+message id 6 unpinned
 ``` 
 ___
