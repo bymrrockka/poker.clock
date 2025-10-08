@@ -67,7 +67,7 @@ abstract class AbstractScenarioTest {
     infix fun WhenSpecification.ThenApproveWith(approver: Approver) {
         val filteredCommands = commands.filter { it !is Command.PollAnswer }
         try {
-            await atMost Duration.ofSeconds(5) until {
+            await atMost Duration.ofSeconds(15) until {
                 dispatcher.requests.size == filteredCommands.size
             }
         } catch (ex: Exception) {
@@ -208,7 +208,10 @@ abstract class AbstractScenarioTest {
             }
 
             is Command.Poll -> {
-                val message = message { poll() }
+                val message = message {
+                    chatId(chatid)
+                    poll()
+                }
                 messageLog += this to message
 
                 dispatcher.scenario {

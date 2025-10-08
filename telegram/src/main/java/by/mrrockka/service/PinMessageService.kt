@@ -7,6 +7,7 @@ import eu.vendeli.tgbot.api.chat.pinChatMessage
 import eu.vendeli.tgbot.api.chat.unpinChatMessage
 import eu.vendeli.tgbot.types.component.onFailure
 import eu.vendeli.tgbot.types.msg.Message
+import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
@@ -14,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional
 
 interface PinMessageService {
     fun pinPoll(message: Message)
-    fun unpinPreviousPolls(message: Message)
+    fun unpinIrrelevantPolls(message: Message)
 }
 
 @Service
@@ -35,13 +36,17 @@ open class PinMessageServiceImpl(
         }
     }
 
-    override fun unpinPreviousPolls(message: Message) {
+    override fun unpinIrrelevantPolls(message: Message) {
         runBlocking {
-            pinMessageRepo.selectByChat(message.chat.id, PinType.POLL)
+            val messageIds = pinMessageRepo.selectByChat(message.chat.id, PinType.POLL)
+            messageIds
                     .forEach { messageId ->
-                        unpinChatMessage(messageId)
-                                .send(to = message.chat.id, bot)
+                        async {
+                            unpinChatMessage(messageId)
+                                    .send(to = message.chat.id, bot)
+                        }
                     }
+            pinMessageRepo.delete(messageIds)
         }
     }
 }

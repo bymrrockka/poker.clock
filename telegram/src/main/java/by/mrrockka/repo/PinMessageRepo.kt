@@ -1,8 +1,11 @@
 package by.mrrockka.repo
 
 import eu.vendeli.tgbot.types.msg.Message
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
 import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.selectAll
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
@@ -10,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional
 interface PinMessageRepo {
     fun store(message: Message, type: PinType)
     fun selectByChat(chatId: Long, type: PinType): List<Long>
+    fun delete(messageIds: List<Long>)
 }
 
 @Repository
@@ -25,9 +29,13 @@ open class PinMessageRepoImpl : PinMessageRepo {
     }
 
     override fun selectByChat(chatId: Long, type: PinType): List<Long> {
-        return PinMessageTable.select(PinMessageTable.messageId)
+        return PinMessageTable.selectAll()
                 .where { (PinMessageTable.chatId eq chatId) and (PinMessageTable.type eq type) }
                 .map { it[PinMessageTable.messageId] }
+    }
+
+    override fun delete(messageIds: List<Long>) {
+        PinMessageTable.deleteWhere { PinMessageTable.messageId inList messageIds }
     }
 
 }

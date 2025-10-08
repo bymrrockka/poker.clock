@@ -51,8 +51,9 @@ class MockDispatcher(
 ) : Dispatcher() {
 
     var requests: MutableMap<Int, String> = mutableMapOf()
-    private var scenarios: ArrayDeque<Scenario> = ArrayDeque()
 
+    @Volatile
+    private var scenarios: ArrayDeque<Scenario> = ArrayDeque()
     private val emptyScenario = Scenario.Builder {}.build()
 
     fun scenario(init: Scenario.Builder.() -> Unit) {
@@ -201,7 +202,11 @@ data class Scenario(
 ) {
 
     fun isEmpty(): Boolean {
-        return updates.isEmpty() && responses.isEmpty() && polls.isEmpty() && pins.isEmpty()
+        return updates.isEmpty() &&
+                responses.isEmpty() &&
+                polls.isEmpty() &&
+                pins.isEmpty() &&
+                unpins.isEmpty()
     }
 
     fun isNotEmpty(): Boolean = !isEmpty()

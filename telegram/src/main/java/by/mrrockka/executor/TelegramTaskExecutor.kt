@@ -71,10 +71,10 @@ class TelegramTaskExecutor(
                                                 chatPollsRepo.store(
                                                         task.id,
                                                         message.poll?.id
-                                                                ?: error("Poll message doesn't contain poll id"),
+                                                                ?: error("Poll message doesn't contain poll"),
                                                 )
 
-                                                pinMessageService.unpinPreviousPolls(message)
+                                                pinMessageService.unpinIrrelevantPolls(message)
                                                 pinMessageService.pinPoll(message)
                                             }
                                 }

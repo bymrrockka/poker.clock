@@ -63,7 +63,7 @@ ___
 ### 5. Unpinned
 
 ``` 
-message id 1 No message
+message id 1 unpinned
 ``` 
 ___
 
