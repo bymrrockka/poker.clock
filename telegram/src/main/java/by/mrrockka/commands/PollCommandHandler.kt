@@ -13,6 +13,10 @@ import eu.vendeli.tgbot.types.component.UpdateType
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
+import java.time.ZoneOffset
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
+import kotlin.time.toJavaInstant
 
 private val logger = KotlinLogging.logger {}
 
@@ -22,11 +26,13 @@ interface PollCommandHandler {
     suspend fun answer(pollAnswer: PollAnswerUpdate)
 }
 
+@OptIn(ExperimentalTime::class)
 @Component
 class PollCommandHandlerImpl(
         private val bot: TelegramBot,
         private val pollService: PollTelegramService,
         private val pollAnswersService: PollAnswersTelegramService,
+        private val clock: Clock,
 ) : PollCommandHandler {
 
     @CommandHandler(["/create_poll", "/cp"])
@@ -35,7 +41,7 @@ class PollCommandHandlerImpl(
         pollService.create(metadata)
                 .let { poll ->
                     sendMessage {
-                        val next = poll.cron.next(LocalDateTime.now())
+                        val next = poll.cron.next(LocalDateTime.ofInstant(clock.now().toJavaInstant(), ZoneOffset.systemDefault()))
                         """
                             |Poll created.
                             |Will be triggered next ${next?.dayOfWeek?.name} ${next?.toLocalTime()}

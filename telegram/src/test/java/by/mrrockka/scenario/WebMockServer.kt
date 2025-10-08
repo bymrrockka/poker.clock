@@ -196,8 +196,8 @@ data class Scenario(
         val responses: LinkedBlockingQueue<MockResponse>,
         val polls: LinkedBlockingQueue<MockResponse>,
         val pins: LinkedBlockingQueue<MockResponse>,
-        val time: Instant? = null,
         val unpins: LinkedBlockingQueue<MockResponse>,
+        val time: Instant? = null,
 ) {
 
     fun isEmpty(): Boolean {
@@ -214,7 +214,8 @@ data class Scenario(
         private val polls = LinkedBlockingQueue<MockResponse>()
         private val pins = LinkedBlockingQueue<MockResponse>()
         private val unpins = LinkedBlockingQueue<MockResponse>()
-        private val defaultBody = serde.encodeToString(Response.Success("TEST OK"))
+        private val defaultMessageBody = serde.encodeToString(Response.Success("TEST OK"))
+        private val defaultBooleanBody = serde.encodeToString(Response.Success(true))
         private var time: Instant? = null
 
         init {
@@ -232,7 +233,7 @@ data class Scenario(
         fun message() {
             check(index > -1) { "Scenario index should be specified and positive" }
             responses += MockResponse(
-                    body = defaultBody,
+                    body = defaultMessageBody,
                     headers = headersOf(scenarioHeader, "$index"),
             )
         }
@@ -248,7 +249,7 @@ data class Scenario(
         fun pin() {
             check(index > -1) { "Scenario index should be specified and positive" }
             pins += MockResponse(
-                    body = defaultBody,
+                    body = defaultBooleanBody,
                     headers = headersOf(scenarioHeader, "$index"),
             )
         }
@@ -256,7 +257,7 @@ data class Scenario(
         fun unpin() {
             check(index > -1) { "Scenario index should be specified and positive" }
             unpins += MockResponse(
-                    body = defaultBody,
+                    body = defaultBooleanBody,
                     headers = headersOf(scenarioHeader, "$index"),
             )
         }
