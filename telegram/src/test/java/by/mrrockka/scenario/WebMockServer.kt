@@ -72,18 +72,22 @@ class MockDispatcher(
     }
 
     override fun dispatch(request: RecordedRequest): MockResponse {
-        val scenario = when {
-            scenarios.isEmpty() -> emptyScenario
-            scenarios.first().isNotEmpty() -> scenarios.first()
-            else -> {
-                scenarios.removeFirst()
-                if (scenarios.isNotEmpty()) scenarios.first()
-                else emptyScenario
-            }
-        }
+        var scenario = emptyScenario
 
-        if (scenario.time != null) {
-            clock.set(scenario.time)
+        synchronized(scenario) {
+            scenario = when {
+                scenarios.isEmpty() -> emptyScenario
+                scenarios.first().isNotEmpty() -> scenarios.first()
+                else -> {
+                    scenarios.removeFirst()
+                    if (scenarios.isNotEmpty()) scenarios.first()
+                    else emptyScenario
+                }
+            }
+
+            if (scenario.time != null) {
+                clock.set(scenario.time)
+            }
         }
 
         return when (request.url.encodedPath) {
