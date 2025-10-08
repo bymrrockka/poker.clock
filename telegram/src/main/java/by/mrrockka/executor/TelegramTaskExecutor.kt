@@ -57,29 +57,27 @@ class TelegramTaskExecutor(
         val now = clock.now().toJavaInstant()
         synchronized(tasks) {
             runBlocking {
-                tasks.toExecute(now)
-                        .forEach { task ->
-                            transactionTemplate.execute {
-                                async {
-                                    task.toAction()
-                                            .sendReturning(to = task.chatId, bot)
-                                            .onFailure { error("Failed to store poll id, game invitation poll wouldn't work") }
-                                            .also { resp ->
-                                                tasks[task.id] = task.updatedAt(now)
-                                                val message = (resp as Message)
+                tasks.toExecute(now).forEach { task ->
+                    transactionTemplate.execute {
+                        async {
+                            task.toAction()
+                                    .sendReturning(to = task.chatId, bot)
+                                    .onFailure { error("Failed to store poll id, game invitation poll wouldn't work") }
+                                    .also { resp ->
+                                        tasks[task.id] = task.updatedAt(now)
+                                        val message = (resp as Message)
 
-                                                chatPollsRepo.store(
-                                                        task.id,
-                                                        message.poll?.id
-                                                                ?: error("Poll message doesn't contain poll"),
-                                                )
+                                        chatPollsRepo.store(
+                                                task.id,
+                                                message.poll?.id ?: error("Poll message doesn't contain poll"),
+                                        )
 
-                                                pinMessageService.unpinIrrelevantPolls(message)
-                                                pinMessageService.pinPoll(message)
-                                            }
-                                }
-                            }
+                                        pinMessageService.unpinIrrelevantPolls(message)
+                                        pinMessageService.pinPoll(message)
+                                    }
                         }
+                    }
+                }
             }
         }
     }
