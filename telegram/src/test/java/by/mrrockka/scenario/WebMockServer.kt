@@ -42,6 +42,17 @@ private val serde = Json {
 }
 
 private val scenarioHeader = "Scenario"
+private val defaultMessageBody = serde.encodeToString(Response.Success("NOT OK"))
+private fun defaultBooleanBody(success: Boolean = true) = if (success) {
+    serde.encodeToString(Response.Success(success))
+} else {
+    serde.encodeToString(
+            Response.Failure(
+                    errorCode = 401,
+                    description = "No mock found",
+            ),
+    )
+}
 
 @Component
 class MockDispatcher(
@@ -91,7 +102,7 @@ class MockDispatcher(
                         val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
                         requests += scenarioIndex to request.toJson().findPath("text").asText()
                         resp
-                    } else MockResponse(code = 404, body = "No messages found")
+                    } else MockResponse(code = 404, body = defaultMessageBody)
                 }
             }
 
@@ -102,7 +113,7 @@ class MockDispatcher(
                         val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
                         requests += scenarioIndex to request.toPollText()
                         resp
-                    } else MockResponse(code = 404, body = "No polls found")
+                    } else MockResponse(code = 404, body = defaultMessageBody)
                 }
             }
 
@@ -113,7 +124,7 @@ class MockDispatcher(
                         val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
                         requests += scenarioIndex to "pinned"
                         resp
-                    } else MockResponse(code = 404, body = "No pins found")
+                    } else MockResponse(code = 200, body = defaultBooleanBody(true))
                 }
 
             "${botProps.botpath}/$unpinChatMessage" ->
@@ -123,10 +134,10 @@ class MockDispatcher(
                         val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
                         requests += scenarioIndex to "unpinned"
                         resp
-                    } else MockResponse(code = 404, body = "No unpins found")
+                    } else MockResponse(code = 200, body = defaultBooleanBody(true))
                 }
 
-            else -> MockResponse(code = 404, body = "No mocks found")
+            else -> MockResponse(code = 404, body = defaultBooleanBody(false))
         }
     }
 
@@ -219,8 +230,6 @@ data class Scenario(
         private val polls = LinkedBlockingQueue<MockResponse>()
         private val pins = LinkedBlockingQueue<MockResponse>()
         private val unpins = LinkedBlockingQueue<MockResponse>()
-        private val defaultMessageBody = serde.encodeToString(Response.Success("TEST OK"))
-        private val defaultBooleanBody = serde.encodeToString(Response.Success(true))
         private var time: Instant? = null
 
         init {
@@ -254,7 +263,7 @@ data class Scenario(
         fun pin() {
             check(index > -1) { "Scenario index should be specified and positive" }
             pins += MockResponse(
-                    body = defaultBooleanBody,
+                    body = defaultBooleanBody(),
                     headers = headersOf(scenarioHeader, "$index"),
             )
         }
@@ -262,7 +271,7 @@ data class Scenario(
         fun unpin() {
             check(index > -1) { "Scenario index should be specified and positive" }
             unpins += MockResponse(
-                    body = defaultBooleanBody,
+                    body = defaultBooleanBody(),
                     headers = headersOf(scenarioHeader, "$index"),
             )
         }
