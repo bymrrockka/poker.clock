@@ -13,13 +13,13 @@ import org.junit.jupiter.api.extension.ExtensionContext
 class TelegramPSQLExtension : CorePSQLExtension() {
     override fun afterEach(context: ExtensionContext) {
         transaction {
+            PinMessageTable.deleteAll()
             ChatPersonsTable.deleteAll()
             ChatGameTable.deleteAll()
             PollAnswersTable.deleteAll()
             ChatPollsTable.deleteAll()
             PollTaskTable.deleteAll()
-            PinMessageTable.deleteAll()
-            cleanCoreTable()
         }
+        cleanCoreTable()
     }
 }
