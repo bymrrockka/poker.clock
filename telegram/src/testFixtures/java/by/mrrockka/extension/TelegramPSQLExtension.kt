@@ -19,7 +19,7 @@ class TelegramPSQLExtension : CorePSQLExtension() {
             PollAnswersTable.deleteAll()
             ChatPollsTable.deleteAll()
             PollTaskTable.deleteAll()
+            cleanCoreTable()
         }
-        cleanCoreTable()
     }
 }
