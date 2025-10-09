@@ -7,12 +7,16 @@ import by.mrrockka.repo.PinMessageTable
 import by.mrrockka.repo.PollAnswersTable
 import by.mrrockka.repo.PollTaskTable
 import org.jetbrains.exposed.sql.deleteAll
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.jupiter.api.extension.ExtensionContext
+import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.transaction.support.TransactionTemplate
 
 class TelegramPSQLExtension : CorePSQLExtension() {
     override fun afterEach(context: ExtensionContext) {
-        transaction {
+        val template = SpringExtension.getApplicationContext(context)
+                .getBean(TransactionTemplate::class.java)
+
+        template.execute {
             PinMessageTable.deleteAll()
             ChatPersonsTable.deleteAll()
             ChatGameTable.deleteAll()
