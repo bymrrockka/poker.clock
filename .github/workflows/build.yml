@@ -31,7 +31,7 @@ jobs:
           gradle-version: '9.0.0'
 
       - name: Run build with Gradle Wrapper
-        run: export JAVA_OPTS="-Xmx1G" ./gradlew clean build
+        run: ./gradlew clean build -DJAVA_OPTS="-Xmx1G"
 
       - name: Test report
         uses: mikepenz/action-junit-report@v5
