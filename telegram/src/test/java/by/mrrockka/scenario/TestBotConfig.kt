@@ -40,6 +40,9 @@ open class TestBotConfig(
                 commandDelimiter = '\n'
                 restrictSpacesInCommands = true
             }
+            updatesListener {
+                pullingDelay = 80
+            }
             exceptionHandlingStrategy = ExceptionHandlingStrategy.Handle(PokerClockExceptionHandler)
         }
         GlobalScope.launch {

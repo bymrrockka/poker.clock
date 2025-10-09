@@ -73,7 +73,7 @@ class MockDispatcher(
     override fun dispatch(request: RecordedRequest): MockResponse {
         var scenario = emptyScenario
 
-        synchronized(scenario) {
+        synchronized(scenarios) {
             scenario = when {
                 scenarios.isEmpty() -> emptyScenario
                 scenarios.first().isNotEmpty() -> scenarios.first()
