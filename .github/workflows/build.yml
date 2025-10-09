@@ -32,7 +32,7 @@ jobs:
         if: ${{ !cancelled() }}
         with:
           name: Unit Tests
-          path: test-results/test/TEST-*.xml
+          path: core/build/test-results/test/TEST-*.xml,telegram/build/test-results/test/TEST-*.xml
           reporter: java-junit
 
       - name: Upload artifact for deployment job
