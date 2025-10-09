@@ -28,6 +28,13 @@ jobs:
       - name: Run build with Gradle Wrapper
         run: ./gradlew build
 
+      - uses: dorny/test-reporter@v2
+        if: ${{ !cancelled() }}
+        with:
+          name: Unit Tests
+          path: test-results/test/TEST-*.xml
+          reporter: java-junit
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
