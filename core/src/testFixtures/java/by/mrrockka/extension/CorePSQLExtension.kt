@@ -23,7 +23,7 @@ import org.springframework.transaction.support.TransactionTemplate
 open class CorePSQLExtension : BeforeAllCallback, AfterEachCallback {
     override fun beforeAll(context: ExtensionContext?) {
         container.start()
-        System.setProperty("spring.datasource.url", "jdbc:tc:postgresql:$version:///%$dbName")
+        System.setProperty("spring.datasource.url", "jdbc:tc:postgresql:$version:///$dbName")
         System.setProperty("spring.datasource.username", username)
         System.setProperty("spring.datasource.password", password)
     }
@@ -31,7 +31,6 @@ open class CorePSQLExtension : BeforeAllCallback, AfterEachCallback {
     override fun afterEach(context: ExtensionContext) {
         val template = SpringExtension.getApplicationContext(context)
                 .getBean(TransactionTemplate::class.java)
-        template.setPropagationBehaviorName("PROPAGATION_REQUIRED")
 
         template.execute {
             cleanCoreTable()
