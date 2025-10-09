@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.DependsOn
 import org.springframework.context.annotation.Primary
 import org.springframework.context.annotation.Profile
 import kotlin.time.Clock
@@ -24,16 +25,17 @@ open class TestBotConfig(
         private val botProps: BotProperties,
 ) {
 
-    @Value("\${wiremock.server.baseUrl:}")
-    lateinit var wiremockServerBaseUrl: String
+    @Value("\${mock.server.url:}")
+    lateinit var mockServerUrl: String
 
     @OptIn(DelicateCoroutinesApi::class)
     @Bean
     @Primary
-    open fun testBot(appContext: ApplicationContext): TelegramBot {
+    @DependsOn("mockServer")
+    open fun testBot(appContext: ApplicationContext, server: MockServer): TelegramBot {
         val bot = TelegramBot(botProps.token) {
             classManager = SpringClassManager(appContext)
-            apiHost = "http://localhost:45678"
+            apiHost = server.server.url("").toString().dropLast(1)
             commandParsing {
                 commandDelimiter = '\n'
                 restrictSpacesInCommands = true

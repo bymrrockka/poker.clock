@@ -27,7 +27,6 @@ import mockwebserver3.RecordedRequest
 import okhttp3.Headers.Companion.headersOf
 import okhttp3.internal.closeQuietly
 import org.springframework.stereotype.Component
-import java.net.InetAddress
 import java.util.concurrent.LinkedBlockingQueue
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
@@ -189,7 +188,7 @@ class MockDispatcher(
 }
 
 @Component
-class TgMockServer(
+class MockServer(
         private val dispatcher: Dispatcher,
 ) {
     lateinit var server: MockWebServer
@@ -198,7 +197,7 @@ class TgMockServer(
     fun init() {
         server = MockWebServer()
         server.dispatcher = dispatcher
-        server.start(InetAddress.getByName("localhost"), 45678)
+        server.start()
     }
 
     @PreDestroy
