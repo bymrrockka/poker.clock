@@ -41,7 +41,7 @@ open class TestBotConfig(
                 restrictSpacesInCommands = true
             }
             updatesListener {
-                pullingDelay = 80
+                pullingDelay = 50
             }
             exceptionHandlingStrategy = ExceptionHandlingStrategy.Handle(PokerClockExceptionHandler)
         }
