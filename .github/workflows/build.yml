@@ -32,6 +32,7 @@ jobs:
 
       - name: Run build with Gradle Wrapper
         run: ./gradlew clean build
+        with: "JAVA_OPTS=\"-Xmx1G\""
 
       - name: Test report
         uses: mikepenz/action-junit-report@v5
