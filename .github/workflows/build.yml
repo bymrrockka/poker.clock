@@ -24,6 +24,7 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
+        cache: 'gradle'
 
       - name: Run build with Gradle Wrapper
         run: ./gradlew build
