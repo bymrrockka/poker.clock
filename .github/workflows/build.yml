@@ -30,7 +30,7 @@ jobs:
 
       - name: Test report
         uses: mikepenz/action-junit-report@v5
-        if: failure()
+        if: always()
         with:
           #          name: Unit Tests
           report_paths: '**/build/test-results/test/TEST-*.xml'
