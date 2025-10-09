@@ -28,12 +28,14 @@ jobs:
       - name: Run build with Gradle Wrapper
         run: ./gradlew build
 
-      - uses: dorny/test-reporter@v2
-        if: ${{ !cancelled() }}
+      - name: Test report
+        uses: mikepenz/action-junit-report@v5
+        if: failure()
         with:
-          name: Unit Tests
-          path: core/build/test-results/test/TEST-*.xml,telegram/build/test-results/test/TEST-*.xml
-          reporter: java-junit
+#          name: Unit Tests
+          report_paths: core/build/test-results/test/TEST-*.xml,telegram/build/test-results/test/TEST-*.xml
+#          reporter: java-junit
+#          list-tests: 'failed'
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
