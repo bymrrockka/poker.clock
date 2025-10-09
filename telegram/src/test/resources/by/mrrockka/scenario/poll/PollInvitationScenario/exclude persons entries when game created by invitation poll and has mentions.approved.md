@@ -102,8 +102,8 @@ message id: 3
 
 ``` 
 Tournament game statistics:
-  - players entered -> 2
-  - number of entries -> 2
-  - total in game -> 20.00 
+  - players entered -> 1
+  - number of entries -> 1
+  - total in game -> 10.00 
 ``` 
 ___

@@ -19,7 +19,7 @@ interface GameTelegramService {
 @Service
 @Transactional(propagation = Propagation.REQUIRED)
 open class GameTelegramServiceImpl(
-        private val telegramPersonService: TelegramPersonService,
+        private val personService: TelegramPersonService,
         private val gameRepo: GameRepo,
         private val entriesRepo: EntriesRepo,
         private val chatGameRepo: ChatGameRepo,
@@ -33,13 +33,18 @@ open class GameTelegramServiceImpl(
         chatGameRepo.store(game.id, metadata)
 
         if (metadata.replyTo?.poll != null) {
+            val excludes = if (metadata.mentions.isNotEmpty())
+                personService.findByMessage(metadata).map { it.id }
+            else emptyList()
+
             pollService.findParticipants(metadata.replyTo.poll.id)
+                    .filterNot { excludes.contains(it) }
                     .also { personIds ->
                         entriesRepo.store(personIds, game.buyIn, game, metadata.createdAt)
                     }
         } else {
             metadata.checkMentions()
-            telegramPersonService.findByMessage(metadata).map { it.id }
+            personService.findByMessage(metadata).map { it.id }
                     .also { personIds ->
                         entriesRepo.store(personIds, game.buyIn, game, metadata.createdAt)
                     }
