@@ -31,6 +31,8 @@ jobs:
           gradle-version: '9.0.0'
 
       - name: Run build with Gradle Wrapper
+        env:
+          GITHUB_PIPELINE: 'true'
         run: ./gradlew build
 
       - name: Test report

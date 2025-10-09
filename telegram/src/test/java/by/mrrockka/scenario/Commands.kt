@@ -1,6 +1,7 @@
 package by.mrrockka.scenario
 
 import by.mrrockka.domain.GameType
+import by.mrrockka.domain.Person
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -41,10 +42,11 @@ class Commands private constructor() {
 
         fun String.createGame(type: GameType, buyin: BigDecimal): String = listOf(this).createGame(type, buyin)
 
-        fun createGame(type: GameType, buyin: BigDecimal): String = """
+        fun createGame(type: GameType, buyin: BigDecimal, excludes: List<Person> = emptyList()): String = """
                 ${type.toCommand()}
                 buyin: $buyin
                 ${if (type == GameType.BOUNTY) "bounty: $buyin" else ""}
+                ${excludes.map { it.nickname }.joinToString(" ") { "@$it" }}
         """.trimIndent()
 
         private fun GameType.toCommand(alias: Boolean = false): String = when (this) {
