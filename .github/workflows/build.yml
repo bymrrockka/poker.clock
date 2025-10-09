@@ -21,7 +21,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '21'
-          distribution: 'amazon-corretto'
+          distribution: 'corretto'
           architecture: 'x64'
           cache: 'gradle'
 
@@ -31,7 +31,7 @@ jobs:
           gradle-version: '9.0.0'
 
       - name: Run build with Gradle Wrapper
-        run: ./gradlew clean build -Dorg.gradle.jvmargs=-Xmx1G
+        run: ./gradlew clean build -Dorg.gradle.jvmargs=-Xmx1g -XX:MaxMetaspaceSize=512m
 
       - name: Test report
         uses: mikepenz/action-junit-report@v5
