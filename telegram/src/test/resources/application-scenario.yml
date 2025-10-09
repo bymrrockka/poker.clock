@@ -3,6 +3,9 @@ spring:
     enabled: true
     change-log: db/changelog/db.changelog-master.yml
 
+github:
+  pipeline: ${GITHUB_PIPELINE:false}
+
 bot:
   properties:
     enabled: true
