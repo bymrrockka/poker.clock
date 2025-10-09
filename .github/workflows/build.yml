@@ -32,10 +32,10 @@ jobs:
         uses: mikepenz/action-junit-report@v5
         if: failure()
         with:
-#          name: Unit Tests
-          report_paths: core/build/test-results/test/TEST-*.xml,telegram/build/test-results/test/TEST-*.xml
-#          reporter: java-junit
-#          list-tests: 'failed'
+          #          name: Unit Tests
+          report_paths: '**/build/test-results/test/TEST-*.xml'
+      #          reporter: java-junit
+      #          list-tests: 'failed'
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
