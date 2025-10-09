@@ -6,6 +6,7 @@ import by.mrrockka.builder.person
 import by.mrrockka.domain.GameType
 import by.mrrockka.scenario.Commands.Companion.createGame
 import by.mrrockka.scenario.Commands.Companion.createPoll
+import by.mrrockka.scenario.Commands.Companion.gameStats
 import by.mrrockka.scenario.Commands.Companion.stopPoll
 import com.oneeyedmen.okeydoke.Approver
 import org.junit.jupiter.api.Test
@@ -51,7 +52,47 @@ class PollInvitationScenario : AbstractPollScenario() {
             message(replyTo = poll) {
                 createGame(type = GameType.TOURNAMENT, BigDecimal(10))
             }
+            message { gameStats }
             message(replyTo = createPoll) { stopPoll }
+        } When {
+            updatesReceived()
+        } ThenApproveWith approver
+    }
+
+    @Test
+    fun `exclude persons entries when game created by invitation poll and has mentions`(approver: Approver) {
+        val time = Instant.parse("2025-09-16T12:34:56Z") //Tuesday
+        val participants = listOf(person(), person())
+        Given {
+            clock.set(time)
+            message {
+                """
+                |${createPoll}
+                |cron: 0 0 0 * * WED
+                |message: Test poll
+                |options: 
+                |1. Yes - participant
+                |2. No
+                |3. I don't know
+                """.trimMargin()
+            }
+            val poll = pollPosted(time + 8.days)
+
+            //participants
+            participants.forEach { person ->
+                poll.pollAnswer(person, 1)
+            }
+            //no
+            listOf(person(), person()).forEach { person ->
+                poll.pollAnswer(person, 2)
+            }
+            //maybe
+            poll.pollAnswer(person(), 3)
+
+            message(replyTo = poll) {
+                createGame(type = GameType.TOURNAMENT, BigDecimal(10), participants.drop(1))
+            }
+            message { gameStats }
         } When {
             updatesReceived()
         } ThenApproveWith approver

@@ -85,6 +85,7 @@ ___
 message id: 2
 /tournament_game
 buyin: 10
+
  
 ```
 
@@ -100,8 +101,27 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
-[reply to message id 0]
 message id: 3
+/game_stats 
+```
+
+&rarr; <ins>Bot message</ins>
+
+``` 
+Tournament game statistics:
+  - players entered -> 2
+  - number of entries -> 2
+  - total in game -> 20.00 
+``` 
+___
+
+### 11. Interaction
+
+&rarr; <ins>User message</ins>
+
+```
+[reply to message id 0]
+message id: 4
 /stop_poll 
 ```
 

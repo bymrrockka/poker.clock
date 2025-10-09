@@ -34,35 +34,42 @@ Test poll
 ``` 
 ___
 
-### 3. Pinned
+### 3. Poll answer
 
 ``` 
-message id 1 pinned
+jackie_rau chosen 1
 ``` 
 ___
 
 ### 4. Poll answer
 
 ``` 
-jackie_rau chosen 2
+terisa_johnston chosen 1
 ``` 
 ___
 
 ### 5. Poll answer
 
 ``` 
-terisa_johnston chosen 2
+santo_welch chosen 2
 ``` 
 ___
 
 ### 6. Poll answer
 
 ``` 
-santo_welch chosen 3
+ashlee_lang chosen 2
 ``` 
 ___
 
-### 7. Interaction
+### 7. Poll answer
+
+``` 
+stanton_boyer chosen 3
+``` 
+___
+
+### 8. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -72,12 +79,31 @@ message id: 2
 /tournament_game
 buyin: 10
 
- 
+@terisa_johnston 
 ```
 
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Game participants not found according to poll 
+Tournament game started. 
+``` 
+___
+
+### 9. Interaction
+
+&rarr; <ins>User message</ins>
+
+```
+message id: 3
+/game_stats 
+```
+
+&rarr; <ins>Bot message</ins>
+
+``` 
+Tournament game statistics:
+  - players entered -> 2
+  - number of entries -> 2
+  - total in game -> 20.00 
 ``` 
 ___
