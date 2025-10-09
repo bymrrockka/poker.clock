@@ -5,7 +5,9 @@ import by.mrrockka.PokerClockExceptionHandler
 import by.mrrockka.SpringClassManager
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.types.component.ExceptionHandlingStrategy
-import org.springframework.beans.factory.annotation.Value
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
@@ -21,21 +23,26 @@ open class TestBotConfig(
         private val botProps: BotProperties,
 ) {
 
-    @Value("\${wiremock.server.baseUrl:}")
-    lateinit var wiremockServerBaseUrl: String
-
     @Bean
     @Primary
-    open fun testBot(appContext: ApplicationContext): TelegramBot {
-        return TelegramBot(botProps.token) {
+    @OptIn(DelicateCoroutinesApi::class)
+    open fun testBot(appContext: ApplicationContext, server: MockServer): TelegramBot {
+        val bot = TelegramBot(botProps.token) {
             classManager = SpringClassManager(appContext)
-            apiHost = wiremockServerBaseUrl
+            apiHost = server.server.url("").toString().dropLast(1)
             commandParsing {
                 commandDelimiter = '\n'
                 restrictSpacesInCommands = true
             }
+            updatesListener {
+                pullingDelay = 40
+            }
             exceptionHandlingStrategy = ExceptionHandlingStrategy.Handle(PokerClockExceptionHandler)
         }
+        GlobalScope.launch {
+            bot.handleUpdates()
+        }
+        return bot
     }
 
     @Bean
@@ -44,6 +51,7 @@ open class TestBotConfig(
     open fun testClock(): TestClock {
         return TestClock()
     }
+
 }
 
 @OptIn(ExperimentalTime::class)

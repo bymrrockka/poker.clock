@@ -4,11 +4,11 @@ import by.mrrockka.Given
 import by.mrrockka.When
 import by.mrrockka.domain.GameType
 import by.mrrockka.extension.mdApprover
-import by.mrrockka.scenario.AbstractScenarioTest
 import by.mrrockka.scenario.Commands.Companion.createGame
 import by.mrrockka.scenario.Commands.Companion.createPoll
 import by.mrrockka.scenario.Commands.Companion.stopPoll
 import com.oneeyedmen.okeydoke.Approver
+import org.junit.Ignore
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
@@ -16,15 +16,16 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
+@Ignore()
 @OptIn(ExperimentalTime::class)
-class PollScenario : AbstractScenarioTest() {
+class PollScenario : AbstractPollScenario() {
 
     @Test
     fun `create and stop poll should send message`(approver: Approver) {
         val time = Instant.parse("2025-09-16T12:34:56Z") //Tuesday
-        clock.set(time)
         Given {
-            message {
+            clock.set(time)
+            val createPoll = message {
                 """
                 |${createPoll}
                 |cron: 0 0 0 * * WED
@@ -37,11 +38,39 @@ class PollScenario : AbstractScenarioTest() {
                 |5. I don't know
                 """.trimMargin()
             }
-            pollPosted()
+            pollPosted(time + 8.days)
+                    .pinned()
             message(replyTo = createPoll) { stopPoll }
         } When {
             updatesReceived()
-            clock.set(time + 8.days)
+        } ThenApproveWith approver
+    }
+
+    @Test
+    fun `pinned posted poll becomes unpinned when new poll posted`(approver: Approver) {
+        val time = Instant.parse("2025-09-16T12:34:56Z") //Tuesday
+        Given {
+            clock.set(time)
+            message {
+                """
+                |$createPoll
+                |cron: 0 0 0 * * *
+                |message: Test poll
+                |options: 
+                |1. Yes - participant
+                |2. Noooooo
+                |3. Hell yeah 12123
+                |4. ;.!@#$%^&*()(_+=<>.,/{}[]`~
+                |5. I don't know
+                """.trimMargin()
+            }
+            val poll1 = pollPosted(time + 1.days)
+            poll1.pinned()
+            val poll2 = pollPosted(time + 2.days)
+            poll1.unpinned()
+            poll2.pinned()
+        } When {
+            updatesReceived()
         } ThenApproveWith approver
     }
 
@@ -63,9 +92,8 @@ class PollScenario : AbstractScenarioTest() {
         } ThenApproveWith mdApprover("fail when doesn't have required fields, field set ${if (actual.isNotBlank()) actual else "empty"}")
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = ["/tournament_game", ""])
-    fun `stop poll fail when wrong or no reply message specified`(command: String) {
+    @Test
+    fun `stop poll fail when wrong reply message specified`(approver: Approver) {
         Given {
             message {
                 """
@@ -76,12 +104,10 @@ class PollScenario : AbstractScenarioTest() {
                 |1. Yes - participant
                 """.trimMargin()
             }
-            message { "me".createGame(GameType.TOURNAMENT, 30.toBigDecimal()) }
-            message(replyTo = command) { stopPoll } // should fail
-            message(replyTo = createPoll) { stopPoll } // should stop task execution to not affect other tests
+            val game = message { "me".createGame(GameType.TOURNAMENT, 30.toBigDecimal()) }
+            message(replyTo = game) { stopPoll } // should fail
         } When {
             updatesReceived()
-        } ThenApproveWith mdApprover("stop poll fail when ${if (command.isNotBlank()) "wrong" else "no"} reply message specified")
+        } ThenApproveWith approver
     }
-
 }

@@ -3,6 +3,8 @@ package by.mrrockka.executor
 import by.mrrockka.domain.PollTask
 import by.mrrockka.domain.Task
 import by.mrrockka.repo.ChatPollsRepo
+import by.mrrockka.repo.PinType
+import by.mrrockka.service.PinMessageService
 import by.mrrockka.service.PollEvent
 import by.mrrockka.service.PollTelegramService
 import eu.vendeli.tgbot.TelegramBot
@@ -16,6 +18,7 @@ import org.springframework.context.annotation.DependsOn
 import org.springframework.context.event.EventListener
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
+import org.springframework.transaction.support.TransactionTemplate
 import java.time.Instant
 import java.util.*
 import kotlin.time.Clock
@@ -26,10 +29,12 @@ import kotlin.time.toJavaInstant
 @Component
 @DependsOn("liquibase")
 class TelegramTaskExecutor(
+        private val bot: TelegramBot,
         private val pollService: PollTelegramService,
         private val chatPollsRepo: ChatPollsRepo,
-        private val bot: TelegramBot,
+        private val pinMessageService: PinMessageService,
         private val clock: Clock,
+        private val transactionTemplate: TransactionTemplate,
 ) {
     @Volatile
     private var tasks: MutableMap<UUID, Task> = mutableMapOf()
@@ -53,20 +58,27 @@ class TelegramTaskExecutor(
         val now = clock.now().toJavaInstant()
         synchronized(tasks) {
             runBlocking {
-                tasks.toExecute(now)
-                        .forEach { task ->
-                            async {
-                                task.toAction()
-                                        .sendReturning(to = task.chatId, bot)
-                                        .onFailure { error("Failed to store poll id, game invitation poll wouldn't work") }
-                                        .also { resp ->
-                                            tasks[task.id] = task.updatedAt(now)
-                                            val tgPollId = (resp as Message).poll?.id
-                                                    ?: error("Poll message doesn't contain poll id")
-                                            chatPollsRepo.store(task.id, tgPollId)
-                                        }
-                            }
+                tasks.toExecute(now).forEach { task ->
+                    transactionTemplate.execute {
+                        async {
+                            task.toAction()
+                                    .sendReturning(to = task.chatId, bot)
+                                    .onFailure { error("Failed to store poll id, game invitation poll wouldn't work") }
+                                    .also { resp ->
+                                        tasks[task.id] = task.updatedAt(now)
+                                        val message = (resp as Message)
+
+                                        chatPollsRepo.store(
+                                                task.id,
+                                                message.poll?.id ?: error("Poll message doesn't contain poll"),
+                                        )
+
+                                        pinMessageService.unpinAll(message, PinType.POLL)
+                                        pinMessageService.pin(message, PinType.POLL)
+                                    }
                         }
+                    }
+                }
             }
         }
     }

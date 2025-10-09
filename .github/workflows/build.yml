@@ -7,6 +7,9 @@ on:
   workflow_call:
   workflow_dispatch:
 
+permissions:
+  checks: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,15 +21,30 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '21'
-          distribution: 'adopt'
+          distribution: 'corretto'
           architecture: 'x64'
           cache: 'gradle'
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '9.0.0'
 
       - name: Run build with Gradle Wrapper
         run: ./gradlew build
+
+      - name: Test report
+        uses: mikepenz/action-junit-report@v5
+        if: always()
+        with:
+          report_paths: '**/build/test-results/test/TEST-*.xml'
+
+      - name: Upload test artifacts
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: test-artifacts
+          path: '**/build/reports/'
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4

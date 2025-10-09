@@ -3,6 +3,7 @@
 &rarr; <ins>User message</ins>
 
 ```
+message id: 0
 /create_poll
 cron: 0 0 0 * * WED
 message: Test poll
@@ -16,13 +17,16 @@ options:
 
 ``` 
 Poll created.
-Will be triggered next WEDNESDAY 
+Will be triggered next WEDNESDAY 00:00 
 ``` 
 ___
 
 ### 2. Posted
 
+&rarr; <ins>2025-09-24 - WEDNESDAY</ins>
+
 ``` 
+message id 1
 Test poll
 1. 'Yes'
 2. 'No'
@@ -30,33 +34,41 @@ Test poll
 ``` 
 ___
 
-### 3. Poll answer
+### 3. Pinned
 
 ``` 
-jackie_rau chosen 2
+message id 1 pinned
 ``` 
 ___
 
 ### 4. Poll answer
 
 ``` 
-terisa_johnston chosen 2
+jackie_rau chosen 2
 ``` 
 ___
 
 ### 5. Poll answer
 
 ``` 
+terisa_johnston chosen 2
+``` 
+___
+
+### 6. Poll answer
+
+``` 
 santo_welch chosen 3
 ``` 
 ___
 
-### 6. Interaction
+### 7. Interaction
 
 &rarr; <ins>User message</ins>
 
 ```
-[reply to chatPoll]
+[reply to message id 1]
+message id: 2
 /tournament_game
 buyin: 10
  
@@ -66,21 +78,5 @@ buyin: 10
 
 ``` 
 Game participants not found according to poll 
-``` 
-___
-
-### 7. Interaction
-
-&rarr; <ins>User message</ins>
-
-```
-[reply to /create_poll]
-/stop_poll 
-```
-
-&rarr; <ins>Bot message</ins>
-
-``` 
-Poll stopped 
 ``` 
 ___

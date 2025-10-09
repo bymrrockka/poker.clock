@@ -3,6 +3,7 @@
 &rarr; <ins>User message</ins>
 
 ```
+message id: 0
 /bounty_game
 buyin: 10
 bounty: 10
@@ -21,6 +22,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 1
 /bounty @me kicked @nickname 
 ```
 
@@ -36,6 +38,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 2
 /bounty @me kicked @nickname 
 ```
 
@@ -51,6 +54,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 3
 /calculate 
 ```
 

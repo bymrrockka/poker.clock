@@ -26,7 +26,7 @@ class EntryCommandHandlerImpl(
                     sendMessage {
                         """
                         |Stored entries: 
-                        |${nicknames.joinToString { "|  - @${it} -> ${amount.setScale(0)}" }}
+                        ${nicknames.joinToString(separator = "\n") { "|  - @${it} -> ${amount.setScale(0)}" }}
                         """.trimMargin()
                     }.send(to = metadata.chatId, via = bot)
                 }

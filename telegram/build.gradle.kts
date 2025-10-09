@@ -48,7 +48,6 @@ dependencies {
     runtimeOnly(libs.aspectjWeaver)
 
     testImplementation(libs.bundles.test)
-    testImplementation(libs.bundles.wiremock)
     testImplementation(libs.bundles.kotlinLibs)
     testImplementation(testFixtures(project))
     testImplementation(testFixtures(project(":core")))
@@ -56,7 +55,6 @@ dependencies {
     testFixturesImplementation(project)
     testFixturesImplementation(testFixtures(project(":core")))
     testFixturesImplementation(libs.bundles.exposed)
-    testFixturesImplementation(libs.wiremockContainer)
     testFixturesImplementation(libs.telegramBot)
 }
 

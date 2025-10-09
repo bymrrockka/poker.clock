@@ -42,3 +42,9 @@ object PollAnswersTable : Table("poll_answers") {
     val personId = uuid("person_id").references(PersonTable.id)
     val answer = integer("answer")
 }
+
+object PinMessageTable : Table("pin_messages") {
+    val chatId = long("chat_id")
+    val messageId = long("message_id")
+    val type = enumerationByName<PinType>("type", 15)
+}

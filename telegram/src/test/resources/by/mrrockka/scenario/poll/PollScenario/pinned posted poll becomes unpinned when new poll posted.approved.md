@@ -5,7 +5,7 @@
 ```
 message id: 0
 /create_poll
-cron: 0 0 0 * * WED
+cron: 0 0 0 * * *
 message: Test poll
 options: 
 1. Yes - participant
@@ -25,7 +25,7 @@ ___
 
 ### 2. Posted
 
-&rarr; <ins>2025-09-24 - WEDNESDAY</ins>
+&rarr; <ins>2025-09-17 - WEDNESDAY</ins>
 
 ``` 
 message id 1
@@ -45,19 +45,31 @@ message id 1 pinned
 ``` 
 ___
 
-### 4. Interaction
+### 4. Posted
 
-&rarr; <ins>User message</ins>
-
-```
-[reply to message id 0]
-message id: 2
-/stop_poll 
-```
-
-&rarr; <ins>Bot message</ins>
+&rarr; <ins>2025-09-18 - THURSDAY</ins>
 
 ``` 
-Poll stopped 
+message id 2
+Test poll
+1. 'Yes'
+2. 'Noooooo'
+3. 'Hell yeah 12123'
+4. ';.!@#$%^&*()(_+=<>.,/{}[]`~'
+5. 'I don't know'
+``` 
+___
+
+### 5. Unpinned
+
+``` 
+message id 1 unpinned
+``` 
+___
+
+### 6. Pinned
+
+``` 
+message id 2 pinned
 ``` 
 ___

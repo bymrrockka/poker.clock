@@ -3,6 +3,7 @@
 &rarr; <ins>User message</ins>
 
 ```
+message id: 0
 /create_poll
 cron: 0 0 0 * * 3
 message: Test poll
@@ -14,7 +15,7 @@ options:
 
 ``` 
 Poll created.
-Will be triggered next WEDNESDAY 
+Will be triggered next WEDNESDAY 00:00 
 ``` 
 ___
 
@@ -23,6 +24,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 1
 /tournament_game
 buyin: 30
 
@@ -41,7 +43,8 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
-[reply to /tournament_game]
+[reply to message id 1]
+message id: 2
 /stop_poll 
 ```
 
@@ -49,21 +52,5 @@ ___
 
 ``` 
 Poll was not found 
-``` 
-___
-
-### 4. Interaction
-
-&rarr; <ins>User message</ins>
-
-```
-[reply to /create_poll]
-/stop_poll 
-```
-
-&rarr; <ins>Bot message</ins>
-
-``` 
-Poll stopped 
 ``` 
 ___

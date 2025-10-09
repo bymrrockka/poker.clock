@@ -3,6 +3,7 @@
 &rarr; <ins>User message</ins>
 
 ```
+message id: 0
 /cg
 buyin: 10
 
@@ -16,11 +17,19 @@ Cash game started.
 ``` 
 ___
 
-### 2. Interaction
+### 2. Pinned
+
+``` 
+message id 0 pinned
+``` 
+___
+
+### 3. Interaction
 
 &rarr; <ins>User message</ins>
 
 ```
+message id: 1
 /withdrawal @nickname1 20 
 ```
 
@@ -32,11 +41,12 @@ Stored withdrawals:
 ``` 
 ___
 
-### 3. Interaction
+### 4. Interaction
 
 &rarr; <ins>User message</ins>
 
 ```
+message id: 2
 /withdrawal @nickname2 30 
 ```
 
@@ -48,11 +58,12 @@ Stored withdrawals:
 ``` 
 ___
 
-### 4. Interaction
+### 5. Interaction
 
 &rarr; <ins>User message</ins>
 
 ```
+message id: 3
 /entry @nickname4 20 
 ```
 
@@ -64,11 +75,12 @@ Stored entries:
 ``` 
 ___
 
-### 5. Interaction
+### 6. Interaction
 
 &rarr; <ins>User message</ins>
 
 ```
+message id: 4
 /withdrawal @nickname3 30 
 ```
 
@@ -80,11 +92,12 @@ Stored withdrawals:
 ``` 
 ___
 
-### 6. Interaction
+### 7. Interaction
 
 &rarr; <ins>User message</ins>
 
 ```
+message id: 5
 /calculate 
 ```
 
@@ -113,5 +126,19 @@ Payout to: @nickname1
   Total: 10 
 From:
   @nickname4 -> 10 
+``` 
+___
+
+### 8. Pinned
+
+``` 
+message id 5 pinned
+``` 
+___
+
+### 9. Unpinned
+
+``` 
+message id 0 unpinned
 ``` 
 ___

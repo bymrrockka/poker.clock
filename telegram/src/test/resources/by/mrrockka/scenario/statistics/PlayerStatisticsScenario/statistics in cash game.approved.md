@@ -3,6 +3,7 @@
 &rarr; <ins>User message</ins>
 
 ```
+message id: 0
 /cash_game
 buyin: 10
 
@@ -21,6 +22,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 1
 /player_stats 
 ```
 
@@ -40,6 +42,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 2
 /entry @me 30 
 ```
 
@@ -56,6 +59,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 3
 /player_stats 
 ```
 
@@ -75,6 +79,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 4
 /withdrawal @me 30 
 ```
 
@@ -91,6 +96,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 5
 /player_stats 
 ```
 
@@ -110,6 +116,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 6
 /withdrawal @me 20 
 ```
 
@@ -126,6 +133,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 7
 /player_stats 
 ```
 

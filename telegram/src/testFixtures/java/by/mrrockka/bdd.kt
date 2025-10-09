@@ -1,35 +1,62 @@
 package by.mrrockka
 
+import by.mrrockka.TelegramRandoms.Companion.telegramRandoms
 import by.mrrockka.domain.Person
-import org.apache.commons.lang3.RandomStringUtils
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 interface Command {
-    data class Message(val replyTo: String? = null, var message: String) : Command {
-        val botcommand: String by lazy { "^(/([\\w]+))".toRegex(RegexOption.MULTILINE).find(message)!!.destructured.component1() }
-    }
+    val unique: String
 
-    class Poll : Command
-    data class PollAnswer(val person: Person, val optionName: String? = null, val option: Int) : Command
+
+    data class Message(var message: String, val replyTo: Command? = null, override val unique: String = unique()) : Command
+
+    @OptIn(ExperimentalTime::class)
+    data class Poll(val time: Instant, override val unique: String = unique()) : Command
+
+    data class PollAnswer(val poll: Poll, val person: Person, val optionName: String? = null, val option: Int, override val unique: String = unique()) : Command
+
+    data class PinMessage(val command: Command, override val unique: String = unique()) : Command
+
+    data class UnpinMessage(val command: Command, override val unique: String = unique()) : Command
+
+    companion object {
+        fun unique(): String = telegramRandoms.faker.regexify("\\w{10,12}")
+    }
 }
 
 class GivenSpecification {
-    val scenarioSeed: String = RandomStringUtils.randomAlphabetic(5)
     var commands: List<Command> = mutableListOf()
 
-    fun message(replyTo: String? = null, init: () -> String) {
-        this.commands += Command.Message(replyTo, init())
+    fun message(replyTo: Command? = null, init: () -> String): Command.Message {
+        val command = Command.Message(replyTo = replyTo, message = init())
+        this.commands += command
+        return command
     }
 
-    fun pollPosted() {
-        this.commands += Command.Poll()
+    @OptIn(ExperimentalTime::class)
+    fun pollPosted(time: Instant): Command.Poll {
+        val command = Command.Poll(time)
+        this.commands += command
+        return command
     }
 
-    fun Person.pollAnswer(option: String) {
-        this@GivenSpecification.commands += Command.PollAnswer(this, option, 0)
+    fun Command.Poll.pollAnswer(person: Person, option: Int) {
+        this@GivenSpecification.commands += Command.PollAnswer(this, person, option = option)
     }
 
-    fun Person.pollAnswer(option: Int) {
-        this@GivenSpecification.commands += Command.PollAnswer(this, option = option)
+    fun Command.pinned() {
+        this@GivenSpecification.commands += Command.PinMessage(this)
+    }
+
+    fun Command.unpinned() {
+        this@GivenSpecification.commands += Command.UnpinMessage(this)
+    }
+
+    fun unpinned(vararg commands: Command) {
+        commands.forEach { command ->
+            this@GivenSpecification.commands += Command.UnpinMessage(command)
+        }
     }
 }
 

@@ -3,6 +3,7 @@
 &rarr; <ins>User message</ins>
 
 ```
+message id: 0
 /tournament_game
 buyin: 10
 
@@ -16,19 +17,10 @@ Tournament game started.
 ``` 
 ___
 
-### 2. Interaction
-
-&rarr; <ins>User message</ins>
-
-```
-/entry @nickname3  
-```
-
-&rarr; <ins>Bot message</ins>
+### 2. Pinned
 
 ``` 
-Stored entries: 
-  - @nickname3 -> 10 
+message id 0 pinned
 ``` 
 ___
 
@@ -37,6 +29,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 1
 /entry @nickname3  
 ```
 
@@ -53,6 +46,24 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 2
+/entry @nickname3  
+```
+
+&rarr; <ins>Bot message</ins>
+
+``` 
+Stored entries: 
+  - @nickname3 -> 10 
+``` 
+___
+
+### 5. Interaction
+
+&rarr; <ins>User message</ins>
+
+```
+message id: 3
 /prize_pool
 1 50%, 2 50% 
 ```
@@ -66,35 +77,10 @@ Prize pool stored:
 ``` 
 ___
 
-### 5. Interaction
-
-&rarr; <ins>User message</ins>
-
-```
-/entry @nickname1  
-```
-
-&rarr; <ins>Bot message</ins>
+### 6. Pinned
 
 ``` 
-Stored entries: 
-  - @nickname1 -> 10 
-``` 
-___
-
-### 6. Interaction
-
-&rarr; <ins>User message</ins>
-
-```
-/entry @nickname1  
-```
-
-&rarr; <ins>Bot message</ins>
-
-``` 
-Stored entries: 
-  - @nickname1 -> 10 
+message id 3 pinned
 ``` 
 ___
 
@@ -103,16 +89,15 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
-/finale_places
-1 @nickname1, 2 @nickname2 
+message id: 4
+/entry @nickname1  
 ```
 
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Finale places stored:
-1. @nickname1
-2. @nickname2 
+Stored entries: 
+  - @nickname1 -> 10 
 ``` 
 ___
 
@@ -121,6 +106,7 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 5
 /entry @nickname1  
 ```
 
@@ -137,30 +123,24 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
-/entry @nickname1  
+message id: 6
+/finale_places
+1 @nickname1, 2 @nickname2 
 ```
 
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Stored entries: 
-  - @nickname1 -> 10 
+Finale places stored:
+1. @nickname1
+2. @nickname2 
 ``` 
 ___
 
-### 10. Interaction
-
-&rarr; <ins>User message</ins>
-
-```
-/entry @nickname1  
-```
-
-&rarr; <ins>Bot message</ins>
+### 10. Pinned
 
 ``` 
-Stored entries: 
-  - @nickname1 -> 10 
+message id 6 pinned
 ``` 
 ___
 
@@ -169,6 +149,58 @@ ___
 &rarr; <ins>User message</ins>
 
 ```
+message id: 7
+/entry @nickname1  
+```
+
+&rarr; <ins>Bot message</ins>
+
+``` 
+Stored entries: 
+  - @nickname1 -> 10 
+``` 
+___
+
+### 12. Interaction
+
+&rarr; <ins>User message</ins>
+
+```
+message id: 8
+/entry @nickname1  
+```
+
+&rarr; <ins>Bot message</ins>
+
+``` 
+Stored entries: 
+  - @nickname1 -> 10 
+``` 
+___
+
+### 13. Interaction
+
+&rarr; <ins>User message</ins>
+
+```
+message id: 9
+/entry @nickname1  
+```
+
+&rarr; <ins>Bot message</ins>
+
+``` 
+Stored entries: 
+  - @nickname1 -> 10 
+``` 
+___
+
+### 14. Interaction
+
+&rarr; <ins>User message</ins>
+
+```
+message id: 10
 /calculate 
 ```
 
@@ -195,5 +227,33 @@ Payout to: @nickname1
   Total: 5 (won 65 - entries 60)
 From:
   @nickname5 -> 5 
+``` 
+___
+
+### 15. Pinned
+
+``` 
+message id 10 pinned
+``` 
+___
+
+### 16. Unpinned
+
+``` 
+message id 0 unpinned
+``` 
+___
+
+### 17. Unpinned
+
+``` 
+message id 3 unpinned
+``` 
+___
+
+### 18. Unpinned
+
+``` 
+message id 6 unpinned
 ``` 
 ___
