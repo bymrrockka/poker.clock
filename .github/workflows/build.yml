@@ -31,7 +31,7 @@ jobs:
           gradle-version: '9.0.0'
 
       - name: Run build with Gradle Wrapper
-        run: ./gradlew clean build -Dorg.gradle.jvmargs='-Xmx1g -XX:MaxMetaspaceSize=512m' -Dkotlin.daemon.jvm.options='-Xmx1G'
+        run: ./gradlew build
 
       - name: Test report
         uses: mikepenz/action-junit-report@v5

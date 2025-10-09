@@ -8,11 +8,9 @@ import eu.vendeli.tgbot.types.component.ExceptionHandlingStrategy
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.DependsOn
 import org.springframework.context.annotation.Primary
 import org.springframework.context.annotation.Profile
 import kotlin.time.Clock
@@ -25,13 +23,9 @@ open class TestBotConfig(
         private val botProps: BotProperties,
 ) {
 
-    @Value("\${mock.server.url:}")
-    lateinit var mockServerUrl: String
-
-    @OptIn(DelicateCoroutinesApi::class)
     @Bean
     @Primary
-    @DependsOn("mockServer")
+    @OptIn(DelicateCoroutinesApi::class)
     open fun testBot(appContext: ApplicationContext, server: MockServer): TelegramBot {
         val bot = TelegramBot(botProps.token) {
             classManager = SpringClassManager(appContext)
