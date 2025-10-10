@@ -52,7 +52,6 @@ class TournamentGameScenario : GameScenario() {
         } ThenApproveWith mdApprover("create game with players and some reentries${if (withAlias) " with alias" else ""}")
     }
 
-
     @Test
     fun `create game with one player and later entries`(approver: Approver) {
         val buyin = BigDecimal(10)
@@ -65,6 +64,26 @@ class TournamentGameScenario : GameScenario() {
             message { "nickname1".entry() }
             message { player.finalePlaces() }
             message { "nickname2".entry() }
+            message { calculate }
+        } When {
+            updatesReceived()
+        } ThenApproveWith approver
+    }
+
+    @Test
+    fun `change finale places and prize pool multiple times`(approver: Approver) {
+        val buyin = BigDecimal(10)
+        val player = "me"
+
+        Given {
+            message { player.createGame(GameType.TOURNAMENT, buyin) }
+            message { "nickname3".entry() }
+            message { prizePool(1) }
+            message { "nickname1".entry() }
+            message { player.finalePlaces() }
+            message { "nickname2".entry() }
+            message { prizePool(2) }
+            message { listOf("me", "nickname2").finalePlaces() }
             message { calculate }
         } When {
             updatesReceived()

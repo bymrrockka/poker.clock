@@ -2,7 +2,7 @@ package by.mrrockka.repo
 
 import by.mrrockka.domain.FinalPlace
 import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.batchInsert
+import org.jetbrains.exposed.sql.batchUpsert
 import org.jetbrains.exposed.sql.selectAll
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Propagation
@@ -26,7 +26,7 @@ open class FinalePlacesRepoImpl(
     }
 
     override fun store(gameId: UUID, finalePlaces: List<FinalPlace>) {
-        FinalePlacesTable.batchInsert(finalePlaces) {
+        FinalePlacesTable.batchUpsert(keys = arrayOf(FinalePlacesTable.gameId, FinalePlacesTable.position), data = finalePlaces) {
             this[FinalePlacesTable.gameId] = gameId
             this[FinalePlacesTable.personId] = it.person.id
             this[FinalePlacesTable.position] = it.position
