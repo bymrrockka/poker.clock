@@ -13,7 +13,17 @@ bounty: 10
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Bounty tournament game started. 
+Bounty tournament game started.
+
+Seats:
+  2. @nickname7
+  3. @nickname6
+  4. @nickname4
+  5. @hong_beer
+  6. @nickname5
+  7. @nickname3
+  9. @nickname1
+  10. @nickname2 
 ``` 
 ___
 

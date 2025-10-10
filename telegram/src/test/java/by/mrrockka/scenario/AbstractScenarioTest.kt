@@ -38,7 +38,7 @@ private val logger = KotlinLogging.logger {}
 @ActiveProfiles(profiles = ["scenario"])
 @DependsOn("mockWebServer")
 @Testcontainers
-@SpringBootTest(classes = [TestBotConfig::class])
+@SpringBootTest(classes = [TestConfig::class])
 abstract class AbstractScenarioTest {
     private val randoms = telegramRandoms("scenario")
     private val chatid = randoms.chatid()

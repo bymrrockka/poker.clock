@@ -13,7 +13,12 @@ buyin: 10
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Tournament game started. 
+Tournament game started.
+
+Seats:
+  5. @nickname1
+  6. @nickname2
+  8. @hong_beer 
 ``` 
 ___
 
@@ -123,7 +128,12 @@ buyin: 10
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Cash game started. 
+Cash game started.
+
+Seats:
+  1. @hong_beer
+  2. @nickname2
+  5. @nickname1 
 ``` 
 ___
 
@@ -203,7 +213,12 @@ bounty: 10
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Bounty tournament game started. 
+Bounty tournament game started.
+
+Seats:
+  3. @nickname1
+  7. @nickname2
+  10. @hong_beer 
 ``` 
 ___
 
@@ -341,7 +356,12 @@ buyin: 10
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Tournament game started. 
+Tournament game started.
+
+Seats:
+  2. @nickname1
+  6. @hong_beer
+  9. @nickname2 
 ``` 
 ___
 

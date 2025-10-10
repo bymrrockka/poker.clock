@@ -5,6 +5,7 @@ import by.mrrockka.domain.CashGame
 import by.mrrockka.domain.TournamentGame
 import by.mrrockka.domain.toMessageMetadata
 import by.mrrockka.repo.PinType
+import by.mrrockka.service.GameSeatsService
 import by.mrrockka.service.GameTelegramService
 import by.mrrockka.service.PinMessageService
 import eu.vendeli.tgbot.TelegramBot
@@ -23,6 +24,7 @@ class GameCommandHandlerImpl(
         private val bot: TelegramBot,
         private val gameService: GameTelegramService,
         private val pinMessageService: PinMessageService,
+        private val gameSeatsService: GameSeatsService,
 ) : GameCommandHandler {
 
     @CommandHandler(["/tournament_game", "/bounty_game", "/cash_game", "/tg", "/bg", "/cg"])
@@ -30,12 +32,19 @@ class GameCommandHandlerImpl(
         val metadata = message.message.toMessageMetadata()
         gameService.store(metadata)
                 .let { game ->
-                    when (game) {
-                        is CashGame -> "Cash game started."
-                        is TournamentGame -> "Tournament game started."
-                        is BountyTournamentGame -> "Bounty tournament game started."
-                        else -> error("Game type not supported: ${this.javaClass.simpleName}")
+                    """
+                    |${
+                        when (game) {
+                            is CashGame -> "Cash game started."
+                            is TournamentGame -> "Tournament game started."
+                            is BountyTournamentGame -> "Bounty tournament game started."
+                            else -> error("Game type not supported: ${this.javaClass.simpleName}")
+                        }
                     }
+                    |
+                    |Seats:
+                    ${gameSeatsService.generate(game).joinToString("\n") { seat -> "|  ${seat.num}. @${seat.nickname}" }}
+                    """.trimMargin()
                 }.let { response ->
                     sendMessage { response }
                             .sendReturning(to = metadata.chatId, via = bot)

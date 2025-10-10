@@ -85,7 +85,10 @@ buyin: 10
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Tournament game started. 
+Tournament game started.
+
+Seats:
+  5. @jackie_rau 
 ``` 
 ___
 

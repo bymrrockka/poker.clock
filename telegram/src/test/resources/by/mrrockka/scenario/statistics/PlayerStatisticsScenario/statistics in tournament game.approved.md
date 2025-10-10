@@ -13,7 +13,11 @@ buyin: 10
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Tournament game started. 
+Tournament game started.
+
+Seats:
+  5. @nickname1
+  6. @hong_beer 
 ``` 
 ___
 

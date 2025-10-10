@@ -1,6 +1,7 @@
 package by.mrrockka.repo
 
 import by.mrrockka.domain.PollTask
+import by.mrrockka.domain.Seat
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.timestamp
@@ -47,4 +48,9 @@ object PinMessageTable : Table("pin_messages") {
     val chatId = long("chat_id")
     val messageId = long("message_id")
     val type = enumerationByName<PinType>("type", 15)
+}
+
+object GameSeatsTable : Table("game_seats") {
+    val gameId = uuid("game_id").references(GameTable.id)
+    val seats = jsonb<Array<Seat>>("seats", Json.Default)
 }
