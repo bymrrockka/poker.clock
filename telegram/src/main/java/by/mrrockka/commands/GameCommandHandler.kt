@@ -43,7 +43,11 @@ class GameCommandHandlerImpl(
                     }
                     |
                     |Seats:
-                    ${gameSeatsService.generate(game).joinToString("\n") { seat -> "|  ${seat.num}. @${seat.nickname}" }}
+                    ${
+                        gameSeatsService.generate(game)
+                                .sortedBy { it.num }
+                                .joinToString("\n") { seat -> "|  ${seat.num}. @${seat.nickname}" }
+                    }
                     """.trimMargin()
                 }.let { response ->
                     sendMessage { response }

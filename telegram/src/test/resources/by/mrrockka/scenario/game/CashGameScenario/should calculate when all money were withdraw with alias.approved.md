@@ -78,8 +78,8 @@ message id: 3
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Stored entries: 
-  - @nickname4 -> 20 
+Entry: 
+  @nickname4: seat 4 -> entry 20 
 ``` 
 ___
 

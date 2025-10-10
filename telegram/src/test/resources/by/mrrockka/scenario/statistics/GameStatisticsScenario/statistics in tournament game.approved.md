@@ -16,8 +16,8 @@ buyin: 10
 Tournament game started.
 
 Seats:
-  1. @hong_beer
-  7. @nickname1 
+  5. @hong_beer
+  9. @nickname1 
 ``` 
 ___
 
@@ -52,8 +52,8 @@ message id: 2
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Stored entries: 
-  - @hong_beer -> 10 
+Entry: 
+  @hong_beer: seat 5 -> entry 10 
 ``` 
 ___
 

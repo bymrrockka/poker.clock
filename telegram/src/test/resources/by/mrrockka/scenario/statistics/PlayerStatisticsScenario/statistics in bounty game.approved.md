@@ -16,8 +16,8 @@ bounty: 10
 Bounty tournament game started.
 
 Seats:
-  1. @hong_beer
-  3. @nickname1 
+  5. @hong_beer
+  9. @nickname1 
 ``` 
 ___
 
@@ -93,8 +93,8 @@ message id: 4
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Stored entries: 
-  - @nickname1 -> 10 
+Entry: 
+  @nickname1: seat 9 -> entry 10 
 ``` 
 ___
 
@@ -148,8 +148,8 @@ message id: 7
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Stored entries: 
-  - @hong_beer -> 10 
+Entry: 
+  @hong_beer: seat 5 -> entry 10 
 ``` 
 ___
 

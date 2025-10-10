@@ -60,8 +60,8 @@ message id: 2
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Stored entries: 
-  - @nickname3 -> 10 
+Entry: 
+  @nickname3: seat 7 -> entry 10 
 ``` 
 ___
 
@@ -93,8 +93,8 @@ message id: 4
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Stored entries: 
-  - @nickname3 -> 10 
+Entry: 
+  @nickname3: seat 7 -> entry 10 
 ``` 
 ___
 
@@ -184,8 +184,8 @@ message id: 9
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Stored entries: 
-  - @nickname1 -> 10 
+Entry: 
+  @nickname1: seat 9 -> entry 10 
 ``` 
 ___
 
@@ -217,8 +217,8 @@ message id: 11
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Stored entries: 
-  - @nickname1 -> 10 
+Entry: 
+  @nickname1: seat 9 -> entry 10 
 ``` 
 ___
 
@@ -276,8 +276,8 @@ message id: 14
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Stored entries: 
-  - @nickname1 -> 10 
+Entry: 
+  @nickname1: seat 9 -> entry 10 
 ``` 
 ___
 

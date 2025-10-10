@@ -1,31 +1,33 @@
 package by.mrrockka.service
 
 import by.mrrockka.domain.MessageMetadata
+import by.mrrockka.domain.Seat
 import by.mrrockka.parser.EntryMessageParser
 import by.mrrockka.repo.EntriesRepo
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 
 interface EntryTelegramService {
-    fun entry(metadata: MessageMetadata): Pair<Set<String>, BigDecimal>
+    fun entry(metadata: MessageMetadata): Pair<Set<Seat>, BigDecimal>
 }
 
 @Service
 class EntryTelegramServiceImpl(
         private val entriesRepo: EntriesRepo,
         private val entryMessageParser: EntryMessageParser,
-        private val gameTelegramService: GameTelegramService,
-        private val telegramPersonService: TelegramPersonService,
+        private val gameService: GameTelegramService,
+        private val personService: TelegramPersonService,
+        private val gameSeatsService: GameSeatsService,
 ) : EntryTelegramService {
 
-    override fun entry(metadata: MessageMetadata): Pair<Set<String>, BigDecimal> {
+    override fun entry(metadata: MessageMetadata): Pair<Set<Seat>, BigDecimal> {
         metadata.checkMentions()
-        //todo: add ability to entry without nickname or @me and decline command handler
-        val (nicknames, amount) = entryMessageParser.parse(metadata)
-        val game = gameTelegramService.findGame(metadata)
-        val personIds = telegramPersonService.findByMessage(metadata).map { it.id }
-        entriesRepo.store(personIds, (amount ?: game.buyIn), game, metadata.createdAt)
+        val amount = entryMessageParser.parse(metadata)
+        val game = gameService.findGame(metadata)
+        val persons = personService.findByMessage(metadata)
+        entriesRepo.store(persons.map { it.id }, (amount ?: game.buyIn), game, metadata.createdAt)
+        val seats = gameSeatsService.entries(game, persons)
 
-        return nicknames to (amount ?: game.buyIn)
+        return seats to (amount ?: game.buyIn)
     }
 }

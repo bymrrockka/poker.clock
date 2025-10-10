@@ -1,7 +1,6 @@
 package by.mrrockka.scenario.game
 
 import by.mrrockka.Given
-import by.mrrockka.TelegramRandoms.Companion.telegramRandoms
 import by.mrrockka.When
 import by.mrrockka.domain.GameType
 import by.mrrockka.extension.mdApprover
@@ -10,22 +9,11 @@ import by.mrrockka.scenario.Commands.Companion.calculate
 import by.mrrockka.scenario.Commands.Companion.createGame
 import by.mrrockka.scenario.Commands.Companion.finalePlaces
 import by.mrrockka.scenario.Commands.Companion.prizePool
-import by.mrrockka.service.GameSeatsService
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
-import org.springframework.beans.factory.annotation.Autowired
 
 abstract class GameScenario : AbstractScenarioTest() {
     abstract fun gameType(): GameType
-
-    @Autowired
-    lateinit var gameSeatsService: GameSeatsService
-
-    @BeforeEach
-    fun before() {
-        gameSeatsService.seed(telegramRandoms.seed.hashCode().toLong())
-    }
 
     @ParameterizedTest
     @ValueSource(ints = [1, 3])

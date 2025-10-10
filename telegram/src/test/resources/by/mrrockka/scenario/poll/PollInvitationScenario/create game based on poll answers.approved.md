@@ -95,7 +95,7 @@ buyin: 10
 Tournament game started.
 
 Seats:
-  8. @jackie_rau
+  5. @jackie_rau
   9. @terisa_johnston 
 ``` 
 ___

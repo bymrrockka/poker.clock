@@ -11,7 +11,7 @@ abstract class AbstractPollScenario : AbstractScenarioTest() {
     lateinit var taskExecutor: TelegramTaskExecutor
 
     @BeforeEach
-    fun before() {
+    fun beforePoll() {
         taskExecutor.init()
     }
 }

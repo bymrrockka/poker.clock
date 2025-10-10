@@ -16,8 +16,8 @@ buyin: 10
 Tournament game started.
 
 Seats:
-  2. @nickname2
-  9. @nickname1 
+  5. @nickname1
+  9. @nickname2 
 ``` 
 ___
 

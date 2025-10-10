@@ -21,12 +21,13 @@ class EntryCommandHandlerImpl(
     @CommandHandler(["/entry", "/reentry"])
     override suspend fun entry(message: MessageUpdate) {
         val metadata = message.message.toMessageMetadata()
+        //todo: add ability to entry without nickname or @me and decline command handler
         entryTelegramService.entry(metadata)
-                .also { (nicknames, amount) ->
+                .also { (seats, amount) ->
                     sendMessage {
                         """
-                        |Stored entries: 
-                        ${nicknames.joinToString(separator = "\n") { "|  - @${it} -> ${amount.setScale(0)}" }}
+                        |Entry: 
+                        ${seats.joinToString(separator = "\n") { "|  @${it.nickname}: seat ${it.num} -> entry ${amount.setScale(0)}" }}
                         """.trimMargin()
                     }.send(to = metadata.chatId, via = bot)
                 }

@@ -11,6 +11,7 @@ import by.mrrockka.builder.update
 import by.mrrockka.builder.user
 import by.mrrockka.extension.MdApproverExtension
 import by.mrrockka.extension.TelegramPSQLExtension
+import by.mrrockka.service.GameSeatsService
 import com.oneeyedmen.okeydoke.Approver
 import eu.vendeli.tgbot.types.msg.Message
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -19,6 +20,7 @@ import org.awaitility.kotlin.atMost
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -51,6 +53,14 @@ abstract class AbstractScenarioTest {
     @Autowired
     lateinit var clock: TestClock
 
+    @Autowired
+    lateinit var gameSeatsService: GameSeatsService
+
+    @BeforeEach
+    fun before() {
+        gameSeatsService.seed(telegramRandoms.seed.hashCode().toLong())
+    }
+
     @AfterEach
     fun after() {
         coreRandoms.reset()
@@ -67,7 +77,7 @@ abstract class AbstractScenarioTest {
     infix fun WhenSpecification.ThenApproveWith(approver: Approver) {
         val filteredCommands = commands.filter { it !is Command.PollAnswer }
         try {
-            await atMost Duration.ofSeconds(5) until {
+            await atMost Duration.ofSeconds(3) until {
                 dispatcher.requests.size == filteredCommands.size
             }
         } catch (ex: Exception) {

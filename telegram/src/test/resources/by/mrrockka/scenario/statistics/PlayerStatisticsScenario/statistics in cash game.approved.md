@@ -17,7 +17,7 @@ Cash game started.
 
 Seats:
   5. @hong_beer
-  10. @nickname1 
+  9. @nickname1 
 ``` 
 ___
 
@@ -53,8 +53,8 @@ message id: 2
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Stored entries: 
-  - @hong_beer -> 30 
+Entry: 
+  @hong_beer: seat 5 -> entry 30 
 ``` 
 ___
 

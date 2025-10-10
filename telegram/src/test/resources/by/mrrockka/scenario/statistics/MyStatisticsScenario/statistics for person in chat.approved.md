@@ -16,9 +16,9 @@ buyin: 10
 Tournament game started.
 
 Seats:
-  5. @nickname1
-  6. @nickname2
-  8. @hong_beer 
+  5. @hong_beer
+  9. @nickname1
+  10. @nickname2 
 ``` 
 ___
 
@@ -131,9 +131,9 @@ buyin: 10
 Cash game started.
 
 Seats:
-  1. @hong_beer
   2. @nickname2
-  5. @nickname1 
+  8. @hong_beer
+  9. @nickname1 
 ``` 
 ___
 
@@ -216,9 +216,9 @@ bounty: 10
 Bounty tournament game started.
 
 Seats:
-  3. @nickname1
-  7. @nickname2
-  10. @hong_beer 
+  5. @hong_beer
+  7. @nickname1
+  10. @nickname2 
 ``` 
 ___
 
@@ -359,9 +359,9 @@ buyin: 10
 Tournament game started.
 
 Seats:
-  2. @nickname1
-  6. @hong_beer
-  9. @nickname2 
+  4. @hong_beer
+  5. @nickname2
+  7. @nickname1 
 ``` 
 ___
 

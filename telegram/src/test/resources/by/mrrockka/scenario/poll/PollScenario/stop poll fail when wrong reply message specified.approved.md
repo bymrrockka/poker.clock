@@ -37,7 +37,7 @@ buyin: 30
 Tournament game started.
 
 Seats:
-  4. @hong_beer 
+  5. @hong_beer 
 ``` 
 ___
 

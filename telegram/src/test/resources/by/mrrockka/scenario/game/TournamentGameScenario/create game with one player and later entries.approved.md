@@ -32,8 +32,8 @@ message id: 1
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Stored entries: 
-  - @nickname3 -> 10 
+Entry: 
+  @nickname3: seat 1 -> entry 10 
 ``` 
 ___
 
@@ -67,8 +67,8 @@ message id: 3
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Stored entries: 
-  - @nickname1 -> 10 
+Entry: 
+  @nickname1: seat 7 -> entry 10 
 ``` 
 ___
 
@@ -102,8 +102,8 @@ message id: 5
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Stored entries: 
-  - @nickname2 -> 10 
+Entry: 
+  @nickname2: seat 3 -> entry 10 
 ``` 
 ___
 
