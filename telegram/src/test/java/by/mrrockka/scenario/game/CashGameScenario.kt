@@ -4,7 +4,6 @@ import by.mrrockka.Given
 import by.mrrockka.When
 import by.mrrockka.domain.GameType
 import by.mrrockka.extension.mdApprover
-import by.mrrockka.scenario.AbstractScenarioTest
 import by.mrrockka.scenario.Commands.Companion.calculate
 import by.mrrockka.scenario.Commands.Companion.createGame
 import by.mrrockka.scenario.Commands.Companion.entry
@@ -17,7 +16,8 @@ import org.junit.jupiter.params.provider.ValueSource
 import java.math.BigDecimal
 
 
-class CashGameScenario : AbstractScenarioTest() {
+class CashGameScenario : GameScenario() {
+    override fun gameType(): GameType = GameType.CASH
 
     @ParameterizedTest
     @ValueSource(booleans = [false, true])
@@ -99,4 +99,5 @@ class CashGameScenario : AbstractScenarioTest() {
             updatesReceived()
         } ThenApproveWith approver
     }
+
 }

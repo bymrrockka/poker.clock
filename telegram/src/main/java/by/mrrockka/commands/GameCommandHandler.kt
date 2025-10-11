@@ -5,7 +5,7 @@ import by.mrrockka.domain.CashGame
 import by.mrrockka.domain.TournamentGame
 import by.mrrockka.domain.toMessageMetadata
 import by.mrrockka.repo.PinType
-import by.mrrockka.service.GameSeatsService
+import by.mrrockka.service.GameTablesService
 import by.mrrockka.service.GameTelegramService
 import by.mrrockka.service.PinMessageService
 import eu.vendeli.tgbot.TelegramBot
@@ -24,7 +24,7 @@ class GameCommandHandlerImpl(
         private val bot: TelegramBot,
         private val gameService: GameTelegramService,
         private val pinMessageService: PinMessageService,
-        private val gameSeatsService: GameSeatsService,
+        private val tablesService: GameTablesService,
 ) : GameCommandHandler {
 
     @CommandHandler(["/tournament_game", "/bounty_game", "/cash_game", "/tg", "/bg", "/cg"])
@@ -42,11 +42,16 @@ class GameCommandHandlerImpl(
                         }
                     }
                     |
-                    |Seats:
                     ${
-                        gameSeatsService.generate(game)
-                                .sortedBy { it.num }
-                                .joinToString("\n") { seat -> "|  ${seat.num}. @${seat.nickname}" }
+                        tablesService.generate(game)
+                                .joinToString("\n") { table ->
+                                    """
+                                    |${"-".repeat(30)}
+                                    |Table ${table.id}
+                                    |Seats:
+                                    ${table.seats.sortedBy { it.num }.joinToString("\n") { seat -> "|  ${seat.num}. @${seat.nickname}" }}
+                                """
+                                }
                     }
                     """.trimMargin()
                 }.let { response ->

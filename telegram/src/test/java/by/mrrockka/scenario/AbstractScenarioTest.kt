@@ -11,7 +11,7 @@ import by.mrrockka.builder.update
 import by.mrrockka.builder.user
 import by.mrrockka.extension.MdApproverExtension
 import by.mrrockka.extension.TelegramPSQLExtension
-import by.mrrockka.service.GameSeatsService
+import by.mrrockka.service.GameTablesService
 import com.oneeyedmen.okeydoke.Approver
 import eu.vendeli.tgbot.types.msg.Message
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -54,7 +54,7 @@ abstract class AbstractScenarioTest {
     lateinit var clock: TestClock
 
     @Autowired
-    lateinit var gameSeatsService: GameSeatsService
+    lateinit var gameSeatsService: GameTablesService
 
     @BeforeEach
     fun before() {

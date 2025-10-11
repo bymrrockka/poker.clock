@@ -23,12 +23,20 @@ class EntryCommandHandlerImpl(
         val metadata = message.message.toMessageMetadata()
         //todo: add ability to entry without nickname or @me and decline command handler
         entryTelegramService.entry(metadata)
-                .also { (seats, amount) ->
+                .also { (tables, amount) ->
                     sendMessage {
                         """
-                        |Entry: 
-                        ${seats.joinToString(separator = "\n") { "|  @${it.nickname}: seat ${it.num} -> entry ${amount.setScale(0)}" }}
-                        """.trimMargin()
+                        |Entries: 
+                        ${
+                            tables.joinToString("\n") { table ->
+                                """
+                                |${"-".repeat(30)}
+                                |Table ${table.id}
+                                |Seats:
+                                ${table.seats.sortedBy { it.num }.joinToString("\n") { seat -> "|  @${seat.nickname} seat ${seat.num} -> entry $amount" }}
+                                """
+                            }
+                        }""".trimMargin()
                     }.send(to = metadata.chatId, via = bot)
                 }
     }

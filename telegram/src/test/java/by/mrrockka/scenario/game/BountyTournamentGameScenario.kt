@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
-class BountyTournamentGameScenario : GameScenario() {
+class BountyTournamentGameScenario : PrizeGameScenario() {
     override fun gameType(): GameType = GameType.BOUNTY
 
     @ParameterizedTest
@@ -78,31 +78,6 @@ class BountyTournamentGameScenario : GameScenario() {
             message { "nickname2" kicked "nickname1" }
             message { player.finalePlaces() }
             message { "me" kicked "nickname2" }
-            message { calculate }
-        } When {
-            updatesReceived()
-        } ThenApproveWith approver
-    }
-
-    @Test
-    fun `change finale places and prize pool multiple times`(approver: Approver) {
-        val buyin = 10.toBigDecimal()
-        val player = "me"
-
-        Given {
-            message { player.createGame(GameType.BOUNTY, buyin) }
-            message { "nickname3".entry() }
-            message { "me" kicked "nickname3" }
-            message { "nickname3".entry() }
-            message { prizePool(1) }
-            message { "nickname2".entry() }
-            message { "nickname2" kicked "nickname3" }
-            message { player.finalePlaces() }
-            message { "nickname1".entry() }
-            message { prizePool(3) }
-            message { "nickname2" kicked "nickname1" }
-            message { "me" kicked "nickname2" }
-            message { listOf("me", "nickname1", "nickname2").finalePlaces() }
             message { calculate }
         } When {
             updatesReceived()
