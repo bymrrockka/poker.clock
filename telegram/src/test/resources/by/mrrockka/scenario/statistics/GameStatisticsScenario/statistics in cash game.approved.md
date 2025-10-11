@@ -14,10 +14,12 @@ buyin: 10
 
 ``` 
 Cash game started.
-
+------------------------------
+Table 1
 Seats:
-  5. @hong_beer
-  9. @nickname1 
+  3. @hong_beer
+  7. @nickname1
+                                 
 ``` 
 ___
 
@@ -53,8 +55,11 @@ message id: 2
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Entry: 
-  @hong_beer: seat 5 -> entry 30 
+Entries: 
+------------------------------
+Table 1
+Seats:
+  @hong_beer seat 3 -> entry 30 
 ``` 
 ___
 

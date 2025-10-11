@@ -14,11 +14,13 @@ buyin: 10
 
 ``` 
 Tournament game started.
-
+------------------------------
+Table 1
 Seats:
-  5. @hong_beer
-  9. @nickname1
-  10. @nickname2 
+  4. @hong_beer
+  5. @nickname2
+  7. @nickname1
+                                 
 ``` 
 ___
 
@@ -72,18 +74,18 @@ message id: 3
 &rarr; <ins>Bot message</ins>
 
 ``` 
------------------------------
+------------------------------
 Finale summary:
   1. @hong_beer won 15
   2. @nickname1 won 15
 Total: 30 (3 entries * 10 buy in)
------------------------------
+------------------------------
 Payout to: @nickname1
   Entries: 1
   Total: 5 (won 15 - entries 10)
 From:
   @nickname2 -> 5
------------------------------
+------------------------------
 Payout to: @hong_beer
   Entries: 1
   Total: 5 (won 15 - entries 10)
@@ -129,11 +131,13 @@ buyin: 10
 
 ``` 
 Cash game started.
-
+------------------------------
+Table 1
 Seats:
-  2. @nickname2
-  8. @hong_beer
-  9. @nickname1 
+  5. @nickname2
+  6. @hong_beer
+  10. @nickname1
+                                 
 ``` 
 ___
 
@@ -166,7 +170,7 @@ message id: 7
 &rarr; <ins>Bot message</ins>
 
 ``` 
------------------------------
+------------------------------
 Payout to: @nickname2
   Entries: 10
   Withdrawals: 30
@@ -214,11 +218,13 @@ bounty: 10
 
 ``` 
 Bounty tournament game started.
-
+------------------------------
+Table 1
 Seats:
-  5. @hong_beer
-  7. @nickname1
-  10. @nickname2 
+  7. @hong_beer
+  9. @nickname1
+  10. @nickname2
+                                 
 ``` 
 ___
 
@@ -304,12 +310,12 @@ message id: 14
 &rarr; <ins>Bot message</ins>
 
 ``` 
------------------------------
+------------------------------
 Finale summary:
   1. @nickname1 won 15
   2. @hong_beer won 15
 Total: 30 (3 entries * 10 buy in)
------------------------------
+------------------------------
 Payout to: @nickname1
   Entries: 1
   Bounties: 20 (taken 2 - given 0) 
@@ -357,11 +363,13 @@ buyin: 10
 
 ``` 
 Tournament game started.
-
+------------------------------
+Table 1
 Seats:
-  4. @hong_beer
-  5. @nickname2
-  7. @nickname1 
+  2. @nickname1
+  5. @hong_beer
+  6. @nickname2
+                                 
 ``` 
 ___
 
@@ -415,18 +423,18 @@ message id: 19
 &rarr; <ins>Bot message</ins>
 
 ``` 
------------------------------
+------------------------------
 Finale summary:
   1. @nickname1 won 15
   2. @nickname2 won 15
 Total: 30 (3 entries * 10 buy in)
------------------------------
+------------------------------
 Payout to: @nickname2
   Entries: 1
   Total: 5 (won 15 - entries 10)
 From:
   @hong_beer -> 5
------------------------------
+------------------------------
 Payout to: @nickname1
   Entries: 1
   Total: 5 (won 15 - entries 10)

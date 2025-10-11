@@ -14,10 +14,12 @@ buyin: 10
 
 ``` 
 Tournament game started.
-
+------------------------------
+Table 1
 Seats:
-  5. @nickname1
-  9. @nickname2 
+  3. @nickname1
+  7. @nickname2
+                                 
 ``` 
 ___
 

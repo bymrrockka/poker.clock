@@ -14,9 +14,11 @@ bounty: 10
 
 ``` 
 Bounty tournament game started.
-
+------------------------------
+Table 1
 Seats:
-  5. @hong_beer 
+  5. @hong_beer
+                                 
 ``` 
 ___
 

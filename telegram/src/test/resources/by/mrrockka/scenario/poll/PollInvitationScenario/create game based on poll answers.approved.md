@@ -93,10 +93,12 @@ buyin: 10
 
 ``` 
 Tournament game started.
-
+------------------------------
+Table 1
 Seats:
-  5. @jackie_rau
-  9. @terisa_johnston 
+  3. @jackie_rau
+  7. @terisa_johnston
+                                 
 ``` 
 ___
 

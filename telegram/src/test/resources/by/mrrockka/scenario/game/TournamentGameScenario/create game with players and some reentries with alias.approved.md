@@ -14,14 +14,16 @@ buyin: 10
 
 ``` 
 Tournament game started.
-
+------------------------------
+Table 1
 Seats:
-  4. @nickname4
-  5. @hong_beer
-  6. @nickname5
-  7. @nickname3
-  9. @nickname1
-  10. @nickname2 
+  2. @nickname5
+  3. @hong_beer
+  5. @nickname2
+  6. @nickname3
+  8. @nickname4
+  10. @nickname1
+                                 
 ``` 
 ___
 
@@ -44,8 +46,11 @@ message id: 1
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Entry: 
-  @nickname3: seat 7 -> entry 10 
+Entries: 
+------------------------------
+Table 1
+Seats:
+  @nickname3 seat 6 -> entry 10.00 
 ``` 
 ___
 
@@ -61,8 +66,11 @@ message id: 2
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Entry: 
-  @nickname3: seat 7 -> entry 10 
+Entries: 
+------------------------------
+Table 1
+Seats:
+  @nickname3 seat 6 -> entry 10.00 
 ``` 
 ___
 
@@ -104,8 +112,11 @@ message id: 4
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Entry: 
-  @nickname1: seat 9 -> entry 10 
+Entries: 
+------------------------------
+Table 1
+Seats:
+  @nickname1 seat 10 -> entry 10.00 
 ``` 
 ___
 
@@ -121,8 +132,11 @@ message id: 5
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Entry: 
-  @nickname1: seat 9 -> entry 10 
+Entries: 
+------------------------------
+Table 1
+Seats:
+  @nickname1 seat 10 -> entry 10.00 
 ``` 
 ___
 
@@ -164,8 +178,11 @@ message id: 7
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Entry: 
-  @nickname1: seat 9 -> entry 10 
+Entries: 
+------------------------------
+Table 1
+Seats:
+  @nickname1 seat 10 -> entry 10.00 
 ``` 
 ___
 
@@ -181,8 +198,11 @@ message id: 8
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Entry: 
-  @nickname1: seat 9 -> entry 10 
+Entries: 
+------------------------------
+Table 1
+Seats:
+  @nickname1 seat 10 -> entry 10.00 
 ``` 
 ___
 
@@ -198,8 +218,11 @@ message id: 9
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Entry: 
-  @nickname1: seat 9 -> entry 10 
+Entries: 
+------------------------------
+Table 1
+Seats:
+  @nickname1 seat 10 -> entry 10.00 
 ``` 
 ___
 
@@ -215,12 +238,12 @@ message id: 10
 &rarr; <ins>Bot message</ins>
 
 ``` 
------------------------------
+------------------------------
 Finale summary:
   1. @nickname1 won 65
   2. @nickname2 won 65
 Total: 130 (13 entries * 10 buy in)
------------------------------
+------------------------------
 Payout to: @nickname2
   Entries: 1
   Total: 55 (won 65 - entries 10)
@@ -229,7 +252,7 @@ From:
   @nickname4 -> 10
   @hong_beer -> 10
   @nickname5 -> 5
------------------------------
+------------------------------
 Payout to: @nickname1
   Entries: 6
   Total: 5 (won 65 - entries 60)

@@ -14,14 +14,16 @@ bounty: 10
 
 ``` 
 Bounty tournament game started.
-
+------------------------------
+Table 1
 Seats:
-  4. @nickname4
-  5. @hong_beer
-  6. @nickname5
-  7. @nickname3
-  9. @nickname1
-  10. @nickname2 
+  2. @nickname5
+  3. @hong_beer
+  5. @nickname2
+  6. @nickname3
+  8. @nickname4
+  10. @nickname1
+                                 
 ``` 
 ___
 
@@ -60,8 +62,11 @@ message id: 2
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Entry: 
-  @nickname3: seat 7 -> entry 10 
+Entries: 
+------------------------------
+Table 1
+Seats:
+  @nickname3 seat 6 -> entry 10.00 
 ``` 
 ___
 
@@ -93,8 +98,11 @@ message id: 4
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Entry: 
-  @nickname3: seat 7 -> entry 10 
+Entries: 
+------------------------------
+Table 1
+Seats:
+  @nickname3 seat 6 -> entry 10.00 
 ``` 
 ___
 
@@ -184,8 +192,11 @@ message id: 9
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Entry: 
-  @nickname1: seat 9 -> entry 10 
+Entries: 
+------------------------------
+Table 1
+Seats:
+  @nickname1 seat 10 -> entry 10.00 
 ``` 
 ___
 
@@ -217,8 +228,11 @@ message id: 11
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Entry: 
-  @nickname1: seat 9 -> entry 10 
+Entries: 
+------------------------------
+Table 1
+Seats:
+  @nickname1 seat 10 -> entry 10.00 
 ``` 
 ___
 
@@ -276,8 +290,11 @@ message id: 14
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Entry: 
-  @nickname1: seat 9 -> entry 10 
+Entries: 
+------------------------------
+Table 1
+Seats:
+  @nickname1 seat 10 -> entry 10.00 
 ``` 
 ___
 
@@ -341,12 +358,12 @@ message id: 18
 &rarr; <ins>Bot message</ins>
 
 ``` 
------------------------------
+------------------------------
 Finale summary:
   1. @nickname1 won 55
   2. @nickname2 won 55
 Total: 110 (11 entries * 10 buy in)
------------------------------
+------------------------------
 Payout to: @nickname2
   Entries: 1
   Bounties: 20 (taken 3 - given 1) 
@@ -355,14 +372,14 @@ From:
   @nickname3 -> 40
   @nickname4 -> 20
   @nickname5 -> 5
------------------------------
+------------------------------
 Payout to: @nickname1
   Entries: 4
   Bounties: 0 (taken 3 - given 3) 
   Total: 15 (won 55 - entries 40 + bounties 0)
 From:
   @nickname5 -> 15
------------------------------
+------------------------------
 Players played equally
   @hong_beer 
 ``` 

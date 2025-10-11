@@ -14,9 +14,11 @@ buyin: 10
 
 ``` 
 Cash game started.
-
+------------------------------
+Table 1
 Seats:
-  5. @nickname1 
+  5. @nickname1
+                                 
 ``` 
 ___
 
@@ -32,8 +34,11 @@ message id: 1
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Entry: 
-  @nickname2: seat 1 -> entry 10 
+Entries: 
+------------------------------
+Table 1
+Seats:
+  @nickname2 seat 1 -> entry 10.00 
 ``` 
 ___
 
@@ -66,7 +71,7 @@ message id: 3
 &rarr; <ins>Bot message</ins>
 
 ``` 
------------------------------
+------------------------------
 Payout to: @nickname1
   Entries: 10
   Withdrawals: 20

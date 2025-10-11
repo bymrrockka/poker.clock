@@ -29,8 +29,7 @@ class EntryCommandHandlerImpl(
                         |Entries: 
                         ${
                             tables.joinToString("\n") { table ->
-                                """
-                                |${"-".repeat(30)}
+                                """|${"-".repeat(30)}
                                 |Table ${table.id}
                                 |Seats:
                                 ${table.seats.sortedBy { it.num }.joinToString("\n") { seat -> "|  @${seat.nickname} seat ${seat.num} -> entry $amount" }}

@@ -41,12 +41,10 @@ class GameCommandHandlerImpl(
                             else -> error("Game type not supported: ${this.javaClass.simpleName}")
                         }
                     }
-                    |
                     ${
                         tablesService.generate(game)
                                 .joinToString("\n") { table ->
-                                    """
-                                    |${"-".repeat(30)}
+                                    """|${"-".repeat(30)}
                                     |Table ${table.id}
                                     |Seats:
                                     ${table.seats.sortedBy { it.num }.joinToString("\n") { seat -> "|  ${seat.num}. @${seat.nickname}" }}

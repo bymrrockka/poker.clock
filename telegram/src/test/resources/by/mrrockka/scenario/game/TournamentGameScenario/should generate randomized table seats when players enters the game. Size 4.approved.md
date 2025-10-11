@@ -14,8 +14,6 @@ buyin: 10
 
 ``` 
 Tournament game started.
-
-                    
 ------------------------------
 Table 1
 Seats:
@@ -40,7 +38,6 @@ message id: 1
 
 ``` 
 Entries: 
-                        
 ------------------------------
 Table 1
 Seats:
@@ -61,7 +58,6 @@ message id: 2
 
 ``` 
 Entries: 
-                        
 ------------------------------
 Table 1
 Seats:
@@ -82,7 +78,6 @@ message id: 3
 
 ``` 
 Entries: 
-                        
 ------------------------------
 Table 1
 Seats:
@@ -103,7 +98,6 @@ message id: 4
 
 ``` 
 Entries: 
-                        
 ------------------------------
 Table 1
 Seats:

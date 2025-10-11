@@ -14,9 +14,11 @@ buyin: 10
 
 ``` 
 Tournament game started.
-
+------------------------------
+Table 1
 Seats:
-  5. @hong_beer 
+  5. @hong_beer
+                                 
 ``` 
 ___
 
@@ -32,8 +34,11 @@ message id: 1
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Entry: 
-  @nickname3: seat 1 -> entry 10 
+Entries: 
+------------------------------
+Table 1
+Seats:
+  @nickname3 seat 1 -> entry 10.00 
 ``` 
 ___
 
@@ -67,8 +72,11 @@ message id: 3
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Entry: 
-  @nickname1: seat 7 -> entry 10 
+Entries: 
+------------------------------
+Table 1
+Seats:
+  @nickname1 seat 2 -> entry 10.00 
 ``` 
 ___
 
@@ -102,8 +110,11 @@ message id: 5
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Entry: 
-  @nickname2: seat 3 -> entry 10 
+Entries: 
+------------------------------
+Table 1
+Seats:
+  @nickname2 seat 3 -> entry 10.00 
 ``` 
 ___
 
@@ -142,37 +153,5 @@ message id: 7
 Finale places stored:
 1. @hong_beer
 2. @nickname2 
-``` 
-___
-
-### 9. Interaction
-
-&rarr; <ins>User message</ins>
-
-```
-message id: 8
-/calculate 
-```
-
-&rarr; <ins>Bot message</ins>
-
-``` 
------------------------------
-Finale summary:
-  1. @hong_beer won 20
-  2. @nickname2 won 20
-Total: 40 (4 entries * 10 buy in)
------------------------------
-Payout to: @nickname2
-  Entries: 1
-  Total: 10 (won 20 - entries 10)
-From:
-  @nickname3 -> 10
------------------------------
-Payout to: @hong_beer
-  Entries: 1
-  Total: 10 (won 20 - entries 10)
-From:
-  @nickname1 -> 10 
 ``` 
 ___

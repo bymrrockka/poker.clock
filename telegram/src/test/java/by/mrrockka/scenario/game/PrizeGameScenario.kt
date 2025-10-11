@@ -2,7 +2,6 @@ package by.mrrockka.scenario.game
 
 import by.mrrockka.Given
 import by.mrrockka.When
-import by.mrrockka.domain.GameType
 import by.mrrockka.extension.mdApprover
 import by.mrrockka.scenario.Commands.Companion.calculate
 import by.mrrockka.scenario.Commands.Companion.createGame
@@ -121,7 +120,7 @@ abstract class PrizeGameScenario : GameScenario() {
         val player = "me"
 
         Given {
-            message { player.createGame(GameType.TOURNAMENT, buyin) }
+            message { player.createGame(gameType(), buyin) }
             message { "nickname3".entry() }
             message { prizePool(1) }
             message { "nickname1".entry() }

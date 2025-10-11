@@ -14,16 +14,18 @@ bounty: 10
 
 ``` 
 Bounty tournament game started.
-
+------------------------------
+Table 1
 Seats:
-  2. @nickname7
-  3. @nickname6
-  4. @nickname4
-  5. @hong_beer
-  6. @nickname5
-  7. @nickname3
-  9. @nickname1
-  10. @nickname2 
+  1. @hong_beer
+  3. @nickname4
+  4. @nickname6
+  5. @nickname3
+  6. @nickname1
+  8. @nickname7
+  9. @nickname5
+  10. @nickname2
+                                 
 ``` 
 ___
 

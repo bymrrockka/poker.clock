@@ -14,9 +14,11 @@ bounty: 10
 
 ``` 
 Bounty tournament game started.
-
+------------------------------
+Table 1
 Seats:
-  5. @hong_beer 
+  5. @hong_beer
+                                 
 ``` 
 ___
 
@@ -32,8 +34,11 @@ message id: 1
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Entry: 
-  @nickname3: seat 1 -> entry 10 
+Entries: 
+------------------------------
+Table 1
+Seats:
+  @nickname3 seat 1 -> entry 10.00 
 ``` 
 ___
 
@@ -65,8 +70,11 @@ message id: 3
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Entry: 
-  @nickname3: seat 1 -> entry 10 
+Entries: 
+------------------------------
+Table 1
+Seats:
+  @nickname3 seat 1 -> entry 10.00 
 ``` 
 ___
 
@@ -100,8 +108,11 @@ message id: 5
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Entry: 
-  @nickname2: seat 2 -> entry 10 
+Entries: 
+------------------------------
+Table 1
+Seats:
+  @nickname2 seat 2 -> entry 10.00 
 ``` 
 ___
 
@@ -133,8 +144,11 @@ message id: 7
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Entry: 
-  @nickname1: seat 4 -> entry 10 
+Entries: 
+------------------------------
+Table 1
+Seats:
+  @nickname1 seat 3 -> entry 10.00 
 ``` 
 ___
 
@@ -200,11 +214,11 @@ message id: 11
 &rarr; <ins>Bot message</ins>
 
 ``` 
------------------------------
+------------------------------
 Finale summary:
   1. @hong_beer won 50
 Total: 50 (5 entries * 10 buy in)
------------------------------
+------------------------------
 Payout to: @hong_beer
   Entries: 1
   Bounties: 20 (taken 2 - given 0) 
@@ -212,7 +226,7 @@ Payout to: @hong_beer
 From:
   @nickname3 -> 40
   @nickname1 -> 20
------------------------------
+------------------------------
 Players played equally
   @nickname2 
 ``` 
