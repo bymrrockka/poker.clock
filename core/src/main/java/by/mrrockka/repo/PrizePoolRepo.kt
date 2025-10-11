@@ -1,8 +1,8 @@
 package by.mrrockka.repo
 
 import by.mrrockka.domain.PositionPrize
-import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.upsert
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
@@ -24,7 +24,7 @@ open class PrizePoolRepoImpl : PrizePoolRepo {
     }
 
     override fun store(gameId: UUID, prizePool: List<PositionPrize>) {
-        PrizePoolTable.insert {
+        PrizePoolTable.upsert(PrizePoolTable.gameId) {
             it[PrizePoolTable.gameId] = gameId
             it[PrizePoolTable.schema] = prizePool.toTypedArray()
         }

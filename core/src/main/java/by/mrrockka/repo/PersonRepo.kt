@@ -67,7 +67,7 @@ open class PersonRepoImpl : PersonRepo {
     }
 
     override fun store(persons: List<Person>) {
-        PersonTable.batchUpsert(persons) { person ->
+        PersonTable.batchUpsert(data = persons) { person ->
             this[id] = person.id
             this[firstName] = person.firstname
             this[lastName] = person.lastname

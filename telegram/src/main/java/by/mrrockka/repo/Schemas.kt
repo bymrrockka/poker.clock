@@ -48,3 +48,8 @@ object PinMessageTable : Table("pin_messages") {
     val messageId = long("message_id")
     val type = enumerationByName<PinType>("type", 15)
 }
+
+object GameTablesTable : Table("game_tables") {
+    val gameId = uuid("game_id").references(GameTable.id)
+    val tables = jsonb<Array<by.mrrockka.domain.Table>>("tables", Json.Default)
+}

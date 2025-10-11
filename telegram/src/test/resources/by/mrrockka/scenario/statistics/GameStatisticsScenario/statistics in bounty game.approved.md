@@ -13,7 +13,13 @@ bounty: 10
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Bounty tournament game started. 
+Bounty tournament game started.
+------------------------------
+Table 1
+Seats:
+  3. @hong_beer
+  7. @nickname1
+                                 
 ``` 
 ___
 
@@ -85,8 +91,11 @@ message id: 4
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Stored entries: 
-  - @nickname1 -> 10 
+Entries: 
+------------------------------
+Table 1
+Seats:
+  @nickname1 seat 7 -> entry 10.00 
 ``` 
 ___
 
@@ -138,8 +147,11 @@ message id: 7
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Stored entries: 
-  - @hong_beer -> 10 
+Entries: 
+------------------------------
+Table 1
+Seats:
+  @hong_beer seat 3 -> entry 10.00 
 ``` 
 ___
 

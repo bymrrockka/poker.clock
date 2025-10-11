@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
-class BountyTournamentGameScenario : GameScenario() {
+class BountyTournamentGameScenario : PrizeGameScenario() {
     override fun gameType(): GameType = GameType.BOUNTY
 
     @ParameterizedTest
@@ -60,7 +60,6 @@ class BountyTournamentGameScenario : GameScenario() {
             updatesReceived()
         } ThenApproveWith mdApprover("create game with players and some reentries${if (withAlias) " with alias" else ""}")
     }
-
 
     @Test
     fun `create game with one player and later entries`(approver: Approver) {

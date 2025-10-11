@@ -64,7 +64,7 @@ class CalculationCommandHandlerImpl(
             is CashGame -> joinToString(separator = "\n") {
                 val player = it.creditor as CashPlayer
                 """
-                |-----------------------------
+                |${"-".repeat(30)}
                 |Payout to: @${player.person.nickname}
                 |  Entries: ${player.entries.total().setScale(0)}
                 |  Withdrawals: ${player.withdrawals.total().setScale(0)}
@@ -81,7 +81,7 @@ class CalculationCommandHandlerImpl(
                             val prize = summaries[it.creditor.person]?.amount
                                     ?: error("No prize for ${it.creditor.person}")
                             """
-                            |-----------------------------
+                            |${"-".repeat(30)}
                             |Payout to: @${player.person.nickname}
                             |  Entries: ${player.entries.size}
                             |  Total: ${it.total.setScale(0)} (won ${prize.setScale(0)} - entries ${player.entries.total().setScale(0)})
@@ -102,7 +102,7 @@ class CalculationCommandHandlerImpl(
                             val (taken, given) = player.takenToGiven()
                             val bountiesTotal = taken.total() - given.total()
                             """
-                            |-----------------------------
+                            |${"-".repeat(30)}
                             |Payout to: @${player.person.nickname}
                             |  Entries: ${player.entries.size}
                             |  Bounties: ${bountiesTotal.setScale(0)} (taken ${taken.size} - given ${given.size}) 
@@ -122,7 +122,7 @@ class CalculationCommandHandlerImpl(
         val zeros = filter { it.total == ZERO }
         return if (zeros.isNotEmpty()) """
             |
-            |-----------------------------
+            |${"-".repeat(30)}
             |Players played equally
             ${zeros.joinToString("\n") { "|  @${it.creditor.person.nickname}" }}
         """.trimMargin() else ""
@@ -140,7 +140,7 @@ class CalculationCommandHandlerImpl(
     private fun Game.finalePlacesMessage(): String {
         val summary = toSummary()
         return """
-                |-----------------------------
+                |${"-".repeat(30)}
                 |Finale summary:
                 ${summary.joinToString("\n") { "|  ${it.position}. @${it.person.nickname} won ${it.amount.setScale(0)}" }}
                 |Total: ${players.totalEntries().setScale(0)} (${players.flatMap { it.entries }.size} entries * ${buyIn.setScale(0)} buy in)
