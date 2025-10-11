@@ -24,7 +24,6 @@ Seats:
   7. @nickname11
   10. @nickname9
                                 
-
 ------------------------------
 Table 2
 Seats:
