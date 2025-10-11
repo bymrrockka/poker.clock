@@ -50,7 +50,7 @@ open class GameTelegramServiceImpl(
                     }
         }
 
-        return game
+        return gameRepo.findById(game.id)
     }
 
     override fun findGame(metadata: MessageMetadata): Game {

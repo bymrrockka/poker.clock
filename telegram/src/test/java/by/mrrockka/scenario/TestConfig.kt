@@ -20,7 +20,7 @@ import kotlin.time.Instant
 
 @Profile("scenario")
 @TestConfiguration
-open class TestBotConfig(
+open class TestConfig(
         private val botProps: BotProperties,
 ) {
 

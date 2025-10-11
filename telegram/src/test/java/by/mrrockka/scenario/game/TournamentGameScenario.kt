@@ -15,7 +15,8 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import java.math.BigDecimal
 
-class TournamentGameScenario : GameScenario() {
+class TournamentGameScenario : PrizeGameScenario() {
+    override fun gameType(): GameType = GameType.TOURNAMENT
 
     @ParameterizedTest
     @ValueSource(booleans = [false, true])
@@ -52,7 +53,6 @@ class TournamentGameScenario : GameScenario() {
         } ThenApproveWith mdApprover("create game with players and some reentries${if (withAlias) " with alias" else ""}")
     }
 
-
     @Test
     fun `create game with one player and later entries`(approver: Approver) {
         val buyin = BigDecimal(10)
@@ -70,6 +70,4 @@ class TournamentGameScenario : GameScenario() {
             updatesReceived()
         } ThenApproveWith approver
     }
-
-    override fun gameType(): GameType = GameType.TOURNAMENT
 }
