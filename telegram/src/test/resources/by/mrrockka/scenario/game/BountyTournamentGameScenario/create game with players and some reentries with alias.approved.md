@@ -359,6 +359,9 @@ message id: 18
 
 ``` 
 ------------------------------
+You can support me using this link. 
+https://buymeacoffee.com/mrrockka
+------------------------------
 Finale summary:
   1. @nickname1 won 55
   2. @nickname2 won 55

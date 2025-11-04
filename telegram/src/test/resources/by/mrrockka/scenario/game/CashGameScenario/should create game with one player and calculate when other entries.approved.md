@@ -72,6 +72,9 @@ message id: 3
 
 ``` 
 ------------------------------
+You can support me using this link. 
+https://buymeacoffee.com/mrrockka
+------------------------------
 Payout to: @nickname1
   Entries: 10
   Withdrawals: 20

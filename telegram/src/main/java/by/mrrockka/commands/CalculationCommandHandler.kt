@@ -43,6 +43,13 @@ class CalculationCommandHandlerImpl(
         private val calculationService: CalculationTelegramService,
 ) : CalculationCommandHandler {
 
+    private val buyMeACoffee = """
+        |${"-".repeat(30)}
+        |You can support me using this link. 
+        |https://buymeacoffee.com/mrrockka
+        |
+        """.trimMargin()
+
     @CommandHandler(["/calculate"])
     override suspend fun calculate(message: MessageUpdate) {
         val metadata = message.message.toMessageMetadata()
@@ -61,7 +68,7 @@ class CalculationCommandHandlerImpl(
 
     private fun List<Payout>.response(game: Game): String {
         return when (game) {
-            is CashGame -> joinToString(separator = "\n") {
+            is CashGame -> buyMeACoffee + joinToString(separator = "\n") {
                 val player = it.creditor as CashPlayer
                 """
                 |${"-".repeat(30)}
@@ -89,7 +96,7 @@ class CalculationCommandHandlerImpl(
                             """.trimMargin()
                         }
 
-                return game.finalePlacesMessage() + payoutsResponse + equalResponse()
+                return buyMeACoffee + game.finalePlacesMessage() + payoutsResponse + equalResponse()
             }
 
             is BountyTournamentGame -> {
@@ -111,7 +118,7 @@ class CalculationCommandHandlerImpl(
                             """.trimMargin()
                         }
 
-                return game.finalePlacesMessage() + payoutsResponse + this.equalResponse()
+                return buyMeACoffee + game.finalePlacesMessage() + payoutsResponse + this.equalResponse()
             }
 
             else -> error("Unknown game type")

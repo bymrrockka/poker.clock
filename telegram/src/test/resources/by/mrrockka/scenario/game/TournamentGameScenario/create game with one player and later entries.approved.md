@@ -131,6 +131,9 @@ message id: 6
 
 ``` 
 ------------------------------
+You can support me using this link. 
+https://buymeacoffee.com/mrrockka
+------------------------------
 Finale summary:
   1. @hong_beer won 40
 Total: 40 (4 entries * 10 buy in)

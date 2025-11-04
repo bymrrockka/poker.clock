@@ -75,6 +75,9 @@ message id: 3
 
 ``` 
 ------------------------------
+You can support me using this link. 
+https://buymeacoffee.com/mrrockka
+------------------------------
 Finale summary:
   1. @hong_beer won 15
   2. @nickname1 won 15
@@ -170,6 +173,9 @@ message id: 7
 &rarr; <ins>Bot message</ins>
 
 ``` 
+------------------------------
+You can support me using this link. 
+https://buymeacoffee.com/mrrockka
 ------------------------------
 Payout to: @nickname2
   Entries: 10
@@ -311,6 +317,9 @@ message id: 14
 
 ``` 
 ------------------------------
+You can support me using this link. 
+https://buymeacoffee.com/mrrockka
+------------------------------
 Finale summary:
   1. @nickname1 won 15
   2. @hong_beer won 15
@@ -423,6 +432,9 @@ message id: 19
 &rarr; <ins>Bot message</ins>
 
 ``` 
+------------------------------
+You can support me using this link. 
+https://buymeacoffee.com/mrrockka
 ------------------------------
 Finale summary:
   1. @nickname1 won 15
