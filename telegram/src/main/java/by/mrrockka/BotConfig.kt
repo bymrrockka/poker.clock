@@ -41,14 +41,13 @@ open class BotConfig(
 
         GlobalScope.launch {
             setMyCommands(
-                    command = botCommands.commands.map {
-                        BotCommand(command = it.name, description = it.description ?: "")
-                    },
+                    command = botCommands.commands
+                            .filter { it.enabled }
+                            .map { BotCommand(command = it.name, description = it.description ?: "No description") },
             ).send(bot)
             bot.handleUpdates(
                     listOf(
                             UpdateType.MESSAGE,
-//                    UpdateType.EDITED_MESSAGE,
                             UpdateType.POLL_ANSWER,
                     ),
             )
