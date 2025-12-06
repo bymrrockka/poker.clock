@@ -12,6 +12,8 @@ bot:
     cron: "0 * * * * *"
   description:
     commands:
+      - name: game
+        enabled: true
       - name: bounty_game
         enabled: true
         alias: bg

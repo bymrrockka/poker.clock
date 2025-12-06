@@ -9,6 +9,7 @@ import eu.vendeli.tgbot.types.component.UpdateType
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.springframework.beans.BeansException
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
@@ -31,7 +32,7 @@ open class BotConfig(
     @OptIn(DelicateCoroutinesApi::class)
     open fun bot(appContext: ApplicationContext, botCommands: BotCommands): TelegramBot {
         val bot = TelegramBot(botProps.token) {
-            classManager = SpringClassManager(appContext)
+            classManager = SpringClassManager(appContext, classManager)
             commandParsing {
                 commandDelimiter = '\n'
                 restrictSpacesInCommands = true
@@ -63,12 +64,20 @@ open class BotConfig(
     }
 }
 
-@Configuration
 open class SpringClassManager(
         private val applicationContext: ApplicationContext,
+        private val classManager: ClassManager,
 ) : ClassManager {
-    override fun getInstance(kClass: KClass<*>, vararg initParams: Any?): Any =
-            applicationContext.getBean(kClass.java, *initParams)
+    override fun getInstance(kClass: KClass<*>, vararg initParams: Any?): Any {
+        var instance: Any
+
+        try {
+            instance = applicationContext.getBean(kClass.java, *initParams)
+        } catch (beanEx: BeansException) {
+            instance = classManager.getInstance(kClass, *initParams)
+        }
+        return instance
+    }
 }
 
 @Component
