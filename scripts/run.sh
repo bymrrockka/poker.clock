@@ -28,7 +28,7 @@ startApp() {
   fileSize=$(($(find ~/app/*.jar -type f | wc -l)-1))
 
   if [ "$fileSize" -gt 0 ]; then
-    find ~/app/*.jar -type f -printf "%Cx.%CX %p\n" | sort -n | awk '{print $2}' | head -$fileSize | xargs rm
+    find ~/app/*.jar -type f -printf "%C@ %p\n" | sort -n | awk '{print $2}' | head -$fileSize | xargs rm
   fi
   commandOpts="-Xmx512m -Djava.net.preferIPv6Addresses=true"
 
