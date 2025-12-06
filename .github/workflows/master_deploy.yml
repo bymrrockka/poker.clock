@@ -63,11 +63,11 @@ jobs:
           script: |
             cd ~/app
             echo ''> .env
-            echo BOT_NAME >> .env
-            echo BOT_NICKNAME >> .env
-            echo BOT_TOKEN >> .env
-            echo DB_PASSWORD >> .env
-            echo DB_URL >> .env
-            echo DB_USER >> .env
-            echo PROFILES >> .env
+            echo $BOT_NAME >> .env
+            echo $BOT_NICKNAME >> .env
+            echo $BOT_TOKEN >> .env
+            echo $DB_PASSWORD >> .env
+            echo $DB_URL >> .env
+            echo $DB_USER >> .env
+            echo $PROFILES >> .env
             source scripts/run.sh
