@@ -8,6 +8,7 @@ import by.mrrockka.extension.TestPSQLContainer.Companion.version
 import by.mrrockka.repo.BountyTable
 import by.mrrockka.repo.EntriesTable
 import by.mrrockka.repo.FinalePlacesTable
+import by.mrrockka.repo.GameSummaryTable
 import by.mrrockka.repo.GameTable
 import by.mrrockka.repo.PersonTable
 import by.mrrockka.repo.PrizePoolTable
@@ -37,6 +38,7 @@ open class CorePSQLExtension : BeforeAllCallback, AfterEachCallback {
     }
 
     protected fun cleanCoreTable() {
+        GameSummaryTable.deleteAll()
         BountyTable.deleteAll()
         EntriesTable.deleteAll()
         WithdrawalTable.deleteAll()

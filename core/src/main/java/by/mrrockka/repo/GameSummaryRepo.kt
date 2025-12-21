@@ -40,7 +40,8 @@ open class PrizeSummaryRepoImpl : GameSummaryRepo {
                     this[GameSummaryTable.position] = it.position
                     this[GameSummaryTable.type] = SummaryType.BOUNTY.name
                     this[GameSummaryTable.prize] = it.prize
-                    this[GameSummaryTable.bounties] = it.bounties
+                    this[GameSummaryTable.takenBounties] = it.takenBounties
+                    this[GameSummaryTable.givenBounties] = it.givenBounties
                 }
 
                 is CashSummary -> {
@@ -70,10 +71,11 @@ open class PrizeSummaryRepoImpl : GameSummaryRepo {
 
             SummaryType.BOUNTY -> BountySummary(
                     person = this.toPerson(),
-                    position = this[GameSummaryTable.position]!!,
                     entries = this[GameSummaryTable.entries],
-                    bounties = this[GameSummaryTable.bounties]!!,
                     prize = this[GameSummaryTable.prize]!!,
+                    position = this[GameSummaryTable.position]!!,
+                    takenBounties = this[GameSummaryTable.takenBounties]!!,
+                    givenBounties = this[GameSummaryTable.givenBounties]!!,
             )
 
             SummaryType.CASH -> CashSummary(

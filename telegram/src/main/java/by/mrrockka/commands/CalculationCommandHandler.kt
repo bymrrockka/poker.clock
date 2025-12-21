@@ -1,6 +1,6 @@
 package by.mrrockka.commands
 
-import by.mrrockka.domain.BountyPlayer
+import by.mrrockka.domain.BountySummary
 import by.mrrockka.domain.BountyTournamentGame
 import by.mrrockka.domain.CashGame
 import by.mrrockka.domain.CashPlayer
@@ -10,8 +10,7 @@ import by.mrrockka.domain.Payout
 import by.mrrockka.domain.Person
 import by.mrrockka.domain.PrizeGameSummary
 import by.mrrockka.domain.TournamentGame
-import by.mrrockka.domain.TournamentPlayer
-import by.mrrockka.domain.takenToGiven
+import by.mrrockka.domain.TournamentSummary
 import by.mrrockka.domain.toMessageMetadata
 import by.mrrockka.domain.toTournamentSummary
 import by.mrrockka.domain.total
@@ -67,6 +66,8 @@ class CalculationCommandHandlerImpl(
         return when (game) {
             is CashGame -> buyMeACoffee + joinToString(separator = "\n") {
                 val player = it.creditor as CashPlayer
+//                val summary = (summaries[it.creditor]
+//                        ?: error("No game summary for ${it.creditor}")) as TournamentSummary
                 """
                 |${"-".repeat(30)}
                 |Payout to: @${player.person.nickname}
@@ -81,14 +82,13 @@ class CalculationCommandHandlerImpl(
                 val summaries = game.toTournamentSummary().associateBy { it.person }
                 val payoutsResponse = prepare(summaries)
                         .joinToString(separator = "\n") {
-                            val player = it.creditor as TournamentPlayer
-                            val prize = summaries[it.creditor]?.prize
-                                    ?: error("No prize for ${it.creditor}")
+                            val summary = (summaries[it.creditor]
+                                    ?: error("No game summary for ${it.creditor}")) as TournamentSummary
                             """
                             |${"-".repeat(30)}
-                            |Payout to: @${player.person.nickname}
-                            |  Entries: ${player.entries.size}
-                            |  Total: ${it.total.setScale(0)} (won ${prize.setScale(0)} - entries ${player.entries.total().setScale(0)})
+                            |Payout to: @${summary.person.nickname}
+                            |  Entries: ${summary.entries}
+                            |  Total: ${it.total.setScale(0)} (won ${summary.prize.setScale(0)} - entries ${summary.entries.setScale(0)})
                             |${it.debtors.message()}
                             """.trimMargin()
                         }
@@ -100,17 +100,15 @@ class CalculationCommandHandlerImpl(
                 val summaries = game.toTournamentSummary().associateBy { it.person }
                 val payoutsResponse = prepare(summaries)
                         .joinToString(separator = "\n") {
-                            val player = it.creditor as BountyPlayer
-                            val prize = summaries[it.creditor]?.prize
-                                    ?: error("No prize for ${it.creditor}")
-                            val (taken, given) = player.takenToGiven()
-                            val bountiesTotal = taken.total() - given.total()
+                            val summary = (summaries[it.creditor]
+                                    ?: error("No game summary for ${it.creditor}")) as BountySummary
+                            val bountiesTotal = summary.takenBounties - summary.givenBounties
                             """
                             |${"-".repeat(30)}
-                            |Payout to: @${player.person.nickname}
-                            |  Entries: ${player.entries.size}
-                            |  Bounties: ${bountiesTotal.setScale(0)} (taken ${taken.size} - given ${given.size}) 
-                            |  Total: ${it.total.setScale(0)} (won ${prize.setScale(0)} - entries ${player.entries.total().setScale(0)} ${if (bountiesTotal < ZERO) "-" else "+"} bounties ${bountiesTotal.setScale(0)})
+                            |Payout to: @${summary.person.nickname}
+                            |  Entries: ${summary.entries}
+                            |  Bounties: ${bountiesTotal.setScale(0)} (taken ${summary.takenBounties} - given ${summary.givenBounties}) 
+                            |  Total: ${it.total.setScale(0)} (won ${summary.prize.setScale(0)} - entries ${summary.entries.setScale(0)} ${if (bountiesTotal < ZERO) "-" else "+"} bounties ${bountiesTotal.setScale(0)})
                             |${it.debtors.message()}
                             """.trimMargin()
                         }

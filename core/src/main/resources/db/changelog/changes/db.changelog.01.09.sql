@@ -7,10 +7,11 @@ CREATE TABLE IF NOT EXISTS game_summary (
     position int,
     entries bigint NOT NULL,
     withdrawals bigint,
-    bounties bigint,
+    taken_bounties bigint,
+    given_bounties bigint,
+    prize bigint,
     type varchar(20) NOT NULL,
-    UNIQUE(game_id, person_id),
-    UNIQUE(game_id, position)
+    UNIQUE(game_id, person_id)
     );
 
 --changeset task#63:2

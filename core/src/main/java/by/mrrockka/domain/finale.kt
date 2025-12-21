@@ -29,9 +29,10 @@ data class BountySummary(
         override val entries: BigDecimal,
         override val prize: BigDecimal,
         override val position: Int? = null,
-        val bounties: BigDecimal,
+        val takenBounties: BigDecimal,
+        val givenBounties: BigDecimal,
 ) : PrizeGameSummary {
-    override fun total(): BigDecimal = bounties + prize - entries
+    override fun total(): BigDecimal = takenBounties - givenBounties + prize - entries
 }
 
 data class CashSummary(
@@ -77,7 +78,8 @@ fun BountyTournamentGame.gameSummary(): List<BountySummary> {
                 entries = player.entries.total(),
                 prize = prize?.amount ?: BigDecimal.ZERO,
                 position = prize?.position,
-                bounties = taken.total() - given.total(),
+                takenBounties = taken.total(),
+                givenBounties = given.total(),
         )
     }
 }
