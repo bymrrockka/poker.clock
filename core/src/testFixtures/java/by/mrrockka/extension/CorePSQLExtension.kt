@@ -9,7 +9,6 @@ import by.mrrockka.repo.BountyTable
 import by.mrrockka.repo.EntriesTable
 import by.mrrockka.repo.FinalePlacesTable
 import by.mrrockka.repo.GameTable
-import by.mrrockka.repo.MoneyTransferTable
 import by.mrrockka.repo.PersonTable
 import by.mrrockka.repo.PrizePoolTable
 import by.mrrockka.repo.WithdrawalTable
@@ -38,7 +37,6 @@ open class CorePSQLExtension : BeforeAllCallback, AfterEachCallback {
     }
 
     protected fun cleanCoreTable() {
-        MoneyTransferTable.deleteAll()
         BountyTable.deleteAll()
         EntriesTable.deleteAll()
         WithdrawalTable.deleteAll()

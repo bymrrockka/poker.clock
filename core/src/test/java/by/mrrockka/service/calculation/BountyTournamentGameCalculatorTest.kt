@@ -46,10 +46,10 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
         val actual = calculator.calculate(game)
         val expect = listOf(
                 Payout(
-                        creditor = toBounties,
+                        creditor = toBounties.person,
                         debtors = fromBounties
                                 .filterNot { it == toBounties }
-                                .map { Debtor(it, buyin + bounty) }
+                                .map { Debtor(it.person, buyin + bounty) }
                                 .reversed(),
                         total = BigDecimal("20") * (players.size - 1).toBigDecimal(),
                 ),
@@ -84,7 +84,7 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
             finalePlaces(FinalPlace(1, toBounties.person))
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify().toJsonString())
+        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
     }
 
     @Test
@@ -113,7 +113,7 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
             )
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify().toJsonString())
+        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
     }
 
     @Test
@@ -136,7 +136,7 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
             finalePlaces(FinalPlace(1, firstPlace.person))
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify().toJsonString())
+        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
     }
 
 
@@ -188,7 +188,7 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
             )
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify().toJsonString())
+        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
     }
 
     @Test
@@ -215,7 +215,7 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
             )
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify().toJsonString())
+        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
     }
 
     companion object {

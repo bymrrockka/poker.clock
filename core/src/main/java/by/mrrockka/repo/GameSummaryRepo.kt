@@ -1,6 +1,7 @@
 package by.mrrockka.repo
 
 import by.mrrockka.domain.BasicPerson
+import by.mrrockka.domain.BountySummary
 import by.mrrockka.domain.CashSummary
 import by.mrrockka.domain.GameSummary
 import by.mrrockka.domain.TournamentSummary
@@ -26,16 +27,25 @@ open class PrizeSummaryRepoImpl : GameSummaryRepo {
         GameSummaryTable.batchUpsert(keys = arrayOf(GameSummaryTable.gameId, GameSummaryTable.personId), data = prizeSummaries) {
             this[GameSummaryTable.gameId] = gameId
             this[GameSummaryTable.personId] = it.person.id
-            this[GameSummaryTable.amount] = it.amount
+            this[GameSummaryTable.entries] = it.entries
 
             when (it) {
                 is TournamentSummary -> {
                     this[GameSummaryTable.position] = it.position
                     this[GameSummaryTable.type] = SummaryType.TOURNAMENT.name
+                    this[GameSummaryTable.prize] = it.prize
+                }
+
+                is BountySummary -> {
+                    this[GameSummaryTable.position] = it.position
+                    this[GameSummaryTable.type] = SummaryType.BOUNTY.name
+                    this[GameSummaryTable.prize] = it.prize
+                    this[GameSummaryTable.bounties] = it.bounties
                 }
 
                 is CashSummary -> {
                     this[GameSummaryTable.type] = SummaryType.CASH.name
+                    this[GameSummaryTable.withdrawals] = it.withdrawals
                 }
             }
         }
@@ -54,15 +64,24 @@ open class PrizeSummaryRepoImpl : GameSummaryRepo {
             SummaryType.TOURNAMENT -> TournamentSummary(
                     person = this.toPerson(),
                     position = this[GameSummaryTable.position]!!,
-                    amount = this[GameSummaryTable.amount],
+                    entries = this[GameSummaryTable.entries],
+                    prize = this[GameSummaryTable.prize]!!,
+            )
+
+            SummaryType.BOUNTY -> BountySummary(
+                    person = this.toPerson(),
+                    position = this[GameSummaryTable.position]!!,
+                    entries = this[GameSummaryTable.entries],
+                    bounties = this[GameSummaryTable.bounties]!!,
+                    prize = this[GameSummaryTable.prize]!!,
             )
 
             SummaryType.CASH -> CashSummary(
                     person = this.toPerson(),
-                    amount = this[GameSummaryTable.amount],
+                    entries = this[GameSummaryTable.entries],
+                    withdrawals = this[GameSummaryTable.withdrawals]!!,
             )
         }
-
     }
 
     private fun ResultRow.toPerson(): BasicPerson {
@@ -75,6 +94,6 @@ open class PrizeSummaryRepoImpl : GameSummaryRepo {
     }
 
     private enum class SummaryType {
-        CASH, TOURNAMENT
+        CASH, BOUNTY, TOURNAMENT
     }
 }

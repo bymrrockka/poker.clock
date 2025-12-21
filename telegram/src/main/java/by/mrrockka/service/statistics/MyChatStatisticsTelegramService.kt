@@ -32,7 +32,7 @@ class MyChatStatisticsTelegramService(
            |nickname: @${person.nickname!!}
            |games played: ${gameSummaries.size}
            |buy-ins total: ${entriesTotal}
-           |won total: ${gameSummaries.map { it.amount }.total()} 
+           |won total: ${gameSummaries.map { it.total() }.total()} 
            |times in prizes: ${firstPlaces.size + otherPlaces.size}
            |times in first place: ${firstPlaces.size}
         """.trimMargin()

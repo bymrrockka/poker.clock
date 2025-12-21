@@ -5,7 +5,9 @@ CREATE TABLE IF NOT EXISTS game_summary (
     game_id uuid REFERENCES game(id),
     person_id uuid REFERENCES person(id),
     position int,
-    amount bigint NOT NULL,
+    entries bigint NOT NULL,
+    withdrawals bigint,
+    bounties bigint,
     type varchar(20) NOT NULL,
     UNIQUE(game_id, person_id),
     UNIQUE(game_id, position)

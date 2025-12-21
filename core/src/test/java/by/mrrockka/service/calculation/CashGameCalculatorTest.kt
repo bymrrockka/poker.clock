@@ -37,9 +37,9 @@ class CashGameCalculatorTest : AbstractTest() {
         val actual = calculator.calculate(game)
         val expect = listOf(
                 Payout(
-                        creditor = withdrawalPlayer,
+                        creditor = withdrawalPlayer.person,
                         debtors = players.drop(1)
-                                .map { Debtor(it, buyin) }
+                                .map { Debtor(it.person, buyin) }
                                 .reversed(),
                         total = BigDecimal("10") * (players.size - 1).toBigDecimal(),
                 ),
@@ -61,7 +61,7 @@ class CashGameCalculatorTest : AbstractTest() {
             players(players.drop(2) + first + second)
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify().toJsonString())
+        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
     }
 
     @Test
@@ -76,7 +76,7 @@ class CashGameCalculatorTest : AbstractTest() {
             players(players)
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify().toJsonString())
+        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
     }
 
     @Test
@@ -97,7 +97,7 @@ class CashGameCalculatorTest : AbstractTest() {
             players(players.drop(1) + winner)
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify().toJsonString())
+        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
     }
 
     companion object {

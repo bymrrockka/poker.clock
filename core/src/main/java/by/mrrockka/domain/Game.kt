@@ -60,19 +60,15 @@ data class CashGame(
     override val players: List<CashPlayer> by lazy { playersProvider() }
 }
 
-fun Game.toTournamentSummary(): List<TournamentSummary> {
-    return when (this) {
-        is TournamentGame -> prizeSummary(finalePlaces = finalePlaces, prizePool = prizePool, players.totalEntries())
-        is BountyTournamentGame -> prizeSummary(finalePlaces = finalePlaces, prizePool = prizePool, players.totalEntries())
-        is CashGame -> emptyList()
-        else -> error("Unknown game type")
-    }
-}
+fun Game.toTournamentSummary(): List<PrizeGameSummary> = toSummary()
+        .filter { it is PrizeGameSummary }
+        .map { it as PrizeGameSummary }
 
 fun Game.toSummary(): List<GameSummary> {
     return when (this) {
-        is TournamentGame, is BountyTournamentGame -> this.toTournamentSummary()
-        is CashGame -> cashSummary(this.players)
+        is TournamentGame -> gameSummary()
+        is BountyTournamentGame -> gameSummary()
+        is CashGame -> gameSummary()
         else -> error("Unknown game type")
     }
 }

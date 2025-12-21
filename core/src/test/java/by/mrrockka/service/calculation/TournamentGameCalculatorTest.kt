@@ -40,10 +40,10 @@ class TournamentGameCalculatorTest : AbstractTest() {
         val actual = calculator.calculate(game)
         val expect = listOf(
                 Payout(
-                        creditor = players[0],
+                        creditor = players[0].person,
                         debtors = players
                                 .filterNot { it == players[0] }
-                                .map { Debtor(it, buyin) }
+                                .map { Debtor(it.person, buyin) }
                                 .reversed(),
                         total = BigDecimal("10") * (players.size - 1).toBigDecimal(),
                 ),
@@ -72,7 +72,7 @@ class TournamentGameCalculatorTest : AbstractTest() {
             finalePlaces(FinalPlace(1, players[0].person))
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify().toJsonString())
+        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
     }
 
     @Test
@@ -95,7 +95,7 @@ class TournamentGameCalculatorTest : AbstractTest() {
             )
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify().toJsonString())
+        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
     }
 
     @Test
@@ -124,7 +124,7 @@ class TournamentGameCalculatorTest : AbstractTest() {
             )
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify().toJsonString())
+        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
     }
 
     @Test
@@ -151,7 +151,7 @@ class TournamentGameCalculatorTest : AbstractTest() {
             )
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify().toJsonString())
+        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
     }
 
     @Test
@@ -178,7 +178,7 @@ class TournamentGameCalculatorTest : AbstractTest() {
             )
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify().toJsonString())
+        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
     }
 
     @Test
@@ -199,7 +199,7 @@ class TournamentGameCalculatorTest : AbstractTest() {
             )
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify().toJsonString())
+        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
     }
 
     companion object {
