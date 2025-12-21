@@ -248,7 +248,7 @@ Finale summary:
 Total: 130 (13 entries * 10 buy in)
 ------------------------------
 Payout to: @nickname2
-  Entries: 1
+  Entries: 10
   Total: 55 (won 65 - entries 10)
 From:
   @nickname3 -> 30
@@ -257,7 +257,7 @@ From:
   @nickname5 -> 5
 ------------------------------
 Payout to: @nickname1
-  Entries: 6
+  Entries: 60
   Total: 5 (won 65 - entries 60)
 From:
   @nickname5 -> 5 

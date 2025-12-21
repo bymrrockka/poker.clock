@@ -84,13 +84,13 @@ Finale summary:
 Total: 30 (3 entries * 10 buy in)
 ------------------------------
 Payout to: @nickname1
-  Entries: 1
+  Entries: 10
   Total: 5 (won 15 - entries 10)
 From:
   @nickname2 -> 5
 ------------------------------
 Payout to: @hong_beer
-  Entries: 1
+  Entries: 10
   Total: 5 (won 15 - entries 10)
 From:
   @nickname2 -> 5 
@@ -326,8 +326,8 @@ Finale summary:
 Total: 30 (3 entries * 10 buy in)
 ------------------------------
 Payout to: @nickname1
-  Entries: 1
-  Bounties: 20 (taken 2 - given 0) 
+  Entries: 10
+  Bounties: 20 (taken 20 - given 0) 
   Total: 25 (won 15 - entries 10 + bounties 20)
 From:
   @nickname2 -> 20
@@ -442,13 +442,13 @@ Finale summary:
 Total: 30 (3 entries * 10 buy in)
 ------------------------------
 Payout to: @nickname2
-  Entries: 1
+  Entries: 10
   Total: 5 (won 15 - entries 10)
 From:
   @hong_beer -> 5
 ------------------------------
 Payout to: @nickname1
-  Entries: 1
+  Entries: 10
   Total: 5 (won 15 - entries 10)
 From:
   @hong_beer -> 5 
@@ -468,10 +468,10 @@ message id: 20
 
 ``` 
 nickname: @hong_beer
-games played: 3
+games played: 4
 buy-ins total: 40.00
 won total: 30.00 
-times in prizes: 2
+times in prizes: 3
 times in first place: 1 
 ``` 
 ___

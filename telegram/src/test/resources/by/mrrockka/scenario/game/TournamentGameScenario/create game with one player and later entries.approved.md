@@ -139,7 +139,7 @@ Finale summary:
 Total: 40 (4 entries * 10 buy in)
 ------------------------------
 Payout to: @hong_beer
-  Entries: 1
+  Entries: 10
   Total: 30 (won 40 - entries 10)
 From:
   @nickname3 -> 10

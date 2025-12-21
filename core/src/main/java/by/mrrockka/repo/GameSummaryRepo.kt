@@ -64,7 +64,7 @@ open class PrizeSummaryRepoImpl : GameSummaryRepo {
         return when (SummaryType.valueOf(this[GameSummaryTable.type])) {
             SummaryType.TOURNAMENT -> TournamentSummary(
                     person = this.toPerson(),
-                    position = this[GameSummaryTable.position]!!,
+                    position = this[GameSummaryTable.position],
                     entries = this[GameSummaryTable.entries],
                     prize = this[GameSummaryTable.prize]!!,
             )
@@ -73,7 +73,7 @@ open class PrizeSummaryRepoImpl : GameSummaryRepo {
                     person = this.toPerson(),
                     entries = this[GameSummaryTable.entries],
                     prize = this[GameSummaryTable.prize]!!,
-                    position = this[GameSummaryTable.position]!!,
+                    position = this[GameSummaryTable.position],
                     takenBounties = this[GameSummaryTable.takenBounties]!!,
                     givenBounties = this[GameSummaryTable.givenBounties]!!,
             )
