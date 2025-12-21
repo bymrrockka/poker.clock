@@ -8,12 +8,12 @@ import by.mrrockka.domain.Debtor
 import by.mrrockka.domain.Game
 import by.mrrockka.domain.Payout
 import by.mrrockka.domain.Person
-import by.mrrockka.domain.PrizeSummary
 import by.mrrockka.domain.TournamentGame
 import by.mrrockka.domain.TournamentPlayer
+import by.mrrockka.domain.TournamentSummary
 import by.mrrockka.domain.takenToGiven
 import by.mrrockka.domain.toMessageMetadata
-import by.mrrockka.domain.toSummary
+import by.mrrockka.domain.toTournamentSummary
 import by.mrrockka.domain.total
 import by.mrrockka.domain.totalEntries
 import by.mrrockka.repo.PinType
@@ -81,7 +81,7 @@ class CalculationCommandHandlerImpl(
             }
 
             is TournamentGame -> {
-                val summaries = game.toSummary().associateBy { it.person }
+                val summaries = game.toTournamentSummary().associateBy { it.person }
                 val payoutsResponse = prepare(summaries)
                         .joinToString(separator = "\n") {
                             val player = it.creditor as TournamentPlayer
@@ -100,7 +100,7 @@ class CalculationCommandHandlerImpl(
             }
 
             is BountyTournamentGame -> {
-                val summaries = game.toSummary().associateBy { it.person }
+                val summaries = game.toTournamentSummary().associateBy { it.person }
                 val payoutsResponse = prepare(summaries)
                         .joinToString(separator = "\n") {
                             val player = it.creditor as BountyPlayer
@@ -145,7 +145,7 @@ class CalculationCommandHandlerImpl(
     }
 
     private fun Game.finalePlacesMessage(): String {
-        val summary = toSummary()
+        val summary = toTournamentSummary()
         return """
                 |${"-".repeat(30)}
                 |Finale summary:
@@ -155,7 +155,7 @@ class CalculationCommandHandlerImpl(
                 """.trimMargin()
     }
 
-    private fun List<Payout>.prepare(summaries: Map<Person, PrizeSummary>): List<Payout> = filter { it.total > ZERO }
+    private fun List<Payout>.prepare(summaries: Map<Person, TournamentSummary>): List<Payout> = filter { it.total > ZERO }
             .sortedBy { summaries[it.creditor.person]?.position }
             .reversed()
 

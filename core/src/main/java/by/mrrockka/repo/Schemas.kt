@@ -80,3 +80,12 @@ object MoneyTransferTable : Table("money_transfer") {
     val createdAt = timestamp("created_at")
     val updatedAt = timestamp("updated_at")
 }
+
+object GameSummaryTable : Table("game_summary") {
+    val gameId = uuid("game_id").references(GameTable.id)
+    val personId = uuid("person_id").references(PersonTable.id)
+    val position = integer("position").nullable()
+    val amount = decimal("amount", 20, 2)
+    val type = varchar("type", 20)
+}
+

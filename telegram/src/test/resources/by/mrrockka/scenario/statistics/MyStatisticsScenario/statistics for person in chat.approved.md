@@ -112,7 +112,7 @@ message id: 4
 nickname: @hong_beer
 games played: 1
 buy-ins total: 10.00
-won total: 5.00 
+won total: 15.00 
 times in prizes: 1
 times in first place: 1 
 ``` 
@@ -202,7 +202,7 @@ message id: 8
 nickname: @hong_beer
 games played: 2
 buy-ins total: 20.00
-won total: 5.00 
+won total: 15.00 
 times in prizes: 1
 times in first place: 1 
 ``` 
@@ -350,7 +350,7 @@ message id: 15
 nickname: @hong_beer
 games played: 3
 buy-ins total: 30.00
-won total: 5.00 
+won total: 30.00 
 times in prizes: 2
 times in first place: 1 
 ``` 
@@ -468,9 +468,9 @@ message id: 20
 
 ``` 
 nickname: @hong_beer
-games played: 4
+games played: 3
 buy-ins total: 40.00
-won total: 5.00 
+won total: 30.00 
 times in prizes: 2
 times in first place: 1 
 ``` 
