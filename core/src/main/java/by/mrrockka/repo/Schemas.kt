@@ -75,11 +75,13 @@ object GameSummaryTable : Table("game_summary") {
     val gameId = uuid("game_id").references(GameTable.id)
     val personId = uuid("person_id").references(PersonTable.id)
     val position = integer("position").nullable()
-    val entries = decimal("entries", 20, 2)
+    val buyIn = decimal("buyin", 20, 2)
+    val entriesNum = integer("entries_num")
     val prize = decimal("prize", 20, 2).nullable()
     val withdrawals = decimal("withdrawals", 20, 2).nullable()
-    val takenBounties = decimal("taken_bounties", 20, 2).nullable()
-    val givenBounties = decimal("given_bounties", 20, 2).nullable()
+    val bounty = decimal("bounty", 20, 2).nullable()
+    val takenNum = integer("taken_num").nullable()
+    val givenNum = integer("given_num").nullable()
     val type = varchar("type", 20)
 }
 

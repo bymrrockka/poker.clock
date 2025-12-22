@@ -5,42 +5,58 @@ import java.math.RoundingMode
 
 interface GameSummary {
     val person: Person
-    val entries: BigDecimal
+    val buyIn: BigDecimal
 
     fun total(): BigDecimal
+    fun entries(): BigDecimal
 }
 
 interface PrizeGameSummary : GameSummary {
+    val entriesNum: Int
     val position: Int?
     val prize: BigDecimal
 }
 
 data class TournamentSummary(
         override val person: Person,
-        override val entries: BigDecimal,
+        override val buyIn: BigDecimal,
+        override val entriesNum: Int,
         override val position: Int? = null,
         override val prize: BigDecimal,
 ) : PrizeGameSummary {
-    override fun total(): BigDecimal = prize - entries
+    override fun total(): BigDecimal = prize - entries()
+    override fun entries(): BigDecimal = buyIn * BigDecimal(entriesNum)
+}
+
+data class BountyTournamentSummary(
+        override val person: Person,
+        override val buyIn: BigDecimal,
+        override val entriesNum: Int,
+        override val prize: BigDecimal,
+        override val position: Int? = null,
+        val bounty: BountySummary,
+) : PrizeGameSummary {
+    override fun total(): BigDecimal = bounty.total + prize - entries()
+    override fun entries(): BigDecimal = buyIn * BigDecimal(entriesNum)
 }
 
 data class BountySummary(
-        override val person: Person,
-        override val entries: BigDecimal,
-        override val prize: BigDecimal,
-        override val position: Int? = null,
-        val takenBounties: BigDecimal,
-        val givenBounties: BigDecimal,
-) : PrizeGameSummary {
-    override fun total(): BigDecimal = takenBounties - givenBounties + prize - entries
+        val amount: BigDecimal,
+        val takenNum: Int,
+        val givenNum: Int,
+) {
+    val given: BigDecimal by lazy { BigDecimal(givenNum) * amount }
+    val taken: BigDecimal by lazy { BigDecimal(takenNum) * amount }
+    val total: BigDecimal by lazy { taken - given }
 }
 
 data class CashSummary(
         override val person: Person,
-        override val entries: BigDecimal,
+        override val buyIn: BigDecimal,
         val withdrawals: BigDecimal,
 ) : GameSummary {
-    override fun total(): BigDecimal = withdrawals - entries
+    override fun total(): BigDecimal = withdrawals - entries()
+    override fun entries(): BigDecimal = buyIn
 }
 
 data class FinalPlace(val position: Int, val person: Person)
@@ -57,14 +73,15 @@ fun TournamentGame.gameSummary(): List<TournamentSummary> {
         val prize = prizeSummary[player.person]
         TournamentSummary(
                 person = player.person,
-                entries = player.entries.total(),
+                buyIn = buyIn,
+                entriesNum = player.entries.size,
                 prize = prize?.amount ?: BigDecimal.ZERO,
                 position = prize?.position,
         )
     }
 }
 
-fun BountyTournamentGame.gameSummary(): List<BountySummary> {
+fun BountyTournamentGame.gameSummary(): List<BountyTournamentSummary> {
     checkNotNull(finalePlaces) { "Can't calculate with no finale places" }
     checkNotNull(prizePool) { "Can't calculate with no prize pool" }
 
@@ -73,22 +90,26 @@ fun BountyTournamentGame.gameSummary(): List<BountySummary> {
     return players.map { player ->
         val prize = prizeSummary[player.person]
         val (taken, given) = player.takenToGiven()
-        BountySummary(
+        BountyTournamentSummary(
                 person = player.person,
-                entries = player.entries.total(),
+                buyIn = buyIn,
+                entriesNum = player.entries.size,
                 prize = prize?.amount ?: BigDecimal.ZERO,
                 position = prize?.position,
-                takenBounties = taken.total(),
-                givenBounties = given.total(),
+                bounty = BountySummary(
+                        amount = bounty,
+                        takenNum = taken.size,
+                        givenNum = given.size,
+                ),
         )
     }
 }
 
-fun CashGame.gameSummary(): List<CashSummary> = players.map {
+fun CashGame.gameSummary(): List<CashSummary> = players.map { player ->
     CashSummary(
-            person = it.person,
-            entries = it.entries.total(),
-            withdrawals = it.withdrawals.total(),
+            person = player.person,
+            buyIn = player.entries.total(),
+            withdrawals = player.withdrawals.total(),
     )
 }
 
