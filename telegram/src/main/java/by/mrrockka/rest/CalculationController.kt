@@ -17,8 +17,21 @@ class CalculationControllerImpl(
 
     @PostMapping("/internal/games/recalculate")
     override fun recalculateGames(): String {
+        val errors = mutableListOf<String>()
         val games = gameRepo.findAll()
-        games.forEach(calculationService::calculate)
-        return "Recalculated ${games.size} games."
+
+        games.forEach { game ->
+            try {
+                calculationService.calculate(game)
+            } catch (ex: IllegalStateException) {
+                errors.add(ex.message ?: "Exception occurred")
+            }
+        }
+        return """
+            Recalculated ${games.size} games.
+            Error count: ${errors.size}
+            Errors output: 
+            - ${errors.joinToString("\n- ")}
+            """.trimIndent()
     }
 }
