@@ -24,14 +24,15 @@ class CalculationControllerImpl(
             try {
                 calculationService.calculate(game)
             } catch (ex: IllegalStateException) {
-                errors.add(ex.message ?: "Exception occurred")
+                errors.add("Game id ${game.id} with: ${ex.message}")
             }
         }
         return """
-            Recalculated ${games.size} games.
-            Error count: ${errors.size}
+            Recalculated ${games.size - errors.size} games.
+            Failed to recalc: ${errors.size}
             Errors output: 
             - ${errors.joinToString("\n- ")}
+            
             """.trimIndent()
     }
 }
