@@ -84,13 +84,13 @@ Finale summary:
 Total: 30 (3 entries * 10 buy in)
 ------------------------------
 Payout to: @nickname1
-  Entries: 1
+  Entries: 10
   Total: 5 (won 15 - entries 10)
 From:
   @nickname2 -> 5
 ------------------------------
 Payout to: @hong_beer
-  Entries: 1
+  Entries: 10
   Total: 5 (won 15 - entries 10)
 From:
   @nickname2 -> 5 
@@ -110,11 +110,12 @@ message id: 4
 
 ``` 
 nickname: @hong_beer
-games played: 1
-buy-ins total: 10.00
-won total: 5.00 
+games played: 1 (1 tournament)
 times in prizes: 1
-times in first place: 1 
+times in first place: 1
+buy-ins total: 10.00
+won total: 15.00 
+correlation: 5.00  
 ``` 
 ___
 
@@ -200,11 +201,12 @@ message id: 8
 
 ``` 
 nickname: @hong_beer
-games played: 2
-buy-ins total: 20.00
-won total: 5.00 
+games played: 2 (1 tournament)
 times in prizes: 1
-times in first place: 1 
+times in first place: 1
+buy-ins total: 20.00
+won total: 15.00 
+correlation: -5.00  
 ``` 
 ___
 
@@ -326,8 +328,8 @@ Finale summary:
 Total: 30 (3 entries * 10 buy in)
 ------------------------------
 Payout to: @nickname1
-  Entries: 1
-  Bounties: 20 (taken 2 - given 0) 
+  Entries: 10
+  Bounties: 20 (taken 20 - given 0) 
   Total: 25 (won 15 - entries 10 + bounties 20)
 From:
   @nickname2 -> 20
@@ -348,11 +350,12 @@ message id: 15
 
 ``` 
 nickname: @hong_beer
-games played: 3
-buy-ins total: 30.00
-won total: 5.00 
+games played: 3 (2 tournaments)
 times in prizes: 2
-times in first place: 1 
+times in first place: 1
+buy-ins total: 40.00
+won total: 30.00 
+correlation: -10.00  
 ``` 
 ___
 
@@ -442,13 +445,13 @@ Finale summary:
 Total: 30 (3 entries * 10 buy in)
 ------------------------------
 Payout to: @nickname2
-  Entries: 1
+  Entries: 10
   Total: 5 (won 15 - entries 10)
 From:
   @hong_beer -> 5
 ------------------------------
 Payout to: @nickname1
-  Entries: 1
+  Entries: 10
   Total: 5 (won 15 - entries 10)
 From:
   @hong_beer -> 5 
@@ -468,10 +471,11 @@ message id: 20
 
 ``` 
 nickname: @hong_beer
-games played: 4
-buy-ins total: 40.00
-won total: 5.00 
+games played: 4 (3 tournaments)
 times in prizes: 2
-times in first place: 1 
+times in first place: 1
+buy-ins total: 50.00
+won total: 30.00 
+correlation: -20.00  
 ``` 
 ___

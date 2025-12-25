@@ -9,11 +9,13 @@ import by.mrrockka.repo.GameRepo
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
+import java.util.*
 
 interface GameTelegramService {
     fun store(metadata: MessageMetadata): Game
     fun findGame(metadata: MessageMetadata): Game
     fun findByChat(metadata: MessageMetadata): List<Game>
+    fun gameIdsByChat(metadata: MessageMetadata): List<UUID>
 }
 
 @Service
@@ -64,5 +66,9 @@ open class GameTelegramServiceImpl(
 
     override fun findByChat(metadata: MessageMetadata): List<Game> {
         return gameRepo.findByIds(chatGameRepo.findByChat(metadata))
+    }
+
+    override fun gameIdsByChat(metadata: MessageMetadata): List<UUID> {
+        return chatGameRepo.findByChat(metadata)
     }
 }
