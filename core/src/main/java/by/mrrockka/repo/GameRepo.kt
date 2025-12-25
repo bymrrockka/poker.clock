@@ -20,6 +20,7 @@ interface GameRepo {
     fun store(game: Game)
     fun findById(id: UUID): Game
     fun findByIds(ids: List<UUID>): List<Game>
+    fun findAll(): List<Game>
 }
 
 @Repository
@@ -52,6 +53,11 @@ open class GameRepoImpl(
     override fun findByIds(ids: List<UUID>): List<Game> {
         return GameTable.selectAll()
                 .where { GameTable.id inList ids }
+                .map { it.toGame() }
+    }
+
+    override fun findAll(): List<Game> {
+        return GameTable.selectAll()
                 .map { it.toGame() }
     }
 
