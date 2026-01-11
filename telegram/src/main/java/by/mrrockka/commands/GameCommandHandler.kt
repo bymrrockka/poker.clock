@@ -14,7 +14,7 @@ import eu.vendeli.tgbot.annotations.CommandHandler
 import eu.vendeli.tgbot.annotations.WizardHandler
 import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.api.message.sendMessage
-import eu.vendeli.tgbot.implementations.MapStringStateManager
+import eu.vendeli.tgbot.generated.getState
 import eu.vendeli.tgbot.types.chain.Transition
 import eu.vendeli.tgbot.types.chain.UserChatReference
 import eu.vendeli.tgbot.types.chain.WizardContext
@@ -100,13 +100,15 @@ class MapGameTypeStateManager : WizardStateManager<GameType> {
     }
 }
 
+@Component
 @WizardHandler(
         trigger = ["/game", "/start"],
-        stateManagers = [MapStringStateManager::class, MapBigDecimalStateManager::class, MapGameTypeStateManager::class],
+        stateManagers = [MapBigDecimalStateManager::class],
 )
 object GameWizardHandler {
     val decimalValidation = { ctx: WizardContext -> ctx.update.text.matches("^([\\d]+)$".toRegex()) }
 
+    @WizardHandler.StateManager(MapGameTypeStateManager::class)
     object Type : WizardStep(isInitial = true) {
         override suspend fun onEntry(ctx: WizardContext) {
             message { "What type of game you'd like to play?" }.send(ctx.user, ctx.bot)
@@ -146,7 +148,7 @@ object GameWizardHandler {
         override suspend fun validate(ctx: WizardContext): Transition {
             return when {
                 !decimalValidation(ctx) -> return Transition.Retry
-                ctx.getState(Type::class) as GameType == GameType.BOUNTY -> Transition.JumpTo(Bounty::class)
+                ctx.getState<Type>() == GameType.BOUNTY -> Transition.JumpTo(Bounty::class)
                 else -> return Transition.JumpTo(Finish::class)
             }
         }
@@ -176,7 +178,48 @@ object GameWizardHandler {
 
     object Finish : WizardStep() {
         override suspend fun onEntry(ctx: WizardContext) {
-            TODO("Not yet implemented")
+            val type = ctx.getState<Type>() ?: error("Type is null")
+            val buyin = ctx.getState<Buyin>() ?: error("Buyin is null")
+            val bounty = ctx.getState<Bounty>()
+
+            message {
+                """
+                |Next properties specified for game
+                |Game type: $type
+                |Buy in: $buyin
+                ${if (type == GameType.BOUNTY) "|Bounty $bounty" else ""}
+            """.trimMargin().trimIndent()
+            }
+
+            val metadata = ctx.update.message.toMessageMetadata()
+            gameService.store(metadata)
+                    .let { game ->
+                        """
+                    |${
+                            when (game) {
+                                is CashGame -> "Cash game started."
+                                is TournamentGame -> "Tournament game started."
+                                is BountyTournamentGame -> "Bounty tournament game started."
+                                else -> error("Game type not supported: ${this.javaClass.simpleName}")
+                            }
+                        }
+                    ${
+                            tablesService.generate(game)
+                                    .joinToString("\n") { table ->
+                                        """|${"-".repeat(30)}
+                                    |Table ${table.id}
+                                    |Seats:
+                                    ${table.seats.sortedBy { it.num }.joinToString("\n") { seat -> "|  ${seat.num}. @${seat.nickname}" }}
+                                """
+                                    }
+                        }
+                    """.trimMargin()
+                    }.let { response ->
+                        sendMessage { response }
+                                .sendReturning(to = metadata.chatId, via = bot)
+                                .onFailure { error("Failed to send game message") }
+                                ?: error("No message returned from telegram api")
+                    }.also { message -> pinMessageService.pin(message, PinType.GAME) }
         }
 
         override suspend fun validate(ctx: WizardContext): Transition {
