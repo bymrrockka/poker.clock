@@ -32,7 +32,7 @@ open class TestConfig(
     @OptIn(DelicateCoroutinesApi::class)
     open fun testBot(appContext: ApplicationContext, server: MockServer): TelegramBot {
         val bot = TelegramBot(botProps.token) {
-            classManager = SpringClassManager(appContext)
+            classManager = SpringClassManager(appContext, classManager)
             apiHost = server.server.url("").toString().dropLast(1)
             commandParsing {
                 commandDelimiter = '\n'
