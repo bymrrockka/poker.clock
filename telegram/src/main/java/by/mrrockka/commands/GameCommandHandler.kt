@@ -11,29 +11,23 @@ import by.mrrockka.service.GameTelegramService
 import by.mrrockka.service.PinMessageService
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.CommandHandler
-import eu.vendeli.tgbot.annotations.InputChain
-import eu.vendeli.tgbot.annotations.InputHandler
-import eu.vendeli.tgbot.api.message.deleteMessage
+import eu.vendeli.tgbot.annotations.WizardHandler
 import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.api.message.sendMessage
-import eu.vendeli.tgbot.generated.getAllState
-import eu.vendeli.tgbot.types.User
-import eu.vendeli.tgbot.types.chain.BaseStatefulLink
-import eu.vendeli.tgbot.types.chain.BreakCondition
-import eu.vendeli.tgbot.types.chain.ChainAction
-import eu.vendeli.tgbot.types.chain.ChainLink
-import eu.vendeli.tgbot.types.chain.ChainingStrategy
+import eu.vendeli.tgbot.implementations.MapStringStateManager
+import eu.vendeli.tgbot.types.chain.Transition
+import eu.vendeli.tgbot.types.chain.UserChatReference
+import eu.vendeli.tgbot.types.chain.WizardContext
+import eu.vendeli.tgbot.types.chain.WizardStateManager
+import eu.vendeli.tgbot.types.chain.WizardStep
 import eu.vendeli.tgbot.types.component.MessageUpdate
-import eu.vendeli.tgbot.types.component.ProcessedUpdate
 import eu.vendeli.tgbot.types.component.onFailure
-import eu.vendeli.tgbot.utils.common.setChain
 import org.springframework.stereotype.Component
+import java.math.BigDecimal
+import kotlin.reflect.KClass
 
 interface GameCommandHandler {
     suspend fun store(message: MessageUpdate)
-    suspend fun game(message: MessageUpdate, user: User)
-    suspend fun gameConversation(message: MessageUpdate)
-    suspend fun game1(message: MessageUpdate, user: User)
 }
 
 @Component
@@ -77,101 +71,116 @@ class GameCommandHandlerImpl(
                 }.also { message -> pinMessageService.pin(message, PinType.GAME) }
     }
 
-    @CommandHandler(["/gam"])
-    override suspend fun game(message: MessageUpdate, user: User) {
-        sendMessage { "What type of game you'd like to play?" }
-                .sendReturning(to = message.chat.id, via = bot)
-                .onFailure { error("Failed to send message") }
-                ?.also { message ->
-                    bot.inputListener[user] = "gam"
-                    deleteMessage(message.messageId).send(to = message.chat.id, via = bot)
-                }
+}
+
+
+class MapBigDecimalStateManager : WizardStateManager<BigDecimal> {
+    val state = mutableMapOf<KClass<out WizardStep>, BigDecimal>()
+    override suspend fun get(key: KClass<out WizardStep>, reference: UserChatReference): BigDecimal? = state[key]
+
+    override suspend fun set(key: KClass<out WizardStep>, reference: UserChatReference, value: BigDecimal) {
+        state[key] = value
     }
 
-    @InputHandler(["gam"])
-    override suspend fun gameConversation(message: MessageUpdate) {
-        sendMessage { " Text : ${message.text}" }
-                .send(to = message.chat.id, via = bot)
-    }
-
-    @CommandHandler(["/game"])
-    override suspend fun game1(message: MessageUpdate, user: User) {
-        sendMessage { "What type of game you'd like to play?" }
-                .send(to = message.chat.id, via = bot)
-                .also { message ->
-                    bot.inputListener.setChain(user, GameChain.Controller)
-                }
+    override suspend fun del(key: KClass<out WizardStep>, reference: UserChatReference) {
+        state.remove(key)
     }
 }
 
-@InputChain
-object GameChain {
-    /*
-    * Worth to create some controller which routes to specific steps in order to define bounty which is not necessary for most of the games
-    * */
+class MapGameTypeStateManager : WizardStateManager<GameType> {
+    val state = mutableMapOf<KClass<out WizardStep>, GameType>()
+    override suspend fun get(key: KClass<out WizardStep>, reference: UserChatReference): GameType? = state[key]
 
-    object Type : BaseStatefulLink() {
-        override val breakCondition = BreakCondition { _, update, _ -> GameType.entries.find { it.name.equals(update.text, ignoreCase = true) } == null }
-        override suspend fun breakAction(user: User, update: ProcessedUpdate, bot: TelegramBot) {
-            message { "Type should be one of ${GameType.entries.joinToString { it.name.lowercase() }}" }.send(user, bot)
-        }
-
-        override suspend fun action(user: User, update: ProcessedUpdate, bot: TelegramBot): String {
-            message { "How much is for buy in?" }.send(user, bot)
-
-            return update.text
-        }
+    override suspend fun set(key: KClass<out WizardStep>, reference: UserChatReference, value: GameType) {
+        state[key] = value
     }
 
-    object Buyin : BaseStatefulLink() {
-        private var gameType: GameType? = null
-        override val breakCondition = BreakCondition { _, update, _ -> !update.text.matches("^([\\d]+)$".toRegex()) }
-        override suspend fun breakAction(user: User, update: ProcessedUpdate, bot: TelegramBot) {
-            message { "Buy in is necessary for calculations and it should be a number" }.send(user, bot)
+    override suspend fun del(key: KClass<out WizardStep>, reference: UserChatReference) {
+        state.remove(key)
+    }
+}
+
+@WizardHandler(
+        trigger = ["/game", "/start"],
+        stateManagers = [MapStringStateManager::class, MapBigDecimalStateManager::class, MapGameTypeStateManager::class],
+)
+object GameWizardHandler {
+    val decimalValidation = { ctx: WizardContext -> ctx.update.text.matches("^([\\d]+)$".toRegex()) }
+
+    object Type : WizardStep(isInitial = true) {
+        override suspend fun onEntry(ctx: WizardContext) {
+            message { "What type of game you'd like to play?" }.send(ctx.user, ctx.bot)
         }
 
-        override suspend fun action(user: User, update: ProcessedUpdate, bot: TelegramBot): String {
-            gameType = GameType.valueOf(
-                    user.getAllState(GameChain).Type?.uppercase()
-                            ?: error("No default game type set up"),
-            )
-            return update.text
+        override suspend fun onRetry(ctx: WizardContext) {
+            message { "Type should be one of ${GameType.entries.joinToString { it.name.lowercase() }}" }.send(ctx.user, ctx.bot)
         }
 
-        override val afterAction = ChainAction { user, update, bot ->
-            val type = GameType.valueOf(
-                    user.getAllState(GameChain).Type?.uppercase()
-                            ?: error("No default game type set up"),
-            )
-            if (type == GameType.BOUNTY) {
-                message { "As it's bounty game we also need bounty buy in" }.send(user, bot)
+        override suspend fun store(ctx: WizardContext): GameType {
+            return GameType.entries.find { it.name.equals(ctx.update.text, ignoreCase = true) }
+                    ?: error("Type ${ctx.update.text} not supported")
+        }
+
+        override suspend fun validate(ctx: WizardContext): Transition {
+            return if (GameType.entries.find { it.name.equals(ctx.update.text, ignoreCase = true) } != null) {
+                Transition.Next
+            } else {
+                Transition.Retry
             }
         }
+    }
 
-        override val chainingStrategy: ChainingStrategy
-            get() {
-                return if (gameType == GameType.BOUNTY) ChainingStrategy.LinkTo { Bounty }
-                else ChainingStrategy.DoNothing
+    object Buyin : WizardStep() {
+        override suspend fun onEntry(ctx: WizardContext) {
+            message { "How much is for buy in?" }.send(ctx.user, ctx.bot)
+        }
+
+        override suspend fun onRetry(ctx: WizardContext) {
+            message { "Buy in is necessary for calculations and it should be a number" }.send(ctx.user, ctx.bot)
+        }
+
+        override suspend fun store(ctx: WizardContext): BigDecimal {
+            return BigDecimal(ctx.update.text)
+        }
+
+        override suspend fun validate(ctx: WizardContext): Transition {
+            return when {
+                !decimalValidation(ctx) -> return Transition.Retry
+                ctx.getState(Type::class) as GameType == GameType.BOUNTY -> Transition.JumpTo(Bounty::class)
+                else -> return Transition.JumpTo(Finish::class)
             }
+        }
     }
 
-    object Bounty : BaseStatefulLink() {
-        override val breakCondition = BreakCondition { _, update, _ -> !update.text.matches("^([\\d]+)$".toRegex()) }
-        override suspend fun breakAction(user: User, update: ProcessedUpdate, bot: TelegramBot) {
-            message { "Bounty is necessary for Bounty tournament and it should be a number" }.send(user, bot)
+    object Bounty : WizardStep() {
+        override suspend fun onEntry(ctx: WizardContext) {
+            message { "How much is for bounty?" }.send(ctx.user, ctx.bot)
         }
 
-        override suspend fun action(user: User, update: ProcessedUpdate, bot: TelegramBot): String {
-            return update.text
+        override suspend fun onRetry(ctx: WizardContext) {
+            message { "Bounty is necessary for Bounty tournament and it should be a number" }.send(ctx.user, ctx.bot)
         }
 
+        override suspend fun store(ctx: WizardContext): BigDecimal {
+            return BigDecimal(ctx.update.text)
+        }
+
+        override suspend fun validate(ctx: WizardContext): Transition {
+            if (decimalValidation(ctx)) {
+                return Transition.Next
+            } else {
+                return Transition.Retry
+            }
+        }
     }
 
-    object Controller : ChainLink() {
-        override suspend fun action(user: User, update: ProcessedUpdate, bot: TelegramBot) {
+    object Finish : WizardStep() {
+        override suspend fun onEntry(ctx: WizardContext) {
+            TODO("Not yet implemented")
+        }
 
-//            val type = user.getAllState(GameChain).Type
-
+        override suspend fun validate(ctx: WizardContext): Transition {
+            return Transition.Finish
         }
     }
 }

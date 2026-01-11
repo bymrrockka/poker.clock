@@ -2,9 +2,9 @@
 #plugins
 springBoot = "3.5.6"
 springDepManagement = "1.1.7"
-kotlin = "2.2.20"
-googleKsp = "2.2.20-2.0.3"
-telegramBot = "8.4.0"
+kotlin = "2.3.0"
+googleKsp = "2.3.4"
+telegramBot = "9.0.0"
 
 #libs
 postgresql = "42.7.8"
