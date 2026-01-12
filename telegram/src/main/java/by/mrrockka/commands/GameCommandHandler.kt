@@ -22,6 +22,7 @@ import eu.vendeli.tgbot.types.chain.WizardStateManager
 import eu.vendeli.tgbot.types.chain.WizardStep
 import eu.vendeli.tgbot.types.component.MessageUpdate
 import eu.vendeli.tgbot.types.component.onFailure
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.math.BigDecimal
 import kotlin.reflect.KClass
@@ -106,6 +107,8 @@ class MapGameTypeStateManager : WizardStateManager<GameType> {
         stateManagers = [MapBigDecimalStateManager::class],
 )
 object GameWizardHandler {
+    @Autowired
+    var gameService: GameTelegramService? = null
     val decimalValidation = { ctx: WizardContext -> ctx.update.text.matches("^([\\d]+)$".toRegex()) }
 
     @WizardHandler.StateManager(MapGameTypeStateManager::class)
@@ -191,8 +194,8 @@ object GameWizardHandler {
             """.trimMargin().trimIndent()
             }
 
-            val metadata = ctx.update.message.toMessageMetadata()
-            gameService.store(metadata)
+            val metadata = ctx.update.origin.message?.toMessageMetadata() ?: error("Unknown message")
+            gameService?.store(metadata)
                     .let { game ->
                         """
                     |${
@@ -203,23 +206,13 @@ object GameWizardHandler {
                                 else -> error("Game type not supported: ${this.javaClass.simpleName}")
                             }
                         }
-                    ${
-                            tablesService.generate(game)
-                                    .joinToString("\n") { table ->
-                                        """|${"-".repeat(30)}
-                                    |Table ${table.id}
-                                    |Seats:
-                                    ${table.seats.sortedBy { it.num }.joinToString("\n") { seat -> "|  ${seat.num}. @${seat.nickname}" }}
-                                """
-                                    }
-                        }
                     """.trimMargin()
                     }.let { response ->
                         sendMessage { response }
-                                .sendReturning(to = metadata.chatId, via = bot)
+                                .sendReturning(to = metadata.chatId, via =ctx.bot)
                                 .onFailure { error("Failed to send game message") }
                                 ?: error("No message returned from telegram api")
-                    }.also { message -> pinMessageService.pin(message, PinType.GAME) }
+                    }
         }
 
         override suspend fun validate(ctx: WizardContext): Transition {
