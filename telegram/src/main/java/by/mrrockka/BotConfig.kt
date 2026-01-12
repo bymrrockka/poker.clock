@@ -33,6 +33,7 @@ open class BotConfig(
     open fun bot(appContext: ApplicationContext, botCommands: BotCommands): TelegramBot {
         val bot = TelegramBot(botProps.token) {
             classManager = SpringClassManager(appContext, classManager)
+            identifier = botProps.name
             commandParsing {
                 commandDelimiter = '\n'
                 restrictSpacesInCommands = true
