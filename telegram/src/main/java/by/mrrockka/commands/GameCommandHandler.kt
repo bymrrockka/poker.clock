@@ -12,8 +12,8 @@ import by.mrrockka.service.PinMessageService
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.CommandHandler
 import eu.vendeli.tgbot.annotations.WizardHandler
+import eu.vendeli.tgbot.api.message.deleteMessages
 import eu.vendeli.tgbot.api.message.message
-import eu.vendeli.tgbot.api.message.sendMessage
 import eu.vendeli.tgbot.generated.getState
 import eu.vendeli.tgbot.types.chain.Transition
 import eu.vendeli.tgbot.types.chain.UserChatReference
@@ -22,7 +22,6 @@ import eu.vendeli.tgbot.types.chain.WizardStateManager
 import eu.vendeli.tgbot.types.chain.WizardStep
 import eu.vendeli.tgbot.types.component.MessageUpdate
 import eu.vendeli.tgbot.types.component.onFailure
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.math.BigDecimal
 import kotlin.reflect.KClass
@@ -65,7 +64,7 @@ class GameCommandHandlerImpl(
                     }
                     """.trimMargin()
                 }.let { response ->
-                    sendMessage { response }
+                    message { response }
                             .sendReturning(to = metadata.chatId, via = bot)
                             .onFailure { error("Failed to send game message") }
                             ?: error("No message returned from telegram api")
@@ -101,24 +100,34 @@ class MapGameTypeStateManager : WizardStateManager<GameType> {
     }
 }
 
-@Component
 @WizardHandler(
         trigger = ["/game", "/start"],
         stateManagers = [MapBigDecimalStateManager::class],
 )
 object GameWizardHandler {
-    @Autowired
     var gameService: GameTelegramService? = null
-    val decimalValidation = { ctx: WizardContext -> ctx.update.text.matches("^([\\d]+)$".toRegex()) }
+
+    val messages = mutableListOf<Long>()
+
+    private val decimalValidation = { ctx: WizardContext -> ctx.update.text.matches("^([\\d]+)$".toRegex()) }
+    private fun messagesForDeletion(messageId: Long) {
+        messages += messageId
+    }
 
     @WizardHandler.StateManager(MapGameTypeStateManager::class)
     object Type : WizardStep(isInitial = true) {
         override suspend fun onEntry(ctx: WizardContext) {
-            message { "What type of game you'd like to play?" }.send(ctx.user, ctx.bot)
+            message { "What type of game you'd like to play?" }
+                    .sendReturning(ctx.user, ctx.bot)
+                    .onFailure { error("Failed to send message") }
+                    .also { message -> messagesForDeletion(message!!.messageId) }
         }
 
         override suspend fun onRetry(ctx: WizardContext) {
-            message { "Type should be one of ${GameType.entries.joinToString { it.name.lowercase() }}" }.send(ctx.user, ctx.bot)
+            message { "Type should be one of ${GameType.entries.joinToString { it.name.lowercase() }}" }
+                    .sendReturning(ctx.user, ctx.bot)
+                    .onFailure { error("Failed to send message") }
+                    .also { message -> messagesForDeletion(message!!.messageId) }
         }
 
         override suspend fun store(ctx: WizardContext): GameType {
@@ -127,6 +136,7 @@ object GameWizardHandler {
         }
 
         override suspend fun validate(ctx: WizardContext): Transition {
+            messagesForDeletion(ctx.update.origin.message!!.messageId)
             return if (GameType.entries.find { it.name.equals(ctx.update.text, ignoreCase = true) } != null) {
                 Transition.Next
             } else {
@@ -137,11 +147,17 @@ object GameWizardHandler {
 
     object Buyin : WizardStep() {
         override suspend fun onEntry(ctx: WizardContext) {
-            message { "How much is for buy in?" }.send(ctx.user, ctx.bot)
+            message { "How much is for buy in?" }
+                    .sendReturning(ctx.user, ctx.bot)
+                    .onFailure { error("Failed to send message") }
+                    .also { message -> messagesForDeletion(message!!.messageId) }
         }
 
         override suspend fun onRetry(ctx: WizardContext) {
-            message { "Buy in is necessary for calculations and it should be a number" }.send(ctx.user, ctx.bot)
+            message { "Buy in is necessary for calculations and it should be a number" }
+                    .sendReturning(ctx.user, ctx.bot)
+                    .onFailure { error("Failed to send message") }
+                    .also { message -> messagesForDeletion(message!!.messageId) }
         }
 
         override suspend fun store(ctx: WizardContext): BigDecimal {
@@ -149,6 +165,7 @@ object GameWizardHandler {
         }
 
         override suspend fun validate(ctx: WizardContext): Transition {
+            messagesForDeletion(ctx.update.origin.message!!.messageId)
             return when {
                 !decimalValidation(ctx) -> return Transition.Retry
                 ctx.getState<Type>() == GameType.BOUNTY -> Transition.JumpTo(Bounty::class)
@@ -159,11 +176,17 @@ object GameWizardHandler {
 
     object Bounty : WizardStep() {
         override suspend fun onEntry(ctx: WizardContext) {
-            message { "How much is for bounty?" }.send(ctx.user, ctx.bot)
+            message { "How much is for bounty?" }
+                    .sendReturning(ctx.user, ctx.bot)
+                    .onFailure { error("Failed to send message") }
+                    .also { message -> messagesForDeletion(message!!.messageId) }
         }
 
         override suspend fun onRetry(ctx: WizardContext) {
-            message { "Bounty is necessary for Bounty tournament and it should be a number" }.send(ctx.user, ctx.bot)
+            message { "Bounty is necessary for Bounty tournament and it should be a number" }
+                    .sendReturning(ctx.user, ctx.bot)
+                    .onFailure { error("Failed to send message") }
+                    .also { message -> messagesForDeletion(message!!.messageId) }
         }
 
         override suspend fun store(ctx: WizardContext): BigDecimal {
@@ -171,6 +194,7 @@ object GameWizardHandler {
         }
 
         override suspend fun validate(ctx: WizardContext): Transition {
+            messagesForDeletion(ctx.update.origin.message!!.messageId)
             if (decimalValidation(ctx)) {
                 return Transition.Next
             } else {
@@ -192,27 +216,29 @@ object GameWizardHandler {
                 |Buy in: $buyin
                 ${if (type == GameType.BOUNTY) "|Bounty $bounty" else ""}
             """.trimMargin().trimIndent()
-            }
+            }.send(ctx.user, ctx.bot)
 
-            val metadata = ctx.update.origin.message?.toMessageMetadata() ?: error("Unknown message")
-            gameService?.store(metadata)
-                    .let { game ->
-                        """
-                    |${
-                            when (game) {
-                                is CashGame -> "Cash game started."
-                                is TournamentGame -> "Tournament game started."
-                                is BountyTournamentGame -> "Bounty tournament game started."
-                                else -> error("Game type not supported: ${this.javaClass.simpleName}")
-                            }
-                        }
-                    """.trimMargin()
-                    }.let { response ->
-                        sendMessage { response }
-                                .sendReturning(to = metadata.chatId, via =ctx.bot)
-                                .onFailure { error("Failed to send game message") }
-                                ?: error("No message returned from telegram api")
-                    }
+//            val metadata = ctx.update.origin.message?.toMessageMetadata() ?: error("Unknown message")
+//            gameService?.store(metadata)
+//                    .let { game ->
+//                        """
+//                    |${
+//                            when (game) {
+//                                is CashGame -> "Cash game started."
+//                                is TournamentGame -> "Tournament game started."
+//                                is BountyTournamentGame -> "Bounty tournament game started."
+//                                else -> error("Game type not supported: ${this.javaClass.simpleName}")
+//                            }
+//                        }
+//                    """.trimMargin()
+//                    }.let { response ->
+//                        message { response }
+//                                .sendReturning(to = metadata.chatId, via = ctx.bot)
+//                                .onFailure { error("Failed to send game message") }
+//                                ?: error("No message returned from telegram api")
+//                    }
+
+            deleteMessages(messages).send(ctx.user, ctx.bot)
         }
 
         override suspend fun validate(ctx: WizardContext): Transition {

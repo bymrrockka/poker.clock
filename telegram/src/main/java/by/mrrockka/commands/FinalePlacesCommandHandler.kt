@@ -6,7 +6,7 @@ import by.mrrockka.service.FinalePlacesTelegramService
 import by.mrrockka.service.PinMessageService
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.CommandHandler
-import eu.vendeli.tgbot.api.message.sendMessage
+import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.types.component.MessageUpdate
 import eu.vendeli.tgbot.types.component.onFailure
 import org.springframework.stereotype.Component
@@ -27,7 +27,7 @@ class FinalePlacesCommandHandlerImpl(
         val metadata = message.message.toMessageMetadata()
         finalePlacesService.store(metadata)
                 .let { finalePlaces ->
-                    sendMessage {
+                    message {
                         """
                         |Finale places stored:
                         |${finalePlaces.joinToString("\n") { "${it.position}. @${it.person.nickname}" }}

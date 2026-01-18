@@ -14,6 +14,10 @@ bot:
     commands:
       - name: game
         enabled: true
+        description: Input chain to start a game
+        details: |
+          You will be asked to input parameters of the game you want to start.
+          There also will be a 'cancel' keyword to finish input chain without game creation
       - name: bounty_game
         enabled: true
         alias: bg

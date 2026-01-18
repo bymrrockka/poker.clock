@@ -1,5 +1,7 @@
 package by.mrrockka
 
+import by.mrrockka.commands.GameWizardHandler
+import by.mrrockka.service.GameTelegramService
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.api.botactions.setMyCommands
 import eu.vendeli.tgbot.interfaces.ctx.ClassManager
@@ -62,6 +64,12 @@ open class BotConfig(
     @OptIn(ExperimentalTime::class)
     open fun clock(): Clock {
         return Clock.System
+    }
+
+    @Bean
+    open fun gameWizard(gameService: GameTelegramService): GameWizardHandler {
+        GameWizardHandler.gameService = gameService
+        return GameWizardHandler
     }
 }
 
