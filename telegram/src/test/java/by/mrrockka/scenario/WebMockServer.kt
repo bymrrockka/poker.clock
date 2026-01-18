@@ -11,7 +11,7 @@ import eu.vendeli.tgbot.api.botactions.GetUpdatesAction
 import eu.vendeli.tgbot.api.chat.pinChatMessage
 import eu.vendeli.tgbot.api.chat.unpinChatMessage
 import eu.vendeli.tgbot.api.common.poll
-import eu.vendeli.tgbot.api.message.sendMessage
+import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.types.common.Update
 import eu.vendeli.tgbot.types.component.Response
 import eu.vendeli.tgbot.types.msg.Message
@@ -98,7 +98,7 @@ class MockDispatcher(
                 }
             }
 
-            "${botProps.botpath}/$sendMessage" -> {
+            "${botProps.botpath}/$messageMethodName" -> {
                 synchronized(scenario.responses) {
                     if (scenario.responses.isNotEmpty()) {
                         val resp = scenario.responses.take()
@@ -109,7 +109,7 @@ class MockDispatcher(
                 }
             }
 
-            "${botProps.botpath}/$sendPoll" -> {
+            "${botProps.botpath}/$pollMethodName" -> {
                 synchronized(scenario.polls) {
                     if (scenario.polls.isNotEmpty()) {
                         val resp = scenario.polls.take()
@@ -120,7 +120,7 @@ class MockDispatcher(
                 }
             }
 
-            "${botProps.botpath}/$pinChatMessage" ->
+            "${botProps.botpath}/$pinChatMethodName" ->
                 synchronized(scenario.pins) {
                     if (scenario.pins.isNotEmpty()) {
                         val resp = scenario.pins.take()
@@ -130,7 +130,7 @@ class MockDispatcher(
                     } else MockResponse(code = 200, body = defaultBooleanBody(true))
                 }
 
-            "${botProps.botpath}/$unpinChatMessage" ->
+            "${botProps.botpath}/$unpinChatMethodName" ->
                 synchronized(scenario.unpins) {
                     if (scenario.unpins.isNotEmpty()) {
                         val resp = scenario.unpins.take()
@@ -171,19 +171,19 @@ class MockDispatcher(
 
         @JvmStatic
         @OptIn(KtGramInternal::class)
-        private val sendMessage = sendMessage("").run { methodName }
+        private val messageMethodName = message("").run { methodName }
 
         @JvmStatic
         @OptIn(KtGramInternal::class)
-        private val sendPoll = poll("", emptyList()).run { methodName }
+        private val pollMethodName = poll("", emptyList()).run { methodName }
 
         @JvmStatic
         @OptIn(KtGramInternal::class)
-        private val pinChatMessage = pinChatMessage(-1L).run { methodName }
+        private val pinChatMethodName = pinChatMessage(-1L).run { methodName }
 
         @JvmStatic
         @OptIn(KtGramInternal::class)
-        private val unpinChatMessage = unpinChatMessage(-1L).run { methodName }
+        private val unpinChatMethodName = unpinChatMessage(-1L).run { methodName }
     }
 }
 

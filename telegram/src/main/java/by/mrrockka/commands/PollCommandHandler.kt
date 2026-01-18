@@ -6,7 +6,7 @@ import by.mrrockka.service.PollTelegramService
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.CommandHandler
 import eu.vendeli.tgbot.annotations.UpdateHandler
-import eu.vendeli.tgbot.api.message.sendMessage
+import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.types.component.MessageUpdate
 import eu.vendeli.tgbot.types.component.PollAnswerUpdate
 import eu.vendeli.tgbot.types.component.UpdateType
@@ -40,7 +40,7 @@ class PollCommandHandlerImpl(
         val metadata = message.message.toMessageMetadata()
         pollService.create(metadata)
                 .let { poll ->
-                    sendMessage {
+                    message {
                         val next = poll.cron.next(LocalDateTime.ofInstant(clock.now().toJavaInstant(), ZoneOffset.systemDefault()))
                         """
                             |Poll created.
@@ -61,7 +61,7 @@ class PollCommandHandlerImpl(
         }
 
         pollService.stop(metadata)
-                .also { sendMessage { "Poll stopped" }.send(to = metadata.chatId, bot) }
+                .also { message { "Poll stopped" }.send(to = metadata.chatId, bot) }
     }
 
     @UpdateHandler([UpdateType.POLL_ANSWER])
