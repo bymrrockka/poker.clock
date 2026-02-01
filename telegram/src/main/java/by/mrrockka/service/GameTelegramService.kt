@@ -29,8 +29,9 @@ open class GameTelegramServiceImpl(
         private val gameMessageParser: GameMessageParser,
 ) : GameTelegramService {
 
-    override fun store(metadata: MessageMetadata): Game {
-        val game = gameMessageParser.parse(metadata)
+    override fun store(metadata: MessageMetadata): Game = store(gameMessageParser.parse(metadata))
+
+    override fun store(game: Game): Game {
         gameRepo.store(game)
         chatGameRepo.store(game.id, metadata)
 
