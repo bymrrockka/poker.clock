@@ -22,6 +22,9 @@ import eu.vendeli.tgbot.types.chain.WizardStateManager
 import eu.vendeli.tgbot.types.chain.WizardStep
 import eu.vendeli.tgbot.types.component.MessageUpdate
 import eu.vendeli.tgbot.types.component.onFailure
+import eu.vendeli.tgbot.types.msg.EntityType
+import eu.vendeli.tgbot.types.msg.Message
+import eu.vendeli.tgbot.types.msg.MessageEntity
 import org.springframework.stereotype.Component
 import java.math.BigDecimal
 import kotlin.reflect.KClass
@@ -106,7 +109,6 @@ class MapGameTypeStateManager : WizardStateManager<GameType> {
 )
 object GameWizardHandler {
     var gameService: GameTelegramService? = null
-
     val messages = mutableListOf<Long>()
 
     private val decimalValidation = { ctx: WizardContext -> ctx.update.text.matches("^([\\d]+)$".toRegex()) }
@@ -201,6 +203,43 @@ object GameWizardHandler {
                 return Transition.Retry
             }
         }
+    }
+
+    object Players : WizardStep() {
+        override suspend fun onEntry(ctx: WizardContext) {
+            message { "Who's playing?" }
+                    .sendReturning(ctx.user, ctx.bot)
+                    .onFailure { error("Failed to send message") }
+                    .also { message -> messagesForDeletion(message!!.messageId) }
+        }
+
+        override suspend fun onRetry(ctx: WizardContext) {
+            message { "Players mentions required to start a game. Like @mention" }
+                    .sendReturning(ctx.user, ctx.bot)
+                    .onFailure { error("Failed to send message") }
+                    .also { message -> messagesForDeletion(message!!.messageId) }
+        }
+
+        override suspend fun store(ctx: WizardContext): List<MessageEntity> {
+            return ctx.update.origin.message!!.entities!!
+        }
+
+        override suspend fun validate(ctx: WizardContext): Transition {
+            messagesForDeletion(ctx.update.origin.message!!.messageId)
+            return when {
+                validateMentions(ctx.update.origin.message) ||
+                        ctx.update.origin.message?.poll == null
+                    -> Transition.Next
+
+                else -> Transition.Retry
+            }
+        }
+
+        private fun validateMentions(message: Message?): Boolean = message != null &&
+                message.entities != null &&
+//                some strange exception related to entities list:
+//                Smart cast to 'Iterable<TypeVariable(T)>' is impossible, because 'entities' is a public API property declared in different module.
+                (message.entities as Iterable<MessageEntity>).any { it.type == EntityType.Mention }
     }
 
     object Finish : WizardStep() {
