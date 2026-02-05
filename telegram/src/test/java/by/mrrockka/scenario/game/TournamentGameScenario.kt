@@ -30,7 +30,7 @@ class TournamentGameScenario : PrizeGameScenario() {
                 "nickname5",
                 "me",
         )
-        val winners = players.dropLast(4);
+        val winners = players.take(2);
 
         Given {
             val game = message { players.createGame(GameType.TOURNAMENT, buyin, withAlias) }
