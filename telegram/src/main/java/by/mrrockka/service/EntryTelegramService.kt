@@ -5,6 +5,8 @@ import by.mrrockka.domain.Table
 import by.mrrockka.parser.EntryMessageParser
 import by.mrrockka.repo.EntriesRepo
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Propagation
+import org.springframework.transaction.annotation.Transactional
 import java.math.BigDecimal
 
 interface EntryTelegramService {
@@ -12,7 +14,8 @@ interface EntryTelegramService {
 }
 
 @Service
-class EntryTelegramServiceImpl(
+@Transactional(propagation = Propagation.REQUIRED)
+open class EntryTelegramServiceImpl(
         private val entriesRepo: EntriesRepo,
         private val entryMessageParser: EntryMessageParser,
         private val gameService: GameTelegramService,
