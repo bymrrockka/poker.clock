@@ -38,7 +38,7 @@ Entries:
 ------------------------------
 Table 1
 Seats:
-  @nickname3 seat 1 -> entry 10.00 
+  @nickname3 seat 7 -> entry 10.00 
 ``` 
 ___
 
@@ -76,7 +76,7 @@ Entries:
 ------------------------------
 Table 1
 Seats:
-  @nickname1 seat 2 -> entry 10.00 
+  @nickname1 seat 9 -> entry 10.00 
 ``` 
 ___
 

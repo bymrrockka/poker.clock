@@ -38,7 +38,7 @@ Entries:
 ------------------------------
 Table 1
 Seats:
-  @nickname3 seat 1 -> entry 10.00 
+  @nickname3 seat 7 -> entry 10.00 
 ``` 
 ___
 
@@ -70,11 +70,7 @@ message id: 3
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Entries: 
-------------------------------
-Table 1
-Seats:
-  @nickname3 seat 1 -> entry 10.00 
+Entry stored 
 ``` 
 ___
 
@@ -112,7 +108,7 @@ Entries:
 ------------------------------
 Table 1
 Seats:
-  @nickname2 seat 2 -> entry 10.00 
+  @nickname2 seat 9 -> entry 10.00 
 ``` 
 ___
 

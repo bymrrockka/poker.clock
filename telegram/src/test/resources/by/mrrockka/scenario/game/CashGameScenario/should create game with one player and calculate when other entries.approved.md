@@ -38,7 +38,7 @@ Entries:
 ------------------------------
 Table 1
 Seats:
-  @nickname2 seat 1 -> entry 10.00 
+  @nickname2 seat 7 -> entry 10.00 
 ``` 
 ___
 

@@ -25,17 +25,21 @@ class EntryCommandHandlerImpl(
         entryTelegramService.entry(metadata)
                 .also { (tables, amount) ->
                     sendMessage {
-                        """
-                        |Entries: 
-                        ${
-                            tables.joinToString("\n") { table ->
-                                """|${"-".repeat(30)}
-                                |Table ${table.id}
-                                |Seats:
-                                ${table.seats.sortedBy { it.num }.joinToString("\n") { seat -> "|  @${seat.nickname} seat ${seat.num} -> entry $amount" }}
-                                """
-                            }
-                        }""".trimMargin()
+                        if (tables.isNotEmpty()) {
+                            """
+                            |Entries: 
+                            ${
+                                tables.joinToString("\n") { table ->
+                                    """|${"-".repeat(30)}
+                                    |Table ${table.id}
+                                    |Seats:
+                                    ${
+                                        table.seats.sortedBy { it.num }
+                                                .joinToString("\n") { seat -> "|  @${seat.nickname} seat ${seat.num} -> entry $amount" }
+                                    }"""
+                                }
+                            }""".trimMargin()
+                        } else "Entry stored"
                     }.send(to = metadata.chatId, via = bot)
                 }
     }
