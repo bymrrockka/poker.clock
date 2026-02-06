@@ -86,10 +86,6 @@ message id: 3
 ``` 
 Entries: 
 ------------------------------
-Table 1
-Seats:
-                                    
-------------------------------
 Table 2
 Seats:
   @nickname16 seat 8 -> entry 10.00 
@@ -110,10 +106,6 @@ message id: 4
 ``` 
 Entries: 
 ------------------------------
-Table 2
-Seats:
-                                    
-------------------------------
 Table 1
 Seats:
   @nickname17 seat 6 -> entry 10.00 
@@ -133,10 +125,6 @@ message id: 5
 
 ``` 
 Entries: 
-------------------------------
-Table 1
-Seats:
-                                    
 ------------------------------
 Table 2
 Seats:

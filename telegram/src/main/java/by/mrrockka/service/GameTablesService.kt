@@ -105,6 +105,7 @@ open class GameTablesServiceImpl(
                 //merge changes and return only updated seats with table
                 tableQueue.toList() to tableQueue
                         .map { update -> Table(update.id, update.seats.filter { newEntries.contains(it.nickname) }.toSet()) }
+                        .filter { it.seats.isNotEmpty() }
                         .toList()
             }
         }

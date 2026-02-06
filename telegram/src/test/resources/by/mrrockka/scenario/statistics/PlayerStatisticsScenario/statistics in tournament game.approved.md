@@ -53,11 +53,7 @@ message id: 2
 &rarr; <ins>Bot message</ins>
 
 ``` 
-Entries: 
-------------------------------
-Table 1
-Seats:
-  @hong_beer seat 3 -> entry 10.00 
+Entry stored 
 ``` 
 ___
 
