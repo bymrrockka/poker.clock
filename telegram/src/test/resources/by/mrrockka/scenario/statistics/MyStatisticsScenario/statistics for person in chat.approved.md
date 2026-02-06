@@ -31,7 +31,8 @@ ___
 ```
 message id: 1
 /prize_pool
-1 50%, 2 50% 
+1 50%
+2 50% 
 ```
 
 &rarr; <ins>Bot message</ins>
@@ -275,7 +276,8 @@ ___
 ```
 message id: 12
 /prize_pool
-1 50%, 2 50% 
+1 50%
+2 50% 
 ```
 
 &rarr; <ins>Bot message</ins>
@@ -392,7 +394,8 @@ ___
 ```
 message id: 17
 /prize_pool
-1 50%, 2 50% 
+1 50%
+2 50% 
 ```
 
 &rarr; <ins>Bot message</ins>

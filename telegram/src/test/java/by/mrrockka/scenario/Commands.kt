@@ -74,9 +74,9 @@ class Commands private constructor() {
 
         fun prizePool(size: Int): String {
             return """
-            $prizePool
-            ${calculatePrizePool(size).entries.joinToString { (index, value) -> "${index} ${value}%" }}
-            """.trimIndent()
+            |$prizePool
+            ${calculatePrizePool(size).entries.joinToString("\n") { (index, value) -> "|${index} ${value}%" }}
+            """.trimMargin()
         }
 
         fun List<String>.finalePlaces(): String {
