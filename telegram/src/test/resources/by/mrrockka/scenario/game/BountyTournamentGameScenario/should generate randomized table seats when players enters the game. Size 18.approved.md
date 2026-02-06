@@ -148,7 +148,9 @@ ___
 ```
 message id: 6
 /prize_pool
-1 50%, 2 30%, 3 20% 
+1 50%
+2 30%
+3 20% 
 ```
 
 &rarr; <ins>Bot message</ins>
