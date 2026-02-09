@@ -1,6 +1,6 @@
 package by.mrrockka
 
-import by.mrrockka.commands.GameWizardHandler
+import by.mrrockka.commands.game.GameWizardHandler
 import by.mrrockka.service.GameTablesService
 import by.mrrockka.service.GameTelegramService
 import by.mrrockka.service.PinMessageService
