@@ -67,4 +67,7 @@ fun Given(block: GivenSpecification.() -> Unit): GivenSpecification = GivenSpeci
 infix fun GivenSpecification.When(block: GivenSpecification.() -> Unit): WhenSpecification = WhenSpecification(this.commands)
         .apply { block() }
 
+/**
+ * This function should be replaced with exact implementation of tests
+ */
 infix fun WhenSpecification.Then(block: WhenSpecification.() -> Unit) = block()

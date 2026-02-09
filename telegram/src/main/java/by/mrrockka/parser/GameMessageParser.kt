@@ -1,17 +1,13 @@
 package by.mrrockka.parser
 
 import by.mrrockka.BotCommands
-import by.mrrockka.domain.BountyTournamentGame
-import by.mrrockka.domain.CashGame
 import by.mrrockka.domain.Game
 import by.mrrockka.domain.GameType
 import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.domain.MetadataEntity
-import by.mrrockka.domain.TournamentGame
+import by.mrrockka.domain.game
 import org.springframework.stereotype.Component
 import java.math.BigDecimal
-import java.math.RoundingMode
-import java.util.*
 
 @Component
 class GameMessageParser(
@@ -51,37 +47,7 @@ class GameMessageParser(
                     } else null
                 }
 
-        return when (type) {
-            GameType.TOURNAMENT ->
-                TournamentGame(
-                        id = UUID.randomUUID(),
-                        buyIn = buyin.defaultScale(),
-                        stack = stack.defaultScale(),
-                        playersProvider = { emptyList() },
-                        createdAt = metadata.createdAt,
-                )
-
-            GameType.CASH ->
-                CashGame(
-                        id = UUID.randomUUID(),
-                        buyIn = buyin.defaultScale(),
-                        stack = stack.defaultScale(),
-                        playersProvider = { emptyList() },
-                        createdAt = metadata.createdAt,
-                )
-
-            GameType.BOUNTY -> {
-                check(bounty != null) { "Bounty should be specified" }
-                BountyTournamentGame(
-                        id = UUID.randomUUID(),
-                        buyIn = buyin.defaultScale(),
-                        stack = stack.defaultScale(),
-                        bounty = bounty.defaultScale(),
-                        playersProvider = { emptyList() },
-                        createdAt = metadata.createdAt,
-                )
-            }
-        }
+        return game(type, buyin, stack, bounty, metadata.createdAt)
     }
 
     private fun String?.multiplierAsDecimal(): BigDecimal {
@@ -93,7 +59,6 @@ class GameMessageParser(
         }
     }
 
-    private fun BigDecimal.defaultScale(): BigDecimal = this.setScale(0, RoundingMode.HALF_DOWN)
 
     private fun MetadataEntity.toType(): GameType {
         val description = commands.byNameAndAlias[text]

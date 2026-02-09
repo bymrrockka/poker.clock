@@ -1,6 +1,7 @@
 package by.mrrockka.domain
 
 import eu.vendeli.tgbot.types.User
+import eu.vendeli.tgbot.types.component.ProcessedUpdate
 import eu.vendeli.tgbot.types.msg.EntityType
 import eu.vendeli.tgbot.types.msg.Message
 import eu.vendeli.tgbot.types.msg.MessageEntity
@@ -59,5 +60,11 @@ fun Message.toMessageMetadata(): MessageMetadata =
                 replyTo = replyToMessage?.toMessageMetadata(),
                 entities = entities ?: emptyList(),
                 from = from,
-                poll = poll
+                poll = poll,
         )
+
+@OptIn(ExperimentalTime::class)
+fun ProcessedUpdate.toMessageMetadata(): MessageMetadata =
+        if (origin.message != null) {
+            origin.message!!.toMessageMetadata()
+        } else error("Update message not found")
