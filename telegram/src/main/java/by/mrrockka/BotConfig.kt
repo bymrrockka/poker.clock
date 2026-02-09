@@ -1,7 +1,9 @@
 package by.mrrockka
 
 import by.mrrockka.commands.GameWizardHandler
+import by.mrrockka.service.GameTablesService
 import by.mrrockka.service.GameTelegramService
+import by.mrrockka.service.PinMessageService
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.api.botactions.setMyCommands
 import eu.vendeli.tgbot.interfaces.ctx.ClassManager
@@ -67,8 +69,14 @@ open class BotConfig(
     }
 
     @Bean
-    open fun gameWizard(gameService: GameTelegramService): GameWizardHandler {
+    open fun gameWizard(
+            gameService: GameTelegramService,
+            tablesService: GameTablesService,
+            pinMessageService: PinMessageService,
+    ): GameWizardHandler {
         GameWizardHandler.gameService = gameService
+        GameWizardHandler.tableService = tablesService
+        GameWizardHandler.pinMessageService = pinMessageService
         return GameWizardHandler
     }
 }

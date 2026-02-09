@@ -59,47 +59,39 @@ class MockDispatcher(
         private val mapper: ObjectMapper,
         private val clock: TestClock,
 ) : Dispatcher() {
-
     var requests: MutableMap<Int, String> = mutableMapOf()
 
     @Volatile
     private var scenarios: ArrayDeque<Scenario> = ArrayDeque()
-    private val emptyScenario = Scenario.Builder {}.build()
 
     fun scenario(init: Scenario.Builder.() -> Unit) {
         this.scenarios += Scenario.Builder(init).build()
     }
 
     override fun dispatch(request: RecordedRequest): MockResponse {
-        var scenario = emptyScenario
-
-        synchronized(scenarios) {
-            scenario = when {
-                scenarios.isEmpty() -> emptyScenario
+        return synchronized(empty) {
+            val scenario = when {
+                scenarios.isEmpty() -> empty
                 scenarios.first().isNotEmpty() -> scenarios.first()
                 else -> {
                     scenarios.removeFirst()
                     if (scenarios.isNotEmpty()) scenarios.first()
-                    else emptyScenario
+                    else empty
                 }
             }
 
             if (scenario.time != null) {
                 clock.set(scenario.time)
             }
-        }
 
-        return when (request.url.encodedPath) {
-            "${botProps.botpath}/$getUpdates" -> {
-                synchronized(scenario.updates) {
+            when (request.url.encodedPath) {
+                "${botProps.botpath}/$getUpdates" -> {
                     if (scenario.updates.isNotEmpty())
                         scenario.updates.take()
                     else MockResponse(body = serde.encodeToString(Response.Success(emptyList<Update>())))
                 }
-            }
 
-            "${botProps.botpath}/$messageMethodName" -> {
-                synchronized(scenario.responses) {
+                "${botProps.botpath}/$sendMessage" -> {
                     if (scenario.responses.isNotEmpty()) {
                         val resp = scenario.responses.take()
                         val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
@@ -107,10 +99,8 @@ class MockDispatcher(
                         resp
                     } else MockResponse(code = 404, body = defaultMessageBody)
                 }
-            }
 
-            "${botProps.botpath}/$pollMethodName" -> {
-                synchronized(scenario.polls) {
+                "${botProps.botpath}/$sendPoll" -> {
                     if (scenario.polls.isNotEmpty()) {
                         val resp = scenario.polls.take()
                         val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
@@ -118,29 +108,25 @@ class MockDispatcher(
                         resp
                     } else MockResponse(code = 404, body = defaultMessageBody)
                 }
-            }
 
-            "${botProps.botpath}/$pinChatMethodName" ->
-                synchronized(scenario.pins) {
+                "${botProps.botpath}/$pinMessage" ->
                     if (scenario.pins.isNotEmpty()) {
                         val resp = scenario.pins.take()
                         val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
                         requests += scenarioIndex to "pinned"
                         resp
                     } else MockResponse(code = 200, body = defaultBooleanBody(true))
-                }
 
-            "${botProps.botpath}/$unpinChatMethodName" ->
-                synchronized(scenario.unpins) {
+                "${botProps.botpath}/$unpinMessage" ->
                     if (scenario.unpins.isNotEmpty()) {
                         val resp = scenario.unpins.take()
                         val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
                         requests += scenarioIndex to "unpinned"
                         resp
                     } else MockResponse(code = 200, body = defaultBooleanBody(true))
-                }
 
-            else -> MockResponse(code = 404, body = defaultBooleanBody(false))
+                else -> MockResponse(code = 404, body = defaultBooleanBody(false))
+            }
         }
     }
 
@@ -171,19 +157,23 @@ class MockDispatcher(
 
         @JvmStatic
         @OptIn(KtGramInternal::class)
-        private val messageMethodName = message("").run { methodName }
+        private val sendMessage = message("").run { methodName }
 
         @JvmStatic
         @OptIn(KtGramInternal::class)
-        private val pollMethodName = poll("", emptyList()).run { methodName }
+        private val sendPoll = poll("", emptyList()).run { methodName }
 
         @JvmStatic
         @OptIn(KtGramInternal::class)
-        private val pinChatMethodName = pinChatMessage(-1L).run { methodName }
+        private val pinMessage = pinChatMessage(-1L).run { methodName }
 
         @JvmStatic
         @OptIn(KtGramInternal::class)
-        private val unpinChatMethodName = unpinChatMessage(-1L).run { methodName }
+        private val unpinMessage = unpinChatMessage(-1L).run { methodName }
+
+        @JvmStatic
+        @OptIn(KtGramInternal::class)
+        private val empty = Scenario.Builder {}.build()
     }
 }
 
