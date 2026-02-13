@@ -33,7 +33,7 @@ jobs:
       - name: Run build with Gradle Wrapper
         env:
           GITHUB_PIPELINE: 'true'
-          TESTCONTAINERS_RYUK_DISABLED: 'true'
+#          TESTCONTAINERS_RYUK_DISABLED: 'true'
         run: ./gradlew build
 
       - name: Test report
