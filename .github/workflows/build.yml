@@ -20,7 +20,7 @@ jobs:
           echo $DOCKER_HOST
 
       - name: Fix Docker API version for Testcontainers
-        run: echo "api.version=1.52" > ~/.docker-java.properties
+        run: echo "api.version=1.44" > ~/.docker-java.properties
 
       - uses: actions/checkout@v4
 
@@ -40,7 +40,7 @@ jobs:
       - name: Run build with Gradle Wrapper
         env:
           GITHUB_PIPELINE: 'true'
-          DOCKER_HOST: unix:///var/run/docker.sock
+#          DOCKER_HOST: unix:///var/run/docker.sock
         run: ./gradlew build
 
       - name: Test report
