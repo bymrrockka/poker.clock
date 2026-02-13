@@ -10,7 +10,7 @@ telegramBot = "8.4.0"
 postgresql = "42.7.8"
 jupiter = "5.13.4"
 assertjCore = "3.27.6"
-testContainer = "1.21.3"
+testContainer = "2.0.3"
 liquibase = "4.33.0"
 javaFaker = "1.0.2"
 jackson = "2.20.0"
@@ -38,8 +38,9 @@ aspectjWeaver = { module = "org.aspectj:aspectjweaver" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
 jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "jupiter" }
 assertjCore = { module = "org.assertj:assertj-core", version.ref = "assertjCore" }
-testContainerPostgresql = { module = "org.testcontainers:postgresql", version.ref = "testContainer" }
-testContainerJupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "testContainer" }
+testContainerPostgresql = { module = "org.testcontainers:testcontainers-postgresql", version.ref = "testContainer" }
+testContainerJupiter = { module = "org.testcontainers:testcontainers-junit-jupiter", version.ref = "testContainer" }
+testContainers = { module = "org.testcontainers:testcontainers", version.ref = "testContainer" }
 springBootWeb = { module = "org.springframework.boot:spring-boot-starter-web" }
 springBootTest = { module = "org.springframework.boot:spring-boot-starter-test" }
 liquibase = { module = "org.liquibase:liquibase-core", version.ref = "liquibase" }
@@ -69,4 +70,4 @@ exposed = ["exposedCore", "exposedSpringBoot", "exposedJdbc", "exposedJson", "ex
 test = ["assertjCore", "jupiter", "junitLauncher", "awaitility", "springBootTest", "okeydoke", "mockwebserver"]
 db = ["postgresql", "liquibase"]
 jackson = ["jacksonDataformat", "jacksonKotlin"]
-testContainer = ["testContainerJupiter", "testContainerPostgresql"]
+testContainer = ["testContainers", "testContainerJupiter", "testContainerPostgresql"]
