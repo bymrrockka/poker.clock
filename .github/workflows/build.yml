@@ -16,7 +16,11 @@ jobs:
 
     steps:
       - name: Check docker
-        run: docker -v
+        run: |
+          whoami
+          docker info
+          ls -la /var/run/docker.sock
+          echo $DOCKER_HOST
 
       - uses: actions/checkout@v4
 
