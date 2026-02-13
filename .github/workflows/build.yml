@@ -19,6 +19,9 @@ jobs:
           ls -la /var/run/docker.sock || echo "no socket"
           echo $DOCKER_HOST
 
+      - name: Fix Docker API version for Testcontainers
+        run: echo "api.version=1.52" > ~/.docker-java.properties
+
       - uses: actions/checkout@v4
 
       - name: Set up Java version
