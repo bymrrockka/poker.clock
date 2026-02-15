@@ -40,7 +40,6 @@ jobs:
       - name: Run build with Gradle Wrapper
         env:
           GITHUB_PIPELINE: 'true'
-#          DOCKER_HOST: unix:///var/run/docker.sock
         run: ./gradlew build
 
       - name: Test report
