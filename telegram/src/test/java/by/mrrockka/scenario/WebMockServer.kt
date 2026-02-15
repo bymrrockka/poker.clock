@@ -59,6 +59,7 @@ class MockDispatcher(
         private val mapper: ObjectMapper,
         private val clock: TestClock,
 ) : Dispatcher() {
+    @Volatile
     var requests: MutableMap<Int, String> = mutableMapOf()
 
     @Volatile
