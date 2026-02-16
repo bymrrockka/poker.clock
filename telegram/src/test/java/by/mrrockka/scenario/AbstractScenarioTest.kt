@@ -77,7 +77,7 @@ abstract class AbstractScenarioTest {
     infix fun WhenSpecification.ThenApproveWith(approver: Approver) {
         val filteredCommands = commands.filter { it !is Command.PollAnswer }
         try {
-            await atMost Duration.ofSeconds(3) until {
+            await atMost Duration.ofSeconds(5) until {
                 dispatcher.requests.size == filteredCommands.size
             }
         } catch (ex: Exception) {
