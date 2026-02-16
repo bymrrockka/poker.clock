@@ -69,7 +69,14 @@ Seats:
 ``` 
 ___
 
-### 5. Interaction
+### 5. Deleted messages
+
+``` 
+1,2,3 deleted
+``` 
+___
+
+### 6. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -85,7 +92,7 @@ Entry stored
 ``` 
 ___
 
-### 6. Interaction
+### 7. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -101,7 +108,7 @@ Entry stored
 ``` 
 ___
 
-### 7. Interaction
+### 8. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -121,7 +128,7 @@ Seats:
 ``` 
 ___
 
-### 8. Interaction
+### 9. Interaction
 
 &rarr; <ins>User message</ins>
 
@@ -141,7 +148,7 @@ Seats:
 ``` 
 ___
 
-### 9. Interaction
+### 10. Interaction
 
 &rarr; <ins>User message</ins>
 

@@ -11,6 +11,7 @@ import eu.vendeli.tgbot.api.botactions.GetUpdatesAction
 import eu.vendeli.tgbot.api.chat.pinChatMessage
 import eu.vendeli.tgbot.api.chat.unpinChatMessage
 import eu.vendeli.tgbot.api.common.poll
+import eu.vendeli.tgbot.api.message.deleteMessages
 import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.types.common.Update
 import eu.vendeli.tgbot.types.component.Response
@@ -126,14 +127,24 @@ class MockDispatcher(
                         resp
                     } else MockResponse(code = 200, body = defaultBooleanBody(true))
 
+                "${botProps.botpath}/$deleteMessages" ->
+                    if (scenario.toDelete.isNotEmpty()) {
+                        val resp = scenario.toDelete.take()
+                        val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
+                        requests += scenarioIndex to "deleted"
+                        resp
+                    } else MockResponse(code = 200, body = defaultBooleanBody(true))
+
                 else -> MockResponse(code = 404, body = defaultBooleanBody(false))
             }
         }
     }
 
     fun reset() {
-        requests.clear()
-        scenarios.clear()
+        synchronized(empty) {
+            requests.clear()
+            scenarios.clear()
+        }
     }
 
     private fun RecordedRequest.toJson(): JsonNode = mapper.readTree(this.body?.toByteArray())
@@ -174,6 +185,10 @@ class MockDispatcher(
 
         @JvmStatic
         @OptIn(KtGramInternal::class)
+        private val deleteMessages = deleteMessages(emptyList()).run { methodName }
+
+        @JvmStatic
+        @OptIn(KtGramInternal::class)
         private val empty = Scenario.Builder {}.build()
     }
 }
@@ -203,6 +218,7 @@ data class Scenario(
         val polls: LinkedBlockingQueue<MockResponse>,
         val pins: LinkedBlockingQueue<MockResponse>,
         val unpins: LinkedBlockingQueue<MockResponse>,
+        val toDelete: LinkedBlockingQueue<MockResponse>,
         val time: Instant? = null,
 ) {
 
@@ -211,7 +227,8 @@ data class Scenario(
                 responses.isEmpty() &&
                 polls.isEmpty() &&
                 pins.isEmpty() &&
-                unpins.isEmpty()
+                unpins.isEmpty() &&
+                toDelete.isEmpty()
     }
 
     fun isNotEmpty(): Boolean = !isEmpty()
@@ -224,6 +241,7 @@ data class Scenario(
         private val polls = LinkedBlockingQueue<MockResponse>()
         private val pins = LinkedBlockingQueue<MockResponse>()
         private val unpins = LinkedBlockingQueue<MockResponse>()
+        private val toDelete = LinkedBlockingQueue<MockResponse>()
         private var time: Instant? = null
 
         init {
@@ -274,6 +292,14 @@ data class Scenario(
             this.time = time
         }
 
+        fun delete() {
+            check(index > -1) { "Scenario index should be specified and positive" }
+            toDelete += MockResponse(
+                    body = defaultBooleanBody(),
+                    headers = headersOf(scenarioHeader, "$index"),
+            )
+        }
+
         fun build(): Scenario {
             return Scenario(
                     updates = updates,
@@ -281,6 +307,7 @@ data class Scenario(
                     polls = polls,
                     pins = pins,
                     unpins = unpins,
+                    toDelete = toDelete,
                     time = time,
             )
         }

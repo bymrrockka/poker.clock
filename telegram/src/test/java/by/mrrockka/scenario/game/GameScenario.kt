@@ -1,5 +1,6 @@
 package by.mrrockka.scenario.game
 
+import by.mrrockka.Command
 import by.mrrockka.Given
 import by.mrrockka.When
 import by.mrrockka.domain.GameType
@@ -39,19 +40,21 @@ abstract class GameScenario : AbstractScenarioTest() {
     fun `should generate randomized table seats when players enters the game (conversation)`(size: Int) {
         val buyin = BigDecimal(10)
         val players = (1..size).map { "nickname$it" }
+        val toDelete = mutableListOf<Command.Message>()
 
         Given {
             message { game }
             //set game type
-            message { gameType().title }
+            toDelete += message { gameType().title }
             //set buyin
-            message { buyin.setScale(0).toString() }
+            toDelete += message { buyin.setScale(0).toString() }
             if(gameType() == GameType.BOUNTY) {
                 //set bounty
-                message { buyin.setScale(0).toString() }
+                toDelete += message { buyin.setScale(0).toString() }
             }
             //set players
-            message { players.entries() }
+            toDelete += message { players.entries() }
+            toDelete.deleted()
             //entries to game
             message { "nickname1".entry() }
             message { "nickname1".entry() }
