@@ -10,7 +10,21 @@ import by.mrrockka.builder.toUser
 import by.mrrockka.builder.update
 import by.mrrockka.builder.user
 import by.mrrockka.extension.MdApproverExtension
-import by.mrrockka.extension.TelegramPSQLExtension
+import by.mrrockka.repo.BountyTable
+import by.mrrockka.repo.ChatGameTable
+import by.mrrockka.repo.ChatPersonsTable
+import by.mrrockka.repo.ChatPollsTable
+import by.mrrockka.repo.EntriesTable
+import by.mrrockka.repo.FinalePlacesTable
+import by.mrrockka.repo.GameSummaryTable
+import by.mrrockka.repo.GameTable
+import by.mrrockka.repo.GameTablesTable
+import by.mrrockka.repo.PersonTable
+import by.mrrockka.repo.PinMessageTable
+import by.mrrockka.repo.PollAnswersTable
+import by.mrrockka.repo.PollTaskTable
+import by.mrrockka.repo.PrizePoolTable
+import by.mrrockka.repo.WithdrawalTable
 import by.mrrockka.service.GameTablesService
 import com.oneeyedmen.okeydoke.Approver
 import eu.vendeli.tgbot.types.msg.Message
@@ -19,6 +33,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import org.awaitility.kotlin.atMost
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
+import org.jetbrains.exposed.sql.deleteAll
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
@@ -26,6 +41,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.DependsOn
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.transaction.support.TransactionTemplate
 import org.testcontainers.junit.jupiter.Testcontainers
 import java.time.Duration
 import java.time.LocalDateTime
@@ -36,7 +52,7 @@ import kotlin.time.toJavaInstant
 private val logger = KotlinLogging.logger {}
 
 @OptIn(ExperimentalTime::class)
-@ExtendWith(value = [TelegramPSQLExtension::class, MdApproverExtension::class])
+@ExtendWith(value = [MdApproverExtension::class])
 @ActiveProfiles(profiles = ["scenario"])
 @DependsOn("mockWebServer")
 @Testcontainers
@@ -56,6 +72,9 @@ abstract class AbstractScenarioTest {
     @Autowired
     lateinit var gameSeatsService: GameTablesService
 
+    @Autowired
+    lateinit var transactionTemplate: TransactionTemplate
+
     @BeforeEach
     fun before() {
         gameSeatsService.seed(telegramRandoms.seed.hashCode().toLong())
@@ -66,6 +85,24 @@ abstract class AbstractScenarioTest {
         coreRandoms.reset()
         telegramRandoms.reset()
         dispatcher.reset()
+        transactionTemplate.execute {
+            PinMessageTable.deleteAll()
+            ChatPersonsTable.deleteAll()
+            ChatGameTable.deleteAll()
+            PollAnswersTable.deleteAll()
+            ChatPollsTable.deleteAll()
+            PollTaskTable.deleteAll()
+
+            GameTablesTable.deleteAll()
+            GameSummaryTable.deleteAll()
+            BountyTable.deleteAll()
+            EntriesTable.deleteAll()
+            WithdrawalTable.deleteAll()
+            PrizePoolTable.deleteAll()
+            FinalePlacesTable.deleteAll()
+            PersonTable.deleteAll()
+            GameTable.deleteAll()
+        }
     }
 
     @OptIn(DelicateCoroutinesApi::class)
