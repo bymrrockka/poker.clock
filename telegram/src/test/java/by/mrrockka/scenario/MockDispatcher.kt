@@ -70,18 +70,20 @@ class MockDispatcher(
         this.scenarios += Scenario.Builder(init).build()
     }
 
+    private fun ArrayDeque<Scenario>.retrieve(): Scenario {
+        return when {
+            isEmpty() -> empty
+            first().isNotEmpty() -> scenarios.first()
+            else -> {
+                removeFirst()
+                retrieve()
+            }
+        }
+    }
+
     override fun dispatch(request: RecordedRequest): MockResponse {
         return synchronized(empty) {
-            val scenario = when {
-                scenarios.isEmpty() -> empty
-                scenarios.first().isNotEmpty() -> scenarios.first()
-                else -> {
-                    scenarios.removeFirst()
-                    if (scenarios.isNotEmpty()) scenarios.first()
-                    else empty
-                }
-            }
-
+            val scenario = scenarios.retrieve()
             if (scenario.time != null) {
                 clock.set(scenario.time)
             }

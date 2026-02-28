@@ -30,7 +30,7 @@ jobs:
           java-version: '21'
           distribution: 'corretto'
           architecture: 'x64'
-#          cache: 'gradle'
+          cache: 'gradle'
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
