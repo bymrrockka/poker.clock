@@ -5,12 +5,11 @@ import by.mrrockka.domain.Payout
 import by.mrrockka.domain.Player
 import by.mrrockka.domain.total
 import by.mrrockka.extension.JsonApproverExtension
-import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.fail
+import tools.jackson.databind.SerializationFeature
+import tools.jackson.module.kotlin.jsonMapper
 import java.math.BigDecimal
 
 @ExtendWith(JsonApproverExtension::class)
@@ -21,9 +20,9 @@ abstract class AbstractTest {
         coreRandoms.reset()
     }
 
-    val objectMapper = ObjectMapper()
-            .enable(SerializationFeature.INDENT_OUTPUT)
-            .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+    val objectMapper = jsonMapper {
+        enable(SerializationFeature.INDENT_OUTPUT)
+    }
 
     fun Any?.toJsonString() = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(this)
 

@@ -6,10 +6,11 @@ import by.mrrockka.repo.PersonTable.firstName
 import by.mrrockka.repo.PersonTable.id
 import by.mrrockka.repo.PersonTable.lastName
 import by.mrrockka.repo.PersonTable.nickName
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.batchUpsert
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.inList
+import org.jetbrains.exposed.v1.jdbc.batchUpsert
+import org.jetbrains.exposed.v1.jdbc.insert
+import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
