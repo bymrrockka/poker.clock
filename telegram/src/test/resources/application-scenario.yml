@@ -2,6 +2,12 @@ spring:
   liquibase:
     enabled: true
     change-log: db/changelog/db.changelog-master.yml
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: "jdbc:tc:postgresql:16.1:///pokerclock"
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    username: root
+    password: root
 
 github:
   pipeline: ${GITHUB_PIPELINE:false}

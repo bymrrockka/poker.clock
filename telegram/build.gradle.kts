@@ -51,6 +51,7 @@ dependencies {
     testImplementation(libs.bundles.kotlinLibs)
     testImplementation(testFixtures(project))
     testImplementation(testFixtures(project(":core")))
+    testImplementation(libs.bundles.jackson)
 
     testFixturesImplementation(project)
     testFixturesImplementation(testFixtures(project(":core")))

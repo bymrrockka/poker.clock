@@ -8,9 +8,11 @@ import by.mrrockka.domain.Game
 import by.mrrockka.domain.GameType
 import by.mrrockka.domain.TournamentGame
 import by.mrrockka.domain.TournamentPlayer
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.upsert
+import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.inList
+import org.jetbrains.exposed.v1.jdbc.selectAll
+import org.jetbrains.exposed.v1.jdbc.upsert
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
