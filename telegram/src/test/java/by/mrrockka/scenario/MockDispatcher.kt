@@ -4,8 +4,6 @@ package by.mrrockka.scenario
 
 import by.mrrockka.BotProperties
 import by.mrrockka.builder.BuilderDsl
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
 import eu.vendeli.tgbot.annotations.internal.KtGramInternal
 import eu.vendeli.tgbot.api.botactions.GetUpdatesAction
 import eu.vendeli.tgbot.api.chat.pinChatMessage
@@ -28,6 +26,8 @@ import mockwebserver3.RecordedRequest
 import okhttp3.Headers.Companion.headersOf
 import okhttp3.internal.closeQuietly
 import org.springframework.stereotype.Component
+import tools.jackson.databind.JsonNode
+import tools.jackson.databind.ObjectMapper
 import java.util.concurrent.LinkedBlockingQueue
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
@@ -47,18 +47,18 @@ private fun defaultBooleanBody(success: Boolean = true) = if (success) {
     serde.encodeToString(Response.Success(success))
 } else {
     serde.encodeToString(
-            Response.Failure(
-                    errorCode = 401,
-                    description = "No mock found",
-            ),
+        Response.Failure(
+            errorCode = 401,
+            description = "No mock found",
+        ),
     )
 }
 
 @Component
 class MockDispatcher(
-        private val botProps: BotProperties,
-        private val mapper: ObjectMapper,
-        private val clock: TestClock,
+    private val botProps: BotProperties,
+    private val mapper: ObjectMapper,
+    private val clock: TestClock,
 ) : Dispatcher() {
     @Volatile
     var requests: MutableMap<Int, String> = mutableMapOf()
@@ -99,7 +99,7 @@ class MockDispatcher(
                     if (scenario.responses.isNotEmpty()) {
                         val resp = scenario.responses.take()
                         val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
-                        requests += scenarioIndex to request.toJson().findPath("text").asText()
+                        requests += scenarioIndex to request.toJson().findPath("text").asString()
                         resp
                     } else MockResponse(code = 404, body = defaultMessageBody)
                 }
@@ -153,10 +153,10 @@ class MockDispatcher(
 
     private fun RecordedRequest.toPollText(): String {
         val json = this.toJson()
-        val question = json.findPath("question").asText()
+        val question = json.findPath("question").asString()
         val options = json.findPath("options")
-                .mapIndexed { index, option -> "${index + 1}. '${option.findPath("text").asText()}'" }
-                .joinToString("\n")
+            .mapIndexed { index, option -> "${index + 1}. '${option.findPath("text").asString()}'" }
+            .joinToString("\n")
 
         return """
                 |$question
@@ -197,7 +197,7 @@ class MockDispatcher(
 
 @Component
 class MockServer(
-        private val dispatcher: Dispatcher,
+    private val dispatcher: Dispatcher,
 ) {
     lateinit var server: MockWebServer
 
@@ -215,13 +215,13 @@ class MockServer(
 }
 
 data class Scenario(
-        val updates: LinkedBlockingQueue<MockResponse>,
-        val responses: LinkedBlockingQueue<MockResponse>,
-        val polls: LinkedBlockingQueue<MockResponse>,
-        val pins: LinkedBlockingQueue<MockResponse>,
-        val unpins: LinkedBlockingQueue<MockResponse>,
-        val toDelete: LinkedBlockingQueue<MockResponse>,
-        val time: Instant? = null,
+    val updates: LinkedBlockingQueue<MockResponse>,
+    val responses: LinkedBlockingQueue<MockResponse>,
+    val polls: LinkedBlockingQueue<MockResponse>,
+    val pins: LinkedBlockingQueue<MockResponse>,
+    val unpins: LinkedBlockingQueue<MockResponse>,
+    val toDelete: LinkedBlockingQueue<MockResponse>,
+    val time: Instant? = null,
 ) {
 
     fun isEmpty(): Boolean {
@@ -261,32 +261,32 @@ data class Scenario(
         fun message(message: Message) {
             check(index > -1) { "Scenario index should be specified and positive" }
             responses += MockResponse(
-                    body = serde.encodeToString(Response.Success(message)),
-                    headers = headersOf(scenarioHeader, "$index"),
+                body = serde.encodeToString(Response.Success(message)),
+                headers = headersOf(scenarioHeader, "$index"),
             )
         }
 
         fun poll(message: Message) {
             check(index > -1) { "Scenario index should be specified and positive" }
             polls += MockResponse(
-                    body = serde.encodeToString(Response.Success(message)),
-                    headers = headersOf(scenarioHeader, "$index"),
+                body = serde.encodeToString(Response.Success(message)),
+                headers = headersOf(scenarioHeader, "$index"),
             )
         }
 
         fun pin() {
             check(index > -1) { "Scenario index should be specified and positive" }
             pins += MockResponse(
-                    body = defaultBooleanBody(),
-                    headers = headersOf(scenarioHeader, "$index"),
+                body = defaultBooleanBody(),
+                headers = headersOf(scenarioHeader, "$index"),
             )
         }
 
         fun unpin() {
             check(index > -1) { "Scenario index should be specified and positive" }
             unpins += MockResponse(
-                    body = defaultBooleanBody(),
-                    headers = headersOf(scenarioHeader, "$index"),
+                body = defaultBooleanBody(),
+                headers = headersOf(scenarioHeader, "$index"),
             )
         }
 
@@ -297,20 +297,20 @@ data class Scenario(
         fun delete() {
             check(index > -1) { "Scenario index should be specified and positive" }
             toDelete += MockResponse(
-                    body = defaultBooleanBody(),
-                    headers = headersOf(scenarioHeader, "$index"),
+                body = defaultBooleanBody(),
+                headers = headersOf(scenarioHeader, "$index"),
             )
         }
 
         fun build(): Scenario {
             return Scenario(
-                    updates = updates,
-                    responses = responses,
-                    polls = polls,
-                    pins = pins,
-                    unpins = unpins,
-                    toDelete = toDelete,
-                    time = time,
+                updates = updates,
+                responses = responses,
+                polls = polls,
+                pins = pins,
+                unpins = unpins,
+                toDelete = toDelete,
+                time = time,
             )
         }
     }

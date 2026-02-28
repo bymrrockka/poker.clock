@@ -61,7 +61,7 @@ object GameWizardHandler {
                     .also { message -> messagesForDeletion(message!!.messageId) }
         }
 
-        override suspend fun onRetry(ctx: WizardContext) {
+        override suspend fun onRetry(ctx: WizardContext, reason: String?) {
             message { "Type should be one of ${GameType.entries.joinToString { it.name.lowercase() }}" }
                     .sendReturning(ctx.user, ctx.bot)
                     .onFailure { error("Failed to send message") }
@@ -78,7 +78,7 @@ object GameWizardHandler {
             return if (GameType.entries.find { it.name.equals(ctx.update.text, ignoreCase = true) } != null) {
                 Transition.Next
             } else {
-                Transition.Retry
+                Transition.Retry()
             }
         }
     }
@@ -100,7 +100,7 @@ object GameWizardHandler {
                     .also { message -> messagesForDeletion(message!!.messageId) }
         }
 
-        override suspend fun onRetry(ctx: WizardContext) {
+        override suspend fun onRetry(ctx: WizardContext, reason: String?) {
             message { "Buy in is necessary for calculations and it should be a number" }
                     .sendReturning(ctx.user, ctx.bot)
                     .onFailure { error("Failed to send message") }
@@ -114,7 +114,7 @@ object GameWizardHandler {
         override suspend fun validate(ctx: WizardContext): Transition {
             messagesForDeletion(ctx.update.origin.message!!.messageId)
             return when {
-                !decimalValidation(ctx) -> return Transition.Retry
+                !decimalValidation(ctx) -> return Transition.Retry()
                 ctx.getState<Type>() == GameType.BOUNTY -> Transition.JumpTo(Bounty::class)
                 else -> return Transition.JumpTo(Players::class)
             }
@@ -138,7 +138,7 @@ object GameWizardHandler {
                     .also { message -> messagesForDeletion(message!!.messageId) }
         }
 
-        override suspend fun onRetry(ctx: WizardContext) {
+        override suspend fun onRetry(ctx: WizardContext, reason: String?) {
             message { "Bounty is necessary for Bounty tournament and it should be a number" }
                     .sendReturning(ctx.user, ctx.bot)
                     .onFailure { error("Failed to send message") }
@@ -154,7 +154,7 @@ object GameWizardHandler {
             if (decimalValidation(ctx)) {
                 return Transition.Next
             } else {
-                return Transition.Retry
+                return Transition.Retry()
             }
         }
     }
@@ -167,7 +167,7 @@ object GameWizardHandler {
                     .also { message -> messagesForDeletion(message!!.messageId) }
         }
 
-        override suspend fun onRetry(ctx: WizardContext) {
+        override suspend fun onRetry(ctx: WizardContext, reason: String?) {
             message { "Players mentions required to start a game. Like @mention" }
                     .sendReturning(ctx.user, ctx.bot)
                     .onFailure { error("Failed to send message") }
@@ -183,7 +183,7 @@ object GameWizardHandler {
             val message = ctx.update.toMessageMetadata()
             return when {
                 message.mentions.isNotEmpty() || message.replyTo?.poll != null -> Transition.Next
-                else -> Transition.Retry
+                else -> Transition.Retry()
             }
         }
 

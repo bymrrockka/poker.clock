@@ -33,7 +33,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import org.awaitility.kotlin.atMost
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
-import org.jetbrains.exposed.sql.deleteAll
+import org.jetbrains.exposed.v1.jdbc.deleteAll
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith

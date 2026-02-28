@@ -1,26 +1,26 @@
 [versions]
 #plugins
-springBoot = "3.5.6"
+springBoot = "4.0.3"
 springDepManagement = "1.1.7"
-kotlin = "2.3.0"
-googleKsp = "2.3.4"
-telegramBot = "9.1.0"
+kotlin = "2.3.10"
+googleKsp = "2.3.6"
+telegramBot = "9.2.1"
 
 #libs
-postgresql = "42.7.8"
-jupiter = "5.13.4"
-assertjCore = "3.27.6"
+postgresql = "42.7.10"
+jupiter = "6.0.3"
+assertjCore = "3.27.7"
 testContainer = "2.0.3"
-liquibase = "4.33.0"
+liquibase = "5.0.1"
 javaFaker = "1.0.2"
-jackson = "2.20.0"
+jackson = "3.1.0"
 hikariCP = "7.0.2"
-exposed = "0.61.0"
+exposed = "1.1.1"
 awaitility = "4.3.0"
 okeydokie = "2.0.3"
-logback = "1.5.18"
-kotlin-logging = "7.0.13"
-mockwebserver = "5.1.0"
+logback = "1.5.32"
+kotlin-logging = "8.0.01"
+mockwebserver = "5.3.2"
 
 [plugins]
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
@@ -42,17 +42,18 @@ testContainerPostgresql = { module = "org.testcontainers:testcontainers-postgres
 testContainerJupiter = { module = "org.testcontainers:testcontainers-junit-jupiter", version.ref = "testContainer" }
 testContainers = { module = "org.testcontainers:testcontainers", version.ref = "testContainer" }
 springBootWeb = { module = "org.springframework.boot:spring-boot-starter-web" }
+springBootLiquibase = { module = "org.springframework.boot:spring-boot-starter-liquibase" }
 springBootTest = { module = "org.springframework.boot:spring-boot-starter-test" }
 liquibase = { module = "org.liquibase:liquibase-core", version.ref = "liquibase" }
 javaFaker = { module = "com.github.javafaker:javafaker", version.ref = "javaFaker" }
-jacksonDataformat = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml", version.ref = "jackson" }
-jacksonKotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
+jacksonDataformat = { module = "tools.jackson.dataformat:jackson-dataformat-xml", version.ref = "jackson" }
+jacksonKotlin = { module = "tools.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
 hikariCP = { module = "com.zaxxer:HikariCP", version.ref = "hikariCP" }
 exposedCore = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
 exposedJdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
 exposedJavaTime = { module = "org.jetbrains.exposed:exposed-java-time", version.ref = "exposed" }
 exposedJson = { module = "org.jetbrains.exposed:exposed-json", version.ref = "exposed" }
-exposedSpringBoot = { module = "org.jetbrains.exposed:exposed-spring-boot-starter", version.ref = "exposed" }
+exposedSpringBoot = { module = "org.jetbrains.exposed:exposed-spring-boot4-starter", version.ref = "exposed" }
 awaitility = { module = "org.awaitility:awaitility-kotlin", version.ref = "awaitility" }
 okeydoke = { module = "com.oneeyedmen:okeydoke", version.ref = "okeydokie" }
 kotlinSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlin" }
@@ -65,7 +66,7 @@ mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "
 [bundles]
 logging = ["kotlinLogging", "logbackClassic", "logbackCore"]
 kotlinLibs = ["kotlinStdLib", "kotlinSerialization"]
-springBoot = ["springBootWeb", "springBootJdbc"]
+springBoot = ["springBootWeb", "springBootJdbc", "springBootLiquibase"]
 exposed = ["exposedCore", "exposedSpringBoot", "exposedJdbc", "exposedJson", "exposedJavaTime"]
 test = ["assertjCore", "jupiter", "junitLauncher", "awaitility", "springBootTest", "okeydoke", "mockwebserver"]
 db = ["postgresql", "liquibase"]
