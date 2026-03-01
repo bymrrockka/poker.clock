@@ -14,6 +14,7 @@ import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Primary
 import org.springframework.context.annotation.Profile
+import org.springframework.stereotype.Component
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
@@ -32,7 +33,7 @@ open class TestConfig(
     @OptIn(DelicateCoroutinesApi::class)
     open fun testBot(appContext: ApplicationContext, server: MockServer): TelegramBot {
         val bot = TelegramBot(botProps.token) {
-            classManager = SpringClassManager(appContext)
+            classManager = SpringClassManager(appContext, classManager)
             apiHost = server.server.url("").toString().dropLast(1)
             commandParsing {
                 commandDelimiter = '\n'
@@ -50,17 +51,11 @@ open class TestConfig(
         }
         return bot
     }
-
-    @Bean
-    @Primary
-    @OptIn(ExperimentalTime::class)
-    open fun testClock(): TestClock {
-        return TestClock()
-    }
-
 }
 
 @OptIn(ExperimentalTime::class)
+@Component
+@Primary
 class TestClock : Clock {
     var time = Clock.System.now()
     override fun now(): Instant {

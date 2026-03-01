@@ -8,7 +8,6 @@ import kotlin.time.Instant
 interface Command {
     val unique: String
 
-
     data class Message(var message: String, val replyTo: Command? = null, override val unique: String = unique()) : Command
 
     @OptIn(ExperimentalTime::class)
@@ -16,9 +15,11 @@ interface Command {
 
     data class PollAnswer(val poll: Poll, val person: Person, val optionName: String? = null, val option: Int, override val unique: String = unique()) : Command
 
-    data class PinMessage(val command: Command, override val unique: String = unique()) : Command
+    data class Pin(val command: Command, override val unique: String = unique()) : Command
 
-    data class UnpinMessage(val command: Command, override val unique: String = unique()) : Command
+    data class Unpin(val command: Command, override val unique: String = unique()) : Command
+
+    data class DeleteMessages(val toDelete: List<Message>, override val unique: String = unique()) : Command
 
     companion object {
         fun unique(): String = telegramRandoms.faker.regexify("\\w{10,12}")
@@ -46,17 +47,21 @@ class GivenSpecification {
     }
 
     fun Command.pinned() {
-        this@GivenSpecification.commands += Command.PinMessage(this)
+        this@GivenSpecification.commands += Command.Pin(this)
     }
 
     fun Command.unpinned() {
-        this@GivenSpecification.commands += Command.UnpinMessage(this)
+        this@GivenSpecification.commands += Command.Unpin(this)
     }
 
     fun unpinned(vararg commands: Command) {
         commands.forEach { command ->
-            this@GivenSpecification.commands += Command.UnpinMessage(command)
+            this@GivenSpecification.commands += Command.Unpin(command)
         }
+    }
+
+    fun List<Command.Message>.deleted() {
+        commands += Command.DeleteMessages(this)
     }
 }
 
@@ -67,4 +72,7 @@ fun Given(block: GivenSpecification.() -> Unit): GivenSpecification = GivenSpeci
 infix fun GivenSpecification.When(block: GivenSpecification.() -> Unit): WhenSpecification = WhenSpecification(this.commands)
         .apply { block() }
 
+/**
+ * This function should be replaced with exact implementation of tests
+ */
 infix fun WhenSpecification.Then(block: WhenSpecification.() -> Unit) = block()

@@ -4,7 +4,7 @@ import by.mrrockka.domain.toMessageMetadata
 import by.mrrockka.service.WithdrawalTelegramService
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.CommandHandler
-import eu.vendeli.tgbot.api.message.sendMessage
+import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.types.component.MessageUpdate
 import org.springframework.stereotype.Component
 
@@ -23,7 +23,7 @@ class WithdrawalCommandHandlerImpl(
         val metadata = message.message.toMessageMetadata()
         withdrawalService.withdraw(metadata)
                 .also { (nicknames, amount) ->
-                    sendMessage {
+                    message {
                         """
                         |Stored withdrawals: 
                         |${nicknames.joinToString { "|  - @${it} -> ${amount.setScale(0)}" }}

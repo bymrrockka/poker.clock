@@ -1,5 +1,9 @@
 package by.mrrockka
 
+import by.mrrockka.commands.game.GameWizardHandler
+import by.mrrockka.service.GameTablesService
+import by.mrrockka.service.GameTelegramService
+import by.mrrockka.service.PinMessageService
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.api.botactions.setMyCommands
 import eu.vendeli.tgbot.interfaces.ctx.ClassManager
@@ -9,6 +13,7 @@ import eu.vendeli.tgbot.types.component.UpdateType
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.springframework.beans.BeansException
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
@@ -31,7 +36,8 @@ open class BotConfig(
     @OptIn(DelicateCoroutinesApi::class)
     open fun bot(appContext: ApplicationContext, botCommands: BotCommands): TelegramBot {
         val bot = TelegramBot(botProps.token) {
-            classManager = SpringClassManager(appContext)
+            classManager = SpringClassManager(appContext, classManager)
+            identifier = botProps.name
             commandParsing {
                 commandDelimiter = '\n'
                 restrictSpacesInCommands = true
@@ -41,14 +47,13 @@ open class BotConfig(
 
         GlobalScope.launch {
             setMyCommands(
-                    command = botCommands.commands.map {
-                        BotCommand(command = it.name, description = it.description ?: "")
-                    },
+                    command = botCommands.commands
+                            .filter { it.enabled }
+                            .map { BotCommand(command = it.name, description = it.description ?: "No description") },
             ).send(bot)
             bot.handleUpdates(
                     listOf(
                             UpdateType.MESSAGE,
-//                    UpdateType.EDITED_MESSAGE,
                             UpdateType.POLL_ANSWER,
                     ),
             )
@@ -62,14 +67,34 @@ open class BotConfig(
     open fun clock(): Clock {
         return Clock.System
     }
+
+    @Bean
+    open fun gameWizard(
+            gameService: GameTelegramService,
+            tablesService: GameTablesService,
+            pinMessageService: PinMessageService,
+    ): GameWizardHandler {
+        GameWizardHandler.gameService = gameService
+        GameWizardHandler.tableService = tablesService
+        GameWizardHandler.pinMessageService = pinMessageService
+        return GameWizardHandler
+    }
 }
 
-@Configuration
 open class SpringClassManager(
         private val applicationContext: ApplicationContext,
+        private val classManager: ClassManager,
 ) : ClassManager {
-    override fun getInstance(kClass: KClass<*>, vararg initParams: Any?): Any =
-            applicationContext.getBean(kClass.java, *initParams)
+    override fun getInstance(kClass: KClass<*>, vararg initParams: Any?): Any {
+        var instance: Any
+
+        try {
+            instance = applicationContext.getBean(kClass.java, *initParams)
+        } catch (beanEx: BeansException) {
+            instance = classManager.getInstance(kClass, *initParams)
+        }
+        return instance
+    }
 }
 
 @Component

@@ -8,6 +8,8 @@ import java.math.RoundingMode
 class Commands private constructor() {
     companion object {
         val calculate = "/calculate"
+        val game = "/game"
+        val start = "/start"
         val gameStats = "/game_stats"
         val playerStats = "/player_stats"
         val myStats = "/my_stats"
@@ -28,6 +30,7 @@ class Commands private constructor() {
         val chatPoll = "chatPoll"
 
         fun String.entry(amount: Int? = null): String = "${entry} @$this ${if (amount == null) "" else amount}"
+        fun List<String>.entries(): String = joinToString(" ") { "@$it" }
         fun entry(amount: Int? = null): String = "${entry} @me ${if (amount == null) "" else amount}"
         fun help(command: String? = null): String = "$help ${command ?: ""}"
 

@@ -4,7 +4,7 @@ import by.mrrockka.domain.toMessageMetadata
 import by.mrrockka.service.EntryTelegramService
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.CommandHandler
-import eu.vendeli.tgbot.api.message.sendMessage
+import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.types.component.MessageUpdate
 import org.springframework.stereotype.Component
 
@@ -24,7 +24,7 @@ class EntryCommandHandlerImpl(
         //todo: add ability to entry without nickname or @me and decline command handler
         entryTelegramService.entry(metadata)
                 .also { (tables, amount) ->
-                    sendMessage {
+                    message {
                         if (tables.isNotEmpty()) {
                             """
                             |Entries: 

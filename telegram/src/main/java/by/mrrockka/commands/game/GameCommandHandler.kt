@@ -1,7 +1,9 @@
-package by.mrrockka.commands
+package by.mrrockka.commands.game
 
 import by.mrrockka.domain.BountyTournamentGame
 import by.mrrockka.domain.CashGame
+import by.mrrockka.domain.GameType
+import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.domain.TournamentGame
 import by.mrrockka.domain.toMessageMetadata
 import by.mrrockka.repo.PinType
@@ -10,10 +12,15 @@ import by.mrrockka.service.GameTelegramService
 import by.mrrockka.service.PinMessageService
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.CommandHandler
-import eu.vendeli.tgbot.api.message.sendMessage
+import eu.vendeli.tgbot.api.message.message
+import eu.vendeli.tgbot.types.chain.UserChatReference
+import eu.vendeli.tgbot.types.chain.WizardStateManager
+import eu.vendeli.tgbot.types.chain.WizardStep
 import eu.vendeli.tgbot.types.component.MessageUpdate
 import eu.vendeli.tgbot.types.component.onFailure
 import org.springframework.stereotype.Component
+import java.math.BigDecimal
+import kotlin.reflect.KClass
 
 interface GameCommandHandler {
     suspend fun store(message: MessageUpdate)
@@ -28,6 +35,7 @@ class GameCommandHandlerImpl(
 ) : GameCommandHandler {
 
     @CommandHandler(["/tournament_game", "/bounty_game", "/cash_game", "/tg", "/bg", "/cg"])
+    @Deprecated(message = "This functionality will be replaced with step by step game conversation", replaceWith = ReplaceWith("/game", "GameWizardHandler"))
     override suspend fun store(message: MessageUpdate) {
         val metadata = message.message.toMessageMetadata()
         gameService.store(metadata)
@@ -53,10 +61,51 @@ class GameCommandHandlerImpl(
                     }
                     """.trimMargin()
                 }.let { response ->
-                    sendMessage { response }
+                    message { response }
                             .sendReturning(to = metadata.chatId, via = bot)
                             .onFailure { error("Failed to send game message") }
                             ?: error("No message returned from telegram api")
                 }.also { message -> pinMessageService.pin(message, PinType.GAME) }
+    }
+
+}
+
+
+class MapBigDecimalStateManager : WizardStateManager<BigDecimal> {
+    val state = mutableMapOf<KClass<out WizardStep>, BigDecimal>()
+    override suspend fun get(key: KClass<out WizardStep>, reference: UserChatReference): BigDecimal? = state[key]
+
+    override suspend fun set(key: KClass<out WizardStep>, reference: UserChatReference, value: BigDecimal) {
+        state[key] = value
+    }
+
+    override suspend fun del(key: KClass<out WizardStep>, reference: UserChatReference) {
+        state.remove(key)
+    }
+}
+
+class MapGameTypeStateManager : WizardStateManager<GameType> {
+    val state = mutableMapOf<KClass<out WizardStep>, GameType>()
+    override suspend fun get(key: KClass<out WizardStep>, reference: UserChatReference): GameType? = state[key]
+
+    override suspend fun set(key: KClass<out WizardStep>, reference: UserChatReference, value: GameType) {
+        state[key] = value
+    }
+
+    override suspend fun del(key: KClass<out WizardStep>, reference: UserChatReference) {
+        state.remove(key)
+    }
+}
+
+class MapMetadataStateManager : WizardStateManager<MessageMetadata> {
+    val state = mutableMapOf<KClass<out WizardStep>, MessageMetadata>()
+    override suspend fun get(key: KClass<out WizardStep>, reference: UserChatReference): MessageMetadata? = state[key]
+
+    override suspend fun set(key: KClass<out WizardStep>, reference: UserChatReference, value: MessageMetadata) {
+        state[key] = value
+    }
+
+    override suspend fun del(key: KClass<out WizardStep>, reference: UserChatReference) {
+        state.remove(key)
     }
 }

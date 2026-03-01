@@ -4,7 +4,7 @@ import by.mrrockka.domain.toMessageMetadata
 import by.mrrockka.service.HelpTelegramService
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.CommandHandler
-import eu.vendeli.tgbot.api.message.sendMessage
+import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.types.component.MessageUpdate
 import org.springframework.stereotype.Component
 
@@ -23,7 +23,7 @@ class HelpCommandHandlerImpl(
         val metadata = message.message.toMessageMetadata()
         helpService.help(metadata)
                 .also { description ->
-                    sendMessage { description.details ?: "No details available" }
+                    message { description.details ?: "No details available" }
                             .send(to = metadata.chatId, via = bot)
                 }
     }

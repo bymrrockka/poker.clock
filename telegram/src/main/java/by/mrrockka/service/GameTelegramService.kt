@@ -13,7 +13,9 @@ import java.util.*
 
 interface GameTelegramService {
     fun store(metadata: MessageMetadata): Game
+    fun store(game: Game, initial: MessageMetadata, players: MessageMetadata = initial): Game
     fun findGame(metadata: MessageMetadata): Game
+    fun findLastGame(metadata: MessageMetadata): Game?
     fun findByChat(metadata: MessageMetadata): List<Game>
     fun gameIdsByChat(metadata: MessageMetadata): List<UUID>
 }
@@ -28,27 +30,30 @@ open class GameTelegramServiceImpl(
         private val pollService: PollTelegramService,
         private val gameMessageParser: GameMessageParser,
 ) : GameTelegramService {
-
     override fun store(metadata: MessageMetadata): Game {
         val game = gameMessageParser.parse(metadata)
-        gameRepo.store(game)
-        chatGameRepo.store(game.id, metadata)
+        return store(game, metadata)
+    }
 
-        if (metadata.replyTo?.poll != null) {
-            val excludes = if (metadata.mentions.isNotEmpty())
-                personService.findByMessage(metadata).map { it.id }
+    override fun store(game: Game, initial: MessageMetadata, players: MessageMetadata): Game {
+        gameRepo.store(game)
+        chatGameRepo.store(game.id, initial)
+
+        if (players.replyTo?.poll != null) {
+            val excludes = if (players.mentions.isNotEmpty())
+                personService.findByMessage(players).map { it.id }
             else emptyList()
 
-            pollService.findParticipants(metadata.replyTo.poll.id)
+            pollService.findParticipants(players.replyTo.poll.id)
                     .filterNot { excludes.contains(it) }
                     .also { personIds ->
-                        entriesRepo.store(personIds, game.buyIn, game, metadata.createdAt)
+                        entriesRepo.store(personIds, game.buyIn, game, players.createdAt)
                     }
         } else {
-            metadata.checkMentions()
-            personService.findByMessage(metadata).map { it.id }
+            players.checkMentions()
+            personService.findByMessage(players).map { it.id }
                     .also { personIds ->
-                        entriesRepo.store(personIds, game.buyIn, game, metadata.createdAt)
+                        entriesRepo.store(personIds, game.buyIn, game, players.createdAt)
                     }
         }
 
@@ -63,6 +68,9 @@ open class GameTelegramServiceImpl(
 
         return gameRepo.findById(chatGameId)
     }
+
+    override fun findLastGame(metadata: MessageMetadata): Game? =
+            chatGameRepo.findLatestForChat(metadata)?.let { gameRepo.findById(it) }
 
     override fun findByChat(metadata: MessageMetadata): List<Game> {
         return gameRepo.findByIds(chatGameRepo.findByChat(metadata))
