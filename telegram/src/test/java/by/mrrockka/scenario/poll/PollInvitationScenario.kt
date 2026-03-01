@@ -90,7 +90,7 @@ class PollInvitationScenario : AbstractPollScenario() {
             poll.pollAnswer(person(), 3)
 
             message(replyTo = poll) {
-                createGame(type = GameType.TOURNAMENT, BigDecimal(10), participants.drop(1))
+                createGame(type = GameType.TOURNAMENT, buyin = BigDecimal(10), excludes = participants.drop(1))
             }
             message { gameStats }
         } When {

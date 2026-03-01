@@ -34,6 +34,7 @@ import org.awaitility.kotlin.atMost
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.jetbrains.exposed.v1.jdbc.deleteAll
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
@@ -85,7 +86,7 @@ abstract class AbstractScenarioTest {
         coreRandoms.reset()
         telegramRandoms.reset()
         dispatcher.reset()
-        transactionTemplate.execute {
+        transaction {
             PinMessageTable.deleteAll()
             ChatPersonsTable.deleteAll()
             ChatGameTable.deleteAll()
