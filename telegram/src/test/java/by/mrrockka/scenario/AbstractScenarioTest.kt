@@ -14,7 +14,6 @@ import by.mrrockka.service.GameTablesService
 import com.oneeyedmen.okeydoke.Approver
 import eu.vendeli.tgbot.types.msg.Message
 import io.github.oshai.kotlinlogging.KotlinLogging
-import kotlinx.coroutines.DelicateCoroutinesApi
 import org.awaitility.kotlin.atMost
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
@@ -71,7 +70,6 @@ abstract class AbstractScenarioTest {
         }
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     fun GivenSpecification.updatesReceived() {
         check(commands.isNotEmpty()) { "Commands should be specified" }
         commands.forEachIndexed { index, command -> command.stub(index) }
@@ -80,11 +78,18 @@ abstract class AbstractScenarioTest {
     infix fun WhenSpecification.ThenApproveWith(approver: Approver) {
         val filteredCommands = commands.filter { it !is Command.PollAnswer }
         try {
-            await atMost Duration.ofSeconds(5) until {
+            await atMost Duration.ofSeconds(3) until {
                 dispatcher.requests.size == filteredCommands.size
             }
         } catch (ex: Exception) {
-            logger.error { "Await timeout failed" }
+            logger.error {
+                """
+                |Await timeout
+                |Dispatcher requests size is ${dispatcher.requests.size}
+                |Commands size is ${filteredCommands.size}
+                |Dispatcher should have exactly the same requests size as expected.
+                """.trimMargin()
+            }
         }
 
         commands.toText()

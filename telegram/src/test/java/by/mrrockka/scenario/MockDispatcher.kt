@@ -14,6 +14,7 @@ import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.types.common.Update
 import eu.vendeli.tgbot.types.component.Response
 import eu.vendeli.tgbot.types.msg.Message
+import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -28,6 +29,8 @@ import okhttp3.internal.closeQuietly
 import org.springframework.stereotype.Component
 import tools.jackson.databind.JsonNode
 import tools.jackson.databind.ObjectMapper
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentLinkedDeque
 import java.util.concurrent.LinkedBlockingQueue
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
@@ -47,30 +50,29 @@ private fun defaultBooleanBody(success: Boolean = true) = if (success) {
     serde.encodeToString(Response.Success(success))
 } else {
     serde.encodeToString(
-        Response.Failure(
-            errorCode = 401,
-            description = "No mock found",
-        ),
+            Response.Failure(
+                    errorCode = 401,
+                    description = "No mock found",
+            ),
     )
 }
 
+private val logger = KotlinLogging.logger {}
+
 @Component
 class MockDispatcher(
-    private val botProps: BotProperties,
-    private val mapper: ObjectMapper,
-    private val clock: TestClock,
+        private val botProps: BotProperties,
+        private val mapper: ObjectMapper,
+        private val clock: TestClock,
 ) : Dispatcher() {
-    @Volatile
-    var requests: MutableMap<Int, String> = mutableMapOf()
-
-    @Volatile
-    private var scenarios: ArrayDeque<Scenario> = ArrayDeque()
+    var requests: ConcurrentHashMap<Int, String> = ConcurrentHashMap()
+    private var scenarios: ConcurrentLinkedDeque<Scenario> = ConcurrentLinkedDeque()
 
     fun scenario(init: Scenario.Builder.() -> Unit) {
         this.scenarios += Scenario.Builder(init).build()
     }
 
-    private fun ArrayDeque<Scenario>.retrieve(): Scenario {
+    private fun ConcurrentLinkedDeque<Scenario>.retrieve(): Scenario {
         return when {
             isEmpty() -> empty
             first().isNotEmpty() -> scenarios.first()
@@ -101,7 +103,10 @@ class MockDispatcher(
                         val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
                         requests += scenarioIndex to request.toJson().findPath("text").asString()
                         resp
-                    } else MockResponse(code = 404, body = defaultMessageBody)
+                    } else {
+                        logger.warn { "Send Message request was skipped" }
+                        MockResponse(code = 200, body = defaultMessageBody)
+                    }
                 }
 
                 "${botProps.botpath}/$sendPoll" -> {
@@ -110,7 +115,10 @@ class MockDispatcher(
                         val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
                         requests += scenarioIndex to request.toPollText()
                         resp
-                    } else MockResponse(code = 404, body = defaultMessageBody)
+                    } else {
+                        logger.warn { "Send Poll request was skipped" }
+                        MockResponse(code = 200, body = defaultMessageBody)
+                    }
                 }
 
                 "${botProps.botpath}/$pinMessage" ->
@@ -119,7 +127,10 @@ class MockDispatcher(
                         val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
                         requests += scenarioIndex to "pinned"
                         resp
-                    } else MockResponse(code = 200, body = defaultBooleanBody(true))
+                    } else {
+                        logger.warn { "Pin Message request was skipped" }
+                        MockResponse(code = 200, body = defaultBooleanBody(true))
+                    }
 
                 "${botProps.botpath}/$unpinMessage" ->
                     if (scenario.unpins.isNotEmpty()) {
@@ -127,7 +138,10 @@ class MockDispatcher(
                         val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
                         requests += scenarioIndex to "unpinned"
                         resp
-                    } else MockResponse(code = 200, body = defaultBooleanBody(true))
+                    } else {
+                        logger.warn { "Unpin Message request was skipped" }
+                        MockResponse(code = 200, body = defaultBooleanBody(true))
+                    }
 
                 "${botProps.botpath}/$deleteMessages" ->
                     if (scenario.toDelete.isNotEmpty()) {
@@ -135,9 +149,15 @@ class MockDispatcher(
                         val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
                         requests += scenarioIndex to "deleted"
                         resp
-                    } else MockResponse(code = 200, body = defaultBooleanBody(true))
+                    } else {
+                        logger.warn { "Delete messages request was skipped" }
+                        MockResponse(code = 200, body = defaultBooleanBody(true))
+                    }
 
-                else -> MockResponse(code = 404, body = defaultBooleanBody(false))
+                else -> {
+                    logger.error { "Unknown request type ${request.url.encodedPath}" }
+                    MockResponse(code = 404, body = defaultBooleanBody(false))
+                }
             }
         }
     }
@@ -155,8 +175,8 @@ class MockDispatcher(
         val json = this.toJson()
         val question = json.findPath("question").asString()
         val options = json.findPath("options")
-            .mapIndexed { index, option -> "${index + 1}. '${option.findPath("text").asString()}'" }
-            .joinToString("\n")
+                .mapIndexed { index, option -> "${index + 1}. '${option.findPath("text").asString()}'" }
+                .joinToString("\n")
 
         return """
                 |$question
@@ -197,7 +217,7 @@ class MockDispatcher(
 
 @Component
 class MockServer(
-    private val dispatcher: Dispatcher,
+        private val dispatcher: Dispatcher,
 ) {
     lateinit var server: MockWebServer
 
@@ -215,13 +235,13 @@ class MockServer(
 }
 
 data class Scenario(
-    val updates: LinkedBlockingQueue<MockResponse>,
-    val responses: LinkedBlockingQueue<MockResponse>,
-    val polls: LinkedBlockingQueue<MockResponse>,
-    val pins: LinkedBlockingQueue<MockResponse>,
-    val unpins: LinkedBlockingQueue<MockResponse>,
-    val toDelete: LinkedBlockingQueue<MockResponse>,
-    val time: Instant? = null,
+        val updates: LinkedBlockingQueue<MockResponse>,
+        val responses: LinkedBlockingQueue<MockResponse>,
+        val polls: LinkedBlockingQueue<MockResponse>,
+        val pins: LinkedBlockingQueue<MockResponse>,
+        val unpins: LinkedBlockingQueue<MockResponse>,
+        val toDelete: LinkedBlockingQueue<MockResponse>,
+        val time: Instant? = null,
 ) {
 
     fun isEmpty(): Boolean {
@@ -261,32 +281,32 @@ data class Scenario(
         fun message(message: Message) {
             check(index > -1) { "Scenario index should be specified and positive" }
             responses += MockResponse(
-                body = serde.encodeToString(Response.Success(message)),
-                headers = headersOf(scenarioHeader, "$index"),
+                    body = serde.encodeToString(Response.Success(message)),
+                    headers = headersOf(scenarioHeader, "$index"),
             )
         }
 
         fun poll(message: Message) {
             check(index > -1) { "Scenario index should be specified and positive" }
             polls += MockResponse(
-                body = serde.encodeToString(Response.Success(message)),
-                headers = headersOf(scenarioHeader, "$index"),
+                    body = serde.encodeToString(Response.Success(message)),
+                    headers = headersOf(scenarioHeader, "$index"),
             )
         }
 
         fun pin() {
             check(index > -1) { "Scenario index should be specified and positive" }
             pins += MockResponse(
-                body = defaultBooleanBody(),
-                headers = headersOf(scenarioHeader, "$index"),
+                    body = defaultBooleanBody(),
+                    headers = headersOf(scenarioHeader, "$index"),
             )
         }
 
         fun unpin() {
             check(index > -1) { "Scenario index should be specified and positive" }
             unpins += MockResponse(
-                body = defaultBooleanBody(),
-                headers = headersOf(scenarioHeader, "$index"),
+                    body = defaultBooleanBody(),
+                    headers = headersOf(scenarioHeader, "$index"),
             )
         }
 
@@ -297,20 +317,20 @@ data class Scenario(
         fun delete() {
             check(index > -1) { "Scenario index should be specified and positive" }
             toDelete += MockResponse(
-                body = defaultBooleanBody(),
-                headers = headersOf(scenarioHeader, "$index"),
+                    body = defaultBooleanBody(),
+                    headers = headersOf(scenarioHeader, "$index"),
             )
         }
 
         fun build(): Scenario {
             return Scenario(
-                updates = updates,
-                responses = responses,
-                polls = polls,
-                pins = pins,
-                unpins = unpins,
-                toDelete = toDelete,
-                time = time,
+                    updates = updates,
+                    responses = responses,
+                    polls = polls,
+                    pins = pins,
+                    unpins = unpins,
+                    toDelete = toDelete,
+                    time = time,
             )
         }
     }
