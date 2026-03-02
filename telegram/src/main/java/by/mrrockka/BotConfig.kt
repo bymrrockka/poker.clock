@@ -91,6 +91,7 @@ open class SpringClassManager(
         try {
             instance = applicationContext.getBean(kClass.java, *initParams)
         } catch (beanEx: BeansException) {
+            //Required for Wizard Handlers that are not spring bean but static classes
             instance = classManager.getInstance(kClass, *initParams)
         }
         return instance
