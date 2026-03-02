@@ -26,7 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.DependsOn
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.transaction.support.TransactionTemplate
 import org.testcontainers.junit.jupiter.Testcontainers
 import java.time.Duration
 import java.time.LocalDateTime
@@ -56,9 +55,6 @@ abstract class AbstractScenarioTest {
 
     @Autowired
     lateinit var gameSeatsService: GameTablesService
-
-    @Autowired
-    lateinit var transactionTemplate: TransactionTemplate
 
     @BeforeEach
     fun before() {
