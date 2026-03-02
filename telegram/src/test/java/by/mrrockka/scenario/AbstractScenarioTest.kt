@@ -28,7 +28,6 @@ import org.springframework.context.annotation.DependsOn
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.support.TransactionTemplate
 import org.testcontainers.junit.jupiter.Testcontainers
-import java.sql.Connection
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -71,7 +70,7 @@ abstract class AbstractScenarioTest {
         coreRandoms.reset()
         telegramRandoms.reset()
         dispatcher.reset()
-        transaction(transactionIsolation = Connection.TRANSACTION_SERIALIZABLE) {
+        transaction {
             exec("TRUNCATE TABLE pin_messages, poll_task, person, game CASCADE")
         }
     }
