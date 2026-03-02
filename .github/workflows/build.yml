@@ -40,7 +40,7 @@ jobs:
       - name: Run build with Gradle Wrapper
         env:
           GITHUB_PIPELINE: 'true'
-        run: ./gradlew build --info
+        run: ./gradlew build
 
       - name: Test report
         uses: mikepenz/action-junit-report@v5
