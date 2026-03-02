@@ -73,18 +73,20 @@ class MockDispatcher(
     }
 
     private fun ConcurrentLinkedDeque<Scenario>.retrieve(): Scenario {
-        return when {
-            isEmpty() -> empty
-            first().isNotEmpty() -> scenarios.first()
-            else -> {
-                removeFirst()
-                retrieve()
+        return synchronized(this) {
+            when {
+                isEmpty() -> empty
+                first().isNotEmpty() -> scenarios.first()
+                else -> {
+                    removeFirst()
+                    retrieve()
+                }
             }
         }
     }
 
     override fun dispatch(request: RecordedRequest): MockResponse {
-        return synchronized(empty) {
+        return synchronized(this) {
             val scenario = scenarios.retrieve()
             if (scenario.time != null) {
                 clock.set(scenario.time)
@@ -92,9 +94,10 @@ class MockDispatcher(
 
             when (request.url.encodedPath) {
                 "${botProps.botpath}/$getUpdates" -> {
-                    if (scenario.updates.isNotEmpty())
+                    if (scenario.updates.isNotEmpty()) {
+                        logger.debug { "Sending updates. Scenarios left: ${scenarios.size}" }
                         scenario.updates.take()
-                    else MockResponse(body = serde.encodeToString(Response.Success(emptyList<Update>())))
+                    } else MockResponse(body = serde.encodeToString(Response.Success(emptyList<Update>())))
                 }
 
                 "${botProps.botpath}/$sendMessage" -> {
@@ -102,6 +105,7 @@ class MockDispatcher(
                         val resp = scenario.responses.take()
                         val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
                         requests += scenarioIndex to request.toJson().findPath("text").asString()
+                        logger.debug { "Send Message request sent. Scenario index: $scenarioIndex" }
                         resp
                     } else {
                         logger.warn { "Send Message request was skipped" }
@@ -114,6 +118,7 @@ class MockDispatcher(
                         val resp = scenario.polls.take()
                         val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
                         requests += scenarioIndex to request.toPollText()
+                        logger.debug { "Send Poll request sent. Scenario index: $scenarioIndex" }
                         resp
                     } else {
                         logger.warn { "Send Poll request was skipped" }
@@ -126,6 +131,7 @@ class MockDispatcher(
                         val resp = scenario.pins.take()
                         val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
                         requests += scenarioIndex to "pinned"
+                        logger.debug { "Pin Message request sent. Scenario index: $scenarioIndex" }
                         resp
                     } else {
                         logger.warn { "Pin Message request was skipped" }
@@ -137,6 +143,7 @@ class MockDispatcher(
                         val resp = scenario.unpins.take()
                         val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
                         requests += scenarioIndex to "unpinned"
+                        logger.debug { "Unpin Message request sent. Scenario index: $scenarioIndex" }
                         resp
                     } else {
                         logger.warn { "Unpin Message request was skipped" }
@@ -148,9 +155,10 @@ class MockDispatcher(
                         val resp = scenario.toDelete.take()
                         val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
                         requests += scenarioIndex to "deleted"
+                        logger.debug { "Delete Messages request sent. Scenario index: $scenarioIndex" }
                         resp
                     } else {
-                        logger.warn { "Delete messages request was skipped" }
+                        logger.warn { "Delete Messages request was skipped" }
                         MockResponse(code = 200, body = defaultBooleanBody(true))
                     }
 
@@ -163,7 +171,7 @@ class MockDispatcher(
     }
 
     fun reset() {
-        synchronized(empty) {
+        synchronized(this) {
             requests.clear()
             scenarios.clear()
         }
@@ -219,6 +227,7 @@ class MockDispatcher(
 class MockServer(
         private val dispatcher: Dispatcher,
 ) {
+    @Volatile
     lateinit var server: MockWebServer
 
     @PostConstruct

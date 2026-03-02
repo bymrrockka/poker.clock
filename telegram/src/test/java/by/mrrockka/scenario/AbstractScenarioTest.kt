@@ -87,7 +87,7 @@ abstract class AbstractScenarioTest {
                 |Await timeout
                 |Dispatcher requests size is ${dispatcher.requests.size}
                 |Commands size is ${filteredCommands.size}
-                |Dispatcher should have exactly the same requests size as expected.
+                |Dispatcher should have exactly the same requests size as commands size.
                 """.trimMargin()
             }
         }

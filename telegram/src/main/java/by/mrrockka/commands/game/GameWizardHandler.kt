@@ -47,7 +47,6 @@ object GameWizardHandler {
         override suspend fun onEntry(ctx: WizardContext) {
             val metadata = ctx.update.toMessageMetadata()
             initials += ctx.user.id to metadata
-            pinMessageService.pin(ctx.update.origin.message!!, PinType.GAME)
 
             message { "What type of game you'd like to play?" }
                 .replyKeyboardMarkup {
@@ -61,14 +60,16 @@ object GameWizardHandler {
                 }
                 .sendReturning(ctx.user, ctx.bot)
                 .onFailure { error("Failed to send message") }
-                .also { message -> ctx.user.id.message(message!!.messageId) }
+                ?.also { message -> ctx.user.id.message(message.messageId) }
+                ?: error("No message returned from telegram api")
         }
 
         override suspend fun onRetry(ctx: WizardContext, reason: String?) {
             message { "Type should be one of ${GameType.entries.joinToString { it.name.lowercase() }}" }
                 .sendReturning(ctx.user, ctx.bot)
                 .onFailure { error("Failed to send message") }
-                .also { message -> ctx.user.id.message(message!!.messageId) }
+                ?.also { message -> ctx.user.id.message(message.messageId) }
+                ?: error("No message returned from telegram api")
         }
 
         override suspend fun store(ctx: WizardContext): GameType {
@@ -101,14 +102,16 @@ object GameWizardHandler {
                 }
                 .sendReturning(ctx.user, ctx.bot)
                 .onFailure { error("Failed to send message") }
-                .also { message -> ctx.user.id.message(message!!.messageId) }
+                ?.also { message -> ctx.user.id.message(message.messageId) }
+                ?: error("No message returned from telegram api")
         }
 
         override suspend fun onRetry(ctx: WizardContext, reason: String?) {
             message { "Buy in is necessary for calculations and it should be a number" }
                 .sendReturning(ctx.user, ctx.bot)
                 .onFailure { error("Failed to send message") }
-                .also { message -> ctx.user.id.message(message!!.messageId) }
+                ?.also { message -> ctx.user.id.message(message.messageId) }
+                ?: error("No message returned from telegram api")
         }
 
         override suspend fun store(ctx: WizardContext): BigDecimal {
@@ -140,14 +143,16 @@ object GameWizardHandler {
                 }
                 .sendReturning(ctx.user, ctx.bot)
                 .onFailure { error("Failed to send message") }
-                .also { message -> ctx.user.id.message(message!!.messageId) }
+                ?.also { message -> ctx.user.id.message(message.messageId) }
+                ?: error("No message returned from telegram api")
         }
 
         override suspend fun onRetry(ctx: WizardContext, reason: String?) {
             message { "Bounty is necessary for Bounty tournament and it should be a number" }
                 .sendReturning(ctx.user, ctx.bot)
                 .onFailure { error("Failed to send message") }
-                .also { message -> ctx.user.id.message(message!!.messageId) }
+                ?.also { message -> ctx.user.id.message(message.messageId) }
+                ?: error("No message returned from telegram api")
         }
 
         override suspend fun store(ctx: WizardContext): BigDecimal {
@@ -169,14 +174,16 @@ object GameWizardHandler {
             message { "Who's playing?" }
                 .sendReturning(ctx.user, ctx.bot)
                 .onFailure { error("Failed to send message") }
-                .also { message -> ctx.user.id.message(message!!.messageId) }
+                ?.also { message -> ctx.user.id.message(message.messageId) }
+                ?: error("No message returned from telegram api")
         }
 
         override suspend fun onRetry(ctx: WizardContext, reason: String?) {
             message { "Players mentions required to start a game. Like @mention" }
                 .sendReturning(ctx.user, ctx.bot)
                 .onFailure { error("Failed to send message") }
-                .also { message -> ctx.user.id.message(message!!.messageId) }
+                ?.also { message -> ctx.user.id.message(message.messageId) }
+                ?: error("No message returned from telegram api")
         }
 
         override suspend fun store(ctx: WizardContext): MessageMetadata {
@@ -234,6 +241,7 @@ object GameWizardHandler {
                 message { response }
                     .sendReturning(to = ctx.user, via = ctx.bot)
                     .onFailure { error("Failed to send game message") }
+                    ?.also { message -> pinMessageService.pin(message, PinType.GAME) }
                     ?: error("No message returned from telegram api")
             }
 
