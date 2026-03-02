@@ -65,6 +65,5 @@ fun Message.toMessageMetadata(): MessageMetadata =
 
 @OptIn(ExperimentalTime::class)
 fun ProcessedUpdate.toMessageMetadata(): MessageMetadata =
-        if (origin.message != null) {
-            origin.message!!.toMessageMetadata()
-        } else error("Update message not found")
+        if (origin.message != null) origin.message!!.toMessageMetadata()
+        else error("Update message not found")
