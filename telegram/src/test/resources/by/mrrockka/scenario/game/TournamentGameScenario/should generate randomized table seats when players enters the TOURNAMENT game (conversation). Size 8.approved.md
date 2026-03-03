@@ -169,6 +169,15 @@ message id: 8
 ``` 
 Entries: 
 ------------------------------
+Table 1
+Seats:
+  @nickname10 seat 2 -> entry 10.00
+  @nickname4 seat 5 -> entry 10.00
+  @nickname2 seat 6 -> entry 10.00
+  @nickname9 seat 7 -> entry 10.00
+  @nickname6 seat 9 -> entry 10.00
+  @nickname3 seat 10 -> entry 10.00
+------------------------------
 Table 2
 Seats:
   @nickname11 seat 2 -> entry 10.00

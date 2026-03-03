@@ -20,6 +20,7 @@ import eu.vendeli.tgbot.types.chain.Transition
 import eu.vendeli.tgbot.types.chain.WizardContext
 import eu.vendeli.tgbot.types.chain.WizardStep
 import eu.vendeli.tgbot.types.component.onFailure
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import java.math.BigDecimal
 
 @WizardHandler(
@@ -185,34 +186,36 @@ object GameWizardHandler {
             val bounty = ctx.getState<Bounty>()
             val playersMessage = ctx.getState<Players>() ?: error("Players message is null")
 
-            gameService.store(
-                game(
-                    type = type,
-                    bounty = bounty,
-                    buyin = buyin,
-                    createdAt = initial.createdAt,
-                ),
-                initial = initial,
-                players = playersMessage,
-            ).let { game ->
-                """
+            transaction {
+                gameService.store(
+                    game(
+                        type = type,
+                        bounty = bounty,
+                        buyin = buyin,
+                        createdAt = initial.createdAt,
+                    ),
+                    initial = initial,
+                    players = playersMessage,
+                ).let { game ->
+                    """
                 |Game type: $type
                 |Buy in: $buyin
                 ${if (type == GameType.BOUNTY) "|Bounty $bounty" else ""}
                 ${
-                    tableService.generate(game)
-                        .joinToString("\n") { table ->
-                            """|${"-".repeat(30)}
+                        tableService.generate(game)
+                            .joinToString("\n") { table ->
+                                """|${"-".repeat(30)}
                                     |Table ${table.id}
                                     |Seats:
                                     ${
-                                table.seats.sortedBy { it.num }
-                                    .joinToString("\n") { seat -> "|  ${seat.num}. @${seat.nickname}" }
-                            }
+                                    table.seats.sortedBy { it.num }
+                                        .joinToString("\n") { seat -> "|  ${seat.num}. @${seat.nickname}" }
+                                }
                                 """
-                        }
-                }
+                            }
+                    }
                 """.trimMargin()
+                }
             }.let { response ->
                 message { response }
                     .sendReturning(to = ctx.user, via = ctx.bot)

@@ -14,13 +14,15 @@ import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.types.component.MessageUpdate
 import eu.vendeli.tgbot.types.component.onFailure
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 interface GameCommandHandler {
     suspend fun store(message: MessageUpdate)
 }
 
 @Component
-class GameCommandHandlerImpl(
+@Transactional
+open class GameCommandHandlerImpl(
         private val bot: TelegramBot,
         private val gameService: GameTelegramService,
         private val pinMessageService: PinMessageService,
