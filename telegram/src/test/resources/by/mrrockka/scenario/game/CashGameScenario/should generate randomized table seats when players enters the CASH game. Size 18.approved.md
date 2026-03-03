@@ -129,6 +129,27 @@ message id: 5
 ``` 
 Entries: 
 ------------------------------
+Table 1
+Seats:
+  @nickname14 seat 1 -> entry 10.00
+  @nickname10 seat 4 -> entry 10.00
+  @nickname19 seat 6 -> entry 10.00
+  @nickname7 seat 7 -> entry 10.00
+  @nickname16 seat 8 -> entry 10.00
+  @nickname1 seat 9 -> entry 10.00
+  @nickname6 seat 10 -> entry 10.00
+------------------------------
+Table 2
+Seats:
+  @nickname8 seat 1 -> entry 10.00
+  @nickname9 seat 2 -> entry 10.00
+  @nickname5 seat 3 -> entry 10.00
+  @nickname20 seat 4 -> entry 10.00
+  @nickname11 seat 6 -> entry 10.00
+  @nickname12 seat 7 -> entry 10.00
+  @nickname18 seat 9 -> entry 10.00
+  @nickname4 seat 10 -> entry 10.00
+------------------------------
 Table 3
 Seats:
   @nickname3 seat 1 -> entry 10.00

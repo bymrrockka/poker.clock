@@ -6,6 +6,7 @@ import by.mrrockka.domain.Seat
 import by.mrrockka.domain.Table
 import by.mrrockka.repo.GameTablesRepo
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import java.util.Random
 import kotlin.collections.ArrayDeque
@@ -17,7 +18,7 @@ interface GameTablesService {
 }
 
 @Service
-@Transactional
+@Transactional(propagation = Propagation.REQUIRED)
 open class GameTablesServiceImpl(
         private val tablesRepo: GameTablesRepo,
 ) : GameTablesService {
@@ -49,64 +50,72 @@ open class GameTablesServiceImpl(
      * @return fully combined and merged tables to only updated tables as pair
      * */
     private fun Game.formTables(entries: List<Person>): Pair<List<Table>, List<Table>> {
-        val tables = tablesRepo.selectBy(this)
-                .sortedBy { it.seats.size }
-        val seated = tables.flatMap { it.byNicknames.keys }
-        val newEntries = entries.map { it.nickname ?: error("Person should have nickname") }
-                .filterNot { seated.contains(it) }
+        return synchronized(this@GameTablesServiceImpl) {
+            val tables = tablesRepo.selectBy(this)
+                    .sortedBy { it.seats.size }
+            val seated = tables.flatMap { it.byNicknames.keys }
+            val newEntries = entries.map { it.nickname ?: error("Person should have nickname") }
+                    .filterNot { seated.contains(it) }
 
-        return when {
-            newEntries.isEmpty() -> tables to emptyList()
+            when {
+                //no new entries
+                newEntries.isEmpty() -> tables to emptyList()
 
-            tables.isEmpty() -> {
-                val newTables = newEntries
-                        .toTableApplicants(seatsAverage())
-                        .generateTables()
-                newTables to newTables
-            }
-
-            (tables.sumOf { it.emptySeats().size } - newEntries.size < 0) -> {
-                //find players to move from existent tables
-                val tablesToPopped = tables
-                        .map { table -> table to table.seats.size - seatsAverage() }
-                        .map { (table, popSize) ->
-                            val toPop = (1..popSize)
-                                    .map {
-                                        var seat: Seat?
-                                        var counter = 0
-                                        do {
-                                            seat = table.byNums[random.nextInt(maxSeats)]
-                                        } while (seat == null && counter++ < maxSeats)
-                                        seat ?: error("Table is empty")
-                                    }
-                            (table - toPop) to toPop
-                        }.groupBy({ it.first }, { it.second })
-                        .mapValues { (_, popped) -> popped.flatten() }
-                        .mapValues { (_, seats) -> seats.map { it.nickname } }
-
-                //sum new entries and players to move and create collection of table applicants
-                //create new tables with table applicants
-                val newTables = (newEntries + tablesToPopped.values.flatten())
-                        .toTableApplicants(seatsAverage())
-                        .generateTables(tables.size)
-
-                //merge changes and return with updates
-                (tablesToPopped.keys + newTables.toSet()).toList() to newTables
-            }
-
-            else -> {
-                //find table for new entries
-                val tableQueue = tables.toDeque()
-                newEntries.forEach { entry ->
-                    val table = tableQueue.removeFirst()
-                    val emptySeats = table.emptySeats()
-                    tableQueue.addLast(table + Seat(emptySeats.removeFirst(), entry))
+                //first generation of table
+                tables.isEmpty() -> {
+                    val newTables = newEntries
+                            .toTableApplicants(seatsAverage())
+                            .generateTables()
+                    newTables to newTables
                 }
-                //merge changes and return only updated seats with table
-                tableQueue.toList() to tableQueue
-                        .map { update -> Table(update.id, update.seats.filter { newEntries.contains(it.nickname) }.toSet()) }
-                        .filter { it.seats.isNotEmpty() }
-                        .toList()
+
+                //existent tables don't have empty seats and regeneration required
+                (tables.sumOf { it.emptySeats().size } - newEntries.size < 0) -> {
+                    //find players to move from existent tables
+                    val tablesToPopped = tables
+                            .map { table -> table to table.seats.size - seatsAverage() }
+                            .map { (table, popSize) ->
+                                val toPop = (1..popSize)
+                                        .map {
+                                            var seat: Seat?
+                                            var counter = 0
+                                            do {
+                                                seat = table.byNums[random.nextInt(maxSeats)]
+                                            } while (seat == null && counter++ < maxSeats)
+                                            seat ?: error("Table is empty")
+                                        }
+                                (table - toPop) to toPop
+                            }.groupBy({ it.first }, { it.second })
+                            .mapValues { (_, popped) -> popped.flatten() }
+                            .mapValues { (_, seats) -> seats.map { it.nickname } }
+
+                    //sum new entries and players to move and create collection of table applicants
+                    //create new tables with table applicants
+                    val newTables = (tablesToPopped.keys +
+                            (newEntries + tablesToPopped.values.flatten())
+                                    .toTableApplicants(seatsAverage())
+                                    .generateTables(tables.size)
+                                    .toSet()).toList()
+
+                    //merge changes and return with updates
+                    newTables to newTables
+                }
+
+                //existent tables has empty places to add new entries
+                else -> {
+                    //find table for new entries
+                    val tableQueue = tables.toDeque()
+                    newEntries.forEach { entry ->
+                        val table = tableQueue.removeFirst()
+                        val emptySeats = table.emptySeats()
+                        tableQueue.addLast(table + Seat(emptySeats.removeFirst(), entry))
+                    }
+                    //merge changes and return only updated seats within table
+                    tableQueue.toList() to tableQueue
+                            .map { update -> Table(update.id, update.seats.filter { newEntries.contains(it.nickname) }.toSet()) }
+                            .filter { it.seats.isNotEmpty() }
+                            .toList()
+                }
             }
         }
     }
