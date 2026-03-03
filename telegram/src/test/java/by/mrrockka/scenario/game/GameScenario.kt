@@ -10,6 +10,8 @@ import by.mrrockka.scenario.Commands.Companion.createGame
 import by.mrrockka.scenario.Commands.Companion.entries
 import by.mrrockka.scenario.Commands.Companion.entry
 import by.mrrockka.scenario.Commands.Companion.game
+import com.oneeyedmen.okeydoke.Approver
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import java.math.BigDecimal
@@ -48,7 +50,7 @@ abstract class GameScenario : AbstractScenarioTest() {
             toDelete += message { gameType().title }
             //set buyin
             toDelete += message { buyin.setScale(0).toString() }
-            if(gameType() == GameType.BOUNTY) {
+            if (gameType() == GameType.BOUNTY) {
                 //set bounty
                 toDelete += message { buyin.setScale(0).toString() }
             }
@@ -64,5 +66,24 @@ abstract class GameScenario : AbstractScenarioTest() {
         } When {
             updatesReceived()
         } ThenApproveWith mdApprover("should generate randomized table seats when players enters the ${gameType()} game (conversation). Size $size")
+    }
+
+    @Test
+    fun `should cancel game creation when 'cancel' input`(approver: Approver) {
+        val buyin = BigDecimal(10)
+        val toDelete = mutableListOf<Command.Message>()
+
+        Given {
+            message { game }
+            //set game type
+            toDelete += message { gameType().title }
+            //set buyin
+            toDelete += message { buyin.setScale(0).toString() }
+            //cancel
+            toDelete += message { "cancel" }
+            toDelete.deleted()
+        } When {
+            updatesReceived()
+        } ThenApproveWith approver
     }
 }
