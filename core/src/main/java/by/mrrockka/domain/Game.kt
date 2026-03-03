@@ -2,6 +2,7 @@ package by.mrrockka.domain
 
 import java.math.BigDecimal
 import java.math.BigDecimal.ZERO
+import java.math.RoundingMode
 import java.time.Instant
 import java.util.*
 
@@ -15,7 +16,9 @@ interface Game {
 }
 
 enum class GameType {
-    CASH, TOURNAMENT, BOUNTY
+    CASH, TOURNAMENT, BOUNTY;
+
+    val title = this.name.lowercase().capitalize()
 }
 
 data class TournamentGame(
@@ -80,3 +83,45 @@ fun Game.moneyInGame(): BigDecimal =
             is TournamentGame -> players.totalEntries()
             else -> error("Unknown game")
         }
+
+fun BigDecimal.defaultScale(): BigDecimal = this.setScale(0, RoundingMode.HALF_DOWN)
+
+fun game(
+        type: GameType,
+        buyin: BigDecimal,
+        stack: BigDecimal = BigDecimal.TEN,
+        bounty: BigDecimal?,
+        createdAt: Instant,
+): Game {
+    return when (type) {
+        GameType.TOURNAMENT ->
+            TournamentGame(
+                    id = UUID.randomUUID(),
+                    buyIn = buyin.defaultScale(),
+                    stack = stack.defaultScale(),
+                    playersProvider = { emptyList() },
+                    createdAt = createdAt,
+            )
+
+        GameType.CASH ->
+            CashGame(
+                    id = UUID.randomUUID(),
+                    buyIn = buyin.defaultScale(),
+                    stack = stack.defaultScale(),
+                    playersProvider = { emptyList() },
+                    createdAt = createdAt,
+            )
+
+        GameType.BOUNTY -> {
+            check(bounty != null) { "Bounty should be specified" }
+            BountyTournamentGame(
+                    id = UUID.randomUUID(),
+                    buyIn = buyin.defaultScale(),
+                    stack = stack.defaultScale(),
+                    bounty = bounty.defaultScale(),
+                    playersProvider = { emptyList() },
+                    createdAt = createdAt,
+            )
+        }
+    }
+}

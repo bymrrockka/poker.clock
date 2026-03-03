@@ -21,7 +21,7 @@ import by.mrrockka.service.GameTelegramService
 import by.mrrockka.service.PinMessageService
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.CommandHandler
-import eu.vendeli.tgbot.api.message.sendMessage
+import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.types.component.MessageUpdate
 import eu.vendeli.tgbot.types.component.onFailure
 import org.springframework.stereotype.Component
@@ -52,7 +52,7 @@ class CalculationCommandHandlerImpl(
         val game = gameService.findGame(metadata)
         calculationService.calculate(metadata)
                 .let { payouts ->
-                    sendMessage { payouts.response(game) }
+                    message { payouts.response(game) }
                             .sendReturning(to = metadata.chatId, via = bot)
                             .onFailure { error("Failed to send payouts message") }
                             ?: error("No message returned from telegram api")

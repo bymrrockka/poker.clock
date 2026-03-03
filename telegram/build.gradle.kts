@@ -82,6 +82,9 @@ tasks {
 
     withType<Test>().configureEach {
         useJUnitPlatform()
+        testLogging {
+            events("failed")
+        }
     }
 
     bootJar {

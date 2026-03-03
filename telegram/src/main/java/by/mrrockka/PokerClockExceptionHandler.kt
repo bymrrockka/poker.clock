@@ -1,7 +1,7 @@
 package by.mrrockka
 
 import eu.vendeli.tgbot.TelegramBot
-import eu.vendeli.tgbot.api.message.sendMessage
+import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.interfaces.helper.ExceptionHandler
 import eu.vendeli.tgbot.types.component.ProcessedUpdate
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -24,6 +24,6 @@ object PokerClockExceptionHandler : ExceptionHandler {
                 "Exception occurred during handling"
             }
         } ?: "No exception message specified"
-        sendMessage { message }.send(chatid, bot)
+        message { message }.send(chatid, bot)
     }
 }

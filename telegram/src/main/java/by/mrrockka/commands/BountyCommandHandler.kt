@@ -4,7 +4,7 @@ import by.mrrockka.domain.toMessageMetadata
 import by.mrrockka.service.BountyTelegramService
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.CommandHandler
-import eu.vendeli.tgbot.api.message.sendMessage
+import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.types.component.MessageUpdate
 import org.springframework.stereotype.Component
 
@@ -23,7 +23,7 @@ class BountyCommandHandlerImpl(
         val metadata = message.message.toMessageMetadata()
         bountyService.store(metadata)
                 .also { bounty ->
-                    sendMessage { "Bounty amount ${bounty.amount} from @${bounty.from.nickname} stored for @${bounty.to.nickname}" }
+                    message { "Bounty amount ${bounty.amount} from @${bounty.from.nickname} stored for @${bounty.to.nickname}" }
                             .send(to = metadata.chatId, via = bot)
                 }
     }

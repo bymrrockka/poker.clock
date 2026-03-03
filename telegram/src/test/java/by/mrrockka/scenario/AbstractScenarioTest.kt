@@ -10,30 +10,14 @@ import by.mrrockka.builder.toUser
 import by.mrrockka.builder.update
 import by.mrrockka.builder.user
 import by.mrrockka.extension.MdApproverExtension
-import by.mrrockka.repo.BountyTable
-import by.mrrockka.repo.ChatGameTable
-import by.mrrockka.repo.ChatPersonsTable
-import by.mrrockka.repo.ChatPollsTable
-import by.mrrockka.repo.EntriesTable
-import by.mrrockka.repo.FinalePlacesTable
-import by.mrrockka.repo.GameSummaryTable
-import by.mrrockka.repo.GameTable
-import by.mrrockka.repo.GameTablesTable
-import by.mrrockka.repo.PersonTable
-import by.mrrockka.repo.PinMessageTable
-import by.mrrockka.repo.PollAnswersTable
-import by.mrrockka.repo.PollTaskTable
-import by.mrrockka.repo.PrizePoolTable
-import by.mrrockka.repo.WithdrawalTable
 import by.mrrockka.service.GameTablesService
 import com.oneeyedmen.okeydoke.Approver
 import eu.vendeli.tgbot.types.msg.Message
 import io.github.oshai.kotlinlogging.KotlinLogging
-import kotlinx.coroutines.DelicateCoroutinesApi
 import org.awaitility.kotlin.atMost
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
-import org.jetbrains.exposed.v1.jdbc.deleteAll
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
@@ -41,7 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.DependsOn
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.transaction.support.TransactionTemplate
 import org.testcontainers.junit.jupiter.Testcontainers
 import java.time.Duration
 import java.time.LocalDateTime
@@ -72,9 +55,6 @@ abstract class AbstractScenarioTest {
     @Autowired
     lateinit var gameSeatsService: GameTablesService
 
-    @Autowired
-    lateinit var transactionTemplate: TransactionTemplate
-
     @BeforeEach
     fun before() {
         gameSeatsService.seed(telegramRandoms.seed.hashCode().toLong())
@@ -85,29 +65,13 @@ abstract class AbstractScenarioTest {
         coreRandoms.reset()
         telegramRandoms.reset()
         dispatcher.reset()
-        transactionTemplate.execute {
-            PinMessageTable.deleteAll()
-            ChatPersonsTable.deleteAll()
-            ChatGameTable.deleteAll()
-            PollAnswersTable.deleteAll()
-            ChatPollsTable.deleteAll()
-            PollTaskTable.deleteAll()
-
-            GameTablesTable.deleteAll()
-            GameSummaryTable.deleteAll()
-            BountyTable.deleteAll()
-            EntriesTable.deleteAll()
-            WithdrawalTable.deleteAll()
-            PrizePoolTable.deleteAll()
-            FinalePlacesTable.deleteAll()
-            PersonTable.deleteAll()
-            GameTable.deleteAll()
+        transaction {
+            exec("TRUNCATE TABLE pin_messages, poll_task, person, game CASCADE")
         }
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     fun GivenSpecification.updatesReceived() {
-        check(this.commands.isNotEmpty()) { "Commands should be specified" }
+        check(commands.isNotEmpty()) { "Commands should be specified" }
         commands.forEachIndexed { index, command -> command.stub(index) }
     }
 
@@ -118,7 +82,14 @@ abstract class AbstractScenarioTest {
                 dispatcher.requests.size == filteredCommands.size
             }
         } catch (ex: Exception) {
-            logger.error { "Await timeout failed" }
+            logger.error {
+                """
+                |Await timeout
+                |Dispatcher requests size is ${dispatcher.requests.size}
+                |Commands size is ${filteredCommands.size}
+                |Dispatcher should have exactly the same requests size as commands size.
+                """.trimMargin()
+            }
         }
 
         commands.toText()
@@ -126,7 +97,7 @@ abstract class AbstractScenarioTest {
     }
 
     private fun List<Command>.toText(): String {
-        val errorMessage = "No message"
+        val emptyMessage = "No message"
         return mapIndexed { index, command ->
             when (command) {
                 is Command.Message ->
@@ -142,7 +113,7 @@ abstract class AbstractScenarioTest {
                    |&rarr; <ins>Bot message</ins>
                    |
                    |``` 
-                   |${dispatcher.requests[index] ?: errorMessage} 
+                   |${dispatcher.requests[index] ?: emptyMessage} 
                    |``` 
                    |___
                    """.trimMargin()
@@ -156,7 +127,7 @@ abstract class AbstractScenarioTest {
                    |
                    |``` 
                    |${command.toText()}
-                   |${dispatcher.requests[index] ?: errorMessage}
+                   |${dispatcher.requests[index] ?: emptyMessage}
                    |``` 
                    |___
                    """.trimMargin()
@@ -172,22 +143,32 @@ abstract class AbstractScenarioTest {
                    |___
                    """.trimMargin()
 
-                is Command.PinMessage ->
+                is Command.Pin ->
                     """
                    |### ${index + 1}. Pinned
                    |
                    |``` 
-                   |${command.toText()} ${dispatcher.requests[index] ?: errorMessage}
+                   |${command.toText()} ${dispatcher.requests[index] ?: emptyMessage}
                    |``` 
                    |___
                    """.trimMargin()
 
-                is Command.UnpinMessage ->
+                is Command.Unpin ->
                     """
                    |### ${index + 1}. Unpinned
                    |
                    |``` 
-                   |${command.toText()} ${dispatcher.requests[index] ?: errorMessage}
+                   |${command.toText()} ${dispatcher.requests[index] ?: emptyMessage}
+                   |``` 
+                   |___
+                   """.trimMargin()
+
+                is Command.DeleteMessages ->
+                    """
+                   |### ${index + 1}. Deleted messages
+                   |
+                   |``` 
+                   |${command.toText()} ${dispatcher.requests[index] ?: emptyMessage}
                    |``` 
                    |___
                    """.trimMargin()
@@ -207,10 +188,20 @@ abstract class AbstractScenarioTest {
                         """.trimMargin()
             }
 
-            is Command.PinMessage -> "message id ${messageLog[command]?.messageId ?: error("Command was not found in log")}"
-            is Command.UnpinMessage -> "message id ${messageLog[command]?.messageId ?: error("Command was not found in log")}"
-            is Command.PollAnswer -> "${this.person.nickname} chosen ${this.option}"
+            is Command.PollAnswer -> "${person.nickname} chosen ${option}"
+            is Command.Pin -> "message id ${messageLog[command]?.messageId ?: error("Command was not found in log")}"
+            is Command.Unpin -> "message id ${messageLog[command]?.messageId ?: error("Command was not found in log")}"
             is Command.Poll -> "message id ${messageLog[this]?.messageId ?: error("Command was not found in log")}"
+            is Command.DeleteMessages -> messageLog
+                    .filter { (key, _) -> toDelete.contains(key) }
+                    .values
+                    .map { it.messageId }
+                    .joinToString(",")
+                    .also {
+                        if (it.isEmpty()) error("Command was not found in log")
+                        "message ids ${it}"
+                    }
+
             else -> error("Command type does not found")
         }
     }
@@ -268,17 +259,24 @@ abstract class AbstractScenarioTest {
                 }
             }
 
-            is Command.PinMessage -> {
+            is Command.Pin -> {
                 dispatcher.scenario {
                     index(index)
                     pin()
                 }
             }
 
-            is Command.UnpinMessage -> {
+            is Command.Unpin -> {
                 dispatcher.scenario {
                     index(index)
                     unpin()
+                }
+            }
+
+            is Command.DeleteMessages -> {
+                dispatcher.scenario {
+                    index(index)
+                    delete()
                 }
             }
 
