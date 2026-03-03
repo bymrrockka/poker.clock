@@ -77,9 +77,11 @@ object GameWizardHandler {
                 ?: error("No message returned from telegram api")
         }
 
-        override suspend fun store(ctx: WizardContext): GameType {
-            return GameType.entries.find { it.name.equals(ctx.update.text, ignoreCase = true) }
-                ?: error("Type ${ctx.update.text} not supported")
+        override suspend fun store(ctx: WizardContext): GameType? {
+            return when {
+                ctx.update.text.canceled() -> null
+                else -> GameType.entries.find { it.name.equals(ctx.update.text, ignoreCase = true) }
+            }
         }
 
         override suspend fun validate(ctx: WizardContext): Transition {
@@ -121,7 +123,12 @@ object GameWizardHandler {
                 ?: error("No message returned from telegram api")
         }
 
-        override suspend fun store(ctx: WizardContext): BigDecimal = BigDecimal(ctx.update.text)
+        override suspend fun store(ctx: WizardContext): BigDecimal? {
+            return when {
+                ctx.update.text.canceled() -> null
+                else -> BigDecimal(ctx.update.text)
+            }
+        }
 
         override suspend fun validate(ctx: WizardContext): Transition {
             ctx.user.id.message(ctx.update.origin.message!!.messageId)
@@ -151,8 +158,11 @@ object GameWizardHandler {
                 ?: error("No message returned from telegram api")
         }
 
-        override suspend fun store(ctx: WizardContext): MessageMetadata {
-            return ctx.update.origin.message!!.toMessageMetadata()
+        override suspend fun store(ctx: WizardContext): MessageMetadata? {
+            return when {
+                ctx.update.text.canceled() -> null
+                else -> ctx.update.origin.message?.toMessageMetadata()
+            }
         }
 
         override suspend fun validate(ctx: WizardContext): Transition {
@@ -248,8 +258,11 @@ object GameWizardHandler {
                 ?: error("No message returned from telegram api")
         }
 
-        override suspend fun store(ctx: WizardContext): BigDecimal {
-            return BigDecimal(ctx.update.text)
+        override suspend fun store(ctx: WizardContext): BigDecimal? {
+            return when {
+                ctx.update.text.canceled() -> null
+                else -> BigDecimal(ctx.update.text)
+            }
         }
 
         override suspend fun validate(ctx: WizardContext): Transition {
