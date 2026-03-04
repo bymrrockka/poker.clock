@@ -92,6 +92,7 @@ class MockDispatcher(
                 clock.set(scenario.time)
             }
 
+
             when (request.url.encodedPath) {
                 "${botProps.botpath}/$getUpdates" -> {
                     if (scenario.updates.isNotEmpty()) {
@@ -100,18 +101,30 @@ class MockDispatcher(
                     } else MockResponse(body = serde.encodeToString(Response.Success(emptyList<Update>())))
                 }
 
-                "${botProps.botpath}/$sendMessage" -> {
-                    if (scenario.responses.isNotEmpty()) {
-                        val resp = scenario.responses.take()
-                        val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
-                        requests += scenarioIndex to request.toJson().findPath("text").asString()
-                        logger.debug { "Send Message request sent. Scenario index: $scenarioIndex" }
-                        resp
-                    } else {
-                        logger.warn { "Send Message request was skipped" }
-                        MockResponse(code = 200, body = defaultMessageBody)
+                "${botProps.botpath}/$sendMessage" ->
+                    when {
+                        scenario.responses.isNotEmpty() -> {
+                            //todo refactor
+                            val resp = scenario.responses.take()
+                            val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
+                            requests += scenarioIndex to request.toJson().findPath("text").asString()
+                            logger.debug { "Send Message request sent. Scenario index: $scenarioIndex" }
+                            resp
+                        }
+
+                        scenario.skip.isNotEmpty() -> {
+                            val resp = scenario.skip.take()
+                            val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
+                            requests += scenarioIndex to request.toJson().findPath("text").asString()
+                            logger.debug { "Send Message request skipped. Scenario index: $scenarioIndex" }
+                            resp
+                        }
+
+                        else -> {
+                            logger.warn { "Send Message request was skipped" }
+                            MockResponse(code = 200, body = defaultMessageBody)
+                        }
                     }
-                }
 
                 "${botProps.botpath}/$sendPoll" -> {
                     if (scenario.polls.isNotEmpty()) {
@@ -250,6 +263,7 @@ data class Scenario(
         val pins: LinkedBlockingQueue<MockResponse>,
         val unpins: LinkedBlockingQueue<MockResponse>,
         val toDelete: LinkedBlockingQueue<MockResponse>,
+        val skip: LinkedBlockingQueue<MockResponse>,
         val time: Instant? = null,
 ) {
 
@@ -259,7 +273,8 @@ data class Scenario(
                 polls.isEmpty() &&
                 pins.isEmpty() &&
                 unpins.isEmpty() &&
-                toDelete.isEmpty()
+                toDelete.isEmpty() &&
+                skip.isEmpty()
     }
 
     fun isNotEmpty(): Boolean = !isEmpty()
@@ -273,6 +288,7 @@ data class Scenario(
         private val pins = LinkedBlockingQueue<MockResponse>()
         private val unpins = LinkedBlockingQueue<MockResponse>()
         private val toDelete = LinkedBlockingQueue<MockResponse>()
+        private val skip = LinkedBlockingQueue<MockResponse>()
         private var time: Instant? = null
 
         init {
@@ -331,6 +347,14 @@ data class Scenario(
             )
         }
 
+        fun skip() {
+            check(index > -1) { "Scenario index should be specified and positive" }
+            skip += MockResponse(
+                    body = defaultBooleanBody(),
+                    headers = headersOf(scenarioHeader, "$index"),
+            )
+        }
+
         fun build(): Scenario {
             return Scenario(
                     updates = updates,
@@ -340,6 +364,7 @@ data class Scenario(
                     unpins = unpins,
                     toDelete = toDelete,
                     time = time,
+                    skip = skip,
             )
         }
     }

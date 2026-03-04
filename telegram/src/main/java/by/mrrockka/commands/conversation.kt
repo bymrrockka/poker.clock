@@ -1,6 +1,6 @@
 package by.mrrockka.commands
 
-import by.mrrockka.commands.game.GameWizardHandler
+import by.mrrockka.commands.game.GameConversation
 import by.mrrockka.domain.MessageMetadata
 import eu.vendeli.tgbot.api.message.deleteMessages
 import eu.vendeli.tgbot.api.message.message
@@ -8,6 +8,8 @@ import eu.vendeli.tgbot.types.chain.Transition
 import eu.vendeli.tgbot.types.chain.WizardContext
 import eu.vendeli.tgbot.types.chain.WizardStep
 import eu.vendeli.tgbot.types.component.onFailure
+import eu.vendeli.tgbot.types.msg.Message
+import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
 
 abstract class CancelableStep(isInitial: Boolean = false, val cancelStep: KClass<out WizardStep>) : WizardStep(isInitial) {
@@ -19,6 +21,17 @@ abstract class CancelableStep(isInitial: Boolean = false, val cancelStep: KClass
             ctx.update.text.canceled() -> Transition.JumpTo(cancelStep, skipPersist = true)
             else -> navigate(ctx)
         }
+    }
+
+    suspend fun WizardContext.initialize(postAction: suspend (Message) -> Unit) {
+        message {
+            """
+            |You started a cancelable conversation. 
+            |To cancel at any step you simply need to type 'cancel'
+        """.trimMargin()
+        }.sendReturning(user, bot)
+                .onFailure { error("Failed to send message") }
+                ?.also { message -> postAction(message) }
     }
 
 }
@@ -39,16 +52,16 @@ open class CancelStep(
 fun String.decimalValidation() = matches("^([\\d.]+)$".toRegex())
 
 abstract class ClearMessageConversation {
-    protected val messages = mutableMapOf<Long, List<Long>>()
-    protected val initials = mutableMapOf<Long, MessageMetadata>()
+    protected val messages = ConcurrentHashMap<Long, List<Long>>()
+    protected val initials = ConcurrentHashMap<Long, MessageMetadata>()
 
     protected fun Long.message(messageId: Long) {
         synchronized(messages) {
-            val list = GameWizardHandler.messages[this]
+            val list = GameConversation.messages[this]
             if (list != null) {
-                GameWizardHandler.messages[this] = (list + messageId)
+                GameConversation.messages[this] = (list + messageId)
             } else {
-                GameWizardHandler.messages[this] = mutableListOf(messageId)
+                GameConversation.messages[this] = mutableListOf(messageId)
             }
         }
     }

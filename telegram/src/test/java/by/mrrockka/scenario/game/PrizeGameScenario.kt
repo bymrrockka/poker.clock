@@ -1,5 +1,6 @@
 package by.mrrockka.scenario.game
 
+import by.mrrockka.Command
 import by.mrrockka.Given
 import by.mrrockka.When
 import by.mrrockka.extension.mdApprover
@@ -68,13 +69,13 @@ abstract class PrizeGameScenario : GameScenario() {
     @ParameterizedTest
     @ValueSource(
             strings = [
-                """/pp 
+                """/prize_pool 
                 |1. 90%, 2. 50%
                 """,
-                """/pp 
+                """/prize_pool
                 |1. 90%
                 """,
-                """/pp 
+                """/prize_pool 
                 |1. 23%
                 |2. 23%
                 |3. 23%
@@ -128,6 +129,26 @@ abstract class PrizeGameScenario : GameScenario() {
             message { "nickname2".entry() }
             message { prizePool(2) }
             message { listOf("me", "nickname2").finalePlaces() }
+        } When {
+            updatesReceived()
+        } ThenApproveWith approver
+    }
+
+    @Test
+    fun `prize pool conversation command should store`(approver: Approver) {
+        val buyin = BigDecimal(10)
+        val player = "me"
+
+        Given {
+            message { player.createGame(gameType(), buyin) }
+            message { "nickname3".entry() }
+            val toDelete = mutableListOf<Command.Message>()
+            message { "/pp" }
+            toDelete += message { "3" }
+            toDelete += message { "50" }
+            toDelete += message { "30" }
+            toDelete += message { "20" }
+            toDelete.deleted()
         } When {
             updatesReceived()
         } ThenApproveWith approver

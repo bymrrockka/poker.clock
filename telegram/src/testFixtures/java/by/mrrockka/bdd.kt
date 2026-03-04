@@ -19,7 +19,8 @@ interface Command {
 
     data class Unpin(val command: Command, override val unique: String = unique()) : Command
 
-    data class DeleteMessages(val toDelete: List<Message>, override val unique: String = unique()) : Command
+    data class DeleteMessages(val toDelete: List<Command>, override val unique: String = unique()) : Command
+    data class Skip(override val unique: String = unique()) : Command
 
     companion object {
         fun unique(): String = telegramRandoms.faker.regexify("\\w{10,12}")
@@ -34,6 +35,8 @@ class GivenSpecification {
         this.commands += command
         return command
     }
+
+    fun skip(): Command.Skip = Command.Skip()
 
     @OptIn(ExperimentalTime::class)
     fun pollPosted(time: Instant): Command.Poll {
@@ -60,7 +63,7 @@ class GivenSpecification {
         }
     }
 
-    fun List<Command.Message>.deleted() {
+    fun List<Command>.deleted() {
         commands += Command.DeleteMessages(this)
     }
 }

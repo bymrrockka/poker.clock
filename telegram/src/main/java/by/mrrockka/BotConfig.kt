@@ -1,6 +1,6 @@
 package by.mrrockka
 
-import by.mrrockka.commands.game.GameWizardHandler
+import by.mrrockka.commands.game.GameConversation
 import by.mrrockka.service.GameTablesService
 import by.mrrockka.service.GameTelegramService
 import by.mrrockka.service.PinMessageService
@@ -73,11 +73,11 @@ open class BotConfig(
             gameService: GameTelegramService,
             tablesService: GameTablesService,
             pinMessageService: PinMessageService,
-    ): GameWizardHandler {
-        GameWizardHandler.gameService = gameService
-        GameWizardHandler.tableService = tablesService
-        GameWizardHandler.pinMessageService = pinMessageService
-        return GameWizardHandler
+    ): GameConversation {
+        GameConversation.gameService = gameService
+        GameConversation.tableService = tablesService
+        GameConversation.pinMessageService = pinMessageService
+        return GameConversation
     }
 }
 

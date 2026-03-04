@@ -143,6 +143,16 @@ abstract class AbstractScenarioTest {
                    |___
                    """.trimMargin()
 
+                is Command.Skip ->
+                    """
+                   |### ${index + 1}. Message was skipped
+                   |
+                   |``` 
+                   |${dispatcher.requests[index] ?: emptyMessage} 
+                   |``` 
+                   |___
+                   """.trimMargin()
+
                 is Command.Pin ->
                     """
                    |### ${index + 1}. Pinned
@@ -222,6 +232,14 @@ abstract class AbstractScenarioTest {
                     update(update)
                 }
             }
+
+            is Command.Skip -> {
+                dispatcher.scenario {
+                    index(index)
+                    skip()
+                }
+            }
+
 
             is Command.Message -> {
                 val update = update {

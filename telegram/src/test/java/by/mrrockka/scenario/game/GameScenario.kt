@@ -42,10 +42,12 @@ abstract class GameScenario : AbstractScenarioTest() {
     fun `should generate randomized table seats when players enters the game (conversation)`(size: Int) {
         val buyin = BigDecimal(10)
         val players = (1..size).map { "nickname$it" }
-        val toDelete = mutableListOf<Command.Message>()
+        val toDelete = mutableListOf<Command>()
 
         Given {
             message { game }
+            //skip initial message
+            toDelete += skip()
             //set game type
             toDelete += message { gameType().title }
             //set buyin
@@ -71,10 +73,12 @@ abstract class GameScenario : AbstractScenarioTest() {
     @Test
     fun `should cancel game creation when 'cancel' input`(approver: Approver) {
         val buyin = BigDecimal(10)
-        val toDelete = mutableListOf<Command.Message>()
+        val toDelete = mutableListOf<Command>()
 
         Given {
             message { game }
+            //skip initial message
+            toDelete += skip()
             //set game type
             toDelete += message { gameType().title }
             //set buyin
