@@ -3,6 +3,7 @@ package by.mrrockka.commands.game
 import by.mrrockka.commands.BigDecimalState
 import by.mrrockka.commands.CancelStep
 import by.mrrockka.commands.CancelableStep
+import by.mrrockka.commands.ClearMessageConversation
 import by.mrrockka.commands.GameTypeState
 import by.mrrockka.commands.MessageMetadataState
 import by.mrrockka.commands.decimalValidation
@@ -16,7 +17,6 @@ import by.mrrockka.service.GameTablesService
 import by.mrrockka.service.GameTelegramService
 import by.mrrockka.service.PinMessageService
 import eu.vendeli.tgbot.annotations.WizardHandler
-import eu.vendeli.tgbot.api.message.deleteMessages
 import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.generated.getState
 import eu.vendeli.tgbot.types.chain.Transition
@@ -30,21 +30,10 @@ import java.math.BigDecimal
     trigger = ["/game", "/start"],
     stateManagers = [BigDecimalState::class, MessageMetadataState::class, GameTypeState::class],
 )
-object GameWizardHandler {
+object GameWizardHandler : ClearMessageConversation() {
     lateinit var gameService: GameTelegramService
     lateinit var tableService: GameTablesService
     lateinit var pinMessageService: PinMessageService
-    val messages = mutableMapOf<Long, List<Long>>()
-    val initials = mutableMapOf<Long, MessageMetadata>()
-
-    private fun Long.message(messageId: Long) {
-        val list = messages[this]
-        if (list != null) {
-            messages[this] = (list + messageId)
-        } else {
-            messages[this] = mutableListOf(messageId)
-        }
-    }
 
     object Type : CancelableStep(isInitial = true, cancelStep = Cancel::class) {
         override suspend fun onEntry(ctx: WizardContext) {
@@ -64,7 +53,6 @@ object GameWizardHandler {
                 .sendReturning(ctx.user, ctx.bot)
                 .onFailure { error("Failed to send message") }
                 ?.also { message -> ctx.user.id.message(message.messageId) }
-                ?: error("No message returned from telegram api")
         }
 
         override suspend fun onRetry(ctx: WizardContext, reason: String?) {
@@ -72,7 +60,6 @@ object GameWizardHandler {
                 .sendReturning(ctx.user, ctx.bot)
                 .onFailure { error("Failed to send message") }
                 ?.also { message -> ctx.user.id.message(message.messageId) }
-                ?: error("No message returned from telegram api")
         }
 
         override suspend fun store(ctx: WizardContext): GameType =
@@ -106,7 +93,6 @@ object GameWizardHandler {
                 .sendReturning(ctx.user, ctx.bot)
                 .onFailure { error("Failed to send message") }
                 ?.also { message -> ctx.user.id.message(message.messageId) }
-                ?: error("No message returned from telegram api")
         }
 
         override suspend fun onRetry(ctx: WizardContext, reason: String?) {
@@ -114,7 +100,6 @@ object GameWizardHandler {
                 .sendReturning(ctx.user, ctx.bot)
                 .onFailure { error("Failed to send message") }
                 ?.also { message -> ctx.user.id.message(message.messageId) }
-                ?: error("No message returned from telegram api")
         }
 
         override suspend fun store(ctx: WizardContext): BigDecimal = BigDecimal(ctx.update.text)
@@ -135,7 +120,6 @@ object GameWizardHandler {
                 .sendReturning(ctx.user, ctx.bot)
                 .onFailure { error("Failed to send message") }
                 ?.also { message -> ctx.user.id.message(message.messageId) }
-                ?: error("No message returned from telegram api")
         }
 
         override suspend fun onRetry(ctx: WizardContext, reason: String?) {
@@ -143,7 +127,6 @@ object GameWizardHandler {
                 .sendReturning(ctx.user, ctx.bot)
                 .onFailure { error("Failed to send message") }
                 ?.also { message -> ctx.user.id.message(message.messageId) }
-                ?: error("No message returned from telegram api")
         }
 
         override suspend fun store(ctx: WizardContext): MessageMetadata =
@@ -203,12 +186,9 @@ object GameWizardHandler {
                     .sendReturning(to = ctx.user, via = ctx.bot)
                     .onFailure { error("Failed to send game message") }
                     ?.also { message -> pinMessageService.pin(message, PinType.GAME) }
-                    ?: error("No message returned from telegram api")
             }
 
-            messages[ctx.user.id]?.also { list ->
-                deleteMessages(list).send(ctx.user, ctx.bot)
-            }
+            ctx.clearMessages()
         }
 
         override suspend fun validate(ctx: WizardContext): Transition {
@@ -232,7 +212,6 @@ object GameWizardHandler {
                 .sendReturning(ctx.user, ctx.bot)
                 .onFailure { error("Failed to send message") }
                 ?.also { message -> ctx.user.id.message(message.messageId) }
-                ?: error("No message returned from telegram api")
         }
 
         override suspend fun onRetry(ctx: WizardContext, reason: String?) {
@@ -240,7 +219,6 @@ object GameWizardHandler {
                 .sendReturning(ctx.user, ctx.bot)
                 .onFailure { error("Failed to send message") }
                 ?.also { message -> ctx.user.id.message(message.messageId) }
-                ?: error("No message returned from telegram api")
         }
 
         override suspend fun store(ctx: WizardContext): BigDecimal = BigDecimal(ctx.update.text)
@@ -254,9 +232,5 @@ object GameWizardHandler {
         }
     }
 
-    object Cancel : CancelStep({ ctx ->
-        messages[ctx.user.id]?.also { list ->
-            deleteMessages(list).send(ctx.user, ctx.bot)
-        }
-    })
+    object Cancel : CancelStep({ ctx -> ctx.clearMessages() })
 }
