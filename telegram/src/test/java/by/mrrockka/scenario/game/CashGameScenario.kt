@@ -33,13 +33,13 @@ class CashGameScenario : GameScenario() {
         )
 
         Given {
-            val game = message { players.createGame(GameType.CASH, buyin, withAlias) }
+            val game = user { players.createGame(GameType.CASH, buyin, withAlias) }
             game.pinned()
-            message { "nickname1".withdrawal(20) }
-            message { "nickname2".withdrawal(30) }
-            message { "nickname4".entry(20) }
-            message { "nickname3".withdrawal(30) }
-            message { calculate }
+            user { "nickname1".withdrawal(20) }
+            user { "nickname2".withdrawal(30) }
+            user { "nickname4".entry(20) }
+            user { "nickname3".withdrawal(30) }
+            user { calculate }
                     .pinned()
             game.unpinned()
         } When {
@@ -52,10 +52,10 @@ class CashGameScenario : GameScenario() {
         val buyin = BigDecimal(10)
 
         Given {
-            message { "nickname1".createGame(GameType.CASH, buyin) }
-            message { "nickname2".entry() }
-            message { "nickname1".withdrawal(20) }
-            message { calculate }
+            user { "nickname1".createGame(GameType.CASH, buyin) }
+            user { "nickname2".entry() }
+            user { "nickname1".withdrawal(20) }
+            user { calculate }
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -67,8 +67,8 @@ class CashGameScenario : GameScenario() {
         val players = listOf("nickname1", "nickname2")
 
         Given {
-            message { players.createGame(GameType.CASH, buyin) }
-            message { calculate }
+            user { players.createGame(GameType.CASH, buyin) }
+            user { calculate }
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -80,8 +80,8 @@ class CashGameScenario : GameScenario() {
         val players = listOf("nickname1", "nickname2")
 
         Given {
-            message { players.createGame(GameType.CASH, buyin) }
-            message { "nickname1".withdrawal(40) }
+            user { players.createGame(GameType.CASH, buyin) }
+            user { "nickname1".withdrawal(40) }
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -93,8 +93,8 @@ class CashGameScenario : GameScenario() {
         val players = listOf("nickname1", "nickname2")
 
         Given {
-            message { players.createGame(GameType.CASH, buyin) }
-            message { prizePool(1) }
+            user { players.createGame(GameType.CASH, buyin) }
+            user { prizePool(1) }
         } When {
             updatesReceived()
         } ThenApproveWith approver

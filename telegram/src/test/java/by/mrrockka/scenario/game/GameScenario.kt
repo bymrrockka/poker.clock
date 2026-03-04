@@ -26,12 +26,18 @@ abstract class GameScenario : AbstractScenarioTest() {
         val players = (1..size).map { "nickname$it" }
 
         Given {
-            message { players.createGame(gameType(), buyin) }
-            message { "nickname1".entry() }
-            message { "nickname1".entry() }
-            message { "nickname${size + 1}".entry() }
-            message { "nickname${size + 2}".entry() }
-            message { "nickname${size + 3}".entry() }
+            user { players.createGame(gameType(), buyin) }
+            bot { "game created" }
+            user { "nickname1".entry() }
+            bot { "entry stored" }
+            user { "nickname1".entry() }
+            bot { "entry stored" }
+            user { "nickname${size + 1}".entry() }
+            bot { "entry stored" }
+            user { "nickname${size + 2}".entry() }
+            bot { "entry stored" }
+            user { "nickname${size + 3}".entry() }
+            bot { "entry stored" }
         } When {
             updatesReceived()
         } ThenApproveWith mdApprover("should generate randomized table seats when players enters the ${gameType()} game. Size $size")
@@ -45,26 +51,30 @@ abstract class GameScenario : AbstractScenarioTest() {
         val toDelete = mutableListOf<Command>()
 
         Given {
-            message { game }
-            //skip initial message
-            toDelete += skip()
-            //set game type
-            toDelete += message { gameType().title }
-            //set buyin
-            toDelete += message { buyin.setScale(0).toString() }
+            user { game }
+            toDelete += bot { "Conversation mode description" }
+            toDelete += bot { "Type of game?" }
+            toDelete += user { gameType().title }
+            toDelete += bot { "Buyin?" }
+            toDelete += user { buyin.setScale(0).toString() }
             if (gameType() == GameType.BOUNTY) {
-                //set bounty
-                toDelete += message { buyin.setScale(0).toString() }
+                toDelete += bot { "Bounty?" }
+                toDelete += user { buyin.setScale(0).toString() }
             }
-            //set players
-            toDelete += message { players.entries() }
+            toDelete += bot { "Players?" }
+            toDelete += user { players.entries() }
+            toDelete += bot { "Game created" }
             toDelete.deleted()
-            //entries to game
-            message { "nickname1".entry() }
-            message { "nickname1".entry() }
-            message { "nickname${size + 1}".entry() }
-            message { "nickname${size + 2}".entry() }
-            message { "nickname${size + 3}".entry() }
+            user { "nickname1".entry() }
+            bot { "entry stored" }
+            user { "nickname1".entry() }
+            bot { "entry stored" }
+            user { "nickname${size + 1}".entry() }
+            bot { "entry stored" }
+            user { "nickname${size + 2}".entry() }
+            bot { "entry stored" }
+            user { "nickname${size + 3}".entry() }
+            bot { "entry stored" }
         } When {
             updatesReceived()
         } ThenApproveWith mdApprover("should generate randomized table seats when players enters the ${gameType()} game (conversation). Size $size")
@@ -76,15 +86,15 @@ abstract class GameScenario : AbstractScenarioTest() {
         val toDelete = mutableListOf<Command>()
 
         Given {
-            message { game }
-            //skip initial message
-            toDelete += skip()
-            //set game type
-            toDelete += message { gameType().title }
-            //set buyin
-            toDelete += message { buyin.setScale(0).toString() }
-            //cancel
-            toDelete += message { "cancel" }
+            user { game }
+            toDelete += bot { "Conversation mode description" }
+            toDelete += bot { "Type of game?" }
+            toDelete += user { gameType().title }
+            toDelete += bot { "Buyin?" }
+            toDelete += user { buyin.setScale(0).toString() }
+            toDelete += bot { "Question?" }
+            toDelete += user { "cancel" }
+            toDelete += bot { "Was canceled" }
             toDelete.deleted()
         } When {
             updatesReceived()

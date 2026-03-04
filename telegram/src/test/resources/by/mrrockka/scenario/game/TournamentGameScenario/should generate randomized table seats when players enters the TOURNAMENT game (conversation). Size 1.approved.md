@@ -1,63 +1,85 @@
-### 1. Interaction
+### 1. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 0
+Processed message id: 1
 /game 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 2. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 2 
+You started a cancelable conversation. 
+To cancel at any step you simply need to type 'cancel' 
+``` 
+___
+
+### 3. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 3 
 What type of game you'd like to play? 
 ``` 
 ___
 
-### 2. Interaction
+### 4. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 1
+Processed message id: 4
 Tournament 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 5. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 5 
 How much is for buy in? 
 ``` 
 ___
 
-### 3. Interaction
+### 6. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 2
+Processed message id: 6
 10 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 7. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 7 
 Who's playing? 
 ``` 
 ___
 
-### 4. Interaction
+### 8. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 3
+Processed message id: 8
 @nickname1 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 9. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 9 
 Game type: TOURNAMENT
 Buy in: 10
                 
@@ -69,57 +91,66 @@ Seats:
 ``` 
 ___
 
-### 5. Deleted messages
+### 10. Deleted messages
 
 ``` 
-1,2,3 deleted
+message ids 2,3,4,5,6,7,8,9 deleted
 ``` 
 ___
 
-### 6. Interaction
+### 11. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 4
+Processed message id: 10
 /entry @nickname1  
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 12. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 11 
 Entry stored 
 ``` 
 ___
 
-### 7. Interaction
+### 13. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 5
+Processed message id: 12
 /entry @nickname1  
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 14. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 13 
 Entry stored 
 ``` 
 ___
 
-### 8. Interaction
+### 15. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 6
+Processed message id: 14
 /entry @nickname2  
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 16. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 15 
 Entries: 
 ------------------------------
 Table 1
@@ -128,18 +159,21 @@ Seats:
 ``` 
 ___
 
-### 9. Interaction
+### 17. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 7
+Processed message id: 16
 /entry @nickname3  
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 18. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 17 
 Entries: 
 ------------------------------
 Table 1
@@ -148,18 +182,21 @@ Seats:
 ``` 
 ___
 
-### 10. Interaction
+### 19. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 8
+Processed message id: 18
 /entry @nickname4  
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 20. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 19 
 Entries: 
 ------------------------------
 Table 1

@@ -25,7 +25,7 @@ class PollScenario : AbstractPollScenario() {
         val time = Instant.parse("2025-09-16T12:34:56Z") //Tuesday
         Given {
             clock.set(time)
-            val createPoll = message {
+            val createPoll = user {
                 """
                 |${createPoll}
                 |cron: 0 0 0 * * WED
@@ -40,7 +40,7 @@ class PollScenario : AbstractPollScenario() {
             }
             pollPosted(time + 8.days)
                     .pinned()
-            message(replyTo = createPoll) { stopPoll }
+            user(replyTo = createPoll) { stopPoll }
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -51,7 +51,7 @@ class PollScenario : AbstractPollScenario() {
         val time = Instant.parse("2025-09-16T12:34:56Z") //Tuesday
         Given {
             clock.set(time)
-            message {
+            user {
                 """
                 |$createPoll
                 |cron: 0 0 0 * * *
@@ -78,7 +78,7 @@ class PollScenario : AbstractPollScenario() {
     @ValueSource(strings = ["", "message, cron, options", "message, cron, element", "message, cron", "cron, options, element", "message, options, element"])
     fun `fail when doesn't have required fields`(actual: String) {
         Given {
-            message {
+            user {
                 """
                 |${createPoll}
                 ${if (actual.contains("message")) "|message: Test poll" else ""}
@@ -95,7 +95,7 @@ class PollScenario : AbstractPollScenario() {
     @Test
     fun `stop poll fail when wrong reply message specified`(approver: Approver) {
         Given {
-            message {
+            user {
                 """
                 |${createPoll}
                 |cron: 0 0 0 * * 3
@@ -104,8 +104,8 @@ class PollScenario : AbstractPollScenario() {
                 |1. Yes - participant
                 """.trimMargin()
             }
-            val game = message { "me".createGame(GameType.TOURNAMENT, 30.toBigDecimal()) }
-            message(replyTo = game) { stopPoll } // should fail
+            val game = user { "me".createGame(GameType.TOURNAMENT, 30.toBigDecimal()) }
+            user(replyTo = game) { stopPoll } // should fail
         } When {
             updatesReceived()
         } ThenApproveWith approver

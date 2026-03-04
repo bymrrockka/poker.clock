@@ -1,70 +1,82 @@
-### 1. Interaction
+### 1. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
 message id: 0
 /game 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 2. Message
+
+&rarr; <ins>Bot</ins>
 
 ``` 
-What type of game you'd like to play? 
+No message 
 ``` 
 ___
 
-### 2. Interaction
+### 3. Message
 
-&rarr; <ins>User message</ins>
-
-```
-message id: 1
-Cash 
-```
-
-&rarr; <ins>Bot message</ins>
+&rarr; <ins>Bot</ins>
 
 ``` 
-How much is for buy in? 
+No message 
 ``` 
 ___
 
-### 3. Interaction
+### 4. Message
 
-&rarr; <ins>User message</ins>
-
-```
-message id: 2
-10 
-```
-
-&rarr; <ins>Bot message</ins>
-
-``` 
-Who's playing? 
-``` 
-___
-
-### 4. Interaction
-
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
 message id: 3
-cancel 
+Cash 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 5. Message
+
+&rarr; <ins>Bot</ins>
 
 ``` 
-Game creation was cancelled 
+No message 
 ``` 
 ___
 
-### 5. Deleted messages
+### 6. Message
+
+&rarr; <ins>User</ins>
+
+```
+message id: 5
+10 
+```
+___
+
+### 7. Message
+
+&rarr; <ins>Bot</ins>
 
 ``` 
-1,2,3 deleted
+No message 
+``` 
+___
+
+### 8. Message
+
+&rarr; <ins>User</ins>
+
+```
+message id: 7
+cancel 
+```
+___
+
+### 9. Deleted messages
+
+``` 
+1,2,3,4,5,6,7 No message
 ``` 
 ___

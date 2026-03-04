@@ -24,7 +24,7 @@ class PollInvitationScenario : AbstractPollScenario() {
 
         Given {
             clock.set(time)
-            val createPoll = message {
+            val createPoll = user {
                 """
                 |${createPoll}
                 |cron: 0 0 0 * * WED
@@ -49,11 +49,11 @@ class PollInvitationScenario : AbstractPollScenario() {
             //maybe
             poll.pollAnswer(person(), 3)
 
-            message(replyTo = poll) {
+            user(replyTo = poll) {
                 createGame(type = GameType.TOURNAMENT, BigDecimal(10))
             }
-            message { gameStats }
-            message(replyTo = createPoll) { stopPoll }
+            user { gameStats }
+            user(replyTo = createPoll) { stopPoll }
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -65,7 +65,7 @@ class PollInvitationScenario : AbstractPollScenario() {
         val participants = listOf(person(), person())
         Given {
             clock.set(time)
-            message {
+            user {
                 """
                 |${createPoll}
                 |cron: 0 0 0 * * WED
@@ -89,10 +89,10 @@ class PollInvitationScenario : AbstractPollScenario() {
             //maybe
             poll.pollAnswer(person(), 3)
 
-            message(replyTo = poll) {
+            user(replyTo = poll) {
                 createGame(type = GameType.TOURNAMENT, buyin = BigDecimal(10), excludes = participants.drop(1))
             }
-            message { gameStats }
+            user { gameStats }
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -104,7 +104,7 @@ class PollInvitationScenario : AbstractPollScenario() {
 
         Given {
             clock.set(time)
-            message {
+            user {
                 """
                 |${createPoll}
                 |cron: 0 0 0 * * WED
@@ -123,7 +123,7 @@ class PollInvitationScenario : AbstractPollScenario() {
             }
             poll.pollAnswer(person(), 3)
 
-            message(replyTo = poll) {
+            user(replyTo = poll) {
                 createGame(type = GameType.TOURNAMENT, BigDecimal(10))
             }
         } When {

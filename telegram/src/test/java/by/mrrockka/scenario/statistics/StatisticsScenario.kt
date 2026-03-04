@@ -24,10 +24,10 @@ abstract class StatisticsScenario : AbstractScenarioTest() {
                 "me", "nickname1",
         )
         Given {
-            message { players.createGame(GameType.TOURNAMENT, buyin) }
-            message { statisticsCommand }
-            message { entry() }
-            message { statisticsCommand }
+            user { players.createGame(GameType.TOURNAMENT, buyin) }
+            user { statisticsCommand }
+            user { entry() }
+            user { statisticsCommand }
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -40,14 +40,14 @@ abstract class StatisticsScenario : AbstractScenarioTest() {
                 "me", "nickname1",
         )
         Given {
-            message { players.createGame(GameType.CASH, buyin) }
-            message { statisticsCommand }
-            message { entry(30) }
-            message { statisticsCommand }
-            message { "me".withdrawal(30) }
-            message { statisticsCommand }
-            message { "me".withdrawal(20) }
-            message { statisticsCommand }
+            user { players.createGame(GameType.CASH, buyin) }
+            user { statisticsCommand }
+            user { entry(30) }
+            user { statisticsCommand }
+            user { "me".withdrawal(30) }
+            user { statisticsCommand }
+            user { "me".withdrawal(20) }
+            user { statisticsCommand }
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -60,17 +60,17 @@ abstract class StatisticsScenario : AbstractScenarioTest() {
                 "me", "nickname1",
         )
         Given {
-            message { players.createGame(GameType.BOUNTY, buyin) }
-            message { statisticsCommand }
-            message { "me" kicked "nickname1" }
-            message { statisticsCommand }
-            message { "nickname1".entry() }
-            message { "nickname1" kicked "me" }
-            message { statisticsCommand }
-            message { "me".entry() }
-            message { statisticsCommand }
-            message { "nickname1" kicked "me" }
-            message { statisticsCommand }
+            user { players.createGame(GameType.BOUNTY, buyin) }
+            user { statisticsCommand }
+            user { "me" kicked "nickname1" }
+            user { statisticsCommand }
+            user { "nickname1".entry() }
+            user { "nickname1" kicked "me" }
+            user { statisticsCommand }
+            user { "me".entry() }
+            user { statisticsCommand }
+            user { "nickname1" kicked "me" }
+            user { statisticsCommand }
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -91,8 +91,8 @@ class PlayerStatisticsScenario : StatisticsScenario() {
                 "nickname2", "nickname1",
         )
         Given {
-            message { players.createGame(GameType.TOURNAMENT, buyin) }
-            message { playerStats }
+            user { players.createGame(GameType.TOURNAMENT, buyin) }
+            user { playerStats }
         } When {
             updatesReceived()
         } ThenApproveWith approver

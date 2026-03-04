@@ -32,10 +32,10 @@ abstract class PrizeGameScenario : GameScenario() {
         val winners = players.dropLast(4)
 
         Given {
-            message { players.createGame(gameType(), buyin) }
-            message { prizePool(size) }
-            message { winners.finalePlaces() }
-            message { calculate }
+            user { players.createGame(gameType(), buyin) }
+            user { prizePool(size) }
+            user { winners.finalePlaces() }
+            user { calculate }
         } When {
             updatesReceived()
         } ThenApproveWith mdApprover("should fail when prize pool is different size then finale places $size")
@@ -56,10 +56,10 @@ abstract class PrizeGameScenario : GameScenario() {
         val winners = players.dropLast(4)
 
         Given {
-            message { players.createGame(gameType(), buyin) }
-            if (!missed.contains("prize pool")) message { prizePool(2) }
-            if (!missed.contains("finale places")) message { winners.finalePlaces() }
-            message { calculate }
+            user { players.createGame(gameType(), buyin) }
+            if (!missed.contains("prize pool")) user { prizePool(2) }
+            if (!missed.contains("finale places")) user { winners.finalePlaces() }
+            user { calculate }
         } When {
             updatesReceived()
         } ThenApproveWith mdApprover("should fail when $missed is missed")
@@ -106,10 +106,10 @@ abstract class PrizeGameScenario : GameScenario() {
                 .trim()
 
         Given {
-            message { players.createGame(gameType(), buyin) }
-            message { prizePool.trimMargin() }
-            message { winner.finalePlaces() }
-            message { calculate }
+            user { players.createGame(gameType(), buyin) }
+            user { prizePool.trimMargin() }
+            user { winner.finalePlaces() }
+            user { calculate }
         } When {
             updatesReceived()
         } ThenApproveWith mdApprover("should fail when prize pool sum is not equal 100 percent. $fileName")
@@ -121,14 +121,14 @@ abstract class PrizeGameScenario : GameScenario() {
         val player = "me"
 
         Given {
-            message { player.createGame(gameType(), buyin) }
-            message { "nickname3".entry() }
-            message { prizePool(1) }
-            message { "nickname1".entry() }
-            message { player.finalePlaces() }
-            message { "nickname2".entry() }
-            message { prizePool(2) }
-            message { listOf("me", "nickname2").finalePlaces() }
+            user { player.createGame(gameType(), buyin) }
+            user { "nickname3".entry() }
+            user { prizePool(1) }
+            user { "nickname1".entry() }
+            user { player.finalePlaces() }
+            user { "nickname2".entry() }
+            user { prizePool(2) }
+            user { listOf("me", "nickname2").finalePlaces() }
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -140,14 +140,14 @@ abstract class PrizeGameScenario : GameScenario() {
         val player = "me"
 
         Given {
-            message { player.createGame(gameType(), buyin) }
-            message { "nickname3".entry() }
-            val toDelete = mutableListOf<Command.Message>()
-            message { "/pp" }
-            toDelete += message { "3" }
-            toDelete += message { "50" }
-            toDelete += message { "30" }
-            toDelete += message { "20" }
+            user { player.createGame(gameType(), buyin) }
+            user { "nickname3".entry() }
+            val toDelete = mutableListOf<Command.UserMessage>()
+            user { "/pp" }
+            toDelete += user { "3" }
+            toDelete += user { "50" }
+            toDelete += user { "30" }
+            toDelete += user { "20" }
             toDelete.deleted()
         } When {
             updatesReceived()

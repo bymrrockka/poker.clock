@@ -33,20 +33,20 @@ class TournamentGameScenario : PrizeGameScenario() {
         val winners = players.take(2);
 
         Given {
-            val game = message { players.createGame(GameType.TOURNAMENT, buyin, withAlias) }
+            val game = user { players.createGame(GameType.TOURNAMENT, buyin, withAlias) }
             game.pinned()
-            message { "nickname3".entry() }
-            message { "nickname3".entry() }
-            val prizePool = message { prizePool(2) }
+            user { "nickname3".entry() }
+            user { "nickname3".entry() }
+            val prizePool = user { prizePool(2) }
             prizePool.pinned()
-            message { "nickname1".entry() }
-            message { "nickname1".entry() }
-            val finalePlaces = message { winners.finalePlaces() }
+            user { "nickname1".entry() }
+            user { "nickname1".entry() }
+            val finalePlaces = user { winners.finalePlaces() }
             finalePlaces.pinned()
-            message { "nickname1".entry() }
-            message { "nickname1".entry() }
-            message { "nickname1".entry() }
-            message { calculate }.pinned()
+            user { "nickname1".entry() }
+            user { "nickname1".entry() }
+            user { "nickname1".entry() }
+            user { calculate }.pinned()
             unpinned(game, prizePool, finalePlaces)
         } When {
             updatesReceived()
@@ -59,13 +59,13 @@ class TournamentGameScenario : PrizeGameScenario() {
         val player = "me"
 
         Given {
-            message { player.createGame(GameType.TOURNAMENT, buyin) }
-            message { "nickname3".entry() }
-            message { prizePool(1) }
-            message { "nickname1".entry() }
-            message { player.finalePlaces() }
-            message { "nickname2".entry() }
-            message { calculate }
+            user { player.createGame(GameType.TOURNAMENT, buyin) }
+            user { "nickname3".entry() }
+            user { prizePool(1) }
+            user { "nickname1".entry() }
+            user { player.finalePlaces() }
+            user { "nickname2".entry() }
+            user { calculate }
         } When {
             updatesReceived()
         } ThenApproveWith approver

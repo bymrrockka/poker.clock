@@ -100,19 +100,25 @@ abstract class AbstractScenarioTest {
         val emptyMessage = "No message"
         return mapIndexed { index, command ->
             when (command) {
-                is Command.Message ->
+                is Command.UserMessage ->
                     """
-                   |### ${index + 1}. Interaction
+                   |### ${index + 1}. Message
                    |
-                   |&rarr; <ins>User message</ins>
+                   |&rarr; <ins>User</ins>
                    |
                    |```
-                   |${command.toText()} 
+                   |${dispatcher.requests[index] ?: emptyMessage} ${command.toText()} 
                    |```
+                   |___
+                   """.trimMargin()
+
+                is Command.BotMessage ->
+                    """
+                   |### ${index + 1}. Message
                    |
-                   |&rarr; <ins>Bot message</ins>
-                   |
+                   |&rarr; <ins>Bot</ins>
                    |``` 
+                   |${command.toText()} 
                    |${dispatcher.requests[index] ?: emptyMessage} 
                    |``` 
                    |___
@@ -139,16 +145,6 @@ abstract class AbstractScenarioTest {
                    |
                    |``` 
                    |${command.toText()}
-                   |``` 
-                   |___
-                   """.trimMargin()
-
-                is Command.Skip ->
-                    """
-                   |### ${index + 1}. Message was skipped
-                   |
-                   |``` 
-                   |${dispatcher.requests[index] ?: emptyMessage} 
                    |``` 
                    |___
                    """.trimMargin()
@@ -190,11 +186,18 @@ abstract class AbstractScenarioTest {
 
     private fun Command.toText(): String {
         return when (this) {
-            is Command.Message -> {
+            is Command.UserMessage -> {
                 val replyMessage = if (replyTo != null && messageLog[replyTo] != null) "[reply to message id ${messageLog[replyTo]!!.messageId}]\n" else ""
                 replyMessage + """
                             |message id: ${messageLog[this]!!.messageId}
                             |$message
+                        """.trimMargin()
+            }
+
+            is Command.BotMessage -> {
+                val replyMessage = if (replyTo != null && messageLog[replyTo] != null) "[reply to message id ${messageLog[replyTo]!!.messageId}]\n" else ""
+                replyMessage + """
+                            |message id: ${messageLog[this]!!.messageId}
                         """.trimMargin()
             }
 
@@ -206,8 +209,9 @@ abstract class AbstractScenarioTest {
                     .filter { (key, _) -> toDelete.contains(key) }
                     .values
                     .map { it.messageId }
+                    .sorted()
                     .joinToString(",")
-                    .also {
+                    .let {
                         if (it.isEmpty()) error("Command was not found in log")
                         "message ids ${it}"
                     }
@@ -233,33 +237,41 @@ abstract class AbstractScenarioTest {
                 }
             }
 
-            is Command.Skip -> {
-                dispatcher.scenario {
-                    index(index)
-                    skip()
-                }
-            }
-
-
-            is Command.Message -> {
-                val update = update {
-                    message {
-                        text(message)
-                        chatId(chatid)
-                        from(user)
-                        createdAt(clock.now().toJavaInstant())
-                        if (replyTo != null && messageLog[replyTo] != null) {
-                            replyTo(messageLog[replyTo]!!)
-                        }
+            is Command.UserMessage -> {
+                val message = message {
+                    text(message)
+                    chatId(chatid)
+                    from(user)
+                    createdAt(clock.now().toJavaInstant())
+                    if (replyTo != null && messageLog[replyTo] != null) {
+                        replyTo(messageLog[replyTo]!!)
                     }
                 }
 
-                messageLog += this to update.message!!
+                messageLog += this to message
 
+                val update = update { message(message) }
                 dispatcher.scenario {
                     index(index)
                     update(update)
-                    message(update.message!!)
+                }
+            }
+
+            is Command.BotMessage -> {
+                val message = message {
+                    text(message)
+                    chatId(chatid)
+                    createdAt(clock.now().toJavaInstant())
+                    if (replyTo != null && messageLog[replyTo] != null) {
+                        replyTo(messageLog[replyTo]!!)
+                    }
+                }
+
+                messageLog += this to message
+
+                dispatcher.scenario {
+                    index(index)
+                    message(message)
                 }
             }
 
