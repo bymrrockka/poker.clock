@@ -1,4 +1,4 @@
-package by.mrrockka.commands
+package by.mrrockka.commands.prizepool
 
 import by.mrrockka.domain.toMessageMetadata
 import by.mrrockka.repo.PinType

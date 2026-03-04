@@ -1,8 +1,11 @@
 package by.mrrockka.commands.game
 
 import by.mrrockka.commands.BigDecimalState
+import by.mrrockka.commands.CancelStep
+import by.mrrockka.commands.CancelableStep
 import by.mrrockka.commands.GameTypeState
 import by.mrrockka.commands.MessageMetadataState
+import by.mrrockka.commands.decimalValidation
 import by.mrrockka.domain.BountyTournamentGame
 import by.mrrockka.domain.GameType
 import by.mrrockka.domain.MessageMetadata
@@ -34,8 +37,6 @@ object GameWizardHandler {
     val messages = mutableMapOf<Long, List<Long>>()
     val initials = mutableMapOf<Long, MessageMetadata>()
 
-    private fun String.decimalValidation() = matches("^([\\d.]+)$".toRegex())
-
     private fun Long.message(messageId: Long) {
         val list = messages[this]
         if (list != null) {
@@ -45,11 +46,7 @@ object GameWizardHandler {
         }
     }
 
-    private fun String.canceled() = matches("^cancel$".toRegex())
-
-    private fun jumpToCancel(): Transition = Transition.JumpTo(Cancel::class)
-
-    object Type : WizardStep(isInitial = true) {
+    object Type : CancelableStep(isInitial = true, cancelStep = Cancel::class) {
         override suspend fun onEntry(ctx: WizardContext) {
             val metadata = ctx.update.toMessageMetadata()
             initials += ctx.user.id to metadata
@@ -78,17 +75,13 @@ object GameWizardHandler {
                 ?: error("No message returned from telegram api")
         }
 
-        override suspend fun store(ctx: WizardContext): GameType? {
-            return when {
-                ctx.update.text.canceled() -> null
-                else -> GameType.entries.find { it.name.equals(ctx.update.text, ignoreCase = true) }
-            }
-        }
+        override suspend fun store(ctx: WizardContext): GameType =
+            GameType.entries.find { it.name.equals(ctx.update.text, ignoreCase = true) }
+                ?: error("No game type found for ${ctx.update.text}")
 
-        override suspend fun validate(ctx: WizardContext): Transition {
+        override suspend fun navigate(ctx: WizardContext): Transition {
             ctx.user.id.message(ctx.update.origin.message!!.messageId)
             return when {
-                ctx.update.text.canceled() -> jumpToCancel()
                 (GameType.entries.find { it.name.equals(ctx.update.text, ignoreCase = true) } != null) ->
                     Transition.Next
 
@@ -97,7 +90,7 @@ object GameWizardHandler {
         }
     }
 
-    object Buyin : WizardStep() {
+    object Buyin : CancelableStep(cancelStep = Cancel::class) {
         override suspend fun onEntry(ctx: WizardContext) {
             val lastGame = initials[ctx.user.id]?.let { gameService.findLastGame(it) }
             message { "How much is for buy in?" }
@@ -124,17 +117,11 @@ object GameWizardHandler {
                 ?: error("No message returned from telegram api")
         }
 
-        override suspend fun store(ctx: WizardContext): BigDecimal? {
-            return when {
-                ctx.update.text.canceled() -> null
-                else -> BigDecimal(ctx.update.text)
-            }
-        }
+        override suspend fun store(ctx: WizardContext): BigDecimal = BigDecimal(ctx.update.text)
 
-        override suspend fun validate(ctx: WizardContext): Transition {
+        override suspend fun navigate(ctx: WizardContext): Transition {
             ctx.user.id.message(ctx.update.origin.message!!.messageId)
             return when {
-                ctx.update.text.canceled() -> jumpToCancel()
                 !ctx.update.text.decimalValidation() -> Transition.Retry()
                 ctx.getState<Type>() == GameType.BOUNTY -> Transition.JumpTo(Bounty::class)
                 else -> Transition.JumpTo(Players::class)
@@ -142,7 +129,7 @@ object GameWizardHandler {
         }
     }
 
-    object Players : WizardStep() {
+    object Players : CancelableStep(cancelStep = Cancel::class) {
         override suspend fun onEntry(ctx: WizardContext) {
             message { "Who's playing?" }
                 .sendReturning(ctx.user, ctx.bot)
@@ -159,18 +146,13 @@ object GameWizardHandler {
                 ?: error("No message returned from telegram api")
         }
 
-        override suspend fun store(ctx: WizardContext): MessageMetadata? {
-            return when {
-                ctx.update.text.canceled() -> null
-                else -> ctx.update.origin.message?.toMessageMetadata()
-            }
-        }
+        override suspend fun store(ctx: WizardContext): MessageMetadata =
+            ctx.update.origin.message!!.toMessageMetadata()
 
-        override suspend fun validate(ctx: WizardContext): Transition {
+        override suspend fun navigate(ctx: WizardContext): Transition {
             ctx.user.id.message(ctx.update.origin.message!!.messageId)
             val message = ctx.update.toMessageMetadata()
             return when {
-                ctx.update.text.canceled() -> jumpToCancel()
                 message.mentions.isNotEmpty() || message.replyTo?.poll != null -> Transition.Next
                 else -> Transition.Retry()
             }
@@ -234,7 +216,7 @@ object GameWizardHandler {
         }
     }
 
-    object Bounty : WizardStep() {
+    object Bounty : CancelableStep(cancelStep = Cancel::class) {
         override suspend fun onEntry(ctx: WizardContext) {
             val lastGame = initials[ctx.user.id]?.let { gameService.findLastGame(it) }
             message { "How much is for bounty?" }
@@ -261,34 +243,20 @@ object GameWizardHandler {
                 ?: error("No message returned from telegram api")
         }
 
-        override suspend fun store(ctx: WizardContext): BigDecimal? {
-            return when {
-                ctx.update.text.canceled() -> null
-                else -> BigDecimal(ctx.update.text)
-            }
-        }
+        override suspend fun store(ctx: WizardContext): BigDecimal = BigDecimal(ctx.update.text)
 
-        override suspend fun validate(ctx: WizardContext): Transition {
+        override suspend fun navigate(ctx: WizardContext): Transition {
             ctx.user.id.message(ctx.update.origin.message!!.messageId)
             return when {
-                ctx.update.text.canceled() -> jumpToCancel()
                 ctx.update.text.decimalValidation() -> Transition.JumpTo(Players::class)
                 else -> Transition.Retry()
             }
         }
     }
 
-    object Cancel : WizardStep() {
-        override suspend fun onEntry(ctx: WizardContext) {
-            message { "Game creation was cancelled" }.send(ctx.user, ctx.bot)
-
-            messages[ctx.user.id]?.also { list ->
-                deleteMessages(list).send(ctx.user, ctx.bot)
-            }
+    object Cancel : CancelStep({ ctx ->
+        messages[ctx.user.id]?.also { list ->
+            deleteMessages(list).send(ctx.user, ctx.bot)
         }
-
-        override suspend fun validate(ctx: WizardContext): Transition {
-            return Transition.Finish
-        }
-    }
+    })
 }
