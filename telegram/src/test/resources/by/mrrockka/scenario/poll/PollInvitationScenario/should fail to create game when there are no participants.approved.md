@@ -1,9 +1,9 @@
-### 1. Interaction
+### 1. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 0
+Processed message id: 1
 /create_poll
 cron: 0 0 0 * * WED
 message: Test poll
@@ -12,21 +12,24 @@ options:
 2. No
 3. I don't know 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 2. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 2 
 Poll created.
 Will be triggered next WEDNESDAY 00:00 
 ``` 
 ___
 
-### 2. Posted
+### 3. Posted
 
 &rarr; <ins>2025-09-24 - WEDNESDAY</ins>
 
 ``` 
-message id 1
+message id 3
 Test poll
 1. 'Yes'
 2. 'No'
@@ -34,50 +37,62 @@ Test poll
 ``` 
 ___
 
-### 3. Pinned
+### 4. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
-message id 1 pinned
-``` 
-___
-
-### 4. Poll answer
-
-``` 
-jackie_rau chosen 2
+message id: 4 
+No message 
 ``` 
 ___
 
-### 5. Poll answer
+### 5. Pinned
 
 ``` 
-terisa_johnston chosen 2
+message id 3 No message
 ``` 
 ___
 
 ### 6. Poll answer
 
 ``` 
+jackie_rau chosen 2
+``` 
+___
+
+### 7. Poll answer
+
+``` 
+terisa_johnston chosen 2
+``` 
+___
+
+### 8. Poll answer
+
+``` 
 santo_welch chosen 3
 ``` 
 ___
 
-### 7. Interaction
+### 9. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-[reply to message id 1]
-message id: 2
+No message [reply to message id 3]
+message id: 5
 /tournament_game
 buyin: 10
 
  
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 10. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
-Game participants not found according to poll 
+message id: 6 
+No message 
 ``` 
 ___

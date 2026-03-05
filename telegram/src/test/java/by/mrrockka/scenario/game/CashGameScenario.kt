@@ -34,13 +34,18 @@ class CashGameScenario : GameScenario() {
 
         Given {
             val game = user { players.createGame(GameType.CASH, buyin, withAlias) }
+            bot { "Game created" }
             game.pinned()
             user { "nickname1".withdrawal(20) }
+            bot { "Withdraw" }
             user { "nickname2".withdrawal(30) }
+            bot { "Withdraw" }
             user { "nickname4".entry(20) }
+            bot { "Entry stored" }
             user { "nickname3".withdrawal(30) }
-            user { calculate }
-                    .pinned()
+            bot { "Withdraw" }
+            user { calculate }.pinned()
+            bot { "Calculated payouts" }
             game.unpinned()
         } When {
             updatesReceived()
@@ -53,48 +58,58 @@ class CashGameScenario : GameScenario() {
 
         Given {
             user { "nickname1".createGame(GameType.CASH, buyin) }
+            bot { "Game created" }
             user { "nickname2".entry() }
+            bot { "Entry stored" }
             user { "nickname1".withdrawal(20) }
+            bot { "Withdraw" }
             user { calculate }
+            bot { "Calculated payouts" }
         } When {
             updatesReceived()
         } ThenApproveWith approver
     }
 
     @Test
-    fun `should send error when calculation started but there are still money in game`(approver: Approver) {
+    fun `fail when calculation started but there are still money in game`(approver: Approver) {
         val buyin = BigDecimal(10)
         val players = listOf("nickname1", "nickname2")
 
         Given {
             user { players.createGame(GameType.CASH, buyin) }
+            bot { "Game created" }
             user { calculate }
+            bot { "Exception" }
         } When {
             updatesReceived()
         } ThenApproveWith approver
     }
 
     @Test
-    fun `should send error when withdrawal is more then money left in game`(approver: Approver) {
+    fun `fail when withdrawal is more then money left in game`(approver: Approver) {
         val buyin = BigDecimal(10)
         val players = listOf("nickname1", "nickname2")
 
         Given {
             user { players.createGame(GameType.CASH, buyin) }
+            bot { "Game created" }
             user { "nickname1".withdrawal(40) }
+            bot { "Exception" }
         } When {
             updatesReceived()
         } ThenApproveWith approver
     }
 
     @Test
-    fun `should send error when prize pool added`(approver: Approver) {
+    fun `fail when prize pool added`(approver: Approver) {
         val buyin = BigDecimal(10)
         val players = listOf("nickname1", "nickname2")
 
         Given {
             user { players.createGame(GameType.CASH, buyin) }
+            bot { "Game created" }
             user { prizePool(1) }
+            bot { "Exception" }
         } When {
             updatesReceived()
         } ThenApproveWith approver

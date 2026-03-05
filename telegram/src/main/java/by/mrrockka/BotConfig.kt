@@ -1,9 +1,11 @@
 package by.mrrockka
 
 import by.mrrockka.commands.game.GameConversation
+import by.mrrockka.commands.prizepool.PrizePoolConversation
 import by.mrrockka.service.GameTablesService
 import by.mrrockka.service.GameTelegramService
 import by.mrrockka.service.PinMessageService
+import by.mrrockka.service.PrizePoolTelegramService
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.api.botactions.setMyCommands
 import eu.vendeli.tgbot.interfaces.ctx.ClassManager
@@ -69,7 +71,7 @@ open class BotConfig(
     }
 
     @Bean
-    open fun gameWizard(
+    open fun gameConversation(
             gameService: GameTelegramService,
             tablesService: GameTablesService,
             pinMessageService: PinMessageService,
@@ -78,6 +80,16 @@ open class BotConfig(
         GameConversation.tableService = tablesService
         GameConversation.pinMessageService = pinMessageService
         return GameConversation
+    }
+
+    @Bean
+    open fun prizePoolConversation(
+            prizePoolTelegramService: PrizePoolTelegramService,
+            pinMessageService: PinMessageService,
+    ): PrizePoolConversation {
+        PrizePoolConversation.prizePoolService = prizePoolTelegramService
+        PrizePoolConversation.pinMessageService = pinMessageService
+        return PrizePoolConversation
     }
 }
 

@@ -27,32 +27,53 @@ class MyStatisticsScenario : AbstractScenarioTest() {
         Given {
             //first in tournament game
             user { players.createGame(GameType.TOURNAMENT, buyin) }
+            bot { "Game created"}
             user { prizePool(2) }
+            bot { "Prize pool stored"}
             user { players.dropLast(1).finalePlaces() }
+            bot { "Finale places stored"}
             user { calculate }
+            bot { "Calculated payouts"}
             user { myStats }
+            bot { "My statistics"}
 
             //lose in cash game
             user { players.createGame(GameType.CASH, buyin) }
+            bot { "Game created"}
             user { "nickname2".withdrawal(30) }
+            bot { "Withdraw" }
             user { calculate }
+            bot { "Calculated payouts"}
             user { myStats }
+            bot { "My statistics"}
 
             //second in bounty tournament game
             user { players.createGame(GameType.BOUNTY, buyin) }
+            bot { "Game created"}
             user { "nickname1" kicked "nickname2" }
+            bot { "Player kicked"}
             user { "nickname1" kicked "me" }
+            bot { "Player kicked"}
             user { prizePool(2) }
+            bot { "Prize pool stored"}
             user { players.dropLast(1).reversed().finalePlaces() }
+            bot { "Finale places stored"}
             user { calculate }
+            bot { "Calculated payouts"}
             user { myStats }
+            bot { "My statistics"}
 
             //lose in tournament game
             user { players.createGame(GameType.TOURNAMENT, buyin) }
+            bot { "Game created"}
             user { prizePool(2) }
+            bot { "Prize pool stored"}
             user { players.drop(1).finalePlaces() }
+            bot { "Finale places stored"}
             user { calculate }
+            bot { "Calculated payouts"}
             user { myStats }
+            bot { "My statistics"}
         } When {
             updatesReceived()
         } ThenApproveWith approver

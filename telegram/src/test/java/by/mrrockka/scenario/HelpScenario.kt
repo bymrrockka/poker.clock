@@ -12,6 +12,7 @@ class HelpScenario : AbstractScenarioTest() {
     fun `send help description if no command`(approver: Approver) {
         Given {
             user { help() }
+            bot { "Help message"}
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -21,6 +22,7 @@ class HelpScenario : AbstractScenarioTest() {
     fun `send command description by command name`(approver: Approver) {
         Given {
             user { help("tournament_game") }
+            bot { "Help message"}
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -30,6 +32,7 @@ class HelpScenario : AbstractScenarioTest() {
     fun `send command description by command alias`(approver: Approver) {
         Given {
             user { help("pp") }
+            bot { "Help message"}
         } When {
             updatesReceived()
         } ThenApproveWith approver

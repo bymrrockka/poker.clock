@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service
 
 interface PrizePoolTelegramService {
     fun store(messageMetadata: MessageMetadata): List<PositionPrize>
+    fun store(metadata: MessageMetadata, prizePool: List<PositionPrize>): List<PositionPrize>
 }
 
 @Service
@@ -18,10 +19,11 @@ open class PrizePoolTelegramServiceImpl(
         private val gameService: GameTelegramService,
 ) : PrizePoolTelegramService {
 
-    override fun store(messageMetadata: MessageMetadata): List<PositionPrize> {
-        val prizePool = prizePoolMessageParser.parse(messageMetadata)
+    override fun store(messageMetadata: MessageMetadata): List<PositionPrize> =
+            store(messageMetadata, prizePoolMessageParser.parse(messageMetadata))
 
-        val game = gameService.findGame(messageMetadata)
+    override fun store(metadata: MessageMetadata, prizePool: List<PositionPrize>): List<PositionPrize> {
+        val game = gameService.findGame(metadata)
         check(game !is CashGame) { "Prize pool is not allowed for cash game" }
         prizePoolRepo.store(game.id, prizePool)
 

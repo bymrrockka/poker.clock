@@ -1,15 +1,18 @@
-### 1. Interaction
+### 1. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 0
+Processed message id: 1
 /help pp 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 2. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 2 
 When you ready to specify prize pool for tournament game use /prize_pool command to store position and percentage map.
 Should contain at least one position.
 Total percentage should be equal to 100%.

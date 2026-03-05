@@ -1,9 +1,9 @@
-### 1. Interaction
+### 1. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 0
+Processed message id: 1
 /create_poll
 cron: 0 0 0 * * WED
 message: Test poll
@@ -14,21 +14,24 @@ options:
 4. ;.!@#$%^&*()(_+=<>.,/{}[]`~
 5. I don't know 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 2. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 2 
 Poll created.
 Will be triggered next WEDNESDAY 00:00 
 ``` 
 ___
 
-### 2. Posted
+### 3. Posted
 
 &rarr; <ins>2025-09-24 - WEDNESDAY</ins>
 
 ``` 
-message id 1
+message id 3
 Test poll
 1. 'Yes'
 2. 'Noooooo'
@@ -38,26 +41,38 @@ Test poll
 ``` 
 ___
 
-### 3. Pinned
+### 4. Pinned
 
 ``` 
-message id 1 pinned
+message id 3 pinned
 ``` 
 ___
 
-### 4. Interaction
+### 5. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>Bot</ins>
+``` 
+message id: 4 
+No message 
+``` 
+___
+
+### 6. Message
+
+&rarr; <ins>User</ins>
 
 ```
-[reply to message id 0]
-message id: 2
+No message [reply to message id 1]
+message id: 5
 /stop_poll 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 7. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
-Poll stopped 
+message id: 6 
+No message 
 ``` 
 ___

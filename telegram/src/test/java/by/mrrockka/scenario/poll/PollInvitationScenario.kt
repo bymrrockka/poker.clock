@@ -35,7 +35,9 @@ class PollInvitationScenario : AbstractPollScenario() {
                 |3. I don't know
                 """.trimMargin()
             }
+            bot { "Poll will be triggered" }
             val poll = pollPosted(time + 8.days)
+            bot { "Poll posted" }
             poll.pinned()
 
             //participants
@@ -52,8 +54,11 @@ class PollInvitationScenario : AbstractPollScenario() {
             user(replyTo = poll) {
                 createGame(type = GameType.TOURNAMENT, BigDecimal(10))
             }
+            bot { "Game created" }
             user { gameStats }
+            bot { "Game stats" }
             user(replyTo = createPoll) { stopPoll }
+            bot { "Poll stoped" }
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -76,7 +81,9 @@ class PollInvitationScenario : AbstractPollScenario() {
                 |3. I don't know
                 """.trimMargin()
             }
+            bot { "Poll will be triggered" }
             val poll = pollPosted(time + 8.days)
+            bot { "Poll posted" }
 
             //participants
             participants.forEach { person ->
@@ -92,7 +99,9 @@ class PollInvitationScenario : AbstractPollScenario() {
             user(replyTo = poll) {
                 createGame(type = GameType.TOURNAMENT, buyin = BigDecimal(10), excludes = participants.drop(1))
             }
+            bot { "Game created" }
             user { gameStats }
+            bot { "Game stats" }
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -115,7 +124,9 @@ class PollInvitationScenario : AbstractPollScenario() {
                 |3. I don't know
                 """.trimMargin()
             }
+            bot { "Poll will be triggered" }
             val poll = pollPosted(time + 8.days)
+            bot { "Poll posted" }
             poll.pinned()
 
             listOf(person(), person()).forEach { person ->
@@ -126,6 +137,7 @@ class PollInvitationScenario : AbstractPollScenario() {
             user(replyTo = poll) {
                 createGame(type = GameType.TOURNAMENT, BigDecimal(10))
             }
+            bot { "Game created" }
         } When {
             updatesReceived()
         } ThenApproveWith approver

@@ -12,6 +12,7 @@ import by.mrrockka.builder.user
 import by.mrrockka.extension.MdApproverExtension
 import by.mrrockka.service.GameTablesService
 import com.oneeyedmen.okeydoke.Approver
+import eu.vendeli.tgbot.types.User
 import eu.vendeli.tgbot.types.msg.Message
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.awaitility.kotlin.atMost
@@ -41,9 +42,8 @@ private val logger = KotlinLogging.logger {}
 @Testcontainers
 @SpringBootTest(classes = [TestConfig::class])
 abstract class AbstractScenarioTest {
-    private val randoms = telegramRandoms("scenario")
-    private val chatid = randoms.chatid()
-    private val user = user(randoms)
+    private var chatid: Long = -1L
+    private lateinit var user: User
     private val messageLog = mutableMapOf<Command, Message>()
 
     @Autowired
@@ -57,14 +57,16 @@ abstract class AbstractScenarioTest {
 
     @BeforeEach
     fun before() {
+        coreRandoms.reset()
+        telegramRandoms.reset()
+        dispatcher.reset()
+        chatid = telegramRandoms.chatid()
+        user = user(telegramRandoms)
         gameSeatsService.seed(telegramRandoms.seed.hashCode().toLong())
     }
 
     @AfterEach
     fun after() {
-        coreRandoms.reset()
-        telegramRandoms.reset()
-        dispatcher.reset()
         transaction {
             exec("TRUNCATE TABLE pin_messages, poll_task, person, game CASCADE")
         }
@@ -90,6 +92,7 @@ abstract class AbstractScenarioTest {
                 |Dispatcher should have exactly the same requests size as commands size.
                 """.trimMargin()
             }
+            throw ex
         }
 
         commands.toText()
@@ -169,15 +172,23 @@ abstract class AbstractScenarioTest {
                    |___
                    """.trimMargin()
 
-                is Command.DeleteMessages ->
+                is Command.DeleteMessages -> {
+                    val request = dispatcher.requests[index]
                     """
                    |### ${index + 1}. Deleted messages
                    |
                    |``` 
-                   |${command.toText()} ${dispatcher.requests[index] ?: emptyMessage}
+                   |${
+                        if (request != null) {
+                            "${command.toText()} $request"
+                        } else {
+                            "Were not deleted"
+                        }
+                    }
                    |``` 
                    |___
                    """.trimMargin()
+                }
 
                 else -> error("<p style=\"color:red\">Command type is not found</p>")
             }

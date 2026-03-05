@@ -3,7 +3,7 @@
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 2
+Processed message id: 1
 /game 
 ```
 ___
@@ -12,7 +12,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 3 
+message id: 2 
 You started a cancelable conversation. 
 To cancel at any step you simply need to type 'cancel' 
 ``` 
@@ -22,7 +22,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 4 
+message id: 3 
 What type of game you'd like to play? 
 ``` 
 ___
@@ -32,7 +32,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 5
+Processed message id: 4
 Bounty 
 ```
 ___
@@ -41,7 +41,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 6 
+message id: 5 
 How much is for buy in? 
 ``` 
 ___
@@ -51,7 +51,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 7
+Processed message id: 6
 10 
 ```
 ___
@@ -60,7 +60,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 8 
+message id: 7 
 How much is for bounty? 
 ``` 
 ___
@@ -70,7 +70,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 9
+Processed message id: 8
 10 
 ```
 ___
@@ -79,7 +79,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 10 
+message id: 9 
 Who's playing? 
 ``` 
 ___
@@ -89,7 +89,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 11
+Processed message id: 10
 @nickname1 
 ```
 ___
@@ -98,7 +98,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 12 
+message id: 11 
 Game type: BOUNTY
 Buy in: 10
 Bounty 10
@@ -113,7 +113,7 @@ ___
 ### 12. Deleted messages
 
 ``` 
-message ids 3,4,5,6,7,8,9,10,11,12 deleted
+message ids 2,3,4,5,6,7,8,9,10,11 deleted
 ``` 
 ___
 
@@ -122,7 +122,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 13
+Processed message id: 12
 /entry @nickname1  
 ```
 ___
@@ -131,7 +131,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 14 
+message id: 13 
 Entry stored 
 ``` 
 ___
@@ -141,7 +141,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 15
+Processed message id: 14
 /entry @nickname1  
 ```
 ___
@@ -150,7 +150,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 16 
+message id: 15 
 Entry stored 
 ``` 
 ___
@@ -160,7 +160,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 17
+Processed message id: 16
 /entry @nickname2  
 ```
 ___
@@ -169,7 +169,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 18 
+message id: 17 
 Entries: 
 ------------------------------
 Table 1
@@ -183,7 +183,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 19
+Processed message id: 18
 /entry @nickname3  
 ```
 ___
@@ -192,7 +192,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 20 
+message id: 19 
 Entries: 
 ------------------------------
 Table 1
@@ -206,7 +206,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 21
+Processed message id: 20
 /entry @nickname4  
 ```
 ___
@@ -215,7 +215,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 22 
+message id: 21 
 Entries: 
 ------------------------------
 Table 1

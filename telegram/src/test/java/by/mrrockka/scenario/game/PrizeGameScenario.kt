@@ -33,9 +33,13 @@ abstract class PrizeGameScenario : GameScenario() {
 
         Given {
             user { players.createGame(gameType(), buyin) }
+            bot { "Game created" }
             user { prizePool(size) }
+            bot { "Prize pool stored" }
             user { winners.finalePlaces() }
+            bot { "Finale places stored" }
             user { calculate }
+            bot { "Calculated payouts" }
         } When {
             updatesReceived()
         } ThenApproveWith mdApprover("should fail when prize pool is different size then finale places $size")
@@ -57,9 +61,17 @@ abstract class PrizeGameScenario : GameScenario() {
 
         Given {
             user { players.createGame(gameType(), buyin) }
-            if (!missed.contains("prize pool")) user { prizePool(2) }
-            if (!missed.contains("finale places")) user { winners.finalePlaces() }
+            bot { "Game created" }
+            if (!missed.contains("prize pool")) {
+                user { prizePool(2) }
+                bot { "Prize pool stored" }
+            }
+            if (!missed.contains("finale places")) {
+                user { winners.finalePlaces() }
+                bot { "Finale places stored" }
+            }
             user { calculate }
+            bot { "Calculated payouts" }
         } When {
             updatesReceived()
         } ThenApproveWith mdApprover("should fail when $missed is missed")
@@ -107,9 +119,13 @@ abstract class PrizeGameScenario : GameScenario() {
 
         Given {
             user { players.createGame(gameType(), buyin) }
+            bot { "Game created" }
             user { prizePool.trimMargin() }
+            bot { "Prize pool stored" }
             user { winner.finalePlaces() }
+            bot { "Finale places stored" }
             user { calculate }
+            bot { "Calculated payouts" }
         } When {
             updatesReceived()
         } ThenApproveWith mdApprover("should fail when prize pool sum is not equal 100 percent. $fileName")
@@ -122,32 +138,49 @@ abstract class PrizeGameScenario : GameScenario() {
 
         Given {
             user { player.createGame(gameType(), buyin) }
+            bot { "Game created" }
             user { "nickname3".entry() }
+            bot { "Entry stored" }
             user { prizePool(1) }
+            bot { "Prize pool stored" }
             user { "nickname1".entry() }
+            bot { "Entry stored" }
             user { player.finalePlaces() }
+            bot { "Finale places stored" }
             user { "nickname2".entry() }
+            bot { "Entry stored" }
             user { prizePool(2) }
+            bot { "Prize pool stored" }
             user { listOf("me", "nickname2").finalePlaces() }
+            bot { "Finale places stored" }
         } When {
             updatesReceived()
         } ThenApproveWith approver
     }
 
     @Test
-    fun `prize pool conversation command should store`(approver: Approver) {
+    fun `interact with user to store prize pool`(approver: Approver) {
         val buyin = BigDecimal(10)
         val player = "me"
 
         Given {
             user { player.createGame(gameType(), buyin) }
+            bot { "Game created" }
             user { "nickname3".entry() }
-            val toDelete = mutableListOf<Command.UserMessage>()
+            bot { "Entry stored" }
+            val toDelete = mutableListOf<Command>()
             user { "/pp" }
+            toDelete += bot { "Conversation descriptor" }
+            toDelete += bot { "Pool size?" }
             toDelete += user { "3" }
+            toDelete += bot { "1 Percentage" }
             toDelete += user { "50" }
+            toDelete += bot { "2 Percentage" }
             toDelete += user { "30" }
+            toDelete += bot { "3 Percentage" }
             toDelete += user { "20" }
+            val summary = bot { "Prize pool stored" }
+            summary.pinned()
             toDelete.deleted()
         } When {
             updatesReceived()

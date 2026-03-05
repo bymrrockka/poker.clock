@@ -3,8 +3,8 @@ package by.mrrockka.commands.game
 import by.mrrockka.commands.BigDecimalState
 import by.mrrockka.commands.CancelStep
 import by.mrrockka.commands.CancelableStep
-import by.mrrockka.commands.ClearMessageConversation
 import by.mrrockka.commands.GameTypeState
+import by.mrrockka.commands.MessageLogConversation
 import by.mrrockka.commands.MessageMetadataState
 import by.mrrockka.commands.decimalValidation
 import by.mrrockka.domain.BountyTournamentGame
@@ -30,16 +30,15 @@ import java.math.BigDecimal
         trigger = ["/game", "/start"],
         stateManagers = [BigDecimalState::class, MessageMetadataState::class, GameTypeState::class],
 )
-object GameConversation : ClearMessageConversation() {
+object GameConversation : MessageLogConversation() {
     lateinit var gameService: GameTelegramService
     lateinit var tableService: GameTablesService
     lateinit var pinMessageService: PinMessageService
 
     object Type : CancelableStep(isInitial = true, cancelStep = Cancel::class) {
         override suspend fun onEntry(ctx: WizardContext) {
-            ctx.initialize { message -> ctx.user.id.message(message.messageId) }
-            val metadata = ctx.update.toMessageMetadata()
-            initials += ctx.user.id to metadata
+            ctx.cancelableMessage { message -> ctx.user.id.message(message.messageId) }
+            ctx.initialize()
 
             message { "What type of game you'd like to play?" }
                     .replyKeyboardMarkup {
@@ -80,7 +79,7 @@ object GameConversation : ClearMessageConversation() {
 
     object Buyin : CancelableStep(cancelStep = Cancel::class) {
         override suspend fun onEntry(ctx: WizardContext) {
-            val lastGame = initials[ctx.user.id]?.let { gameService.findLastGame(it) }
+            val lastGame = ctx.user.id.initial().let { gameService.findLastGame(it) }
             message { "How much is for buy in?" }
                     .replyKeyboardMarkup {
                         if (lastGame != null) {
@@ -146,7 +145,6 @@ object GameConversation : ClearMessageConversation() {
 
     object Finish : WizardStep() {
         override suspend fun onEntry(ctx: WizardContext) {
-            val initial = initials[ctx.user.id] ?: error("Can't find initial user message")
             val type = ctx.getState<Type>() ?: error("Type is null")
             val buyin = ctx.getState<Buyin>() ?: error("Buyin is null")
             val bounty = ctx.getState<Bounty>()
@@ -158,9 +156,9 @@ object GameConversation : ClearMessageConversation() {
                                 type = type,
                                 bounty = bounty,
                                 buyin = buyin,
-                                createdAt = initial.createdAt,
+                                createdAt = ctx.user.id.initial().createdAt,
                         ),
-                        initial = initial,
+                        initial = ctx.user.id.initial(),
                         players = playersMessage,
                 ).let { game ->
                     """
@@ -199,7 +197,7 @@ object GameConversation : ClearMessageConversation() {
 
     object Bounty : CancelableStep(cancelStep = Cancel::class) {
         override suspend fun onEntry(ctx: WizardContext) {
-            val lastGame = initials[ctx.user.id]?.let { gameService.findLastGame(it) }
+            val lastGame = gameService.findLastGame(ctx.user.id.initial())
             message { "How much is for bounty?" }
                     .replyKeyboardMarkup {
                         if (lastGame is BountyTournamentGame) {

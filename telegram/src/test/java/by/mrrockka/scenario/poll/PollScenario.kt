@@ -38,9 +38,12 @@ class PollScenario : AbstractPollScenario() {
                 |5. I don't know
                 """.trimMargin()
             }
+            bot { "Poll will be triggered" }
             pollPosted(time + 8.days)
                     .pinned()
+            bot { "Poll posted" }
             user(replyTo = createPoll) { stopPoll }
+            bot { "Poll stopped" }
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -64,9 +67,12 @@ class PollScenario : AbstractPollScenario() {
                 |5. I don't know
                 """.trimMargin()
             }
+            bot { "Poll will be triggered" }
             val poll1 = pollPosted(time + 1.days)
+            bot { "Poll posted" }
             poll1.pinned()
             val poll2 = pollPosted(time + 2.days)
+            bot { "Poll posted" }
             poll1.unpinned()
             poll2.pinned()
         } When {
@@ -87,6 +93,7 @@ class PollScenario : AbstractPollScenario() {
                 ${if (actual.contains("element")) "|Yes - participant" else ""}
             """.trimMargin()
             }
+            bot { "Exception" }
         } When {
             updatesReceived()
         } ThenApproveWith mdApprover("fail when doesn't have required fields, field set ${if (actual.isNotBlank()) actual else "empty"}")
@@ -104,8 +111,11 @@ class PollScenario : AbstractPollScenario() {
                 |1. Yes - participant
                 """.trimMargin()
             }
+            bot { "Poll will be triggered" }
             val game = user { "me".createGame(GameType.TOURNAMENT, 30.toBigDecimal()) }
+            bot { "Game created"}
             user(replyTo = game) { stopPoll } // should fail
+            bot { "Exception" }
         } When {
             updatesReceived()
         } ThenApproveWith approver

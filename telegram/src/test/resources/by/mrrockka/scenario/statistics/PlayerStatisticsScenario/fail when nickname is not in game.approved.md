@@ -1,18 +1,21 @@
-### 1. Interaction
+### 1. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 0
+Processed message id: 1
 /tournament_game
 buyin: 10
 
 @nickname2, @nickname1 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 2. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 2 
 Tournament game started.
 ------------------------------
 Table 1
@@ -23,18 +26,21 @@ Seats:
 ``` 
 ___
 
-### 2. Interaction
+### 3. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 1
+Processed message id: 3
 /player_stats 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 4. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
-User hong_beer hasn't enter the game 
+message id: 4 
+User sergio_cartwright hasn't enter the game 
 ``` 
 ___

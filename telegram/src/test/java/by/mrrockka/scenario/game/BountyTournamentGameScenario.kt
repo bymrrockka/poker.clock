@@ -34,27 +34,46 @@ class BountyTournamentGameScenario : PrizeGameScenario() {
 
         Given {
             val game = user { players.createGame(GameType.BOUNTY, buyin, withAlias) }
+            bot { "Game created" }
             game.pinned()
             user { "me" kicked "nickname3" }
+            bot { "Entry stored" }
             user { "nickname3".entry() }
+            bot { "Entry stored" }
             user { "me" kicked "nickname3" }
+            bot { "Player kicked" }
             user { "nickname3".entry() }
+            bot { "Entry stored" }
             user { "nickname1" kicked "nickname4" }
+            bot { "Player kicked" }
             user { "nickname1" kicked "nickname5" }
+            bot { "Player kicked" }
             val prizePool = user { prizePool(2) }
+            bot { "Prize pool stored" }
             prizePool.pinned()
             user { "nickname3" kicked "nickname1" }
+            bot { "Player kicked" }
             user { "nickname1".entry() }
+            bot { "Entry stored" }
             user { "nickname3" kicked "nickname1" }
+            bot { "Player kicked" }
             user { "nickname1".entry() }
+            bot { "Entry stored" }
             val finalePlaces = user { winners.finalePlaces() }
+            bot { "Finale places stored" }
             finalePlaces.pinned()
             user { "nickname2" kicked "nickname1" }
+            bot { "Player kicked" }
             user { "nickname1".entry() }
+            bot { "Entry stored" }
             user { "nickname2" kicked "nickname3" }
+            bot { "Player kicked" }
             user { "nickname2" kicked "me" }
+            bot { "Player kicked" }
             user { "nickname1" kicked "nickname2" }
+            bot { "Player kicked" }
             user { calculate }.pinned()
+            bot { "Calculated payouts" }
             unpinned(game, prizePool, finalePlaces)
         } When {
             updatesReceived()
@@ -68,17 +87,29 @@ class BountyTournamentGameScenario : PrizeGameScenario() {
 
         Given {
             user { player.createGame(GameType.BOUNTY, buyin) }
+            bot { "Game created" }
             user { "nickname3".entry() }
+            bot { "Entry stored" }
             user { "me" kicked "nickname3" }
+            bot { "Player kicked" }
             user { "nickname3".entry() }
+            bot { "Entry stored" }
             user { prizePool(1) }
+            bot { "Prize pool stored" }
             user { "nickname2".entry() }
+            bot { "Entry stored" }
             user { "nickname2" kicked "nickname3" }
+            bot { "Player kicked" }
             user { "nickname1".entry() }
+            bot { "Entry stored" }
             user { "nickname2" kicked "nickname1" }
+            bot { "Player kicked" }
             user { player.finalePlaces() }
+            bot { "Finale places stored" }
             user { "me" kicked "nickname2" }
+            bot { "Player kicked" }
             user { calculate }
+            bot { "Calculated payouts" }
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -91,8 +122,11 @@ class BountyTournamentGameScenario : PrizeGameScenario() {
 
         Given {
             user { player.createGame(GameType.BOUNTY, buyin) }
+            bot { "Game created" }
             user { "me" kicked "nickname3" }
+            bot { "Player kicked" }
             user { calculate }
+            bot { "Exception" }
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -105,8 +139,11 @@ class BountyTournamentGameScenario : PrizeGameScenario() {
 
         Given {
             user { player.createGame(GameType.BOUNTY, buyin) }
+            bot { "Game created" }
             user { "me" kicked "me" }
+            bot { "Player kicked" }
             user { calculate }
+            bot { "Exception" }
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -119,8 +156,11 @@ class BountyTournamentGameScenario : PrizeGameScenario() {
 
         Given {
             user { player.createGame(GameType.BOUNTY, buyin) }
+            bot { "Game created" }
             user { "nickname" kicked "me" }
+            bot { "Player kicked" }
             user { calculate }
+            bot { "Exception" }
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -133,9 +173,13 @@ class BountyTournamentGameScenario : PrizeGameScenario() {
 
         Given {
             user { players.createGame(GameType.BOUNTY, buyin) }
+            bot { "Game created" }
             user { "me" kicked "nickname" }
+            bot { "Player kicked" }
             user { "me" kicked "nickname" }
+            bot { "Player kicked" }
             user { calculate }
+            bot { "Exception" }
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -148,9 +192,13 @@ class BountyTournamentGameScenario : PrizeGameScenario() {
 
         Given {
             user { players.createGame(GameType.BOUNTY, buyin) }
+            bot { "Game created" }
             user { "nickname" kicked "me" }
+            bot { "Player kicked" }
             user { "me" kicked "nickname" }
+            bot { "Player kicked" }
             user { calculate }
+            bot { "Exception" }
         } When {
             updatesReceived()
         } ThenApproveWith approver

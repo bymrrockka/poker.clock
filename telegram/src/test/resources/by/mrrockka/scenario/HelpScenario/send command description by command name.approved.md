@@ -1,15 +1,18 @@
-### 1. Interaction
+### 1. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 0
+Processed message id: 1
 /help tournament_game 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 2. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 2 
 You could create a tournament game using /tournament_game command with list of players nicknames that separated with a space.
 Also you should specify buy-in, stack amount.
 There should be at least two players for the game

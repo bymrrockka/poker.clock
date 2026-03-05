@@ -1,7 +1,7 @@
 package by.mrrockka.commands
 
-import by.mrrockka.commands.game.GameConversation
 import by.mrrockka.domain.MessageMetadata
+import by.mrrockka.domain.toMessageMetadata
 import eu.vendeli.tgbot.api.message.deleteMessages
 import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.types.chain.Transition
@@ -23,7 +23,7 @@ abstract class CancelableStep(isInitial: Boolean = false, val cancelStep: KClass
         }
     }
 
-    suspend fun WizardContext.initialize(postAction: suspend (Message) -> Unit) {
+    suspend fun WizardContext.cancelableMessage(postAction: suspend (Message) -> Unit) {
         message {
             """
             |You started a cancelable conversation. 
@@ -50,24 +50,34 @@ open class CancelStep(
 }
 
 fun String.decimalValidation() = matches("^([\\d.]+)$".toRegex())
+fun String.digitValidation() = matches("^([\\d]+)$".toRegex())
 
-abstract class ClearMessageConversation {
-    protected val messages = ConcurrentHashMap<Long, List<Long>>()
-    protected val initials = ConcurrentHashMap<Long, MessageMetadata>()
+abstract class MessageLogConversation {
+    private val messages = ConcurrentHashMap<Long, List<Long>>()
+    private val initials = ConcurrentHashMap<Long, MessageMetadata>()
 
     protected fun Long.message(messageId: Long) {
         synchronized(messages) {
-            val list = GameConversation.messages[this]
+            val list = messages[this]
             if (list != null) {
-                GameConversation.messages[this] = (list + messageId)
+                messages[this] = (list + messageId)
             } else {
-                GameConversation.messages[this] = mutableListOf(messageId)
+                messages[this] = mutableListOf(messageId)
             }
         }
     }
 
+    protected fun WizardContext.initialize(): MessageMetadata {
+        val metadata = update.toMessageMetadata()
+        initials += user.id to metadata
+        return metadata
+    }
+
+    protected fun Long.initial(): MessageMetadata = initials[this] ?: error("Initial message not found for user $this")
+
     protected suspend fun WizardContext.clearMessages() {
-        messages[user.id]?.also { list ->
+        initials.remove(user.id)
+        messages.remove(user.id)?.also { list ->
             deleteMessages(list)
                     .sendReturning(user, bot)
                     .onFailure { "Failed to clear messages" }

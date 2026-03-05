@@ -54,8 +54,7 @@ ___
 
 ```
 Processed message id: 5
-/prize_pool
-1 100% 
+/pp 
 ```
 ___
 
@@ -64,119 +63,109 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 6 
-Prize pool stored:
-1. 100% 
+You started a cancelable conversation. 
+To cancel at any step you simply need to type 'cancel' 
 ``` 
 ___
 
 ### 7. Message
 
-&rarr; <ins>User</ins>
-
-```
-Processed message id: 7
-/entry @nickname1  
-```
+&rarr; <ins>Bot</ins>
+``` 
+message id: 7 
+How many places to account? 
+``` 
 ___
 
 ### 8. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 8 
-Entries: 
-------------------------------
-Table 1
-Seats:
-  @nickname1 seat 9 -> entry 10.00 
-``` 
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 8
+3 
+```
 ___
 
 ### 9. Message
 
-&rarr; <ins>User</ins>
-
-```
-Processed message id: 9
-/finale_places
-1 @me 
-```
+&rarr; <ins>Bot</ins>
+``` 
+message id: 9 
+What percentage for #1 place? 
+``` 
 ___
 
 ### 10. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 10 
-Finale places stored:
-1. @sergio_cartwright 
-``` 
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 10
+50 
+```
 ___
 
 ### 11. Message
 
-&rarr; <ins>User</ins>
-
-```
-Processed message id: 11
-/entry @nickname2  
-```
+&rarr; <ins>Bot</ins>
+``` 
+message id: 11 
+What percentage for #2 place? 
+``` 
 ___
 
 ### 12. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 12 
-Entries: 
-------------------------------
-Table 1
-Seats:
-  @nickname2 seat 3 -> entry 10.00 
-``` 
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 12
+30 
+```
 ___
 
 ### 13. Message
 
-&rarr; <ins>User</ins>
-
-```
-Processed message id: 13
-/prize_pool
-1 50%
-2 50% 
-```
+&rarr; <ins>Bot</ins>
+``` 
+message id: 13 
+What percentage for #3 place? 
+``` 
 ___
 
 ### 14. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 14 
-Prize pool stored:
-1. 50%
-2. 50% 
-``` 
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 14
+20 
+```
 ___
 
 ### 15. Message
 
-&rarr; <ins>User</ins>
-
-```
-Processed message id: 15
-/finale_places
-1 @me, 2 @nickname2 
-```
-___
-
-### 16. Message
-
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 16 
-Finale places stored:
-1. @sergio_cartwright
-2. @nickname2 
+message id: 15 
+Prize pool stored:
+1. 50%
+2. 30%
+3. 20% 
+``` 
+___
+
+### 16. Pinned
+
+``` 
+message id 15 pinned
+``` 
+___
+
+### 17. Deleted messages
+
+``` 
+message ids 6,7,8,9,10,11,12,13,14 deleted
 ``` 
 ___

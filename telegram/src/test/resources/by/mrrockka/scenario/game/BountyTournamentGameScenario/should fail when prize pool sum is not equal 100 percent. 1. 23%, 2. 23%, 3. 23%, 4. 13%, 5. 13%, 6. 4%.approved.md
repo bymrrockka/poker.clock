@@ -1,41 +1,44 @@
-### 1. Interaction
+### 1. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 0
+Processed message id: 1
 /bounty_game
 buyin: 10
 bounty: 10
 @nickname1, @nickname2, @nickname3, @nickname4, @nickname5, @nickname6, @nickname7, @me 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 2. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 2 
 Bounty tournament game started.
 ------------------------------
 Table 1
 Seats:
-  1. @hong_beer
-  3. @nickname4
-  4. @nickname6
-  5. @nickname3
-  6. @nickname1
-  8. @nickname7
-  9. @nickname5
-  10. @nickname2
+  1. @nickname1
+  3. @nickname5
+  4. @nickname7
+  5. @nickname4
+  6. @nickname2
+  8. @sergio_cartwright
+  9. @nickname6
+  10. @nickname3
                                  
 ``` 
 ___
 
-### 2. Interaction
+### 3. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 1
-/pp 
+Processed message id: 3
+/prize_pool 
 1. 23%
 2. 23%
 3. 23%
@@ -43,44 +46,53 @@ message id: 1
 5. 13%
 6. 4% 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 4. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 4 
 Prize pool total percentage should be 100%. Current 99% 
 ``` 
 ___
 
-### 3. Interaction
+### 5. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 2
+Processed message id: 5
 /finale_places
 1 @nickname1 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 6. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 6 
 Finale places stored:
 1. @nickname1 
 ``` 
 ___
 
-### 4. Interaction
+### 7. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 3
+Processed message id: 7
 /calculate 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 8. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 8 
 No prize pool specified, can't calculate finale summary. 
 ``` 
 ___

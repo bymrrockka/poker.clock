@@ -2,6 +2,7 @@ package by.mrrockka.commands
 
 import by.mrrockka.domain.GameType
 import by.mrrockka.domain.MessageMetadata
+import by.mrrockka.domain.PositionPrize
 import eu.vendeli.tgbot.types.chain.UserChatReference
 import eu.vendeli.tgbot.types.chain.WizardStateManager
 import eu.vendeli.tgbot.types.chain.WizardStep
@@ -39,6 +40,19 @@ class MessageMetadataState : WizardStateManager<MessageMetadata> {
     override suspend fun get(key: KClass<out WizardStep>, reference: UserChatReference): MessageMetadata? = state[key]
 
     override suspend fun set(key: KClass<out WizardStep>, reference: UserChatReference, value: MessageMetadata) {
+        state[key] = value
+    }
+
+    override suspend fun del(key: KClass<out WizardStep>, reference: UserChatReference) {
+        state.remove(key)
+    }
+}
+
+class PositionPrizeState : WizardStateManager<List<PositionPrize>> {
+    val state = mutableMapOf<KClass<out WizardStep>, List<PositionPrize>>()
+    override suspend fun get(key: KClass<out WizardStep>, reference: UserChatReference): List<PositionPrize>? = state[key]
+
+    override suspend fun set(key: KClass<out WizardStep>, reference: UserChatReference, value: List<PositionPrize>) {
         state[key] = value
     }
 
