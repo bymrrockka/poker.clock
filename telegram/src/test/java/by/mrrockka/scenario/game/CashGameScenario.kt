@@ -44,8 +44,9 @@ class CashGameScenario : GameScenario() {
             bot { "Entry stored" }
             user { "nickname3".withdrawal(30) }
             bot { "Withdraw" }
-            user { calculate }.pinned()
+            val calculate = user { calculate }
             bot { "Calculated payouts" }
+            calculate.pinned()
             game.unpinned()
         } When {
             updatesReceived()

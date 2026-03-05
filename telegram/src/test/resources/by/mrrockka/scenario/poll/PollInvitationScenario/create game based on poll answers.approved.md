@@ -37,64 +37,55 @@ Test poll
 ``` 
 ___
 
-### 4. Message
+### 4. Pinned
 
-&rarr; <ins>Bot</ins>
 ``` 
-message id: 4 
-No message 
+message id 3 pinned
 ``` 
 ___
 
-### 5. Pinned
-
-``` 
-message id 3 No message
-``` 
-___
-
-### 6. Poll answer
+### 5. Poll answer
 
 ``` 
 jackie_rau chosen 1
 ``` 
 ___
 
-### 7. Poll answer
+### 6. Poll answer
 
 ``` 
 terisa_johnston chosen 1
 ``` 
 ___
 
-### 8. Poll answer
+### 7. Poll answer
 
 ``` 
 santo_welch chosen 2
 ``` 
 ___
 
-### 9. Poll answer
+### 8. Poll answer
 
 ``` 
 ashlee_lang chosen 2
 ``` 
 ___
 
-### 10. Poll answer
+### 9. Poll answer
 
 ``` 
 stanton_boyer chosen 3
 ``` 
 ___
 
-### 11. Message
+### 10. Message
 
 &rarr; <ins>User</ins>
 
 ```
-No message [reply to message id 3]
-message id: 5
+Processed [reply to message id 3]
+message id: 4
 /tournament_game
 buyin: 10
 
@@ -102,50 +93,59 @@ buyin: 10
 ```
 ___
 
-### 12. Message
+### 11. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 6 
-No message 
+message id: 5 
+Tournament game started.
+------------------------------
+Table 1
+Seats:
+  3. @jackie_rau
+  7. @terisa_johnston
+                                 
 ``` 
 ___
 
-### 13. Message
+### 12. Message
 
 &rarr; <ins>User</ins>
 
 ```
-No message message id: 7
+Processed message id: 6
 /game_stats 
 ```
 ___
 
-### 14. Message
+### 13. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 8 
-No message 
+message id: 7 
+Tournament game statistics:
+  - players entered -> 2
+  - number of entries -> 2
+  - total in game -> 20.00 
 ``` 
 ___
 
-### 15. Message
+### 14. Message
 
 &rarr; <ins>User</ins>
 
 ```
-No message [reply to message id 1]
-message id: 9
+Processed [reply to message id 1]
+message id: 8
 /stop_poll 
 ```
 ___
 
-### 16. Message
+### 15. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 10 
-No message 
+message id: 9 
+Poll stopped 
 ``` 
 ___

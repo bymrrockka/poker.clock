@@ -239,39 +239,61 @@ Processed message id: 21
 ```
 ___
 
-### 25. Pinned
+### 25. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 22 
+------------------------------
+You can support me using this link. 
+https://buymeacoffee.com/mrrockka
+------------------------------
+Finale summary:
+  1. @nickname1 won 65
+  2. @nickname2 won 65
+Total: 130 (13 entries * 10 buy in)
+------------------------------
+Payout to: @nickname2
+  Entries: 10
+  Total: 55 (won 65 - entries 10)
+From:
+  @nickname3 -> 30
+  @nickname5 -> 10
+  @nickname4 -> 10
+  @sergio_cartwright -> 5
+------------------------------
+Payout to: @nickname1
+  Entries: 60
+  Total: 5 (won 65 - entries 60)
+From:
+  @sergio_cartwright -> 5 
+``` 
+___
+
+### 26. Pinned
 
 ``` 
 message id 21 pinned
 ``` 
 ___
 
-### 26. Message
-
-&rarr; <ins>Bot</ins>
-``` 
-message id: 22 
-No message 
-``` 
-___
-
 ### 27. Unpinned
 
 ``` 
-message id 1 No message
+message id 1 unpinned
 ``` 
 ___
 
 ### 28. Unpinned
 
 ``` 
-message id 7 No message
+message id 7 unpinned
 ``` 
 ___
 
 ### 29. Unpinned
 
 ``` 
-message id 13 No message
+message id 13 unpinned
 ``` 
 ___

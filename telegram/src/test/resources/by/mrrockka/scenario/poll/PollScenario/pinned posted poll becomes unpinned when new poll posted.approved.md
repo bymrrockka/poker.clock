@@ -41,51 +41,38 @@ Test poll
 ``` 
 ___
 
-### 4. Message
+### 4. Pinned
 
-&rarr; <ins>Bot</ins>
 ``` 
-message id: 4 
-No message 
+message id 3 pinned
 ``` 
 ___
 
-### 5. Pinned
-
-``` 
-message id 3 No message
-``` 
-___
-
-### 6. Posted
+### 5. Posted
 
 &rarr; <ins>2025-09-18 - THURSDAY</ins>
 
 ``` 
-message id 5
-No message
+message id 4
+Test poll
+1. 'Yes'
+2. 'Noooooo'
+3. 'Hell yeah 12123'
+4. ';.!@#$%^&*()(_+=<>.,/{}[]`~'
+5. 'I don't know'
 ``` 
 ___
 
-### 7. Message
+### 6. Unpinned
 
-&rarr; <ins>Bot</ins>
 ``` 
-message id: 6 
-No message 
+message id 3 unpinned
 ``` 
 ___
 
-### 8. Unpinned
+### 7. Pinned
 
 ``` 
-message id 3 No message
-``` 
-___
-
-### 9. Pinned
-
-``` 
-message id 5 No message
+message id 4 pinned
 ``` 
 ___

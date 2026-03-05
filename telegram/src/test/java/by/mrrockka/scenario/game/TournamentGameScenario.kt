@@ -56,8 +56,9 @@ class TournamentGameScenario : PrizeGameScenario() {
             bot { "Entry stored" }
             user { "nickname1".entry() }
             bot { "Entry stored" }
-            user { calculate }.pinned()
+            val calculate = user { calculate }
             bot { "Calculated payouts" }
+            calculate.pinned()
             unpinned(game, prizePool, finalePlaces)
         } When {
             updatesReceived()

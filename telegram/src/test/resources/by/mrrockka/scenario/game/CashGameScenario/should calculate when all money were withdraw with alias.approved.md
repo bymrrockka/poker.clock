@@ -126,25 +126,49 @@ Processed message id: 11
 ```
 ___
 
-### 13. Pinned
+### 13. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 12 
+------------------------------
+You can support me using this link. 
+https://buymeacoffee.com/mrrockka
+------------------------------
+Payout to: @nickname2
+  Entries: 10
+  Withdrawals: 30
+  Total: 20 
+From:
+  @sergio_cartwright -> 10
+  @nickname5 -> 10
+------------------------------
+Payout to: @nickname3
+  Entries: 10
+  Withdrawals: 30
+  Total: 20 
+From:
+  @nickname4 -> 20
+------------------------------
+Payout to: @nickname1
+  Entries: 10
+  Withdrawals: 20
+  Total: 10 
+From:
+  @nickname4 -> 10 
+``` 
+___
+
+### 14. Pinned
 
 ``` 
 message id 11 pinned
 ``` 
 ___
 
-### 14. Message
-
-&rarr; <ins>Bot</ins>
-``` 
-message id: 12 
-No message 
-``` 
-___
-
 ### 15. Unpinned
 
 ``` 
-message id 1 No message
+message id 1 unpinned
 ``` 
 ___

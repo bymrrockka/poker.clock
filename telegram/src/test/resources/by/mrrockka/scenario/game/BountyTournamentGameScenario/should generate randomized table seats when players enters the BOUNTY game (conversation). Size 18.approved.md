@@ -131,14 +131,21 @@ Seats:
 ``` 
 ___
 
-### 12. Deleted messages
+### 12. Pinned
 
 ``` 
-message ids 2,3,4,5,6,7,8,9,10,11 deleted
+message id 11 pinned
 ``` 
 ___
 
-### 13. Message
+### 13. Deleted messages
+
+``` 
+message ids 2,3,4,5,6,7,8,9,10 deleted
+``` 
+___
+
+### 14. Message
 
 &rarr; <ins>User</ins>
 
@@ -148,7 +155,7 @@ Processed message id: 12
 ```
 ___
 
-### 14. Message
+### 15. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
@@ -157,7 +164,7 @@ Entry stored
 ``` 
 ___
 
-### 15. Message
+### 16. Message
 
 &rarr; <ins>User</ins>
 
@@ -167,7 +174,7 @@ Processed message id: 14
 ```
 ___
 
-### 16. Message
+### 17. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
@@ -176,7 +183,7 @@ Entry stored
 ``` 
 ___
 
-### 17. Message
+### 18. Message
 
 &rarr; <ins>User</ins>
 
@@ -186,7 +193,7 @@ Processed message id: 16
 ```
 ___
 
-### 18. Message
+### 19. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
@@ -199,7 +206,7 @@ Seats:
 ``` 
 ___
 
-### 19. Message
+### 20. Message
 
 &rarr; <ins>User</ins>
 
@@ -209,7 +216,7 @@ Processed message id: 18
 ```
 ___
 
-### 20. Message
+### 21. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
@@ -222,7 +229,7 @@ Seats:
 ``` 
 ___
 
-### 21. Message
+### 22. Message
 
 &rarr; <ins>User</ins>
 
@@ -232,7 +239,7 @@ Processed message id: 20
 ```
 ___
 
-### 22. Message
+### 23. Message
 
 &rarr; <ins>Bot</ins>
 ``` 

@@ -63,7 +63,8 @@ abstract class GameScenario : AbstractScenarioTest() {
             }
             toDelete += bot { "Players?" }
             toDelete += user { players.entries() }
-            toDelete += bot { "Game created" }
+            val game = bot { "Game created" }
+            game.pinned()
             toDelete.deleted()
             user { "nickname1".entry() }
             bot { "entry stored" }

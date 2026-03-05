@@ -37,50 +37,41 @@ Test poll
 ``` 
 ___
 
-### 4. Message
+### 4. Pinned
 
-&rarr; <ins>Bot</ins>
 ``` 
-message id: 4 
-No message 
+message id 3 pinned
 ``` 
 ___
 
-### 5. Pinned
-
-``` 
-message id 3 No message
-``` 
-___
-
-### 6. Poll answer
+### 5. Poll answer
 
 ``` 
 jackie_rau chosen 2
 ``` 
 ___
 
-### 7. Poll answer
+### 6. Poll answer
 
 ``` 
 terisa_johnston chosen 2
 ``` 
 ___
 
-### 8. Poll answer
+### 7. Poll answer
 
 ``` 
 santo_welch chosen 3
 ``` 
 ___
 
-### 9. Message
+### 8. Message
 
 &rarr; <ins>User</ins>
 
 ```
-No message [reply to message id 3]
-message id: 5
+Processed [reply to message id 3]
+message id: 4
 /tournament_game
 buyin: 10
 
@@ -88,11 +79,11 @@ buyin: 10
 ```
 ___
 
-### 10. Message
+### 9. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 6 
-No message 
+message id: 5 
+Game participants not found according to poll 
 ``` 
 ___

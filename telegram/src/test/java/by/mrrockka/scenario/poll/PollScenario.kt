@@ -41,7 +41,6 @@ class PollScenario : AbstractPollScenario() {
             bot { "Poll will be triggered" }
             pollPosted(time + 8.days)
                     .pinned()
-            bot { "Poll posted" }
             user(replyTo = createPoll) { stopPoll }
             bot { "Poll stopped" }
         } When {
@@ -69,10 +68,8 @@ class PollScenario : AbstractPollScenario() {
             }
             bot { "Poll will be triggered" }
             val poll1 = pollPosted(time + 1.days)
-            bot { "Poll posted" }
             poll1.pinned()
             val poll2 = pollPosted(time + 2.days)
-            bot { "Poll posted" }
             poll1.unpinned()
             poll2.pinned()
         } When {

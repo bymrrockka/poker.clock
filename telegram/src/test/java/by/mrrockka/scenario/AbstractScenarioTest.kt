@@ -78,17 +78,15 @@ abstract class AbstractScenarioTest {
     }
 
     infix fun WhenSpecification.ThenApproveWith(approver: Approver) {
-        val filteredCommands = commands.filter { it !is Command.PollAnswer }
         try {
             await atMost Duration.ofSeconds(3) until {
-                dispatcher.requests.size == filteredCommands.size
+                dispatcher.requests.size == commands.size
             }
         } catch (ex: Exception) {
             logger.error {
                 """
-                |Await timeout
                 |Dispatcher requests size is ${dispatcher.requests.size}
-                |Commands size is ${filteredCommands.size}
+                |Commands size is ${commands.size}
                 |Dispatcher should have exactly the same requests size as commands size.
                 """.trimMargin()
             }

@@ -37,7 +37,6 @@ class PollInvitationScenario : AbstractPollScenario() {
             }
             bot { "Poll will be triggered" }
             val poll = pollPosted(time + 8.days)
-            bot { "Poll posted" }
             poll.pinned()
 
             //participants
@@ -83,8 +82,6 @@ class PollInvitationScenario : AbstractPollScenario() {
             }
             bot { "Poll will be triggered" }
             val poll = pollPosted(time + 8.days)
-            bot { "Poll posted" }
-
             //participants
             participants.forEach { person ->
                 poll.pollAnswer(person, 1)
@@ -126,7 +123,6 @@ class PollInvitationScenario : AbstractPollScenario() {
             }
             bot { "Poll will be triggered" }
             val poll = pollPosted(time + 8.days)
-            bot { "Poll posted" }
             poll.pinned()
 
             listOf(person(), person()).forEach { person ->

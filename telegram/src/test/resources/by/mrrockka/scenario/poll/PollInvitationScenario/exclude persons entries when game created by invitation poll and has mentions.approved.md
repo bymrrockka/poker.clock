@@ -37,57 +37,48 @@ Test poll
 ``` 
 ___
 
-### 4. Message
-
-&rarr; <ins>Bot</ins>
-``` 
-message id: 4 
-No message 
-``` 
-___
-
-### 5. Poll answer
+### 4. Poll answer
 
 ``` 
 jackie_rau chosen 1
 ``` 
 ___
 
-### 6. Poll answer
+### 5. Poll answer
 
 ``` 
 terisa_johnston chosen 1
 ``` 
 ___
 
-### 7. Poll answer
+### 6. Poll answer
 
 ``` 
 santo_welch chosen 2
 ``` 
 ___
 
-### 8. Poll answer
+### 7. Poll answer
 
 ``` 
 ashlee_lang chosen 2
 ``` 
 ___
 
-### 9. Poll answer
+### 8. Poll answer
 
 ``` 
 stanton_boyer chosen 3
 ``` 
 ___
 
-### 10. Message
+### 9. Message
 
 &rarr; <ins>User</ins>
 
 ```
-No message [reply to message id 3]
-message id: 5
+Processed [reply to message id 3]
+message id: 4
 /tournament_game
 buyin: 10
 
@@ -95,30 +86,38 @@ buyin: 10
 ```
 ___
 
-### 11. Message
+### 10. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 6 
-No message 
+message id: 5 
+Tournament game started.
+------------------------------
+Table 1
+Seats:
+  5. @jackie_rau
+                                 
 ``` 
 ___
 
-### 12. Message
+### 11. Message
 
 &rarr; <ins>User</ins>
 
 ```
-No message message id: 7
+Processed message id: 6
 /game_stats 
 ```
 ___
 
-### 13. Message
+### 12. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 8 
-No message 
+message id: 7 
+Tournament game statistics:
+  - players entered -> 1
+  - number of entries -> 1
+  - total in game -> 10.00 
 ``` 
 ___

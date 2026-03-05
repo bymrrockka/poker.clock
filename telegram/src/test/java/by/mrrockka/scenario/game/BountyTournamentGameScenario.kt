@@ -72,8 +72,9 @@ class BountyTournamentGameScenario : PrizeGameScenario() {
             bot { "Player kicked" }
             user { "nickname1" kicked "nickname2" }
             bot { "Player kicked" }
-            user { calculate }.pinned()
+            val calculate = user { calculate }
             bot { "Calculated payouts" }
+            calculate.pinned()
             unpinned(game, prizePool, finalePlaces)
         } When {
             updatesReceived()

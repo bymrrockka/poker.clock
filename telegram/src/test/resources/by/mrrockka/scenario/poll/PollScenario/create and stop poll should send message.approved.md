@@ -50,29 +50,20 @@ ___
 
 ### 5. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 4 
-No message 
-``` 
-___
-
-### 6. Message
-
 &rarr; <ins>User</ins>
 
 ```
-No message [reply to message id 1]
-message id: 5
+Processed [reply to message id 1]
+message id: 4
 /stop_poll 
 ```
 ___
 
-### 7. Message
+### 6. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 6 
-No message 
+message id: 5 
+Poll stopped 
 ``` 
 ___
