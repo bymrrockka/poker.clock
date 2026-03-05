@@ -18,7 +18,7 @@ class HelpCommandHandlerImpl(
         private val helpService: HelpTelegramService,
 ) : HelpCommandHandler {
 
-    @CommandHandler(["/help"])
+    @CommandHandler(["/help", "/start"])
     override suspend fun help(message: MessageUpdate) {
         val metadata = message.message.toMessageMetadata()
         helpService.help(metadata)
