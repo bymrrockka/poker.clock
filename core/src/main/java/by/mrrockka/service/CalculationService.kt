@@ -18,13 +18,13 @@ interface CalculationService {
 }
 
 @Service
+@Transactional(propagation = Propagation.REQUIRED)
 open class CalculationServiceImpl(
         private val calculator: GameCalculator,
         private val gameRepo: GameRepo,
         private val gameSummaryRepo: GameSummaryRepo,
 ) : CalculationService {
 
-    @Transactional(propagation = Propagation.REQUIRED)
     override fun calculate(game: Game): List<Payout> {
         val payouts = calculator.calculate(game)
 

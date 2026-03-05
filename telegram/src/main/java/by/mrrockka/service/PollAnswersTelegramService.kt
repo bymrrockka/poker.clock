@@ -7,6 +7,7 @@ import eu.vendeli.tgbot.types.User
 import eu.vendeli.tgbot.types.common.PollAnswer
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 
 private val logger = KotlinLogging.logger {}
@@ -16,7 +17,7 @@ interface PollAnswersTelegramService {
 }
 
 @Service
-@Transactional
+@Transactional(propagation = Propagation.REQUIRED)
 open class PollAnswersTelegramServiceImpl(
         private val pollAnswersRepo: PollAnswersRepo,
         private val personRepo: PersonRepo,

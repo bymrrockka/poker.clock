@@ -2,6 +2,7 @@ package by.mrrockka.rest
 
 import by.mrrockka.repo.GameRepo
 import by.mrrockka.service.CalculationService
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -20,11 +21,13 @@ class CalculationControllerImpl(
         val errors = mutableListOf<String>()
         val games = gameRepo.findAll()
 
-        games.forEach { game ->
-            try {
-                calculationService.calculate(game)
-            } catch (ex: IllegalStateException) {
-                errors.add("Game id ${game.id} with: ${ex.message}")
+        transaction {
+            games.forEach { game ->
+                try {
+                    calculationService.calculate(game)
+                } catch (ex: IllegalStateException) {
+                    errors.add("Game id ${game.id} with: ${ex.message}")
+                }
             }
         }
         return """

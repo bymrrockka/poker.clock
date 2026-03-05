@@ -6,13 +6,16 @@ import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.parser.FinalePlacesMessageParser
 import by.mrrockka.repo.FinalePlacesRepo
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Propagation
+import org.springframework.transaction.annotation.Transactional
 
 interface FinalePlacesTelegramService {
     fun store(message: MessageMetadata): List<FinalPlace>
 }
 
 @Service
-class FinalePlacesTelegramServiceImpl(
+@Transactional(propagation = Propagation.REQUIRED)
+open class FinalePlacesTelegramServiceImpl(
         private val finalePlacesRepo: FinalePlacesRepo,
         private val finalePlacesParser: FinalePlacesMessageParser,
         private val gameService: GameTelegramService,

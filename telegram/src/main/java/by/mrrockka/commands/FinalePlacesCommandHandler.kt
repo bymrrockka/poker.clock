@@ -10,13 +10,16 @@ import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.types.component.MessageUpdate
 import eu.vendeli.tgbot.types.component.onFailure
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Propagation
+import org.springframework.transaction.annotation.Transactional
 
 interface FinalePlacesCommandHandler {
     suspend fun store(message: MessageUpdate)
 }
 
 @Component
-class FinalePlacesCommandHandlerImpl(
+@Transactional(propagation = Propagation.REQUIRED)
+open class FinalePlacesCommandHandlerImpl(
         private val bot: TelegramBot,
         private val finalePlacesService: FinalePlacesTelegramService,
         private val pinMessageService: PinMessageService,

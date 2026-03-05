@@ -25,6 +25,8 @@ import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.types.component.MessageUpdate
 import eu.vendeli.tgbot.types.component.onFailure
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Propagation
+import org.springframework.transaction.annotation.Transactional
 import java.math.BigDecimal.ZERO
 
 interface CalculationCommandHandler {
@@ -32,7 +34,8 @@ interface CalculationCommandHandler {
 }
 
 @Component
-class CalculationCommandHandlerImpl(
+@Transactional(propagation = Propagation.REQUIRED)
+open class CalculationCommandHandlerImpl(
         private val bot: TelegramBot,
         private val gameService: GameTelegramService,
         private val pinMessageService: PinMessageService,

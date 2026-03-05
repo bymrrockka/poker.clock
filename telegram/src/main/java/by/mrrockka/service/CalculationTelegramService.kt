@@ -8,6 +8,7 @@ import by.mrrockka.domain.Payout
 import by.mrrockka.domain.TournamentGame
 import by.mrrockka.domain.total
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 
 interface CalculationTelegramService {
@@ -15,7 +16,7 @@ interface CalculationTelegramService {
 }
 
 @Service
-@Transactional
+@Transactional(propagation = Propagation.REQUIRED)
 open class CalculationTelegramServiceImpl(
         private val calculationService: CalculationService,
         private val gameService: GameTelegramService,

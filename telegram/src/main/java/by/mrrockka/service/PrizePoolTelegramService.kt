@@ -6,6 +6,8 @@ import by.mrrockka.domain.PositionPrize
 import by.mrrockka.parser.PrizePoolMessageParser
 import by.mrrockka.repo.PrizePoolRepo
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Propagation
+import org.springframework.transaction.annotation.Transactional
 
 interface PrizePoolTelegramService {
     fun store(messageMetadata: MessageMetadata): List<PositionPrize>
@@ -13,6 +15,7 @@ interface PrizePoolTelegramService {
 }
 
 @Service
+@Transactional(propagation = Propagation.REQUIRED)
 open class PrizePoolTelegramServiceImpl(
         private val prizePoolRepo: PrizePoolRepo,
         private val prizePoolMessageParser: PrizePoolMessageParser,
