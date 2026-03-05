@@ -187,4 +187,31 @@ abstract class PrizeGameScenario : GameScenario() {
         } ThenApproveWith approver
     }
 
+    @Test
+    fun `interact with user to create prize pool but cancel`(approver: Approver) {
+        val buyin = BigDecimal(10)
+        val player = "me"
+
+        Given {
+            user { player.createGame(gameType(), buyin) }
+            bot { "Game created" }
+            user { "nickname3".entry() }
+            bot { "Entry stored" }
+            val toDelete = mutableListOf<Command>()
+            user { "/pp" }
+            toDelete += bot { "Conversation descriptor" }
+            toDelete += bot { "Pool size?" }
+            toDelete += user { "3" }
+            toDelete += bot { "1 Percentage" }
+            toDelete += user { "50" }
+            toDelete += bot { "2 Percentage" }
+            toDelete += user { "30" }
+            toDelete += bot { "3 Percentage" }
+            toDelete += user { "cancel" }
+            bot { "Canceled" }
+            toDelete.deleted()
+        } When {
+            updatesReceived()
+        } ThenApproveWith approver
+    }
 }

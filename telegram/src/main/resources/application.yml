@@ -95,7 +95,6 @@ bot:
           /withdrawal @nickname @nickname 20
       - name: prize_pool
         enabled: true
-        alias: pp
         description: Stores a prize pool for a tournament
         details: |
           When you ready to specify prize pool for tournament game use /prize_pool command to store position and percentage map.
@@ -108,6 +107,11 @@ bot:
           /prize_pool 
           1 70%
           2 30%
+      - name: pp
+        enabled: true
+        description: Stores a prize pool for a tournament
+        details: |
+          You will asked about details for game's prize pool
       - name: finale_places
         enabled: true
         alias: fp
