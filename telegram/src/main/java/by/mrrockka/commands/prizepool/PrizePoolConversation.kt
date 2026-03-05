@@ -78,7 +78,7 @@ object PrizePoolConversation : MessageLogConversation() {
 
     object PositionPercentage : CancelableStep(isInitial = true, cancelStep = Cancel::class) {
         const val nextPercentage = "Next Percentage"
-        private var positionPrizes = ConcurrentHashMap<Long, List<PositionPrize>>()
+        private val positionPrizes = ConcurrentHashMap<Long, List<PositionPrize>>()
 
         private fun Long.get(): List<PositionPrize> = positionPrizes[this] ?: mutableListOf()
         private fun Long.update(text: String): Boolean {
@@ -126,8 +126,8 @@ object PrizePoolConversation : MessageLogConversation() {
         override suspend fun store(ctx: WizardContext): List<PositionPrize> = positionPrizes.remove(ctx.user.id)
                 ?: error("No position prizes found for user ${ctx.user.id}")
 
-        override fun WizardContext.beforeCancelAction() {
-            positionPrizes.remove(user.id)
+        override fun beforeCancelAction(ctx: WizardContext) {
+            positionPrizes.remove(ctx.user.id)
         }
     }
 

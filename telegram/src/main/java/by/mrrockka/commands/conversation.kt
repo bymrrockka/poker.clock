@@ -15,12 +15,12 @@ import kotlin.reflect.KClass
 abstract class CancelableStep(isInitial: Boolean = false, val cancelStep: KClass<out WizardStep>) : WizardStep(isInitial) {
     private fun String.canceled() = matches("^cancel$".toRegex())
 
-    open fun WizardContext.beforeCancelAction() {}
+    open fun beforeCancelAction(ctx: WizardContext) {}
     abstract suspend fun navigate(ctx: WizardContext): Transition
     override suspend fun validate(ctx: WizardContext): Transition {
         return when {
             ctx.update.text.canceled() -> {
-                ctx.beforeCancelAction()
+                beforeCancelAction(ctx)
                 Transition.JumpTo(cancelStep, skipPersist = true)
             }
 
