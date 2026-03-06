@@ -37,7 +37,9 @@ jobs:
           gradle-version: '9.3.1'
 
       - name: Run build with Gradle Wrapper
-        run: ./gradlew clean build
+        env:
+          GITHUB_PIPELINE: 'true'
+        run: ./gradlew build
 
       - name: Test report
         uses: mikepenz/action-junit-report@v5
