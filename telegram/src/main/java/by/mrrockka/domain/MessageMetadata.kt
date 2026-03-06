@@ -1,6 +1,7 @@
 package by.mrrockka.domain
 
 import eu.vendeli.tgbot.types.User
+import eu.vendeli.tgbot.types.chat.Chat
 import eu.vendeli.tgbot.types.component.ProcessedUpdate
 import eu.vendeli.tgbot.types.msg.EntityType
 import eu.vendeli.tgbot.types.msg.Message
@@ -63,7 +64,10 @@ fun Message.toMessageMetadata(): MessageMetadata =
                 poll = poll,
         )
 
-@OptIn(ExperimentalTime::class)
 fun ProcessedUpdate.toMessageMetadata(): MessageMetadata =
         if (origin.message != null) origin.message!!.toMessageMetadata()
+        else error("Update message not found")
+
+fun ProcessedUpdate.chat(): Chat =
+        if (origin.message != null) origin.message!!.chat
         else error("Update message not found")
