@@ -15,6 +15,7 @@ import com.oneeyedmen.okeydoke.Approver
 import eu.vendeli.tgbot.types.User
 import eu.vendeli.tgbot.types.msg.Message
 import io.github.oshai.kotlinlogging.KotlinLogging
+import org.awaitility.core.ConditionTimeoutException
 import org.awaitility.kotlin.atMost
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
@@ -82,14 +83,14 @@ abstract class AbstractScenarioTest {
             await atMost Duration.ofSeconds(3) until {
                 dispatcher.requests.size == commands.size
             }
-        } catch (ex: Exception) {
+        } catch (ex: ConditionTimeoutException) {
             val message = """
                 |Await timeout
                 |Dispatcher requests size is ${dispatcher.requests.size}
                 |Commands size is ${commands.size}
                 |Dispatcher should have exactly the same requests size as commands size.
                 """.trimMargin()
-            error("$message \n\n ${ex.message}")
+            throw ConditionTimeoutException("$message \n\n ${ex.message}", ex)
         }
 
         commands.toText()
