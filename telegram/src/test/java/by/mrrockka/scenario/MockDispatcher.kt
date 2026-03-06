@@ -177,10 +177,8 @@ class MockDispatcher(
     }
 
     fun reset() {
-        synchronized(this) {
-            requests.clear()
-            interactions.clear()
-        }
+        requests.clear()
+        interactions.clear()
     }
 
     private fun RecordedRequest.toJson(): JsonNode = mapper.readTree(this.body?.toByteArray())
