@@ -19,6 +19,7 @@ import eu.vendeli.tgbot.types.chain.Transition
 import eu.vendeli.tgbot.types.chain.WizardContext
 import eu.vendeli.tgbot.types.chain.WizardStep
 import eu.vendeli.tgbot.types.component.onFailure
+import java.math.BigDecimal
 import java.util.concurrent.ConcurrentHashMap
 
 @WizardHandler(
@@ -76,7 +77,10 @@ object PrizePoolConversation : MessageLogConversation() {
     }
 
     object PositionPercentage : CancelableStep(isInitial = true, cancelStep = Cancel::class) {
-        const val nextPercentage = "Next Percentage"
+        enum class Navigate {
+            PLACE, TOTAL_INVALID, MESSAGE_INVALID;
+        }
+
         private val positionPrizes = ConcurrentHashMap<Long, List<PositionPrize>>()
 
         private fun Long.get(): List<PositionPrize> = positionPrizes[this] ?: mutableListOf()
@@ -98,22 +102,35 @@ object PrizePoolConversation : MessageLogConversation() {
 
         override suspend fun navigate(ctx: WizardContext): Transition {
             val size = ctx.getState<Size>() ?: error("No size found")
-
             val updated = ctx.user.id.update(ctx.update.text)
+            val percentage = positionPrizes.get(ctx.user.id)?.sumOf { it.percentage }
+            val completed = ctx.user.id.get().size == size
 
             return when {
-                updated && ctx.user.id.get().size == size -> Transition.Next
-                updated -> Transition.Retry(nextPercentage)
-                else -> Transition.Retry()
+                completed && percentage != null && percentage != BigDecimal("100") -> Transition.Retry(Navigate.TOTAL_INVALID.name)
+                completed -> Transition.Next
+                updated -> Transition.Retry(Navigate.PLACE.name)
+                else -> Transition.Retry(Navigate.MESSAGE_INVALID.name)
             }
         }
 
         override suspend fun onRetry(ctx: WizardContext, reason: String?) {
             when (reason) {
-                nextPercentage -> message { "What percentage for #${ctx.user.id.get().size + 1} place?" }
+                Navigate.PLACE.name -> message { "What percentage for #${ctx.user.id.get().size + 1} place?" }
                         .sendReturning(ctx.user, ctx.bot)
                         .onFailure { error("Failed to send message") }
                         ?.also { message -> ctx.user.id.message(message.messageId) }
+
+                Navigate.TOTAL_INVALID.name -> {
+                    message { "Position percentage should equal 100% but was ${positionPrizes.remove(ctx.user.id)?.sumOf { it.percentage } ?: 0}%" }
+                            .sendReturning(ctx.user, ctx.bot)
+                            .onFailure { error("Failed to send prize percentage") }
+                            ?.also { message -> ctx.user.id.message(message.messageId) }
+                    message { "What percentage for #${ctx.user.id.get().size + 1} place?" }
+                            .sendReturning(ctx.user, ctx.bot)
+                            .onFailure { error("Failed to send message") }
+                            ?.also { message -> ctx.user.id.message(message.messageId) }
+                }
 
                 else -> message { "Percentage should not be negative" }
                         .sendReturning(ctx.user, ctx.bot)
@@ -132,7 +149,8 @@ object PrizePoolConversation : MessageLogConversation() {
 
     object Finish : WizardStep() {
         override suspend fun onEntry(ctx: WizardContext) {
-            val prizePool = ctx.getState<PositionPercentage>() ?: error("Prize pool not found for user ${ctx.user.id}")
+            val prizePool = ctx.getState<PositionPercentage>()
+                    ?: error("Prize pool not found for user ${ctx.user.id}")
             prizePoolService.store(ctx.user.id.initial(), prizePool)
                     .let { prizePool ->
                         message {
