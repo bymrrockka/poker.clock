@@ -90,7 +90,7 @@ abstract class AbstractScenarioTest {
                 |Commands size is ${commands.size}
                 |Dispatcher should have exactly the same requests size as commands size.
                 """.trimMargin()
-            throw ConditionTimeoutException("$message \n\n ${ex.message}", ex)
+            throw ConditionTimeoutException("${ex.message}\n\n$message", ex)
         }
 
         commands.toText()

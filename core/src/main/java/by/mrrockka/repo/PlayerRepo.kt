@@ -23,6 +23,7 @@ open class PlayerRepoImpl(
         val bountyRepo: BountyRepo,
 ) : PlayerRepo {
 
+    @Suppress("UNCHECKED_CAST")
     override fun <T : Player> findPlayers(gameId: UUID, clazz: KClass<T>): List<T> {
         val personEntries = entriesRepo.findByGame(gameId)
 
