@@ -11,9 +11,11 @@ import by.mrrockka.domain.Debtor
 import by.mrrockka.domain.FinalPlace
 import by.mrrockka.domain.Payout
 import by.mrrockka.domain.PositionPrize
+import by.mrrockka.feature.ServiceFeeFeature
 import by.mrrockka.service.GameCalculator
 import com.oneeyedmen.okeydoke.Approver
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -22,7 +24,12 @@ import java.math.BigDecimal
 import java.util.stream.Stream
 
 class BountyTournamentGameCalculatorTest : AbstractTest() {
-    private val calculator: GameCalculator = GameCalculator()
+    private lateinit var calculator: GameCalculator
+
+    @BeforeEach
+    fun before() {
+        calculator = GameCalculator(ServiceFeeFeature())
+    }
 
     @ParameterizedTest
     @MethodSource("playerSize")
@@ -60,6 +67,36 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
 
     @Test
     fun `given some reentries and one prize place should calculate`(approver: Approver) {
+        val buyin = BigDecimal("10")
+        val bounty = BigDecimal("10")
+        val players = bountyPlayers(10) {
+            buyin(buyin)
+            bounty(bounty)
+        } + bountyPlayer {
+            buyin(buyin)
+            bounty(bounty)
+            entries(3)
+        } + bountyPlayer {
+            buyin(buyin)
+            bounty(bounty)
+            entries(4)
+        }
+        val (toBounties, fromBounties) = players.bountyToWinner(players[0], bounty)
+
+        val game = bountyGame {
+            buyIn(buyin)
+            bounty(bounty)
+            players(fromBounties + toBounties)
+            prizePool(PositionPrize(1, BigDecimal("100")))
+            finalePlaces(FinalPlace(1, toBounties.person))
+        }
+
+        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+    }
+
+    @Test
+    fun `given entries and one prize place should calculate with service fee`(approver: Approver) {
+        calculator = GameCalculator(ServiceFeeFeature(enabled = true, percent = BigDecimal("10"), threshold = BigDecimal("1")))
         val buyin = BigDecimal("10")
         val bounty = BigDecimal("10")
         val players = bountyPlayers(10) {

@@ -1,5 +1,6 @@
 package by.mrrockka.domain
 
+import by.mrrockka.feature.ServiceFeeFeature
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -12,7 +13,6 @@ import kotlinx.serialization.json.JsonEncoder
 import kotlinx.serialization.json.JsonUnquotedLiteral
 import kotlinx.serialization.json.jsonPrimitive
 import java.math.BigDecimal
-import java.math.RoundingMode
 
 interface GameSummary {
     val person: Person
@@ -76,11 +76,11 @@ data class FinalPlace(val position: Int, val person: Person)
 data class PositionPrize(val position: Int, @Serializable(with = BigDecimalSerializer::class) val percentage: BigDecimal)
 internal data class FinalPrizeSummary(val position: Int, val amount: BigDecimal, val person: Person)
 
-fun TournamentGame.gameSummary(): List<TournamentSummary> {
+fun TournamentGame.gameSummary(serviceFee: ServiceFeeFeature): List<TournamentSummary> {
     checkNotNull(finalePlaces) { "Can't calculate with no finale places" }
     checkNotNull(prizePool) { "Can't calculate with no prize pool" }
 
-    val prizeSummary = prizePool!!.prizeSummary(finalePlaces!!, players.flatMap { it.entries }.total())
+    val prizeSummary = prizeSummary(prizePool!!, finalePlaces!!, serviceFee)
 
     return players.map { player ->
         val prize = prizeSummary[player.person]
@@ -94,11 +94,11 @@ fun TournamentGame.gameSummary(): List<TournamentSummary> {
     }
 }
 
-fun BountyTournamentGame.gameSummary(): List<BountyTournamentSummary> {
+fun BountyTournamentGame.gameSummary(featureServiceFee: ServiceFeeFeature): List<BountyTournamentSummary> {
     checkNotNull(finalePlaces) { "Can't calculate with no finale places" }
     checkNotNull(prizePool) { "Can't calculate with no prize pool" }
 
-    val prizeSummary = prizePool!!.prizeSummary(finalePlaces!!, players.flatMap { it.entries }.total())
+    val prizeSummary = prizeSummary(prizePool!!, finalePlaces!!, featureServiceFee)
 
     return players.map { player ->
         val prize = prizeSummary[player.person]
@@ -118,7 +118,7 @@ fun BountyTournamentGame.gameSummary(): List<BountyTournamentSummary> {
     }
 }
 
-fun CashGame.gameSummary(): List<CashSummary> = players.map { player ->
+fun CashGame.gameSummary(featureServiceFee: ServiceFeeFeature): List<CashSummary> = players.map { player ->
     CashSummary(
             person = player.person,
             buyIn = player.entries.total(),
@@ -126,9 +126,11 @@ fun CashGame.gameSummary(): List<CashSummary> = players.map { player ->
     )
 }
 
-private fun List<PositionPrize>.prizeSummary(finalePlaces: List<FinalPlace>, entries: BigDecimal): Map<Person, FinalPrizeSummary> {
-    var left = entries
-    return this.sortedBy { it.position }
+private fun Game.prizeSummary(prizePoll: List<PositionPrize>, finalePlaces: List<FinalPlace>, serviceFee: ServiceFeeFeature): Map<Person, FinalPrizeSummary> {
+    val serviceFeeAmount = serviceFee.calculate(total())
+    val total = total() - serviceFeeAmount
+    var left = total
+    return prizePoll.sortedBy { it.position }
             .zip(finalePlaces.sortedBy { it.position })
             .mapIndexed { index, (prize, place) ->
                 if (finalePlaces.size - 1 <= index) FinalPrizeSummary(
@@ -137,7 +139,7 @@ private fun List<PositionPrize>.prizeSummary(finalePlaces: List<FinalPlace>, ent
                         amount = left,
                 )
                 else {
-                    val amount = (entries * prize.percentage / BigDecimal("100")).setScale(0, RoundingMode.HALF_DOWN)
+                    val amount = (total * prize.percentage / BigDecimal("100")).scaleDown()
                     left -= amount
                     FinalPrizeSummary(
                             position = place.position,
@@ -164,3 +166,4 @@ private object BigDecimalSerializer : KSerializer<BigDecimal> {
                 else -> decoder.decodeString().toBigDecimal()
             }
 }
+

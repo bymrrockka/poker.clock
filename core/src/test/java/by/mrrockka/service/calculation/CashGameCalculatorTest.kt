@@ -8,9 +8,11 @@ import by.mrrockka.builder.plus
 import by.mrrockka.domain.CashPlayer
 import by.mrrockka.domain.Debtor
 import by.mrrockka.domain.Payout
+import by.mrrockka.feature.ServiceFeeFeature
 import by.mrrockka.service.GameCalculator
 import com.oneeyedmen.okeydoke.Approver
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -19,7 +21,12 @@ import java.math.BigDecimal
 import java.util.stream.Stream
 
 class CashGameCalculatorTest : AbstractTest() {
-    private val calculator: GameCalculator = GameCalculator()
+    private lateinit var calculator: GameCalculator
+
+    @BeforeEach
+    fun before() {
+        calculator = GameCalculator(ServiceFeeFeature())
+    }
 
     @ParameterizedTest
     @MethodSource("playerSize")

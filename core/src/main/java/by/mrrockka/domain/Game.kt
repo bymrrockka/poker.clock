@@ -1,5 +1,6 @@
 package by.mrrockka.domain
 
+import by.mrrockka.feature.ServiceFeeFeature
 import java.math.BigDecimal
 import java.math.BigDecimal.ZERO
 import java.math.RoundingMode
@@ -13,6 +14,8 @@ interface Game {
     val createdAt: Instant
     val finishedAt: Instant?
     val players: List<Player>
+
+    fun total(): BigDecimal = players.totalEntries()
 }
 
 enum class GameType {
@@ -32,6 +35,7 @@ data class TournamentGame(
         private val prizePoolProvider: () -> List<PositionPrize>? = { null },
 ) : Game {
     override val players: List<TournamentPlayer> by lazy { playersProvider() }
+
     val finalePlaces: List<FinalPlace>? by lazy { finalePlacesProvider() }
     val prizePool: List<PositionPrize>? by lazy { prizePoolProvider() }
 }
@@ -48,6 +52,12 @@ data class BountyTournamentGame(
         private val prizePoolProvider: () -> List<PositionPrize>? = { null },
 ) : Game {
     override val players: List<BountyPlayer> by lazy { playersProvider() }
+    override fun total(): BigDecimal {
+        val entries = playersProvider().totalEntries()
+        val bounties = playersProvider().flatMap { it.entries }.size.toBigDecimal() * bounty
+        return entries + bounties
+    }
+
     val finalePlaces: List<FinalPlace>? by lazy { finalePlacesProvider() }
     val prizePool: List<PositionPrize>? by lazy { prizePoolProvider() }
 }
@@ -67,11 +77,11 @@ fun Game.toTournamentSummary(): List<PrizeGameSummary> = toSummary()
         .filter { it is PrizeGameSummary }
         .map { it as PrizeGameSummary }
 
-fun Game.toSummary(): List<GameSummary> {
+fun Game.toSummary(serviceFee: ServiceFeeFeature = ServiceFeeFeature()): List<GameSummary> {
     return when (this) {
-        is TournamentGame -> gameSummary()
-        is BountyTournamentGame -> gameSummary()
-        is CashGame -> gameSummary()
+        is TournamentGame -> gameSummary(serviceFee)
+        is BountyTournamentGame -> gameSummary(serviceFee)
+        is CashGame -> gameSummary(serviceFee)
         else -> error("Unknown game type")
     }
 }

@@ -1,0 +1,44 @@
+Payout to: jackie_rau 
+Total: 143
+
+***
+Debtor: erich_mayer
+Debt: 40
+***
+Debtor: donya_willms
+Debt: 30
+***
+Debtor: deb_becker
+Debt: 10
+***
+Debtor: perry_hessel
+Debt: 10
+***
+Debtor: hope_wehner
+Debt: 10
+***
+Debtor: stanton_boyer
+Debt: 10
+***
+Debtor: ashlee_lang
+Debt: 10
+***
+Debtor: santo_welch
+Debt: 10
+***
+Debtor: terisa_johnston
+Debt: 10
+***
+Debtor: ronnie_schuppe
+Debt: 3
+______________________________
+Payout to: serviceFee 
+Total: 17
+
+***
+Debtor: refugia_koss
+Debt: 10
+***
+Debtor: ronnie_schuppe
+Debt: 7
+______________________________

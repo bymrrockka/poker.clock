@@ -1,8 +1,11 @@
 package by.mrrockka
 
 import by.mrrockka.CoreRandoms.Companion.coreRandoms
+import by.mrrockka.domain.Debtor
+import by.mrrockka.domain.Game
 import by.mrrockka.domain.Payout
 import by.mrrockka.domain.Player
+import by.mrrockka.domain.TournamentGame
 import by.mrrockka.domain.total
 import by.mrrockka.extension.JsonApproverExtension
 import org.junit.jupiter.api.AfterEach
@@ -56,4 +59,28 @@ abstract class AbstractTest {
             )
         }
     }
+
+    fun List<Payout>.text(): String = joinToString("\n") { payout ->
+        """
+           |Payout to: ${payout.creditor.nickname} 
+           |Total: ${payout.total}
+           |
+           |${payout.debtors.toText()}
+           |${"_".repeat(30)}
+        """.trimMargin()
+    }
+
+    fun List<Debtor>.toText(): String = joinToString("\n") { debtor ->
+        """
+            |  - Debtor: ${debtor.person.nickname}
+            |    Debt: ${debtor.debt}
+        """.trimMargin()
+    }
+
+    fun Game.text(): String = "Game Summary\n" + when (this) {
+        is TournamentGame -> ""
+        else -> error("Unknown game type!")
+    }
+
+
 }

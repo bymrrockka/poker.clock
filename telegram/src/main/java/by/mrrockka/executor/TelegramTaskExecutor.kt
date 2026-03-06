@@ -14,11 +14,11 @@ import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.springframework.context.annotation.DependsOn
 import org.springframework.context.event.EventListener
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
-import org.springframework.transaction.support.TransactionTemplate
 import java.time.Instant
 import java.util.*
 import kotlin.time.Clock
@@ -34,7 +34,6 @@ class TelegramTaskExecutor(
         private val chatPollsRepo: ChatPollsRepo,
         private val pinMessageService: PinMessageService,
         private val clock: Clock,
-        private val transactionTemplate: TransactionTemplate,
 ) {
     @Volatile
     private var tasks: MutableMap<UUID, Task> = mutableMapOf()
@@ -59,7 +58,7 @@ class TelegramTaskExecutor(
         synchronized(tasks) {
             runBlocking {
                 tasks.toExecute(now).forEach { task ->
-                    transactionTemplate.execute {
+                    transaction {
                         async {
                             task.toAction()
                                     .sendReturning(to = task.chatId, bot)

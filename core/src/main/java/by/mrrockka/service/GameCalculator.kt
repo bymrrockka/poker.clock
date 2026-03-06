@@ -1,5 +1,6 @@
 package by.mrrockka.service
 
+import by.mrrockka.domain.BasicPerson
 import by.mrrockka.domain.Debtor
 import by.mrrockka.domain.Game
 import by.mrrockka.domain.GameSummary
@@ -8,29 +9,35 @@ import by.mrrockka.domain.Person
 import by.mrrockka.domain.TransferType
 import by.mrrockka.domain.toSummary
 import by.mrrockka.domain.total
+import by.mrrockka.feature.ServiceFeeFeature
 import org.springframework.stereotype.Component
 import java.math.BigDecimal
 import java.math.BigDecimal.ZERO
+import java.util.*
 
 @Component
-open class GameCalculator {
+open class GameCalculator(
+        private val serviceFeeFeature: ServiceFeeFeature,
+) {
     //todo: consider to refactor this class to make it extendable with strategies to calculate out payouts
     fun calculate(game: Game): List<Payout> {
-        val transferTypeToPlayer = game.toSummary()
+        val serviceFee = PlayerTotal(BasicPerson(UUID.randomUUID(), nickname = "serviceFee"), serviceFeeFeature.calculate(game.total()))
+        val transferTypeToPlayer = game.toSummary(serviceFeeFeature)
                 .map { it.associateByTransferType() }
+                .let { it + (TransferType.CREDIT to serviceFee) }
                 .groupBy({ it.first }, { it.second })
 
         val creditors = transferTypeToPlayer[TransferType.CREDIT]?.sortedByDescending { it.total } ?: emptyList()
         val debtors = transferTypeToPlayer[TransferType.DEBIT]?.sortedByDescending { it.total } ?: emptyList()
         val equals = transferTypeToPlayer[TransferType.EQUAL] ?: emptyList()
 
-        validate(game, creditors, debtors, equals)
+        validate(creditors, debtors, equals)
 
         return creditors.calculatePayouts(debtors) + equals.toEqualPayouts()
     }
 
-    private fun validate(game: Game, creditors: List<PlayerTotal>, debtors: List<PlayerTotal>, equals: List<PlayerTotal>) {
-        check(game.players.size == (creditors + debtors + equals).size) { "Players size and payout size are not equal" }
+    private fun validate(creditors: List<PlayerTotal>, debtors: List<PlayerTotal>, equals: List<PlayerTotal>) {
+//        check(game.players.size == (creditors + debtors + equals).size) { "Players size and payout size are not equal" }
         check((creditors + debtors + equals).isNotEmpty()) { "There must be at least one player in a game" }
         check(creditors.map { it.total }.total() == debtors.map { it.total }.total()) { "Debtors and creditors totals are not equal" }
 
