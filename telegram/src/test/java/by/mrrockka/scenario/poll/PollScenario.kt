@@ -25,7 +25,7 @@ class PollScenario : AbstractPollScenario() {
         val time = Instant.parse("2025-09-16T12:34:56Z") //Tuesday
         Given {
             clock.set(time)
-            val createPoll = message {
+            val createPoll = user {
                 """
                 |${createPoll}
                 |cron: 0 0 0 * * WED
@@ -38,9 +38,11 @@ class PollScenario : AbstractPollScenario() {
                 |5. I don't know
                 """.trimMargin()
             }
+            bot { "Poll will be triggered" }
             pollPosted(time + 8.days)
                     .pinned()
-            message(replyTo = createPoll) { stopPoll }
+            user(replyTo = createPoll) { stopPoll }
+            bot { "Poll stopped" }
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -51,7 +53,7 @@ class PollScenario : AbstractPollScenario() {
         val time = Instant.parse("2025-09-16T12:34:56Z") //Tuesday
         Given {
             clock.set(time)
-            message {
+            user {
                 """
                 |$createPoll
                 |cron: 0 0 0 * * *
@@ -64,6 +66,7 @@ class PollScenario : AbstractPollScenario() {
                 |5. I don't know
                 """.trimMargin()
             }
+            bot { "Poll will be triggered" }
             val poll1 = pollPosted(time + 1.days)
             poll1.pinned()
             val poll2 = pollPosted(time + 2.days)
@@ -78,7 +81,7 @@ class PollScenario : AbstractPollScenario() {
     @ValueSource(strings = ["", "message, cron, options", "message, cron, element", "message, cron", "cron, options, element", "message, options, element"])
     fun `fail when doesn't have required fields`(actual: String) {
         Given {
-            message {
+            user {
                 """
                 |${createPoll}
                 ${if (actual.contains("message")) "|message: Test poll" else ""}
@@ -87,6 +90,7 @@ class PollScenario : AbstractPollScenario() {
                 ${if (actual.contains("element")) "|Yes - participant" else ""}
             """.trimMargin()
             }
+            bot { "Exception" }
         } When {
             updatesReceived()
         } ThenApproveWith mdApprover("fail when doesn't have required fields, field set ${if (actual.isNotBlank()) actual else "empty"}")
@@ -95,7 +99,7 @@ class PollScenario : AbstractPollScenario() {
     @Test
     fun `stop poll fail when wrong reply message specified`(approver: Approver) {
         Given {
-            message {
+            user {
                 """
                 |${createPoll}
                 |cron: 0 0 0 * * 3
@@ -104,8 +108,11 @@ class PollScenario : AbstractPollScenario() {
                 |1. Yes - participant
                 """.trimMargin()
             }
-            val game = message { "me".createGame(GameType.TOURNAMENT, 30.toBigDecimal()) }
-            message(replyTo = game) { stopPoll } // should fail
+            bot { "Poll will be triggered" }
+            val game = user { "me".createGame(GameType.TOURNAMENT, 30.toBigDecimal()) }
+            bot { "Game created"}
+            user(replyTo = game) { stopPoll } // should fail
+            bot { "Exception" }
         } When {
             updatesReceived()
         } ThenApproveWith approver

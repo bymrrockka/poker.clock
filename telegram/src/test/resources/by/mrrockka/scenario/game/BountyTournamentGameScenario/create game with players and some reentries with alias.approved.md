@@ -1,344 +1,401 @@
-### 1. Interaction
+### 1. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 0
+Processed message id: 1
 /bg
 buyin: 10
 bounty: 10
 @nickname1, @nickname2, @nickname3, @nickname4, @nickname5, @me 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 2. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 2 
 Bounty tournament game started.
 ------------------------------
 Table 1
 Seats:
-  2. @nickname5
-  3. @hong_beer
-  5. @nickname2
-  6. @nickname3
-  8. @nickname4
-  10. @nickname1
+  2. @sergio_cartwright
+  3. @nickname1
+  5. @nickname3
+  6. @nickname4
+  8. @nickname5
+  10. @nickname2
                                  
 ``` 
 ___
 
-### 2. Pinned
+### 3. Pinned
 
 ``` 
-message id 0 pinned
+message id 1 pinned
 ``` 
 ___
 
-### 3. Interaction
+### 4. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 1
+Processed message id: 3
 /bounty @me kicked @nickname3 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 5. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
-Bounty amount 10.00 from @nickname3 stored for @hong_beer 
+message id: 4 
+Bounty amount 10.00 from @nickname3 stored for @sergio_cartwright 
 ``` 
 ___
 
-### 4. Interaction
+### 6. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 2
+Processed message id: 5
 /entry @nickname3  
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 7. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 6 
 Entry stored 
 ``` 
 ___
 
-### 5. Interaction
+### 8. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 3
+Processed message id: 7
 /bounty @me kicked @nickname3 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 9. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
-Bounty amount 10.00 from @nickname3 stored for @hong_beer 
+message id: 8 
+Bounty amount 10.00 from @nickname3 stored for @sergio_cartwright 
 ``` 
 ___
 
-### 6. Interaction
+### 10. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 4
+Processed message id: 9
 /entry @nickname3  
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 11. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 10 
 Entry stored 
 ``` 
 ___
 
-### 7. Interaction
+### 12. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 5
+Processed message id: 11
 /bounty @nickname1 kicked @nickname4 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 13. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 12 
 Bounty amount 10.00 from @nickname4 stored for @nickname1 
 ``` 
 ___
 
-### 8. Interaction
+### 14. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 6
+Processed message id: 13
 /bounty @nickname1 kicked @nickname5 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 15. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 14 
 Bounty amount 10.00 from @nickname5 stored for @nickname1 
 ``` 
 ___
 
-### 9. Interaction
+### 16. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 7
+Processed message id: 15
 /prize_pool
 1 50%
 2 50% 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 17. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 16 
 Prize pool stored:
 1. 50%
 2. 50% 
 ``` 
 ___
 
-### 10. Pinned
+### 18. Pinned
 
 ``` 
-message id 7 pinned
+message id 15 pinned
 ``` 
 ___
 
-### 11. Interaction
+### 19. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 8
+Processed message id: 17
 /bounty @nickname3 kicked @nickname1 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 20. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 18 
 Bounty amount 10.00 from @nickname1 stored for @nickname3 
 ``` 
 ___
 
-### 12. Interaction
+### 21. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 9
+Processed message id: 19
 /entry @nickname1  
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 22. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 20 
 Entry stored 
 ``` 
 ___
 
-### 13. Interaction
+### 23. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 10
+Processed message id: 21
 /bounty @nickname3 kicked @nickname1 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 24. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 22 
 Bounty amount 10.00 from @nickname1 stored for @nickname3 
 ``` 
 ___
 
-### 14. Interaction
+### 25. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 11
+Processed message id: 23
 /entry @nickname1  
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 26. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 24 
 Entry stored 
 ``` 
 ___
 
-### 15. Interaction
+### 27. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 12
+Processed message id: 25
 /finale_places
 1 @nickname1, 2 @nickname2 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 28. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 26 
 Finale places stored:
 1. @nickname1
 2. @nickname2 
 ``` 
 ___
 
-### 16. Pinned
+### 29. Pinned
 
 ``` 
-message id 12 pinned
+message id 25 pinned
 ``` 
 ___
 
-### 17. Interaction
+### 30. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 13
+Processed message id: 27
 /bounty @nickname2 kicked @nickname1 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 31. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 28 
 Bounty amount 10.00 from @nickname1 stored for @nickname2 
 ``` 
 ___
 
-### 18. Interaction
+### 32. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 14
+Processed message id: 29
 /entry @nickname1  
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 33. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 30 
 Entry stored 
 ``` 
 ___
 
-### 19. Interaction
+### 34. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 15
+Processed message id: 31
 /bounty @nickname2 kicked @nickname3 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 35. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 32 
 Bounty amount 10.00 from @nickname3 stored for @nickname2 
 ``` 
 ___
 
-### 20. Interaction
+### 36. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 16
+Processed message id: 33
 /bounty @nickname2 kicked @me 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 37. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
-Bounty amount 10.00 from @hong_beer stored for @nickname2 
+message id: 34 
+Bounty amount 10.00 from @sergio_cartwright stored for @nickname2 
 ``` 
 ___
 
-### 21. Interaction
+### 38. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 17
+Processed message id: 35
 /bounty @nickname1 kicked @nickname2 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 39. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 36 
 Bounty amount 10.00 from @nickname2 stored for @nickname1 
 ``` 
 ___
 
-### 22. Interaction
+### 40. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 18
+Processed message id: 37
 /calculate 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 41. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 38 
 ------------------------------
 You can support me using this link. 
 https://buymeacoffee.com/mrrockka
@@ -365,34 +422,34 @@ From:
   @nickname5 -> 15
 ------------------------------
 Players played equally
-  @hong_beer 
+  @sergio_cartwright 
 ``` 
 ___
 
-### 23. Pinned
+### 42. Pinned
 
 ``` 
-message id 18 pinned
-``` 
-___
-
-### 24. Unpinned
-
-``` 
-message id 0 unpinned
+message id 37 pinned
 ``` 
 ___
 
-### 25. Unpinned
+### 43. Unpinned
 
 ``` 
-message id 7 unpinned
+message id 1 unpinned
 ``` 
 ___
 
-### 26. Unpinned
+### 44. Unpinned
 
 ``` 
-message id 12 unpinned
+message id 15 unpinned
+``` 
+___
+
+### 45. Unpinned
+
+``` 
+message id 25 unpinned
 ``` 
 ___

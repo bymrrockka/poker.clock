@@ -1,18 +1,21 @@
-### 1. Interaction
+### 1. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 0
+Processed message id: 1
 /bounty_game
 buyin: 10
 bounty: 10
 @nickname1, @nickname2, @nickname3, @nickname4, @nickname5, @nickname6, @nickname7, @nickname8 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 2. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 2 
 Bounty tournament game started.
 ------------------------------
 Table 1
@@ -29,50 +32,59 @@ Seats:
 ``` 
 ___
 
-### 2. Interaction
+### 3. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 1
+Processed message id: 3
 /entry @nickname1  
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 4. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 4 
 Entry stored 
 ``` 
 ___
 
-### 3. Interaction
+### 5. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 2
+Processed message id: 5
 /entry @nickname1  
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 6. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 6 
 Entry stored 
 ``` 
 ___
 
-### 4. Interaction
+### 7. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 3
+Processed message id: 7
 /entry @nickname9  
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 8. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 8 
 Entries: 
 ------------------------------
 Table 1
@@ -81,18 +93,21 @@ Seats:
 ``` 
 ___
 
-### 5. Interaction
+### 9. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 4
+Processed message id: 9
 /entry @nickname10  
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 10. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 10 
 Entries: 
 ------------------------------
 Table 1
@@ -101,18 +116,21 @@ Seats:
 ``` 
 ___
 
-### 6. Interaction
+### 11. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 5
+Processed message id: 11
 /entry @nickname11  
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 12. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 12 
 Entries: 
 ------------------------------
 Table 1

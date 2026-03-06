@@ -41,8 +41,8 @@ open class TestConfig(
             }
             updatesListener {
                 if (githubPipeline) {
-                    pullingDelay = 80
-                }
+                    pullingDelay = 20
+                } else pullingDelay = 5
             }
             exceptionHandlingStrategy = ExceptionHandlingStrategy.Handle(PokerClockExceptionHandler)
         }

@@ -6,6 +6,8 @@ import by.mrrockka.domain.moneyInGame
 import by.mrrockka.parser.WithdrawalMessageParser
 import by.mrrockka.repo.WithdrawalsRepo
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Propagation
+import org.springframework.transaction.annotation.Transactional
 import java.math.BigDecimal
 
 interface WithdrawalTelegramService {
@@ -13,7 +15,8 @@ interface WithdrawalTelegramService {
 }
 
 @Service
-class WithdrawalTelegramServiceImpl(
+@Transactional(propagation = Propagation.REQUIRED)
+open class WithdrawalTelegramServiceImpl(
         private val withdrawalsRepo: WithdrawalsRepo,
         private val withdrawalMessageParser: WithdrawalMessageParser,
         private val gameTelegramService: GameTelegramService,

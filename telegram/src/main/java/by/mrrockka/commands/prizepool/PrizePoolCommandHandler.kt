@@ -1,4 +1,4 @@
-package by.mrrockka.commands
+package by.mrrockka.commands.prizepool
 
 import by.mrrockka.domain.toMessageMetadata
 import by.mrrockka.repo.PinType
@@ -22,7 +22,7 @@ class PrizePoolCommandHandlerImpl(
         private val pinMessageService: PinMessageService,
 ) : PrizePoolCommandHandler {
 
-    @CommandHandler(["/prize_pool", "/pp"])
+    @CommandHandler(["/prize_pool"])
     override suspend fun prizePool(message: MessageUpdate) {
         val metadata = message.message.toMessageMetadata()
         prizePoolService.store(metadata)

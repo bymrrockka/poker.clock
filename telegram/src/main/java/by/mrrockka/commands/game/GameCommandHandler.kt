@@ -14,6 +14,7 @@ import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.types.component.MessageUpdate
 import eu.vendeli.tgbot.types.component.onFailure
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 
 interface GameCommandHandler {
@@ -21,7 +22,7 @@ interface GameCommandHandler {
 }
 
 @Component
-@Transactional
+@Transactional(propagation = Propagation.REQUIRED)
 open class GameCommandHandlerImpl(
         private val bot: TelegramBot,
         private val gameService: GameTelegramService,

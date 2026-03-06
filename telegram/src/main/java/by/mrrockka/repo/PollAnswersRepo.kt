@@ -6,6 +6,7 @@ import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.upsert
 import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
@@ -15,7 +16,7 @@ interface PollAnswersRepo {
 }
 
 @Repository
-@Transactional
+@Transactional(propagation = Propagation.REQUIRED)
 open class PollAnswersRepoImpl : PollAnswersRepo {
 
     override fun store(pollAnswer: PollAnswer, person: Person) {

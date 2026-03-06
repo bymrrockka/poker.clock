@@ -1,39 +1,45 @@
-### 1. Interaction
+### 1. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 0
+Processed message id: 1
 /bounty_game
 buyin: 10
 bounty: 10
 @me 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 2. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 2 
 Bounty tournament game started.
 ------------------------------
 Table 1
 Seats:
-  5. @hong_beer
+  5. @sergio_cartwright
                                  
 ``` 
 ___
 
-### 2. Interaction
+### 3. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 1
+Processed message id: 3
 /entry @nickname3  
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 4. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 4 
 Entries: 
 ------------------------------
 Table 1
@@ -42,68 +48,80 @@ Seats:
 ``` 
 ___
 
-### 3. Interaction
+### 5. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 2
+Processed message id: 5
 /bounty @me kicked @nickname3 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 6. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
-Bounty amount 10.00 from @nickname3 stored for @hong_beer 
+message id: 6 
+Bounty amount 10.00 from @nickname3 stored for @sergio_cartwright 
 ``` 
 ___
 
-### 4. Interaction
+### 7. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 3
+Processed message id: 7
 /entry @nickname3  
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 8. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 8 
 Entry stored 
 ``` 
 ___
 
-### 5. Interaction
+### 9. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 4
+Processed message id: 9
 /prize_pool
 1 100% 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 10. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 10 
 Prize pool stored:
 1. 100% 
 ``` 
 ___
 
-### 6. Interaction
+### 11. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 5
+Processed message id: 11
 /entry @nickname2  
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 12. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 12 
 Entries: 
 ------------------------------
 Table 1
@@ -112,34 +130,40 @@ Seats:
 ``` 
 ___
 
-### 7. Interaction
+### 13. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 6
+Processed message id: 13
 /bounty @nickname2 kicked @nickname3 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 14. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 14 
 Bounty amount 10.00 from @nickname3 stored for @nickname2 
 ``` 
 ___
 
-### 8. Interaction
+### 15. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 7
+Processed message id: 15
 /entry @nickname1  
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 16. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 16 
 Entries: 
 ------------------------------
 Table 1
@@ -148,77 +172,89 @@ Seats:
 ``` 
 ___
 
-### 9. Interaction
+### 17. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 8
+Processed message id: 17
 /bounty @nickname2 kicked @nickname1 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 18. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 18 
 Bounty amount 10.00 from @nickname1 stored for @nickname2 
 ``` 
 ___
 
-### 10. Interaction
+### 19. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 9
+Processed message id: 19
 /finale_places
 1 @me 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 20. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 20 
 Finale places stored:
-1. @hong_beer 
+1. @sergio_cartwright 
 ``` 
 ___
 
-### 11. Interaction
+### 21. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 10
+Processed message id: 21
 /bounty @me kicked @nickname2 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 22. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
-Bounty amount 10.00 from @nickname2 stored for @hong_beer 
+message id: 22 
+Bounty amount 10.00 from @nickname2 stored for @sergio_cartwright 
 ``` 
 ___
 
-### 12. Interaction
+### 23. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 11
+Processed message id: 23
 /calculate 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 24. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 24 
 ------------------------------
 You can support me using this link. 
 https://buymeacoffee.com/mrrockka
 ------------------------------
 Finale summary:
-  1. @hong_beer won 50
+  1. @sergio_cartwright won 50
 Total: 50 (5 entries * 10 buy in)
 ------------------------------
-Payout to: @hong_beer
+Payout to: @sergio_cartwright
   Entries: 10
   Bounties: 20 (taken 20 - given 0) 
   Total: 60 (won 50 - entries 10 + bounties 20)

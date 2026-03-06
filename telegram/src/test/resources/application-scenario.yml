@@ -22,6 +22,12 @@ bot:
     cron: "* * * * * *"
   description:
     commands:
+      - name: game
+        enabled: true
+        description: Bot conversation to start a game
+        details: |
+          You will be asked to input parameters of the game you want to start.
+          There also will be a 'cancel' keyword to finish input chain without game creation
       - name: bounty_game
         enabled: true
         alias: bg
@@ -166,14 +172,20 @@ bot:
           Examples: 
           /my_stats
       - name: help
+        alias: start
         enabled: true
         description: Post it with a command name for command details
         details: |
-          You could use this command to get details about supported commands.
-          Empty command will send you this message.
-          Examples: 
-          /help
-          /help calculate
+          Hey nice to see you. 
+          This bot is designed to manage offline poker games in an easy manner and payouts calculation for each player.
+          It supports tournaments and cash games calculation.
+          
+          Also if your game depends on number of players there is a command to create a scheduled automatic poll which later can be used as a player reference for game creation.
+          
+          You could use `/help` command to get details about supported commands.
+          And you can try start a poker manager for game with `/game` command or type `/help game` to get details about it
+      - name: start
+        enabled: true
       - name: create_poll
         enabled: true
         description: Created a scheduled poll with specific message and repeat time for chat

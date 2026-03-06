@@ -33,28 +33,48 @@ class BountyTournamentGameScenario : PrizeGameScenario() {
         val winners = players.dropLast(4)
 
         Given {
-            val game = message { players.createGame(GameType.BOUNTY, buyin, withAlias) }
+            val game = user { players.createGame(GameType.BOUNTY, buyin, withAlias) }
+            bot { "Game created" }
             game.pinned()
-            message { "me" kicked "nickname3" }
-            message { "nickname3".entry() }
-            message { "me" kicked "nickname3" }
-            message { "nickname3".entry() }
-            message { "nickname1" kicked "nickname4" }
-            message { "nickname1" kicked "nickname5" }
-            val prizePool = message { prizePool(2) }
+            user { "me" kicked "nickname3" }
+            bot { "Entry stored" }
+            user { "nickname3".entry() }
+            bot { "Entry stored" }
+            user { "me" kicked "nickname3" }
+            bot { "Player kicked" }
+            user { "nickname3".entry() }
+            bot { "Entry stored" }
+            user { "nickname1" kicked "nickname4" }
+            bot { "Player kicked" }
+            user { "nickname1" kicked "nickname5" }
+            bot { "Player kicked" }
+            val prizePool = user { prizePool(2) }
+            bot { "Prize pool stored" }
             prizePool.pinned()
-            message { "nickname3" kicked "nickname1" }
-            message { "nickname1".entry() }
-            message { "nickname3" kicked "nickname1" }
-            message { "nickname1".entry() }
-            val finalePlaces = message { winners.finalePlaces() }
+            user { "nickname3" kicked "nickname1" }
+            bot { "Player kicked" }
+            user { "nickname1".entry() }
+            bot { "Entry stored" }
+            user { "nickname3" kicked "nickname1" }
+            bot { "Player kicked" }
+            user { "nickname1".entry() }
+            bot { "Entry stored" }
+            val finalePlaces = user { winners.finalePlaces() }
+            bot { "Finale places stored" }
             finalePlaces.pinned()
-            message { "nickname2" kicked "nickname1" }
-            message { "nickname1".entry() }
-            message { "nickname2" kicked "nickname3" }
-            message { "nickname2" kicked "me" }
-            message { "nickname1" kicked "nickname2" }
-            message { calculate }.pinned()
+            user { "nickname2" kicked "nickname1" }
+            bot { "Player kicked" }
+            user { "nickname1".entry() }
+            bot { "Entry stored" }
+            user { "nickname2" kicked "nickname3" }
+            bot { "Player kicked" }
+            user { "nickname2" kicked "me" }
+            bot { "Player kicked" }
+            user { "nickname1" kicked "nickname2" }
+            bot { "Player kicked" }
+            val calculate = user { calculate }
+            bot { "Calculated payouts" }
+            calculate.pinned()
             unpinned(game, prizePool, finalePlaces)
         } When {
             updatesReceived()
@@ -67,18 +87,30 @@ class BountyTournamentGameScenario : PrizeGameScenario() {
         val player = "me"
 
         Given {
-            message { player.createGame(GameType.BOUNTY, buyin) }
-            message { "nickname3".entry() }
-            message { "me" kicked "nickname3" }
-            message { "nickname3".entry() }
-            message { prizePool(1) }
-            message { "nickname2".entry() }
-            message { "nickname2" kicked "nickname3" }
-            message { "nickname1".entry() }
-            message { "nickname2" kicked "nickname1" }
-            message { player.finalePlaces() }
-            message { "me" kicked "nickname2" }
-            message { calculate }
+            user { player.createGame(GameType.BOUNTY, buyin) }
+            bot { "Game created" }
+            user { "nickname3".entry() }
+            bot { "Entry stored" }
+            user { "me" kicked "nickname3" }
+            bot { "Player kicked" }
+            user { "nickname3".entry() }
+            bot { "Entry stored" }
+            user { prizePool(1) }
+            bot { "Prize pool stored" }
+            user { "nickname2".entry() }
+            bot { "Entry stored" }
+            user { "nickname2" kicked "nickname3" }
+            bot { "Player kicked" }
+            user { "nickname1".entry() }
+            bot { "Entry stored" }
+            user { "nickname2" kicked "nickname1" }
+            bot { "Player kicked" }
+            user { player.finalePlaces() }
+            bot { "Finale places stored" }
+            user { "me" kicked "nickname2" }
+            bot { "Player kicked" }
+            user { calculate }
+            bot { "Calculated payouts" }
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -90,9 +122,12 @@ class BountyTournamentGameScenario : PrizeGameScenario() {
         val player = "me"
 
         Given {
-            message { player.createGame(GameType.BOUNTY, buyin) }
-            message { "me" kicked "nickname3" }
-            message { calculate }
+            user { player.createGame(GameType.BOUNTY, buyin) }
+            bot { "Game created" }
+            user { "me" kicked "nickname3" }
+            bot { "Player kicked" }
+            user { calculate }
+            bot { "Exception" }
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -104,9 +139,12 @@ class BountyTournamentGameScenario : PrizeGameScenario() {
         val player = "me"
 
         Given {
-            message { player.createGame(GameType.BOUNTY, buyin) }
-            message { "me" kicked "me" }
-            message { calculate }
+            user { player.createGame(GameType.BOUNTY, buyin) }
+            bot { "Game created" }
+            user { "me" kicked "me" }
+            bot { "Player kicked" }
+            user { calculate }
+            bot { "Exception" }
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -118,9 +156,12 @@ class BountyTournamentGameScenario : PrizeGameScenario() {
         val player = "me"
 
         Given {
-            message { player.createGame(GameType.BOUNTY, buyin) }
-            message { "nickname" kicked "me" }
-            message { calculate }
+            user { player.createGame(GameType.BOUNTY, buyin) }
+            bot { "Game created" }
+            user { "nickname" kicked "me" }
+            bot { "Player kicked" }
+            user { calculate }
+            bot { "Exception" }
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -132,10 +173,14 @@ class BountyTournamentGameScenario : PrizeGameScenario() {
         val players = listOf("me", "nickname")
 
         Given {
-            message { players.createGame(GameType.BOUNTY, buyin) }
-            message { "me" kicked "nickname" }
-            message { "me" kicked "nickname" }
-            message { calculate }
+            user { players.createGame(GameType.BOUNTY, buyin) }
+            bot { "Game created" }
+            user { "me" kicked "nickname" }
+            bot { "Player kicked" }
+            user { "me" kicked "nickname" }
+            bot { "Player kicked" }
+            user { calculate }
+            bot { "Exception" }
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -147,10 +192,14 @@ class BountyTournamentGameScenario : PrizeGameScenario() {
         val players = listOf("me", "nickname")
 
         Given {
-            message { players.createGame(GameType.BOUNTY, buyin) }
-            message { "nickname" kicked "me" }
-            message { "me" kicked "nickname" }
-            message { calculate }
+            user { players.createGame(GameType.BOUNTY, buyin) }
+            bot { "Game created" }
+            user { "nickname" kicked "me" }
+            bot { "Player kicked" }
+            user { "me" kicked "nickname" }
+            bot { "Player kicked" }
+            user { calculate }
+            bot { "Exception" }
         } When {
             updatesReceived()
         } ThenApproveWith approver

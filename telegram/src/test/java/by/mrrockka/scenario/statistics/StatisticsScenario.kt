@@ -24,10 +24,14 @@ abstract class StatisticsScenario : AbstractScenarioTest() {
                 "me", "nickname1",
         )
         Given {
-            message { players.createGame(GameType.TOURNAMENT, buyin) }
-            message { statisticsCommand }
-            message { entry() }
-            message { statisticsCommand }
+            user { players.createGame(GameType.TOURNAMENT, buyin) }
+            bot { "Game created"}
+            user { statisticsCommand }
+            bot { "Players stats"}
+            user { entry() }
+            bot { "Entry stored"}
+            user { statisticsCommand }
+            bot { "Players stats"}
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -40,14 +44,22 @@ abstract class StatisticsScenario : AbstractScenarioTest() {
                 "me", "nickname1",
         )
         Given {
-            message { players.createGame(GameType.CASH, buyin) }
-            message { statisticsCommand }
-            message { entry(30) }
-            message { statisticsCommand }
-            message { "me".withdrawal(30) }
-            message { statisticsCommand }
-            message { "me".withdrawal(20) }
-            message { statisticsCommand }
+            user { players.createGame(GameType.CASH, buyin) }
+            bot { "Players stats"}
+            user { statisticsCommand }
+            bot { "Players stats"}
+            user { entry(30) }
+            bot { "Entry stored"}
+            user { statisticsCommand }
+            bot { "Players stats"}
+            user { "me".withdrawal(30) }
+            bot { "Withdraw" }
+            user { statisticsCommand }
+            bot { "Players stats"}
+            user { "me".withdrawal(20) }
+            bot { "Withdraw" }
+            user { statisticsCommand }
+            bot { "Players stats"}
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -60,17 +72,28 @@ abstract class StatisticsScenario : AbstractScenarioTest() {
                 "me", "nickname1",
         )
         Given {
-            message { players.createGame(GameType.BOUNTY, buyin) }
-            message { statisticsCommand }
-            message { "me" kicked "nickname1" }
-            message { statisticsCommand }
-            message { "nickname1".entry() }
-            message { "nickname1" kicked "me" }
-            message { statisticsCommand }
-            message { "me".entry() }
-            message { statisticsCommand }
-            message { "nickname1" kicked "me" }
-            message { statisticsCommand }
+            user { players.createGame(GameType.BOUNTY, buyin) }
+            bot { "Game created"}
+            user { statisticsCommand }
+            bot { "Players stats"}
+            user { "me" kicked "nickname1" }
+            bot { "Player kicked"}
+            user { statisticsCommand }
+            bot { "Players stats"}
+            user { "nickname1".entry() }
+            bot { "Entry stored"}
+            user { "nickname1" kicked "me" }
+            bot { "Player kicked"}
+            user { statisticsCommand }
+            bot { "Players stats"}
+            user { "me".entry() }
+            bot { "Entry stored"}
+            user { statisticsCommand }
+            bot { "Players stats"}
+            user { "nickname1" kicked "me" }
+            bot { "Player kicked"}
+            user { statisticsCommand }
+            bot { "Players stats"}
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -91,8 +114,10 @@ class PlayerStatisticsScenario : StatisticsScenario() {
                 "nickname2", "nickname1",
         )
         Given {
-            message { players.createGame(GameType.TOURNAMENT, buyin) }
-            message { playerStats }
+            user { players.createGame(GameType.TOURNAMENT, buyin) }
+            bot { "Game created"}
+            user { playerStats }
+            bot { "Players stats"}
         } When {
             updatesReceived()
         } ThenApproveWith approver

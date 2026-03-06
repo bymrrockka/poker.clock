@@ -12,6 +12,7 @@ import java.util.*
 
 interface TelegramPersonService {
     fun findByMessage(metadata: MessageMetadata): List<Person>
+    fun findByNicknames(nicknames: List<String>, chatId: Long): List<Person>
     fun findByFrom(metadata: MessageMetadata): Person
 }
 
@@ -24,6 +25,10 @@ open class TelegramPersonServiceImpl(
 
     override fun findByMessage(metadata: MessageMetadata): List<Person> {
         val nicknames = metadata.mentions.map { it.text }
+        return findByNicknames(nicknames, metadata.chatId)
+    }
+
+    override fun findByNicknames(nicknames: List<String>, chatId: Long): List<Person> {
         val persons = personRepo.findByNicknames(nicknames)
         val newPersons = nicknames.newNicknames(persons)
                 .let { nicknames ->
@@ -33,7 +38,7 @@ open class TelegramPersonServiceImpl(
                 }
 
         val allPersons = persons + newPersons
-        chatPersonsRepo.store(allPersons.map { it.id }, metadata.chatId)
+        chatPersonsRepo.store(allPersons.map { it.id }, chatId)
 
         return allPersons
     }

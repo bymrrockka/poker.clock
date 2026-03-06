@@ -33,20 +33,32 @@ class TournamentGameScenario : PrizeGameScenario() {
         val winners = players.take(2);
 
         Given {
-            val game = message { players.createGame(GameType.TOURNAMENT, buyin, withAlias) }
+            val game = user { players.createGame(GameType.TOURNAMENT, buyin, withAlias) }
+            bot { "Game created" }
             game.pinned()
-            message { "nickname3".entry() }
-            message { "nickname3".entry() }
-            val prizePool = message { prizePool(2) }
+            user { "nickname3".entry() }
+            bot { "Entry stored" }
+            user { "nickname3".entry() }
+            bot { "Entry stored" }
+            val prizePool = user { prizePool(2) }
+            bot { "Prize pool stored" }
             prizePool.pinned()
-            message { "nickname1".entry() }
-            message { "nickname1".entry() }
-            val finalePlaces = message { winners.finalePlaces() }
+            user { "nickname1".entry() }
+            bot { "Entry stored" }
+            user { "nickname1".entry() }
+            bot { "Entry stored" }
+            val finalePlaces = user { winners.finalePlaces() }
+            bot { "Finale places stored" }
             finalePlaces.pinned()
-            message { "nickname1".entry() }
-            message { "nickname1".entry() }
-            message { "nickname1".entry() }
-            message { calculate }.pinned()
+            user { "nickname1".entry() }
+            bot { "Entry stored" }
+            user { "nickname1".entry() }
+            bot { "Entry stored" }
+            user { "nickname1".entry() }
+            bot { "Entry stored" }
+            val calculate = user { calculate }
+            bot { "Calculated payouts" }
+            calculate.pinned()
             unpinned(game, prizePool, finalePlaces)
         } When {
             updatesReceived()
@@ -59,13 +71,20 @@ class TournamentGameScenario : PrizeGameScenario() {
         val player = "me"
 
         Given {
-            message { player.createGame(GameType.TOURNAMENT, buyin) }
-            message { "nickname3".entry() }
-            message { prizePool(1) }
-            message { "nickname1".entry() }
-            message { player.finalePlaces() }
-            message { "nickname2".entry() }
-            message { calculate }
+            user { player.createGame(GameType.TOURNAMENT, buyin) }
+            bot { "Game created" }
+            user { "nickname3".entry() }
+            bot { "Entry stored" }
+            user { prizePool(1) }
+            bot { "Prize pool stored" }
+            user { "nickname1".entry() }
+            bot { "Entry stored" }
+            user { player.finalePlaces() }
+            bot { "Finale places stored" }
+            user { "nickname2".entry() }
+            bot { "Entry stored" }
+            user { calculate }
+            bot { "Calculated payouts" }
         } When {
             updatesReceived()
         } ThenApproveWith approver

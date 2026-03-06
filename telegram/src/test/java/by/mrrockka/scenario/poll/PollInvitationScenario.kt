@@ -24,7 +24,7 @@ class PollInvitationScenario : AbstractPollScenario() {
 
         Given {
             clock.set(time)
-            val createPoll = message {
+            val createPoll = user {
                 """
                 |${createPoll}
                 |cron: 0 0 0 * * WED
@@ -35,6 +35,7 @@ class PollInvitationScenario : AbstractPollScenario() {
                 |3. I don't know
                 """.trimMargin()
             }
+            bot { "Poll will be triggered" }
             val poll = pollPosted(time + 8.days)
             poll.pinned()
 
@@ -49,11 +50,14 @@ class PollInvitationScenario : AbstractPollScenario() {
             //maybe
             poll.pollAnswer(person(), 3)
 
-            message(replyTo = poll) {
+            user(replyTo = poll) {
                 createGame(type = GameType.TOURNAMENT, BigDecimal(10))
             }
-            message { gameStats }
-            message(replyTo = createPoll) { stopPoll }
+            bot { "Game created" }
+            user { gameStats }
+            bot { "Game stats" }
+            user(replyTo = createPoll) { stopPoll }
+            bot { "Poll stoped" }
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -65,7 +69,7 @@ class PollInvitationScenario : AbstractPollScenario() {
         val participants = listOf(person(), person())
         Given {
             clock.set(time)
-            message {
+            user {
                 """
                 |${createPoll}
                 |cron: 0 0 0 * * WED
@@ -76,8 +80,8 @@ class PollInvitationScenario : AbstractPollScenario() {
                 |3. I don't know
                 """.trimMargin()
             }
+            bot { "Poll will be triggered" }
             val poll = pollPosted(time + 8.days)
-
             //participants
             participants.forEach { person ->
                 poll.pollAnswer(person, 1)
@@ -89,10 +93,12 @@ class PollInvitationScenario : AbstractPollScenario() {
             //maybe
             poll.pollAnswer(person(), 3)
 
-            message(replyTo = poll) {
+            user(replyTo = poll) {
                 createGame(type = GameType.TOURNAMENT, buyin = BigDecimal(10), excludes = participants.drop(1))
             }
-            message { gameStats }
+            bot { "Game created" }
+            user { gameStats }
+            bot { "Game stats" }
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -104,7 +110,7 @@ class PollInvitationScenario : AbstractPollScenario() {
 
         Given {
             clock.set(time)
-            message {
+            user {
                 """
                 |${createPoll}
                 |cron: 0 0 0 * * WED
@@ -115,6 +121,7 @@ class PollInvitationScenario : AbstractPollScenario() {
                 |3. I don't know
                 """.trimMargin()
             }
+            bot { "Poll will be triggered" }
             val poll = pollPosted(time + 8.days)
             poll.pinned()
 
@@ -123,9 +130,10 @@ class PollInvitationScenario : AbstractPollScenario() {
             }
             poll.pollAnswer(person(), 3)
 
-            message(replyTo = poll) {
+            user(replyTo = poll) {
                 createGame(type = GameType.TOURNAMENT, BigDecimal(10))
             }
+            bot { "Game created" }
         } When {
             updatesReceived()
         } ThenApproveWith approver

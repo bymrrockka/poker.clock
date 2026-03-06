@@ -1,5 +1,6 @@
 package by.mrrockka.scenario.game
 
+import by.mrrockka.Command
 import by.mrrockka.Given
 import by.mrrockka.When
 import by.mrrockka.extension.mdApprover
@@ -31,10 +32,14 @@ abstract class PrizeGameScenario : GameScenario() {
         val winners = players.dropLast(4)
 
         Given {
-            message { players.createGame(gameType(), buyin) }
-            message { prizePool(size) }
-            message { winners.finalePlaces() }
-            message { calculate }
+            user { players.createGame(gameType(), buyin) }
+            bot { "Game created" }
+            user { prizePool(size) }
+            bot { "Prize pool stored" }
+            user { winners.finalePlaces() }
+            bot { "Finale places stored" }
+            user { calculate }
+            bot { "Calculated payouts" }
         } When {
             updatesReceived()
         } ThenApproveWith mdApprover("should fail when prize pool is different size then finale places $size")
@@ -55,10 +60,18 @@ abstract class PrizeGameScenario : GameScenario() {
         val winners = players.dropLast(4)
 
         Given {
-            message { players.createGame(gameType(), buyin) }
-            if (!missed.contains("prize pool")) message { prizePool(2) }
-            if (!missed.contains("finale places")) message { winners.finalePlaces() }
-            message { calculate }
+            user { players.createGame(gameType(), buyin) }
+            bot { "Game created" }
+            if (!missed.contains("prize pool")) {
+                user { prizePool(2) }
+                bot { "Prize pool stored" }
+            }
+            if (!missed.contains("finale places")) {
+                user { winners.finalePlaces() }
+                bot { "Finale places stored" }
+            }
+            user { calculate }
+            bot { "Calculated payouts" }
         } When {
             updatesReceived()
         } ThenApproveWith mdApprover("should fail when $missed is missed")
@@ -68,13 +81,13 @@ abstract class PrizeGameScenario : GameScenario() {
     @ParameterizedTest
     @ValueSource(
             strings = [
-                """/pp 
+                """/prize_pool 
                 |1. 90%, 2. 50%
                 """,
-                """/pp 
+                """/prize_pool
                 |1. 90%
                 """,
-                """/pp 
+                """/prize_pool 
                 |1. 23%
                 |2. 23%
                 |3. 23%
@@ -105,10 +118,14 @@ abstract class PrizeGameScenario : GameScenario() {
                 .trim()
 
         Given {
-            message { players.createGame(gameType(), buyin) }
-            message { prizePool.trimMargin() }
-            message { winner.finalePlaces() }
-            message { calculate }
+            user { players.createGame(gameType(), buyin) }
+            bot { "Game created" }
+            user { prizePool.trimMargin() }
+            bot { "Prize pool stored" }
+            user { winner.finalePlaces() }
+            bot { "Finale places stored" }
+            user { calculate }
+            bot { "Calculated payouts" }
         } When {
             updatesReceived()
         } ThenApproveWith mdApprover("should fail when prize pool sum is not equal 100 percent. $fileName")
@@ -120,17 +137,138 @@ abstract class PrizeGameScenario : GameScenario() {
         val player = "me"
 
         Given {
-            message { player.createGame(gameType(), buyin) }
-            message { "nickname3".entry() }
-            message { prizePool(1) }
-            message { "nickname1".entry() }
-            message { player.finalePlaces() }
-            message { "nickname2".entry() }
-            message { prizePool(2) }
-            message { listOf("me", "nickname2").finalePlaces() }
+            user { player.createGame(gameType(), buyin) }
+            bot { "Game created" }
+            user { "nickname3".entry() }
+            bot { "Entry stored" }
+            user { prizePool(1) }
+            bot { "Prize pool stored" }
+            user { "nickname1".entry() }
+            bot { "Entry stored" }
+            user { player.finalePlaces() }
+            bot { "Finale places stored" }
+            user { "nickname2".entry() }
+            bot { "Entry stored" }
+            user { prizePool(2) }
+            bot { "Prize pool stored" }
+            user { listOf("me", "nickname2").finalePlaces() }
+            bot { "Finale places stored" }
         } When {
             updatesReceived()
         } ThenApproveWith approver
     }
 
+    @Test
+    fun `interact with user to store prize pool`(approver: Approver) {
+        val buyin = BigDecimal(10)
+        val player = "me"
+
+        Given {
+            user { player.createGame(gameType(), buyin) }
+            bot { "Game created" }
+            user { "nickname3".entry() }
+            bot { "Entry stored" }
+            val toDelete = mutableListOf<Command>()
+            user { "/pp" }
+            toDelete += bot { "Conversation descriptor" }
+            toDelete += bot { "Pool size?" }
+            toDelete += user { "3" }
+            toDelete += bot { "1 Percentage" }
+            toDelete += user { "50" }
+            toDelete += bot { "2 Percentage" }
+            toDelete += user { "30" }
+            toDelete += bot { "3 Percentage" }
+            toDelete += user { "20" }
+            val summary = bot { "Prize pool stored" }
+            summary.pinned()
+            toDelete.deleted()
+        } When {
+            updatesReceived()
+        } ThenApproveWith approver
+    }
+
+    @Test
+    fun `interact with user to create prize pool but cancel`(approver: Approver) {
+        val buyin = BigDecimal(10)
+        val player = "me"
+
+        Given {
+            user { player.createGame(gameType(), buyin) }
+            bot { "Game created" }
+            user { "nickname3".entry() }
+            bot { "Entry stored" }
+            val toDelete = mutableListOf<Command>()
+            user { "/pp" }
+            toDelete += bot { "Conversation descriptor" }
+            toDelete += bot { "Pool size?" }
+            toDelete += user { "3" }
+            toDelete += bot { "1 Percentage" }
+            toDelete += user { "50" }
+            toDelete += bot { "2 Percentage" }
+            toDelete += user { "30" }
+            toDelete += bot { "3 Percentage" }
+            toDelete += user { "cancel" }
+            bot { "Canceled" }
+            toDelete.deleted()
+        } When {
+            updatesReceived()
+        } ThenApproveWith approver
+    }
+
+    @Test
+    fun `interact with user to store finale places`(approver: Approver) {
+        val buyin = BigDecimal(10)
+        val player = "me"
+
+        Given {
+            user { listOf(player, "nickname1", "nickname2").createGame(gameType(), buyin) }
+            bot { "Game created" }
+            user { "nickname3".entry() }
+            bot { "Entry stored" }
+            val toDelete = mutableListOf<Command>()
+            user { "/fp" }
+            toDelete += bot { "Conversation descriptor" }
+            toDelete += bot { "Pool size?" }
+            toDelete += user { "3" }
+            toDelete += bot { "1 place" }
+            toDelete += user { "@nickname1" }
+            toDelete += bot { "2 place" }
+            toDelete += user { "@nickname2" }
+            toDelete += bot { "3 place" }
+            toDelete += user { "@me" }
+            val summary = bot { "Finale places stored" }
+            summary.pinned()
+            toDelete.deleted()
+        } When {
+            updatesReceived()
+        } ThenApproveWith approver
+    }
+
+    @Test
+    fun `interact with user to create finale places but cancel`(approver: Approver) {
+        val buyin = BigDecimal(10)
+        val player = "me"
+
+        Given {
+            user { listOf(player, "nickname1", "nickname2").createGame(gameType(), buyin) }
+            bot { "Game created" }
+            user { "nickname3".entry() }
+            bot { "Entry stored" }
+            val toDelete = mutableListOf<Command>()
+            user { "/fp" }
+            toDelete += bot { "Conversation descriptor" }
+            toDelete += bot { "Pool size?" }
+            toDelete += user { "3" }
+            toDelete += bot { "1 place" }
+            toDelete += user { "@nickname1" }
+            toDelete += bot { "2 place" }
+            toDelete += user { "@nickname2" }
+            toDelete += bot { "3 place" }
+            toDelete += user { "cancel" }
+            bot { "Canceled" }
+            toDelete.deleted()
+        } When {
+            updatesReceived()
+        } ThenApproveWith approver
+    }
 }

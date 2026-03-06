@@ -1,0 +1,155 @@
+package by.mrrockka.commands.prizepool
+
+import by.mrrockka.commands.BigDecimalState
+import by.mrrockka.commands.CancelStep
+import by.mrrockka.commands.CancelableStep
+import by.mrrockka.commands.MessageLogConversation
+import by.mrrockka.commands.PositionPrizeState
+import by.mrrockka.commands.decimalValidation
+import by.mrrockka.commands.digitValidation
+import by.mrrockka.domain.PositionPrize
+import by.mrrockka.repo.PinType
+import by.mrrockka.service.PinMessageService
+import by.mrrockka.service.PrizePoolTelegramService
+import eu.vendeli.tgbot.annotations.WizardHandler
+import eu.vendeli.tgbot.api.message.message
+import eu.vendeli.tgbot.generated.getState
+import eu.vendeli.tgbot.implementations.MapIntStateManager
+import eu.vendeli.tgbot.types.chain.Transition
+import eu.vendeli.tgbot.types.chain.WizardContext
+import eu.vendeli.tgbot.types.chain.WizardStep
+import eu.vendeli.tgbot.types.component.onFailure
+import java.util.concurrent.ConcurrentHashMap
+
+@WizardHandler(
+        trigger = ["/pp"],
+        stateManagers = [MapIntStateManager::class, BigDecimalState::class, PositionPrizeState::class],
+)
+object PrizePoolConversation : MessageLogConversation() {
+    lateinit var prizePoolService: PrizePoolTelegramService
+    lateinit var pinMessageService: PinMessageService
+
+    object Size : CancelableStep(isInitial = true, cancelStep = Cancel::class) {
+        override suspend fun onEntry(ctx: WizardContext) {
+            ctx.cancelableMessage { message -> ctx.user.id.message(message.messageId) }
+            ctx.initialize()
+
+            message { "How many places to account?" }
+                    .replyKeyboardMarkup {
+                        +"1"
+                        +"2"
+                        +"3"
+                        +"4"
+                        options {
+                            resizeKeyboard = true
+                            oneTimeKeyboard = true
+                        }
+                    }
+                    .sendReturning(ctx.user, ctx.bot)
+                    .onFailure { error("Failed to send message") }
+                    ?.also { message -> ctx.user.id.message(message.messageId) }
+        }
+
+        override suspend fun onRetry(ctx: WizardContext, reason: String?) {
+            message { "Should be a number not less then 1" }
+                    .replyKeyboardMarkup {
+                        +"1"
+                        +"2"
+                        +"3"
+                        +"4"
+                        options {
+                            resizeKeyboard = true
+                            oneTimeKeyboard = true
+                        }
+                    }
+                    .sendReturning(ctx.user, ctx.bot)
+                    .onFailure { error("Failed to send message") }
+                    ?.also { message -> ctx.user.id.message(message.messageId) }
+        }
+
+        override suspend fun navigate(ctx: WizardContext): Transition = when {
+            ctx.update.text.digitValidation() -> Transition.Next
+            else -> Transition.Retry()
+        }
+
+        override suspend fun store(ctx: WizardContext): Int = ctx.update.text.toInt()
+    }
+
+    object PositionPercentage : CancelableStep(isInitial = true, cancelStep = Cancel::class) {
+        const val nextPercentage = "Next Percentage"
+        private val positionPrizes = ConcurrentHashMap<Long, List<PositionPrize>>()
+
+        private fun Long.get(): List<PositionPrize> = positionPrizes[this] ?: mutableListOf()
+        private fun Long.update(text: String): Boolean {
+            return if (text.decimalValidation()) {
+                val list = this.get()
+                val positionPrize = PositionPrize(list.size + 1, text.toBigDecimal())
+                positionPrizes[this] = (list + positionPrize)
+                true
+            } else false
+        }
+
+        override suspend fun onEntry(ctx: WizardContext) {
+            message { "What percentage for #1 place?" }
+                    .sendReturning(ctx.user, ctx.bot)
+                    .onFailure { error("Failed to send message") }
+                    ?.also { message -> ctx.user.id.message(message.messageId) }
+        }
+
+        override suspend fun navigate(ctx: WizardContext): Transition {
+            val size = ctx.getState<Size>() ?: error("No size found")
+
+            val updated = ctx.user.id.update(ctx.update.text)
+
+            return when {
+                updated && ctx.user.id.get().size == size -> Transition.Next
+                updated -> Transition.Retry(nextPercentage)
+                else -> Transition.Retry()
+            }
+        }
+
+        override suspend fun onRetry(ctx: WizardContext, reason: String?) {
+            when (reason) {
+                nextPercentage -> message { "What percentage for #${ctx.user.id.get().size + 1} place?" }
+                        .sendReturning(ctx.user, ctx.bot)
+                        .onFailure { error("Failed to send message") }
+                        ?.also { message -> ctx.user.id.message(message.messageId) }
+
+                else -> message { "Percentage should not be negative" }
+                        .sendReturning(ctx.user, ctx.bot)
+                        .onFailure { error("Failed to send message") }
+                        ?.also { message -> ctx.user.id.message(message.messageId) }
+            }
+        }
+
+        override suspend fun store(ctx: WizardContext): List<PositionPrize> = positionPrizes.remove(ctx.user.id)
+                ?: error("No position prizes found for user ${ctx.user.id}")
+
+        override fun beforeCancelAction(ctx: WizardContext) {
+            positionPrizes.remove(ctx.user.id)
+        }
+    }
+
+    object Finish : WizardStep() {
+        override suspend fun onEntry(ctx: WizardContext) {
+            val prizePool = ctx.getState<PositionPercentage>() ?: error("Prize pool not found for user ${ctx.user.id}")
+            prizePoolService.store(ctx.user.id.initial(), prizePool)
+                    .let { prizePool ->
+                        message {
+                            """
+                            |Prize pool stored:
+                            |${prizePool.joinToString("\n") { "${it.position}. ${it.percentage}%" }}
+                            """.trimMargin()
+                        }
+                    }.sendReturning(ctx.user, ctx.bot)
+                    .onFailure { error("Failed to send prize pool message") }
+                    ?.also { message -> pinMessageService.pin(message, PinType.GAME) }
+
+            ctx.clearMessages()
+        }
+
+        override suspend fun validate(ctx: WizardContext): Transition = Transition.Finish
+    }
+
+    object Cancel : CancelStep({ ctx -> ctx.clearMessages() })
+}

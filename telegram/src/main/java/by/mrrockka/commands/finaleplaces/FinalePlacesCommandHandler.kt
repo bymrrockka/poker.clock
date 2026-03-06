@@ -1,4 +1,4 @@
-package by.mrrockka.commands
+package by.mrrockka.commands.finaleplaces
 
 import by.mrrockka.domain.toMessageMetadata
 import by.mrrockka.repo.PinType
@@ -10,19 +10,22 @@ import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.types.component.MessageUpdate
 import eu.vendeli.tgbot.types.component.onFailure
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Propagation
+import org.springframework.transaction.annotation.Transactional
 
 interface FinalePlacesCommandHandler {
     suspend fun store(message: MessageUpdate)
 }
 
 @Component
-class FinalePlacesCommandHandlerImpl(
+@Transactional(propagation = Propagation.REQUIRED)
+open class FinalePlacesCommandHandlerImpl(
         private val bot: TelegramBot,
         private val finalePlacesService: FinalePlacesTelegramService,
         private val pinMessageService: PinMessageService,
 ) : FinalePlacesCommandHandler {
 
-    @CommandHandler(["/finale_places", "/fp"])
+    @CommandHandler(["/finale_places"])
     override suspend fun store(message: MessageUpdate) {
         val metadata = message.message.toMessageMetadata()
         finalePlacesService.store(metadata)

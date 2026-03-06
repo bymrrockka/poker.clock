@@ -8,6 +8,7 @@ import by.mrrockka.repo.PollAnswersRepo
 import by.mrrockka.repo.PollTaskRepo
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
 import java.util.*
@@ -21,7 +22,7 @@ interface PollTelegramService {
 }
 
 @Service
-@Transactional
+@Transactional(propagation = Propagation.REQUIRED)
 open class PollTelegramServiceImpl(
         private val pollMessageParser: PollMessageParser,
         private val pollTaskRepository: PollTaskRepo,

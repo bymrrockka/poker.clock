@@ -1,18 +1,21 @@
-### 1. Interaction
+### 1. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 0
+Processed message id: 1
 /cash_game
 buyin: 10
 
 @nickname1 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 2. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 2 
 Cash game started.
 ------------------------------
 Table 1
@@ -22,18 +25,21 @@ Seats:
 ``` 
 ___
 
-### 2. Interaction
+### 3. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 1
+Processed message id: 3
 /entry @nickname2  
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 4. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 4 
 Entries: 
 ------------------------------
 Table 1
@@ -42,35 +48,41 @@ Seats:
 ``` 
 ___
 
-### 3. Interaction
+### 5. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 2
+Processed message id: 5
 /withdrawal @nickname1 20 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 6. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 6 
 Stored withdrawals: 
   - @nickname1 -> 20 
 ``` 
 ___
 
-### 4. Interaction
+### 7. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 3
+Processed message id: 7
 /calculate 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 8. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 8 
 ------------------------------
 You can support me using this link. 
 https://buymeacoffee.com/mrrockka

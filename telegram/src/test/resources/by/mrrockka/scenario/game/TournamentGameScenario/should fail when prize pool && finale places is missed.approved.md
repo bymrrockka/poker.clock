@@ -1,44 +1,50 @@
-### 1. Interaction
+### 1. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 0
+Processed message id: 1
 /tournament_game
 buyin: 10
 
 @nickname1, @nickname2, @nickname3, @nickname4, @nickname5, @me 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 2. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 2 
 Tournament game started.
 ------------------------------
 Table 1
 Seats:
-  2. @nickname5
-  3. @hong_beer
-  5. @nickname2
-  6. @nickname3
-  8. @nickname4
-  10. @nickname1
+  2. @sergio_cartwright
+  3. @nickname1
+  5. @nickname3
+  6. @nickname4
+  8. @nickname5
+  10. @nickname2
                                  
 ``` 
 ___
 
-### 2. Interaction
+### 3. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 1
+Processed message id: 3
 /calculate 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 4. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 4 
 No finale places specified, can't calculate finale summary. 
 ``` 
 ___

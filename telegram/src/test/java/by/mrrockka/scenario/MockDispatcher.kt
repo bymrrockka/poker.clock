@@ -4,6 +4,7 @@ package by.mrrockka.scenario
 
 import by.mrrockka.BotProperties
 import by.mrrockka.builder.BuilderDsl
+import by.mrrockka.builder.MessageBuilder
 import eu.vendeli.tgbot.annotations.internal.KtGramInternal
 import eu.vendeli.tgbot.api.botactions.GetUpdatesAction
 import eu.vendeli.tgbot.api.chat.pinChatMessage
@@ -29,9 +30,7 @@ import okhttp3.internal.closeQuietly
 import org.springframework.stereotype.Component
 import tools.jackson.databind.JsonNode
 import tools.jackson.databind.ObjectMapper
-import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedDeque
-import java.util.concurrent.LinkedBlockingQueue
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
@@ -45,7 +44,7 @@ private val serde = Json {
 }
 
 private val scenarioHeader = "Scenario"
-private val defaultMessageBody = serde.encodeToString(Response.Success("NOT OK"))
+private val defaultMessageBody = serde.encodeToString(Response.Success(MessageBuilder { text("NOT OK") }.message()))
 private fun defaultBooleanBody(success: Boolean = true) = if (success) {
     serde.encodeToString(Response.Success(success))
 } else {
@@ -65,18 +64,18 @@ class MockDispatcher(
         private val mapper: ObjectMapper,
         private val clock: TestClock,
 ) : Dispatcher() {
-    var requests: ConcurrentHashMap<Int, String> = ConcurrentHashMap()
-    private var scenarios: ConcurrentLinkedDeque<Scenario> = ConcurrentLinkedDeque()
+    var requests = mutableMapOf<Int, String>()
+    private var interactions = ConcurrentLinkedDeque<Interaction>()
 
-    fun scenario(init: Scenario.Builder.() -> Unit) {
-        this.scenarios += Scenario.Builder(init).build()
+    fun scenario(init: Interaction.Builder.() -> Unit) {
+        this.interactions += Interaction.Builder(init).build()
     }
 
-    private fun ConcurrentLinkedDeque<Scenario>.retrieve(): Scenario {
+    private fun ConcurrentLinkedDeque<Interaction>.retrieve(): Interaction {
         return synchronized(this) {
             when {
                 isEmpty() -> empty
-                first().isNotEmpty() -> scenarios.first()
+                first().isNotEmpty() -> interactions.first()
                 else -> {
                     removeFirst()
                     retrieve()
@@ -87,83 +86,90 @@ class MockDispatcher(
 
     override fun dispatch(request: RecordedRequest): MockResponse {
         return synchronized(this) {
-            val scenario = scenarios.retrieve()
-            if (scenario.time != null) {
-                clock.set(scenario.time)
+            val interaction = interactions.retrieve()
+            if (interaction.time != null) {
+                clock.set(interaction.time)
             }
 
             when (request.url.encodedPath) {
-                "${botProps.botpath}/$getUpdates" -> {
-                    if (scenario.updates.isNotEmpty()) {
-                        logger.debug { "Sending updates. Scenarios left: ${scenarios.size}" }
-                        scenario.updates.take()
-                    } else MockResponse(body = serde.encodeToString(Response.Success(emptyList<Update>())))
-                }
-
-                "${botProps.botpath}/$sendMessage" -> {
-                    if (scenario.responses.isNotEmpty()) {
-                        val resp = scenario.responses.take()
-                        val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
-                        requests += scenarioIndex to request.toJson().findPath("text").asString()
-                        logger.debug { "Send Message request sent. Scenario index: $scenarioIndex" }
-                        resp
-                    } else {
-                        logger.warn { "Send Message request was skipped" }
-                        MockResponse(code = 200, body = defaultMessageBody)
+                "${botProps.botpath}/$getUpdates" -> when {
+                    interaction.update.isNotEmpty() -> {
+                        logger.debug { "Sending updates. Interaction index: ${interaction.index}" }
+                        requests += interaction.index to "Processed"
+                        interaction.update.removeFirst()
                     }
+
+                    else -> MockResponse(body = serde.encodeToString(Response.Success(emptyList<Update>())))
                 }
 
-                "${botProps.botpath}/$sendPoll" -> {
-                    if (scenario.polls.isNotEmpty()) {
-                        val resp = scenario.polls.take()
-                        val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
-                        requests += scenarioIndex to request.toPollText()
-                        logger.debug { "Send Poll request sent. Scenario index: $scenarioIndex" }
-                        resp
-                    } else {
+                "${botProps.botpath}/$sendMessage" ->
+                    when {
+                        interaction.message.isNotEmpty() -> {
+                            requests += interaction.index to request.toJson().findPath("text").asString()
+                            logger.debug { "Send Message request sent. Scenario index: ${interaction.index}" }
+                            interaction.message.removeFirst()
+                        }
+
+                        else -> {
+                            logger.warn { "Send Message request was skipped" }
+                            MockResponse(code = 200, body = defaultMessageBody)
+                        }
+                    }
+
+                "${botProps.botpath}/$sendPoll" -> when {
+                    interaction.poll.isNotEmpty() -> {
+                        requests += interaction.index to request.toPollText()
+                        logger.debug { "Send Poll request sent. Interaction index: ${interaction.index}" }
+                        interaction.poll.removeFirst()
+                    }
+
+                    else -> {
                         logger.warn { "Send Poll request was skipped" }
                         MockResponse(code = 200, body = defaultMessageBody)
                     }
                 }
 
-                "${botProps.botpath}/$pinMessage" ->
-                    if (scenario.pins.isNotEmpty()) {
-                        val resp = scenario.pins.take()
-                        val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
-                        requests += scenarioIndex to "pinned"
-                        logger.debug { "Pin Message request sent. Scenario index: $scenarioIndex" }
-                        resp
-                    } else {
+                "${botProps.botpath}/$pinMessage" -> when {
+                    interaction.pin.isNotEmpty() -> {
+                        requests += interaction.index to "pinned"
+                        logger.debug { "Pin Message request sent. Interaction index: ${interaction.index}" }
+                        interaction.pin.removeFirst()
+                    }
+
+                    else -> {
                         logger.warn { "Pin Message request was skipped" }
                         MockResponse(code = 200, body = defaultBooleanBody(true))
                     }
+                }
 
-                "${botProps.botpath}/$unpinMessage" ->
-                    if (scenario.unpins.isNotEmpty()) {
-                        val resp = scenario.unpins.take()
-                        val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
-                        requests += scenarioIndex to "unpinned"
-                        logger.debug { "Unpin Message request sent. Scenario index: $scenarioIndex" }
-                        resp
-                    } else {
+                "${botProps.botpath}/$unpinMessage" -> when {
+                    interaction.unpin.isNotEmpty() -> {
+                        requests += interaction.index to "unpinned"
+                        logger.debug { "Unpin Message request sent. Interaction index: ${interaction.index}" }
+                        interaction.unpin.removeFirst()
+                    }
+
+                    else -> {
                         logger.warn { "Unpin Message request was skipped" }
                         MockResponse(code = 200, body = defaultBooleanBody(true))
                     }
+                }
 
-                "${botProps.botpath}/$deleteMessages" ->
-                    if (scenario.toDelete.isNotEmpty()) {
-                        val resp = scenario.toDelete.take()
-                        val scenarioIndex = resp.headers[scenarioHeader]?.toInt() ?: -1
-                        requests += scenarioIndex to "deleted"
-                        logger.debug { "Delete Messages request sent. Scenario index: $scenarioIndex" }
-                        resp
-                    } else {
+                "${botProps.botpath}/$deleteMessages" -> when {
+                    interaction.delete.isNotEmpty() -> {
+                        requests += interaction.index to "deleted"
+                        logger.debug { "Delete Messages request sent. Interaction index: ${interaction.index}" }
+                        interaction.delete.removeFirst()
+                    }
+
+                    else -> {
                         logger.warn { "Delete Messages request was skipped" }
                         MockResponse(code = 200, body = defaultBooleanBody(true))
                     }
+                }
 
                 else -> {
-                    logger.error { "Unknown request type ${request.url.encodedPath}" }
+                    logger.error { "Unknown request type ${request.url.encodedPath}. Interaction index: ${interaction.index}" }
                     MockResponse(code = 404, body = defaultBooleanBody(false))
                 }
             }
@@ -171,10 +177,8 @@ class MockDispatcher(
     }
 
     fun reset() {
-        synchronized(this) {
-            requests.clear()
-            scenarios.clear()
-        }
+        requests.clear()
+        interactions.clear()
     }
 
     private fun RecordedRequest.toJson(): JsonNode = mapper.readTree(this.body?.toByteArray())
@@ -219,7 +223,7 @@ class MockDispatcher(
 
         @JvmStatic
         @OptIn(KtGramInternal::class)
-        private val empty = Scenario.Builder {}.build()
+        private val empty = Interaction.Builder {}.build()
     }
 }
 
@@ -243,23 +247,24 @@ class MockServer(
     }
 }
 
-data class Scenario(
-        val updates: LinkedBlockingQueue<MockResponse>,
-        val responses: LinkedBlockingQueue<MockResponse>,
-        val polls: LinkedBlockingQueue<MockResponse>,
-        val pins: LinkedBlockingQueue<MockResponse>,
-        val unpins: LinkedBlockingQueue<MockResponse>,
-        val toDelete: LinkedBlockingQueue<MockResponse>,
+data class Interaction(
+        val index: Int,
+        val update: ArrayDeque<MockResponse>,
+        val message: ArrayDeque<MockResponse>,
+        val poll: ArrayDeque<MockResponse>,
+        val pin: ArrayDeque<MockResponse>,
+        val unpin: ArrayDeque<MockResponse>,
+        val delete: ArrayDeque<MockResponse>,
         val time: Instant? = null,
 ) {
 
     fun isEmpty(): Boolean {
-        return updates.isEmpty() &&
-                responses.isEmpty() &&
-                polls.isEmpty() &&
-                pins.isEmpty() &&
-                unpins.isEmpty() &&
-                toDelete.isEmpty()
+        return update.isEmpty() &&
+                message.isEmpty() &&
+                poll.isEmpty() &&
+                pin.isEmpty() &&
+                unpin.isEmpty() &&
+                delete.isEmpty()
     }
 
     fun isNotEmpty(): Boolean = !isEmpty()
@@ -267,12 +272,12 @@ data class Scenario(
     @BuilderDsl
     class Builder(init: Builder.() -> Unit) {
         private var index = -1
-        private val updates = LinkedBlockingQueue<MockResponse>()
-        private val responses = LinkedBlockingQueue<MockResponse>()
-        private val polls = LinkedBlockingQueue<MockResponse>()
-        private val pins = LinkedBlockingQueue<MockResponse>()
-        private val unpins = LinkedBlockingQueue<MockResponse>()
-        private val toDelete = LinkedBlockingQueue<MockResponse>()
+        private val update = ArrayDeque<MockResponse>()
+        private val message = ArrayDeque<MockResponse>()
+        private val poll = ArrayDeque<MockResponse>()
+        private val pin = ArrayDeque<MockResponse>()
+        private val unpin = ArrayDeque<MockResponse>()
+        private val delete = ArrayDeque<MockResponse>()
         private var time: Instant? = null
 
         init {
@@ -284,12 +289,13 @@ data class Scenario(
         }
 
         fun update(update: Update) {
-            updates += MockResponse(body = serde.encodeToString(Response.Success(listOf(update))))
+            check(index > -1) { "Scenario index should be specified and positive" }
+            this@Builder.update += MockResponse(body = serde.encodeToString(Response.Success(listOf(update))))
         }
 
         fun message(message: Message) {
             check(index > -1) { "Scenario index should be specified and positive" }
-            responses += MockResponse(
+            this@Builder.message += MockResponse(
                     body = serde.encodeToString(Response.Success(message)),
                     headers = headersOf(scenarioHeader, "$index"),
             )
@@ -297,7 +303,7 @@ data class Scenario(
 
         fun poll(message: Message) {
             check(index > -1) { "Scenario index should be specified and positive" }
-            polls += MockResponse(
+            poll += MockResponse(
                     body = serde.encodeToString(Response.Success(message)),
                     headers = headersOf(scenarioHeader, "$index"),
             )
@@ -305,7 +311,7 @@ data class Scenario(
 
         fun pin() {
             check(index > -1) { "Scenario index should be specified and positive" }
-            pins += MockResponse(
+            pin += MockResponse(
                     body = defaultBooleanBody(),
                     headers = headersOf(scenarioHeader, "$index"),
             )
@@ -313,7 +319,7 @@ data class Scenario(
 
         fun unpin() {
             check(index > -1) { "Scenario index should be specified and positive" }
-            unpins += MockResponse(
+            unpin += MockResponse(
                     body = defaultBooleanBody(),
                     headers = headersOf(scenarioHeader, "$index"),
             )
@@ -325,20 +331,21 @@ data class Scenario(
 
         fun delete() {
             check(index > -1) { "Scenario index should be specified and positive" }
-            toDelete += MockResponse(
+            delete += MockResponse(
                     body = defaultBooleanBody(),
                     headers = headersOf(scenarioHeader, "$index"),
             )
         }
 
-        fun build(): Scenario {
-            return Scenario(
-                    updates = updates,
-                    responses = responses,
-                    polls = polls,
-                    pins = pins,
-                    unpins = unpins,
-                    toDelete = toDelete,
+        fun build(): Interaction {
+            return Interaction(
+                    index = index,
+                    update = update,
+                    message = message,
+                    poll = poll,
+                    pin = pin,
+                    unpin = unpin,
+                    delete = delete,
                     time = time,
             )
         }

@@ -12,8 +12,10 @@ import by.mrrockka.builder.user
 import by.mrrockka.extension.MdApproverExtension
 import by.mrrockka.service.GameTablesService
 import com.oneeyedmen.okeydoke.Approver
+import eu.vendeli.tgbot.types.User
 import eu.vendeli.tgbot.types.msg.Message
 import io.github.oshai.kotlinlogging.KotlinLogging
+import org.awaitility.core.ConditionTimeoutException
 import org.awaitility.kotlin.atMost
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
@@ -41,9 +43,8 @@ private val logger = KotlinLogging.logger {}
 @Testcontainers
 @SpringBootTest(classes = [TestConfig::class])
 abstract class AbstractScenarioTest {
-    private val randoms = telegramRandoms("scenario")
-    private val chatid = randoms.chatid()
-    private val user = user(randoms)
+    private var chatid: Long = -1L
+    private lateinit var user: User
     private val messageLog = mutableMapOf<Command, Message>()
 
     @Autowired
@@ -57,14 +58,16 @@ abstract class AbstractScenarioTest {
 
     @BeforeEach
     fun before() {
+        coreRandoms.reset()
+        telegramRandoms.reset()
+        dispatcher.reset()
+        chatid = telegramRandoms.chatid()
+        user = user(telegramRandoms)
         gameSeatsService.seed(telegramRandoms.seed.hashCode().toLong())
     }
 
     @AfterEach
     fun after() {
-        coreRandoms.reset()
-        telegramRandoms.reset()
-        dispatcher.reset()
         transaction {
             exec("TRUNCATE TABLE pin_messages, poll_task, person, game CASCADE")
         }
@@ -76,20 +79,18 @@ abstract class AbstractScenarioTest {
     }
 
     infix fun WhenSpecification.ThenApproveWith(approver: Approver) {
-        val filteredCommands = commands.filter { it !is Command.PollAnswer }
         try {
             await atMost Duration.ofSeconds(3) until {
-                dispatcher.requests.size == filteredCommands.size
+                dispatcher.requests.size == commands.size
             }
-        } catch (ex: Exception) {
-            logger.error {
-                """
+        } catch (ex: ConditionTimeoutException) {
+            val message = """
                 |Await timeout
                 |Dispatcher requests size is ${dispatcher.requests.size}
-                |Commands size is ${filteredCommands.size}
+                |Commands size is ${commands.size}
                 |Dispatcher should have exactly the same requests size as commands size.
                 """.trimMargin()
-            }
+            throw ConditionTimeoutException("${ex.message}\n\n$message", ex)
         }
 
         commands.toText()
@@ -100,19 +101,25 @@ abstract class AbstractScenarioTest {
         val emptyMessage = "No message"
         return mapIndexed { index, command ->
             when (command) {
-                is Command.Message ->
+                is Command.UserMessage ->
                     """
-                   |### ${index + 1}. Interaction
+                   |### ${index + 1}. Message
                    |
-                   |&rarr; <ins>User message</ins>
+                   |&rarr; <ins>User</ins>
                    |
                    |```
-                   |${command.toText()} 
+                   |${dispatcher.requests[index] ?: emptyMessage} ${command.toText()} 
                    |```
+                   |___
+                   """.trimMargin()
+
+                is Command.BotMessage ->
+                    """
+                   |### ${index + 1}. Message
                    |
-                   |&rarr; <ins>Bot message</ins>
-                   |
+                   |&rarr; <ins>Bot</ins>
                    |``` 
+                   |${command.toText()} 
                    |${dispatcher.requests[index] ?: emptyMessage} 
                    |``` 
                    |___
@@ -163,15 +170,23 @@ abstract class AbstractScenarioTest {
                    |___
                    """.trimMargin()
 
-                is Command.DeleteMessages ->
+                is Command.DeleteMessages -> {
+                    val request = dispatcher.requests[index]
                     """
                    |### ${index + 1}. Deleted messages
                    |
                    |``` 
-                   |${command.toText()} ${dispatcher.requests[index] ?: emptyMessage}
+                   |${
+                        if (request != null) {
+                            "${command.toText()} $request"
+                        } else {
+                            "Were not deleted"
+                        }
+                    }
                    |``` 
                    |___
                    """.trimMargin()
+                }
 
                 else -> error("<p style=\"color:red\">Command type is not found</p>")
             }
@@ -180,11 +195,18 @@ abstract class AbstractScenarioTest {
 
     private fun Command.toText(): String {
         return when (this) {
-            is Command.Message -> {
+            is Command.UserMessage -> {
                 val replyMessage = if (replyTo != null && messageLog[replyTo] != null) "[reply to message id ${messageLog[replyTo]!!.messageId}]\n" else ""
                 replyMessage + """
                             |message id: ${messageLog[this]!!.messageId}
                             |$message
+                        """.trimMargin()
+            }
+
+            is Command.BotMessage -> {
+                val replyMessage = if (replyTo != null && messageLog[replyTo] != null) "[reply to message id ${messageLog[replyTo]!!.messageId}]\n" else ""
+                replyMessage + """
+                            |message id: ${messageLog[this]!!.messageId}
                         """.trimMargin()
             }
 
@@ -196,8 +218,9 @@ abstract class AbstractScenarioTest {
                     .filter { (key, _) -> toDelete.contains(key) }
                     .values
                     .map { it.messageId }
+                    .sorted()
                     .joinToString(",")
-                    .also {
+                    .let {
                         if (it.isEmpty()) error("Command was not found in log")
                         "message ids ${it}"
                     }
@@ -223,25 +246,41 @@ abstract class AbstractScenarioTest {
                 }
             }
 
-            is Command.Message -> {
-                val update = update {
-                    message {
-                        text(message)
-                        chatId(chatid)
-                        from(user)
-                        createdAt(clock.now().toJavaInstant())
-                        if (replyTo != null && messageLog[replyTo] != null) {
-                            replyTo(messageLog[replyTo]!!)
-                        }
+            is Command.UserMessage -> {
+                val message = message {
+                    text(message)
+                    chatId(chatid)
+                    from(user)
+                    createdAt(clock.now().toJavaInstant())
+                    if (replyTo != null && messageLog[replyTo] != null) {
+                        replyTo(messageLog[replyTo]!!)
                     }
                 }
 
-                messageLog += this to update.message!!
+                messageLog += this to message
 
+                val update = update { message(message) }
                 dispatcher.scenario {
                     index(index)
                     update(update)
-                    message(update.message!!)
+                }
+            }
+
+            is Command.BotMessage -> {
+                val message = message {
+                    text(message)
+                    chatId(chatid)
+                    createdAt(clock.now().toJavaInstant())
+                    if (replyTo != null && messageLog[replyTo] != null) {
+                        replyTo(messageLog[replyTo]!!)
+                    }
+                }
+
+                messageLog += this to message
+
+                dispatcher.scenario {
+                    index(index)
+                    message(message)
                 }
             }
 

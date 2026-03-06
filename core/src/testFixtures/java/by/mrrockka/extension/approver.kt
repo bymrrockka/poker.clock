@@ -45,7 +45,7 @@ class CustomSourceOfApproval(dir: File, fileExtension: String) : FileSystemSourc
 
     override fun <T : Any?> checkActualAgainstApproved(testName: String, serializer: Serializer<T>, checker: Checker<T>) {
         (IO.readResource(approvedFor(testName), serializer) as String?)?.let { approved ->
-            assertThat(approved).isEqualTo(IO.readResource(actualFor(testName), serializer) as String)
+            assertThat(IO.readResource(actualFor(testName), serializer) as String).isEqualTo(approved)
         } ?: fail("No approved file found")
     }
 }

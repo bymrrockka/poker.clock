@@ -1,216 +1,249 @@
-### 1. Interaction
+### 1. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 0
+Processed message id: 1
 /tournament_game
 buyin: 10
 
 @nickname1, @nickname2, @nickname3, @nickname4, @nickname5, @me 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 2. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 2 
 Tournament game started.
 ------------------------------
 Table 1
 Seats:
-  2. @nickname5
-  3. @hong_beer
-  5. @nickname2
-  6. @nickname3
-  8. @nickname4
-  10. @nickname1
+  2. @sergio_cartwright
+  3. @nickname1
+  5. @nickname3
+  6. @nickname4
+  8. @nickname5
+  10. @nickname2
                                  
 ``` 
 ___
 
-### 2. Pinned
+### 3. Pinned
 
 ``` 
-message id 0 pinned
+message id 1 pinned
 ``` 
 ___
 
-### 3. Interaction
+### 4. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 1
+Processed message id: 3
 /entry @nickname3  
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 5. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 4 
 Entry stored 
 ``` 
 ___
 
-### 4. Interaction
+### 6. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 2
+Processed message id: 5
 /entry @nickname3  
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 7. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 6 
 Entry stored 
 ``` 
 ___
 
-### 5. Interaction
+### 8. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 3
+Processed message id: 7
 /prize_pool
 1 50%
 2 50% 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 9. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 8 
 Prize pool stored:
 1. 50%
 2. 50% 
 ``` 
 ___
 
-### 6. Pinned
+### 10. Pinned
 
 ``` 
-message id 3 pinned
+message id 7 pinned
 ``` 
 ___
 
-### 7. Interaction
+### 11. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 4
+Processed message id: 9
 /entry @nickname1  
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 12. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 10 
 Entry stored 
 ``` 
 ___
 
-### 8. Interaction
+### 13. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 5
+Processed message id: 11
 /entry @nickname1  
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 14. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 12 
 Entry stored 
 ``` 
 ___
 
-### 9. Interaction
+### 15. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 6
+Processed message id: 13
 /finale_places
 1 @nickname1, 2 @nickname2 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 16. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 14 
 Finale places stored:
 1. @nickname1
 2. @nickname2 
 ``` 
 ___
 
-### 10. Pinned
+### 17. Pinned
 
 ``` 
-message id 6 pinned
+message id 13 pinned
 ``` 
 ___
 
-### 11. Interaction
+### 18. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 7
+Processed message id: 15
 /entry @nickname1  
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 19. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 16 
 Entry stored 
 ``` 
 ___
 
-### 12. Interaction
+### 20. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 8
+Processed message id: 17
 /entry @nickname1  
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 21. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 18 
 Entry stored 
 ``` 
 ___
 
-### 13. Interaction
+### 22. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 9
+Processed message id: 19
 /entry @nickname1  
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 23. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 20 
 Entry stored 
 ``` 
 ___
 
-### 14. Interaction
+### 24. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 10
+Processed message id: 21
 /calculate 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 25. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 22 
 ------------------------------
 You can support me using this link. 
 https://buymeacoffee.com/mrrockka
@@ -225,42 +258,42 @@ Payout to: @nickname2
   Total: 55 (won 65 - entries 10)
 From:
   @nickname3 -> 30
+  @nickname5 -> 10
   @nickname4 -> 10
-  @hong_beer -> 10
-  @nickname5 -> 5
+  @sergio_cartwright -> 5
 ------------------------------
 Payout to: @nickname1
   Entries: 60
   Total: 5 (won 65 - entries 60)
 From:
-  @nickname5 -> 5 
+  @sergio_cartwright -> 5 
 ``` 
 ___
 
-### 15. Pinned
+### 26. Pinned
 
 ``` 
-message id 10 pinned
-``` 
-___
-
-### 16. Unpinned
-
-``` 
-message id 0 unpinned
+message id 21 pinned
 ``` 
 ___
 
-### 17. Unpinned
+### 27. Unpinned
 
 ``` 
-message id 3 unpinned
+message id 1 unpinned
 ``` 
 ___
 
-### 18. Unpinned
+### 28. Unpinned
 
 ``` 
-message id 6 unpinned
+message id 7 unpinned
+``` 
+___
+
+### 29. Unpinned
+
+``` 
+message id 13 unpinned
 ``` 
 ___

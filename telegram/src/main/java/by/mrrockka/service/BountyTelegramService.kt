@@ -7,13 +7,16 @@ import by.mrrockka.domain.takenToGiven
 import by.mrrockka.parser.BountyMessageParser
 import by.mrrockka.repo.BountyRepo
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Propagation
+import org.springframework.transaction.annotation.Transactional
 
 interface BountyTelegramService {
     fun store(metadata: MessageMetadata): Bounty
 }
 
 @Service
-class BountyTelegramServiceImpl(
+@Transactional(propagation = Propagation.REQUIRED)
+open class BountyTelegramServiceImpl(
         private val bountyRepo: BountyRepo,
         private val bountyMessageParser: BountyMessageParser,
         private val gameService: GameTelegramService,

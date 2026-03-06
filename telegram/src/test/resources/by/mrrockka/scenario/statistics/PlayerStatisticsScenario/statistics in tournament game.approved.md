@@ -1,75 +1,87 @@
-### 1. Interaction
+### 1. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 0
+Processed message id: 1
 /tournament_game
 buyin: 10
 
 @me, @nickname1 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 2. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 2 
 Tournament game started.
 ------------------------------
 Table 1
 Seats:
-  3. @hong_beer
-  7. @nickname1
+  3. @nickname1
+  7. @sergio_cartwright
                                  
 ``` 
 ___
 
-### 2. Interaction
+### 3. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 1
+Processed message id: 3
 /player_stats 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 4. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
-@hong_beer game statistics:
+message id: 4 
+@sergio_cartwright game statistics:
 entries: 10.00
 entries number: 1 
 ``` 
 ___
 
-### 3. Interaction
+### 5. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 2
+Processed message id: 5
 /entry @me  
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 6. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
+message id: 6 
 Entry stored 
 ``` 
 ___
 
-### 4. Interaction
+### 7. Message
 
-&rarr; <ins>User message</ins>
+&rarr; <ins>User</ins>
 
 ```
-message id: 3
+Processed message id: 7
 /player_stats 
 ```
+___
 
-&rarr; <ins>Bot message</ins>
+### 8. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
-@hong_beer game statistics:
+message id: 8 
+@sergio_cartwright game statistics:
 entries: 20.00
 entries number: 2 
 ``` 
