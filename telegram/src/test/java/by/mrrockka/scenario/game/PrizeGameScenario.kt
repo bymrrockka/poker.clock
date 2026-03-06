@@ -214,4 +214,61 @@ abstract class PrizeGameScenario : GameScenario() {
             updatesReceived()
         } ThenApproveWith approver
     }
+
+    @Test
+    fun `interact with user to store finale places`(approver: Approver) {
+        val buyin = BigDecimal(10)
+        val player = "me"
+
+        Given {
+            user { listOf(player, "nickname1", "nickname2").createGame(gameType(), buyin) }
+            bot { "Game created" }
+            user { "nickname3".entry() }
+            bot { "Entry stored" }
+            val toDelete = mutableListOf<Command>()
+            user { "/fp" }
+            toDelete += bot { "Conversation descriptor" }
+            toDelete += bot { "Pool size?" }
+            toDelete += user { "3" }
+            toDelete += bot { "1 place" }
+            toDelete += user { "@nickname1" }
+            toDelete += bot { "2 place" }
+            toDelete += user { "@nickname2" }
+            toDelete += bot { "3 place" }
+            toDelete += user { "@me" }
+            val summary = bot { "Finale places stored" }
+            summary.pinned()
+            toDelete.deleted()
+        } When {
+            updatesReceived()
+        } ThenApproveWith approver
+    }
+
+    @Test
+    fun `interact with user to create finale places but cancel`(approver: Approver) {
+        val buyin = BigDecimal(10)
+        val player = "me"
+
+        Given {
+            user { listOf(player, "nickname1", "nickname2").createGame(gameType(), buyin) }
+            bot { "Game created" }
+            user { "nickname3".entry() }
+            bot { "Entry stored" }
+            val toDelete = mutableListOf<Command>()
+            user { "/fp" }
+            toDelete += bot { "Conversation descriptor" }
+            toDelete += bot { "Pool size?" }
+            toDelete += user { "3" }
+            toDelete += bot { "1 place" }
+            toDelete += user { "@nickname1" }
+            toDelete += bot { "2 place" }
+            toDelete += user { "@nickname2" }
+            toDelete += bot { "3 place" }
+            toDelete += user { "cancel" }
+            bot { "Canceled" }
+            toDelete.deleted()
+        } When {
+            updatesReceived()
+        } ThenApproveWith approver
+    }
 }

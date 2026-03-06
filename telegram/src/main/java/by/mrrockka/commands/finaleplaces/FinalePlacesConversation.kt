@@ -1,16 +1,15 @@
-package by.mrrockka.commands.prizepool
+package by.mrrockka.commands.finaleplaces
 
-import by.mrrockka.commands.BigDecimalState
 import by.mrrockka.commands.CancelStep
 import by.mrrockka.commands.CancelableStep
 import by.mrrockka.commands.MessageLogConversation
-import by.mrrockka.commands.PositionPrizeState
-import by.mrrockka.commands.decimalValidation
+import by.mrrockka.commands.PositionMentionState
 import by.mrrockka.commands.digitValidation
-import by.mrrockka.domain.PositionPrize
+import by.mrrockka.domain.MessageMetadata
+import by.mrrockka.domain.toMessageMetadata
 import by.mrrockka.repo.PinType
+import by.mrrockka.service.FinalePlacesTelegramService
 import by.mrrockka.service.PinMessageService
-import by.mrrockka.service.PrizePoolTelegramService
 import eu.vendeli.tgbot.annotations.WizardHandler
 import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.generated.getState
@@ -22,11 +21,11 @@ import eu.vendeli.tgbot.types.component.onFailure
 import java.util.concurrent.ConcurrentHashMap
 
 @WizardHandler(
-        trigger = ["/pp"],
-        stateManagers = [MapIntStateManager::class, BigDecimalState::class, PositionPrizeState::class],
+        trigger = ["/fp"],
+        stateManagers = [MapIntStateManager::class, PositionMentionState::class],
 )
-object PrizePoolConversation : MessageLogConversation() {
-    lateinit var prizePoolService: PrizePoolTelegramService
+object FinalePlacesConversation : MessageLogConversation() {
+    lateinit var finalePlacesService: FinalePlacesTelegramService
     lateinit var pinMessageService: PinMessageService
 
     object Size : CancelableStep(isInitial = true, cancelStep = Cancel::class) {
@@ -75,22 +74,23 @@ object PrizePoolConversation : MessageLogConversation() {
         override suspend fun store(ctx: WizardContext): Int = ctx.update.text.toInt()
     }
 
-    object PositionPercentage : CancelableStep(isInitial = true, cancelStep = Cancel::class) {
+    object FinalPlaces : CancelableStep(isInitial = true, cancelStep = Cancel::class) {
         const val nextPercentage = "Next Percentage"
-        private val positionPrizes = ConcurrentHashMap<Long, List<PositionPrize>>()
+        private val positionToMentions = ConcurrentHashMap<Long, Map<Int, String>>()
 
-        private fun Long.get(): List<PositionPrize> = positionPrizes[this] ?: mutableListOf()
-        private fun Long.update(text: String): Boolean {
-            return if (text.decimalValidation()) {
-                val list = this.get()
-                val positionPrize = PositionPrize(list.size + 1, text.toBigDecimal())
-                positionPrizes[this] = (list + positionPrize)
+        private fun Long.get(): Map<Int, String> = positionToMentions[this] ?: mutableMapOf()
+        private fun Long.update(metadata: MessageMetadata): Boolean {
+            val mentions = metadata.mentions.toList()
+            return if (mentions.size == 1) {
+                val map = get()
+                val positionToMention = (map.size + 1) to mentions.first().text
+                positionToMentions[this] = (map + positionToMention)
                 true
             } else false
         }
 
         override suspend fun onEntry(ctx: WizardContext) {
-            message { "What percentage for #1 place?" }
+            message { "Who's on #1 place?" }
                     .sendReturning(ctx.user, ctx.bot)
                     .onFailure { error("Failed to send message") }
                     ?.also { message -> ctx.user.id.message(message.messageId) }
@@ -99,7 +99,7 @@ object PrizePoolConversation : MessageLogConversation() {
         override suspend fun navigate(ctx: WizardContext): Transition {
             val size = ctx.getState<Size>() ?: error("No size found")
 
-            val updated = ctx.user.id.update(ctx.update.text)
+            val updated = ctx.user.id.update(ctx.update.toMessageMetadata())
 
             return when {
                 updated && ctx.user.id.get().size == size -> Transition.Next
@@ -110,36 +110,38 @@ object PrizePoolConversation : MessageLogConversation() {
 
         override suspend fun onRetry(ctx: WizardContext, reason: String?) {
             when (reason) {
-                nextPercentage -> message { "What percentage for #${ctx.user.id.get().size + 1} place?" }
+                nextPercentage -> message { "Who's on #${ctx.user.id.get().size + 1} place?" }
                         .sendReturning(ctx.user, ctx.bot)
                         .onFailure { error("Failed to send message") }
                         ?.also { message -> ctx.user.id.message(message.messageId) }
 
-                else -> message { "Percentage should not be negative" }
+                else -> message { "Player mention should be specified" }
                         .sendReturning(ctx.user, ctx.bot)
                         .onFailure { error("Failed to send message") }
                         ?.also { message -> ctx.user.id.message(message.messageId) }
             }
         }
 
-        override suspend fun store(ctx: WizardContext): List<PositionPrize> = positionPrizes.remove(ctx.user.id)
-                ?: error("No position prizes found for user ${ctx.user.id}")
+        override suspend fun store(ctx: WizardContext): Map<Int, String> = positionToMentions.remove(ctx.user.id)
+                ?: error("No final places found for user ${ctx.user.id}")
 
         override fun beforeCancelAction(ctx: WizardContext) {
-            positionPrizes.remove(ctx.user.id)
+            positionToMentions.remove(ctx.user.id)
         }
     }
 
     object Finish : WizardStep() {
         override suspend fun onEntry(ctx: WizardContext) {
-            val prizePool = ctx.getState<PositionPercentage>() ?: error("Prize pool not found for user ${ctx.user.id}")
-            prizePoolService.store(ctx.user.id.initial(), prizePool)
-                    .let { prizePool ->
+            val positionToMention = ctx.getState<FinalPlaces>()
+                    ?: error("Finale Places not found for user ${ctx.user.id}")
+
+            finalePlacesService.store(ctx.user.id.initial(), positionToMention)
+                    .let { finalePlaces ->
                         message {
                             """
-                            |Prize pool stored:
-                            |${prizePool.joinToString("\n") { "${it.position}. ${it.percentage}%" }}
-                            """.trimMargin()
+                                |Finale places stored:
+                                |${finalePlaces.joinToString("\n") { "${it.position}. @${it.person.nickname}" }}
+                                """.trimMargin()
                         }
                     }.sendReturning(ctx.user, ctx.bot)
                     .onFailure { error("Failed to send prize pool message") }

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional
 
 interface FinalePlacesTelegramService {
     fun store(message: MessageMetadata): List<FinalPlace>
+    fun store(message: MessageMetadata, finalePlaces: Map<Int, String>): List<FinalPlace>
 }
 
 @Service
@@ -25,18 +26,22 @@ open class FinalePlacesTelegramServiceImpl(
     override fun store(message: MessageMetadata): List<FinalPlace> {
         message.checkMentions()
         val places = finalePlacesParser.parse(message)
-        check(places.isNotEmpty()) { "Finale places could not be empty" }
+        return store(message, places)
+    }
+
+    override fun store(message: MessageMetadata, finalePlaces: Map<Int, String>): List<FinalPlace> {
+        check(finalePlaces.isNotEmpty()) { "Finale places could not be empty" }
 
         val game = gameService.findGame(message)
         check(game !is CashGame) { "Finale places is not allowed for cash game" }
-        val persons = personService.findByMessage(message)
+        val persons = personService.findByNicknames(finalePlaces.values.toList(), message.chatId)
                 .associateBy { it.nickname }
-        val finalePlaces = places
+        val mapped = finalePlaces
                 .map { (position, nickname) ->
                     FinalPlace(position, persons[nickname] ?: error("Person not found for $nickname"))
                 }
-        finalePlacesRepo.store(game.id, finalePlaces)
+        finalePlacesRepo.store(game.id, mapped)
 
-        return finalePlaces
+        return mapped
     }
 }

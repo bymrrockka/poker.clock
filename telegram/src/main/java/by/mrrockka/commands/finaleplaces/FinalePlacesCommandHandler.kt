@@ -1,4 +1,4 @@
-package by.mrrockka.commands
+package by.mrrockka.commands.finaleplaces
 
 import by.mrrockka.domain.toMessageMetadata
 import by.mrrockka.repo.PinType
@@ -25,7 +25,7 @@ open class FinalePlacesCommandHandlerImpl(
         private val pinMessageService: PinMessageService,
 ) : FinalePlacesCommandHandler {
 
-    @CommandHandler(["/finale_places", "/fp"])
+    @CommandHandler(["/finale_places"])
     override suspend fun store(message: MessageUpdate) {
         val metadata = message.message.toMessageMetadata()
         finalePlacesService.store(metadata)

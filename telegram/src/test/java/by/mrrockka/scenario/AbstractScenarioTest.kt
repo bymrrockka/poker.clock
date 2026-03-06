@@ -85,6 +85,7 @@ abstract class AbstractScenarioTest {
         } catch (ex: Exception) {
             logger.error {
                 """
+                |Await timeout
                 |Dispatcher requests size is ${dispatcher.requests.size}
                 |Commands size is ${commands.size}
                 |Dispatcher should have exactly the same requests size as commands size.

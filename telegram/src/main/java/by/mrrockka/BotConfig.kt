@@ -1,7 +1,9 @@
 package by.mrrockka
 
+import by.mrrockka.commands.finaleplaces.FinalePlacesConversation
 import by.mrrockka.commands.game.GameConversation
 import by.mrrockka.commands.prizepool.PrizePoolConversation
+import by.mrrockka.service.FinalePlacesTelegramService
 import by.mrrockka.service.GameTablesService
 import by.mrrockka.service.GameTelegramService
 import by.mrrockka.service.PinMessageService
@@ -90,6 +92,16 @@ open class BotConfig(
         PrizePoolConversation.prizePoolService = prizePoolTelegramService
         PrizePoolConversation.pinMessageService = pinMessageService
         return PrizePoolConversation
+    }
+
+    @Bean
+    open fun finalePlacesConversation(
+            finalePlacesService: FinalePlacesTelegramService,
+            pinMessageService: PinMessageService,
+    ): FinalePlacesConversation {
+        FinalePlacesConversation.finalePlacesService = finalePlacesService
+        FinalePlacesConversation.pinMessageService = pinMessageService
+        return FinalePlacesConversation
     }
 }
 
