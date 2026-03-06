@@ -83,15 +83,13 @@ abstract class AbstractScenarioTest {
                 dispatcher.requests.size == commands.size
             }
         } catch (ex: Exception) {
-            logger.error {
-                """
+            val message = """
                 |Await timeout
                 |Dispatcher requests size is ${dispatcher.requests.size}
                 |Commands size is ${commands.size}
                 |Dispatcher should have exactly the same requests size as commands size.
                 """.trimMargin()
-            }
-            throw ex
+            error("$message \n\n ${ex.message}")
         }
 
         commands.toText()
