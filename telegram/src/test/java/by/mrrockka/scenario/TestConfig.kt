@@ -40,9 +40,7 @@ open class TestConfig(
                 restrictSpacesInCommands = true
             }
             updatesListener {
-                if (githubPipeline) {
-                    pullingDelay = 80
-                } else pullingDelay = 5
+                pullingDelay = 5
             }
             exceptionHandlingStrategy = ExceptionHandlingStrategy.Handle(PokerClockExceptionHandler)
         }
