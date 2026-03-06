@@ -1,6 +1,7 @@
 package by.mrrockka.commands
 
 import by.mrrockka.domain.MessageMetadata
+import by.mrrockka.domain.chat
 import by.mrrockka.domain.toMessageMetadata
 import eu.vendeli.tgbot.api.message.deleteMessages
 import eu.vendeli.tgbot.api.message.message
@@ -34,7 +35,7 @@ abstract class CancelableStep(isInitial: Boolean = false, val cancelStep: KClass
             |You started a cancelable conversation. 
             |To cancel at any step you simply need to type 'cancel'
         """.trimMargin()
-        }.sendReturning(user, bot)
+        }.sendReturning(to = update.chat(), bot)
                 .onFailure { error("Failed to send message") }
                 ?.also { message -> postAction(message) }
     }
@@ -45,7 +46,7 @@ open class CancelStep(
         val postAction: suspend (WizardContext) -> Unit,
 ) : WizardStep() {
     override suspend fun onEntry(ctx: WizardContext) {
-        message { "Game creation was cancelled" }.send(ctx.user, ctx.bot)
+        message { "Game creation was cancelled" }.send(to = ctx.update.chat(), ctx.bot)
         postAction(ctx)
     }
 
@@ -84,7 +85,7 @@ abstract class MessageLogConversation {
         initials.remove(user.id)
         messages.remove(user.id)?.also { list ->
             deleteMessages(list)
-                    .sendReturning(user, bot)
+                    .sendReturning(update.chat(), bot)
                     .onFailure { "Failed to clear messages" }
                     ?.also { messages.remove(user.id) }
         }

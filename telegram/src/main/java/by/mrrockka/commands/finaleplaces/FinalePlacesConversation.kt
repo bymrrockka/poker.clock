@@ -6,6 +6,7 @@ import by.mrrockka.commands.MessageLogConversation
 import by.mrrockka.commands.PositionMentionState
 import by.mrrockka.commands.digitValidation
 import by.mrrockka.domain.MessageMetadata
+import by.mrrockka.domain.chat
 import by.mrrockka.domain.toMessageMetadata
 import by.mrrockka.repo.PinType
 import by.mrrockka.service.FinalePlacesTelegramService
@@ -44,7 +45,7 @@ object FinalePlacesConversation : MessageLogConversation() {
                             oneTimeKeyboard = true
                         }
                     }
-                    .sendReturning(ctx.user, ctx.bot)
+                    .sendReturning(ctx.update.chat(), ctx.bot)
                     .onFailure { error("Failed to send message") }
                     ?.also { message -> ctx.user.id.message(message.messageId) }
         }
@@ -61,7 +62,7 @@ object FinalePlacesConversation : MessageLogConversation() {
                             oneTimeKeyboard = true
                         }
                     }
-                    .sendReturning(ctx.user, ctx.bot)
+                    .sendReturning(ctx.update.chat(), ctx.bot)
                     .onFailure { error("Failed to send message") }
                     ?.also { message -> ctx.user.id.message(message.messageId) }
         }
@@ -91,7 +92,7 @@ object FinalePlacesConversation : MessageLogConversation() {
 
         override suspend fun onEntry(ctx: WizardContext) {
             message { "Who's on #1 place?" }
-                    .sendReturning(ctx.user, ctx.bot)
+                    .sendReturning(ctx.update.chat(), ctx.bot)
                     .onFailure { error("Failed to send message") }
                     ?.also { message -> ctx.user.id.message(message.messageId) }
         }
@@ -111,12 +112,12 @@ object FinalePlacesConversation : MessageLogConversation() {
         override suspend fun onRetry(ctx: WizardContext, reason: String?) {
             when (reason) {
                 nextPercentage -> message { "Who's on #${ctx.user.id.get().size + 1} place?" }
-                        .sendReturning(ctx.user, ctx.bot)
+                        .sendReturning(ctx.update.chat(), ctx.bot)
                         .onFailure { error("Failed to send message") }
                         ?.also { message -> ctx.user.id.message(message.messageId) }
 
                 else -> message { "Player mention should be specified" }
-                        .sendReturning(ctx.user, ctx.bot)
+                        .sendReturning(ctx.update.chat(), ctx.bot)
                         .onFailure { error("Failed to send message") }
                         ?.also { message -> ctx.user.id.message(message.messageId) }
             }
@@ -143,7 +144,7 @@ object FinalePlacesConversation : MessageLogConversation() {
                                 |${finalePlaces.joinToString("\n") { "${it.position}. @${it.person.nickname}" }}
                                 """.trimMargin()
                         }
-                    }.sendReturning(ctx.user, ctx.bot)
+                    }.sendReturning(ctx.update.chat(), ctx.bot)
                     .onFailure { error("Failed to send prize pool message") }
                     ?.also { message -> pinMessageService.pin(message, PinType.GAME) }
 

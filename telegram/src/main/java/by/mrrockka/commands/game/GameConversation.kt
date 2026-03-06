@@ -10,6 +10,7 @@ import by.mrrockka.commands.decimalValidation
 import by.mrrockka.domain.BountyTournamentGame
 import by.mrrockka.domain.GameType
 import by.mrrockka.domain.MessageMetadata
+import by.mrrockka.domain.chat
 import by.mrrockka.domain.game
 import by.mrrockka.domain.toMessageMetadata
 import by.mrrockka.repo.PinType
@@ -27,7 +28,7 @@ import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import java.math.BigDecimal
 
 @WizardHandler(
-        trigger = ["/game", "/start"],
+        trigger = ["/game"],
         stateManagers = [BigDecimalState::class, MessageMetadataState::class, GameTypeState::class],
 )
 object GameConversation : MessageLogConversation() {
@@ -50,14 +51,14 @@ object GameConversation : MessageLogConversation() {
                             oneTimeKeyboard = true
                         }
                     }
-                    .sendReturning(ctx.user, ctx.bot)
+                    .sendReturning(ctx.update.chat(), ctx.bot)
                     .onFailure { error("Failed to send message") }
                     ?.also { message -> ctx.user.id.message(message.messageId) }
         }
 
         override suspend fun onRetry(ctx: WizardContext, reason: String?) {
             message { "Type should be one of ${GameType.entries.joinToString { it.name.lowercase() }}" }
-                    .sendReturning(ctx.user, ctx.bot)
+                    .sendReturning(ctx.update.chat(), ctx.bot)
                     .onFailure { error("Failed to send message") }
                     ?.also { message -> ctx.user.id.message(message.messageId) }
         }
@@ -90,14 +91,14 @@ object GameConversation : MessageLogConversation() {
                             }
                         }
                     }
-                    .sendReturning(ctx.user, ctx.bot)
+                    .sendReturning(ctx.update.chat(), ctx.bot)
                     .onFailure { error("Failed to send message") }
                     ?.also { message -> ctx.user.id.message(message.messageId) }
         }
 
         override suspend fun onRetry(ctx: WizardContext, reason: String?) {
             message { "Buy in is necessary for calculations and it should be a number" }
-                    .sendReturning(ctx.user, ctx.bot)
+                    .sendReturning(ctx.update.chat(), ctx.bot)
                     .onFailure { error("Failed to send message") }
                     ?.also { message -> ctx.user.id.message(message.messageId) }
         }
@@ -117,14 +118,14 @@ object GameConversation : MessageLogConversation() {
     object Players : CancelableStep(cancelStep = Cancel::class) {
         override suspend fun onEntry(ctx: WizardContext) {
             message { "Who's playing?" }
-                    .sendReturning(ctx.user, ctx.bot)
+                    .sendReturning(ctx.update.chat(), ctx.bot)
                     .onFailure { error("Failed to send message") }
                     ?.also { message -> ctx.user.id.message(message.messageId) }
         }
 
         override suspend fun onRetry(ctx: WizardContext, reason: String?) {
             message { "Players mentions required to start a game. Like @mention" }
-                    .sendReturning(ctx.user, ctx.bot)
+                    .sendReturning(ctx.update.chat(), ctx.bot)
                     .onFailure { error("Failed to send message") }
                     ?.also { message -> ctx.user.id.message(message.messageId) }
         }
@@ -182,7 +183,7 @@ object GameConversation : MessageLogConversation() {
                 }
             }.let { response ->
                 message { response }
-                        .sendReturning(to = ctx.user, via = ctx.bot)
+                        .sendReturning(ctx.update.chat(), ctx.bot)
                         .onFailure { error("Failed to send game message") }
                         ?.also { message -> pinMessageService.pin(message, PinType.GAME) }
             }
@@ -208,14 +209,14 @@ object GameConversation : MessageLogConversation() {
                             }
                         }
                     }
-                    .sendReturning(ctx.user, ctx.bot)
+                    .sendReturning(ctx.update.chat(), ctx.bot)
                     .onFailure { error("Failed to send message") }
                     ?.also { message -> ctx.user.id.message(message.messageId) }
         }
 
         override suspend fun onRetry(ctx: WizardContext, reason: String?) {
             message { "Bounty is necessary for Bounty tournament and it should be a number" }
-                    .sendReturning(ctx.user, ctx.bot)
+                    .sendReturning(ctx.update.chat(), ctx.bot)
                     .onFailure { error("Failed to send message") }
                     ?.also { message -> ctx.user.id.message(message.messageId) }
         }

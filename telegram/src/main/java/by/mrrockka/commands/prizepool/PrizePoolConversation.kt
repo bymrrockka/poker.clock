@@ -8,6 +8,7 @@ import by.mrrockka.commands.PositionPrizeState
 import by.mrrockka.commands.decimalValidation
 import by.mrrockka.commands.digitValidation
 import by.mrrockka.domain.PositionPrize
+import by.mrrockka.domain.chat
 import by.mrrockka.repo.PinType
 import by.mrrockka.service.PinMessageService
 import by.mrrockka.service.PrizePoolTelegramService
@@ -46,7 +47,7 @@ object PrizePoolConversation : MessageLogConversation() {
                             oneTimeKeyboard = true
                         }
                     }
-                    .sendReturning(ctx.user, ctx.bot)
+                    .sendReturning(ctx.update.chat(), ctx.bot)
                     .onFailure { error("Failed to send message") }
                     ?.also { message -> ctx.user.id.message(message.messageId) }
         }
@@ -63,7 +64,7 @@ object PrizePoolConversation : MessageLogConversation() {
                             oneTimeKeyboard = true
                         }
                     }
-                    .sendReturning(ctx.user, ctx.bot)
+                    .sendReturning(ctx.update.chat(), ctx.bot)
                     .onFailure { error("Failed to send message") }
                     ?.also { message -> ctx.user.id.message(message.messageId) }
         }
@@ -95,7 +96,7 @@ object PrizePoolConversation : MessageLogConversation() {
 
         override suspend fun onEntry(ctx: WizardContext) {
             message { "What percentage for #1 place?" }
-                    .sendReturning(ctx.user, ctx.bot)
+                    .sendReturning(ctx.update.chat(), ctx.bot)
                     .onFailure { error("Failed to send message") }
                     ?.also { message -> ctx.user.id.message(message.messageId) }
         }
@@ -117,23 +118,23 @@ object PrizePoolConversation : MessageLogConversation() {
         override suspend fun onRetry(ctx: WizardContext, reason: String?) {
             when (reason) {
                 Navigate.PLACE.name -> message { "What percentage for #${ctx.user.id.get().size + 1} place?" }
-                        .sendReturning(ctx.user, ctx.bot)
+                        .sendReturning(ctx.update.chat(), ctx.bot)
                         .onFailure { error("Failed to send message") }
                         ?.also { message -> ctx.user.id.message(message.messageId) }
 
                 Navigate.TOTAL_INVALID.name -> {
                     message { "Position percentage should equal 100% but was ${positionPrizes.remove(ctx.user.id)?.sumOf { it.percentage } ?: 0}%" }
-                            .sendReturning(ctx.user, ctx.bot)
+                            .sendReturning(ctx.update.chat(), ctx.bot)
                             .onFailure { error("Failed to send prize percentage") }
                             ?.also { message -> ctx.user.id.message(message.messageId) }
                     message { "What percentage for #${ctx.user.id.get().size + 1} place?" }
-                            .sendReturning(ctx.user, ctx.bot)
+                            .sendReturning(ctx.update.chat(), ctx.bot)
                             .onFailure { error("Failed to send message") }
                             ?.also { message -> ctx.user.id.message(message.messageId) }
                 }
 
                 else -> message { "Percentage should not be negative" }
-                        .sendReturning(ctx.user, ctx.bot)
+                        .sendReturning(ctx.update.chat(), ctx.bot)
                         .onFailure { error("Failed to send message") }
                         ?.also { message -> ctx.user.id.message(message.messageId) }
             }
@@ -159,7 +160,7 @@ object PrizePoolConversation : MessageLogConversation() {
                             |${prizePool.joinToString("\n") { "${it.position}. ${it.percentage}%" }}
                             """.trimMargin()
                         }
-                    }.sendReturning(ctx.user, ctx.bot)
+                    }.sendReturning(ctx.update.chat(), ctx.bot)
                     .onFailure { error("Failed to send prize pool message") }
                     ?.also { message -> pinMessageService.pin(message, PinType.GAME) }
 
