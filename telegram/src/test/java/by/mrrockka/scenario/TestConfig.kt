@@ -36,7 +36,7 @@ open class TestConfig(
                 restrictSpacesInCommands = true
             }
             updatesListener {
-                pullingDelay = 5
+                pullingDelay = 10
             }
             exceptionHandlingStrategy = ExceptionHandlingStrategy.Handle(PokerClockExceptionHandler)
         }
