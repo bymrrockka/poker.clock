@@ -60,6 +60,31 @@ class CashGameCalculatorTest : AbstractTest() {
     }
 
     @Test
+    fun `given entries and service fee enable should calculate`(approver: Approver) {
+        val feature = ServiceFeeFeature(
+                enabled = true,
+                percent = BigDecimal("10"),
+                threshold = BigDecimal("1"),
+                description = "Service Fee",
+                url = "https://www.mrrockka.by",
+        )
+        calculator = GameCalculator(feature)
+        val buyin = BigDecimal("10")
+        val withdrawal = BigDecimal("10")
+        val players = cashPlayers(10) {
+            buyin(buyin)
+        }
+        val first = players[0].addWithdrawals(withdrawal, size = 5)
+        val second = players[1].addWithdrawals(withdrawal, size = 5)
+        val game = cashGame {
+            buyIn(buyin)
+            players(players.drop(2) + first + second)
+        }
+
+        approver.assertApproved(calculator.calculate(game).text())
+    }
+
+    @Test
     fun `given equal entries and withdrawals should calculate`(approver: Approver) {
         val buyin = BigDecimal("10")
         val withdrawal = BigDecimal("10")
