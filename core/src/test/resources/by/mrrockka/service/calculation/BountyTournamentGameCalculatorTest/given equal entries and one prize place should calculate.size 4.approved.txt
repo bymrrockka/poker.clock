@@ -1,0 +1,17 @@
+Game Summary
+Position 1
+  Prize 40
+  Buyins: -10
+  Bounties: 30 (taken 30 - given 0)
+  Nickname jackie_rau
+
+Payout to: jackie_rau 
+Total: 60
+Debtors:
+  - Debtor: ashlee_lang
+    Debt: 20
+  - Debtor: santo_welch
+    Debt: 20
+  - Debtor: terisa_johnston
+    Debt: 20
+______________________________

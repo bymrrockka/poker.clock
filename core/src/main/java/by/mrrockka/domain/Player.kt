@@ -3,23 +3,23 @@ package by.mrrockka.domain
 import java.math.BigDecimal
 
 interface Player {
-    val person: Person
+    val person: BasicPerson
     val entries: List<BigDecimal>
 }
 
 data class TournamentPlayer(
-        override val person: Person,
+        override val person: BasicPerson,
         override val entries: List<BigDecimal>,
 ) : Player
 
 data class CashPlayer(
-        override val person: Person,
+        override val person: BasicPerson,
         override val entries: List<BigDecimal>,
         val withdrawals: List<BigDecimal> = emptyList(),
 ) : Player
 
 data class BountyPlayer(
-        override val person: Person,
+        override val person: BasicPerson,
         override val entries: List<BigDecimal>,
         val bounties: List<Bounty> = emptyList(),
 ) : Player

@@ -6,12 +6,10 @@ import by.mrrockka.builder.cashPlayer
 import by.mrrockka.builder.cashPlayers
 import by.mrrockka.builder.plus
 import by.mrrockka.domain.CashPlayer
-import by.mrrockka.domain.Debtor
-import by.mrrockka.domain.Payout
+import by.mrrockka.extension.textApprover
 import by.mrrockka.feature.ServiceFeeFeature
 import by.mrrockka.service.GameCalculator
 import com.oneeyedmen.okeydoke.Approver
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -41,18 +39,8 @@ class CashGameCalculatorTest : AbstractTest() {
             players(players.drop(1) + withdrawalPlayer)
         }
 
-        val actual = calculator.calculate(game)
-        val expect = listOf(
-                Payout(
-                        creditor = withdrawalPlayer.person,
-                        debtors = players.drop(1)
-                                .map { Debtor(it.person, buyin) }
-                                .reversed(),
-                        total = BigDecimal("10") * (players.size - 1).toBigDecimal(),
-                ),
-        )
-
-        assertThat(actual).isEqualTo(expect)
+        textApprover("given equal entries and one player wins pot should calculate. size $size")
+                .assertApproved(calculator.calculate(game).text())
     }
 
     @Test
@@ -68,7 +56,7 @@ class CashGameCalculatorTest : AbstractTest() {
             players(players.drop(2) + first + second)
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+        approver.assertApproved(calculator.calculate(game).text())
     }
 
     @Test
@@ -83,7 +71,7 @@ class CashGameCalculatorTest : AbstractTest() {
             players(players)
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+        approver.assertApproved(calculator.calculate(game).text())
     }
 
     @Test
@@ -104,7 +92,7 @@ class CashGameCalculatorTest : AbstractTest() {
             players(players.drop(1) + winner)
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+        approver.assertApproved(calculator.calculate(game).text())
     }
 
     companion object {

@@ -1,0 +1,28 @@
+Game Summary
+Bounty winner
+  Buyins: -10
+  Bounties: 30 (taken 40 - given 10)
+  Nickname santo_welch
+Position 1
+  Prize 35
+  Buyins: -50
+  Bounties: -20 (taken 20 - given 40)
+  Nickname jackie_rau
+Position 2
+  Prize 35
+  Buyins: -10
+  Bounties: -10 (taken 0 - given 10)
+  Nickname terisa_johnston
+
+Payout to: santo_welch 
+Total: 20
+Debtors:
+  - Debtor: jackie_rau
+    Debt: 20
+______________________________
+Payout to: terisa_johnston 
+Total: 15
+Debtors:
+  - Debtor: jackie_rau
+    Debt: 15
+______________________________

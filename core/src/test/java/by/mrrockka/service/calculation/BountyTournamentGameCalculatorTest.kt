@@ -7,14 +7,12 @@ import by.mrrockka.builder.bountyPlayers
 import by.mrrockka.builder.plus
 import by.mrrockka.domain.Bounty
 import by.mrrockka.domain.BountyPlayer
-import by.mrrockka.domain.Debtor
 import by.mrrockka.domain.FinalPlace
-import by.mrrockka.domain.Payout
 import by.mrrockka.domain.PositionPrize
+import by.mrrockka.extension.textApprover
 import by.mrrockka.feature.ServiceFeeFeature
 import by.mrrockka.service.GameCalculator
 import com.oneeyedmen.okeydoke.Approver
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -50,19 +48,14 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
             finalePlaces(FinalPlace(1, toBounties.person))
         }
 
-        val actual = calculator.calculate(game)
-        val expect = listOf(
-                Payout(
-                        creditor = toBounties.person,
-                        debtors = fromBounties
-                                .filterNot { it == toBounties }
-                                .map { Debtor(it.person, buyin + bounty) }
-                                .reversed(),
-                        total = BigDecimal("20") * (players.size - 1).toBigDecimal(),
-                ),
-        )
-
-        assertThat(actual).isEqualTo(expect)
+        textApprover("given equal entries and one prize place should calculate.size $size")
+                .assertApproved(
+                        """
+                        |${game.text()}
+                        |
+                        |${calculator.calculate(game).text()}
+                    """.trimMargin(),
+                )
     }
 
     @Test
@@ -91,7 +84,13 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
             finalePlaces(FinalPlace(1, toBounties.person))
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+        approver.assertApproved(
+                """
+                |${game.text()}
+                |
+                |${calculator.calculate(game).text()}
+            """.trimMargin(),
+        )
     }
 
     @Test
@@ -121,7 +120,13 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
             finalePlaces(FinalPlace(1, toBounties.person))
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+        approver.assertApproved(
+                """
+                |${game.text()}
+                |
+                |${calculator.calculate(game).text()}
+            """.trimMargin(),
+        )
     }
 
     @Test
@@ -150,7 +155,13 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
             )
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+        approver.assertApproved(
+                """
+                |${game.text()}
+                |
+                |${calculator.calculate(game).text()}
+            """.trimMargin(),
+        )
     }
 
     @Test
@@ -173,7 +184,13 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
             finalePlaces(FinalPlace(1, firstPlace.person))
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+        approver.assertApproved(
+                """
+                |${game.text()}
+                |
+                |${calculator.calculate(game).text()}
+            """.trimMargin(),
+        )
     }
 
 
@@ -225,7 +242,13 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
             )
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+        approver.assertApproved(
+                """
+                |${game.text()}
+                |
+                |${calculator.calculate(game).text()}
+            """.trimMargin(),
+        )
     }
 
     @Test
@@ -252,7 +275,13 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
             )
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+        approver.assertApproved(
+                """
+                |${game.text()}
+                |
+                |${calculator.calculate(game).text()}
+            """.trimMargin(),
+        )
     }
 
     companion object {

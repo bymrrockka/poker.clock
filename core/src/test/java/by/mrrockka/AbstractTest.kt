@@ -1,21 +1,21 @@
 package by.mrrockka
 
 import by.mrrockka.CoreRandoms.Companion.coreRandoms
+import by.mrrockka.domain.BasicPerson
+import by.mrrockka.domain.BountyTournamentGame
+import by.mrrockka.domain.BountyTournamentSummary
 import by.mrrockka.domain.Debtor
 import by.mrrockka.domain.Game
 import by.mrrockka.domain.Payout
-import by.mrrockka.domain.Player
+import by.mrrockka.domain.ServiceFee
 import by.mrrockka.domain.TournamentGame
-import by.mrrockka.domain.total
-import by.mrrockka.extension.JsonApproverExtension
+import by.mrrockka.domain.toTournamentSummary
+import by.mrrockka.extension.TextApproverExtension
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.extension.ExtendWith
-import org.junit.jupiter.api.fail
-import tools.jackson.databind.SerializationFeature
-import tools.jackson.module.kotlin.jsonMapper
 import java.math.BigDecimal
 
-@ExtendWith(JsonApproverExtension::class)
+@ExtendWith(TextApproverExtension::class)
 abstract class AbstractTest {
 
     @AfterEach
@@ -23,62 +23,76 @@ abstract class AbstractTest {
         coreRandoms.reset()
     }
 
-    val objectMapper = jsonMapper {
-        enable(SerializationFeature.INDENT_OUTPUT)
-    }
+    fun List<Payout>.text(): String = joinToString("\n") { payout ->
+        when (payout.creditor) {
+            is BasicPerson -> """
+               |Payout to: ${payout.creditor.nickname} 
+               |Total: ${payout.total}
+               |Debtors:
+               |${payout.debtors.toText()}
+               |${"_".repeat(30)}
+            """.trimMargin()
 
-    fun Any?.toJsonString() = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(this)
+            is ServiceFee -> """
+               |Description: ${payout.creditor.description}
+               |URL: ${payout.creditor.url}
+               |Total: ${payout.total}
+               |Debtors:
+               |${payout.debtors.toText()}
+               |${"_".repeat(30)}
+            """.trimMargin()
 
-    data class SimplePayout(
-            val creditor: String,
-            val entries: BigDecimal,
-            val total: BigDecimal,
-            val debtors: List<SimpleDebtor>,
-    )
-
-    data class SimpleDebtor(
-            val debtor: String,
-            val debt: BigDecimal,
-            val entries: BigDecimal,
-    )
-
-    internal fun List<Payout>.simplify(players: List<Player>): List<SimplePayout> {
-        val personMap = players.associateBy { it.person }
-        return map { payout ->
-            SimplePayout(
-                    creditor = payout.creditor.nickname ?: fail("No creditor nickname found"),
-                    entries = personMap[payout.creditor]!!.entries.total(),
-                    total = payout.total,
-                    debtors = payout.debtors.map { debtor ->
-                        SimpleDebtor(
-                                debtor = debtor.person.nickname ?: fail("No debtor nickname found"),
-                                debt = debtor.debt,
-                                entries = personMap[debtor.person]!!.entries.total(),
-                        )
-                    },
-            )
+            else -> error("Unknown payout type: ${payout.creditor::class.simpleName}")
         }
     }
 
-    fun List<Payout>.text(): String = joinToString("\n") { payout ->
-        """
-           |Payout to: ${payout.creditor.nickname} 
-           |Total: ${payout.total}
-           |
-           |${payout.debtors.toText()}
-           |${"_".repeat(30)}
-        """.trimMargin()
-    }
-
     fun List<Debtor>.toText(): String = joinToString("\n") { debtor ->
-        """
-            |  - Debtor: ${debtor.person.nickname}
-            |    Debt: ${debtor.debt}
-        """.trimMargin()
+        when (debtor.person) {
+            is BasicPerson -> """
+                |  - Debtor: ${debtor.person.nickname}
+                |    Debt: ${debtor.debt}
+            """.trimMargin()
+
+            else -> error("Debtor type is not supported")
+        }
     }
 
     fun Game.text(): String = "Game Summary\n" + when (this) {
-        is TournamentGame -> ""
+        is TournamentGame -> toTournamentSummary()
+                .filter { it.position != null }
+                .sortedBy { it.position }
+                .joinToString("\n") {
+                    """
+                    |Position ${it.position}
+                    |  Prize ${it.prize}
+                    |  Buyins: -${it.entries()}
+                    |  Nickname ${it.person.nickname}
+                """.trimMargin()
+                }
+
+        is BountyTournamentGame -> toTournamentSummary()
+                .map { it as BountyTournamentSummary }
+                .filter { it.position != null || it.total() > BigDecimal.ZERO }
+                .sortedBy { it.position }
+                .joinToString("\n") {
+                    if (it.position != null) {
+                        """
+                            |Position ${it.position}
+                            |  Prize ${it.prize}
+                            |  Buyins: -${it.entries()}
+                            |  Bounties: ${it.bounty.total} (taken ${it.bounty.taken} - given ${it.bounty.given})
+                            |  Nickname ${it.person.nickname}
+                        """.trimMargin()
+                    } else {
+                        """
+                            |Bounty winner
+                            |  Buyins: -${it.entries()}
+                            |  Bounties: ${it.bounty.total} (taken ${it.bounty.taken} - given ${it.bounty.given})
+                            |  Nickname ${it.person.nickname}
+                        """.trimMargin()
+                    }
+                }
+
         else -> error("Unknown game type!")
     }
 

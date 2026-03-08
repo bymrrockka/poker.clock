@@ -53,8 +53,8 @@ data class BountyTournamentGame(
 ) : Game {
     override val players: List<BountyPlayer> by lazy { playersProvider() }
     override fun total(): BigDecimal {
-        val entries = playersProvider().totalEntries()
-        val bounties = playersProvider().flatMap { it.entries }.size.toBigDecimal() * bounty
+        val entries = players.totalEntries()
+        val bounties = players.flatMap { it.entries }.size.toBigDecimal() * bounty
         return entries + bounties
     }
 
@@ -73,7 +73,7 @@ data class CashGame(
     override val players: List<CashPlayer> by lazy { playersProvider() }
 }
 
-fun Game.toTournamentSummary(): List<PrizeGameSummary> = toSummary()
+fun Game.toTournamentSummary(serviceFeeFeature: ServiceFeeFeature = ServiceFeeFeature()): List<PrizeGameSummary> = toSummary(serviceFeeFeature)
         .filter { it is PrizeGameSummary }
         .map { it as PrizeGameSummary }
 

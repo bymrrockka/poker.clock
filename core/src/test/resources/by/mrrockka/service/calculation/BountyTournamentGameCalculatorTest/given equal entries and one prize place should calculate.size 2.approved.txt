@@ -1,0 +1,13 @@
+Game Summary
+Position 1
+  Prize 20
+  Buyins: -10
+  Bounties: 10 (taken 10 - given 0)
+  Nickname jackie_rau
+
+Payout to: jackie_rau 
+Total: 20
+Debtors:
+  - Debtor: terisa_johnston
+    Debt: 20
+______________________________

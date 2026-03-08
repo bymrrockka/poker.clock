@@ -1,6 +1,5 @@
 package by.mrrockka.service
 
-import by.mrrockka.domain.BasicPerson
 import by.mrrockka.domain.Debtor
 import by.mrrockka.domain.Game
 import by.mrrockka.domain.GameSummary
@@ -13,7 +12,6 @@ import by.mrrockka.feature.ServiceFeeFeature
 import org.springframework.stereotype.Component
 import java.math.BigDecimal
 import java.math.BigDecimal.ZERO
-import java.util.*
 
 @Component
 open class GameCalculator(
@@ -21,10 +19,14 @@ open class GameCalculator(
 ) {
     //todo: consider to refactor this class to make it extendable with strategies to calculate out payouts
     fun calculate(game: Game): List<Payout> {
-        val serviceFee = PlayerTotal(BasicPerson(UUID.randomUUID(), nickname = "serviceFee"), serviceFeeFeature.calculate(game.total()))
+        val serviceFee = PlayerTotal(serviceFeeFeature.feePerson, serviceFeeFeature.calculate(game.total()))
         val transferTypeToPlayer = game.toSummary(serviceFeeFeature)
                 .map { it.associateByTransferType() }
-                .let { it + (TransferType.CREDIT to serviceFee) }
+                .let {
+                    if (serviceFeeFeature.enabled) {
+                        it + (TransferType.CREDIT to serviceFee)
+                    } else it
+                }
                 .groupBy({ it.first }, { it.second })
 
         val creditors = transferTypeToPlayer[TransferType.CREDIT]?.sortedByDescending { it.total } ?: emptyList()

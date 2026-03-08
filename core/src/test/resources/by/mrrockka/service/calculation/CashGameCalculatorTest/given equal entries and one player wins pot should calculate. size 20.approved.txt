@@ -1,0 +1,42 @@
+Payout to: jackie_rau 
+Total: 190
+Debtors:
+  - Debtor: jeniffer_hegmann
+    Debt: 10
+  - Debtor: antwan_wunsch
+    Debt: 10
+  - Debtor: malorie_blick
+    Debt: 10
+  - Debtor: jefferson_jacobs
+    Debt: 10
+  - Debtor: edmond_klein
+    Debt: 10
+  - Debtor: preston_blanda
+    Debt: 10
+  - Debtor: pearlene_huels
+    Debt: 10
+  - Debtor: harry_mayer
+    Debt: 10
+  - Debtor: erich_mayer
+    Debt: 10
+  - Debtor: donya_willms
+    Debt: 10
+  - Debtor: ronnie_schuppe
+    Debt: 10
+  - Debtor: refugia_koss
+    Debt: 10
+  - Debtor: deb_becker
+    Debt: 10
+  - Debtor: perry_hessel
+    Debt: 10
+  - Debtor: hope_wehner
+    Debt: 10
+  - Debtor: stanton_boyer
+    Debt: 10
+  - Debtor: ashlee_lang
+    Debt: 10
+  - Debtor: santo_welch
+    Debt: 10
+  - Debtor: terisa_johnston
+    Debt: 10
+______________________________

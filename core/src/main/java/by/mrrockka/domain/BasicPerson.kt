@@ -4,14 +4,19 @@ import java.util.*
 
 interface Person {
     val id: UUID
-    val firstname: String?
-    val lastname: String?
-    val nickname: String?
 }
 
 data class BasicPerson(
         override val id: UUID,
-        override val firstname: String? = null,
-        override val lastname: String? = null,
-        override val nickname: String? = null,
+        val firstname: String? = null,
+        val lastname: String? = null,
+        val nickname: String? = null,
 ) : Person
+
+data class ServiceFee(
+        val description: String,
+        val url: String,
+) : Person {
+    override val id: UUID = UUID.randomUUID()
+
+}

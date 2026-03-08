@@ -5,15 +5,12 @@ import by.mrrockka.builder.plus
 import by.mrrockka.builder.tournamentGame
 import by.mrrockka.builder.tournamentPlayer
 import by.mrrockka.builder.tournamentPlayers
-import by.mrrockka.domain.Debtor
 import by.mrrockka.domain.FinalPlace
-import by.mrrockka.domain.Payout
 import by.mrrockka.domain.PositionPrize
 import by.mrrockka.extension.textApprover
 import by.mrrockka.feature.ServiceFeeFeature
 import by.mrrockka.service.GameCalculator
 import com.oneeyedmen.okeydoke.Approver
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -45,19 +42,14 @@ class TournamentGameCalculatorTest : AbstractTest() {
             finalePlaces(FinalPlace(1, players[0].person))
         }
 
-        val actual = calculator.calculate(game)
-        val expect = listOf(
-                Payout(
-                        creditor = players[0].person,
-                        debtors = players
-                                .filterNot { it == players[0] }
-                                .map { Debtor(it.person, buyin) }
-                                .reversed(),
-                        total = BigDecimal("10") * (players.size - 1).toBigDecimal(),
-                ),
-        )
-
-        assertThat(actual).isEqualTo(expect)
+        textApprover("given equal entries and one prize place should calculate.size $size")
+                .assertApproved(
+                        """
+                        |${game.text()}
+                        |
+                        |${calculator.calculate(game).text()}
+                    """.trimMargin(),
+                )
     }
 
     @Test
@@ -80,12 +72,18 @@ class TournamentGameCalculatorTest : AbstractTest() {
             finalePlaces(FinalPlace(1, players[0].person))
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+        approver.assertApproved(calculator.calculate(game).text())
     }
 
     @Test
     fun `given entries and service fee enable should calculate`(approver: Approver) {
-        val feature = ServiceFeeFeature(enabled = true, percent = BigDecimal("10"), threshold = BigDecimal("1"))
+        val feature = ServiceFeeFeature(
+                enabled = true,
+                percent = BigDecimal("10"),
+                threshold = BigDecimal("1"),
+                description = "Service Fee",
+                url = "https://www.mrrockka.by",
+        )
         calculator = GameCalculator(feature)
         val buyin = BigDecimal("10")
         val players = tournamentPlayers(10) {
@@ -105,14 +103,15 @@ class TournamentGameCalculatorTest : AbstractTest() {
             finalePlaces(FinalPlace(1, players[0].person))
         }
 
-//        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
-
-        textApprover("given entries and service fee enable should calculate")
-                .assertApproved(
-                        game.text() +
-                        calculator.calculate(game).text()
-                )
+        approver.assertApproved(
+                """
+                |${game.text()}
+                |
+                |${calculator.calculate(game).text()}
+            """.trimMargin(),
+        )
     }
+
     @Test
     fun `given equal entries and two prize positions should calculate`(approver: Approver) {
         val buyin = BigDecimal("10")
@@ -133,7 +132,13 @@ class TournamentGameCalculatorTest : AbstractTest() {
             )
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+        approver.assertApproved(
+                """
+                |${game.text()}
+                |
+                |${calculator.calculate(game).text()}
+            """.trimMargin(),
+        )
     }
 
     @Test
@@ -162,7 +167,13 @@ class TournamentGameCalculatorTest : AbstractTest() {
             )
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+        approver.assertApproved(
+                """
+                |${game.text()}
+                |
+                |${calculator.calculate(game).text()}
+            """.trimMargin(),
+        )
     }
 
     @Test
@@ -189,7 +200,13 @@ class TournamentGameCalculatorTest : AbstractTest() {
             )
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+        approver.assertApproved(
+                """
+                |${game.text()}
+                |
+                |${calculator.calculate(game).text()}
+            """.trimMargin(),
+        )
     }
 
     @Test
@@ -216,7 +233,13 @@ class TournamentGameCalculatorTest : AbstractTest() {
             )
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+        approver.assertApproved(
+                """
+                |${game.text()}
+                |
+                |${calculator.calculate(game).text()}
+            """.trimMargin(),
+        )
     }
 
     @Test
@@ -237,7 +260,13 @@ class TournamentGameCalculatorTest : AbstractTest() {
             )
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+        approver.assertApproved(
+                """
+                |${game.text()}
+                |
+                |${calculator.calculate(game).text()}
+            """.trimMargin(),
+        )
     }
 
     companion object {

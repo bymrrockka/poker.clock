@@ -1,0 +1,40 @@
+Game Summary
+Position 1
+  Prize 82
+  Buyins: -10
+  Bounties: 100 (taken 100 - given 0)
+  Nickname jackie_rau
+Position 2
+  Prize 28
+  Buyins: -10
+  Bounties: -10 (taken 0 - given 10)
+  Nickname terisa_johnston
+
+Payout to: jackie_rau 
+Total: 172
+Debtors:
+  - Debtor: ronnie_schuppe
+    Debt: 20
+  - Debtor: refugia_koss
+    Debt: 20
+  - Debtor: deb_becker
+    Debt: 20
+  - Debtor: perry_hessel
+    Debt: 20
+  - Debtor: hope_wehner
+    Debt: 20
+  - Debtor: stanton_boyer
+    Debt: 20
+  - Debtor: ashlee_lang
+    Debt: 20
+  - Debtor: santo_welch
+    Debt: 20
+  - Debtor: donya_willms
+    Debt: 12
+______________________________
+Payout to: terisa_johnston 
+Total: 8
+Debtors:
+  - Debtor: donya_willms
+    Debt: 8
+______________________________
