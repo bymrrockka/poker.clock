@@ -101,8 +101,6 @@ open class PrizeSummaryRepoImpl : GameSummaryRepo {
     private fun ResultRow.toPerson(): BasicPerson {
         return BasicPerson(
                 id = this[PersonTable.id],
-                firstname = this[PersonTable.firstName],
-                lastname = this[PersonTable.lastName],
                 nickname = this[PersonTable.nickName],
         )
     }

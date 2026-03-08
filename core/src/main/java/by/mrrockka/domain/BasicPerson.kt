@@ -8,8 +8,6 @@ interface Person {
 
 data class BasicPerson(
         override val id: UUID,
-        val firstname: String? = null,
-        val lastname: String? = null,
         val nickname: String? = null,
 ) : Person
 

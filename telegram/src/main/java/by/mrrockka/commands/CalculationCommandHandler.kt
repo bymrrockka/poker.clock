@@ -1,5 +1,6 @@
 package by.mrrockka.commands
 
+import by.mrrockka.domain.BasicPerson
 import by.mrrockka.domain.BountyTournamentGame
 import by.mrrockka.domain.BountyTournamentSummary
 import by.mrrockka.domain.CashGame
@@ -130,7 +131,14 @@ open class CalculationCommandHandlerImpl(
             |
             |${"-".repeat(30)}
             |Players played equally
-            ${zeros.joinToString("\n") { "|  @${it.creditor.nickname}" }}
+            ${
+            zeros.joinToString("\n") {
+                when (val person = it.creditor) {
+                    is BasicPerson -> "|  @${person.nickname}"
+                    else -> error("Unknown person")
+                }
+            }
+        }
         """.trimMargin() else ""
     }
 
@@ -139,7 +147,14 @@ open class CalculationCommandHandlerImpl(
 
         return """
             |From:
-            ${joinToString("\n") { "|  @${it.person.nickname} -> ${it.debt.setScale(0)}" }}
+            ${
+            joinToString("\n") {
+                when (val person = it.person) {
+                    is BasicPerson -> "|  @${person.nickname} -> ${it.debt.setScale(0)}"
+                    else -> error("Unknown person")
+                }
+            }
+        }
         """.trimMargin()
     }
 
@@ -154,7 +169,7 @@ open class CalculationCommandHandlerImpl(
                 """.trimMargin()
     }
 
-    private fun List<Payout>.prepare(summaries: Map<Person, PrizeGameSummary>): List<Payout> = filter { it.total > ZERO }
+    private fun List<Payout>.prepare(summaries: Map<out Person, PrizeGameSummary>): List<Payout> = filter { it.total > ZERO }
             .sortedBy { summaries[it.creditor]?.position }
             .reversed()
 }

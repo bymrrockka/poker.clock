@@ -1,7 +1,7 @@
 package by.mrrockka.service
 
+import by.mrrockka.domain.BasicPerson
 import by.mrrockka.domain.Game
-import by.mrrockka.domain.Person
 import by.mrrockka.domain.Seat
 import by.mrrockka.domain.Table
 import by.mrrockka.repo.GameTablesRepo
@@ -13,7 +13,7 @@ import kotlin.collections.ArrayDeque
 
 interface GameTablesService {
     fun generate(game: Game): List<Table>
-    fun entries(game: Game, persons: List<Person>): List<Table>
+    fun entries(game: Game, persons: List<BasicPerson>): List<Table>
     fun seed(seed: Long)
 }
 
@@ -37,7 +37,7 @@ open class GameTablesServiceImpl(
         random.setSeed(seed)
     }
 
-    override fun entries(game: Game, persons: List<Person>): List<Table> {
+    override fun entries(game: Game, persons: List<BasicPerson>): List<Table> {
         val (tables, updatedTables) = game.formTables(persons)
 
         tablesRepo.store(game, tables)
@@ -49,7 +49,7 @@ open class GameTablesServiceImpl(
      * As far as table has only id in constructor when merging collections
      * @return fully combined and merged tables to only updated tables as pair
      * */
-    private fun Game.formTables(entries: List<Person>): Pair<List<Table>, List<Table>> {
+    private fun Game.formTables(entries: List<BasicPerson>): Pair<List<Table>, List<Table>> {
         return synchronized(this@GameTablesServiceImpl) {
             val tables = tablesRepo.selectBy(this)
                     .sortedBy { it.seats.size }

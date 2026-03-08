@@ -1,9 +1,7 @@
 package by.mrrockka.repo
 
 import by.mrrockka.domain.BasicPerson
-import by.mrrockka.repo.PersonTable.firstName
 import by.mrrockka.repo.PersonTable.id
-import by.mrrockka.repo.PersonTable.lastName
 import by.mrrockka.repo.PersonTable.nickName
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.inList
@@ -41,8 +39,6 @@ open class PersonRepoImpl : PersonRepo {
     private fun ResultRow.toPerson(): BasicPerson {
         return BasicPerson(
                 id = this[id],
-                firstname = this[firstName],
-                lastname = this[lastName],
                 nickname = this[nickName],
         )
     }
@@ -60,8 +56,6 @@ open class PersonRepoImpl : PersonRepo {
     override fun store(person: BasicPerson) {
         PersonTable.insert {
             it[id] = person.id
-            it[firstName] = person.firstname
-            it[lastName] = person.lastname
             it[nickName] = person.nickname
         }
     }
@@ -69,8 +63,6 @@ open class PersonRepoImpl : PersonRepo {
     override fun store(persons: List<BasicPerson>) {
         PersonTable.batchUpsert(data = persons) { person ->
             this[id] = person.id
-            this[firstName] = person.firstname
-            this[lastName] = person.lastname
             this[nickName] = person.nickname
         }
     }

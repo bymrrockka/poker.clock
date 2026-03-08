@@ -17,16 +17,46 @@ import java.math.BigDecimal.ZERO
 open class GameCalculator(
         private val serviceFeeFeature: ServiceFeeFeature,
 ) {
-    //todo: consider to refactor this class to make it extendable with strategies to calculate out payouts
-    fun calculate(game: Game): List<Payout> {
-        val serviceFee = PlayerTotal(serviceFeeFeature.feePerson, serviceFeeFeature.calculate(game.total()))
-        val transferTypeToPlayer = game.toSummary(serviceFeeFeature)
+
+    fun newCalculate(game: Game): List<Payout> {
+        val (compressedTotal, computedServiceAmounts) = game.setup()
+        val computedPlayerAmounts = game.computePlayerAmounts(compressedTotal)
+        return (computedPlayerAmounts + computedServiceAmounts).toPayouts()
+    }
+
+    //could be extended to a processing strategies
+    private fun Game.setup(): Pair<BigDecimal, List<ComputedAmount>> {
+        val serviceFeeAmount = serviceFeeFeature.calculate(total())
+        val serviceFeeTotal = ComputedAmount(
+                transferType = TransferType.CREDIT,
+                person = serviceFeeFeature.feePerson,
+                amount = serviceFeeAmount,
+        )
+        val compressedTotal = total() - serviceFeeAmount
+        return compressedTotal to listOf(serviceFeeTotal)
+    }
+
+    private fun Game.computePlayerAmounts(total: BigDecimal): List<ComputedAmount> {
+        val transferTypeToPlayer = toSummary()
                 .map { it.associateByTransferType() }
-                .let {
-                    if (serviceFeeFeature.enabled) {
-                        it + (TransferType.CREDIT to serviceFee)
-                    } else it
-                }
+                .groupBy({ it.first }, { it.second })
+
+        val creditors = transferTypeToPlayer[TransferType.CREDIT]?.sortedByDescending { it.total } ?: emptyList()
+        val debtors = transferTypeToPlayer[TransferType.DEBIT]?.sortedByDescending { it.total } ?: emptyList()
+        val equals = transferTypeToPlayer[TransferType.EQUAL] ?: emptyList()
+
+        validate(creditors, debtors, equals)
+        TODO()
+    }
+
+    private fun List<ComputedAmount>.toPayouts(): List<Payout> {
+        TODO()
+    }
+
+
+    fun calculate(game: Game): List<Payout> {
+        val transferTypeToPlayer = game.toSummary()
+                .map { it.associateByTransferType() }
                 .groupBy({ it.first }, { it.second })
 
         val creditors = transferTypeToPlayer[TransferType.CREDIT]?.sortedByDescending { it.total } ?: emptyList()
@@ -97,6 +127,7 @@ open class GameCalculator(
 }
 
 internal class PlayerTotal(val person: Person, val total: BigDecimal)
+internal class ComputedAmount(val transferType: TransferType, val person: Person, val amount: BigDecimal)
 
 private operator fun List<PlayerTotal>.minus(debtors: List<Debtor>): List<PlayerTotal> {
     val debtorPlayers = debtors.map { it.person }
