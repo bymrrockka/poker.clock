@@ -3,14 +3,14 @@ package by.mrrockka
 import by.mrrockka.CoreRandoms.Companion.coreRandoms
 import by.mrrockka.domain.BasicPerson
 import by.mrrockka.domain.BountyTournamentGame
-import by.mrrockka.domain.BountyTournamentSummary
 import by.mrrockka.domain.Debtor
 import by.mrrockka.domain.Game
 import by.mrrockka.domain.Payout
 import by.mrrockka.domain.ServiceFee
 import by.mrrockka.domain.TournamentGame
-import by.mrrockka.domain.toTournamentSummary
 import by.mrrockka.extension.TextApproverExtension
+import by.mrrockka.service.BountyTournamentPlayerSummary
+import by.mrrockka.service.toTournamentSummary
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.extension.ExtendWith
 import java.math.BigDecimal
@@ -71,7 +71,7 @@ abstract class AbstractTest {
                 }
 
         is BountyTournamentGame -> toTournamentSummary()
-                .map { it as BountyTournamentSummary }
+                .map { it as BountyTournamentPlayerSummary }
                 .filter { it.position != null || it.total() > BigDecimal.ZERO }
                 .sortedBy { it.position }
                 .joinToString("\n") {

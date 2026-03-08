@@ -1,15 +1,15 @@
 package by.mrrockka.service.statistics
 
-import by.mrrockka.domain.BountyTournamentSummary
-import by.mrrockka.domain.CashSummary
-import by.mrrockka.domain.GameSummary
 import by.mrrockka.domain.MessageMetadata
-import by.mrrockka.domain.PrizeGameSummary
-import by.mrrockka.domain.TournamentSummary
 import by.mrrockka.domain.total
-import by.mrrockka.repo.GameSummaryRepo
+import by.mrrockka.repo.PlayerSummaryRepo
+import by.mrrockka.service.BountyTournamentPlayerSummary
+import by.mrrockka.service.CashPlayerSummary
 import by.mrrockka.service.GameTelegramService
+import by.mrrockka.service.PlayerPrizeSummary
+import by.mrrockka.service.PlayerSummary
 import by.mrrockka.service.TelegramPersonService
+import by.mrrockka.service.TournamentPlayerSummary
 import org.springframework.stereotype.Component
 import java.math.BigDecimal
 
@@ -17,7 +17,7 @@ import java.math.BigDecimal
 class MyChatStatisticsTelegramService(
         private val personService: TelegramPersonService,
         private val gameTelegramService: GameTelegramService,
-        private val gameSummaryRepo: GameSummaryRepo,
+        private val gameSummaryRepo: PlayerSummaryRepo,
 ) : StatisticsService {
 
     override fun statistics(metadata: MessageMetadata): String {
@@ -27,13 +27,13 @@ class MyChatStatisticsTelegramService(
         val entriesTotal = gameSummaries
                 .map { summary ->
                     when (summary) {
-                        is BountyTournamentSummary -> summary.entries() + (summary.bounty.amount * BigDecimal(summary.entriesNum))
+                        is BountyTournamentPlayerSummary -> summary.entries() + (summary.bounty.amount * BigDecimal(summary.entriesNum))
                         else -> summary.entries()
                     }
                 }.total()
         val tournaments = gameSummaries
-                .filter { it is PrizeGameSummary }
-                .map { it as PrizeGameSummary }
+                .filter { it is PlayerPrizeSummary }
+                .map { it as PlayerPrizeSummary }
         val (firstPlaces, otherPlaces) = tournaments
                 .filter { it.position != null }
                 .partition { it.position == 1 }
@@ -51,11 +51,11 @@ class MyChatStatisticsTelegramService(
         """.trimMargin()
     }
 
-    private fun GameSummary.won(): BigDecimal {
+    private fun PlayerSummary.won(): BigDecimal {
         return when (this) {
-            is TournamentSummary -> prize
-            is BountyTournamentSummary -> prize + bounty.taken
-            is CashSummary -> withdrawals
+            is TournamentPlayerSummary -> prize
+            is BountyTournamentPlayerSummary -> prize + bounty.taken
+            is CashPlayerSummary -> withdrawals
             else -> error("Unknown game summary type")
         }
     }

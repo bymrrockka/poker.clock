@@ -5,10 +5,10 @@ import by.mrrockka.domain.CashGame
 import by.mrrockka.domain.Game
 import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.domain.TournamentGame
-import by.mrrockka.domain.moneyInGame
 import by.mrrockka.domain.total
 import by.mrrockka.domain.totalEntries
 import by.mrrockka.service.GameTelegramService
+import by.mrrockka.service.moneyInGame
 import org.springframework.stereotype.Component
 
 @Component

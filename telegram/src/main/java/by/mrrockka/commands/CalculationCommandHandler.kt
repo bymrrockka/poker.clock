@@ -2,24 +2,24 @@ package by.mrrockka.commands
 
 import by.mrrockka.domain.BasicPerson
 import by.mrrockka.domain.BountyTournamentGame
-import by.mrrockka.domain.BountyTournamentSummary
 import by.mrrockka.domain.CashGame
-import by.mrrockka.domain.CashSummary
 import by.mrrockka.domain.Debtor
 import by.mrrockka.domain.Game
 import by.mrrockka.domain.Payout
 import by.mrrockka.domain.Person
-import by.mrrockka.domain.PrizeGameSummary
 import by.mrrockka.domain.TournamentGame
-import by.mrrockka.domain.TournamentSummary
 import by.mrrockka.domain.toMessageMetadata
-import by.mrrockka.domain.toSummary
-import by.mrrockka.domain.toTournamentSummary
 import by.mrrockka.domain.totalEntries
 import by.mrrockka.repo.PinType
+import by.mrrockka.service.BountyTournamentPlayerSummary
 import by.mrrockka.service.CalculationTelegramService
+import by.mrrockka.service.CashPlayerSummary
 import by.mrrockka.service.GameTelegramService
 import by.mrrockka.service.PinMessageService
+import by.mrrockka.service.PlayerPrizeSummary
+import by.mrrockka.service.TournamentPlayerSummary
+import by.mrrockka.service.toSummary
+import by.mrrockka.service.toTournamentSummary
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.CommandHandler
 import eu.vendeli.tgbot.api.message.message
@@ -69,7 +69,7 @@ open class CalculationCommandHandlerImpl(
     private fun List<Payout>.response(game: Game): String {
         return when (game) {
             is CashGame -> {
-                val summaries = game.toSummary().map { it as CashSummary }.associateBy { it.person }
+                val summaries = game.toSummary().map { it as CashPlayerSummary }.associateBy { it.person }
                 buyMeACoffee + joinToString(separator = "\n") {
                     val summary = summaries[it.creditor]
                             ?: error("No game summary for ${it.creditor}")
@@ -89,7 +89,7 @@ open class CalculationCommandHandlerImpl(
                 val payoutsResponse = prepare(summaries)
                         .joinToString(separator = "\n") {
                             val summary = (summaries[it.creditor]
-                                    ?: error("No game summary for ${it.creditor}")) as TournamentSummary
+                                    ?: error("No game summary for ${it.creditor}")) as TournamentPlayerSummary
                             """
                             |${"-".repeat(30)}
                             |Payout to: @${summary.person.nickname}
@@ -107,7 +107,7 @@ open class CalculationCommandHandlerImpl(
                 val payoutsResponse = prepare(summaries)
                         .joinToString(separator = "\n") {
                             val summary = (summaries[it.creditor]
-                                    ?: error("No game summary for ${it.creditor}")) as BountyTournamentSummary
+                                    ?: error("No game summary for ${it.creditor}")) as BountyTournamentPlayerSummary
                             """
                             |${"-".repeat(30)}
                             |Payout to: @${summary.person.nickname}
@@ -169,7 +169,7 @@ open class CalculationCommandHandlerImpl(
                 """.trimMargin()
     }
 
-    private fun List<Payout>.prepare(summaries: Map<out Person, PrizeGameSummary>): List<Payout> = filter { it.total > ZERO }
+    private fun List<Payout>.prepare(summaries: Map<out Person, PlayerPrizeSummary>): List<Payout> = filter { it.total > ZERO }
             .sortedBy { summaries[it.creditor]?.position }
             .reversed()
 }

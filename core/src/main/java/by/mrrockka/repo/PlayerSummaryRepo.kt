@@ -1,11 +1,11 @@
 package by.mrrockka.repo
 
 import by.mrrockka.domain.BasicPerson
-import by.mrrockka.domain.BountySummary
-import by.mrrockka.domain.BountyTournamentSummary
-import by.mrrockka.domain.CashSummary
-import by.mrrockka.domain.GameSummary
-import by.mrrockka.domain.TournamentSummary
+import by.mrrockka.service.BountySummary
+import by.mrrockka.service.BountyTournamentPlayerSummary
+import by.mrrockka.service.CashPlayerSummary
+import by.mrrockka.service.PlayerSummary
+import by.mrrockka.service.TournamentPlayerSummary
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
@@ -17,30 +17,30 @@ import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
-interface GameSummaryRepo {
-    fun store(gameId: UUID, prizeSummaries: List<GameSummary>)
-    fun findForPersonGames(gameIds: List<UUID>, personId: UUID): List<GameSummary>
+interface PlayerSummaryRepo {
+    fun store(gameId: UUID, playerSummaries: List<PlayerSummary>)
+    fun findForPersonGames(gameIds: List<UUID>, personId: UUID): List<PlayerSummary>
 }
 
 @Repository
 @Transactional(propagation = Propagation.REQUIRED)
-open class PrizeSummaryRepoImpl : GameSummaryRepo {
+open class PrizeSummaryRepoImpl : PlayerSummaryRepo {
 
-    override fun store(gameId: UUID, prizeSummaries: List<GameSummary>) {
-        GameSummaryTable.batchUpsert(keys = arrayOf(GameSummaryTable.gameId, GameSummaryTable.personId), data = prizeSummaries) {
+    override fun store(gameId: UUID, playerSummaries: List<PlayerSummary>) {
+        GameSummaryTable.batchUpsert(keys = arrayOf(GameSummaryTable.gameId, GameSummaryTable.personId), data = playerSummaries) {
             this[GameSummaryTable.gameId] = gameId
             this[GameSummaryTable.personId] = it.person.id
             this[GameSummaryTable.buyIn] = it.buyIn
 
             when (it) {
-                is TournamentSummary -> {
+                is TournamentPlayerSummary -> {
                     this[GameSummaryTable.position] = it.position
                     this[GameSummaryTable.type] = SummaryType.TOURNAMENT.name
                     this[GameSummaryTable.prize] = it.prize
                     this[GameSummaryTable.entriesNum] = it.entriesNum
                 }
 
-                is BountyTournamentSummary -> {
+                is BountyTournamentPlayerSummary -> {
                     this[GameSummaryTable.position] = it.position
                     this[GameSummaryTable.type] = SummaryType.BOUNTY.name
                     this[GameSummaryTable.prize] = it.prize
@@ -50,7 +50,7 @@ open class PrizeSummaryRepoImpl : GameSummaryRepo {
                     this[GameSummaryTable.entriesNum] = it.entriesNum
                 }
 
-                is CashSummary -> {
+                is CashPlayerSummary -> {
                     this[GameSummaryTable.type] = SummaryType.CASH.name
                     this[GameSummaryTable.withdrawals] = it.withdrawals
                     this[GameSummaryTable.entriesNum] = 0
@@ -59,7 +59,7 @@ open class PrizeSummaryRepoImpl : GameSummaryRepo {
         }
     }
 
-    override fun findForPersonGames(gameIds: List<UUID>, personId: UUID): List<GameSummary> {
+    override fun findForPersonGames(gameIds: List<UUID>, personId: UUID): List<PlayerSummary> {
         return GameSummaryTable
                 .leftJoin(PersonTable)
                 .selectAll()
@@ -67,9 +67,9 @@ open class PrizeSummaryRepoImpl : GameSummaryRepo {
                 .map { it.toSummary() }
     }
 
-    private fun ResultRow.toSummary(): GameSummary {
+    private fun ResultRow.toSummary(): PlayerSummary {
         return when (SummaryType.valueOf(this[GameSummaryTable.type])) {
-            SummaryType.TOURNAMENT -> TournamentSummary(
+            SummaryType.TOURNAMENT -> TournamentPlayerSummary(
                     person = this.toPerson(),
                     position = this[GameSummaryTable.position],
                     buyIn = this[GameSummaryTable.buyIn],
@@ -77,7 +77,7 @@ open class PrizeSummaryRepoImpl : GameSummaryRepo {
                     prize = this[GameSummaryTable.prize]!!,
             )
 
-            SummaryType.BOUNTY -> BountyTournamentSummary(
+            SummaryType.BOUNTY -> BountyTournamentPlayerSummary(
                     person = this.toPerson(),
                     buyIn = this[GameSummaryTable.buyIn],
                     entriesNum = this[GameSummaryTable.entriesNum],
@@ -90,7 +90,7 @@ open class PrizeSummaryRepoImpl : GameSummaryRepo {
                     ),
             )
 
-            SummaryType.CASH -> CashSummary(
+            SummaryType.CASH -> CashPlayerSummary(
                     person = this.toPerson(),
                     buyIn = this[GameSummaryTable.buyIn],
                     withdrawals = this[GameSummaryTable.withdrawals]!!,

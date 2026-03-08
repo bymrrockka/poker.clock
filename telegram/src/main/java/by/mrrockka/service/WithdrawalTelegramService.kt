@@ -2,7 +2,6 @@ package by.mrrockka.service
 
 import by.mrrockka.domain.CashGame
 import by.mrrockka.domain.MessageMetadata
-import by.mrrockka.domain.moneyInGame
 import by.mrrockka.parser.WithdrawalMessageParser
 import by.mrrockka.repo.WithdrawalsRepo
 import org.springframework.stereotype.Service

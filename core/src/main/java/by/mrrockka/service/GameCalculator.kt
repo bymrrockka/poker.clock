@@ -2,11 +2,9 @@ package by.mrrockka.service
 
 import by.mrrockka.domain.Debtor
 import by.mrrockka.domain.Game
-import by.mrrockka.domain.GameSummary
 import by.mrrockka.domain.Payout
 import by.mrrockka.domain.Person
 import by.mrrockka.domain.TransferType
-import by.mrrockka.domain.toSummary
 import by.mrrockka.domain.total
 import by.mrrockka.feature.ServiceFeeFeature
 import org.springframework.stereotype.Component
@@ -17,7 +15,6 @@ import java.math.BigDecimal.ZERO
 open class GameCalculator(
         private val serviceFeeFeature: ServiceFeeFeature,
 ) {
-
     fun newCalculate(game: Game): List<Payout> {
         val (compressedTotal, computedServiceAmounts) = game.setup()
         val computedPlayerAmounts = game.computePlayerAmounts(compressedTotal)
@@ -118,7 +115,7 @@ open class GameCalculator(
     }
 
     private fun List<PlayerTotal>.toEqualPayouts(): List<Payout> = map { Payout(it.person, ZERO, emptyList()) }
-    private fun GameSummary.associateByTransferType(): Pair<TransferType, PlayerTotal> =
+    private fun PlayerSummary.associateByTransferType(): Pair<TransferType, PlayerTotal> =
             when {
                 total() < ZERO -> TransferType.DEBIT to PlayerTotal(person, -total())
                 total() > ZERO -> TransferType.CREDIT to PlayerTotal(person, total())

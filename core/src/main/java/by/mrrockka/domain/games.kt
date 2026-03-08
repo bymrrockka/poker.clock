@@ -1,9 +1,8 @@
 package by.mrrockka.domain
 
-import by.mrrockka.feature.ServiceFeeFeature
+import by.mrrockka.service.scaleDown
 import java.math.BigDecimal
 import java.math.BigDecimal.ZERO
-import java.math.RoundingMode
 import java.time.Instant
 import java.util.*
 
@@ -73,29 +72,6 @@ data class CashGame(
     override val players: List<CashPlayer> by lazy { playersProvider() }
 }
 
-fun Game.toTournamentSummary(serviceFeeFeature: ServiceFeeFeature = ServiceFeeFeature()): List<PrizeGameSummary> = toSummary(serviceFeeFeature)
-        .filter { it is PrizeGameSummary }
-        .map { it as PrizeGameSummary }
-
-fun Game.toSummary(serviceFee: ServiceFeeFeature = ServiceFeeFeature()): List<GameSummary> {
-    return when (this) {
-        is TournamentGame -> gameSummary(serviceFee)
-        is BountyTournamentGame -> gameSummary(serviceFee)
-        is CashGame -> gameSummary(serviceFee)
-        else -> error("Unknown game type")
-    }
-}
-
-fun Game.moneyInGame(): BigDecimal =
-        when (this) {
-            is CashGame -> players.totalEntries() - players.totalWithdrawals()
-            is BountyTournamentGame -> players.totalEntries() + (players.sumOf { it.entries.size }.toBigDecimal() * bounty)
-            is TournamentGame -> players.totalEntries()
-            else -> error("Unknown game")
-        }
-
-fun BigDecimal.defaultScale(): BigDecimal = this.setScale(0, RoundingMode.HALF_DOWN)
-
 fun game(
         type: GameType,
         buyin: BigDecimal,
@@ -107,8 +83,8 @@ fun game(
         GameType.TOURNAMENT ->
             TournamentGame(
                     id = UUID.randomUUID(),
-                    buyIn = buyin.defaultScale(),
-                    stack = stack.defaultScale(),
+                    buyIn = buyin.scaleDown(),
+                    stack = stack.scaleDown(),
                     playersProvider = { emptyList() },
                     createdAt = createdAt,
             )
@@ -116,8 +92,8 @@ fun game(
         GameType.CASH ->
             CashGame(
                     id = UUID.randomUUID(),
-                    buyIn = buyin.defaultScale(),
-                    stack = stack.defaultScale(),
+                    buyIn = buyin.scaleDown(),
+                    stack = stack.scaleDown(),
                     playersProvider = { emptyList() },
                     createdAt = createdAt,
             )
@@ -126,9 +102,9 @@ fun game(
             check(bounty != null) { "Bounty should be specified" }
             BountyTournamentGame(
                     id = UUID.randomUUID(),
-                    buyIn = buyin.defaultScale(),
-                    stack = stack.defaultScale(),
-                    bounty = bounty.defaultScale(),
+                    buyIn = buyin.scaleDown(),
+                    stack = stack.scaleDown(),
+                    bounty = bounty.scaleDown(),
                     playersProvider = { emptyList() },
                     createdAt = createdAt,
             )
