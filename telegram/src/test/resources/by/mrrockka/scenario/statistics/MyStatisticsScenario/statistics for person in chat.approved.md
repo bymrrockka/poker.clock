@@ -376,7 +376,7 @@ Total: 30 (3 entries * 10 buy in)
 ------------------------------
 Payout to: @nickname1
   Entries: 10
-  Bounties: 20 (taken 20 - given 0) 
+  Bounties: 20 (taken 2 - given 0) 
   Total: 25 (won 15 - entries 10 + bounties 20)
 From:
   @nickname2 -> 20
@@ -403,9 +403,9 @@ nickname: @sergio_cartwright
 games played: 3 (2 tournaments)
 times in prizes: 2
 times in first place: 1
-buy-ins total: 40.00
-won total: 30.00 
-correlation: -10.00  
+buy-ins total: 20.00
+won total: 20.00 
+correlation: 0.00  
 ``` 
 ___
 
@@ -540,8 +540,8 @@ nickname: @sergio_cartwright
 games played: 4 (3 tournaments)
 times in prizes: 2
 times in first place: 1
-buy-ins total: 50.00
-won total: 30.00 
-correlation: -20.00  
+buy-ins total: 30.00
+won total: 20.00 
+correlation: -10.00  
 ``` 
 ___

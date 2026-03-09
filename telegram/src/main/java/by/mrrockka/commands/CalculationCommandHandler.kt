@@ -19,6 +19,7 @@ import by.mrrockka.service.PinMessageService
 import by.mrrockka.service.PlayerPrizeSummary
 import by.mrrockka.service.PlayerSummaryService
 import by.mrrockka.service.TournamentPlayerSummary
+import by.mrrockka.service.scaleDown
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.CommandHandler
 import eu.vendeli.tgbot.api.message.message
@@ -111,9 +112,9 @@ open class CalculationCommandHandlerImpl(
                             """
                             |${"-".repeat(30)}
                             |Payout to: @${summary.person.nickname}
-                            |  Entries: ${summary.entries()}
-                            |  Bounties: ${summary.bounty.total} (taken ${summary.bounty.taken} - given ${summary.bounty.given}) 
-                            |  Total: ${it.total} (won ${summary.prize} - entries ${summary.entries()} ${if (summary.bounty.total < ZERO) "-" else "+"} bounties ${summary.bounty.total})
+                            |  Entries: ${summary.entries().scaleDown()}
+                            |  Bounties: ${summary.bounty.total.scaleDown()} (taken ${summary.bounty.taken} - given ${summary.bounty.given}) 
+                            |  Total: ${it.total.scaleDown()} (won ${summary.prize.scaleDown()} - entries ${summary.entries().scaleDown()} ${if (summary.bounty.total < ZERO) "-" else "+"} bounties ${summary.bounty.total.scaleDown()})
                             |${it.debtors.message()}
                             """.trimMargin()
                         }

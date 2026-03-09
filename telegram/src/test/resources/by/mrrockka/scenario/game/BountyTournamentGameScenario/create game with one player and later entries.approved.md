@@ -256,7 +256,7 @@ Total: 50 (5 entries * 10 buy in)
 ------------------------------
 Payout to: @sergio_cartwright
   Entries: 10
-  Bounties: 20 (taken 20 - given 0) 
+  Bounties: 20 (taken 2 - given 0) 
   Total: 60 (won 50 - entries 10 + bounties 20)
 From:
   @nickname3 -> 40

@@ -407,7 +407,7 @@ Total: 110 (11 entries * 10 buy in)
 ------------------------------
 Payout to: @nickname2
   Entries: 10
-  Bounties: 20 (taken 30 - given 10) 
+  Bounties: 20 (taken 3 - given 1) 
   Total: 65 (won 55 - entries 10 + bounties 20)
 From:
   @nickname3 -> 40
@@ -416,7 +416,7 @@ From:
 ------------------------------
 Payout to: @nickname1
   Entries: 40
-  Bounties: 0 (taken 30 - given 30) 
+  Bounties: 0 (taken 3 - given 3) 
   Total: 15 (won 55 - entries 40 + bounties 0)
 From:
   @nickname5 -> 15
