@@ -30,6 +30,22 @@ abstract class ServiceFeeFeatureTest : AbstractCalculatorTest() {
         game.calculateAndAssert(approver)
     }
 
+    @Test
+    fun `when calculated fee goes beyond threshold then fee shouldn't affect game calculations`(approver: Approver) {
+        val feature = ServiceFeeFeature(
+                enabled = true,
+                percent = BigDecimal("13"),
+                threshold = BigDecimal("100"),
+                description = "Service Fee",
+                url = "https://www.mrrockka.by",
+        )
+        changeFeeTo(feature)
+
+        val game = game(playersSize = 3, prizeSize = 1)
+
+        game.calculateAndAssert(approver)
+    }
+
     protected fun prizePool(size: Int): List<PositionPrize> {
         val hundred = BigDecimal("100.0")
         val state = AmountState(hundred)
