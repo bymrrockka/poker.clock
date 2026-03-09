@@ -47,7 +47,7 @@ abstract class ServiceFeeFeatureTest : AbstractCalculatorTest() {
     protected fun prizePool(size: Int): List<PositionPrize> {
         val hundred = BigDecimal("100.0")
         val state = AmountState(hundred)
-        return (1..size).map { PositionPrize(it, state.getAndDecrease(hundred / size.toBigDecimal())) }
+        return (1..size).map { PositionPrize(it, state.decreaseAndGet(hundred / size.toBigDecimal())) }
     }
 
     protected fun List<Player>.finalePlaces(size: Int): List<FinalPlace> = take(size)

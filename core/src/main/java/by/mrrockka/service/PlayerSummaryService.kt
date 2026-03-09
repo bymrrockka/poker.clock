@@ -62,7 +62,7 @@ class PlayerSummaryService(
         }
 
         val prizeSummary = prizeTotal.prizeSummary(prizePool!!, finalePlaces!!)
-        val bountySummary = bountyTotal.bountySummary(players)
+        val bountySummary = bountyTotal.bountySummary(players, bounty)
 
         return players.map { player ->
             val prize = prizeSummary[player.person]
@@ -78,15 +78,17 @@ class PlayerSummaryService(
         }
     }
 
-    private fun BigDecimal.bountySummary(players: List<BountyPlayer>): Map<BasicPerson, BountySummary> {
-        val amountState = AmountState(this)
-        val average = this / players.flatMap { it.entries }.size.toBigDecimal()
+    private fun BigDecimal.bountySummary(players: List<BountyPlayer>, bounty: BigDecimal): Map<BasicPerson, BountySummary> {
+        val average = this.setScale(1) / players.flatMap { it.entries }.size.toBigDecimal()
+        //last player safes his bounty
+        val amountState = AmountState(this - bounty)
 
         return players.associate { player ->
             val (taken, given) = player.takenToGiven()
-            val total = (taken.size - given.size).toBigDecimal() * average
+            val sum = taken.size - given.size
+            val total = if (sum >= 0) sum.toBigDecimal() * average else taken.total() - given.total()
             player.person to BountySummary(
-                    total = amountState.getAndDecrease(total),
+                    total = amountState.decreaseAndGet(total),
                     taken = taken.size,
                     given = given.size,
             )
@@ -101,7 +103,7 @@ class PlayerSummaryService(
             CashPlayerSummary(
                     person = player.person,
                     buyIn = player.entries.total(),
-                    withdrawals = amountState.getAndDecrease(player.withdrawals.total() * ratio),
+                    withdrawals = amountState.decreaseAndGet(player.withdrawals.total() * ratio),
             )
         }
     }
@@ -115,14 +117,14 @@ class PlayerSummaryService(
                     FinalPrizeSummary(
                             position = place.position,
                             person = place.person,
-                            amount = state.getAndDecrease(amount),
+                            amount = state.decreaseAndGet(amount),
                     )
                 }.associateBy { it.person }
     }
 
 }
 
-fun BigDecimal.scaleDown(): BigDecimal = setScale(0, RoundingMode.HALF_DOWN)
+fun BigDecimal.scaleDown(): BigDecimal = setScale(0, RoundingMode.DOWN)
 fun BigDecimal.scaleUp(): BigDecimal = setScale(0, RoundingMode.UP)
 
 interface PlayerSummary {
@@ -179,9 +181,10 @@ data class CashPlayerSummary(
 
 private data class FinalPrizeSummary(val position: Int, val amount: BigDecimal, val person: BasicPerson)
 data class AmountState(private var state: BigDecimal) {
-    fun getAndDecrease(amount: BigDecimal): BigDecimal {
+    fun decreaseAndGet(amount: BigDecimal): BigDecimal {
         val scaled = amount.scaleUp()
         return when {
+            amount < BigDecimal.ZERO -> amount
             state - scaled == BigDecimal.ONE -> all()
             scaled < state -> {
                 state -= scaled
