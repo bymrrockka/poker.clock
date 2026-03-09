@@ -19,7 +19,7 @@ class ServiceFeeFeature(
     val feePerson: ServiceFee by lazy { ServiceFee(description, url) }
 
     fun calculate(amount: BigDecimal): BigDecimal = if (enabled) {
-        val result = (amount * percent / BigDecimal("100")).scaleDown()
+        val result = (amount * percent / BigDecimal("100.0")).scaleDown()
         if ((amount / result) < threshold) BigDecimal.ZERO else result
     } else BigDecimal.ZERO
 

@@ -17,9 +17,8 @@ import by.mrrockka.service.CashPlayerSummary
 import by.mrrockka.service.GameTelegramService
 import by.mrrockka.service.PinMessageService
 import by.mrrockka.service.PlayerPrizeSummary
+import by.mrrockka.service.PlayerSummaryService
 import by.mrrockka.service.TournamentPlayerSummary
-import by.mrrockka.service.toSummary
-import by.mrrockka.service.toTournamentSummary
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.CommandHandler
 import eu.vendeli.tgbot.api.message.message
@@ -41,6 +40,7 @@ open class CalculationCommandHandlerImpl(
         private val gameService: GameTelegramService,
         private val pinMessageService: PinMessageService,
         private val calculationService: CalculationTelegramService,
+        private val playerSummaryService: PlayerSummaryService,
 ) : CalculationCommandHandler {
 
     private val buyMeACoffee = """
@@ -69,7 +69,7 @@ open class CalculationCommandHandlerImpl(
     private fun List<Payout>.response(game: Game): String {
         return when (game) {
             is CashGame -> {
-                val summaries = game.toSummary().map { it as CashPlayerSummary }.associateBy { it.person }
+                val summaries = playerSummaryService.summary(game).map { it as CashPlayerSummary }.associateBy { it.person }
                 buyMeACoffee + joinToString(separator = "\n") {
                     val summary = summaries[it.creditor]
                             ?: error("No game summary for ${it.creditor}")
@@ -85,7 +85,7 @@ open class CalculationCommandHandlerImpl(
             }
 
             is TournamentGame -> {
-                val summaries = game.toTournamentSummary().associateBy { it.person }
+                val summaries = playerSummaryService.tournamentSummary(game).associateBy { it.person }
                 val payoutsResponse = prepare(summaries)
                         .joinToString(separator = "\n") {
                             val summary = (summaries[it.creditor]
@@ -103,7 +103,7 @@ open class CalculationCommandHandlerImpl(
             }
 
             is BountyTournamentGame -> {
-                val summaries = game.toTournamentSummary().associateBy { it.person }
+                val summaries = playerSummaryService.tournamentSummary(game).associateBy { it.person }
                 val payoutsResponse = prepare(summaries)
                         .joinToString(separator = "\n") {
                             val summary = (summaries[it.creditor]
@@ -111,9 +111,9 @@ open class CalculationCommandHandlerImpl(
                             """
                             |${"-".repeat(30)}
                             |Payout to: @${summary.person.nickname}
-                            |  Entries: ${summary.entries().setScale(0)}
-                            |  Bounties: ${summary.bounty.total.setScale(0)} (taken ${summary.bounty.taken.setScale(0)} - given ${summary.bounty.given.setScale(0)}) 
-                            |  Total: ${it.total.setScale(0)} (won ${summary.prize.setScale(0)} - entries ${summary.entries().setScale(0)} ${if (summary.bounty.total < ZERO) "-" else "+"} bounties ${summary.bounty.total.setScale(0)})
+                            |  Entries: ${summary.entries()}
+                            |  Bounties: ${summary.bounty.total} (taken ${summary.bounty.taken} - given ${summary.bounty.given}) 
+                            |  Total: ${it.total} (won ${summary.prize} - entries ${summary.entries()} ${if (summary.bounty.total < ZERO) "-" else "+"} bounties ${summary.bounty.total})
                             |${it.debtors.message()}
                             """.trimMargin()
                         }
@@ -159,7 +159,7 @@ open class CalculationCommandHandlerImpl(
     }
 
     private fun Game.finalePlacesMessage(): String {
-        val summary = toTournamentSummary().sortedBy { it.position }
+        val summary = playerSummaryService.tournamentSummary(this).sortedBy { it.position }
         return """
                 |${"-".repeat(30)}
                 |Finale summary:

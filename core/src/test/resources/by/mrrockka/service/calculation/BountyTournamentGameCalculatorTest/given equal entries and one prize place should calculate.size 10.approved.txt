@@ -1,29 +1,34 @@
-Game Summary
+Game details: 
+ - total money: 200
+ - players size: 10
+ - entries size: 10
+
+Prize summary:
 Position 1
   Prize 100
-  Buyins: -10
-  Bounties: 90 (taken 90 - given 0)
+  Buyins: -10.0
+  Bounties: 90 (taken 9 - given 0)
   Nickname jackie_rau
 
 Payout to: jackie_rau 
-Total: 180
+Total: 180.0
 Debtors:
   - Debtor: ronnie_schuppe
-    Debt: 20
+    Debt: 20.0
   - Debtor: refugia_koss
-    Debt: 20
+    Debt: 20.0
   - Debtor: deb_becker
-    Debt: 20
+    Debt: 20.0
   - Debtor: perry_hessel
-    Debt: 20
+    Debt: 20.0
   - Debtor: hope_wehner
-    Debt: 20
+    Debt: 20.0
   - Debtor: stanton_boyer
-    Debt: 20
+    Debt: 20.0
   - Debtor: ashlee_lang
-    Debt: 20
+    Debt: 20.0
   - Debtor: santo_welch
-    Debt: 20
+    Debt: 20.0
   - Debtor: terisa_johnston
-    Debt: 20
+    Debt: 20.0
 ______________________________

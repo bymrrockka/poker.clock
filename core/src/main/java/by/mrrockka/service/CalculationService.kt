@@ -21,14 +21,15 @@ interface CalculationService {
 open class CalculationServiceImpl(
         private val calculator: GameCalculator,
         private val gameRepo: GameRepo,
-        private val gameSummaryRepo: PlayerSummaryRepo,
+        private val playerSummaryService: PlayerSummaryService,
+        private val playerSummaryRepo: PlayerSummaryRepo,
 ) : CalculationService {
 
     override fun calculate(game: Game): List<Payout> {
         val payouts = calculator.calculate(game)
 
-        val gameSummaries = game.toSummary()
-        gameSummaryRepo.store(game.id, gameSummaries)
+        val playerSummaries = playerSummaryService.summary(game)
+        playerSummaryRepo.store(game.id, playerSummaries)
 
         if (game.finishedAt == null) {
             gameRepo.store(game.finish())

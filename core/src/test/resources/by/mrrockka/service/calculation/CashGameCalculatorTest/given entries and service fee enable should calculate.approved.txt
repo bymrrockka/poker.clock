@@ -11,14 +11,19 @@ Debtors:
     Debt: 10
 ______________________________
 Payout to: terisa_johnston 
-Total: 40
+Total: 30
 Debtors:
-  - Debtor: ronnie_schuppe
-    Debt: 10
   - Debtor: refugia_koss
     Debt: 10
   - Debtor: deb_becker
     Debt: 10
   - Debtor: perry_hessel
+    Debt: 10
+______________________________
+Description: Service Fee
+URL: https://www.mrrockka.by
+Total: 10
+Debtors:
+  - Debtor: ronnie_schuppe
     Debt: 10
 ______________________________

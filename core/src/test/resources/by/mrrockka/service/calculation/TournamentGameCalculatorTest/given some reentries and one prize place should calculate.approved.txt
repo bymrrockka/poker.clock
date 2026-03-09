@@ -1,26 +1,26 @@
 Payout to: jackie_rau 
-Total: 160
+Total: 160.0
 Debtors:
   - Debtor: erich_mayer
-    Debt: 40
+    Debt: 40.0
   - Debtor: donya_willms
-    Debt: 30
+    Debt: 30.0
   - Debtor: ronnie_schuppe
-    Debt: 10
+    Debt: 10.0
   - Debtor: refugia_koss
-    Debt: 10
+    Debt: 10.0
   - Debtor: deb_becker
-    Debt: 10
+    Debt: 10.0
   - Debtor: perry_hessel
-    Debt: 10
+    Debt: 10.0
   - Debtor: hope_wehner
-    Debt: 10
+    Debt: 10.0
   - Debtor: stanton_boyer
-    Debt: 10
+    Debt: 10.0
   - Debtor: ashlee_lang
-    Debt: 10
+    Debt: 10.0
   - Debtor: santo_welch
-    Debt: 10
+    Debt: 10.0
   - Debtor: terisa_johnston
-    Debt: 10
+    Debt: 10.0
 ______________________________

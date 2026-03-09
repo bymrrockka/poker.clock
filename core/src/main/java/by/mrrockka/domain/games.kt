@@ -54,7 +54,7 @@ data class BountyTournamentGame(
     override fun total(): BigDecimal {
         val entries = players.totalEntries()
         val bounties = players.flatMap { it.entries }.size.toBigDecimal() * bounty
-        return entries + bounties
+        return (entries + bounties).setScale(0)
     }
 
     val finalePlaces: List<FinalPlace>? by lazy { finalePlacesProvider() }
@@ -71,6 +71,14 @@ data class CashGame(
 ) : Game {
     override val players: List<CashPlayer> by lazy { playersProvider() }
 }
+
+fun Game.moneyInGame(): BigDecimal =
+        when (this) {
+            is CashGame -> players.totalEntries() - players.totalWithdrawals()
+            is BountyTournamentGame -> players.totalEntries() + (players.sumOf { it.entries.size }.toBigDecimal() * bounty)
+            is TournamentGame -> players.totalEntries()
+            else -> error("Unknown game")
+        }
 
 fun game(
         type: GameType,

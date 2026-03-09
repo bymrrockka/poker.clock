@@ -2,6 +2,7 @@ package by.mrrockka.scenario
 
 import by.mrrockka.domain.BasicPerson
 import by.mrrockka.domain.GameType
+import by.mrrockka.domain.PositionPrize
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -58,7 +59,7 @@ class Commands private constructor() {
             GameType.BOUNTY -> if (alias) bountyGameAlias else bountyGame
         }
 
-        private fun calculatePrizePool(size: Int): Map<Int, BigDecimal> {
+        private fun calculatePrizePool(size: Int): List<PositionPrize> {
             var total = BigDecimal(100)
             val calculatePercentageForPlace = fun(index: Int): BigDecimal {
                 if (size == 1) {
@@ -72,13 +73,13 @@ class Commands private constructor() {
                 return result
             }
 
-            return (1..size).associate { it to calculatePercentageForPlace(it) }
+            return (1..size).map { PositionPrize(it, calculatePercentageForPlace(it)) }
         }
 
         fun prizePool(size: Int): String {
             return """
             |$prizePool
-            ${calculatePrizePool(size).entries.joinToString("\n") { (index, value) -> "|${index} ${value}%" }}
+            ${calculatePrizePool(size).joinToString("\n") { (position, percentage) -> "|${position} ${percentage}%" }}
             """.trimMargin()
         }
 

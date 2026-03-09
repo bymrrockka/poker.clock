@@ -9,14 +9,29 @@ import by.mrrockka.domain.Payout
 import by.mrrockka.domain.ServiceFee
 import by.mrrockka.domain.TournamentGame
 import by.mrrockka.extension.TextApproverExtension
+import by.mrrockka.feature.ServiceFeeFeature
 import by.mrrockka.service.BountyTournamentPlayerSummary
-import by.mrrockka.service.toTournamentSummary
+import by.mrrockka.service.GameCalculator
+import by.mrrockka.service.PlayerSummaryService
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
 import java.math.BigDecimal
 
 @ExtendWith(TextApproverExtension::class)
-abstract class AbstractTest {
+abstract class AbstractCalculatorTest {
+    lateinit var calculator: GameCalculator
+    lateinit var playerSummaryService: PlayerSummaryService
+
+    @BeforeEach
+    fun before() {
+        changeFeeTo(ServiceFeeFeature())
+    }
+
+    protected fun changeFeeTo(serviceFeeFeature: ServiceFeeFeature) {
+        playerSummaryService = PlayerSummaryService(serviceFeeFeature)
+        calculator = GameCalculator(serviceFeeFeature, playerSummaryService)
+    }
 
     @AfterEach
     fun afterEach() {
@@ -57,8 +72,16 @@ abstract class AbstractTest {
         }
     }
 
-    fun Game.text(): String = "Game Summary\n" + when (this) {
-        is TournamentGame -> toTournamentSummary()
+    fun Game.text(): String = """
+        |Game details: 
+        | - total money: ${total()}
+        | - players size: ${players.size}
+        | - entries size: ${players.flatMap { it.entries }.count()}
+        |
+        |Prize summary:
+        |
+    """.trimMargin() + when (this) {
+        is TournamentGame -> playerSummaryService.tournamentSummary(this)
                 .filter { it.position != null }
                 .sortedBy { it.position }
                 .joinToString("\n") {
@@ -70,7 +93,7 @@ abstract class AbstractTest {
                 """.trimMargin()
                 }
 
-        is BountyTournamentGame -> toTournamentSummary()
+        is BountyTournamentGame -> playerSummaryService.tournamentSummary(this)
                 .map { it as BountyTournamentPlayerSummary }
                 .filter { it.position != null || it.total() > BigDecimal.ZERO }
                 .sortedBy { it.position }

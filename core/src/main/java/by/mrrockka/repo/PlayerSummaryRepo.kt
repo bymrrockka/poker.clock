@@ -44,9 +44,9 @@ open class PrizeSummaryRepoImpl : PlayerSummaryRepo {
                     this[GameSummaryTable.position] = it.position
                     this[GameSummaryTable.type] = SummaryType.BOUNTY.name
                     this[GameSummaryTable.prize] = it.prize
-                    this[GameSummaryTable.bounty] = it.bounty.amount
-                    this[GameSummaryTable.takenNum] = it.bounty.takenNum
-                    this[GameSummaryTable.givenNum] = it.bounty.givenNum
+                    this[GameSummaryTable.bounty] = it.bounty.total
+                    this[GameSummaryTable.takenNum] = it.bounty.taken
+                    this[GameSummaryTable.givenNum] = it.bounty.given
                     this[GameSummaryTable.entriesNum] = it.entriesNum
                 }
 
@@ -84,9 +84,9 @@ open class PrizeSummaryRepoImpl : PlayerSummaryRepo {
                     prize = this[GameSummaryTable.prize]!!,
                     position = this[GameSummaryTable.position],
                     bounty = BountySummary(
-                            amount = this[GameSummaryTable.bounty]!!,
-                            takenNum = this[GameSummaryTable.takenNum]!!,
-                            givenNum = this[GameSummaryTable.givenNum]!!,
+                            total = this[GameSummaryTable.bounty]!!,
+                            taken = this[GameSummaryTable.takenNum]!!,
+                            given = this[GameSummaryTable.givenNum]!!,
                     ),
             )
 

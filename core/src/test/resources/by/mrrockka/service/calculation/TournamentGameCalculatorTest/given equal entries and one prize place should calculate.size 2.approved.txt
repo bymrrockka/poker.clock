@@ -1,12 +1,17 @@
-Game Summary
+Game details: 
+ - total money: 20.0
+ - players size: 2
+ - entries size: 2
+
+Prize summary:
 Position 1
-  Prize 20
-  Buyins: -10
+  Prize 20.0
+  Buyins: -10.0
   Nickname jackie_rau
 
 Payout to: jackie_rau 
-Total: 10
+Total: 10.0
 Debtors:
   - Debtor: terisa_johnston
-    Debt: 10
+    Debt: 10.0
 ______________________________
