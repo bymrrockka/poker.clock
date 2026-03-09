@@ -397,9 +397,6 @@ ___
 ``` 
 message id: 38 
 ------------------------------
-You can support me using this link. 
-https://buymeacoffee.com/mrrockka
-------------------------------
 Finale summary:
   1. @nickname1 won 55
   2. @nickname2 won 55
@@ -422,7 +419,10 @@ From:
   @nickname5 -> 15
 ------------------------------
 Players played equally
-  @sergio_cartwright 
+  @sergio_cartwright
+------------------------------
+You can support me using this link. 
+https://buymeacoffee.com/mrrockka 
 ``` 
 ___
 

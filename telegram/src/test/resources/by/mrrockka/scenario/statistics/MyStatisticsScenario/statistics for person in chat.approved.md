@@ -88,9 +88,6 @@ ___
 ``` 
 message id: 8 
 ------------------------------
-You can support me using this link. 
-https://buymeacoffee.com/mrrockka
-------------------------------
 Finale summary:
   1. @sergio_cartwright won 15
   2. @nickname1 won 15
@@ -106,7 +103,10 @@ Payout to: @sergio_cartwright
   Entries: 10
   Total: 5 (won 15 - entries 10)
 From:
-  @nickname2 -> 5 
+  @nickname2 -> 5
+------------------------------
+You can support me using this link. 
+https://buymeacoffee.com/mrrockka 
 ``` 
 ___
 
@@ -200,16 +200,16 @@ ___
 ``` 
 message id: 16 
 ------------------------------
-You can support me using this link. 
-https://buymeacoffee.com/mrrockka
-------------------------------
 Payout to: @nickname2
   Entries: 10
   Withdrawals: 30
   Total: 20 
 From:
   @sergio_cartwright -> 10
-  @nickname1 -> 10 
+  @nickname1 -> 10
+------------------------------
+You can support me using this link. 
+https://buymeacoffee.com/mrrockka 
 ``` 
 ___
 
@@ -366,9 +366,6 @@ ___
 ``` 
 message id: 30 
 ------------------------------
-You can support me using this link. 
-https://buymeacoffee.com/mrrockka
-------------------------------
 Finale summary:
   1. @nickname1 won 15
   2. @sergio_cartwright won 15
@@ -380,7 +377,10 @@ Payout to: @nickname1
   Total: 25 (won 15 - entries 10 + bounties 20)
 From:
   @nickname2 -> 20
-  @sergio_cartwright -> 5 
+  @sergio_cartwright -> 5
+------------------------------
+You can support me using this link. 
+https://buymeacoffee.com/mrrockka 
 ``` 
 ___
 
@@ -499,9 +499,6 @@ ___
 ``` 
 message id: 40 
 ------------------------------
-You can support me using this link. 
-https://buymeacoffee.com/mrrockka
-------------------------------
 Finale summary:
   1. @nickname1 won 15
   2. @nickname2 won 15
@@ -517,7 +514,10 @@ Payout to: @nickname1
   Entries: 10
   Total: 5 (won 15 - entries 10)
 From:
-  @sergio_cartwright -> 5 
+  @sergio_cartwright -> 5
+------------------------------
+You can support me using this link. 
+https://buymeacoffee.com/mrrockka 
 ``` 
 ___
 

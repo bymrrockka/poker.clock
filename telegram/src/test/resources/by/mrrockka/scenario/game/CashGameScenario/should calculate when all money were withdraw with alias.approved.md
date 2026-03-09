@@ -132,9 +132,6 @@ ___
 ``` 
 message id: 12 
 ------------------------------
-You can support me using this link. 
-https://buymeacoffee.com/mrrockka
-------------------------------
 Payout to: @nickname2
   Entries: 10
   Withdrawals: 30
@@ -155,7 +152,10 @@ Payout to: @nickname1
   Withdrawals: 20
   Total: 10 
 From:
-  @nickname4 -> 10 
+  @nickname4 -> 10
+------------------------------
+You can support me using this link. 
+https://buymeacoffee.com/mrrockka 
 ``` 
 ___
 

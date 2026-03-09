@@ -152,9 +152,6 @@ ___
 ``` 
 message id: 14 
 ------------------------------
-You can support me using this link. 
-https://buymeacoffee.com/mrrockka
-------------------------------
 Finale summary:
   1. @sergio_cartwright won 40
 Total: 40 (4 entries * 10 buy in)
@@ -165,6 +162,9 @@ Payout to: @sergio_cartwright
 From:
   @nickname3 -> 10
   @nickname2 -> 10
-  @nickname1 -> 10 
+  @nickname1 -> 10
+------------------------------
+You can support me using this link. 
+https://buymeacoffee.com/mrrockka 
 ``` 
 ___

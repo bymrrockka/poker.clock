@@ -7,9 +7,11 @@ import by.mrrockka.domain.Debtor
 import by.mrrockka.domain.Game
 import by.mrrockka.domain.Payout
 import by.mrrockka.domain.Person
+import by.mrrockka.domain.ServiceFee
 import by.mrrockka.domain.TournamentGame
 import by.mrrockka.domain.toMessageMetadata
 import by.mrrockka.domain.totalEntries
+import by.mrrockka.feature.ServiceFeeFeature
 import by.mrrockka.repo.PinType
 import by.mrrockka.service.BountyTournamentPlayerSummary
 import by.mrrockka.service.CalculationTelegramService
@@ -42,13 +44,14 @@ open class CalculationCommandHandlerImpl(
         private val pinMessageService: PinMessageService,
         private val calculationService: CalculationTelegramService,
         private val playerSummaryService: PlayerSummaryService,
+        private val serviceFeeFeature: ServiceFeeFeature,
 ) : CalculationCommandHandler {
 
     private val buyMeACoffee = """
+        |
         |${"-".repeat(30)}
         |You can support me using this link. 
         |https://buymeacoffee.com/mrrockka
-        |
         """.trimMargin()
 
     @CommandHandler(["/calculate"])
@@ -71,7 +74,7 @@ open class CalculationCommandHandlerImpl(
         return when (game) {
             is CashGame -> {
                 val summaries = playerSummaryService.summary(game).map { it as CashPlayerSummary }.associateBy { it.person }
-                buyMeACoffee + joinToString(separator = "\n") {
+                joinToString(separator = "\n") {
                     val summary = summaries[it.creditor]
                             ?: error("No game summary for ${it.creditor}")
                     """
@@ -100,7 +103,7 @@ open class CalculationCommandHandlerImpl(
                             """.trimMargin()
                         }
 
-                return buyMeACoffee + game.finalePlacesMessage() + payoutsResponse + equalResponse()
+                game.finalePlacesMessage() + payoutsResponse + equalResponse()
             }
 
             is BountyTournamentGame -> {
@@ -119,11 +122,11 @@ open class CalculationCommandHandlerImpl(
                             """.trimMargin()
                         }
 
-                return buyMeACoffee + game.finalePlacesMessage() + payoutsResponse + this.equalResponse()
+                game.finalePlacesMessage() + payoutsResponse + this.equalResponse()
             }
 
             else -> error("Unknown game type")
-        }
+        } + if (!serviceFeeFeature.enabled) buyMeACoffee else ""
     }
 
     private fun List<Payout>.equalResponse(): String {
@@ -133,7 +136,7 @@ open class CalculationCommandHandlerImpl(
             |${"-".repeat(30)}
             |Players played equally
             ${
-            zeros.joinToString("\n") {
+            zeros.filter { it.creditor !is ServiceFee }.joinToString("\n") {
                 when (val person = it.creditor) {
                     is BasicPerson -> "|  @${person.nickname}"
                     else -> error("Unknown person")

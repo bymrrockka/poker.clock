@@ -247,9 +247,6 @@ ___
 ``` 
 message id: 24 
 ------------------------------
-You can support me using this link. 
-https://buymeacoffee.com/mrrockka
-------------------------------
 Finale summary:
   1. @sergio_cartwright won 50
 Total: 50 (5 entries * 10 buy in)
@@ -263,6 +260,9 @@ From:
   @nickname1 -> 20
 ------------------------------
 Players played equally
-  @nickname2 
+  @nickname2
+------------------------------
+You can support me using this link. 
+https://buymeacoffee.com/mrrockka 
 ``` 
 ___

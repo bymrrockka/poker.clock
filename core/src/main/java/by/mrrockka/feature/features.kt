@@ -12,7 +12,7 @@ import java.math.BigDecimal
 class ServiceFeeFeature(
         var enabled: Boolean = false,
         var percent: BigDecimal = BigDecimal.ZERO,
-        var threshold: BigDecimal = BigDecimal("100"),
+        var threshold: BigDecimal = BigDecimal("1"),
         var description: String = "",
         val url: String = "",
 ) {
