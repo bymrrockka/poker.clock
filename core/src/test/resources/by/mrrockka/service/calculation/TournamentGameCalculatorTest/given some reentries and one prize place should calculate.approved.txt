@@ -1,3 +1,15 @@
+Game details: 
+ - total money: 170.0
+ - buy-in: 10.0
+ - players size: 12
+ - entries size: 17
+
+Prize summary:
+Position 1
+  Prize 170.0
+  Buyins: -10.0
+  Nickname jackie_rau
+
 Payout to: jackie_rau 
 Total: 160.0
 Debtors:

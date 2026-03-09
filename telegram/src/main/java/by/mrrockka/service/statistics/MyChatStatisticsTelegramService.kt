@@ -54,7 +54,7 @@ class MyChatStatisticsTelegramService(
     private fun PlayerSummary.won(): BigDecimal {
         return when (this) {
             is TournamentPlayerSummary -> prize
-            is BountyTournamentPlayerSummary -> prize + bounty.taken
+            is BountyTournamentPlayerSummary -> prize + bounty.total
             is CashPlayerSummary -> withdrawals
             else -> error("Unknown game summary type")
         }

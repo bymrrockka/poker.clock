@@ -1,5 +1,7 @@
 Game details: 
  - total money: 260
+ - buy-in: 10
+ - bounty: 10
  - players size: 13
  - entries size: 13
 

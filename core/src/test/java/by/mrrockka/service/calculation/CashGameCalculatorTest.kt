@@ -32,8 +32,7 @@ class CashGameCalculatorTest : ServiceFeeFeatureTest() {
             players(players.drop(1) + withdrawalPlayer)
         }
 
-        textApprover("given equal entries and one player wins pot should calculate. size $size")
-                .assertApproved(calculator.calculate(game).text())
+        game.calculateAndAssert(textApprover("given equal entries and one player wins pot should calculate. size $size"))
     }
 
     @Test
@@ -49,7 +48,7 @@ class CashGameCalculatorTest : ServiceFeeFeatureTest() {
             players(players.drop(2) + first + second)
         }
 
-        approver.assertApproved(calculator.calculate(game).text())
+        game.calculateAndAssert(approver)
     }
 
     @Test
@@ -64,7 +63,7 @@ class CashGameCalculatorTest : ServiceFeeFeatureTest() {
             players(players)
         }
 
-        approver.assertApproved(calculator.calculate(game).text())
+        game.calculateAndAssert(approver)
     }
 
     @Test
@@ -85,7 +84,7 @@ class CashGameCalculatorTest : ServiceFeeFeatureTest() {
             players(players.drop(1) + winner)
         }
 
-        approver.assertApproved(calculator.calculate(game).text())
+        game.calculateAndAssert(approver)
     }
 
     companion object {

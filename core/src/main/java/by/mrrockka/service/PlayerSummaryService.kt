@@ -96,7 +96,7 @@ class PlayerSummaryService(
     }
 
     private fun CashGame.playerSummary(compressedTotal: BigDecimal): List<CashPlayerSummary> {
-        val ratio = compressedTotal / total()
+        val ratio = compressedTotal.setScale(2) / total()
         val amountState = AmountState(compressedTotal)
 
         return players.map { player ->

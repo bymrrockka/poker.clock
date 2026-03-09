@@ -40,14 +40,7 @@ class BountyTournamentGameCalculatorTest : ServiceFeeFeatureTest() {
             finalePlaces(FinalPlace(1, toBounties.person))
         }
 
-        textApprover("given equal entries and one prize place should calculate.size $size")
-                .assertApproved(
-                        """
-                        |${game.text()}
-                        |
-                        |${calculator.calculate(game).text()}
-                    """.trimMargin(),
-                )
+        game.calculateAndAssert(textApprover("given equal entries and one prize place should calculate.size $size"))
     }
 
     @Test
@@ -76,13 +69,7 @@ class BountyTournamentGameCalculatorTest : ServiceFeeFeatureTest() {
             finalePlaces(FinalPlace(1, toBounties.person))
         }
 
-        approver.assertApproved(
-                """
-                |${game.text()}
-                |
-                |${calculator.calculate(game).text()}
-            """.trimMargin(),
-        )
+        game.calculateAndAssert(approver)
     }
 
     @Test
@@ -111,13 +98,7 @@ class BountyTournamentGameCalculatorTest : ServiceFeeFeatureTest() {
             )
         }
 
-        approver.assertApproved(
-                """
-                |${game.text()}
-                |
-                |${calculator.calculate(game).text()}
-            """.trimMargin(),
-        )
+        game.calculateAndAssert(approver)
     }
 
     @Test
@@ -140,13 +121,7 @@ class BountyTournamentGameCalculatorTest : ServiceFeeFeatureTest() {
             finalePlaces(FinalPlace(1, firstPlace.person))
         }
 
-        approver.assertApproved(
-                """
-                |${game.text()}
-                |
-                |${calculator.calculate(game).text()}
-            """.trimMargin(),
-        )
+        game.calculateAndAssert(approver)
     }
 
 
@@ -198,13 +173,7 @@ class BountyTournamentGameCalculatorTest : ServiceFeeFeatureTest() {
             )
         }
 
-        approver.assertApproved(
-                """
-                |${game.text()}
-                |
-                |${calculator.calculate(game).text()}
-            """.trimMargin(),
-        )
+        game.calculateAndAssert(approver)
     }
 
     @Test
@@ -231,13 +200,7 @@ class BountyTournamentGameCalculatorTest : ServiceFeeFeatureTest() {
             )
         }
 
-        approver.assertApproved(
-                """
-                |${game.text()}
-                |
-                |${calculator.calculate(game).text()}
-            """.trimMargin(),
-        )
+        game.calculateAndAssert(approver)
     }
 
     companion object {

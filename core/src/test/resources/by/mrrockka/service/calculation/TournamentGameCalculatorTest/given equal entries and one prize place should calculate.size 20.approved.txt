@@ -1,5 +1,6 @@
 Game details: 
  - total money: 200.0
+ - buy-in: 10.0
  - players size: 20
  - entries size: 20
 

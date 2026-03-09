@@ -1,3 +1,41 @@
+Game details: 
+ - total money: 100.0
+ - buy-in: 10.0
+ - players size: 10
+ - entries size: 10
+
+Cash summary:
+Nickname jackie_rau
+  Buy-ins: -10.0
+  Withdrawals: 10
+Nickname terisa_johnston
+  Buy-ins: -10.0
+  Withdrawals: 10
+Nickname santo_welch
+  Buy-ins: -10.0
+  Withdrawals: 10
+Nickname ashlee_lang
+  Buy-ins: -10.0
+  Withdrawals: 10
+Nickname stanton_boyer
+  Buy-ins: -10.0
+  Withdrawals: 10
+Nickname hope_wehner
+  Buy-ins: -10.0
+  Withdrawals: 10
+Nickname perry_hessel
+  Buy-ins: -10.0
+  Withdrawals: 10
+Nickname deb_becker
+  Buy-ins: -10.0
+  Withdrawals: 10
+Nickname refugia_koss
+  Buy-ins: -10.0
+  Withdrawals: 10
+Nickname ronnie_schuppe
+  Buy-ins: -10.0
+  Withdrawals: 10.0
+
 Payout to: jackie_rau 
 Total: 0
 Debtors:

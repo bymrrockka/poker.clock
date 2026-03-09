@@ -1,5 +1,7 @@
 Game details: 
  - total money: 220
+ - buy-in: 10.0
+ - bounty: 10.0
  - players size: 11
  - entries size: 11
 
@@ -7,12 +9,12 @@ Prize summary:
 Position 1
   Prize 82
   Buyins: -10.0
-  Bounties: 100 (taken 10 - given 0)
+  Bounties: 100.0 (taken 10 - given 0)
   Nickname jackie_rau
 Position 2
   Prize 28
   Buyins: -10.0
-  Bounties: -10 (taken 0 - given 1)
+  Bounties: -10.0 (taken 0 - given 1)
   Nickname terisa_johnston
 
 Payout to: jackie_rau 

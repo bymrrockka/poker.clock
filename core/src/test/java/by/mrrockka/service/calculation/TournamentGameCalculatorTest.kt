@@ -33,14 +33,7 @@ class TournamentGameCalculatorTest : ServiceFeeFeatureTest() {
             finalePlaces(FinalPlace(1, players[0].person))
         }
 
-        textApprover("given equal entries and one prize place should calculate.size $size")
-                .assertApproved(
-                        """
-                        |${game.text()}
-                        |
-                        |${calculator.calculate(game).text()}
-                    """.trimMargin(),
-                )
+        game.calculateAndAssert(textApprover("given equal entries and one prize place should calculate.size $size"))
     }
 
     @Test
@@ -63,7 +56,7 @@ class TournamentGameCalculatorTest : ServiceFeeFeatureTest() {
             finalePlaces(FinalPlace(1, players[0].person))
         }
 
-        approver.assertApproved(calculator.calculate(game).text())
+        game.calculateAndAssert(approver)
     }
 
     @Test
@@ -86,13 +79,7 @@ class TournamentGameCalculatorTest : ServiceFeeFeatureTest() {
             )
         }
 
-        approver.assertApproved(
-                """
-                |${game.text()}
-                |
-                |${calculator.calculate(game).text()}
-            """.trimMargin(),
-        )
+        game.calculateAndAssert(approver)
     }
 
     @Test
@@ -121,13 +108,7 @@ class TournamentGameCalculatorTest : ServiceFeeFeatureTest() {
             )
         }
 
-        approver.assertApproved(
-                """
-                |${game.text()}
-                |
-                |${calculator.calculate(game).text()}
-            """.trimMargin(),
-        )
+        game.calculateAndAssert(approver)
     }
 
     @Test
@@ -154,13 +135,7 @@ class TournamentGameCalculatorTest : ServiceFeeFeatureTest() {
             )
         }
 
-        approver.assertApproved(
-                """
-                |${game.text()}
-                |
-                |${calculator.calculate(game).text()}
-            """.trimMargin(),
-        )
+        game.calculateAndAssert(approver)
     }
 
     @Test
@@ -187,13 +162,7 @@ class TournamentGameCalculatorTest : ServiceFeeFeatureTest() {
             )
         }
 
-        approver.assertApproved(
-                """
-                |${game.text()}
-                |
-                |${calculator.calculate(game).text()}
-            """.trimMargin(),
-        )
+        game.calculateAndAssert(approver)
     }
 
     @Test
@@ -214,13 +183,7 @@ class TournamentGameCalculatorTest : ServiceFeeFeatureTest() {
             )
         }
 
-        approver.assertApproved(
-                """
-                |${game.text()}
-                |
-                |${calculator.calculate(game).text()}
-            """.trimMargin(),
-        )
+        game.calculateAndAssert(approver)
     }
 
     companion object {

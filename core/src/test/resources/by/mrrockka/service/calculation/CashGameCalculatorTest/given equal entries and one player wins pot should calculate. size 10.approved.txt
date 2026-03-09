@@ -1,3 +1,14 @@
+Game details: 
+ - total money: 100.0
+ - buy-in: 10.0
+ - players size: 10
+ - entries size: 10
+
+Cash summary:
+Nickname jackie_rau
+  Buy-ins: -10.0
+  Withdrawals: 100.0
+
 Payout to: jackie_rau 
 Total: 90.0
 Debtors:

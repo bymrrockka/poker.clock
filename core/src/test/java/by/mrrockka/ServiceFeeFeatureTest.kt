@@ -1,12 +1,9 @@
 package by.mrrockka
 
-import by.mrrockka.domain.BountyTournamentGame
-import by.mrrockka.domain.CashGame
 import by.mrrockka.domain.FinalPlace
 import by.mrrockka.domain.Game
 import by.mrrockka.domain.Player
 import by.mrrockka.domain.PositionPrize
-import by.mrrockka.domain.TournamentGame
 import by.mrrockka.feature.ServiceFeeFeature
 import by.mrrockka.service.AmountState
 import com.oneeyedmen.okeydoke.Approver
@@ -30,18 +27,7 @@ abstract class ServiceFeeFeatureTest : AbstractCalculatorTest() {
 
         val game = game(playersSize = 13, prizeSize = 3)
 
-        when (game) {
-            is CashGame -> approver.assertApproved(calculator.calculate(game).text())
-            is TournamentGame, is BountyTournamentGame -> approver.assertApproved(
-                    """
-                    |${game.text()}
-                    |
-                    |${calculator.calculate(game).text()}
-                """.trimMargin(),
-            )
-
-            else -> error("Invalid game")
-        }
+        game.calculateAndAssert(approver)
     }
 
     protected fun prizePool(size: Int): List<PositionPrize> {

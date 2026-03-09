@@ -3,6 +3,7 @@ package by.mrrockka
 import by.mrrockka.CoreRandoms.Companion.coreRandoms
 import by.mrrockka.domain.BasicPerson
 import by.mrrockka.domain.BountyTournamentGame
+import by.mrrockka.domain.CashGame
 import by.mrrockka.domain.Debtor
 import by.mrrockka.domain.Game
 import by.mrrockka.domain.Payout
@@ -11,8 +12,10 @@ import by.mrrockka.domain.TournamentGame
 import by.mrrockka.extension.TextApproverExtension
 import by.mrrockka.feature.ServiceFeeFeature
 import by.mrrockka.service.BountyTournamentPlayerSummary
+import by.mrrockka.service.CashPlayerSummary
 import by.mrrockka.service.GameCalculator
 import by.mrrockka.service.PlayerSummaryService
+import com.oneeyedmen.okeydoke.Approver
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
@@ -31,6 +34,16 @@ abstract class AbstractCalculatorTest {
     protected fun changeFeeTo(serviceFeeFeature: ServiceFeeFeature) {
         playerSummaryService = PlayerSummaryService(serviceFeeFeature)
         calculator = GameCalculator(serviceFeeFeature, playerSummaryService)
+    }
+
+    fun Game.calculateAndAssert(approver: Approver) {
+        approver.assertApproved(
+                """
+                    |${text()}
+                    |
+                    |${calculator.calculate(this).text()}
+                """.trimMargin(),
+        )
     }
 
     @AfterEach
@@ -72,16 +85,17 @@ abstract class AbstractCalculatorTest {
         }
     }
 
-    fun Game.text(): String = """
-        |Game details: 
-        | - total money: ${total()}
-        | - players size: ${players.size}
-        | - entries size: ${players.flatMap { it.entries }.count()}
-        |
-        |Prize summary:
-        |
-    """.trimMargin() + when (this) {
-        is TournamentGame -> playerSummaryService.tournamentSummary(this)
+    fun Game.text(): String = when (this) {
+        is TournamentGame -> """
+            |Game details: 
+            | - total money: ${total()}
+            | - buy-in: ${buyIn}
+            | - players size: ${players.size}
+            | - entries size: ${players.flatMap { it.entries }.count()}
+            |
+            |Prize summary:
+            |
+        """.trimMargin() + playerSummaryService.tournamentSummary(this)
                 .filter { it.position != null }
                 .sortedBy { it.position }
                 .joinToString("\n") {
@@ -93,7 +107,17 @@ abstract class AbstractCalculatorTest {
                 """.trimMargin()
                 }
 
-        is BountyTournamentGame -> playerSummaryService.tournamentSummary(this)
+        is BountyTournamentGame -> """
+            |Game details: 
+            | - total money: ${total()}
+            | - buy-in: ${buyIn}
+            | - bounty: ${bounty}
+            | - players size: ${players.size}
+            | - entries size: ${players.flatMap { it.entries }.count()}
+            |
+            |Prize summary:
+            |
+        """.trimMargin() + playerSummaryService.tournamentSummary(this)
                 .map { it as BountyTournamentPlayerSummary }
                 .filter { it.position != null || it.total() > BigDecimal.ZERO }
                 .sortedBy { it.position }
@@ -116,8 +140,28 @@ abstract class AbstractCalculatorTest {
                     }
                 }
 
-        else -> error("Unknown game type!")
-    }
+        is CashGame -> """
+            |Game details: 
+            | - total money: ${total()}
+            | - buy-in: ${buyIn}
+            | - players size: ${players.size}
+            | - entries size: ${players.flatMap { it.entries }.count()}
+            |
+            |Cash summary:
+            |
+        """.trimMargin() + playerSummaryService.summary(this)
+                .map { it as CashPlayerSummary }
+                .filter { it.withdrawals > BigDecimal.ZERO }
+                .sortedBy { it.total() }
+                .joinToString("\n") {
+                    """
+                        |Nickname ${it.person.nickname}
+                        |  Buy-ins: -${it.entries()}
+                        |  Withdrawals: ${it.withdrawals}
+                    """.trimMargin()
+                }
 
+        else -> error("Unknown game type: ${this::class.simpleName}")
+    }
 
 }

@@ -1,5 +1,7 @@
 Game details: 
  - total money: 40
+ - buy-in: 10.0
+ - bounty: 10.0
  - players size: 2
  - entries size: 2
 
@@ -7,7 +9,7 @@ Prize summary:
 Position 1
   Prize 20
   Buyins: -10.0
-  Bounties: 10 (taken 1 - given 0)
+  Bounties: 10.0 (taken 1 - given 0)
   Nickname jackie_rau
 
 Payout to: jackie_rau 
