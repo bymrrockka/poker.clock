@@ -79,16 +79,16 @@ class PlayerSummaryService(
     }
 
     private fun BigDecimal.bountySummary(players: List<BountyPlayer>, bounty: BigDecimal): Map<BasicPerson, BountySummary> {
-        val average = (this.setScale(1) / players.flatMap { it.entries }.size.toBigDecimal()).up()
+        val average = this.setScale(1) / players.flatMap { it.entries }.size.toBigDecimal()
         //last player safes his bounty
         val state = AmountState(this - bounty)
 
         return players
                 .mapIndexed { index, player ->
                     val (taken, given) = player.takenToGiven()
-                    val takenCompressed = taken.size.toBigDecimal() * average
+                    val takenCompressed = average * taken.size.toBigDecimal()
                     player.person to BountySummary(
-                            total = (if (taken.size - given.size > 0) state.decreaseAndGet(takenCompressed) else taken.total()) - given.total(),
+                            total = state.decreaseAndGet(takenCompressed) - given.total(),
                             taken = taken.size,
                             given = given.size,
                     )
@@ -103,7 +103,7 @@ class PlayerSummaryService(
             CashPlayerSummary(
                     person = player.person,
                     buyIn = player.entries.total(),
-                    withdrawals = if (index == players.size - 1) state.all() else state.decreaseAndGet(player.withdrawals.total() * ratio),
+                    withdrawals = state.decreaseAndGet(player.withdrawals.total() * ratio),
             )
         }
     }
@@ -117,7 +117,7 @@ class PlayerSummaryService(
                     FinalPrizeSummary(
                             position = place.position,
                             person = place.person,
-                            amount = if (index == prizePoll.size - 1) state.all() else state.decreaseAndGet(amount),
+                            amount = state.decreaseAndGet(amount),
                     )
                 }.associateBy { it.person }
     }

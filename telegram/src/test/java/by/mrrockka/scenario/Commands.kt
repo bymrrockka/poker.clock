@@ -35,11 +35,11 @@ class Commands private constructor() {
         fun entry(amount: Int? = null): String = "${entry} @me ${if (amount == null) "" else amount}"
         fun help(command: String? = null): String = "$help ${command ?: ""}"
 
-        fun List<String>.createGame(type: GameType, buyin: BigDecimal, alias: Boolean = false): String {
+        fun List<String>.createGame(type: GameType, buyin: BigDecimal, alias: Boolean = false, bounty: BigDecimal = buyin): String {
             return """
                 ${type.toCommand(alias)}
                 buyin: $buyin
-                ${if (type == GameType.BOUNTY) "bounty: $buyin" else ""}
+                ${if (type == GameType.BOUNTY) "bounty: $bounty" else ""}
                 ${this.joinToString { "@$it" }}
             """.trimIndent()
         }
