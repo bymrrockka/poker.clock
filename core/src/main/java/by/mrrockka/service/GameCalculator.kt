@@ -16,40 +16,12 @@ open class GameCalculator(
         private val serviceFeeFeature: ServiceFeeFeature,
         private val playerSummaryService: PlayerSummaryService,
 ) {
-    /*
-    * idea is to get player summaries not as amounts but as game details (buyins, bounties etc)
-    * this probably not gonna work with cash game so it should be a special case for it
-    *
-    * on the other side is calculation as is right now but with compressed total
-    * in that case it's not clear how to spread the fee for bounties and withdrawals
-    *
-    * For tournaments
-    * I already use amount state to calculate prize amounts for players - no problems here
-    *
-    * For Bounty Tournaments
-    * I would need to use compressed total for calculations
-    * At first I require to divide it by half (scale down bounty part and subtract from total prize part)
-    * Use prize and amount state to calculate prizes
-    *
-    * For bounties I would need
-    * 1. overall size of bounties
-    * 2. divide bounty total by size
-    * 3. Use amount state to spread the resulted amount
-    *
-    * For Cash
-    * It's required to calculate percentage of the overall pot for each player did withdraw
-    * Then apply this percentage on amount state to calculate players payouts
-    *
-    * */
-
-
     fun calculate(game: Game): List<Payout> {
         val computedServiceAmounts = game.setup()
         val computedPlayerAmounts = playerSummaryService.summary(game).map { it.toComputedAmount() }
         return (computedPlayerAmounts + computedServiceAmounts).toPayouts()
     }
 
-    //could be extended to a processing strategies
     private fun Game.setup(): List<ComputedAmount> {
         return if (serviceFeeFeature.enabled) {
             val serviceFeeAmount = serviceFeeFeature.calculate(total())
@@ -73,7 +45,7 @@ open class GameCalculator(
 
     private fun validate(creditors: List<ComputedAmount>, debtors: List<ComputedAmount>, equals: List<ComputedAmount>) {
         check((creditors + debtors + equals).isNotEmpty()) { "There must be at least one player in a game" }
-        check(creditors.total() == debtors.total()) { "Debtors and creditors totals are not equal" }
+        check(creditors.total() == debtors.total()) { "Debtors and creditors totals are not equal. Deviation ${creditors.total() - debtors.total()}" }
 
         when {
             debtors.isEmpty() && creditors.isNotEmpty() -> error("There must be at least one debtor")
@@ -91,11 +63,10 @@ open class GameCalculator(
             debtorsLeft = debtorsLeft - debtors
             Payout(creditor.person, creditor.amount, debtors)
         }.let { prefilled ->
-            var payouts = prefilled
+            var filled = prefilled
             debtorsLeft.map { debtor ->
                 var debt = debtor.amount
-                payouts = prefilled
-                        .filter { it.debtors.map { it.debt }.total() - it.total != ZERO }
+                filled = prefilled
                         .map { payout ->
                             val leftToPay = payout.total - payout.debtors.map { it.debt }.total()
                             if (leftToPay > ZERO) {
@@ -104,7 +75,7 @@ open class GameCalculator(
                             } else payout
                         }
             }
-            payouts
+            filled
         }
 
         check(total() == payouts.map { it.total }.total()) { "${debtorsLeft.size} Debtors left unprocessed" }

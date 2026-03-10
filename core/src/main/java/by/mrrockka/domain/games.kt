@@ -1,6 +1,6 @@
 package by.mrrockka.domain
 
-import by.mrrockka.service.scaleDown
+import by.mrrockka.service.halfDown
 import java.math.BigDecimal
 import java.math.BigDecimal.ZERO
 import java.time.Instant
@@ -91,8 +91,8 @@ fun game(
         GameType.TOURNAMENT ->
             TournamentGame(
                     id = UUID.randomUUID(),
-                    buyIn = buyin.scaleDown(),
-                    stack = stack.scaleDown(),
+                    buyIn = buyin.halfDown(),
+                    stack = stack.halfDown(),
                     playersProvider = { emptyList() },
                     createdAt = createdAt,
             )
@@ -100,8 +100,8 @@ fun game(
         GameType.CASH ->
             CashGame(
                     id = UUID.randomUUID(),
-                    buyIn = buyin.scaleDown(),
-                    stack = stack.scaleDown(),
+                    buyIn = buyin.halfDown(),
+                    stack = stack.halfDown(),
                     playersProvider = { emptyList() },
                     createdAt = createdAt,
             )
@@ -110,9 +110,9 @@ fun game(
             check(bounty != null) { "Bounty should be specified" }
             BountyTournamentGame(
                     id = UUID.randomUUID(),
-                    buyIn = buyin.scaleDown(),
-                    stack = stack.scaleDown(),
-                    bounty = bounty.scaleDown(),
+                    buyIn = buyin.halfDown(),
+                    stack = stack.halfDown(),
+                    bounty = bounty.halfDown(),
                     playersProvider = { emptyList() },
                     createdAt = createdAt,
             )

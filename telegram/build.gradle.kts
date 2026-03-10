@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.bundles.db)
     implementation(libs.bundles.kotlinLibs)
     implementation(libs.bundles.exposed)
+    implementation(libs.bundles.jackson)
 
     runtimeOnly(libs.aspectjWeaver)
 

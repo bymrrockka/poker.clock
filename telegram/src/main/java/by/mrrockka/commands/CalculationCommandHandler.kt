@@ -21,7 +21,7 @@ import by.mrrockka.service.PinMessageService
 import by.mrrockka.service.PlayerPrizeSummary
 import by.mrrockka.service.PlayerSummaryService
 import by.mrrockka.service.TournamentPlayerSummary
-import by.mrrockka.service.scaleDown
+import by.mrrockka.service.halfDown
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.CommandHandler
 import eu.vendeli.tgbot.api.message.message
@@ -51,7 +51,7 @@ open class CalculationCommandHandlerImpl(
         |
         |${"-".repeat(30)}
         |You can support me using this link. 
-        |https://buymeacoffee.com/mrrockka
+        |${serviceFeeFeature.url}
         """.trimMargin()
 
     @CommandHandler(["/calculate"])
@@ -60,8 +60,10 @@ open class CalculationCommandHandlerImpl(
         val game = gameService.findGame(metadata)
         calculationService.calculate(metadata)
                 .let { payouts ->
-                    message { payouts.response(game) }
-                            .sendReturning(to = metadata.chatId, via = bot)
+                    message {
+                        payouts.filter { it.creditor !is ServiceFee }
+                                .response(game) + payouts.serviceFeeText()
+                    }.sendReturning(to = metadata.chatId, via = bot)
                             .onFailure { error("Failed to send payouts message") }
                             ?: error("No message returned from telegram api")
                 }.also { message ->
@@ -84,7 +86,7 @@ open class CalculationCommandHandlerImpl(
                     |  Withdrawals: ${summary.withdrawals.setScale(0)}
                     |  Total: ${it.total.setScale(0)} 
                     |${it.debtors.message()}
-                    """.trimMargin() + equalResponse()
+                    """.trimMargin()
                 }
             }
 
@@ -103,7 +105,7 @@ open class CalculationCommandHandlerImpl(
                             """.trimMargin()
                         }
 
-                game.finalePlacesMessage() + payoutsResponse + equalResponse()
+                game.finalePlacesMessage() + payoutsResponse
             }
 
             is BountyTournamentGame -> {
@@ -115,18 +117,18 @@ open class CalculationCommandHandlerImpl(
                             """
                             |${"-".repeat(30)}
                             |Payout to: @${summary.person.nickname}
-                            |  Entries: ${summary.entries().scaleDown()}
-                            |  Bounties: ${summary.bounty.total.scaleDown()} (taken ${summary.bounty.taken} - given ${summary.bounty.given}) 
-                            |  Total: ${it.total.scaleDown()} (won ${summary.prize.scaleDown()} - entries ${summary.entries().scaleDown()} ${if (summary.bounty.total < ZERO) "-" else "+"} bounties ${summary.bounty.total.scaleDown()})
+                            |  Entries: ${summary.entries().halfDown()}
+                            |  Bounties: ${summary.bounty.total.halfDown()} (taken ${summary.bounty.taken} - given ${summary.bounty.given}) 
+                            |  Total: ${it.total.halfDown()} (won ${summary.prize.halfDown()} - entries ${summary.entries().halfDown()} ${if (summary.bounty.total < ZERO) "-" else "+"} bounties ${summary.bounty.total.halfDown()})
                             |${it.debtors.message()}
                             """.trimMargin()
                         }
 
-                game.finalePlacesMessage() + payoutsResponse + this.equalResponse()
+                game.finalePlacesMessage() + payoutsResponse
             }
 
             else -> error("Unknown game type")
-        } + if (!serviceFeeFeature.enabled) buyMeACoffee else ""
+        } + equalResponse()
     }
 
     private fun List<Payout>.equalResponse(): String {
@@ -176,4 +178,22 @@ open class CalculationCommandHandlerImpl(
     private fun List<Payout>.prepare(summaries: Map<out Person, PlayerPrizeSummary>): List<Payout> = filter { it.total > ZERO }
             .sortedBy { summaries[it.creditor]?.position }
             .reversed()
+
+    private fun List<Payout>.serviceFeeIsEqual(): Boolean = any { it.creditor is ServiceFee && it.total == ZERO }
+
+    private fun List<Payout>.serviceFeeText(): String {
+        return if (serviceFeeFeature.enabled && !serviceFeeIsEqual()) {
+            find { it.creditor is ServiceFee }
+                    ?.let { fee ->
+                        """
+                            |
+                            |${"-".repeat(30)}
+                            |${serviceFeeFeature.description}
+                            |  URL: ${serviceFeeFeature.url}
+                            |  Total: ${fee.total.halfDown()}
+                            |${fee.debtors.message()}
+                        """.trimMargin()
+                    } ?: buyMeACoffee
+        } else buyMeACoffee
+    }
 }

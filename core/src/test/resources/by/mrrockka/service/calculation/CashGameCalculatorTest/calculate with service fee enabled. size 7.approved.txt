@@ -1,0 +1,39 @@
+Game details: 
+ - total money: 70
+ - buy-in: 10
+ - players size: 7
+ - entries size: 7
+
+Cash summary:
+Nickname terisa_johnston
+  Buy-ins: -10
+  Withdrawals: 26
+Nickname jackie_rau
+  Buy-ins: -10
+  Withdrawals: 35
+
+Payout to: jackie_rau 
+Total: 25
+Debtors:
+  - Debtor: ashlee_lang
+    Debt: 10
+  - Debtor: santo_welch
+    Debt: 10
+  - Debtor: perry_hessel
+    Debt: 5
+______________________________
+Payout to: terisa_johnston 
+Total: 16
+Debtors:
+  - Debtor: stanton_boyer
+    Debt: 10
+  - Debtor: perry_hessel
+    Debt: 6
+______________________________
+Description: Service Fee
+URL: https://www.mrrockka.by
+Total: 9
+Debtors:
+  - Debtor: perry_hessel
+    Debt: 9
+______________________________

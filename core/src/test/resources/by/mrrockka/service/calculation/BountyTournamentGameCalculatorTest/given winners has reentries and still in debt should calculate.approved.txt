@@ -8,7 +8,7 @@ Game details:
 Prize summary:
 Bounty winner
   Buyins: -10.0
-  Bounties: 30 (taken 4 - given 1)
+  Bounties: 30.0 (taken 4 - given 1)
   Nickname santo_welch
 Position 1
   Prize 35

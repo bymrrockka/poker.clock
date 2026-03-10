@@ -8,7 +8,7 @@ import by.mrrockka.builder.plus
 import by.mrrockka.domain.CashPlayer
 import by.mrrockka.domain.Game
 import by.mrrockka.extension.textApprover
-import by.mrrockka.service.scaleDown
+import by.mrrockka.service.halfDown
 import com.oneeyedmen.okeydoke.Approver
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -105,7 +105,7 @@ class CashGameCalculatorTest : ServiceFeeFeatureTest() {
     override fun game(buyin: BigDecimal, playersSize: Int, prizeSize: Int): Game {
         val withdrawal = buyin
         val players = cashPlayers(playersSize) { buyin(buyin) }
-        val withdrawSize = (playersSize / prizeSize).toBigDecimal().scaleDown().toInt()
+        val withdrawSize = (playersSize / prizeSize).toBigDecimal().halfDown().toInt()
         val first = players[0].addWithdrawals(withdrawal, size = playersSize - withdrawSize)
         val second = players[1].addWithdrawals(withdrawal, size = withdrawSize)
         return cashGame {

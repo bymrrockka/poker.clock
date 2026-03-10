@@ -12,6 +12,14 @@ spring:
 github:
   pipeline: ${GITHUB_PIPELINE:false}
 
+feature:
+  service-fee:
+    description: Game calculation fee
+    enabled: true
+    url: https://buymeacoffee.com/mrrockka
+    percent: 5
+    threshold: 5
+
 bot:
   properties:
     enabled: true

@@ -1,0 +1,34 @@
+Game details: 
+ - total money: 60
+ - buy-in: 10
+ - bounty: 10
+ - players size: 3
+ - entries size: 3
+
+Prize summary:
+Position 1
+  Prize 13
+  Buyins: -10
+  Bounties: 16 (taken 2 - given 0)
+  Nickname jackie_rau
+Position 2
+  Prize 13
+  Buyins: -10
+  Bounties: -10 (taken 0 - given 1)
+  Nickname terisa_johnston
+
+Payout to: jackie_rau 
+Total: 19
+Debtors:
+  - Debtor: terisa_johnston
+    Debt: 7
+  - Debtor: santo_welch
+    Debt: 12
+______________________________
+Description: Service Fee
+URL: https://www.mrrockka.by
+Total: 8
+Debtors:
+  - Debtor: santo_welch
+    Debt: 8
+______________________________

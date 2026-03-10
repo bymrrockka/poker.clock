@@ -4,18 +4,22 @@ import by.mrrockka.domain.FinalPlace
 import by.mrrockka.domain.Game
 import by.mrrockka.domain.Player
 import by.mrrockka.domain.PositionPrize
+import by.mrrockka.extension.textApprover
 import by.mrrockka.feature.ServiceFeeFeature
 import by.mrrockka.service.AmountState
 import com.oneeyedmen.okeydoke.Approver
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 import java.math.BigDecimal
 
 abstract class ServiceFeeFeatureTest : AbstractCalculatorTest() {
 
     abstract fun game(buyin: BigDecimal = BigDecimal("10"), playersSize: Int, prizeSize: Int = 1): Game
 
-    @Test
-    fun `calculate with service fee enabled`(approver: Approver) {
+    @ParameterizedTest
+    @ValueSource(ints = [3, 5, 7, 8, 11, 14, 16, 30])
+    fun `calculate with service fee enabled`(size: Int) {
         val feature = ServiceFeeFeature(
                 enabled = true,
                 percent = BigDecimal("13"),
@@ -25,9 +29,9 @@ abstract class ServiceFeeFeatureTest : AbstractCalculatorTest() {
         )
         changeFeeTo(feature)
 
-        val game = game(playersSize = 13, prizeSize = 3)
+        val game = game(playersSize = size, prizeSize = 2)
 
-        game.calculateAndAssert(approver)
+        game.calculateAndAssert(textApprover("calculate with service fee enabled. size $size"))
     }
 
     @Test
