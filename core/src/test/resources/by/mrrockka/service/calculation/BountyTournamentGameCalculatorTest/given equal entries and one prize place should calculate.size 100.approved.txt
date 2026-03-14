@@ -7,10 +7,11 @@ Game details:
 
 Prize summary:
 Position 1
-  Prize 1000
-  Buyins: -10.0
+  Prize 1000.0
+  Buy-ins: -10.0
   Bounties: 990.0 (taken 99 - given 0)
   Nickname jackie_rau
+  Total: 1980.0
 
 Payout to: jackie_rau 
 Total: 1980.0

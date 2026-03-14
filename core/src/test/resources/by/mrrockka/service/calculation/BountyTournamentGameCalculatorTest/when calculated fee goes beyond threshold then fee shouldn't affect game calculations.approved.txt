@@ -8,9 +8,10 @@ Game details:
 Prize summary:
 Position 1
   Prize 30
-  Buyins: -10
+  Buy-ins: -10
   Bounties: 20 (taken 2 - given 0)
   Nickname jackie_rau
+  Total: 40
 
 Payout to: jackie_rau 
 Total: 40
@@ -19,10 +20,4 @@ Debtors:
     Debt: 20
   - Debtor: terisa_johnston
     Debt: 20
-______________________________
-Description: Service Fee
-URL: https://www.mrrockka.by
-Total: 0
-Debtors:
-
 ______________________________

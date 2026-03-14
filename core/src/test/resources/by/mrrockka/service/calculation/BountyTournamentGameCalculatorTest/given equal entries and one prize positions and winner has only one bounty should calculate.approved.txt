@@ -7,14 +7,16 @@ Game details:
 
 Prize summary:
 Bounty winner
-  Buyins: -10.0
+  Buy-ins: -10.0
   Bounties: 70.0 (taken 8 - given 1)
   Nickname terisa_johnston
+  Total: 60.0
 Position 1
-  Prize 100
-  Buyins: -10.0
+  Prize 100.0
+  Buy-ins: -10.0
   Bounties: 10.0 (taken 1 - given 0)
   Nickname jackie_rau
+  Total: 100.0
 
 Payout to: jackie_rau 
 Total: 100.0

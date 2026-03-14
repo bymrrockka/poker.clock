@@ -7,21 +7,23 @@ Game details:
 
 Prize summary:
 Position 1
-  Prize 13
-  Buyins: -10
-  Bounties: 16 (taken 2 - given 0)
+  Prize 15
+  Buy-ins: -10
+  Bounties: 20 (taken 2 - given 0)
   Nickname jackie_rau
+  Total: 25
 Position 2
-  Prize 13
-  Buyins: -10
+  Prize 15
+  Buy-ins: -10
   Bounties: -10 (taken 0 - given 1)
   Nickname terisa_johnston
+  Total: -5
 
 Payout to: jackie_rau 
-Total: 19
+Total: 17
 Debtors:
   - Debtor: terisa_johnston
-    Debt: 7
+    Debt: 5
   - Debtor: santo_welch
     Debt: 12
 ______________________________

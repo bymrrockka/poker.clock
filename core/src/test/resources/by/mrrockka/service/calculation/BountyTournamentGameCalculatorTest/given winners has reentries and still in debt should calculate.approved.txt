@@ -7,19 +7,22 @@ Game details:
 
 Prize summary:
 Bounty winner
-  Buyins: -10.0
+  Buy-ins: -10.0
   Bounties: 30.0 (taken 4 - given 1)
   Nickname santo_welch
+  Total: 20.0
 Position 1
   Prize 35
-  Buyins: -50.0
+  Buy-ins: -50.0
   Bounties: -20.0 (taken 2 - given 4)
   Nickname jackie_rau
+  Total: -35.0
 Position 2
-  Prize 35
-  Buyins: -10.0
+  Prize 35.0
+  Buy-ins: -10.0
   Bounties: -10.0 (taken 0 - given 1)
   Nickname terisa_johnston
+  Total: 15.0
 
 Payout to: santo_welch 
 Total: 20.0

@@ -6,13 +6,15 @@ Game details:
 
 Prize summary:
 Position 1
-  Prize 35
-  Buyins: -10
+  Prize 40
+  Buy-ins: -10
   Nickname jackie_rau
+  Total: 30
 Position 2
-  Prize 35
-  Buyins: -10
+  Prize 40
+  Buy-ins: -10
   Nickname terisa_johnston
+  Total: 30
 
 Payout to: jackie_rau 
 Total: 25

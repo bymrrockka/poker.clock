@@ -10,35 +10,31 @@ import by.mrrockka.domain.PositionPrize
 import by.mrrockka.domain.TournamentGame
 import by.mrrockka.domain.takenToGiven
 import by.mrrockka.domain.total
-import by.mrrockka.feature.ServiceFeeFeature
+import by.mrrockka.domain.totalEntries
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 import java.math.RoundingMode
 
 @Service
-class PlayerSummaryService(
-        private val serviceFeeFeature: ServiceFeeFeature,
-) {
+class PlayerSummaryService {
     fun tournamentSummary(game: Game): List<PlayerPrizeSummary> = summary(game)
             .filter { it is PlayerPrizeSummary }
             .map { it as PlayerPrizeSummary }
 
     fun summary(game: Game): List<PlayerSummary> {
-        val serviceFeeAmount = serviceFeeFeature.calculate(game.total())
-        val compressedTotal = game.total() - serviceFeeAmount
         return when (game) {
-            is TournamentGame -> game.playerSummary(compressedTotal)
-            is BountyTournamentGame -> game.playerSummary(compressedTotal)
-            is CashGame -> game.playerSummary(compressedTotal)
+            is TournamentGame -> game.playerSummary()
+            is BountyTournamentGame -> game.playerSummary()
+            is CashGame -> game.playerSummary()
             else -> error("Unknown game type")
         }
     }
 
-    private fun TournamentGame.playerSummary(compressedTotal: BigDecimal): List<TournamentPlayerSummary> {
+    private fun TournamentGame.playerSummary(): List<TournamentPlayerSummary> {
         checkNotNull(finalePlaces) { "Can't calculate with no finale places" }
         checkNotNull(prizePool) { "Can't calculate with no prize pool" }
 
-        val prizeSummary = compressedTotal.prizeSummary(prizePool!!, finalePlaces!!)
+        val prizeSummary = total().prizeSummary(prizePool!!, finalePlaces!!)
 
         return players.map { player ->
             val prize = prizeSummary[player.person]
@@ -52,17 +48,12 @@ class PlayerSummaryService(
         }
     }
 
-    private fun BountyTournamentGame.playerSummary(compressedTotal: BigDecimal): List<BountyTournamentPlayerSummary> {
+    private fun BountyTournamentGame.playerSummary(): List<BountyTournamentPlayerSummary> {
         checkNotNull(finalePlaces) { "Can't calculate with no finale places" }
         checkNotNull(prizePool) { "Can't calculate with no prize pool" }
 
-        val (prizeTotal, bountyTotal) = compressedTotal.let { amount ->
-            val halfDown = (amount.setScale(2) / 2.toBigDecimal()).halfDown()
-            amount - halfDown to halfDown
-        }
-
-        val prizeSummary = prizeTotal.prizeSummary(prizePool!!, finalePlaces!!)
-        val bountySummary = bountyTotal.bountySummary(players, bounty)
+        val prizeSummary = players.totalEntries().prizeSummary(prizePool!!, finalePlaces!!)
+        val bountySummary = players.bountySummary()
 
         return players.map { player ->
             val prize = prizeSummary[player.person]
@@ -78,32 +69,23 @@ class PlayerSummaryService(
         }
     }
 
-    private fun BigDecimal.bountySummary(players: List<BountyPlayer>, bounty: BigDecimal): Map<BasicPerson, BountySummary> {
-        val average = this.setScale(1) / players.flatMap { it.entries }.size.toBigDecimal()
-        //last player safes his bounty
-        val state = AmountState(this - bounty)
-
-        return players
-                .mapIndexed { index, player ->
-                    val (taken, given) = player.takenToGiven()
-                    val takenCompressed = average * taken.size.toBigDecimal()
-                    player.person to BountySummary(
-                            total = state.decreaseAndGet(takenCompressed) - given.total(),
-                            taken = taken.size,
-                            given = given.size,
-                    )
-                }.toMap()
+    private fun List<BountyPlayer>.bountySummary(): Map<BasicPerson, BountySummary> {
+        return mapIndexed { index, player ->
+            val (taken, given) = player.takenToGiven()
+            player.person to BountySummary(
+                    total = taken.total() - given.total(),
+                    taken = taken.size,
+                    given = given.size,
+            )
+        }.toMap()
     }
 
-    private fun CashGame.playerSummary(compressedTotal: BigDecimal): List<CashPlayerSummary> {
-        val ratio = compressedTotal.setScale(2) / total()
-        val state = AmountState(compressedTotal)
-
+    private fun CashGame.playerSummary(): List<CashPlayerSummary> {
         return players.mapIndexed { index, player ->
             CashPlayerSummary(
                     person = player.person,
                     buyIn = player.entries.total(),
-                    withdrawals = state.decreaseAndGet(player.withdrawals.total() * ratio),
+                    withdrawals = player.withdrawals.total(),
             )
         }
     }
@@ -121,10 +103,8 @@ class PlayerSummaryService(
                     )
                 }.associateBy { it.person }
     }
-
 }
 
-fun BigDecimal.down(): BigDecimal = setScale(0, RoundingMode.DOWN)
 fun BigDecimal.halfDown(): BigDecimal = setScale(0, RoundingMode.HALF_DOWN)
 fun BigDecimal.up(): BigDecimal = setScale(0, RoundingMode.UP)
 

@@ -8,6 +8,7 @@ Cash summary:
 Nickname terisa_johnston
   Buy-ins: -10
   Withdrawals: 30
+  Total: 20
 
 Payout to: terisa_johnston 
 Total: 20
@@ -16,10 +17,4 @@ Debtors:
     Debt: 10
   - Debtor: santo_welch
     Debt: 10
-______________________________
-Description: Service Fee
-URL: https://www.mrrockka.by
-Total: 0
-Debtors:
-
 ______________________________

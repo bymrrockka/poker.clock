@@ -7,16 +7,16 @@ Game details:
 Cash summary:
 Nickname terisa_johnston
   Buy-ins: -10
-  Withdrawals: 8
+  Withdrawals: 10
+  Total: 0
 Nickname jackie_rau
   Buy-ins: -10
-  Withdrawals: 18
+  Withdrawals: 20
+  Total: 10
 
 Payout to: jackie_rau 
-Total: 8
+Total: 6
 Debtors:
-  - Debtor: terisa_johnston
-    Debt: 2
   - Debtor: santo_welch
     Debt: 6
 ______________________________
@@ -26,4 +26,9 @@ Total: 4
 Debtors:
   - Debtor: santo_welch
     Debt: 4
+______________________________
+Payout to: terisa_johnston 
+Total: 0
+Debtors:
+
 ______________________________

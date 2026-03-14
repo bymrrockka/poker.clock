@@ -6,13 +6,15 @@ Game details:
 
 Prize summary:
 Position 1
-  Prize 13
-  Buyins: -10
+  Prize 15
+  Buy-ins: -10
   Nickname jackie_rau
+  Total: 5
 Position 2
-  Prize 13
-  Buyins: -10
+  Prize 15
+  Buy-ins: -10
   Nickname terisa_johnston
+  Total: 5
 
 Description: Service Fee
 URL: https://www.mrrockka.by

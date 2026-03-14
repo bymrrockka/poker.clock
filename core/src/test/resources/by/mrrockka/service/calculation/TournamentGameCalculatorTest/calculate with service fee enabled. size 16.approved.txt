@@ -6,15 +6,17 @@ Game details:
 
 Prize summary:
 Position 1
-  Prize 70
-  Buyins: -10
+  Prize 80
+  Buy-ins: -10
   Nickname jackie_rau
+  Total: 70
 Position 2
-  Prize 69
-  Buyins: -10
+  Prize 80
+  Buy-ins: -10
   Nickname terisa_johnston
+  Total: 70
 
-Payout to: jackie_rau 
+Payout to: terisa_johnston 
 Total: 60
 Debtors:
   - Debtor: deb_becker
@@ -30,7 +32,7 @@ Debtors:
   - Debtor: santo_welch
     Debt: 10
 ______________________________
-Payout to: terisa_johnston 
+Payout to: jackie_rau 
 Total: 59
 Debtors:
   - Debtor: harry_mayer

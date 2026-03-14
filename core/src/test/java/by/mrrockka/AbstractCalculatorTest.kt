@@ -32,7 +32,7 @@ abstract class AbstractCalculatorTest {
     }
 
     protected fun changeFeeTo(serviceFeeFeature: ServiceFeeFeature) {
-        playerSummaryService = PlayerSummaryService(serviceFeeFeature)
+        playerSummaryService = PlayerSummaryService()
         calculator = GameCalculator(serviceFeeFeature, playerSummaryService)
     }
 
@@ -102,8 +102,9 @@ abstract class AbstractCalculatorTest {
                     """
                     |Position ${it.position}
                     |  Prize ${it.prize}
-                    |  Buyins: -${it.entries()}
+                    |  Buy-ins: -${it.entries()}
                     |  Nickname ${it.person.nickname}
+                    |  Total: ${it.total()}
                 """.trimMargin()
                 }
 
@@ -126,16 +127,18 @@ abstract class AbstractCalculatorTest {
                         """
                             |Position ${it.position}
                             |  Prize ${it.prize}
-                            |  Buyins: -${it.entries()}
+                            |  Buy-ins: -${it.entries()}
                             |  Bounties: ${it.bounty.total} (taken ${it.bounty.taken} - given ${it.bounty.given})
                             |  Nickname ${it.person.nickname}
+                            |  Total: ${it.total()}
                         """.trimMargin()
                     } else {
                         """
                             |Bounty winner
-                            |  Buyins: -${it.entries()}
+                            |  Buy-ins: -${it.entries()}
                             |  Bounties: ${it.bounty.total} (taken ${it.bounty.taken} - given ${it.bounty.given})
                             |  Nickname ${it.person.nickname}
+                            |  Total: ${it.total()}
                         """.trimMargin()
                     }
                 }
@@ -158,6 +161,7 @@ abstract class AbstractCalculatorTest {
                         |Nickname ${it.person.nickname}
                         |  Buy-ins: -${it.entries()}
                         |  Withdrawals: ${it.withdrawals}
+                        |  Total: ${it.total()}
                     """.trimMargin()
                 }
 

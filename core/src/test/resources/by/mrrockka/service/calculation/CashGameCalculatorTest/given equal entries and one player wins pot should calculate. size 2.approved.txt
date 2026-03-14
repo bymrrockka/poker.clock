@@ -8,6 +8,7 @@ Cash summary:
 Nickname jackie_rau
   Buy-ins: -10.0
   Withdrawals: 20.0
+  Total: 10.0
 
 Payout to: jackie_rau 
 Total: 10.0

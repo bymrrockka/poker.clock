@@ -17,21 +17,76 @@ open class GameCalculator(
         private val playerSummaryService: PlayerSummaryService,
 ) {
     fun calculate(game: Game): List<Payout> {
-        val computedServiceAmounts = game.setup()
-        val computedPlayerAmounts = playerSummaryService.summary(game).map { it.toComputedAmount() }
-        return (computedPlayerAmounts + computedServiceAmounts).toPayouts()
+
+        /*
+        *todo
+        * 1. Calculate total for game
+        * 2. Calculate service fee for total
+        * 3. calculate summaries and define creditors with debtors
+        * 4. spread service fee for creditors
+        * 5. reduce amounts for creditors
+        * 6. calculate payouts
+        * */
+        val computedFee = game.serviceCalculationFee()
+        val computedAmounts = playerSummaryService.summary(game).map { it.toComputedAmount() }
+                .let { summaries ->
+                    if (serviceFeeFeature.enabled && computedFee.transferType == TransferType.CREDIT) {
+                        val (creditors, others) = summaries.partition { it.transferType == TransferType.CREDIT }
+                        val compressedCreditors = ComputationDetails(
+                                computedDebt = others.total(),
+                                computedFee = computedFee.amount,
+                        ).compress(creditors.sortedByDescending { it.amount })
+
+                        compressedCreditors + others + computedFee
+                    } else summaries
+                }
+
+        return computedAmounts.toPayouts()
     }
 
-    private fun Game.setup(): List<ComputedAmount> {
-        return if (serviceFeeFeature.enabled) {
-            val serviceFeeAmount = serviceFeeFeature.calculate(total())
+    private fun ComputationDetails.compress(creditors: List<ComputedAmount>): List<ComputedAmount> {
+        return when {
+            creditors.isNotEmpty() -> {
+                val creditor = creditors.first()
+                val ratio = creditor.amount.setScale(2) / computedDebt
+                val compressedAmount = state.decreaseAndGet(computedFee * ratio)
+
+                listOf(creditor.copy(amount = creditor.amount - compressedAmount)) + compress(creditors - creditor)
+            }
+
+            else -> emptyList()
+        }
+
+        /*
+        *todo:
+        * 1. get first element of a collection
+        * 2. calculate reduction amount by prize percentage
+        * 3. reduce state amount
+        * 4. return element + reduced list called with same function
+        * */
+    }
+
+    internal data class ComputationDetails(
+            val computedDebt: BigDecimal,
+            val computedFee: BigDecimal,
+    ) {
+        val state: AmountState = AmountState(computedFee)
+    }
+
+    private fun Game.serviceCalculationFee(): ComputedAmount {
+        val serviceFeeAmount = serviceFeeFeature.calculate(total())
+        return if (serviceFeeFeature.enabled && serviceFeeAmount > ZERO) {
             val serviceFeeTotal = ComputedAmount(
                     transferType = TransferType.CREDIT,
                     person = serviceFeeFeature.feePerson,
                     amount = serviceFeeAmount,
             )
-            listOf(serviceFeeTotal)
-        } else emptyList()
+            serviceFeeTotal
+        } else ComputedAmount(
+                transferType = TransferType.EQUAL,
+                person = serviceFeeFeature.feePerson,
+                amount = ZERO,
+        )
     }
 
     private fun List<ComputedAmount>.toPayouts(): List<Payout> {
@@ -102,7 +157,7 @@ open class GameCalculator(
     private fun List<ComputedAmount>.total() = map { it.amount }.total()
 }
 
-internal class ComputedAmount(val transferType: TransferType, val person: Person, val amount: BigDecimal)
+internal data class ComputedAmount(val transferType: TransferType, val person: Person, val amount: BigDecimal)
 
 private operator fun List<ComputedAmount>.minus(debtors: List<Debtor>): List<ComputedAmount> {
     val debtorPlayers = debtors.map { it.person }

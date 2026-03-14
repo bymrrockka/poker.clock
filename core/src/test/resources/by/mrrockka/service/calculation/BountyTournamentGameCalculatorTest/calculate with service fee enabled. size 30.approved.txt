@@ -7,18 +7,20 @@ Game details:
 
 Prize summary:
 Position 1
-  Prize 130
-  Buyins: -10
-  Bounties: 251 (taken 29 - given 0)
+  Prize 150
+  Buy-ins: -10
+  Bounties: 290 (taken 29 - given 0)
   Nickname jackie_rau
+  Total: 430
 Position 2
-  Prize 131
-  Buyins: -10
+  Prize 150
+  Buy-ins: -10
   Bounties: -10 (taken 0 - given 1)
   Nickname terisa_johnston
+  Total: 130
 
 Payout to: jackie_rau 
-Total: 371
+Total: 369
 Debtors:
   - Debtor: jeniffer_hegmann
     Debt: 20
@@ -57,10 +59,10 @@ Debtors:
   - Debtor: santo_welch
     Debt: 20
   - Debtor: francisco_nolan
-    Debt: 11
+    Debt: 9
 ______________________________
 Payout to: terisa_johnston 
-Total: 111
+Total: 113
 Debtors:
   - Debtor: regina_kreiger
     Debt: 20
@@ -73,7 +75,7 @@ Debtors:
   - Debtor: lena_howe
     Debt: 20
   - Debtor: francisco_nolan
-    Debt: 11
+    Debt: 13
 ______________________________
 Description: Service Fee
 URL: https://www.mrrockka.by

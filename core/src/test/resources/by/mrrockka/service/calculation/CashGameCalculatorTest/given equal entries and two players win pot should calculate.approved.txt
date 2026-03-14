@@ -7,10 +7,12 @@ Game details:
 Cash summary:
 Nickname jackie_rau
   Buy-ins: -10.0
-  Withdrawals: 50
+  Withdrawals: 50.0
+  Total: 40.0
 Nickname terisa_johnston
   Buy-ins: -10.0
   Withdrawals: 50.0
+  Total: 40.0
 
 Payout to: jackie_rau 
 Total: 40.0
