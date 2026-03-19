@@ -17,7 +17,7 @@ Position 2
   Total: 70
 
 Payout to: terisa_johnston 
-Total: 60
+Total: 60 (70 - 10)
 Debtors:
   - Debtor: deb_becker
     Debt: 10
@@ -33,7 +33,7 @@ Debtors:
     Debt: 10
 ______________________________
 Payout to: jackie_rau 
-Total: 59
+Total: 59 (70 - 11)
 Debtors:
   - Debtor: harry_mayer
     Debt: 10

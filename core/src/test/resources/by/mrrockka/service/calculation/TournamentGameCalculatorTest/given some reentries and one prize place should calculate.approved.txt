@@ -7,33 +7,33 @@ Game details:
 Prize summary:
 Position 1
   Prize 170.0
-  Buy-ins: -10.0
+  Buy-ins: -10
   Nickname jackie_rau
-  Total: 160.0
+  Total: 160
 
 Payout to: jackie_rau 
-Total: 160.0
+Total: 160 
 Debtors:
   - Debtor: erich_mayer
-    Debt: 40.0
+    Debt: 40
   - Debtor: donya_willms
-    Debt: 30.0
+    Debt: 30
   - Debtor: ronnie_schuppe
-    Debt: 10.0
+    Debt: 10
   - Debtor: refugia_koss
-    Debt: 10.0
+    Debt: 10
   - Debtor: deb_becker
-    Debt: 10.0
+    Debt: 10
   - Debtor: perry_hessel
-    Debt: 10.0
+    Debt: 10
   - Debtor: hope_wehner
-    Debt: 10.0
+    Debt: 10
   - Debtor: stanton_boyer
-    Debt: 10.0
+    Debt: 10
   - Debtor: ashlee_lang
-    Debt: 10.0
+    Debt: 10
   - Debtor: santo_welch
-    Debt: 10.0
+    Debt: 10
   - Debtor: terisa_johnston
-    Debt: 10.0
+    Debt: 10
 ______________________________

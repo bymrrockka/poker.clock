@@ -55,7 +55,11 @@ abstract class AbstractCalculatorTest {
         when (payout.creditor) {
             is BasicPerson -> """
                |Payout to: ${payout.creditor.nickname} 
-               |Total: ${payout.total}
+               |Total: ${payout.total} ${
+                if (payout.fee != BigDecimal.ZERO) {
+                    "(${payout.amount} - ${payout.fee})"
+                } else ""
+            }
                |Debtors:
                |${payout.debtors.toText()}
                |${"_".repeat(30)}
@@ -102,9 +106,9 @@ abstract class AbstractCalculatorTest {
                     """
                     |Position ${it.position}
                     |  Prize ${it.prize}
-                    |  Buy-ins: -${it.entries()}
+                    |  Buy-ins: -${it.entries}
                     |  Nickname ${it.person.nickname}
-                    |  Total: ${it.total()}
+                    |  Total: ${it.total}
                 """.trimMargin()
                 }
 
@@ -120,25 +124,25 @@ abstract class AbstractCalculatorTest {
             |
         """.trimMargin() + playerSummaryService.tournamentSummary(this)
                 .map { it as BountyTournamentPlayerSummary }
-                .filter { it.position != null || it.total() > BigDecimal.ZERO }
+                .filter { it.position != null || it.total > BigDecimal.ZERO }
                 .sortedBy { it.position }
                 .joinToString("\n") {
                     if (it.position != null) {
                         """
                             |Position ${it.position}
                             |  Prize ${it.prize}
-                            |  Buy-ins: -${it.entries()}
+                            |  Buy-ins: -${it.entries}
                             |  Bounties: ${it.bounty.total} (taken ${it.bounty.taken} - given ${it.bounty.given})
                             |  Nickname ${it.person.nickname}
-                            |  Total: ${it.total()}
+                            |  Total: ${it.total}
                         """.trimMargin()
                     } else {
                         """
                             |Bounty winner
-                            |  Buy-ins: -${it.entries()}
+                            |  Buy-ins: -${it.entries}
                             |  Bounties: ${it.bounty.total} (taken ${it.bounty.taken} - given ${it.bounty.given})
                             |  Nickname ${it.person.nickname}
-                            |  Total: ${it.total()}
+                            |  Total: ${it.total}
                         """.trimMargin()
                     }
                 }
@@ -155,13 +159,13 @@ abstract class AbstractCalculatorTest {
         """.trimMargin() + playerSummaryService.summary(this)
                 .map { it as CashPlayerSummary }
                 .filter { it.withdrawals > BigDecimal.ZERO }
-                .sortedBy { it.total() }
+                .sortedBy { it.total }
                 .joinToString("\n") {
                     """
                         |Nickname ${it.person.nickname}
-                        |  Buy-ins: -${it.entries()}
+                        |  Buy-ins: -${it.entries}
                         |  Withdrawals: ${it.withdrawals}
-                        |  Total: ${it.total()}
+                        |  Total: ${it.total}
                     """.trimMargin()
                 }
 

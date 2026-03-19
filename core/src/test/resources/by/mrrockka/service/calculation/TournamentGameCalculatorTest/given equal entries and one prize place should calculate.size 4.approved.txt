@@ -7,17 +7,17 @@ Game details:
 Prize summary:
 Position 1
   Prize 40.0
-  Buy-ins: -10.0
+  Buy-ins: -10
   Nickname jackie_rau
-  Total: 30.0
+  Total: 30
 
 Payout to: jackie_rau 
-Total: 30.0
+Total: 30 
 Debtors:
   - Debtor: ashlee_lang
-    Debt: 10.0
+    Debt: 10
   - Debtor: santo_welch
-    Debt: 10.0
+    Debt: 10
   - Debtor: terisa_johnston
-    Debt: 10.0
+    Debt: 10
 ______________________________

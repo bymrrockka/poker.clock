@@ -6,93 +6,93 @@ Game details:
 
 Cash summary:
 Nickname jackie_rau
-  Buy-ins: -10.0
+  Buy-ins: -10
   Withdrawals: 10.0
-  Total: 0.0
+  Total: 0
 Nickname terisa_johnston
-  Buy-ins: -10.0
+  Buy-ins: -10
   Withdrawals: 10.0
-  Total: 0.0
+  Total: 0
 Nickname santo_welch
-  Buy-ins: -10.0
+  Buy-ins: -10
   Withdrawals: 10.0
-  Total: 0.0
+  Total: 0
 Nickname ashlee_lang
-  Buy-ins: -10.0
+  Buy-ins: -10
   Withdrawals: 10.0
-  Total: 0.0
+  Total: 0
 Nickname stanton_boyer
-  Buy-ins: -10.0
+  Buy-ins: -10
   Withdrawals: 10.0
-  Total: 0.0
+  Total: 0
 Nickname hope_wehner
-  Buy-ins: -10.0
+  Buy-ins: -10
   Withdrawals: 10.0
-  Total: 0.0
+  Total: 0
 Nickname perry_hessel
-  Buy-ins: -10.0
+  Buy-ins: -10
   Withdrawals: 10.0
-  Total: 0.0
+  Total: 0
 Nickname deb_becker
-  Buy-ins: -10.0
+  Buy-ins: -10
   Withdrawals: 10.0
-  Total: 0.0
+  Total: 0
 Nickname refugia_koss
-  Buy-ins: -10.0
+  Buy-ins: -10
   Withdrawals: 10.0
-  Total: 0.0
+  Total: 0
 Nickname ronnie_schuppe
-  Buy-ins: -10.0
+  Buy-ins: -10
   Withdrawals: 10.0
-  Total: 0.0
+  Total: 0
 
 Payout to: jackie_rau 
-Total: 0
+Total: 0 
 Debtors:
 
 ______________________________
 Payout to: terisa_johnston 
-Total: 0
+Total: 0 
 Debtors:
 
 ______________________________
 Payout to: santo_welch 
-Total: 0
+Total: 0 
 Debtors:
 
 ______________________________
 Payout to: ashlee_lang 
-Total: 0
+Total: 0 
 Debtors:
 
 ______________________________
 Payout to: stanton_boyer 
-Total: 0
+Total: 0 
 Debtors:
 
 ______________________________
 Payout to: hope_wehner 
-Total: 0
+Total: 0 
 Debtors:
 
 ______________________________
 Payout to: perry_hessel 
-Total: 0
+Total: 0 
 Debtors:
 
 ______________________________
 Payout to: deb_becker 
-Total: 0
+Total: 0 
 Debtors:
 
 ______________________________
 Payout to: refugia_koss 
-Total: 0
+Total: 0 
 Debtors:
 
 ______________________________
 Payout to: ronnie_schuppe 
-Total: 0
+Total: 0 
 Debtors:
 
 ______________________________

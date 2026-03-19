@@ -6,13 +6,13 @@ Game details:
 
 Cash summary:
 Nickname jackie_rau
-  Buy-ins: -10.0
+  Buy-ins: -10
   Withdrawals: 20.0
-  Total: 10.0
+  Total: 10
 
 Payout to: jackie_rau 
-Total: 10.0
+Total: 10 
 Debtors:
   - Debtor: terisa_johnston
-    Debt: 10.0
+    Debt: 10
 ______________________________

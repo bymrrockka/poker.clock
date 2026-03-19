@@ -20,7 +20,7 @@ Position 2
   Total: 35
 
 Payout to: jackie_rau 
-Total: 121
+Total: 121 (145 - 24)
 Debtors:
   - Debtor: deb_becker
     Debt: 20
@@ -38,7 +38,7 @@ Debtors:
     Debt: 1
 ______________________________
 Payout to: terisa_johnston 
-Total: 30
+Total: 30 (35 - 5)
 Debtors:
   - Debtor: refugia_koss
     Debt: 20

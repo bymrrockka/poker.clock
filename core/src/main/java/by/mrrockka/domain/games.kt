@@ -20,7 +20,7 @@ interface Game {
 enum class GameType {
     CASH, TOURNAMENT, BOUNTY;
 
-    val title = this.name.lowercase().capitalize()
+    val title = name.lowercase().capitalize()
 }
 
 data class TournamentGame(

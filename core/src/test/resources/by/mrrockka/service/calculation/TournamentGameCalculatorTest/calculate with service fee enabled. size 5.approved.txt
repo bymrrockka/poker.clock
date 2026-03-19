@@ -17,7 +17,7 @@ Position 2
   Total: 15
 
 Payout to: jackie_rau 
-Total: 12
+Total: 12 (15 - 3)
 Debtors:
   - Debtor: santo_welch
     Debt: 10
@@ -25,7 +25,7 @@ Debtors:
     Debt: 2
 ______________________________
 Payout to: terisa_johnston 
-Total: 12
+Total: 12 (15 - 3)
 Debtors:
   - Debtor: ashlee_lang
     Debt: 10

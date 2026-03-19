@@ -135,7 +135,7 @@ message id: 12
 Payout to: @nickname2
   Entries: 10
   Withdrawals: 30
-  Total: 20 
+  Total: 20 (withdrawals 30 - entries 10)
 From:
   @sergio_cartwright -> 10
   @nickname5 -> 10
@@ -143,14 +143,14 @@ From:
 Payout to: @nickname3
   Entries: 10
   Withdrawals: 30
-  Total: 20 
+  Total: 20 (withdrawals 30 - entries 10)
 From:
   @nickname4 -> 20
 ------------------------------
 Payout to: @nickname1
   Entries: 10
   Withdrawals: 20
-  Total: 10 
+  Total: 10 (withdrawals 20 - entries 10)
 From:
   @nickname4 -> 10
 ------------------------------

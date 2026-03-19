@@ -11,7 +11,7 @@ Nickname terisa_johnston
   Total: 20
 
 Payout to: terisa_johnston 
-Total: 20
+Total: 20 
 Debtors:
   - Debtor: jackie_rau
     Debt: 10

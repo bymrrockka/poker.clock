@@ -19,9 +19,10 @@ import by.mrrockka.service.CashPlayerSummary
 import by.mrrockka.service.GameTelegramService
 import by.mrrockka.service.PinMessageService
 import by.mrrockka.service.PlayerPrizeSummary
+import by.mrrockka.service.PlayerSummary
 import by.mrrockka.service.PlayerSummaryService
 import by.mrrockka.service.TournamentPlayerSummary
-import by.mrrockka.service.halfDown
+import by.mrrockka.service.up
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.CommandHandler
 import eu.vendeli.tgbot.api.message.message
@@ -82,9 +83,9 @@ open class CalculationCommandHandlerImpl(
                     """
                     |${"-".repeat(30)}
                     |Payout to: @${summary.person.nickname}
-                    |  Entries: ${summary.entries().setScale(0)}
-                    |  Withdrawals: ${summary.withdrawals.setScale(0)}
-                    |  Total: ${it.total.setScale(0)} 
+                    |  Entries: ${summary.entries}
+                    |  Withdrawals: ${summary.withdrawals.up()}
+                    |  Total: ${it.total} (${summary.totalText()}${it.feeText()})
                     |${it.debtors.message()}
                     """.trimMargin()
                 }
@@ -99,8 +100,8 @@ open class CalculationCommandHandlerImpl(
                             """
                             |${"-".repeat(30)}
                             |Payout to: @${summary.person.nickname}
-                            |  Entries: ${summary.entries().setScale(0)}
-                            |  Total: ${it.total.setScale(0)} (won ${summary.prize.setScale(0)} - entries ${summary.entries().setScale(0)})
+                            |  Entries: ${summary.entries}
+                            |  Total: ${it.amount.up()} (${summary.totalText()}${it.feeText()})
                             |${it.debtors.message()}
                             """.trimMargin()
                         }
@@ -117,9 +118,9 @@ open class CalculationCommandHandlerImpl(
                             """
                             |${"-".repeat(30)}
                             |Payout to: @${summary.person.nickname}
-                            |  Entries: ${summary.entries().halfDown()}
-                            |  Bounties: ${summary.bounty.total.halfDown()} (taken ${summary.bounty.taken} - given ${summary.bounty.given}) 
-                            |  Total: ${it.total.halfDown()} (won ${summary.prize.halfDown()} - entries ${summary.entries().halfDown()} ${if (summary.bounty.total < ZERO) "-" else "+"} bounties ${summary.bounty.total.halfDown()})
+                            |  Entries: ${summary.entries}
+                            |  Bounties: ${summary.bounty.total.up()} (taken ${summary.bounty.taken} - given ${summary.bounty.given}) 
+                            |  Total: ${it.total} (${summary.totalText()}${it.feeText()})
                             |${it.debtors.message()}
                             """.trimMargin()
                         }
@@ -132,7 +133,7 @@ open class CalculationCommandHandlerImpl(
     }
 
     private fun List<Payout>.equalResponse(): String {
-        val zeros = filter { it.total == ZERO }
+        val zeros = filter { it.amount == ZERO }
         return if (zeros.isNotEmpty()) """
             |
             |${"-".repeat(30)}
@@ -156,7 +157,7 @@ open class CalculationCommandHandlerImpl(
             ${
             joinToString("\n") {
                 when (val person = it.person) {
-                    is BasicPerson -> "|  @${person.nickname} -> ${it.debt.setScale(0)}"
+                    is BasicPerson -> "|  @${person.nickname} -> ${it.debt}"
                     else -> error("Unknown person")
                 }
             }
@@ -169,17 +170,17 @@ open class CalculationCommandHandlerImpl(
         return """
                 |${"-".repeat(30)}
                 |Finale summary:
-                ${summary.filter { it.position != null }.joinToString("\n") { "|  ${it.position}. @${it.person.nickname} won ${it.prize.setScale(0)}" }}
-                |Total: ${players.totalEntries().setScale(0)} (${players.flatMap { it.entries }.size} entries * ${buyIn.setScale(0)} buy in)
+                ${summary.filter { it.position != null }.joinToString("\n") { "|  ${it.position}. @${it.person.nickname} won ${it.prize.up()}" }}
+                |Total: ${players.totalEntries().up()} (${players.flatMap { it.entries }.size} entries * ${buyIn.up()} buy in)
                 |
                 """.trimMargin()
     }
 
-    private fun List<Payout>.prepare(summaries: Map<out Person, PlayerPrizeSummary>): List<Payout> = filter { it.total > ZERO }
+    private fun List<Payout>.prepare(summaries: Map<out Person, PlayerPrizeSummary>): List<Payout> = filter { it.amount > ZERO }
             .sortedBy { summaries[it.creditor]?.position }
             .reversed()
 
-    private fun List<Payout>.serviceFeeIsEqual(): Boolean = any { it.creditor is ServiceFee && it.total == ZERO }
+    private fun List<Payout>.serviceFeeIsEqual(): Boolean = any { it.creditor is ServiceFee && it.amount.up() == ZERO }
 
     private fun List<Payout>.serviceFeeText(): String {
         return if (serviceFeeFeature.enabled && !serviceFeeIsEqual()) {
@@ -190,10 +191,22 @@ open class CalculationCommandHandlerImpl(
                             |${"-".repeat(30)}
                             |${serviceFeeFeature.description}
                             |  URL: ${serviceFeeFeature.url}
-                            |  Total: ${fee.total.halfDown()}
+                            |  Total: ${fee.amount.up()}
                             |${fee.debtors.message()}
                         """.trimMargin()
                     } ?: buyMeACoffee
         } else buyMeACoffee
     }
+
+    private fun PlayerSummary.totalText(): String = when (this) {
+        is BountyTournamentPlayerSummary -> "won ${prize.up()} - entries ${entries} ${if (bounty.total < ZERO) "-" else "+"} bounties ${bounty.total.up()}"
+        is TournamentPlayerSummary -> "won ${prize.up()} - entries ${entries}"
+        is CashPlayerSummary -> "withdrawals ${withdrawals.up()} - entries ${entries}"
+        else -> error("Unknown game summary ${this::class.simpleName}")
+    }
+
+    private fun Payout.feeText(): String = if (fee.up() != ZERO) {
+        " - ${fee.up()} fee"
+    } else ""
+
 }

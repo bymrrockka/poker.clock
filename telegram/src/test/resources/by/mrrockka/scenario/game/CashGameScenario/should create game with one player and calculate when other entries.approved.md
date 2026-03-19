@@ -87,7 +87,7 @@ message id: 8
 Payout to: @nickname1
   Entries: 10
   Withdrawals: 20
-  Total: 10 
+  Total: 10 (withdrawals 20 - entries 10)
 From:
   @nickname2 -> 10
 ------------------------------

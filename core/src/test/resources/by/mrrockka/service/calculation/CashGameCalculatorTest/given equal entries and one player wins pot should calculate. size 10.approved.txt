@@ -6,29 +6,29 @@ Game details:
 
 Cash summary:
 Nickname jackie_rau
-  Buy-ins: -10.0
+  Buy-ins: -10
   Withdrawals: 100.0
-  Total: 90.0
+  Total: 90
 
 Payout to: jackie_rau 
-Total: 90.0
+Total: 90 
 Debtors:
   - Debtor: ronnie_schuppe
-    Debt: 10.0
+    Debt: 10
   - Debtor: refugia_koss
-    Debt: 10.0
+    Debt: 10
   - Debtor: deb_becker
-    Debt: 10.0
+    Debt: 10
   - Debtor: perry_hessel
-    Debt: 10.0
+    Debt: 10
   - Debtor: hope_wehner
-    Debt: 10.0
+    Debt: 10
   - Debtor: stanton_boyer
-    Debt: 10.0
+    Debt: 10
   - Debtor: ashlee_lang
-    Debt: 10.0
+    Debt: 10
   - Debtor: santo_welch
-    Debt: 10.0
+    Debt: 10
   - Debtor: terisa_johnston
-    Debt: 10.0
+    Debt: 10
 ______________________________

@@ -20,7 +20,7 @@ Position 2
   Total: 50
 
 Payout to: jackie_rau 
-Total: 161
+Total: 161 (190 - 29)
 Debtors:
   - Debtor: ronnie_schuppe
     Debt: 20
@@ -42,7 +42,7 @@ Debtors:
     Debt: 1
 ______________________________
 Payout to: terisa_johnston 
-Total: 43
+Total: 43 (50 - 7)
 Debtors:
   - Debtor: erich_mayer
     Debt: 20

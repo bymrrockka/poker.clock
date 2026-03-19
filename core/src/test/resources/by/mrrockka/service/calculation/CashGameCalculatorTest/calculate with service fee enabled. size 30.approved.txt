@@ -15,7 +15,7 @@ Nickname terisa_johnston
   Total: 140
 
 Payout to: terisa_johnston 
-Total: 121
+Total: 121 (140 - 19)
 Debtors:
   - Debtor: pearlene_huels
     Debt: 10
@@ -45,7 +45,7 @@ Debtors:
     Debt: 1
 ______________________________
 Payout to: jackie_rau 
-Total: 120
+Total: 120 (140 - 20)
 Debtors:
   - Debtor: kennith_bradtke
     Debt: 10

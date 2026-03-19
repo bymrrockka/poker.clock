@@ -129,7 +129,7 @@ nickname: @sergio_cartwright
 games played: 1 (1 tournament)
 times in prizes: 1
 times in first place: 1
-buy-ins total: 10.00
+buy-ins total: 10
 won total: 15.00 
 correlation: 5.00  
 ``` 
@@ -203,7 +203,7 @@ message id: 16
 Payout to: @nickname2
   Entries: 10
   Withdrawals: 30
-  Total: 20 
+  Total: 20 (withdrawals 30 - entries 10)
 From:
   @sergio_cartwright -> 10
   @nickname1 -> 10
@@ -232,7 +232,7 @@ nickname: @sergio_cartwright
 games played: 2 (1 tournament)
 times in prizes: 1
 times in first place: 1
-buy-ins total: 20.00
+buy-ins total: 20
 won total: 15.00 
 correlation: -5.00  
 ``` 

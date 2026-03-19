@@ -20,7 +20,7 @@ Position 2
   Total: 130
 
 Payout to: jackie_rau 
-Total: 369
+Total: 369 (430 - 61)
 Debtors:
   - Debtor: jeniffer_hegmann
     Debt: 20
@@ -62,7 +62,7 @@ Debtors:
     Debt: 9
 ______________________________
 Payout to: terisa_johnston 
-Total: 113
+Total: 113 (130 - 17)
 Debtors:
   - Debtor: regina_kreiger
     Debt: 20

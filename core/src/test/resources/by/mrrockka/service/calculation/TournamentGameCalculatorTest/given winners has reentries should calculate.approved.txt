@@ -7,42 +7,42 @@ Game details:
 Prize summary:
 Position 1
   Prize 119
-  Buy-ins: -30.0
+  Buy-ins: -30
   Nickname jackie_rau
-  Total: 89.0
+  Total: 89
 Position 2
   Prize 51.0
-  Buy-ins: -40.0
+  Buy-ins: -40
   Nickname terisa_johnston
-  Total: 11.0
+  Total: 11
 
 Payout to: jackie_rau 
-Total: 89.0
+Total: 89 
 Debtors:
   - Debtor: ronnie_schuppe
-    Debt: 10.0
+    Debt: 10
   - Debtor: refugia_koss
-    Debt: 10.0
+    Debt: 10
   - Debtor: deb_becker
-    Debt: 10.0
+    Debt: 10
   - Debtor: perry_hessel
-    Debt: 10.0
+    Debt: 10
   - Debtor: hope_wehner
-    Debt: 10.0
+    Debt: 10
   - Debtor: stanton_boyer
-    Debt: 10.0
+    Debt: 10
   - Debtor: ashlee_lang
-    Debt: 10.0
+    Debt: 10
   - Debtor: santo_welch
-    Debt: 10.0
+    Debt: 10
   - Debtor: erich_mayer
-    Debt: 9.0
+    Debt: 9
 ______________________________
 Payout to: terisa_johnston 
-Total: 11.0
+Total: 11 
 Debtors:
   - Debtor: donya_willms
-    Debt: 10.0
+    Debt: 10
   - Debtor: erich_mayer
-    Debt: 1.0
+    Debt: 1
 ______________________________

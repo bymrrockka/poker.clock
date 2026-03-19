@@ -12,7 +12,7 @@ Position 1
   Total: 20
 
 Payout to: jackie_rau 
-Total: 20
+Total: 20 
 Debtors:
   - Debtor: santo_welch
     Debt: 10

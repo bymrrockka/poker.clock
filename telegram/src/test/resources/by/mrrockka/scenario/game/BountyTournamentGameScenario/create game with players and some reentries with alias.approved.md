@@ -398,26 +398,27 @@ ___
 message id: 38 
 ------------------------------
 Finale summary:
-  1. @nickname1 won 52
-  2. @nickname2 won 53
+  1. @nickname1 won 55
+  2. @nickname2 won 55
 Total: 110 (11 entries * 10 buy in)
 ------------------------------
 Payout to: @nickname2
   Entries: 10
-  Bounties: 19 (taken 3 - given 1) 
-  Total: 62 (won 53 - entries 10 + bounties 19)
+  Bounties: 20 (taken 3 - given 1) 
+  Total: 56 (won 55 - entries 10 + bounties 20 - 9 fee)
 From:
-  @nickname3 -> 41
-  @nickname4 -> 20
-  @nickname5 -> 1
+  @nickname3 -> 40
+  @nickname5 -> 16
 ------------------------------
 Payout to: @nickname1
   Entries: 40
-  Bounties: -1 (taken 3 - given 3) 
-  Total: 11 (won 52 - entries 40 - bounties -1)
+  Bounties: 0 (taken 3 - given 3) 
+  Total: 13 (won 55 - entries 40 + bounties 0 - 2 fee)
 From:
-  @sergio_cartwright -> 3
-  @nickname5 -> 8
+  @nickname5 -> 13
+------------------------------
+Players played equally
+  @sergio_cartwright
 ------------------------------
 Game calculation fee
   URL: https://buymeacoffee.com/mrrockka

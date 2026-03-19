@@ -15,7 +15,7 @@ Nickname terisa_johnston
   Total: 60
 
 Payout to: jackie_rau 
-Total: 51
+Total: 51 (60 - 9)
 Debtors:
   - Debtor: perry_hessel
     Debt: 10
@@ -31,7 +31,7 @@ Debtors:
     Debt: 1
 ______________________________
 Payout to: terisa_johnston 
-Total: 51
+Total: 51 (60 - 9)
 Debtors:
   - Debtor: erich_mayer
     Debt: 10

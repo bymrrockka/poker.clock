@@ -17,16 +17,6 @@ open class GameCalculator(
         private val playerSummaryService: PlayerSummaryService,
 ) {
     fun calculate(game: Game): List<Payout> {
-
-        /*
-        *todo
-        * 1. Calculate total for game
-        * 2. Calculate service fee for total
-        * 3. calculate summaries and define creditors with debtors
-        * 4. spread service fee for creditors
-        * 5. reduce amounts for creditors
-        * 6. calculate payouts
-        * */
         val computedFee = game.serviceCalculationFee()
         val computedAmounts = playerSummaryService.summary(game).map { it.toComputedAmount() }
                 .let { summaries ->
@@ -34,36 +24,30 @@ open class GameCalculator(
                         val (creditors, others) = summaries.partition { it.transferType == TransferType.CREDIT }
                         val compressedCreditors = ComputationDetails(
                                 computedDebt = others.total(),
-                                computedFee = computedFee.amount,
-                        ).compress(creditors.sortedByDescending { it.amount })
+                                computedFee = computedFee.total,
+                        ).compress(creditors.sortedByDescending { it.total })
 
                         compressedCreditors + others + computedFee
                     } else summaries
                 }
 
-        return computedAmounts.toPayouts()
+        val payouts = computedAmounts.toPayouts()
+        check(payouts.sum() == ZERO) { "Payouts and debtors are not equal. Deviation ${payouts.sum()}. Game total ${game.total()}" }
+        return payouts
     }
 
     private fun ComputationDetails.compress(creditors: List<ComputedAmount>): List<ComputedAmount> {
         return when {
             creditors.isNotEmpty() -> {
                 val creditor = creditors.first()
-                val ratio = creditor.amount.setScale(2) / computedDebt
+                val ratio = creditor.total.setScale(2) / computedDebt
                 val compressedAmount = state.decreaseAndGet(computedFee * ratio)
 
-                listOf(creditor.copy(amount = creditor.amount - compressedAmount)) + compress(creditors - creditor)
+                listOf(creditor.copy(fee = compressedAmount)) + compress(creditors - creditor)
             }
 
             else -> emptyList()
         }
-
-        /*
-        *todo:
-        * 1. get first element of a collection
-        * 2. calculate reduction amount by prize percentage
-        * 3. reduce state amount
-        * 4. return element + reduced list called with same function
-        * */
     }
 
     internal data class ComputationDetails(
@@ -91,8 +75,8 @@ open class GameCalculator(
 
     private fun List<ComputedAmount>.toPayouts(): List<Payout> {
         val transfersToComputedAmounts = groupBy({ it.transferType }, { it })
-        val creditors = transfersToComputedAmounts[TransferType.CREDIT]?.sortedByDescending { it.amount } ?: emptyList()
-        val debtors = transfersToComputedAmounts[TransferType.DEBIT]?.sortedByDescending { it.amount } ?: emptyList()
+        val creditors = transfersToComputedAmounts[TransferType.CREDIT]?.sortedByDescending { it.total } ?: emptyList()
+        val debtors = transfersToComputedAmounts[TransferType.DEBIT]?.sortedByDescending { it.total } ?: emptyList()
         val equals = transfersToComputedAmounts[TransferType.EQUAL] ?: emptyList()
         validate(creditors, debtors, equals)
         return creditors.calculatePayouts(debtors) + equals.toEqualPayouts()
@@ -114,32 +98,31 @@ open class GameCalculator(
         var debtorsLeft = debtorTotals
 
         val payouts = map { creditor ->
-            val debtors = debtorsLeft.findDebtors(creditor.amount).sortedByDescending { it.debt }
+            val debtors = debtorsLeft.findDebtors(creditor.total).sortedByDescending { it.debt }
             debtorsLeft = debtorsLeft - debtors
-            Payout(creditor.person, creditor.amount, debtors)
+            Payout(creditor = creditor.person, amount = creditor.amount, debtors = debtors, fee = creditor.fee)
         }.let { prefilled ->
             var filled = prefilled
             debtorsLeft.map { debtor ->
-                var debt = debtor.amount
+                var debt = debtor.total
                 filled = prefilled
                         .map { payout ->
-                            val leftToPay = payout.total - payout.debtors.map { it.debt }.total()
+                            val leftToPay = payout.total - payout.debtors.sumOf { it.debt }
                             if (leftToPay > ZERO) {
                                 debt -= leftToPay
-                                payout.copy(total = payout.total, debtors = payout.debtors + Debtor(debtor.person, leftToPay))
+                                payout.copy(debtors = payout.debtors + Debtor(debtor.person, leftToPay))
                             } else payout
                         }
             }
             filled
         }
 
-        check(total() == payouts.map { it.total }.total()) { "${debtorsLeft.size} Debtors left unprocessed" }
         return payouts
     }
 
     private fun List<ComputedAmount>.findDebtors(amount: BigDecimal): List<Debtor> {
-        val playerTotal = find { it.amount <= amount }
-        val payer = playerTotal?.let { Debtor(it.person, it.amount) }
+        val playerTotal = find { it.total <= amount }
+        val payer = playerTotal?.let { Debtor(it.person, it.total) }
         return when {
             payer == null -> emptyList()
             payer.debt < amount -> this.minus(playerTotal).findDebtors(amount - payer.debt) + payer
@@ -149,15 +132,18 @@ open class GameCalculator(
 
     private fun PlayerSummary.toComputedAmount(): ComputedAmount =
             when {
-                total() < ZERO -> ComputedAmount(transferType = TransferType.DEBIT, person = person, amount = -total())
-                total() > ZERO -> ComputedAmount(transferType = TransferType.CREDIT, person = person, amount = total())
-                else -> ComputedAmount(transferType = TransferType.EQUAL, person = person, amount = total())
+                total < ZERO -> ComputedAmount(transferType = TransferType.DEBIT, person = person, amount = -total)
+                total > ZERO -> ComputedAmount(transferType = TransferType.CREDIT, person = person, amount = total)
+                else -> ComputedAmount(transferType = TransferType.EQUAL, person = person, amount = total)
             }
 
-    private fun List<ComputedAmount>.total() = map { it.amount }.total()
+    private fun List<ComputedAmount>.total() = map { it.total }.total()
+    private fun List<Payout>.sum() = sumOf { it.total - it.debtors.sumOf { it.debt } }.up()
 }
 
-internal data class ComputedAmount(val transferType: TransferType, val person: Person, val amount: BigDecimal)
+internal data class ComputedAmount(val transferType: TransferType, val person: Person, val amount: BigDecimal, val fee: BigDecimal = ZERO) {
+    val total: BigDecimal = amount - fee
+}
 
 private operator fun List<ComputedAmount>.minus(debtors: List<Debtor>): List<ComputedAmount> {
     val debtorPlayers = debtors.map { it.person }

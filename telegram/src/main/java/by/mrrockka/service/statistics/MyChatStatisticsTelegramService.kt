@@ -27,8 +27,8 @@ class MyChatStatisticsTelegramService(
         val entriesTotal = gameSummaries
                 .map { summary ->
                     when (summary) {
-                        is BountyTournamentPlayerSummary -> summary.entries() + (summary.bounty.total * BigDecimal(summary.entriesNum))
-                        else -> summary.entries()
+                        is BountyTournamentPlayerSummary -> summary.entries + (summary.bounty.total * summary.entriesNum.toBigDecimal())
+                        else -> summary.entries
                     }
                 }.total()
         val tournaments = gameSummaries

@@ -15,7 +15,7 @@ Nickname jackie_rau
   Total: 30
 
 Payout to: jackie_rau 
-Total: 24
+Total: 24 (30 - 6)
 Debtors:
   - Debtor: ashlee_lang
     Debt: 10
@@ -25,7 +25,7 @@ Debtors:
     Debt: 4
 ______________________________
 Payout to: terisa_johnston 
-Total: 17
+Total: 17 (20 - 3)
 Debtors:
   - Debtor: stanton_boyer
     Debt: 10

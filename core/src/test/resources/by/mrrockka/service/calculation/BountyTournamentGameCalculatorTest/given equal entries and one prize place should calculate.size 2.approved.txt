@@ -8,14 +8,14 @@ Game details:
 Prize summary:
 Position 1
   Prize 20.0
-  Buy-ins: -10.0
+  Buy-ins: -10
   Bounties: 10.0 (taken 1 - given 0)
   Nickname jackie_rau
-  Total: 20.0
+  Total: 20
 
 Payout to: jackie_rau 
-Total: 20.0
+Total: 20 
 Debtors:
   - Debtor: terisa_johnston
-    Debt: 20.0
+    Debt: 20
 ______________________________

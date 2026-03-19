@@ -248,17 +248,19 @@ ___
 message id: 24 
 ------------------------------
 Finale summary:
-  1. @sergio_cartwright won 48
+  1. @sergio_cartwright won 50
 Total: 50 (5 entries * 10 buy in)
 ------------------------------
 Payout to: @sergio_cartwright
   Entries: 10
-  Bounties: 18 (taken 2 - given 0) 
-  Total: 56 (won 48 - entries 10 + bounties 18)
+  Bounties: 20 (taken 2 - given 0) 
+  Total: 55 (won 50 - entries 10 + bounties 20 - 5 fee)
 From:
   @nickname3 -> 40
-  @nickname2 -> 1
   @nickname1 -> 15
+------------------------------
+Players played equally
+  @nickname2
 ------------------------------
 Game calculation fee
   URL: https://buymeacoffee.com/mrrockka

@@ -15,7 +15,7 @@ Nickname jackie_rau
   Total: 10
 
 Payout to: jackie_rau 
-Total: 6
+Total: 6 (10 - 4)
 Debtors:
   - Debtor: santo_welch
     Debt: 6
@@ -28,7 +28,7 @@ Debtors:
     Debt: 4
 ______________________________
 Payout to: terisa_johnston 
-Total: 0
+Total: 0 
 Debtors:
 
 ______________________________

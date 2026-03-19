@@ -24,13 +24,13 @@ Debtors:
     Debt: 4
 ______________________________
 Payout to: jackie_rau 
-Total: 3
+Total: 3 (5 - 2)
 Debtors:
   - Debtor: santo_welch
     Debt: 3
 ______________________________
 Payout to: terisa_johnston 
-Total: 3
+Total: 3 (5 - 2)
 Debtors:
   - Debtor: santo_welch
     Debt: 3

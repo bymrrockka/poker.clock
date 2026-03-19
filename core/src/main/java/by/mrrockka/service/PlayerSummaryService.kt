@@ -112,8 +112,8 @@ interface PlayerSummary {
     val person: BasicPerson
     val buyIn: BigDecimal
 
-    fun total(): BigDecimal
-    fun entries(): BigDecimal
+    val total: BigDecimal
+    val entries: BigDecimal
 }
 
 interface PlayerPrizeSummary : PlayerSummary {
@@ -129,8 +129,8 @@ data class TournamentPlayerSummary(
         override val position: Int? = null,
         override val prize: BigDecimal,
 ) : PlayerPrizeSummary {
-    override fun total(): BigDecimal = prize - entries()
-    override fun entries(): BigDecimal = buyIn * entriesNum.toBigDecimal()
+    override val total: BigDecimal by lazy { (prize - entries).up() }
+    override val entries: BigDecimal by lazy { (buyIn * entriesNum.toBigDecimal()).up() }
 }
 
 data class BountyTournamentPlayerSummary(
@@ -141,8 +141,8 @@ data class BountyTournamentPlayerSummary(
         override val position: Int? = null,
         val bounty: BountySummary,
 ) : PlayerPrizeSummary {
-    override fun total(): BigDecimal = bounty.total + prize - entries()
-    override fun entries(): BigDecimal = buyIn * entriesNum.toBigDecimal()
+    override val total: BigDecimal by lazy { (bounty.total + prize - entries).up() }
+    override val entries: BigDecimal by lazy { (buyIn * entriesNum.toBigDecimal()).up() }
 }
 
 data class BountySummary(
@@ -156,8 +156,8 @@ data class CashPlayerSummary(
         override val buyIn: BigDecimal,
         val withdrawals: BigDecimal,
 ) : PlayerSummary {
-    override fun total(): BigDecimal = withdrawals - entries()
-    override fun entries(): BigDecimal = buyIn
+    override val total: BigDecimal by lazy { (withdrawals - entries).up() }
+    override val entries: BigDecimal = buyIn.up()
 }
 
 private data class FinalPrizeSummary(val position: Int, val amount: BigDecimal, val person: BasicPerson)

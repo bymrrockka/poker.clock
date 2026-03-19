@@ -15,7 +15,7 @@ Nickname jackie_rau
   Total: 50
 
 Payout to: jackie_rau 
-Total: 42
+Total: 42 (50 - 8)
 Debtors:
   - Debtor: hope_wehner
     Debt: 10
@@ -29,7 +29,7 @@ Debtors:
     Debt: 2
 ______________________________
 Payout to: terisa_johnston 
-Total: 34
+Total: 34 (40 - 6)
 Debtors:
   - Debtor: refugia_koss
     Debt: 10
