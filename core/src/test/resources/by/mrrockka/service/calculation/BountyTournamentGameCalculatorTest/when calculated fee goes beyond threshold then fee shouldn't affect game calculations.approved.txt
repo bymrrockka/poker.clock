@@ -1,0 +1,23 @@
+Game details: 
+ - total money: 60
+ - buy-in: 10
+ - bounty: 10
+ - players size: 3
+ - entries size: 3
+
+Prize summary:
+Position 1
+  Prize 30
+  Buy-ins: -10
+  Bounties: 20 (taken 2 - given 0)
+  Nickname jackie_rau
+  Total: 40
+
+Payout to: jackie_rau 
+Total: 40 
+Debtors:
+  - Debtor: santo_welch
+    Debt: 20
+  - Debtor: terisa_johnston
+    Debt: 20
+______________________________

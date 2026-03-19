@@ -2,7 +2,6 @@ package by.mrrockka.service
 
 import by.mrrockka.domain.BasicPerson
 import by.mrrockka.domain.MessageMetadata
-import by.mrrockka.domain.Person
 import by.mrrockka.repo.ChatPersonsRepo
 import by.mrrockka.repo.PersonRepo
 import org.springframework.stereotype.Component
@@ -11,9 +10,9 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 interface TelegramPersonService {
-    fun findByMessage(metadata: MessageMetadata): List<Person>
-    fun findByNicknames(nicknames: List<String>, chatId: Long): List<Person>
-    fun findByFrom(metadata: MessageMetadata): Person
+    fun findByMessage(metadata: MessageMetadata): List<BasicPerson>
+    fun findByNicknames(nicknames: List<String>, chatId: Long): List<BasicPerson>
+    fun findByFrom(metadata: MessageMetadata): BasicPerson
 }
 
 @Component
@@ -23,12 +22,12 @@ open class TelegramPersonServiceImpl(
         private val chatPersonsRepo: ChatPersonsRepo,
 ) : TelegramPersonService {
 
-    override fun findByMessage(metadata: MessageMetadata): List<Person> {
+    override fun findByMessage(metadata: MessageMetadata): List<BasicPerson> {
         val nicknames = metadata.mentions.map { it.text }
         return findByNicknames(nicknames, metadata.chatId)
     }
 
-    override fun findByNicknames(nicknames: List<String>, chatId: Long): List<Person> {
+    override fun findByNicknames(nicknames: List<String>, chatId: Long): List<BasicPerson> {
         val persons = personRepo.findByNicknames(nicknames)
         val newPersons = nicknames.newNicknames(persons)
                 .let { nicknames ->
@@ -43,7 +42,7 @@ open class TelegramPersonServiceImpl(
         return allPersons
     }
 
-    override fun findByFrom(metadata: MessageMetadata): Person {
+    override fun findByFrom(metadata: MessageMetadata): BasicPerson {
         check(metadata.from?.username != null) { "User must have nickname to execute command" }
         val person = personRepo.findByNickname(metadata.from.username!!)
         check(person != null) { "Person does not found" }
@@ -51,7 +50,7 @@ open class TelegramPersonServiceImpl(
         return person
     }
 
-    private fun List<String>.newNicknames(existing: List<Person>): List<String> {
+    private fun List<String>.newNicknames(existing: List<BasicPerson>): List<String> {
         val existingNicknames = existing.map { it.nickname }
         return filter { !existingNicknames.contains(it) }
     }

@@ -84,14 +84,14 @@ ___
 ``` 
 message id: 8 
 ------------------------------
-You can support me using this link. 
-https://buymeacoffee.com/mrrockka
-------------------------------
 Payout to: @nickname1
   Entries: 10
   Withdrawals: 20
-  Total: 10 
+  Total: 10 (withdrawals 20 - entries 10)
 From:
-  @nickname2 -> 10 
+  @nickname2 -> 10
+------------------------------
+You can support me using this link. 
+https://buymeacoffee.com/mrrockka 
 ``` 
 ___

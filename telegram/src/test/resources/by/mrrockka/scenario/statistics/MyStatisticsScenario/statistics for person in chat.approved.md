@@ -88,9 +88,6 @@ ___
 ``` 
 message id: 8 
 ------------------------------
-You can support me using this link. 
-https://buymeacoffee.com/mrrockka
-------------------------------
 Finale summary:
   1. @sergio_cartwright won 15
   2. @nickname1 won 15
@@ -106,7 +103,10 @@ Payout to: @sergio_cartwright
   Entries: 10
   Total: 5 (won 15 - entries 10)
 From:
-  @nickname2 -> 5 
+  @nickname2 -> 5
+------------------------------
+You can support me using this link. 
+https://buymeacoffee.com/mrrockka 
 ``` 
 ___
 
@@ -129,7 +129,7 @@ nickname: @sergio_cartwright
 games played: 1 (1 tournament)
 times in prizes: 1
 times in first place: 1
-buy-ins total: 10.00
+buy-ins total: 10
 won total: 15.00 
 correlation: 5.00  
 ``` 
@@ -200,16 +200,16 @@ ___
 ``` 
 message id: 16 
 ------------------------------
-You can support me using this link. 
-https://buymeacoffee.com/mrrockka
-------------------------------
 Payout to: @nickname2
   Entries: 10
   Withdrawals: 30
-  Total: 20 
+  Total: 20 (withdrawals 30 - entries 10)
 From:
   @sergio_cartwright -> 10
-  @nickname1 -> 10 
+  @nickname1 -> 10
+------------------------------
+You can support me using this link. 
+https://buymeacoffee.com/mrrockka 
 ``` 
 ___
 
@@ -232,7 +232,7 @@ nickname: @sergio_cartwright
 games played: 2 (1 tournament)
 times in prizes: 1
 times in first place: 1
-buy-ins total: 20.00
+buy-ins total: 20
 won total: 15.00 
 correlation: -5.00  
 ``` 
@@ -366,9 +366,6 @@ ___
 ``` 
 message id: 30 
 ------------------------------
-You can support me using this link. 
-https://buymeacoffee.com/mrrockka
-------------------------------
 Finale summary:
   1. @nickname1 won 15
   2. @sergio_cartwright won 15
@@ -376,11 +373,14 @@ Total: 30 (3 entries * 10 buy in)
 ------------------------------
 Payout to: @nickname1
   Entries: 10
-  Bounties: 20 (taken 20 - given 0) 
+  Bounties: 20 (taken 2 - given 0) 
   Total: 25 (won 15 - entries 10 + bounties 20)
 From:
   @nickname2 -> 20
-  @sergio_cartwright -> 5 
+  @sergio_cartwright -> 5
+------------------------------
+You can support me using this link. 
+https://buymeacoffee.com/mrrockka 
 ``` 
 ___
 
@@ -403,9 +403,9 @@ nickname: @sergio_cartwright
 games played: 3 (2 tournaments)
 times in prizes: 2
 times in first place: 1
-buy-ins total: 40.00
-won total: 30.00 
-correlation: -10.00  
+buy-ins total: 20.00
+won total: 20.00 
+correlation: 0.00  
 ``` 
 ___
 
@@ -499,9 +499,6 @@ ___
 ``` 
 message id: 40 
 ------------------------------
-You can support me using this link. 
-https://buymeacoffee.com/mrrockka
-------------------------------
 Finale summary:
   1. @nickname1 won 15
   2. @nickname2 won 15
@@ -517,7 +514,10 @@ Payout to: @nickname1
   Entries: 10
   Total: 5 (won 15 - entries 10)
 From:
-  @sergio_cartwright -> 5 
+  @sergio_cartwright -> 5
+------------------------------
+You can support me using this link. 
+https://buymeacoffee.com/mrrockka 
 ``` 
 ___
 
@@ -540,8 +540,8 @@ nickname: @sergio_cartwright
 games played: 4 (3 tournaments)
 times in prizes: 2
 times in first place: 1
-buy-ins total: 50.00
-won total: 30.00 
-correlation: -20.00  
+buy-ins total: 30.00
+won total: 20.00 
+correlation: -10.00  
 ``` 
 ___

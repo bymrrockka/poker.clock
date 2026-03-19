@@ -2,6 +2,16 @@ spring:
   profiles:
     active: ${PROFILES:postgres}
 
+feature:
+  service-fee:
+    description: |
+      Game calculation fee. 
+      Link below
+    enabled: true
+    url: https://buymeacoffee.com/mrrockka
+    percent: 5
+    threshold: 5
+
 bot:
   properties:
     name: ${BOT_NAME:Poker calculator bot}

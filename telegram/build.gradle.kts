@@ -19,11 +19,6 @@ plugins {
 
 val jvmVersion = 21
 
-ktGram {
-    forceVersion = "dev-260304~c2d701e"
-    addSnapshotRepo = true
-}
-
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(jvmVersion)
@@ -49,6 +44,7 @@ dependencies {
     implementation(libs.bundles.db)
     implementation(libs.bundles.kotlinLibs)
     implementation(libs.bundles.exposed)
+    implementation(libs.bundles.jackson)
 
     runtimeOnly(libs.aspectjWeaver)
 

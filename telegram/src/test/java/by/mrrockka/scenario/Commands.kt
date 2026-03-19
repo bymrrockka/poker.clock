@@ -1,7 +1,8 @@
 package by.mrrockka.scenario
 
+import by.mrrockka.domain.BasicPerson
 import by.mrrockka.domain.GameType
-import by.mrrockka.domain.Person
+import by.mrrockka.domain.PositionPrize
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -34,18 +35,18 @@ class Commands private constructor() {
         fun entry(amount: Int? = null): String = "${entry} @me ${if (amount == null) "" else amount}"
         fun help(command: String? = null): String = "$help ${command ?: ""}"
 
-        fun List<String>.createGame(type: GameType, buyin: BigDecimal, alias: Boolean = false): String {
+        fun List<String>.createGame(type: GameType, buyin: BigDecimal, alias: Boolean = false, bounty: BigDecimal = buyin): String {
             return """
                 ${type.toCommand(alias)}
                 buyin: $buyin
-                ${if (type == GameType.BOUNTY) "bounty: $buyin" else ""}
+                ${if (type == GameType.BOUNTY) "bounty: $bounty" else ""}
                 ${this.joinToString { "@$it" }}
             """.trimIndent()
         }
 
         fun String.createGame(type: GameType, buyin: BigDecimal): String = listOf(this).createGame(type, buyin)
 
-        fun createGame(type: GameType, buyin: BigDecimal, excludes: List<Person> = emptyList()): String = """
+        fun createGame(type: GameType, buyin: BigDecimal, excludes: List<BasicPerson> = emptyList()): String = """
                 ${type.toCommand()}
                 buyin: $buyin
                 ${if (type == GameType.BOUNTY) "bounty: $buyin" else ""}
@@ -58,7 +59,7 @@ class Commands private constructor() {
             GameType.BOUNTY -> if (alias) bountyGameAlias else bountyGame
         }
 
-        private fun calculatePrizePool(size: Int): Map<Int, BigDecimal> {
+        private fun calculatePrizePool(size: Int): List<PositionPrize> {
             var total = BigDecimal(100)
             val calculatePercentageForPlace = fun(index: Int): BigDecimal {
                 if (size == 1) {
@@ -72,13 +73,13 @@ class Commands private constructor() {
                 return result
             }
 
-            return (1..size).associate { it to calculatePercentageForPlace(it) }
+            return (1..size).map { PositionPrize(it, calculatePercentageForPlace(it)) }
         }
 
         fun prizePool(size: Int): String {
             return """
             |$prizePool
-            ${calculatePrizePool(size).entries.joinToString("\n") { (index, value) -> "|${index} ${value}%" }}
+            ${calculatePrizePool(size).joinToString("\n") { (position, percentage) -> "|${position} ${percentage}%" }}
             """.trimMargin()
         }
 

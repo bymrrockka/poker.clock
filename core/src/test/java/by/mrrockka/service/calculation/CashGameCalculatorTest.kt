@@ -1,16 +1,15 @@
 package by.mrrockka.service.calculation
 
-import by.mrrockka.AbstractTest
+import by.mrrockka.ServiceFeeFeatureTest
 import by.mrrockka.builder.cashGame
 import by.mrrockka.builder.cashPlayer
 import by.mrrockka.builder.cashPlayers
 import by.mrrockka.builder.plus
 import by.mrrockka.domain.CashPlayer
-import by.mrrockka.domain.Debtor
-import by.mrrockka.domain.Payout
-import by.mrrockka.service.GameCalculator
+import by.mrrockka.domain.Game
+import by.mrrockka.extension.textApprover
+import by.mrrockka.service.halfDown
 import com.oneeyedmen.okeydoke.Approver
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -18,14 +17,13 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.math.BigDecimal
 import java.util.stream.Stream
 
-class CashGameCalculatorTest : AbstractTest() {
-    private val calculator: GameCalculator = GameCalculator()
+class CashGameCalculatorTest : ServiceFeeFeatureTest() {
 
     @ParameterizedTest
     @MethodSource("playerSize")
     fun `given equal entries and one player wins pot should calculate`(size: Int) {
-        val buyin = BigDecimal("10")
-        val withdrawal = BigDecimal("10")
+        val buyin = BigDecimal("10.0")
+        val withdrawal = BigDecimal("10.0")
         val players = cashPlayers(size) { buyin(buyin) }
         val withdrawalPlayer = players[0].addWithdrawals(withdrawal, size)
 
@@ -34,24 +32,13 @@ class CashGameCalculatorTest : AbstractTest() {
             players(players.drop(1) + withdrawalPlayer)
         }
 
-        val actual = calculator.calculate(game)
-        val expect = listOf(
-                Payout(
-                        creditor = withdrawalPlayer.person,
-                        debtors = players.drop(1)
-                                .map { Debtor(it.person, buyin) }
-                                .reversed(),
-                        total = BigDecimal("10") * (players.size - 1).toBigDecimal(),
-                ),
-        )
-
-        assertThat(actual).isEqualTo(expect)
+        game.calculateAndAssert(textApprover("given equal entries and one player wins pot should calculate. size $size"))
     }
 
     @Test
     fun `given equal entries and two players win pot should calculate`(approver: Approver) {
-        val buyin = BigDecimal("10")
-        val withdrawal = BigDecimal("10")
+        val buyin = BigDecimal("10.0")
+        val withdrawal = BigDecimal("10.0")
         val players = cashPlayers(10) { buyin(buyin) }
         val first = players[0].addWithdrawals(withdrawal, 5)
         val second = players[1].addWithdrawals(withdrawal, 5)
@@ -61,13 +48,13 @@ class CashGameCalculatorTest : AbstractTest() {
             players(players.drop(2) + first + second)
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+        game.calculateAndAssert(approver)
     }
 
     @Test
     fun `given equal entries and withdrawals should calculate`(approver: Approver) {
-        val buyin = BigDecimal("10")
-        val withdrawal = BigDecimal("10")
+        val buyin = BigDecimal("10.0")
+        val withdrawal = BigDecimal("10.0")
         val players = cashPlayers(10) { buyin(buyin) }
                 .map { it.addWithdrawals(withdrawal, 1) }
 
@@ -76,13 +63,13 @@ class CashGameCalculatorTest : AbstractTest() {
             players(players)
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+        game.calculateAndAssert(approver)
     }
 
     @Test
     fun `given player enters many times and wins a pot should calculate`(approver: Approver) {
-        val buyin = BigDecimal("10")
-        val withdrawal = BigDecimal("10")
+        val buyin = BigDecimal("10.0")
+        val withdrawal = BigDecimal("10.0")
         val players = cashPlayer {
             buyin(buyin)
             entries(5)
@@ -97,7 +84,7 @@ class CashGameCalculatorTest : AbstractTest() {
             players(players.drop(1) + winner)
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+        game.calculateAndAssert(approver)
     }
 
     companion object {
@@ -114,4 +101,16 @@ class CashGameCalculatorTest : AbstractTest() {
     }
 
     fun CashPlayer.addWithdrawals(withdrawal: BigDecimal, size: Int): CashPlayer = this.copy(withdrawals = (0..<size).map { withdrawal })
+
+    override fun game(buyin: BigDecimal, playersSize: Int, prizeSize: Int): Game {
+        val withdrawal = buyin
+        val players = cashPlayers(playersSize) { buyin(buyin) }
+        val withdrawSize = (playersSize / prizeSize).toBigDecimal().halfDown().toInt()
+        val first = players[0].addWithdrawals(withdrawal, size = playersSize - withdrawSize)
+        val second = players[1].addWithdrawals(withdrawal, size = withdrawSize)
+        return cashGame {
+            buyIn(buyin)
+            players(players.drop(2) + first + second)
+        }
+    }
 }

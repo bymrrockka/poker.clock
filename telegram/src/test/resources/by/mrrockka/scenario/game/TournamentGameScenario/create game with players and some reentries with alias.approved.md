@@ -245,9 +245,6 @@ ___
 ``` 
 message id: 22 
 ------------------------------
-You can support me using this link. 
-https://buymeacoffee.com/mrrockka
-------------------------------
 Finale summary:
   1. @nickname1 won 65
   2. @nickname2 won 65
@@ -255,18 +252,23 @@ Total: 130 (13 entries * 10 buy in)
 ------------------------------
 Payout to: @nickname2
   Entries: 10
-  Total: 55 (won 65 - entries 10)
+  Total: 55 (won 65 - entries 10 - 6 fee)
 From:
   @nickname3 -> 30
-  @nickname5 -> 10
   @nickname4 -> 10
-  @sergio_cartwright -> 5
+  @sergio_cartwright -> 9
 ------------------------------
 Payout to: @nickname1
   Entries: 60
   Total: 5 (won 65 - entries 60)
 From:
-  @sergio_cartwright -> 5 
+  @sergio_cartwright -> 5
+------------------------------
+Game calculation fee
+  URL: https://buymeacoffee.com/mrrockka
+  Total: 6
+From:
+  @sergio_cartwright -> 6 
 ``` 
 ___
 

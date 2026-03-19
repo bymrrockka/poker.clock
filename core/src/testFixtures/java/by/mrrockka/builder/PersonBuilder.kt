@@ -10,22 +10,18 @@ class PersonBuilder(
         init: PersonBuilder.() -> Unit,
 ) : AbstractBuilder<CoreRandoms>(coreRandoms) {
     var id: UUID? = null
-    var firstname: String? = null
-    var lastname: String? = null
-    var username: String? = null
+    var nickname: String? = null
 
     init {
         init()
     }
 
     fun build(): BasicPerson {
-        val firstname = firstname ?: randoms.firstname()
-        val lastname = lastname ?: randoms.lastname()
+        val firstname = randoms.firstname()
+        val lastname = randoms.lastname()
         return BasicPerson(
                 id = id ?: randoms.uuid(),
-                firstname = firstname,
-                lastname = lastname,
-                nickname = username ?: "${firstname.lowercase()}_${lastname.lowercase()}",
+                nickname = nickname ?: "${firstname.lowercase()}_${lastname.lowercase()}",
         )
     }
 }

@@ -1,19 +1,17 @@
 package by.mrrockka.service.calculation
 
-import by.mrrockka.AbstractTest
+import by.mrrockka.ServiceFeeFeatureTest
 import by.mrrockka.builder.bountyGame
 import by.mrrockka.builder.bountyPlayer
 import by.mrrockka.builder.bountyPlayers
 import by.mrrockka.builder.plus
 import by.mrrockka.domain.Bounty
 import by.mrrockka.domain.BountyPlayer
-import by.mrrockka.domain.Debtor
 import by.mrrockka.domain.FinalPlace
-import by.mrrockka.domain.Payout
+import by.mrrockka.domain.Game
 import by.mrrockka.domain.PositionPrize
-import by.mrrockka.service.GameCalculator
+import by.mrrockka.extension.textApprover
 import com.oneeyedmen.okeydoke.Approver
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -21,14 +19,13 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.math.BigDecimal
 import java.util.stream.Stream
 
-class BountyTournamentGameCalculatorTest : AbstractTest() {
-    private val calculator: GameCalculator = GameCalculator()
+class BountyTournamentGameCalculatorTest : ServiceFeeFeatureTest() {
 
     @ParameterizedTest
     @MethodSource("playerSize")
     fun `given equal entries and one prize place should calculate`(size: Int) {
-        val buyin = BigDecimal("10")
-        val bounty = BigDecimal("10")
+        val buyin = BigDecimal("10.0")
+        val bounty = BigDecimal("10.0")
         val players = bountyPlayers(size) {
             buyin(buyin)
             bounty(bounty)
@@ -39,29 +36,17 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
             buyIn(buyin)
             bounty(bounty)
             players(fromBounties + toBounties)
-            prizePool(PositionPrize(1, BigDecimal("100")))
+            prizePool(PositionPrize(1, BigDecimal("100.0")))
             finalePlaces(FinalPlace(1, toBounties.person))
         }
 
-        val actual = calculator.calculate(game)
-        val expect = listOf(
-                Payout(
-                        creditor = toBounties.person,
-                        debtors = fromBounties
-                                .filterNot { it == toBounties }
-                                .map { Debtor(it.person, buyin + bounty) }
-                                .reversed(),
-                        total = BigDecimal("20") * (players.size - 1).toBigDecimal(),
-                ),
-        )
-
-        assertThat(actual).isEqualTo(expect)
+        game.calculateAndAssert(textApprover("given equal entries and one prize place should calculate.size $size"))
     }
 
     @Test
     fun `given some reentries and one prize place should calculate`(approver: Approver) {
-        val buyin = BigDecimal("10")
-        val bounty = BigDecimal("10")
+        val buyin = BigDecimal("10.0")
+        val bounty = BigDecimal("10.0")
         val players = bountyPlayers(10) {
             buyin(buyin)
             bounty(bounty)
@@ -80,17 +65,17 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
             buyIn(buyin)
             bounty(bounty)
             players(fromBounties + toBounties)
-            prizePool(PositionPrize(1, BigDecimal("100")))
+            prizePool(PositionPrize(1, BigDecimal("100.0")))
             finalePlaces(FinalPlace(1, toBounties.person))
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+        game.calculateAndAssert(approver)
     }
 
     @Test
     fun `given equal entries and two prize positions should calculate`(approver: Approver) {
-        val buyin = BigDecimal("10")
-        val bounty = BigDecimal("10")
+        val buyin = BigDecimal("10.0")
+        val bounty = BigDecimal("10.0")
         val players = bountyPlayers(10) {
             buyin(buyin)
             bounty(bounty)
@@ -113,13 +98,13 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
             )
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+        game.calculateAndAssert(approver)
     }
 
     @Test
     fun `given equal entries and one prize positions and winner has only one bounty should calculate`(approver: Approver) {
-        val buyin = BigDecimal("10")
-        val bounty = BigDecimal("10")
+        val buyin = BigDecimal("10.0")
+        val bounty = BigDecimal("10.0")
         val players = bountyPlayers(10) {
             buyin(buyin)
             bounty(bounty)
@@ -132,11 +117,11 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
             buyIn(buyin)
             bounty(bounty)
             players(noPlaceBounties + firstPlaceBounties + firstPlace)
-            prizePool(PositionPrize(1, BigDecimal("100")))
+            prizePool(PositionPrize(1, BigDecimal("100.0")))
             finalePlaces(FinalPlace(1, firstPlace.person))
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+        game.calculateAndAssert(approver)
     }
 
 
@@ -160,8 +145,8 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
          * And third player total is (2 * -10) + (4 * 10) = 20
          * */
 
-        val bounty = BigDecimal("10")
-        val buyin = BigDecimal("10")
+        val bounty = BigDecimal("10.0")
+        val buyin = BigDecimal("10.0")
         val players = bountyPlayer {
             buyin(buyin)
             bounty(bounty)
@@ -188,13 +173,13 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
             )
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+        game.calculateAndAssert(approver)
     }
 
     @Test
     fun `given prize amounts has decimal points should calculate`(approver: Approver) {
-        val buyin = BigDecimal("10")
-        val bounty = BigDecimal("10")
+        val buyin = BigDecimal("10.0")
+        val bounty = BigDecimal("10.0")
         val players = bountyPlayers(11) {
             buyin(buyin)
             bounty(bounty)
@@ -215,7 +200,7 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
             )
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+        game.calculateAndAssert(approver)
     }
 
     companion object {
@@ -263,4 +248,21 @@ class BountyTournamentGameCalculatorTest : AbstractTest() {
                             else -> biggest.copy(bounties = biggest.bounties + other.filterNot { biggest.bounties.contains(it) })
                         }
                     }
+
+    override fun game(buyin: BigDecimal, playersSize: Int, prizeSize: Int): Game {
+        val bountyAmount = buyin
+        val players = bountyPlayers(playersSize) {
+            buyin(buyin)
+            bounty(bountyAmount)
+        }
+        val (toBounties, fromBounties) = players.bountyToWinner(players[0], bountyAmount)
+
+        return bountyGame {
+            buyIn(buyin)
+            bounty(bountyAmount)
+            players(fromBounties + toBounties)
+            prizePool(prizePool(prizeSize))
+            finalePlaces(players.finalePlaces(prizeSize))
+        }
+    }
 }

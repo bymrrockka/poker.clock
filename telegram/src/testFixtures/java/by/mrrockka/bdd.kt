@@ -1,7 +1,7 @@
 package by.mrrockka
 
 import by.mrrockka.TelegramRandoms.Companion.telegramRandoms
-import by.mrrockka.domain.Person
+import by.mrrockka.domain.BasicPerson
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
@@ -16,7 +16,7 @@ interface Command {
     @OptIn(ExperimentalTime::class)
     data class Poll(val time: Instant, override val unique: String = unique()) : Command
 
-    data class PollAnswer(val poll: Poll, val person: Person, val optionName: String? = null, val option: Int, override val unique: String = unique()) : Command
+    data class PollAnswer(val poll: Poll, val person: BasicPerson, val optionName: String? = null, val option: Int, override val unique: String = unique()) : Command
 
     data class Pin(val command: Command, override val unique: String = unique()) : Command
 
@@ -51,7 +51,7 @@ class GivenSpecification {
         return command
     }
 
-    fun Command.Poll.pollAnswer(person: Person, option: Int) {
+    fun Command.Poll.pollAnswer(person: BasicPerson, option: Int) {
         this@GivenSpecification.commands += Command.PollAnswer(this, person, option = option)
     }
 

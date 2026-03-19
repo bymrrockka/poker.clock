@@ -1,0 +1,26 @@
+package by.mrrockka.feature
+
+import by.mrrockka.domain.ServiceFee
+import by.mrrockka.service.halfDown
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.stereotype.Component
+import java.math.BigDecimal
+
+
+@Component
+@ConfigurationProperties(prefix = "feature.service-fee")
+class ServiceFeeFeature(
+        var enabled: Boolean = false,
+        var percent: BigDecimal = BigDecimal.ZERO,
+        var threshold: BigDecimal = BigDecimal("1"),
+        var description: String = "",
+        var url: String = "",
+) {
+    val feePerson: ServiceFee by lazy { ServiceFee(description, url) }
+
+    fun calculate(amount: BigDecimal): BigDecimal = if (enabled) {
+        val result = (amount * percent / BigDecimal("100.0")).halfDown()
+        if (result < threshold) BigDecimal.ZERO else result
+    } else BigDecimal.ZERO
+
+}

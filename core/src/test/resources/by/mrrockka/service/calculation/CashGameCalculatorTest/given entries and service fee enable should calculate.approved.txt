@@ -1,0 +1,29 @@
+Payout to: jackie_rau 
+Total: 40
+Debtors:
+  - Debtor: hope_wehner
+    Debt: 10
+  - Debtor: stanton_boyer
+    Debt: 10
+  - Debtor: ashlee_lang
+    Debt: 10
+  - Debtor: santo_welch
+    Debt: 10
+______________________________
+Payout to: terisa_johnston 
+Total: 30
+Debtors:
+  - Debtor: refugia_koss
+    Debt: 10
+  - Debtor: deb_becker
+    Debt: 10
+  - Debtor: perry_hessel
+    Debt: 10
+______________________________
+Description: Service Fee
+URL: https://www.mrrockka.by
+Total: 10
+Debtors:
+  - Debtor: ronnie_schuppe
+    Debt: 10
+______________________________

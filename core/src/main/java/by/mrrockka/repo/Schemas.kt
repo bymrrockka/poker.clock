@@ -22,8 +22,6 @@ object GameTable : Table("game") {
 
 object PersonTable : Table("person") {
     val id = javaUUID("id")
-    val firstName = varchar("first_name", 100).nullable()
-    val lastName = varchar("last_name", 100).nullable()
     val nickName = varchar("nick_name", 32).nullable()
 
     override val primaryKey = PrimaryKey(id)

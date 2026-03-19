@@ -1,0 +1,215 @@
+Game details: 
+ - total money: 1000.0
+ - buy-in: 10.0
+ - players size: 100
+ - entries size: 100
+
+Prize summary:
+Position 1
+  Prize 1000.0
+  Buy-ins: -10
+  Nickname jackie_rau
+  Total: 990
+
+Payout to: jackie_rau 
+Total: 990 
+Debtors:
+  - Debtor: vicente_hettinger
+    Debt: 10
+  - Debtor: samara_schowalter
+    Debt: 10
+  - Debtor: tyler_gusikowski
+    Debt: 10
+  - Debtor: erika_stroman
+    Debt: 10
+  - Debtor: marvel_bechtelar
+    Debt: 10
+  - Debtor: adan_champlin
+    Debt: 10
+  - Debtor: earlene_grimes
+    Debt: 10
+  - Debtor: elfreda_huels
+    Debt: 10
+  - Debtor: patrice_wehner
+    Debt: 10
+  - Debtor: sharie_ondricka
+    Debt: 10
+  - Debtor: kristian_hettinger
+    Debt: 10
+  - Debtor: adrienne_beier
+    Debt: 10
+  - Debtor: randal_larson
+    Debt: 10
+  - Debtor: isiah_schumm
+    Debt: 10
+  - Debtor: alonso_russel
+    Debt: 10
+  - Debtor: rolande_wiza
+    Debt: 10
+  - Debtor: jerrell_johnston
+    Debt: 10
+  - Debtor: levi_ruecker
+    Debt: 10
+  - Debtor: geraldo_cremin
+    Debt: 10
+  - Debtor: del_crona
+    Debt: 10
+  - Debtor: rickie_gerhold
+    Debt: 10
+  - Debtor: lonna_murphy
+    Debt: 10
+  - Debtor: loree_koelpin
+    Debt: 10
+  - Debtor: lakisha_hammes
+    Debt: 10
+  - Debtor: trinidad_hintz
+    Debt: 10
+  - Debtor: ronald_brown
+    Debt: 10
+  - Debtor: ayako_kulas
+    Debt: 10
+  - Debtor: marci_batz
+    Debt: 10
+  - Debtor: quinn_mante
+    Debt: 10
+  - Debtor: linnea_senger
+    Debt: 10
+  - Debtor: jesenia_bernhard
+    Debt: 10
+  - Debtor: dannette_hansen
+    Debt: 10
+  - Debtor: lucile_haag
+    Debt: 10
+  - Debtor: adrienne_johnston
+    Debt: 10
+  - Debtor: alfredo_lang
+    Debt: 10
+  - Debtor: marni_lang
+    Debt: 10
+  - Debtor: steven_witting
+    Debt: 10
+  - Debtor: hayden_schamberger
+    Debt: 10
+  - Debtor: rozanne_turcotte
+    Debt: 10
+  - Debtor: domitila_o'hara
+    Debt: 10
+  - Debtor: melinda_crooks
+    Debt: 10
+  - Debtor: danilo_schneider
+    Debt: 10
+  - Debtor: hong_sporer
+    Debt: 10
+  - Debtor: marty_grady
+    Debt: 10
+  - Debtor: dyan_nicolas
+    Debt: 10
+  - Debtor: maragret_heller
+    Debt: 10
+  - Debtor: everette_mertz
+    Debt: 10
+  - Debtor: luanne_abernathy
+    Debt: 10
+  - Debtor: alejandro_hegmann
+    Debt: 10
+  - Debtor: pamila_braun
+    Debt: 10
+  - Debtor: mitch_sanford
+    Debt: 10
+  - Debtor: carol_conroy
+    Debt: 10
+  - Debtor: ismael_mclaughlin
+    Debt: 10
+  - Debtor: derick_tremblay
+    Debt: 10
+  - Debtor: fairy_abernathy
+    Debt: 10
+  - Debtor: chaya_price
+    Debt: 10
+  - Debtor: robt_jast
+    Debt: 10
+  - Debtor: shelton_nienow
+    Debt: 10
+  - Debtor: rupert_cummerata
+    Debt: 10
+  - Debtor: giuseppe_pfeffer
+    Debt: 10
+  - Debtor: dana_blanda
+    Debt: 10
+  - Debtor: theron_macgyver
+    Debt: 10
+  - Debtor: alfonzo_gaylord
+    Debt: 10
+  - Debtor: jeremiah_parker
+    Debt: 10
+  - Debtor: kelly_gibson
+    Debt: 10
+  - Debtor: laraine_haag
+    Debt: 10
+  - Debtor: coral_beier
+    Debt: 10
+  - Debtor: ashlie_rempel
+    Debt: 10
+  - Debtor: isaac_oberbrunner
+    Debt: 10
+  - Debtor: richie_franecki
+    Debt: 10
+  - Debtor: francisco_nolan
+    Debt: 10
+  - Debtor: darryl_hane
+    Debt: 10
+  - Debtor: tasia_rempel
+    Debt: 10
+  - Debtor: marhta_baumbach
+    Debt: 10
+  - Debtor: kennith_bradtke
+    Debt: 10
+  - Debtor: regina_kreiger
+    Debt: 10
+  - Debtor: thaddeus_moen
+    Debt: 10
+  - Debtor: jed_klein
+    Debt: 10
+  - Debtor: edythe_runolfsson
+    Debt: 10
+  - Debtor: lena_howe
+    Debt: 10
+  - Debtor: jeniffer_hegmann
+    Debt: 10
+  - Debtor: antwan_wunsch
+    Debt: 10
+  - Debtor: malorie_blick
+    Debt: 10
+  - Debtor: jefferson_jacobs
+    Debt: 10
+  - Debtor: edmond_klein
+    Debt: 10
+  - Debtor: preston_blanda
+    Debt: 10
+  - Debtor: pearlene_huels
+    Debt: 10
+  - Debtor: harry_mayer
+    Debt: 10
+  - Debtor: erich_mayer
+    Debt: 10
+  - Debtor: donya_willms
+    Debt: 10
+  - Debtor: ronnie_schuppe
+    Debt: 10
+  - Debtor: refugia_koss
+    Debt: 10
+  - Debtor: deb_becker
+    Debt: 10
+  - Debtor: perry_hessel
+    Debt: 10
+  - Debtor: hope_wehner
+    Debt: 10
+  - Debtor: stanton_boyer
+    Debt: 10
+  - Debtor: ashlee_lang
+    Debt: 10
+  - Debtor: santo_welch
+    Debt: 10
+  - Debtor: terisa_johnston
+    Debt: 10
+______________________________

@@ -1,17 +1,15 @@
 package by.mrrockka.service.calculation
 
-import by.mrrockka.AbstractTest
+import by.mrrockka.ServiceFeeFeatureTest
 import by.mrrockka.builder.plus
 import by.mrrockka.builder.tournamentGame
 import by.mrrockka.builder.tournamentPlayer
 import by.mrrockka.builder.tournamentPlayers
-import by.mrrockka.domain.Debtor
 import by.mrrockka.domain.FinalPlace
-import by.mrrockka.domain.Payout
+import by.mrrockka.domain.Game
 import by.mrrockka.domain.PositionPrize
-import by.mrrockka.service.GameCalculator
+import by.mrrockka.extension.textApprover
 import com.oneeyedmen.okeydoke.Approver
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -19,13 +17,11 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.math.BigDecimal
 import java.util.stream.Stream
 
-class TournamentGameCalculatorTest : AbstractTest() {
-    private val calculator: GameCalculator = GameCalculator()
-
+class TournamentGameCalculatorTest : ServiceFeeFeatureTest() {
     @ParameterizedTest
     @MethodSource("playerSize")
     fun `given equal entries and one prize place should calculate`(size: Int) {
-        val buyin = BigDecimal("10")
+        val buyin = BigDecimal("10.0")
         val players = tournamentPlayers(size) {
             buyin(buyin)
         }
@@ -33,28 +29,16 @@ class TournamentGameCalculatorTest : AbstractTest() {
         val game = tournamentGame {
             buyIn(buyin)
             players(players)
-            prizePool(PositionPrize(1, BigDecimal("100")))
+            prizePool(PositionPrize(1, BigDecimal("100.0")))
             finalePlaces(FinalPlace(1, players[0].person))
         }
 
-        val actual = calculator.calculate(game)
-        val expect = listOf(
-                Payout(
-                        creditor = players[0].person,
-                        debtors = players
-                                .filterNot { it == players[0] }
-                                .map { Debtor(it.person, buyin) }
-                                .reversed(),
-                        total = BigDecimal("10") * (players.size - 1).toBigDecimal(),
-                ),
-        )
-
-        assertThat(actual).isEqualTo(expect)
+        game.calculateAndAssert(textApprover("given equal entries and one prize place should calculate.size $size"))
     }
 
     @Test
     fun `given some reentries and one prize place should calculate`(approver: Approver) {
-        val buyin = BigDecimal("10")
+        val buyin = BigDecimal("10.0")
         val players = tournamentPlayers(10) {
             buyin(buyin)
         } + tournamentPlayer {
@@ -68,16 +52,16 @@ class TournamentGameCalculatorTest : AbstractTest() {
         val game = tournamentGame {
             buyIn(buyin)
             players(players)
-            prizePool(PositionPrize(1, BigDecimal("100")))
+            prizePool(PositionPrize(1, BigDecimal("100.0")))
             finalePlaces(FinalPlace(1, players[0].person))
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+        game.calculateAndAssert(approver)
     }
 
     @Test
     fun `given equal entries and two prize positions should calculate`(approver: Approver) {
-        val buyin = BigDecimal("10")
+        val buyin = BigDecimal("10.0")
         val players = tournamentPlayers(10) {
             buyin(buyin)
         }
@@ -95,12 +79,12 @@ class TournamentGameCalculatorTest : AbstractTest() {
             )
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+        game.calculateAndAssert(approver)
     }
 
     @Test
     fun `given some reentries and two prize positions should calculate`(approver: Approver) {
-        val buyin = BigDecimal("10")
+        val buyin = BigDecimal("10.0")
         val players = tournamentPlayers(10) {
             buyin(buyin)
         } + tournamentPlayer {
@@ -124,12 +108,12 @@ class TournamentGameCalculatorTest : AbstractTest() {
             )
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+        game.calculateAndAssert(approver)
     }
 
     @Test
     fun `given winners has reentries should calculate`(approver: Approver) {
-        val buyin = BigDecimal("10")
+        val buyin = BigDecimal("10.0")
         val players = tournamentPlayer {
             buyin(buyin)
             entries(3)
@@ -151,12 +135,12 @@ class TournamentGameCalculatorTest : AbstractTest() {
             )
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+        game.calculateAndAssert(approver)
     }
 
     @Test
     fun `given winners has reentries and prize doesn't cover debt should calculate payouts`(approver: Approver) {
-        val buyin = BigDecimal("10")
+        val buyin = BigDecimal("10.0")
         val players = tournamentPlayer {
             buyin(buyin)
             entries(3)
@@ -170,7 +154,7 @@ class TournamentGameCalculatorTest : AbstractTest() {
             players(players)
             prizePool(
                     PositionPrize(1, BigDecimal("90")),
-                    PositionPrize(2, BigDecimal("10")),
+                    PositionPrize(2, BigDecimal("10.0")),
             )
             finalePlaces(
                     FinalPlace(1, players[0].person),
@@ -178,12 +162,12 @@ class TournamentGameCalculatorTest : AbstractTest() {
             )
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+        game.calculateAndAssert(approver)
     }
 
     @Test
     fun `given prize amounts has decimal points should calculate`(approver: Approver) {
-        val buyin = BigDecimal("10")
+        val buyin = BigDecimal("10.0")
         val players = tournamentPlayers(11) { buyin(buyin) }
 
         val game = tournamentGame {
@@ -199,7 +183,7 @@ class TournamentGameCalculatorTest : AbstractTest() {
             )
         }
 
-        approver.assertApproved(calculator.calculate(game).simplify(players).toJsonString())
+        game.calculateAndAssert(approver)
     }
 
     companion object {
@@ -214,4 +198,16 @@ class TournamentGameCalculatorTest : AbstractTest() {
             )
         }
     }
+
+    override fun game(buyin: BigDecimal, playersSize: Int, prizeSize: Int): Game {
+        val players = tournamentPlayers(playersSize) { buyin(buyin) }
+
+        return tournamentGame {
+            buyIn(buyin)
+            players(players)
+            prizePool(prizePool(prizeSize))
+            finalePlaces(players.finalePlaces(prizeSize))
+        }
+    }
+
 }

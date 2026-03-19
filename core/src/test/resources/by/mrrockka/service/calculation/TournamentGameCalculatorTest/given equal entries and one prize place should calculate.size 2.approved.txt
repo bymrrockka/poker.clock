@@ -1,0 +1,19 @@
+Game details: 
+ - total money: 20.0
+ - buy-in: 10.0
+ - players size: 2
+ - entries size: 2
+
+Prize summary:
+Position 1
+  Prize 20.0
+  Buy-ins: -10
+  Nickname jackie_rau
+  Total: 10
+
+Payout to: jackie_rau 
+Total: 10 
+Debtors:
+  - Debtor: terisa_johnston
+    Debt: 10
+______________________________

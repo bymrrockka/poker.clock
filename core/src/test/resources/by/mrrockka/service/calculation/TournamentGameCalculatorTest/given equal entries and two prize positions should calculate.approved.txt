@@ -1,0 +1,42 @@
+Game details: 
+ - total money: 100.0
+ - buy-in: 10.0
+ - players size: 10
+ - entries size: 10
+
+Prize summary:
+Position 1
+  Prize 70
+  Buy-ins: -10
+  Nickname jackie_rau
+  Total: 60
+Position 2
+  Prize 30.0
+  Buy-ins: -10
+  Nickname terisa_johnston
+  Total: 20
+
+Payout to: jackie_rau 
+Total: 60 
+Debtors:
+  - Debtor: deb_becker
+    Debt: 10
+  - Debtor: perry_hessel
+    Debt: 10
+  - Debtor: hope_wehner
+    Debt: 10
+  - Debtor: stanton_boyer
+    Debt: 10
+  - Debtor: ashlee_lang
+    Debt: 10
+  - Debtor: santo_welch
+    Debt: 10
+______________________________
+Payout to: terisa_johnston 
+Total: 20 
+Debtors:
+  - Debtor: ronnie_schuppe
+    Debt: 10
+  - Debtor: refugia_koss
+    Debt: 10
+______________________________

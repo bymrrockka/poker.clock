@@ -8,12 +8,11 @@ import by.mrrockka.domain.Player
 import by.mrrockka.domain.TournamentPlayer
 import java.math.BigDecimal
 
-internal val defaultBuyin = BigDecimal("10")
+internal val defaultBuyin = BigDecimal("10.0")
 
 class PlayerBuilder(init: (PlayerBuilder.() -> Unit) = {}) : AbstractBuilder<CoreRandoms>(coreRandoms) {
     private var buyin: BigDecimal? = null
     private var bounty: BigDecimal? = null
-    private var moneys: List<BigDecimal>? = null
     private var entries: Int = 1
 
     init {
@@ -26,10 +25,6 @@ class PlayerBuilder(init: (PlayerBuilder.() -> Unit) = {}) : AbstractBuilder<Cor
 
     fun bounty(bounty: BigDecimal) {
         this.bounty = bounty
-    }
-
-    fun moneys(moneys: List<BigDecimal>) {
-        this.moneys = moneys
     }
 
     fun entries(entries: Int) {

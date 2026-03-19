@@ -1,0 +1,20 @@
+Game details: 
+ - total money: 30
+ - buy-in: 10
+ - players size: 3
+ - entries size: 3
+
+Cash summary:
+Nickname terisa_johnston
+  Buy-ins: -10
+  Withdrawals: 30
+  Total: 20
+
+Payout to: terisa_johnston 
+Total: 20 
+Debtors:
+  - Debtor: jackie_rau
+    Debt: 10
+  - Debtor: santo_welch
+    Debt: 10
+______________________________
