@@ -4,7 +4,7 @@ springBoot = "4.0.3"
 springDepManagement = "1.1.7"
 kotlin = "2.3.10"
 googleKsp = "2.3.6"
-telegramBot = "9.2.1"
+telegramBot = "9.3.1"
 
 #libs
 postgresql = "42.7.10"
