@@ -12,6 +12,7 @@ import by.mrrockka.repo.PinType
 import by.mrrockka.service.FinalePlacesTelegramService
 import by.mrrockka.service.PinMessageService
 import eu.vendeli.tgbot.annotations.WizardHandler
+import eu.vendeli.tgbot.api.message.SendMessageAction
 import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.generated.getState
 import eu.vendeli.tgbot.implementations.MapIntStateManager
@@ -30,42 +31,26 @@ object FinalePlacesConversation : MessageLogConversation() {
     lateinit var pinMessageService: PinMessageService
 
     object Size : CancelableStep(isInitial = true, cancelStep = Cancel::class) {
+
+        private fun SendMessageAction.sizeReply(): SendMessageAction = cancelableReplyMarkup {
+            +"1"
+            +"2"
+            +"3"
+            +"4"
+        }
+
         override suspend fun onEntry(ctx: WizardContext) {
-            ctx.cancelableMessage { message -> ctx.user.id.message(message.messageId) }
             ctx.initialize()
 
             message { "How many places to account?" }
-                    .replyKeyboardMarkup {
-                        +"1"
-                        +"2"
-                        +"3"
-                        +"4"
-                        options {
-                            resizeKeyboard = true
-                            oneTimeKeyboard = true
-                        }
-                    }
-                    .sendReturning(ctx.update.chat(), ctx.bot)
-                    .onFailure { error("Failed to send message") }
-                    ?.also { message -> ctx.user.id.message(message.messageId) }
+                    .sizeReply()
+                    .sendLogging(ctx)
         }
 
-        override suspend fun onRetry(ctx: WizardContext, reason: String?) {
-            message { "Should be a number not less then 1" }
-                    .replyKeyboardMarkup {
-                        +"1"
-                        +"2"
-                        +"3"
-                        +"4"
-                        options {
-                            resizeKeyboard = true
-                            oneTimeKeyboard = true
-                        }
-                    }
-                    .sendReturning(ctx.update.chat(), ctx.bot)
-                    .onFailure { error("Failed to send message") }
-                    ?.also { message -> ctx.user.id.message(message.messageId) }
-        }
+        override suspend fun onRetry(ctx: WizardContext, reason: String?) =
+                message { "Should be a number not less then 1" }
+                        .sizeReply()
+                        .sendLogging(ctx)
 
         override suspend fun navigate(ctx: WizardContext): Transition = when {
             ctx.update.text.digitValidation() -> Transition.Next
@@ -90,12 +75,7 @@ object FinalePlacesConversation : MessageLogConversation() {
             } else false
         }
 
-        override suspend fun onEntry(ctx: WizardContext) {
-            message { "Who's on #1 place?" }
-                    .sendReturning(ctx.update.chat(), ctx.bot)
-                    .onFailure { error("Failed to send message") }
-                    ?.also { message -> ctx.user.id.message(message.messageId) }
-        }
+        override suspend fun onEntry(ctx: WizardContext) = message { "Who's on #1 place?" }.sendLogging(ctx)
 
         override suspend fun navigate(ctx: WizardContext): Transition {
             val size = ctx.getState<Size>() ?: error("No size found")
@@ -109,19 +89,13 @@ object FinalePlacesConversation : MessageLogConversation() {
             }
         }
 
-        override suspend fun onRetry(ctx: WizardContext, reason: String?) {
-            when (reason) {
-                nextPercentage -> message { "Who's on #${ctx.user.id.get().size + 1} place?" }
-                        .sendReturning(ctx.update.chat(), ctx.bot)
-                        .onFailure { error("Failed to send message") }
-                        ?.also { message -> ctx.user.id.message(message.messageId) }
+        override suspend fun onRetry(ctx: WizardContext, reason: String?) =
+                when (reason) {
+                    nextPercentage -> message { "Who's on #${ctx.user.id.get().size + 1} place?" }
 
-                else -> message { "Player mention should be specified" }
-                        .sendReturning(ctx.update.chat(), ctx.bot)
-                        .onFailure { error("Failed to send message") }
-                        ?.also { message -> ctx.user.id.message(message.messageId) }
-            }
-        }
+                    else -> message { "Player mention should be specified" }
+                }.sendLogging(ctx)
+
 
         override suspend fun store(ctx: WizardContext): Map<Int, String> = positionToMentions.remove(ctx.user.id)
                 ?: error("No final places found for user ${ctx.user.id}")
@@ -135,14 +109,13 @@ object FinalePlacesConversation : MessageLogConversation() {
         override suspend fun onEntry(ctx: WizardContext) {
             val positionToMention = ctx.getState<FinalPlaces>()
                     ?: error("Finale Places not found for user ${ctx.user.id}")
-
             finalePlacesService.store(ctx.user.id.initial(), positionToMention)
                     .let { finalePlaces ->
                         message {
                             """
-                                |Finale places stored:
-                                |${finalePlaces.joinToString("\n") { "${it.position}. @${it.person.nickname}" }}
-                                """.trimMargin()
+                            |Finale places stored:
+                            |${finalePlaces.joinToString("\n") { "${it.position}. @${it.person.nickname}" }}
+                            """.trimMargin()
                         }
                     }.sendReturning(ctx.update.chat(), ctx.bot)
                     .onFailure { error("Failed to send prize pool message") }

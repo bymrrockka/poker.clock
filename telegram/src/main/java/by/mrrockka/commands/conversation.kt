@@ -3,18 +3,20 @@ package by.mrrockka.commands
 import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.domain.chat
 import by.mrrockka.domain.toMessageMetadata
+import eu.vendeli.tgbot.api.message.SendMessageAction
 import eu.vendeli.tgbot.api.message.deleteMessages
 import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.types.chain.Transition
 import eu.vendeli.tgbot.types.chain.WizardContext
 import eu.vendeli.tgbot.types.chain.WizardStep
 import eu.vendeli.tgbot.types.component.onFailure
-import eu.vendeli.tgbot.types.msg.Message
+import eu.vendeli.tgbot.utils.builders.ReplyKeyboardMarkupBuilder
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
 
 abstract class CancelableStep(isInitial: Boolean = false, val cancelStep: KClass<out WizardStep>) : WizardStep(isInitial) {
-    private fun String.canceled() = matches("^cancel$".toRegex())
+    private val cancel = "cancel"
+    private fun String.canceled() = matches("^${cancel}$".toRegex())
 
     open fun beforeCancelAction(ctx: WizardContext) {}
     abstract suspend fun navigate(ctx: WizardContext): Transition
@@ -29,17 +31,16 @@ abstract class CancelableStep(isInitial: Boolean = false, val cancelStep: KClass
         }
     }
 
-    suspend fun WizardContext.cancelableMessage(postAction: suspend (Message) -> Unit) {
-        message {
-            """
-            |You started a cancelable conversation. 
-            |To cancel at any step you simply need to type 'cancel'
-        """.trimMargin()
-        }.sendReturning(to = update.chat(), bot)
-                .onFailure { error("Failed to send message") }
-                ?.also { message -> postAction(message) }
+    protected fun SendMessageAction.cancelableReplyMarkup(block: ReplyKeyboardMarkupBuilder.() -> Unit = {}): SendMessageAction {
+        return replyKeyboardMarkup {
+            block()
+            +cancel
+            options {
+                resizeKeyboard = true
+                oneTimeKeyboard = true
+            }
+        }
     }
-
 }
 
 open class CancelStep(
@@ -61,6 +62,12 @@ fun String.digitValidation() = matches("^([\\d]+)$".toRegex())
 abstract class MessageLogConversation {
     private val messages = ConcurrentHashMap<Long, List<Long>>()
     private val initials = ConcurrentHashMap<Long, MessageMetadata>()
+
+    protected suspend fun SendMessageAction.sendLogging(ctx: WizardContext) {
+        sendReturning(ctx.update.chat(), ctx.bot)
+                .onFailure { error("Failed to send message") }
+                ?.also { message -> ctx.user.id.message(message.messageId) }
+    }
 
     protected fun Long.message(messageId: Long) {
         synchronized(messages) {

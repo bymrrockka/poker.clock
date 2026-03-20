@@ -13,73 +13,63 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 2 
-You started a cancelable conversation. 
-To cancel at any step you simply need to type 'cancel' 
+What type of game you'd like to play? 
 ``` 
 ___
 
 ### 3. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 3 
-What type of game you'd like to play? 
-``` 
-___
-
-### 4. Message
-
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 4
+Processed message id: 3
 Tournament 
 ```
 ___
 
-### 5. Message
+### 4. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 5 
+message id: 4 
 How much is for buy in? 
 ``` 
 ___
 
-### 6. Message
+### 5. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 6
+Processed message id: 5
 10 
 ```
 ___
 
-### 7. Message
+### 6. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 7 
+message id: 6 
 Who's playing? 
 ``` 
 ___
 
-### 8. Message
+### 7. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 8
+Processed message id: 7
 @nickname1 @nickname2 @nickname3 @nickname4 @nickname5 @nickname6 @nickname7 @nickname8 
 ```
 ___
 
-### 9. Message
+### 8. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 9 
+message id: 8 
 Game type: TOURNAMENT
 Buy in: 10
                 
@@ -98,73 +88,73 @@ Seats:
 ``` 
 ___
 
-### 10. Pinned
+### 9. Pinned
 
 ``` 
-message id 9 pinned
+message id 8 pinned
 ``` 
 ___
 
-### 11. Deleted messages
+### 10. Deleted messages
 
 ``` 
-message ids 2,3,4,5,6,7,8 deleted
+message ids 2,3,4,5,6,7 deleted
 ``` 
+___
+
+### 11. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 9
+/entry @nickname1  
+```
 ___
 
 ### 12. Message
 
-&rarr; <ins>User</ins>
-
-```
-Processed message id: 10
-/entry @nickname1  
-```
+&rarr; <ins>Bot</ins>
+``` 
+message id: 10 
+Entry stored 
+``` 
 ___
 
 ### 13. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 11 
-Entry stored 
-``` 
-___
-
-### 14. Message
-
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 12
+Processed message id: 11
 /entry @nickname1  
 ```
 ___
 
-### 15. Message
+### 14. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 13 
+message id: 12 
 Entry stored 
 ``` 
 ___
 
-### 16. Message
+### 15. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 14
+Processed message id: 13
 /entry @nickname9  
 ```
 ___
 
-### 17. Message
+### 16. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 15 
+message id: 14 
 Entries: 
 ------------------------------
 Table 1
@@ -173,21 +163,21 @@ Seats:
 ``` 
 ___
 
-### 18. Message
+### 17. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 16
+Processed message id: 15
 /entry @nickname10  
 ```
 ___
 
-### 19. Message
+### 18. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 17 
+message id: 16 
 Entries: 
 ------------------------------
 Table 1
@@ -196,21 +186,21 @@ Seats:
 ``` 
 ___
 
-### 20. Message
+### 19. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 18
+Processed message id: 17
 /entry @nickname11  
 ```
 ___
 
-### 21. Message
+### 20. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 19 
+message id: 18 
 Entries: 
 ------------------------------
 Table 1
