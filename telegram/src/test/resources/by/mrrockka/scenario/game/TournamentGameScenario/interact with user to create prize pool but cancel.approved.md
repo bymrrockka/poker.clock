@@ -63,99 +63,89 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 6 
-You started a cancelable conversation. 
-To cancel at any step you simply need to type 'cancel' 
+How many places to account? 
 ``` 
 ___
 
 ### 7. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 7 
-How many places to account? 
-``` 
-___
-
-### 8. Message
-
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 8
+Processed message id: 7
 3 
 ```
 ___
 
-### 9. Message
+### 8. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 9 
+message id: 8 
 What percentage for #1 place? 
 ``` 
 ___
 
-### 10. Message
+### 9. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 10
+Processed message id: 9
 50 
 ```
 ___
 
-### 11. Message
+### 10. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 11 
+message id: 10 
 What percentage for #2 place? 
 ``` 
 ___
 
-### 12. Message
+### 11. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 12
+Processed message id: 11
 30 
 ```
 ___
 
-### 13. Message
+### 12. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 13 
+message id: 12 
 What percentage for #3 place? 
 ``` 
 ___
 
-### 14. Message
+### 13. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 14
+Processed message id: 13
 cancel 
 ```
 ___
 
-### 15. Message
+### 14. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 15 
+message id: 14 
 Game creation was cancelled 
 ``` 
 ___
 
-### 16. Deleted messages
+### 15. Deleted messages
 
 ``` 
-message ids 6,7,8,9,10,11,12,13,14 deleted
+message ids 6,7,8,9,10,11,12,13 deleted
 ``` 
 ___

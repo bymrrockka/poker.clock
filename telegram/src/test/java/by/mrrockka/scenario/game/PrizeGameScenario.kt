@@ -170,7 +170,6 @@ abstract class PrizeGameScenario : GameScenario() {
             bot { "Entry stored" }
             val toDelete = mutableListOf<Command>()
             user { "/pp" }
-            toDelete += bot { "Conversation descriptor" }
             toDelete += bot { "Pool size?" }
             toDelete += user { "3" }
             toDelete += bot { "1 Percentage" }
@@ -199,7 +198,6 @@ abstract class PrizeGameScenario : GameScenario() {
             bot { "Entry stored" }
             val toDelete = mutableListOf<Command>()
             user { "/pp" }
-            toDelete += bot { "Conversation descriptor" }
             toDelete += bot { "Pool size?" }
             toDelete += user { "3" }
             toDelete += bot { "1 Percentage" }
@@ -235,7 +233,6 @@ abstract class PrizeGameScenario : GameScenario() {
             bot { "Entry stored" }
             val toDelete = mutableListOf<Command>()
             user { "/pp" }
-            toDelete += bot { "Conversation descriptor" }
             toDelete += bot { "Pool size?" }
             toDelete += user { "3" }
             toDelete += bot { "1 Percentage" }
@@ -263,7 +260,6 @@ abstract class PrizeGameScenario : GameScenario() {
             bot { "Entry stored" }
             val toDelete = mutableListOf<Command>()
             user { "/fp" }
-            toDelete += bot { "Conversation descriptor" }
             toDelete += bot { "Pool size?" }
             toDelete += user { "3" }
             toDelete += bot { "1 place" }
@@ -292,7 +288,6 @@ abstract class PrizeGameScenario : GameScenario() {
             bot { "Entry stored" }
             val toDelete = mutableListOf<Command>()
             user { "/fp" }
-            toDelete += bot { "Conversation descriptor" }
             toDelete += bot { "Pool size?" }
             toDelete += user { "3" }
             toDelete += bot { "1 place" }

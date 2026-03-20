@@ -10,6 +10,7 @@ import by.mrrockka.scenario.Commands.Companion.createGame
 import by.mrrockka.scenario.Commands.Companion.entries
 import by.mrrockka.scenario.Commands.Companion.entry
 import by.mrrockka.scenario.Commands.Companion.game
+import by.mrrockka.service.up
 import com.oneeyedmen.okeydoke.Approver
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -52,14 +53,13 @@ abstract class GameScenario : AbstractScenarioTest() {
 
         Given {
             user { game }
-            toDelete += bot { "Conversation mode description" }
             toDelete += bot { "Type of game?" }
             toDelete += user { gameType().title }
             toDelete += bot { "Buyin?" }
-            toDelete += user { buyin.setScale(0).toString() }
+            toDelete += user { buyin.up().toString() }
             if (gameType() == GameType.BOUNTY) {
                 toDelete += bot { "Bounty?" }
-                toDelete += user { buyin.setScale(0).toString() }
+                toDelete += user { buyin.up().toString() }
             }
             toDelete += bot { "Players?" }
             toDelete += user { players.entries() }
@@ -88,7 +88,6 @@ abstract class GameScenario : AbstractScenarioTest() {
 
         Given {
             user { game }
-            toDelete += bot { "Conversation mode description" }
             toDelete += bot { "Type of game?" }
             toDelete += user { gameType().title }
             toDelete += bot { "Buyin?" }

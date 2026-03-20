@@ -13,6 +13,7 @@ import by.mrrockka.repo.PinType
 import by.mrrockka.service.PinMessageService
 import by.mrrockka.service.PrizePoolTelegramService
 import eu.vendeli.tgbot.annotations.WizardHandler
+import eu.vendeli.tgbot.api.message.SendMessageAction
 import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.generated.getState
 import eu.vendeli.tgbot.implementations.MapIntStateManager
@@ -32,42 +33,25 @@ object PrizePoolConversation : MessageLogConversation() {
     lateinit var pinMessageService: PinMessageService
 
     object Size : CancelableStep(isInitial = true, cancelStep = Cancel::class) {
+        private fun SendMessageAction.sizeReply(): SendMessageAction = cancelableReplyMarkup {
+            +"1"
+            +"2"
+            +"3"
+            +"4"
+        }
+
         override suspend fun onEntry(ctx: WizardContext) {
-            ctx.cancelableMessage { message -> ctx.user.id.message(message.messageId) }
             ctx.initialize()
 
             message { "How many places to account?" }
-                    .replyKeyboardMarkup {
-                        +"1"
-                        +"2"
-                        +"3"
-                        +"4"
-                        options {
-                            resizeKeyboard = true
-                            oneTimeKeyboard = true
-                        }
-                    }
-                    .sendReturning(ctx.update.chat(), ctx.bot)
-                    .onFailure { error("Failed to send message") }
-                    ?.also { message -> ctx.user.id.message(message.messageId) }
+                    .sizeReply()
+                    .sendLogging(ctx)
         }
 
-        override suspend fun onRetry(ctx: WizardContext, reason: String?) {
-            message { "Should be a number not less then 1" }
-                    .replyKeyboardMarkup {
-                        +"1"
-                        +"2"
-                        +"3"
-                        +"4"
-                        options {
-                            resizeKeyboard = true
-                            oneTimeKeyboard = true
-                        }
-                    }
-                    .sendReturning(ctx.update.chat(), ctx.bot)
-                    .onFailure { error("Failed to send message") }
-                    ?.also { message -> ctx.user.id.message(message.messageId) }
-        }
+        override suspend fun onRetry(ctx: WizardContext, reason: String?) =
+                message { "Should be a number not less then 1" }
+                        .sizeReply()
+                        .sendLogging(ctx)
 
         override suspend fun navigate(ctx: WizardContext): Transition = when {
             ctx.update.text.digitValidation() -> Transition.Next
@@ -94,12 +78,7 @@ object PrizePoolConversation : MessageLogConversation() {
             } else false
         }
 
-        override suspend fun onEntry(ctx: WizardContext) {
-            message { "What percentage for #1 place?" }
-                    .sendReturning(ctx.update.chat(), ctx.bot)
-                    .onFailure { error("Failed to send message") }
-                    ?.also { message -> ctx.user.id.message(message.messageId) }
-        }
+        override suspend fun onEntry(ctx: WizardContext) = message { "What percentage for #1 place?" }.sendLogging(ctx)
 
         override suspend fun navigate(ctx: WizardContext): Transition {
             val size = ctx.getState<Size>() ?: error("No size found")
@@ -117,26 +96,16 @@ object PrizePoolConversation : MessageLogConversation() {
 
         override suspend fun onRetry(ctx: WizardContext, reason: String?) {
             when (reason) {
-                Navigate.PLACE.name -> message { "What percentage for #${ctx.user.id.get().size + 1} place?" }
-                        .sendReturning(ctx.update.chat(), ctx.bot)
-                        .onFailure { error("Failed to send message") }
-                        ?.also { message -> ctx.user.id.message(message.messageId) }
+                Navigate.PLACE.name -> message { "What percentage for #${ctx.user.id.get().size + 1} place?" }.sendLogging(ctx)
 
                 Navigate.TOTAL_INVALID.name -> {
                     message { "Position percentage should equal 100% but was ${positionPrizes.remove(ctx.user.id)?.sumOf { it.percentage } ?: 0}%" }
-                            .sendReturning(ctx.update.chat(), ctx.bot)
-                            .onFailure { error("Failed to send prize percentage") }
-                            ?.also { message -> ctx.user.id.message(message.messageId) }
+                            .sendLogging(ctx)
                     message { "What percentage for #${ctx.user.id.get().size + 1} place?" }
-                            .sendReturning(ctx.update.chat(), ctx.bot)
-                            .onFailure { error("Failed to send message") }
-                            ?.also { message -> ctx.user.id.message(message.messageId) }
+                            .sendLogging(ctx)
                 }
 
-                else -> message { "Percentage should not be negative" }
-                        .sendReturning(ctx.update.chat(), ctx.bot)
-                        .onFailure { error("Failed to send message") }
-                        ?.also { message -> ctx.user.id.message(message.messageId) }
+                else -> message { "Percentage should not be negative" }.sendLogging(ctx)
             }
         }
 

@@ -13,80 +13,70 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 2 
-You started a cancelable conversation. 
-To cancel at any step you simply need to type 'cancel' 
+What type of game you'd like to play? 
 ``` 
 ___
 
 ### 3. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 3 
-What type of game you'd like to play? 
-``` 
-___
-
-### 4. Message
-
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 4
+Processed message id: 3
 Tournament 
 ```
 ___
 
-### 5. Message
+### 4. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 5 
+message id: 4 
 How much is for buy in? 
 ``` 
 ___
 
-### 6. Message
+### 5. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 6
+Processed message id: 5
 10 
 ```
 ___
 
-### 7. Message
+### 6. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 7 
+message id: 6 
 Who's playing? 
 ``` 
 ___
 
-### 8. Message
+### 7. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 8
+Processed message id: 7
 cancel 
 ```
 ___
 
-### 9. Message
+### 8. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 9 
+message id: 8 
 Game creation was cancelled 
 ``` 
 ___
 
-### 10. Deleted messages
+### 9. Deleted messages
 
 ``` 
-message ids 2,3,4,5,6,7,8,9 deleted
+message ids 2,3,4,5,6,7,8 deleted
 ``` 
 ___
