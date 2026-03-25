@@ -1,7 +1,10 @@
 package by.mrrockka
 
 import by.mrrockka.TelegramRandoms.Companion.telegramRandoms
+import by.mrrockka.builder.member
 import by.mrrockka.domain.BasicPerson
+import eu.vendeli.tgbot.types.User
+import eu.vendeli.tgbot.types.chat.ChatMember
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
@@ -9,6 +12,7 @@ interface Command {
     val unique: String
 
     data class UserMessage(var message: String, val replyTo: Command? = null, override val unique: String = unique()) : Command
+    data class Member(var member: ChatMember, override val unique: String = unique()) : Command
 
     //no assertions for bot message
     data class BotMessage(var message: String, val replyTo: Command? = null, override val unique: String = unique()) : Command
@@ -31,6 +35,10 @@ interface Command {
 
 class GivenSpecification {
     var commands: List<Command> = mutableListOf()
+
+    fun User.isAdmin() {
+        commands += Command.Member(member<ChatMember.Administrator> { user(this@isAdmin) })
+    }
 
     fun user(replyTo: Command? = null, init: () -> String): Command.UserMessage {
         val command = Command.UserMessage(replyTo = replyTo, message = init())

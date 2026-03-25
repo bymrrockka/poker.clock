@@ -19,6 +19,11 @@ plugins {
 
 val jvmVersion = 21
 
+ktGram {
+    forceVersion = "dev-260325~e4c725b"
+    addSnapshotRepo = true
+}
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(jvmVersion)

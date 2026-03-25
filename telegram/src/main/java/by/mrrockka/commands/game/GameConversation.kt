@@ -1,5 +1,6 @@
 package by.mrrockka.commands.game
 
+import by.mrrockka.commands.AdminGuard
 import by.mrrockka.commands.BigDecimalState
 import by.mrrockka.commands.CancelStep
 import by.mrrockka.commands.CancelableStep
@@ -18,6 +19,7 @@ import by.mrrockka.service.GameTablesService
 import by.mrrockka.service.GameTelegramService
 import by.mrrockka.service.PinMessageService
 import by.mrrockka.service.up
+import eu.vendeli.tgbot.annotations.Guard
 import eu.vendeli.tgbot.annotations.WizardHandler
 import eu.vendeli.tgbot.api.message.SendMessageAction
 import eu.vendeli.tgbot.api.message.message
@@ -33,6 +35,7 @@ import java.math.BigDecimal
         trigger = ["/game"],
         stateManagers = [BigDecimalState::class, MessageMetadataState::class, GameTypeState::class],
 )
+@Guard(AdminGuard::class)
 object GameConversation : MessageLogConversation() {
     lateinit var gameService: GameTelegramService
     lateinit var tableService: GameTablesService

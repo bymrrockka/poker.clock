@@ -1,5 +1,6 @@
 package by.mrrockka.commands.game
 
+import by.mrrockka.commands.AdminGuard
 import by.mrrockka.domain.BountyTournamentGame
 import by.mrrockka.domain.CashGame
 import by.mrrockka.domain.TournamentGame
@@ -10,6 +11,7 @@ import by.mrrockka.service.GameTelegramService
 import by.mrrockka.service.PinMessageService
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.CommandHandler
+import eu.vendeli.tgbot.annotations.Guard
 import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.types.component.MessageUpdate
 import eu.vendeli.tgbot.types.component.onFailure
@@ -31,7 +33,8 @@ open class GameCommandHandlerImpl(
 ) : GameCommandHandler {
 
     @CommandHandler(["/tournament_game", "/bounty_game", "/cash_game", "/tg", "/bg", "/cg"])
-    @Deprecated(message = "This functionality will be replaced with step by step game conversation", replaceWith = ReplaceWith("/game", "GameWizardHandler"))
+    @Guard(AdminGuard::class)
+    @Deprecated(message = "This functionality will be replaced with step by step game conversation", replaceWith = ReplaceWith("/game", "GameConversation"))
     override suspend fun store(message: MessageUpdate) {
         val metadata = message.message.toMessageMetadata()
         gameService.store(metadata)

@@ -44,7 +44,7 @@ private val logger = KotlinLogging.logger {}
 @SpringBootTest(classes = [TestConfig::class])
 abstract class AbstractScenarioTest {
     private var chatid: Long = -1L
-    private lateinit var user: User
+    internal lateinit var user: User
     private val messageLog = mutableMapOf<Command, Message>()
 
     @Autowired
@@ -79,15 +79,16 @@ abstract class AbstractScenarioTest {
     }
 
     infix fun WhenSpecification.ThenApproveWith(approver: Approver) {
+        val filtered = commands.filter { it !is Command.Member }
         try {
             await atMost Duration.ofSeconds(3) until {
-                dispatcher.requests.size == commands.size
+                dispatcher.requests.size == filtered.size
             }
         } catch (ex: ConditionTimeoutException) {
             val message = """
                 |Await timeout
                 |Dispatcher requests size is ${dispatcher.requests.size}
-                |Commands size is ${commands.size}
+                |Commands size is ${filtered.size}
                 |Dispatcher should have exactly the same requests size as commands size.
                 """.trimMargin()
             throw ConditionTimeoutException("${ex.message}\n\n$message", ex)
@@ -187,6 +188,10 @@ abstract class AbstractScenarioTest {
                    |___
                    """.trimMargin()
                 }
+                is Command.Member -> """
+                   |### ${index + 1}. Member requested
+                   |___
+                """.trimMargin()
 
                 else -> error("<p style=\"color:red\">Command type is not found</p>")
             }
@@ -231,6 +236,10 @@ abstract class AbstractScenarioTest {
 
     private fun Command.stub(index: Int) {
         when (this) {
+            is Command.Member -> {
+                dispatcher.member(member)
+            }
+
             is Command.PollAnswer -> {
                 val update = update {
                     pollAnswer {
