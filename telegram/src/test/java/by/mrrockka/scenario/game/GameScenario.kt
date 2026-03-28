@@ -27,7 +27,6 @@ abstract class GameScenario : AbstractScenarioTest() {
         val players = (1..size).map { "nickname$it" }
 
         Given {
-            user.isAdmin()
             user { players.createGame(gameType(), buyin) }
             bot { "game created" }
             user { "nickname1".entry() }
@@ -53,7 +52,6 @@ abstract class GameScenario : AbstractScenarioTest() {
         val toDelete = mutableListOf<Command>()
 
         Given {
-            user.isAdmin()
             user { game }
             toDelete += bot { "Type of game?" }
             toDelete += user { gameType().title }
@@ -89,7 +87,6 @@ abstract class GameScenario : AbstractScenarioTest() {
         val toDelete = mutableListOf<Command>()
 
         Given {
-            user.isAdmin()
             user { game }
             toDelete += bot { "Type of game?" }
             toDelete += user { gameType().title }

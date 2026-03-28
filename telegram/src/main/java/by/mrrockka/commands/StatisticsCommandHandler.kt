@@ -6,6 +6,7 @@ import by.mrrockka.service.statistics.MyChatStatisticsTelegramService
 import by.mrrockka.service.statistics.PlayerStatisticsTelegramService
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.CommandHandler
+import eu.vendeli.tgbot.annotations.Guard
 import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.types.component.MessageUpdate
 import org.springframework.stereotype.Component
@@ -24,6 +25,7 @@ class StatisticsCommandHandlerImpl(
         private val myChatStatisticsService: MyChatStatisticsTelegramService,
 ) : StatisticsCommandHandler {
     @CommandHandler(["/player_stats"])
+    @Guard(ExcludeBotGuard::class)
     override suspend fun playerStats(message: MessageUpdate) {
         val metadata = message.message.toMessageMetadata()
         playerStatisticsService.statistics(metadata)
@@ -34,6 +36,7 @@ class StatisticsCommandHandlerImpl(
     }
 
     @CommandHandler(["/game_stats"])
+    @Guard(ExcludeBotGuard::class)
     override suspend fun gameStats(message: MessageUpdate) {
         val metadata = message.message.toMessageMetadata()
         gameStatisticsService.statistics(metadata)
@@ -44,6 +47,7 @@ class StatisticsCommandHandlerImpl(
     }
 
     @CommandHandler(["/my_stats"])
+    @Guard(ExcludeBotGuard::class)
     override suspend fun myStats(message: MessageUpdate) {
         val metadata = message.message.toMessageMetadata()
         myChatStatisticsService.statistics(metadata)

@@ -1,6 +1,6 @@
 package by.mrrockka.commands.prizepool
 
-import by.mrrockka.commands.AdminGuard
+import by.mrrockka.commands.ExcludeBotGuard
 import by.mrrockka.domain.toMessageMetadata
 import by.mrrockka.repo.PinType
 import by.mrrockka.service.PinMessageService
@@ -26,7 +26,7 @@ class PrizePoolCommandHandlerImpl(
 
     @CommandHandler(["/prize_pool"])
     @Deprecated(message = "This functionality will be replaced with step by step prize pool conversation", replaceWith = ReplaceWith("/pp", "PrizePoolConversation"))
-    @Guard(AdminGuard::class)
+    @Guard(ExcludeBotGuard::class)
     override suspend fun prizePool(message: MessageUpdate) {
         val metadata = message.message.toMessageMetadata()
         prizePoolService.store(metadata)

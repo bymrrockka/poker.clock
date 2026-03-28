@@ -37,7 +37,7 @@ class PollCommandHandlerImpl(
 ) : PollCommandHandler {
 
     @CommandHandler(["/create_poll", "/cp"])
-    @Guard(AdminGuard::class)
+    @Guard(ExcludeBotGuard::class)
     override suspend fun create(message: MessageUpdate) {
         val metadata = message.message.toMessageMetadata()
         pollService.create(metadata)
@@ -53,7 +53,7 @@ class PollCommandHandlerImpl(
     }
 
     @CommandHandler(["/stop_poll", "/sp"])
-    @Guard(AdminGuard::class)
+    @Guard(ExcludeBotGuard::class)
     override suspend fun stop(message: MessageUpdate) {
         val metadata = message.message.toMessageMetadata()
         check(metadata.replyTo != null) {
@@ -68,6 +68,7 @@ class PollCommandHandlerImpl(
     }
 
     @UpdateHandler([UpdateType.POLL_ANSWER])
+    @Guard(ExcludeBotGuard::class)
     override suspend fun answer(pollAnswer: PollAnswerUpdate) {
         if (pollAnswer.user != null) {
             //only user answers are counted

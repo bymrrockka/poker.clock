@@ -1,8 +1,8 @@
 package by.mrrockka.commands.finaleplaces
 
-import by.mrrockka.commands.AdminGuard
 import by.mrrockka.commands.CancelStep
 import by.mrrockka.commands.CancelableStep
+import by.mrrockka.commands.ExcludeBotGuard
 import by.mrrockka.commands.MessageLogConversation
 import by.mrrockka.commands.PositionMentionState
 import by.mrrockka.commands.digitValidation
@@ -28,7 +28,7 @@ import java.util.concurrent.ConcurrentHashMap
         trigger = ["/fp"],
         stateManagers = [MapIntStateManager::class, PositionMentionState::class],
 )
-@Guard(AdminGuard::class)
+@Guard(ExcludeBotGuard::class)
 object FinalePlacesConversation : MessageLogConversation() {
     lateinit var finalePlacesService: FinalePlacesTelegramService
     lateinit var pinMessageService: PinMessageService

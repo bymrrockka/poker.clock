@@ -3,6 +3,7 @@ package by.mrrockka.service
 import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.domain.Table
 import by.mrrockka.parser.EntryMessageParser
+import by.mrrockka.repo.ChatMessagesRepo
 import by.mrrockka.repo.EntriesRepo
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
@@ -21,6 +22,7 @@ open class EntryTelegramServiceImpl(
         private val gameService: GameTelegramService,
         private val personService: TelegramPersonService,
         private val tablesService: GameTablesService,
+        private val chatMessagesRepo: ChatMessagesRepo,
 ) : EntryTelegramService {
 
     override fun entry(metadata: MessageMetadata): Pair<List<Table>, BigDecimal> {
@@ -29,6 +31,7 @@ open class EntryTelegramServiceImpl(
         val game = gameService.findGame(metadata)
         val persons = personService.findByMessage(metadata)
         entriesRepo.store(persons.map { it.id }, (amount ?: game.buyIn), game, metadata.createdAt)
+        chatMessagesRepo.store(metadata)
         val tables = tablesService.entries(game, persons)
 
         return tables to (amount ?: game.buyIn)

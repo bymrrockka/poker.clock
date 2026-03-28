@@ -1,6 +1,6 @@
 package by.mrrockka.commands.game
 
-import by.mrrockka.commands.AdminGuard
+import by.mrrockka.commands.ExcludeBotGuard
 import by.mrrockka.domain.BountyTournamentGame
 import by.mrrockka.domain.CashGame
 import by.mrrockka.domain.TournamentGame
@@ -33,7 +33,7 @@ open class GameCommandHandlerImpl(
 ) : GameCommandHandler {
 
     @CommandHandler(["/tournament_game", "/bounty_game", "/cash_game", "/tg", "/bg", "/cg"])
-    @Guard(AdminGuard::class)
+    @Guard(ExcludeBotGuard::class)
     @Deprecated(message = "This functionality will be replaced with step by step game conversation", replaceWith = ReplaceWith("/game", "GameConversation"))
     override suspend fun store(message: MessageUpdate) {
         val metadata = message.message.toMessageMetadata()

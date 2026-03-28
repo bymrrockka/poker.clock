@@ -4,6 +4,7 @@ import by.mrrockka.domain.toMessageMetadata
 import by.mrrockka.service.WithdrawalTelegramService
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.CommandHandler
+import eu.vendeli.tgbot.annotations.Guard
 import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.types.component.MessageUpdate
 import org.springframework.stereotype.Component
@@ -19,6 +20,7 @@ class WithdrawalCommandHandlerImpl(
 ) : WithdrawalCommandHandler {
 
     @CommandHandler(["/withdrawal", "/wdrl"])
+    @Guard(ExcludeBotGuard::class)
     override suspend fun withdraw(message: MessageUpdate) {
         val metadata = message.message.toMessageMetadata()
         withdrawalService.withdraw(metadata)

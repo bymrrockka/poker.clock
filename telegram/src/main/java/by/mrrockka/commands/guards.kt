@@ -9,11 +9,16 @@ import eu.vendeli.tgbot.types.chat.ChatMember
 import eu.vendeli.tgbot.types.component.ProcessedUpdate
 import eu.vendeli.tgbot.types.component.onFailure
 
+object ExcludeBotGuard : Guard {
+    override suspend fun condition(user: User?, update: ProcessedUpdate, bot: TelegramBot): Boolean {
+        return user != null && !user.isBot
+    }
+}
+
 object AdminGuard : Guard {
     override suspend fun condition(user: User?, update: ProcessedUpdate, bot: TelegramBot): Boolean {
         if (user == null) error("User can't be null")
-
-        if (user.isBot) error("Bot user is not allowed")
+        if (user.isBot) error("Bot cannot use this command")
 
         getChatMember(user)
                 .sendReturning(update.chat(), bot)

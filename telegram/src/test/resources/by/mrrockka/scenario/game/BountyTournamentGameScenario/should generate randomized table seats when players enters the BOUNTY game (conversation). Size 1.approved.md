@@ -1,4 +1,7 @@
-### 1. Message
+### 1. Member requested
+___
+
+### 2. Message
 
 &rarr; <ins>User</ins>
 
@@ -8,7 +11,7 @@ Processed message id: 1
 ```
 ___
 
-### 2. Message
+### 3. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
@@ -17,7 +20,7 @@ What type of game you'd like to play?
 ``` 
 ___
 
-### 3. Message
+### 4. Message
 
 &rarr; <ins>User</ins>
 
@@ -27,7 +30,7 @@ Bounty
 ```
 ___
 
-### 4. Message
+### 5. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
@@ -36,7 +39,7 @@ How much is for buy in?
 ``` 
 ___
 
-### 5. Message
+### 6. Message
 
 &rarr; <ins>User</ins>
 
@@ -46,7 +49,7 @@ Processed message id: 5
 ```
 ___
 
-### 6. Message
+### 7. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
@@ -55,7 +58,7 @@ How much is for bounty?
 ``` 
 ___
 
-### 7. Message
+### 8. Message
 
 &rarr; <ins>User</ins>
 
@@ -65,7 +68,7 @@ Processed message id: 7
 ```
 ___
 
-### 8. Message
+### 9. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
@@ -74,7 +77,7 @@ Who's playing?
 ``` 
 ___
 
-### 9. Message
+### 10. Message
 
 &rarr; <ins>User</ins>
 
@@ -84,7 +87,7 @@ Processed message id: 9
 ```
 ___
 
-### 10. Message
+### 11. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
@@ -100,21 +103,21 @@ Seats:
 ``` 
 ___
 
-### 11. Pinned
+### 12. Pinned
 
 ``` 
 message id 10 pinned
 ``` 
 ___
 
-### 12. Deleted messages
+### 13. Deleted messages
 
 ``` 
 message ids 2,3,4,5,6,7,8,9 deleted
 ``` 
 ___
 
-### 13. Message
+### 14. Message
 
 &rarr; <ins>User</ins>
 
@@ -124,16 +127,16 @@ Processed message id: 11
 ```
 ___
 
-### 14. Message
+### 15. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 12 
-Entry stored 
+Entry stored, buy in amount is 10 
 ``` 
 ___
 
-### 15. Message
+### 16. Message
 
 &rarr; <ins>User</ins>
 
@@ -143,16 +146,16 @@ Processed message id: 13
 ```
 ___
 
-### 16. Message
+### 17. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 14 
-Entry stored 
+Entry stored, buy in amount is 10 
 ``` 
 ___
 
-### 17. Message
+### 18. Message
 
 &rarr; <ins>User</ins>
 
@@ -162,7 +165,7 @@ Processed message id: 15
 ```
 ___
 
-### 18. Message
+### 19. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
@@ -175,7 +178,7 @@ Seats:
 ``` 
 ___
 
-### 19. Message
+### 20. Message
 
 &rarr; <ins>User</ins>
 
@@ -185,7 +188,7 @@ Processed message id: 17
 ```
 ___
 
-### 20. Message
+### 21. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
@@ -198,7 +201,7 @@ Seats:
 ``` 
 ___
 
-### 21. Message
+### 22. Message
 
 &rarr; <ins>User</ins>
 
@@ -208,7 +211,7 @@ Processed message id: 19
 ```
 ___
 
-### 22. Message
+### 23. Message
 
 &rarr; <ins>Bot</ins>
 ``` 

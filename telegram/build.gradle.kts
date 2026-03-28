@@ -4,7 +4,6 @@ group = "by.mrrockka"
 version = "1.5.5"
 
 plugins {
-    java
     idea
     application
     `maven-publish`

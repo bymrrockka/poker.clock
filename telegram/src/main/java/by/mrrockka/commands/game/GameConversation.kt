@@ -1,9 +1,9 @@
 package by.mrrockka.commands.game
 
-import by.mrrockka.commands.AdminGuard
 import by.mrrockka.commands.BigDecimalState
 import by.mrrockka.commands.CancelStep
 import by.mrrockka.commands.CancelableStep
+import by.mrrockka.commands.ExcludeBotGuard
 import by.mrrockka.commands.GameTypeState
 import by.mrrockka.commands.MessageLogConversation
 import by.mrrockka.commands.MessageMetadataState
@@ -35,7 +35,7 @@ import java.math.BigDecimal
         trigger = ["/game"],
         stateManagers = [BigDecimalState::class, MessageMetadataState::class, GameTypeState::class],
 )
-@Guard(AdminGuard::class)
+@Guard(ExcludeBotGuard::class)
 object GameConversation : MessageLogConversation() {
     lateinit var gameService: GameTelegramService
     lateinit var tableService: GameTablesService

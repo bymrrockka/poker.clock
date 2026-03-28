@@ -63,7 +63,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 6 
-Entry stored 
+Entry stored, buy in amount is 10 
 ``` 
 ___
 

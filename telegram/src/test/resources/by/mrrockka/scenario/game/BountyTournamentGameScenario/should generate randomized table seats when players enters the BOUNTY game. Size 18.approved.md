@@ -1,7 +1,4 @@
-### 1. Member requested
-___
-
-### 2. Message
+### 1. Message
 
 &rarr; <ins>User</ins>
 
@@ -14,7 +11,7 @@ bounty: 10
 ```
 ___
 
-### 3. Message
+### 2. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
@@ -49,7 +46,7 @@ Seats:
 ``` 
 ___
 
-### 4. Message
+### 3. Message
 
 &rarr; <ins>User</ins>
 
@@ -59,16 +56,16 @@ Processed message id: 3
 ```
 ___
 
-### 5. Message
+### 4. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 4 
-Entry stored 
+Entry stored, buy in amount is 10 
 ``` 
 ___
 
-### 6. Message
+### 5. Message
 
 &rarr; <ins>User</ins>
 
@@ -78,16 +75,16 @@ Processed message id: 5
 ```
 ___
 
-### 7. Message
+### 6. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 6 
-Entry stored 
+Entry stored, buy in amount is 10 
 ``` 
 ___
 
-### 8. Message
+### 7. Message
 
 &rarr; <ins>User</ins>
 
@@ -97,7 +94,7 @@ Processed message id: 7
 ```
 ___
 
-### 9. Message
+### 8. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
@@ -110,7 +107,7 @@ Seats:
 ``` 
 ___
 
-### 10. Message
+### 9. Message
 
 &rarr; <ins>User</ins>
 
@@ -120,7 +117,7 @@ Processed message id: 9
 ```
 ___
 
-### 11. Message
+### 10. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
@@ -133,7 +130,7 @@ Seats:
 ``` 
 ___
 
-### 12. Message
+### 11. Message
 
 &rarr; <ins>User</ins>
 
@@ -143,7 +140,7 @@ Processed message id: 11
 ```
 ___
 
-### 13. Message
+### 12. Message
 
 &rarr; <ins>Bot</ins>
 ``` 

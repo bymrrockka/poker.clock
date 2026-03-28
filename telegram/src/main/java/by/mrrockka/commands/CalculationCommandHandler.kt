@@ -57,7 +57,7 @@ open class CalculationCommandHandlerImpl(
         """.trimMargin()
 
     @CommandHandler(["/calculate"])
-    @Guard(AdminGuard::class)
+    @Guard(ExcludeBotGuard::class)
     override suspend fun calculate(message: MessageUpdate) {
         val metadata = message.message.toMessageMetadata()
         val game = gameService.findGame(metadata)

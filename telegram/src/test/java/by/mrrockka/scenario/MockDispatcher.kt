@@ -49,7 +49,7 @@ private val serde = Json {
 }
 
 private val scenarioHeader = "Scenario"
-private val defaultMessageBody = serde.encodeToString(Response.Success(MessageBuilder { text("NOT OK") }.message()))
+private val defaultMessageBody = serde.encodeToString(Response.Success(MessageBuilder { text("SKIPPED") }.message()))
 private fun defaultBooleanBody(success: Boolean = true) = if (success) {
     serde.encodeToString(Response.Success(success))
 } else {

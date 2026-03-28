@@ -71,7 +71,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 6 
-Entry stored 
+Entry stored, buy in amount is 10 
 ``` 
 ___
 
@@ -109,7 +109,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 10 
-Entry stored 
+Entry stored, buy in amount is 10 
 ``` 
 ___
 
@@ -215,7 +215,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 20 
-Entry stored 
+Entry stored, buy in amount is 10 
 ``` 
 ___
 
@@ -253,7 +253,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 24 
-Entry stored 
+Entry stored, buy in amount is 10 
 ``` 
 ___
 
@@ -320,7 +320,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 30 
-Entry stored 
+Entry stored, buy in amount is 10 
 ``` 
 ___
 

@@ -1,6 +1,6 @@
 package by.mrrockka.commands.finaleplaces
 
-import by.mrrockka.commands.AdminGuard
+import by.mrrockka.commands.ExcludeBotGuard
 import by.mrrockka.domain.toMessageMetadata
 import by.mrrockka.repo.PinType
 import by.mrrockka.service.FinalePlacesTelegramService
@@ -28,8 +28,8 @@ open class FinalePlacesCommandHandlerImpl(
 ) : FinalePlacesCommandHandler {
 
     @CommandHandler(["/finale_places"])
+    @Guard(ExcludeBotGuard::class)
     @Deprecated(message = "This functionality will be replaced with step by step finale places conversation", replaceWith = ReplaceWith("/fp", "FinalePlacesConversation"))
-    @Guard(AdminGuard::class)
     override suspend fun store(message: MessageUpdate) {
         val metadata = message.message.toMessageMetadata()
         finalePlacesService.store(metadata)

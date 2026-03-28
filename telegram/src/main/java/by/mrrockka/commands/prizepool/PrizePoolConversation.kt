@@ -1,9 +1,9 @@
 package by.mrrockka.commands.prizepool
 
-import by.mrrockka.commands.AdminGuard
 import by.mrrockka.commands.BigDecimalState
 import by.mrrockka.commands.CancelStep
 import by.mrrockka.commands.CancelableStep
+import by.mrrockka.commands.ExcludeBotGuard
 import by.mrrockka.commands.MessageLogConversation
 import by.mrrockka.commands.PositionPrizeState
 import by.mrrockka.commands.decimalValidation
@@ -30,7 +30,7 @@ import java.util.concurrent.ConcurrentHashMap
         trigger = ["/pp"],
         stateManagers = [MapIntStateManager::class, BigDecimalState::class, PositionPrizeState::class],
 )
-@Guard(AdminGuard::class)
+@Guard(ExcludeBotGuard::class)
 object PrizePoolConversation : MessageLogConversation() {
     lateinit var prizePoolService: PrizePoolTelegramService
     lateinit var pinMessageService: PinMessageService
