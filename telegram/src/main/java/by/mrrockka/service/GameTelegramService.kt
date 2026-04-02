@@ -47,13 +47,13 @@ open class GameTelegramServiceImpl(
             pollService.findParticipants(players.replyTo.poll.id)
                     .filterNot { excludes.contains(it) }
                     .also { personIds ->
-                        entriesRepo.store(personIds, game.buyIn, game, players.createdAt)
+                        entriesRepo.store(game.id, personIds, game.buyIn, players.createdAt)
                     }
         } else {
             players.checkMentions()
             personService.findByMessage(players).map { it.id }
                     .also { personIds ->
-                        entriesRepo.store(personIds, game.buyIn, game, players.createdAt)
+                        entriesRepo.store(game.id, personIds, game.buyIn, players.createdAt)
                     }
         }
 

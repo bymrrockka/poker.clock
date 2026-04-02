@@ -25,10 +25,12 @@ open class PlayerRepoImpl(
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : Player> findPlayers(gameId: UUID, clazz: KClass<T>): List<T> {
-        val personEntries = entriesRepo.findByGame(gameId)
+        val entries = entriesRepo.findByGame(gameId)
+        val withdrawals = withdrawalsRepo.findByGame(gameId)
+        val bounties = bountyRepo.findByGame(gameId)
 
-        return personRepo.findByIds(personEntries.keys).map { person ->
-            val entries = personEntries[person.id] ?: error("No entries found for ${person.nickname}")
+        return personRepo.findByIds(entries.keys).map { person ->
+            val entries = entries[person.id] ?: error("No entries found for ${person.nickname}")
             when (clazz) {
                 TournamentPlayer::class -> {
                     TournamentPlayer(
@@ -41,7 +43,7 @@ open class PlayerRepoImpl(
                     CashPlayer(
                             person = person,
                             entries = entries,
-                            withdrawals = withdrawalsRepo.findByPerson(gameId, person.id),
+                            withdrawals = withdrawals[person.id] ?: emptyList(),
                     )
                 }
 
@@ -49,7 +51,7 @@ open class PlayerRepoImpl(
                     BountyPlayer(
                             person = person,
                             entries = entries,
-                            bounties = bountyRepo.findByPerson(gameId, person.id),
+                            bounties = bounties.filter { it.from == person || it.to == person },
                     )
                 }
 

@@ -69,7 +69,7 @@ abstract class AbstractScenarioTest {
     @AfterEach
     fun after() {
         transaction {
-            exec("TRUNCATE TABLE pin_messages, poll_task, person, game CASCADE")
+            exec("TRUNCATE TABLE pin_messages, poll_task, person, game, chat_messages CASCADE")
         }
     }
 
@@ -188,6 +188,7 @@ abstract class AbstractScenarioTest {
                    |___
                    """.trimMargin()
                 }
+
                 is Command.Member -> """
                    |### ${index + 1}. Member requested
                    |___
@@ -260,7 +261,7 @@ abstract class AbstractScenarioTest {
                     text(message)
                     chatId(chatid)
                     from(user)
-                    createdAt(clock.now().toJavaInstant())
+                    createdAt(clock.now())
                     if (replyTo != null && messageLog[replyTo] != null) {
                         replyTo(messageLog[replyTo]!!)
                     }
@@ -279,7 +280,7 @@ abstract class AbstractScenarioTest {
                 val message = message {
                     text(message)
                     chatId(chatid)
-                    createdAt(clock.now().toJavaInstant())
+                    createdAt(clock.now())
                     if (replyTo != null && messageLog[replyTo] != null) {
                         replyTo(messageLog[replyTo]!!)
                     }

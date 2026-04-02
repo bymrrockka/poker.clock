@@ -54,3 +54,11 @@ object GameTablesTable : Table("game_tables") {
     val gameId = javaUUID("game_id").references(GameTable.id)
     val tables = jsonb<Array<by.mrrockka.domain.Table>>("tables", Json.Default)
 }
+
+object ChatMessagesTable : Table("chat_messages") {
+    val chatId = long("chat_id")
+    val messageId = long("message_id")
+    val type = enumerationByName<CommandType>("type", 10)
+    val createdAt = timestamp("created_at")
+    val updatedAt = timestamp("updated_at").nullable()
+}

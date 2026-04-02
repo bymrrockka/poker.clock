@@ -4,6 +4,7 @@ import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.domain.Table
 import by.mrrockka.parser.EntryMessageParser
 import by.mrrockka.repo.ChatMessagesRepo
+import by.mrrockka.repo.CommandType
 import by.mrrockka.repo.EntriesRepo
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
@@ -30,8 +31,8 @@ open class EntryTelegramServiceImpl(
         val amount = entryMessageParser.parse(metadata)
         val game = gameService.findGame(metadata)
         val persons = personService.findByMessage(metadata)
-        entriesRepo.store(persons.map { it.id }, (amount ?: game.buyIn), game, metadata.createdAt)
-        chatMessagesRepo.store(metadata)
+        entriesRepo.store(game.id, persons.map { it.id }, (amount ?: game.buyIn), metadata.createdAt)
+        chatMessagesRepo.upsert(metadata, CommandType.ENTRY)
         val tables = tablesService.entries(game, persons)
 
         return tables to (amount ?: game.buyIn)

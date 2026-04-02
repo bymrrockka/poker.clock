@@ -24,7 +24,6 @@ class EntryCommandHandlerImpl(
     @Guard(ExcludeBotGuard::class)
     override suspend fun entry(message: MessageUpdate) {
         val metadata = message.message.toMessageMetadata()
-        //todo: add ability to entry without nickname or @me and decline command handler
         entryTelegramService.entry(metadata)
                 .also { (tables, amount) ->
                     message {

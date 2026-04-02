@@ -6,6 +6,8 @@ import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.domain.takenToGiven
 import by.mrrockka.parser.BountyMessageParser
 import by.mrrockka.repo.BountyRepo
+import by.mrrockka.repo.ChatMessagesRepo
+import by.mrrockka.repo.CommandType
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
@@ -20,6 +22,7 @@ open class BountyTelegramServiceImpl(
         private val bountyRepo: BountyRepo,
         private val bountyMessageParser: BountyMessageParser,
         private val gameService: GameTelegramService,
+        private val chatMessagesRepo: ChatMessagesRepo,
 ) : BountyTelegramService {
 
     override fun store(metadata: MessageMetadata): Bounty {
@@ -35,6 +38,7 @@ open class BountyTelegramServiceImpl(
 
         val bounty = Bounty(from = fromPlayer.person, to = toPlayer.person, amount = game.bounty)
         bountyRepo.store(game.id, bounty, metadata.createdAt)
+        chatMessagesRepo.upsert(metadata, CommandType.BOUNTY)
 
         return bounty
     }

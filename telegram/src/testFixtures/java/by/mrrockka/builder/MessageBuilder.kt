@@ -6,9 +6,8 @@ import eu.vendeli.tgbot.types.User
 import eu.vendeli.tgbot.types.msg.Message
 import eu.vendeli.tgbot.types.msg.MessageEntity
 import eu.vendeli.tgbot.types.poll.Poll
-import java.time.Instant
 import kotlin.time.ExperimentalTime
-import kotlin.time.toKotlinInstant
+import kotlin.time.Instant
 
 class MessageBuilder(init: (MessageBuilder.() -> Unit) = {}) : AbstractBuilder<TelegramRandoms>(telegramRandoms) {
     private var chatId: Long? = null
@@ -66,7 +65,7 @@ class MessageBuilder(init: (MessageBuilder.() -> Unit) = {}) : AbstractBuilder<T
         return Message(
                 messageId = id ?: randoms.messageid(),
                 chat = chat { id(this@MessageBuilder.chatId) },
-                date = (createdAt ?: randoms.instant()).toKotlinInstant(),
+                date = createdAt ?: randoms.instant(),
                 text = text ?: randoms.faker.chuckNorris().fact(),
                 replyToMessage = replyToMessage,
                 entities = if (entities.isEmpty() && text != null) text.entities() else entities,
