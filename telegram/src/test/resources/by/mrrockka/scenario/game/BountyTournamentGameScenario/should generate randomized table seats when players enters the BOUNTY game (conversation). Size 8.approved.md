@@ -127,7 +127,7 @@ ___
 
 ```
 Processed message id: 11
-/entry @nickname1  
+/entry 
 ```
 ___
 
@@ -136,7 +136,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 12 
-Entry stored, buy in amount is 10 
+Re-entry stored for @nickname1, buy in amount is 10 
 ``` 
 ___
 
@@ -146,7 +146,7 @@ ___
 
 ```
 Processed message id: 13
-/entry @nickname1  
+/entry 
 ```
 ___
 
@@ -155,7 +155,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 14 
-Entry stored, buy in amount is 10 
+Re-entry stored for @nickname1, buy in amount is 10 
 ``` 
 ___
 
@@ -165,7 +165,7 @@ ___
 
 ```
 Processed message id: 15
-/entry @nickname9  
+/entry 
 ```
 ___
 
@@ -188,7 +188,7 @@ ___
 
 ```
 Processed message id: 17
-/entry @nickname10  
+/entry 
 ```
 ___
 
@@ -211,7 +211,7 @@ ___
 
 ```
 Processed message id: 19
-/entry @nickname11  
+/entry 
 ```
 ___
 

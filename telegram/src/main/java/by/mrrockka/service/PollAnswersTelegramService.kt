@@ -27,13 +27,11 @@ open class PollAnswersTelegramServiceImpl(
         if (user.username != null) {
             val person = personRepo.findByNickname(user.username!!)
                     .let { person ->
-                        if (person == null) {
+                        person ?: {
                             val new = user.toPerson()
                             personRepo.store(new)
                             new
-                        } else {
-                            person
-                        }
+                        }.invoke()
                     }
 
             pollAnswersRepo.store(pollAnswer, person)

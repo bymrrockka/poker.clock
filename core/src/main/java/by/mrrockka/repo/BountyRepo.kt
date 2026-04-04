@@ -5,7 +5,7 @@ import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.neq
-import org.jetbrains.exposed.v1.jdbc.insert
+import org.jetbrains.exposed.v1.jdbc.insertReturning
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.update
 import org.springframework.stereotype.Repository
@@ -16,8 +16,8 @@ import java.util.*
 
 interface BountyRepo {
     fun findByGame(gameId: UUID): List<Bounty>
-    fun store(gameId: UUID, bounty: Bounty, createdAt: Instant)
-    fun update(gameId: UUID, bounty: Bounty, updatedAt: Instant, isDeleted: Boolean = false)
+    fun store(gameId: UUID, bounty: Bounty, createdAt: Instant): Int
+    fun update(operationId: Int, updatedAt: Instant, isDeleted: Boolean)
 }
 
 @Repository
@@ -31,24 +31,19 @@ open class BountyRepoImpl(
                 .map { it.toBounty() }
     }
 
-    override fun store(gameId: UUID, bounty: Bounty, createdAt: Instant) {
-        BountyTable.insert {
-            it[BountyTable.gameId] = gameId
-            it[BountyTable.from_person] = bounty.from.id
-            it[BountyTable.to_person] = bounty.to.id
-            it[BountyTable.createdAt] = createdAt
-            it[BountyTable.amount] = bounty.amount
-        }
-    }
+    override fun store(gameId: UUID, bounty: Bounty, createdAt: Instant): Int =
+            BountyTable.insertReturning {
+                it[BountyTable.gameId] = gameId
+                it[BountyTable.from_person] = bounty.from.id
+                it[BountyTable.to_person] = bounty.to.id
+                it[BountyTable.createdAt] = createdAt
+                it[BountyTable.amount] = bounty.amount
+            }.single()[BountyTable.operationId]
 
-    override fun update(gameId: UUID, bounty: Bounty, updatedAt: Instant, isDeleted: Boolean) {
+    override fun update(operationId: Int, updatedAt: Instant, isDeleted: Boolean) {
         BountyTable.update(
-                limit = 1,
                 where = {
-                    (BountyTable.gameId eq gameId) and
-                            (BountyTable.from_person eq bounty.from.id) and
-                            (BountyTable.to_person eq bounty.to.id) and
-                            (BountyTable.isDeleted neq true)
+                    BountyTable.operationId eq operationId
                 },
         ) {
             it[BountyTable.isDeleted] = isDeleted

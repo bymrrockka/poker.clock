@@ -31,7 +31,7 @@ ___
 
 ```
 Processed message id: 3
-/entry @nickname3  
+/entry 
 ```
 ___
 
@@ -75,7 +75,7 @@ ___
 
 ```
 Processed message id: 7
-/entry @nickname1  
+/entry 
 ```
 ___
 
@@ -119,7 +119,7 @@ ___
 
 ```
 Processed message id: 11
-/entry @nickname2  
+/entry 
 ```
 ___
 

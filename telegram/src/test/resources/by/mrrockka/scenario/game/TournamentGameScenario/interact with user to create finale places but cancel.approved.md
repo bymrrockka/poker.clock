@@ -33,7 +33,7 @@ ___
 
 ```
 Processed message id: 3
-/entry @nickname3  
+/entry 
 ```
 ___
 

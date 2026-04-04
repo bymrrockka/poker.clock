@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.math.BigDecimal
 
 interface WithdrawalTelegramService {
-    fun withdraw(metadata: MessageMetadata): Pair<Set<String>, BigDecimal>
+    fun withdraw(metadata: MessageMetadata): Pair<String, BigDecimal>
 }
 
 @Service
@@ -26,17 +26,18 @@ open class WithdrawalTelegramServiceImpl(
         private val chatMessagesRepo: ChatMessagesRepo,
 ) : WithdrawalTelegramService {
 
-    override fun withdraw(metadata: MessageMetadata): Pair<Set<String>, BigDecimal> {
-        metadata.checkMentions()
-        val (nicknames, amount) = withdrawalMessageParser.parse(metadata)
+    override fun withdraw(metadata: MessageMetadata): Pair<String, BigDecimal> {
+        check(metadata.mentions.isEmpty()) { "Withdrawal command does not require mentions anymore. Use as /withdrawal #amount" }
+        check(metadata.from?.username != null) { "User must have nickname to execute command" }
+        val amount = withdrawalMessageParser.parse(metadata)
         val game = gameTelegramService.findGame(metadata)
         check(game is CashGame) { "Withdrawals are not allowed for non cash game" }
-        check(amount * nicknames.size.toBigDecimal() <= game.moneyInGame()) { "Sum of withdrawals is bigger then ${game.moneyInGame()} active in game" }
+        check(amount <= game.moneyInGame()) { "Sum of withdrawals is bigger then ${game.moneyInGame()} active in game" }
 
-        val personsIds = telegramPersonService.findByMessage(metadata).map { it.id }
-        withdrawalsRepo.store(game.id, personsIds, amount, metadata.createdAt)
-        chatMessagesRepo.upsert(metadata, CommandType.WITHDRAWAL)
+        val person = telegramPersonService.findOrAdd(metadata.from.username!!, metadata.chatId)
+        val operationId = withdrawalsRepo.store(game.id, person.id, amount, metadata.createdAt)
+        chatMessagesRepo.store(metadata, operationId, CommandType.WITHDRAWAL)
 
-        return nicknames to amount
+        return person.nickname!! to amount
     }
 }

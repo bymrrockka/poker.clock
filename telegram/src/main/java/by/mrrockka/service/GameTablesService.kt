@@ -13,7 +13,7 @@ import kotlin.collections.ArrayDeque
 
 interface GameTablesService {
     fun generate(game: Game): List<Table>
-    fun entries(game: Game, persons: List<BasicPerson>): List<Table>
+    fun entry(game: Game, person: BasicPerson): List<Table>
     fun seed(seed: Long)
 }
 
@@ -37,8 +37,8 @@ open class GameTablesServiceImpl(
         random.setSeed(seed)
     }
 
-    override fun entries(game: Game, persons: List<BasicPerson>): List<Table> {
-        val (tables, updatedTables) = game.formTables(persons)
+    override fun entry(game: Game, person: BasicPerson): List<Table> {
+        val (tables, updatedTables) = game.formTables(listOf(person))
 
         tablesRepo.store(game, tables)
         return updatedTables

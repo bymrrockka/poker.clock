@@ -54,7 +54,7 @@ ___
 
 ```
 Processed message id: 5
-/entry @me  
+/entry 
 ```
 ___
 
@@ -63,7 +63,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 6 
-Entry stored, buy in amount is 10 
+Re-entry stored for @sergio_cartwright, buy in amount is 10 
 ``` 
 ___
 

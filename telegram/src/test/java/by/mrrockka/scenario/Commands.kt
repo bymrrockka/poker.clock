@@ -29,10 +29,10 @@ class Commands private constructor() {
         val createPoll = "/create_poll"
         val stopPoll = "/stop_poll"
         val chatPoll = "chatPoll"
+        val cancel = "/cancel"
 
-        fun String.entry(amount: Int? = null): String = "${entry} @$this ${if (amount == null) "" else amount}"
         fun List<String>.entries(): String = joinToString(" ") { "@$it" }
-        fun entry(amount: Int? = null): String = "${entry} @me ${if (amount == null) "" else amount}"
+        fun entry(amount: Int): String = "${entry} ${amount}"
         fun help(command: String? = null): String = "$help ${command ?: ""}"
 
         fun List<String>.createGame(type: GameType, buyin: BigDecimal, alias: Boolean = false, bounty: BigDecimal = buyin): String {
@@ -95,6 +95,7 @@ class Commands private constructor() {
         fun String.finalePlaces(): String = listOf(this).finalePlaces()
 
         fun String.withdrawal(amount: Int): String = "${withdrawal} @$this $amount"
+        fun withdrawal(amount: Int): String = "${withdrawal} $amount"
 
         infix fun String.kicked(kicked: String): String = "/bounty @$this kicked @$kicked"
     }

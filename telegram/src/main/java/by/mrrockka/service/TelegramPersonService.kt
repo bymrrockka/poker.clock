@@ -11,7 +11,9 @@ import java.util.*
 
 interface TelegramPersonService {
     fun findByMessage(metadata: MessageMetadata): List<BasicPerson>
-    fun findByNicknames(nicknames: List<String>, chatId: Long): List<BasicPerson>
+    fun findOrAdd(metadata: MessageMetadata): List<BasicPerson>
+    fun findOrAdd(nicknames: List<String>, chatId: Long): List<BasicPerson>
+    fun findOrAdd(nickname: String, chatId: Long): BasicPerson
     fun findByFrom(metadata: MessageMetadata): BasicPerson
 }
 
@@ -24,10 +26,12 @@ open class TelegramPersonServiceImpl(
 
     override fun findByMessage(metadata: MessageMetadata): List<BasicPerson> {
         val nicknames = metadata.mentions.map { it.text }
-        return findByNicknames(nicknames, metadata.chatId)
+        return personRepo.findByNicknames(nicknames)
     }
 
-    override fun findByNicknames(nicknames: List<String>, chatId: Long): List<BasicPerson> {
+    override fun findOrAdd(metadata: MessageMetadata): List<BasicPerson> = findOrAdd(metadata.mentions.map { it.text }, metadata.chatId)
+
+    override fun findOrAdd(nicknames: List<String>, chatId: Long): List<BasicPerson> {
         val persons = personRepo.findByNicknames(nicknames)
         val newPersons = nicknames.newNicknames(persons)
                 .let { nicknames ->
@@ -40,6 +44,19 @@ open class TelegramPersonServiceImpl(
         chatPersonsRepo.store(allPersons.map { it.id }, chatId)
 
         return allPersons
+    }
+
+    override fun findOrAdd(nickname: String, chatId: Long): BasicPerson {
+        return personRepo.findByNickname(nickname)
+                .let { person ->
+                    if (person != null) person
+                    else {
+                        val new = BasicPerson(nickname = nickname, id = UUID.randomUUID())
+                        personRepo.store(new)
+                        chatPersonsRepo.store(new.id, chatId)
+                        new
+                    }
+                }
     }
 
     override fun findByFrom(metadata: MessageMetadata): BasicPerson {

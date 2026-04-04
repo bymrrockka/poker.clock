@@ -27,13 +27,16 @@ open class EntryTelegramServiceImpl(
 ) : EntryTelegramService {
 
     override fun entry(metadata: MessageMetadata): Pair<List<Table>, BigDecimal> {
-        metadata.checkMentions()
+        check(metadata.mentions.isEmpty()) { "Entry command does not require mentions anymore. Use as /entry" }
+        check(metadata.from != null) { "Only users can enter game" }
+        check(metadata.from.username != null) { "User must have nickname to execute command" }
         val amount = entryMessageParser.parse(metadata)
         val game = gameService.findGame(metadata)
-        val persons = personService.findByMessage(metadata)
-        entriesRepo.store(game.id, persons.map { it.id }, (amount ?: game.buyIn), metadata.createdAt)
-        chatMessagesRepo.upsert(metadata, CommandType.ENTRY)
-        val tables = tablesService.entries(game, persons)
+        val person = personService.findOrAdd(metadata.from.username!!, metadata.chatId)
+
+        val operationId = entriesRepo.store(game.id, person.id, (amount ?: game.buyIn), metadata.createdAt)
+        chatMessagesRepo.store(metadata, operationId, CommandType.ENTRY)
+        val tables = tablesService.entry(game, person)
 
         return tables to (amount ?: game.buyIn)
     }

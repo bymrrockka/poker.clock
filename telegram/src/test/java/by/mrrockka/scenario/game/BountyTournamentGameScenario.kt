@@ -38,11 +38,11 @@ class BountyTournamentGameScenario : PrizeGameScenario() {
             game.pinned()
             user { "me" kicked "nickname3" }
             bot { "Entry stored" }
-            user { "nickname3".entry() }
+            user("nickname3") { entry }
             bot { "Entry stored" }
             user { "me" kicked "nickname3" }
             bot { "Player kicked" }
-            user { "nickname3".entry() }
+            user("nickname3") { entry }
             bot { "Entry stored" }
             user { "nickname1" kicked "nickname4" }
             bot { "Player kicked" }
@@ -53,18 +53,18 @@ class BountyTournamentGameScenario : PrizeGameScenario() {
             prizePool.pinned()
             user { "nickname3" kicked "nickname1" }
             bot { "Player kicked" }
-            user { "nickname1".entry() }
+            user("nickname1") { entry }
             bot { "Entry stored" }
             user { "nickname3" kicked "nickname1" }
             bot { "Player kicked" }
-            user { "nickname1".entry() }
+            user("nickname1") { entry }
             bot { "Entry stored" }
             val finalePlaces = user { winners.finalePlaces() }
             bot { "Finale places stored" }
             finalePlaces.pinned()
             user { "nickname2" kicked "nickname1" }
             bot { "Player kicked" }
-            user { "nickname1".entry() }
+            user("nickname1") { entry }
             bot { "Entry stored" }
             user { "nickname2" kicked "nickname3" }
             bot { "Player kicked" }
@@ -89,19 +89,19 @@ class BountyTournamentGameScenario : PrizeGameScenario() {
         Given {
             user { player.createGame(GameType.BOUNTY, buyin) }
             bot { "Game created" }
-            user { "nickname3".entry() }
+            user("nickname3") { entry }
             bot { "Entry stored" }
             user { "me" kicked "nickname3" }
             bot { "Player kicked" }
-            user { "nickname3".entry() }
+            user("nickname3") { entry }
             bot { "Entry stored" }
             user { prizePool(1) }
             bot { "Prize pool stored" }
-            user { "nickname2".entry() }
+            user("nickname2") { entry }
             bot { "Entry stored" }
             user { "nickname2" kicked "nickname3" }
             bot { "Player kicked" }
-            user { "nickname1".entry() }
+            user("nickname1") { entry }
             bot { "Entry stored" }
             user { "nickname2" kicked "nickname1" }
             bot { "Player kicked" }

@@ -151,7 +151,7 @@ object GameConversation : MessageLogConversation() {
                                 createdAt = ctx.user.id.initial().createdAt,
                         ),
                         initial = ctx.user.id.initial(),
-                        players = playersMessage,
+                        playersMetadata = playersMessage,
                 ).let { game ->
                     """
                 |Game type: $type

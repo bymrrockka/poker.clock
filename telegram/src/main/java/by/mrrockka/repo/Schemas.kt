@@ -58,7 +58,7 @@ object GameTablesTable : Table("game_tables") {
 object ChatMessagesTable : Table("chat_messages") {
     val chatId = long("chat_id")
     val messageId = long("message_id")
+    val operationId = integer("operation_id")
     val type = enumerationByName<CommandType>("type", 10)
     val createdAt = timestamp("created_at")
-    val updatedAt = timestamp("updated_at").nullable()
 }

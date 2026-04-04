@@ -4,10 +4,7 @@
 
 ```
 Processed message id: 1
-/bounty_game
-buyin: 10
-bounty: 10
-@me 
+/game 
 ```
 ___
 
@@ -16,12 +13,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 2 
-Bounty tournament game started.
-------------------------------
-Table 1
-Seats:
-  5. @sergio_cartwright
-                                 
+What type of game you'd like to play? 
 ``` 
 ___
 
@@ -31,7 +23,7 @@ ___
 
 ```
 Processed message id: 3
-/entry 
+Tournament 
 ```
 ___
 
@@ -40,11 +32,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 4 
-Entries: 
-------------------------------
-Table 1
-Seats:
-  @nickname3 seat 7 -> entry 10.00 
+How much is for buy in? 
 ``` 
 ___
 
@@ -54,7 +42,7 @@ ___
 
 ```
 Processed message id: 5
-/pp 
+10 
 ```
 ___
 
@@ -63,7 +51,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 6 
-How many places to account? 
+Who's playing? 
 ``` 
 ___
 
@@ -73,7 +61,7 @@ ___
 
 ```
 Processed message id: 7
-3 
+@nickname1 @nickname2 @nickname3 @nickname4 
 ```
 ___
 
@@ -82,7 +70,17 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 8 
-What percentage for #1 place? 
+Game type: TOURNAMENT
+Buy in: 10
+                
+------------------------------
+Table 1
+Seats:
+  1. @nickname1
+  2. @nickname4
+  6. @nickname3
+  7. @nickname2
+                                 
 ``` 
 ___
 
@@ -92,7 +90,7 @@ ___
 
 ```
 Processed message id: 9
-10 
+/entry 
 ```
 ___
 
@@ -101,7 +99,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 10 
-What percentage for #2 place? 
+Re-entry stored for @nickname1, buy in amount is 10 
 ``` 
 ___
 
@@ -111,7 +109,7 @@ ___
 
 ```
 Processed message id: 11
-20 
+/entry 
 ```
 ___
 
@@ -120,7 +118,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 12 
-What percentage for #3 place? 
+Re-entry stored for @nickname1, buy in amount is 10 
 ``` 
 ___
 
@@ -130,7 +128,7 @@ ___
 
 ```
 Processed message id: 13
-30 
+/game_stats 
 ```
 ___
 
@@ -139,36 +137,34 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 14 
-Position percentage should equal 100% but was 60% 
+Tournament game statistics:
+  - players entered -> 4
+  - number of entries -> 6
+  - total in game -> 60.00 
 ``` 
 ___
 
 ### 15. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 15 
-What percentage for #1 place? 
-``` 
+&rarr; <ins>User</ins>
+
+```
+Processed [reply to message id 11]
+message id: 15
+/cancel 
+```
 ___
 
 ### 16. Message
 
-&rarr; <ins>User</ins>
-
-```
-Processed message id: 16
-50 
-```
-___
-
-### 17. Message
-
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 17 
-What percentage for #2 place? 
+message id: 16 
+Only administrators allowed to user this command. 
 ``` 
+___
+
+### 17. Member requested
 ___
 
 ### 18. Message
@@ -176,8 +172,9 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 18
-30 
+Processed [reply to message id 11]
+message id: 17
+/cancel 
 ```
 ___
 
@@ -185,8 +182,8 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 19 
-What percentage for #3 place? 
+message id: 18 
+Entry canceled 
 ``` 
 ___
 
@@ -195,8 +192,8 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 20
-20 
+Processed message id: 19
+/game_stats 
 ```
 ___
 
@@ -204,24 +201,10 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 21 
-Prize pool stored:
-1. 50%
-2. 30%
-3. 20% 
-``` 
-___
-
-### 22. Pinned
-
-``` 
-message id 21 pinned
-``` 
-___
-
-### 23. Deleted messages
-
-``` 
-message ids 6,7,8,9,10,11,12,13,14,15,16,17,18,19,20 deleted
+message id: 20 
+Tournament game statistics:
+  - players entered -> 4
+  - number of entries -> 5
+  - total in game -> 50.00 
 ``` 
 ___

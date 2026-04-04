@@ -40,7 +40,7 @@ class MyStatisticsScenario : AbstractScenarioTest() {
             //lose in cash game
             user { players.createGame(GameType.CASH, buyin) }
             bot { "Game created"}
-            user { "nickname2".withdrawal(30) }
+            user("nickname2") { withdrawal(30) }
             bot { "Withdraw" }
             user { calculate }
             bot { "Calculated payouts"}

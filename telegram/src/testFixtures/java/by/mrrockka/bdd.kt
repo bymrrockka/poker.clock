@@ -11,7 +11,7 @@ import kotlin.time.Instant
 interface Command {
     val unique: String
 
-    data class UserMessage(var message: String, val replyTo: Command? = null, override val unique: String = unique()) : Command
+    data class UserMessage(var message: String, val username: String? = null, val replyTo: Command? = null, override val unique: String = unique()) : Command
     data class Member(var member: ChatMember, override val unique: String = unique()) : Command
 
     //no assertions for bot message
@@ -40,8 +40,8 @@ class GivenSpecification {
         commands += Command.Member(member<ChatMember.Administrator> { user(this@isAdmin) })
     }
 
-    fun user(replyTo: Command? = null, init: () -> String): Command.UserMessage {
-        val command = Command.UserMessage(replyTo = replyTo, message = init())
+    fun user(username: String? = null, replyTo: Command? = null, init: () -> String): Command.UserMessage {
+        val command = Command.UserMessage(replyTo = replyTo, username = username, message = init())
         this.commands += command
         return command
     }

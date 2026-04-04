@@ -110,7 +110,6 @@ bot:
           /bounty @nickname kicked @nickname
       - name: withdrawal
         enabled: true
-        alias: wdrl
         description: Player withdrawal from a cash game
         details: |
           For players withdrawals use /withdrawal command with nickname and amount to save it against the last started game.

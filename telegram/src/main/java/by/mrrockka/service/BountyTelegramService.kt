@@ -3,6 +3,7 @@ package by.mrrockka.service
 import by.mrrockka.domain.Bounty
 import by.mrrockka.domain.BountyTournamentGame
 import by.mrrockka.domain.MessageMetadata
+import by.mrrockka.domain.checkMentions
 import by.mrrockka.domain.takenToGiven
 import by.mrrockka.parser.BountyMessageParser
 import by.mrrockka.repo.BountyRepo
@@ -37,8 +38,8 @@ open class BountyTelegramServiceImpl(
         val toPlayer = players[to]!!
 
         val bounty = Bounty(from = fromPlayer.person, to = toPlayer.person, amount = game.bounty)
-        bountyRepo.store(game.id, bounty, metadata.createdAt)
-        chatMessagesRepo.upsert(metadata, CommandType.BOUNTY)
+        val operationId = bountyRepo.store(game.id, bounty, metadata.createdAt)
+        chatMessagesRepo.store(metadata, operationId, CommandType.BOUNTY)
 
         return bounty
     }

@@ -55,7 +55,7 @@ ___
 
 ```
 Processed message id: 5
-/entry @me 30 
+/entry 30 
 ```
 ___
 
@@ -64,7 +64,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 6 
-Entry stored, buy in amount is 30 
+Re-entry stored for @sergio_cartwright, buy in amount is 30 
 ``` 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 ```
 Processed message id: 9
-/withdrawal @me 30 
+/withdrawal 30 
 ```
 ___
 
@@ -140,7 +140,7 @@ ___
 
 ```
 Processed message id: 13
-/withdrawal @me 20 
+/withdrawal 20 
 ```
 ___
 

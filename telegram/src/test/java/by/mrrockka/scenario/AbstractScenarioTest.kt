@@ -44,7 +44,8 @@ private val logger = KotlinLogging.logger {}
 @SpringBootTest(classes = [TestConfig::class])
 abstract class AbstractScenarioTest {
     private var chatid: Long = -1L
-    internal lateinit var user: User
+    internal lateinit var mainUser: User
+    internal val users = mutableMapOf<String, User>()
     private val messageLog = mutableMapOf<Command, Message>()
 
     @Autowired
@@ -61,8 +62,11 @@ abstract class AbstractScenarioTest {
         coreRandoms.reset()
         telegramRandoms.reset()
         dispatcher.reset()
+        users.clear()
+        messageLog.clear()
         chatid = telegramRandoms.chatid()
-        user = user(telegramRandoms)
+        mainUser = user()
+        users[mainUser.username!!] = mainUser
         gameSeatsService.seed(telegramRandoms.seed.hashCode().toLong())
     }
 
@@ -260,7 +264,7 @@ abstract class AbstractScenarioTest {
                 val message = message {
                     text(message)
                     chatId(chatid)
-                    from(user)
+                    from(username?.get() ?: mainUser)
                     createdAt(clock.now())
                     if (replyTo != null && messageLog[replyTo] != null) {
                         replyTo(messageLog[replyTo]!!)
@@ -331,5 +335,15 @@ abstract class AbstractScenarioTest {
 
             else -> error("Command type haven't recognised")
         }
+    }
+
+    private fun String.get(): User {
+        return users[this] ?: {
+            val user = user {
+                username(this@get)
+            }
+            users[this] = user
+            user
+        }.invoke()
     }
 }

@@ -41,7 +41,7 @@ class EntryCommandHandlerImpl(
                                     }"""
                                 }
                             }""".trimMargin()
-                        } else "Entry stored, buy in amount is ${amount.up()}"
+                        } else "Re-entry stored for @${metadata.from!!.username}, buy in amount is ${amount.up()}"
                     }.send(to = metadata.chatId, via = bot)
                 }
     }

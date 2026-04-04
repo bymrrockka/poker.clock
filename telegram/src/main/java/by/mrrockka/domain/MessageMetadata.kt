@@ -71,3 +71,9 @@ fun ProcessedUpdate.toMessageMetadata(): MessageMetadata =
 fun ProcessedUpdate.chat(): Chat =
         if (origin.message != null) origin.message!!.chat
         else error("Update message not found")
+
+fun MessageMetadata.checkMentions() {
+    check(mentions.isNotEmpty()) { "Message should contain at least one person mention" }
+    val textMention = entities.find { it.type == EntityType.TextMention }
+    check(textMention == null) { "Can't register players without nickname. Text mentions are not allowed. (${text.substring(textMention!!.offset, textMention.length)})" }
+}

@@ -116,7 +116,7 @@ class MockDispatcher(
                     when {
                         interaction.message.isNotEmpty() -> {
                             requests += interaction.index to request.toJson().findPath("text").asString()
-                            logger.debug { "Send Message request sent. Scenario index: ${interaction.index}" }
+                            logger.debug { "Send Message request sent. Interaction index: ${interaction.index}" }
                             interaction.message.removeFirst()
                         }
 

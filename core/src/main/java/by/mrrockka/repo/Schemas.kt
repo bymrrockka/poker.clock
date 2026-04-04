@@ -34,6 +34,7 @@ object EntriesTable : Table("entries") {
     val isDeleted = bool("is_deleted").default(false)
     val createdAt = timestamp("created_at")
     val updatedAt = timestamp("updated_at").nullable()
+    val operationId = integer("operation_id")
 }
 
 object WithdrawalTable : Table("withdrawal") {
@@ -43,6 +44,7 @@ object WithdrawalTable : Table("withdrawal") {
     val isDeleted = bool("is_deleted").default(false)
     val createdAt = timestamp("created_at")
     val updatedAt = timestamp("updated_at").nullable()
+    val operationId = integer("operation_id")
 }
 
 object BountyTable : Table("bounty") {
@@ -53,6 +55,7 @@ object BountyTable : Table("bounty") {
     val isDeleted = bool("is_deleted").default(false)
     val createdAt = timestamp("created_at")
     val updatedAt = timestamp("updated_at").nullable()
+    val operationId = integer("operation_id")
 }
 
 object PrizePoolTable : Table("prize_pool") {
