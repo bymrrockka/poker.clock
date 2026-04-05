@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 group = "by.mrrockka"
-version = "1.5.5"
+version = "1.6.0"
 
 plugins {
     idea
