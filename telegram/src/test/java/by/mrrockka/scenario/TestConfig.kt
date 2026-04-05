@@ -6,6 +6,7 @@ import by.mrrockka.SpringClassManager
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.types.component.ExceptionHandlingStrategy
 import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.springframework.beans.factory.annotation.Value
@@ -40,6 +41,9 @@ open class TestConfig(
                 restrictSpacesInCommands = true
             }
             updatesListener {
+                val disp = Dispatchers.Default.limitedParallelism(2)
+                dispatcher = disp
+                processingDispatcher = disp
                 if (githubPipeline) {
                     pullingDelay = 20
                 } else pullingDelay = 5
