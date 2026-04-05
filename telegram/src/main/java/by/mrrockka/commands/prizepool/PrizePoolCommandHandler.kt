@@ -1,11 +1,13 @@
 package by.mrrockka.commands.prizepool
 
+import by.mrrockka.commands.ExcludeBotGuard
 import by.mrrockka.domain.toMessageMetadata
 import by.mrrockka.repo.PinType
 import by.mrrockka.service.PinMessageService
 import by.mrrockka.service.PrizePoolTelegramService
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.CommandHandler
+import eu.vendeli.tgbot.annotations.Guard
 import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.types.component.MessageUpdate
 import eu.vendeli.tgbot.types.component.onFailure
@@ -23,6 +25,8 @@ class PrizePoolCommandHandlerImpl(
 ) : PrizePoolCommandHandler {
 
     @CommandHandler(["/prize_pool"])
+    @Deprecated(message = "This functionality will be replaced with step by step prize pool conversation", replaceWith = ReplaceWith("/pp", "PrizePoolConversation"))
+    @Guard(ExcludeBotGuard::class)
     override suspend fun prizePool(message: MessageUpdate) {
         val metadata = message.message.toMessageMetadata()
         prizePoolService.store(metadata)

@@ -32,7 +32,7 @@ ___
 
 ```
 Processed message id: 3
-/withdrawal @nickname1 40 
+/withdrawal 40 
 ```
 ___
 

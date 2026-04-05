@@ -25,6 +25,7 @@ import by.mrrockka.service.TournamentPlayerSummary
 import by.mrrockka.service.up
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.CommandHandler
+import eu.vendeli.tgbot.annotations.Guard
 import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.types.component.MessageUpdate
 import eu.vendeli.tgbot.types.component.onFailure
@@ -56,6 +57,7 @@ open class CalculationCommandHandlerImpl(
         """.trimMargin()
 
     @CommandHandler(["/calculate"])
+    @Guard(ExcludeBotGuard::class)
     override suspend fun calculate(message: MessageUpdate) {
         val metadata = message.message.toMessageMetadata()
         val game = gameService.findGame(metadata)

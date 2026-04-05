@@ -2,6 +2,7 @@ package by.mrrockka.service
 
 import by.mrrockka.domain.Game
 import by.mrrockka.domain.MessageMetadata
+import by.mrrockka.domain.checkMentions
 import by.mrrockka.parser.GameMessageParser
 import by.mrrockka.repo.ChatGameRepo
 import by.mrrockka.repo.EntriesRepo
@@ -13,7 +14,7 @@ import java.util.*
 
 interface GameTelegramService {
     fun store(metadata: MessageMetadata): Game
-    fun store(game: Game, initial: MessageMetadata, players: MessageMetadata = initial): Game
+    fun store(game: Game, initial: MessageMetadata, playersMetadata: MessageMetadata = initial): Game
     fun findGame(metadata: MessageMetadata): Game
     fun findLastGame(metadata: MessageMetadata): Game?
     fun findByChat(metadata: MessageMetadata): List<Game>
@@ -35,25 +36,25 @@ open class GameTelegramServiceImpl(
         return store(game, metadata)
     }
 
-    override fun store(game: Game, initial: MessageMetadata, players: MessageMetadata): Game {
+    override fun store(game: Game, initial: MessageMetadata, playersMetadata: MessageMetadata): Game {
         gameRepo.store(game)
         chatGameRepo.store(game.id, initial)
 
-        if (players.replyTo?.poll != null) {
-            val excludes = if (players.mentions.isNotEmpty())
-                personService.findByMessage(players).map { it.id }
+        if (playersMetadata.replyTo?.poll != null) {
+            val excludes = if (playersMetadata.mentions.isNotEmpty())
+                personService.findByMessage(playersMetadata).map { it.id }
             else emptyList()
 
-            pollService.findParticipants(players.replyTo.poll.id)
+            pollService.findParticipants(playersMetadata.replyTo.poll.id)
                     .filterNot { excludes.contains(it) }
                     .also { personIds ->
-                        entriesRepo.store(personIds, game.buyIn, game, players.createdAt)
+                        entriesRepo.store(game.id, personIds, game.buyIn, playersMetadata.createdAt)
                     }
         } else {
-            players.checkMentions()
-            personService.findByMessage(players).map { it.id }
+            playersMetadata.checkMentions()
+            personService.findOrAdd(playersMetadata).map { it.id }
                     .also { personIds ->
-                        entriesRepo.store(personIds, game.buyIn, game, players.createdAt)
+                        entriesRepo.store(game.id, personIds, game.buyIn, playersMetadata.createdAt)
                     }
         }
 

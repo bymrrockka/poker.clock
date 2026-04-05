@@ -2,8 +2,10 @@ package by.mrrockka.commands
 
 import by.mrrockka.domain.toMessageMetadata
 import by.mrrockka.service.WithdrawalTelegramService
+import by.mrrockka.service.up
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.CommandHandler
+import eu.vendeli.tgbot.annotations.Guard
 import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.types.component.MessageUpdate
 import org.springframework.stereotype.Component
@@ -18,15 +20,16 @@ class WithdrawalCommandHandlerImpl(
         private val withdrawalService: WithdrawalTelegramService,
 ) : WithdrawalCommandHandler {
 
-    @CommandHandler(["/withdrawal", "/wdrl"])
+    @CommandHandler(["/withdrawal"])
+    @Guard(ExcludeBotGuard::class)
     override suspend fun withdraw(message: MessageUpdate) {
         val metadata = message.message.toMessageMetadata()
         withdrawalService.withdraw(metadata)
-                .also { (nicknames, amount) ->
+                .also { (nickname, amount) ->
                     message {
                         """
                         |Stored withdrawals: 
-                        |${nicknames.joinToString { "|  - @${it} -> ${amount.setScale(0)}" }}
+                        |  - @${nickname} -> ${amount.up()}
                         """.trimMargin()
                     }.send(to = metadata.chatId, via = bot)
                 }

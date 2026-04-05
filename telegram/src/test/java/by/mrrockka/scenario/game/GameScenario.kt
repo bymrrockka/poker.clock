@@ -6,10 +6,12 @@ import by.mrrockka.When
 import by.mrrockka.domain.GameType
 import by.mrrockka.extension.mdApprover
 import by.mrrockka.scenario.AbstractScenarioTest
+import by.mrrockka.scenario.Commands.Companion.cancel
 import by.mrrockka.scenario.Commands.Companion.createGame
 import by.mrrockka.scenario.Commands.Companion.entries
 import by.mrrockka.scenario.Commands.Companion.entry
 import by.mrrockka.scenario.Commands.Companion.game
+import by.mrrockka.scenario.Commands.Companion.gameStats
 import by.mrrockka.service.up
 import com.oneeyedmen.okeydoke.Approver
 import org.junit.jupiter.api.Test
@@ -29,15 +31,15 @@ abstract class GameScenario : AbstractScenarioTest() {
         Given {
             user { players.createGame(gameType(), buyin) }
             bot { "game created" }
-            user { "nickname1".entry() }
+            user("nickname1") { entry }
             bot { "entry stored" }
-            user { "nickname1".entry() }
+            user("nickname1") { entry }
             bot { "entry stored" }
-            user { "nickname${size + 1}".entry() }
+            user("nickname${size + 1}") { entry }
             bot { "entry stored" }
-            user { "nickname${size + 2}".entry() }
+            user("nickname${size + 2}") { entry }
             bot { "entry stored" }
-            user { "nickname${size + 3}".entry() }
+            user("nickname${size + 3}") { entry }
             bot { "entry stored" }
         } When {
             updatesReceived()
@@ -66,15 +68,15 @@ abstract class GameScenario : AbstractScenarioTest() {
             val game = bot { "Game created" }
             game.pinned()
             toDelete.deleted()
-            user { "nickname1".entry() }
+            user("nickname1") { entry }
             bot { "entry stored" }
-            user { "nickname1".entry() }
+            user("nickname1") { entry }
             bot { "entry stored" }
-            user { "nickname${size + 1}".entry() }
+            user("nickname${size + 1}") { entry }
             bot { "entry stored" }
-            user { "nickname${size + 2}".entry() }
+            user("nickname${size + 2}") { entry }
             bot { "entry stored" }
-            user { "nickname${size + 3}".entry() }
+            user("nickname${size + 3}") { entry }
             bot { "entry stored" }
         } When {
             updatesReceived()
@@ -91,11 +93,47 @@ abstract class GameScenario : AbstractScenarioTest() {
             toDelete += bot { "Type of game?" }
             toDelete += user { gameType().title }
             toDelete += bot { "Buyin?" }
-            toDelete += user { buyin.setScale(0).toString() }
+            toDelete += user { buyin.up().toString() }
             toDelete += bot { "Question?" }
             toDelete += user { "cancel" }
             toDelete += bot { "Was canceled" }
             toDelete.deleted()
+        } When {
+            updatesReceived()
+        } ThenApproveWith approver
+    }
+
+    @Test
+    fun `should cancel entry on cancel command with attached message`(approver: Approver) {
+        val buyin = BigDecimal(10)
+        val players = (1..4).map { "nickname$it" }
+
+        Given {
+            user { game }
+            bot { "Type of game?" }
+            user { gameType().title }
+            bot { "Buyin?" }
+            user { buyin.up().toString() }
+            if (gameType() == GameType.BOUNTY) {
+                bot { "Bounty?" }
+                user { buyin.up().toString() }
+            }
+            bot { "Players?" }
+            user { players.entries() }
+            bot { "Game created" }
+            user("nickname1") { entry }
+            bot { "entry stored" }
+            val entry = user("nickname1") { entry }
+            bot { "entry stored" }
+            user { gameStats }
+            bot { "game stats" }
+            user(username = "nickname1", replyTo = entry) { cancel }
+            bot { "cancel command require admin permissions" }
+            mainUser.isAdmin()
+            user(replyTo = entry) { cancel }
+            bot { "entry canceled" }
+            user { gameStats }
+            bot { "game stats" }
         } When {
             updatesReceived()
         } ThenApproveWith approver

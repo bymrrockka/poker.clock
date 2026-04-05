@@ -31,14 +31,20 @@ object EntriesTable : Table("entries") {
     val gameId = javaUUID("game_id").references(GameTable.id)
     val personId = javaUUID("person_id").references(PersonTable.id)
     val amount = decimal("amount", 20, 2)
+    val isDeleted = bool("is_deleted").default(false)
     val createdAt = timestamp("created_at")
+    val updatedAt = timestamp("updated_at").nullable()
+    val operationId = integer("operation_id")
 }
 
 object WithdrawalTable : Table("withdrawal") {
     val gameId = javaUUID("game_id").references(GameTable.id)
     val personId = javaUUID("person_id").references(PersonTable.id)
     val amount = decimal("amount", 20, 2)
+    val isDeleted = bool("is_deleted").default(false)
     val createdAt = timestamp("created_at")
+    val updatedAt = timestamp("updated_at").nullable()
+    val operationId = integer("operation_id")
 }
 
 object BountyTable : Table("bounty") {
@@ -46,7 +52,10 @@ object BountyTable : Table("bounty") {
     val from_person = javaUUID("from_person").references(PersonTable.id)
     val to_person = javaUUID("to_person").references(PersonTable.id)
     val amount = decimal("amount", 20, 2)
+    val isDeleted = bool("is_deleted").default(false)
     val createdAt = timestamp("created_at")
+    val updatedAt = timestamp("updated_at").nullable()
+    val operationId = integer("operation_id")
 }
 
 object PrizePoolTable : Table("prize_pool") {

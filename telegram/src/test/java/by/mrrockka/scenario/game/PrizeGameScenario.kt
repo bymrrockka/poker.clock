@@ -139,15 +139,15 @@ abstract class PrizeGameScenario : GameScenario() {
         Given {
             user { player.createGame(gameType(), buyin) }
             bot { "Game created" }
-            user { "nickname3".entry() }
+            user("nickname3") { entry }
             bot { "Entry stored" }
             user { prizePool(1) }
             bot { "Prize pool stored" }
-            user { "nickname1".entry() }
+            user("nickname1") { entry }
             bot { "Entry stored" }
             user { player.finalePlaces() }
             bot { "Finale places stored" }
-            user { "nickname2".entry() }
+            user("nickname2") { entry }
             bot { "Entry stored" }
             user { prizePool(2) }
             bot { "Prize pool stored" }
@@ -166,7 +166,7 @@ abstract class PrizeGameScenario : GameScenario() {
         Given {
             user { player.createGame(gameType(), buyin) }
             bot { "Game created" }
-            user { "nickname3".entry() }
+            user("nickname3") { entry }
             bot { "Entry stored" }
             val toDelete = mutableListOf<Command>()
             user { "/pp" }
@@ -194,7 +194,7 @@ abstract class PrizeGameScenario : GameScenario() {
         Given {
             user { player.createGame(gameType(), buyin) }
             bot { "Game created" }
-            user { "nickname3".entry() }
+            user("nickname3") { entry }
             bot { "Entry stored" }
             val toDelete = mutableListOf<Command>()
             user { "/pp" }
@@ -229,7 +229,7 @@ abstract class PrizeGameScenario : GameScenario() {
         Given {
             user { player.createGame(gameType(), buyin) }
             bot { "Game created" }
-            user { "nickname3".entry() }
+            user("nickname3") { entry }
             bot { "Entry stored" }
             val toDelete = mutableListOf<Command>()
             user { "/pp" }
@@ -256,7 +256,7 @@ abstract class PrizeGameScenario : GameScenario() {
         Given {
             user { listOf(player, "nickname1", "nickname2").createGame(gameType(), buyin) }
             bot { "Game created" }
-            user { "nickname3".entry() }
+            user("nickname3") { entry }
             bot { "Entry stored" }
             val toDelete = mutableListOf<Command>()
             user { "/fp" }
@@ -284,7 +284,7 @@ abstract class PrizeGameScenario : GameScenario() {
         Given {
             user { listOf(player, "nickname1", "nickname2").createGame(gameType(), buyin) }
             bot { "Game created" }
-            user { "nickname3".entry() }
+            user("nickname3") { entry }
             bot { "Entry stored" }
             val toDelete = mutableListOf<Command>()
             user { "/fp" }

@@ -3,6 +3,7 @@ package by.mrrockka.commands.prizepool
 import by.mrrockka.commands.BigDecimalState
 import by.mrrockka.commands.CancelStep
 import by.mrrockka.commands.CancelableStep
+import by.mrrockka.commands.ExcludeBotGuard
 import by.mrrockka.commands.MessageLogConversation
 import by.mrrockka.commands.PositionPrizeState
 import by.mrrockka.commands.decimalValidation
@@ -12,6 +13,7 @@ import by.mrrockka.domain.chat
 import by.mrrockka.repo.PinType
 import by.mrrockka.service.PinMessageService
 import by.mrrockka.service.PrizePoolTelegramService
+import eu.vendeli.tgbot.annotations.Guard
 import eu.vendeli.tgbot.annotations.WizardHandler
 import eu.vendeli.tgbot.api.message.SendMessageAction
 import eu.vendeli.tgbot.api.message.message
@@ -28,6 +30,7 @@ import java.util.concurrent.ConcurrentHashMap
         trigger = ["/pp"],
         stateManagers = [MapIntStateManager::class, BigDecimalState::class, PositionPrizeState::class],
 )
+@Guard(ExcludeBotGuard::class)
 object PrizePoolConversation : MessageLogConversation() {
     lateinit var prizePoolService: PrizePoolTelegramService
     lateinit var pinMessageService: PinMessageService

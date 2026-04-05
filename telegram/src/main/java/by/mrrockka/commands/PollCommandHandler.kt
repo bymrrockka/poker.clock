@@ -5,6 +5,7 @@ import by.mrrockka.service.PollAnswersTelegramService
 import by.mrrockka.service.PollTelegramService
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.CommandHandler
+import eu.vendeli.tgbot.annotations.Guard
 import eu.vendeli.tgbot.annotations.UpdateHandler
 import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.types.component.MessageUpdate
@@ -36,6 +37,7 @@ class PollCommandHandlerImpl(
 ) : PollCommandHandler {
 
     @CommandHandler(["/create_poll", "/cp"])
+    @Guard(ExcludeBotGuard::class)
     override suspend fun create(message: MessageUpdate) {
         val metadata = message.message.toMessageMetadata()
         pollService.create(metadata)
@@ -51,6 +53,7 @@ class PollCommandHandlerImpl(
     }
 
     @CommandHandler(["/stop_poll", "/sp"])
+    @Guard(ExcludeBotGuard::class)
     override suspend fun stop(message: MessageUpdate) {
         val metadata = message.message.toMessageMetadata()
         check(metadata.replyTo != null) {
@@ -65,6 +68,7 @@ class PollCommandHandlerImpl(
     }
 
     @UpdateHandler([UpdateType.POLL_ANSWER])
+    @Guard(ExcludeBotGuard::class)
     override suspend fun answer(pollAnswer: PollAnswerUpdate) {
         if (pollAnswer.user != null) {
             //only user answers are counted

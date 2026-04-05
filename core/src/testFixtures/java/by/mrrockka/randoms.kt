@@ -2,8 +2,9 @@ package by.mrrockka
 
 import com.github.javafaker.Faker
 import java.math.BigDecimal
-import java.time.Instant
 import java.util.*
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 interface Randoms {
     val random: Random
@@ -19,7 +20,7 @@ open class CoreRandoms(
         override val seed: String? = null,
 ) : Randoms {
 
-    fun instant(): Instant = Instant.now()
+    fun instant(): Instant = Clock.System.now()
     fun firstname(): String = faker.name().firstName()
     fun lastname(): String = faker.name().lastName()
     fun decimal(from: Int = 10, to: Int = 100): BigDecimal = BigDecimal.valueOf(faker.number().numberBetween(from, to).toLong())

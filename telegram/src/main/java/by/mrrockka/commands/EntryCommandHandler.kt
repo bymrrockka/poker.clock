@@ -2,8 +2,10 @@ package by.mrrockka.commands
 
 import by.mrrockka.domain.toMessageMetadata
 import by.mrrockka.service.EntryTelegramService
+import by.mrrockka.service.up
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.annotations.CommandHandler
+import eu.vendeli.tgbot.annotations.Guard
 import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.types.component.MessageUpdate
 import org.springframework.stereotype.Component
@@ -19,9 +21,9 @@ class EntryCommandHandlerImpl(
 ) : EntryCommandHandler {
 
     @CommandHandler(["/entry", "/reentry"])
+    @Guard(ExcludeBotGuard::class)
     override suspend fun entry(message: MessageUpdate) {
         val metadata = message.message.toMessageMetadata()
-        //todo: add ability to entry without nickname or @me and decline command handler
         entryTelegramService.entry(metadata)
                 .also { (tables, amount) ->
                     message {
@@ -39,7 +41,7 @@ class EntryCommandHandlerImpl(
                                     }"""
                                 }
                             }""".trimMargin()
-                        } else "Entry stored"
+                        } else "Re-entry stored for @${metadata.from!!.username}, buy in amount is ${amount.up()}"
                     }.send(to = metadata.chatId, via = bot)
                 }
     }

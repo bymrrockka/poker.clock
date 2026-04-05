@@ -2,6 +2,7 @@ package by.mrrockka.repo
 
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.jdbc.batchInsert
+import org.jetbrains.exposed.v1.jdbc.insert
 import org.jetbrains.exposed.v1.jdbc.select
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Propagation
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 interface ChatPersonsRepo {
+    fun store(personId: UUID, chatId: Long)
     fun store(personIds: List<UUID>, chatId: Long)
     fun personChats(personId: UUID): List<Long>
 }
@@ -16,6 +18,12 @@ interface ChatPersonsRepo {
 @Repository
 @Transactional(propagation = Propagation.REQUIRED)
 open class ChatPersonsRepoImpl : ChatPersonsRepo {
+    override fun store(personId: UUID, chatId: Long) {
+        ChatPersonsTable.insert {
+            it[ChatPersonsTable.chatId] = chatId
+            it[ChatPersonsTable.personId] = personId
+        }
+    }
 
     override fun store(personIds: List<UUID>, chatId: Long) {
         ChatPersonsTable.batchInsert(personIds, ignore = true) { id ->

@@ -5,13 +5,16 @@ package by.mrrockka.scenario
 import by.mrrockka.BotProperties
 import by.mrrockka.builder.BuilderDsl
 import by.mrrockka.builder.MessageBuilder
+import by.mrrockka.builder.member
 import eu.vendeli.tgbot.annotations.internal.KtGramInternal
 import eu.vendeli.tgbot.api.botactions.GetUpdatesAction
+import eu.vendeli.tgbot.api.chat.getChatMember
 import eu.vendeli.tgbot.api.chat.pinChatMessage
 import eu.vendeli.tgbot.api.chat.unpinChatMessage
 import eu.vendeli.tgbot.api.common.poll
 import eu.vendeli.tgbot.api.message.deleteMessages
 import eu.vendeli.tgbot.api.message.message
+import eu.vendeli.tgbot.types.chat.ChatMember
 import eu.vendeli.tgbot.types.common.Update
 import eu.vendeli.tgbot.types.component.Response
 import eu.vendeli.tgbot.types.msg.Message
@@ -30,6 +33,7 @@ import okhttp3.internal.closeQuietly
 import org.springframework.stereotype.Component
 import tools.jackson.databind.JsonNode
 import tools.jackson.databind.ObjectMapper
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedDeque
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
@@ -41,10 +45,11 @@ private val serde = Json {
     ignoreUnknownKeys = true
     explicitNulls = false
     isLenient = true
+    classDiscriminator = "status"
 }
 
 private val scenarioHeader = "Scenario"
-private val defaultMessageBody = serde.encodeToString(Response.Success(MessageBuilder { text("NOT OK") }.message()))
+private val defaultMessageBody = serde.encodeToString(Response.Success(MessageBuilder { text("SKIPPED") }.message()))
 private fun defaultBooleanBody(success: Boolean = true) = if (success) {
     serde.encodeToString(Response.Success(success))
 } else {
@@ -66,9 +71,14 @@ class MockDispatcher(
 ) : Dispatcher() {
     var requests = mutableMapOf<Int, String>()
     private var interactions = ConcurrentLinkedDeque<Interaction>()
+    private var members = ConcurrentHashMap<Long, ChatMember>()
 
     fun scenario(init: Interaction.Builder.() -> Unit) {
         this.interactions += Interaction.Builder(init).build()
+    }
+
+    fun member(member: ChatMember) {
+        members += member.user.id to member
     }
 
     private fun ConcurrentLinkedDeque<Interaction>.retrieve(): Interaction {
@@ -106,7 +116,7 @@ class MockDispatcher(
                     when {
                         interaction.message.isNotEmpty() -> {
                             requests += interaction.index to request.toJson().findPath("text").asString()
-                            logger.debug { "Send Message request sent. Scenario index: ${interaction.index}" }
+                            logger.debug { "Send Message request sent. Interaction index: ${interaction.index}" }
                             interaction.message.removeFirst()
                         }
 
@@ -168,6 +178,21 @@ class MockDispatcher(
                     }
                 }
 
+                "${botProps.botpath}/$getMember" -> {
+                    val member = members[request.userId()]
+                    when {
+                        member != null -> {
+                            logger.debug { "Requested member details for ${member.user.username}. Role is ${member.status}." }
+                            MockResponse(code = 200, body = serde.encodeToString<Response.Success<ChatMember>>(Response.Success(member)))
+                        }
+
+                        else -> {
+                            logger.warn { "Member detail request was skipped" }
+                            MockResponse(code = 200, body = serde.encodeToString<Response.Success<ChatMember>>(Response.Success(member())))
+                        }
+                    }
+                }
+
                 else -> {
                     logger.error { "Unknown request type ${request.url.encodedPath}. Interaction index: ${interaction.index}" }
                     MockResponse(code = 404, body = defaultBooleanBody(false))
@@ -179,9 +204,11 @@ class MockDispatcher(
     fun reset() {
         requests.clear()
         interactions.clear()
+        members.clear()
     }
 
     private fun RecordedRequest.toJson(): JsonNode = mapper.readTree(this.body?.toByteArray())
+    private fun RecordedRequest.userId(): Long = toJson().findPath("user_id").asLong()
 
     private fun RecordedRequest.toPollText(): String {
         val json = this.toJson()
@@ -220,6 +247,10 @@ class MockDispatcher(
         @JvmStatic
         @OptIn(KtGramInternal::class)
         private val deleteMessages = deleteMessages(emptyList()).run { methodName }
+
+        @JvmStatic
+        @OptIn(KtGramInternal::class)
+        private val getMember = getChatMember(1L).run { methodName }
 
         @JvmStatic
         @OptIn(KtGramInternal::class)

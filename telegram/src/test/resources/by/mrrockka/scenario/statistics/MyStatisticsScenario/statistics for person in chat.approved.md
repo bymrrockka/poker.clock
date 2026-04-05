@@ -170,7 +170,7 @@ ___
 
 ```
 Processed message id: 13
-/withdrawal @nickname2 30 
+/withdrawal 30 
 ```
 ___
 

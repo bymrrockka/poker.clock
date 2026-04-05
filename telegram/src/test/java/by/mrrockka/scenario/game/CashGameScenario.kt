@@ -36,13 +36,13 @@ class CashGameScenario : GameScenario() {
             val game = user { players.createGame(GameType.CASH, buyin, withAlias) }
             bot { "Game created" }
             game.pinned()
-            user { "nickname1".withdrawal(20) }
+            user("nickname1") { withdrawal(20) }
             bot { "Withdraw" }
-            user { "nickname2".withdrawal(30) }
+            user("nickname2") { withdrawal(30) }
             bot { "Withdraw" }
-            user { "nickname4".entry(20) }
+            user("nickname4") { entry(20) }
             bot { "Entry stored" }
-            user { "nickname3".withdrawal(30) }
+            user("nickname3") { withdrawal(30) }
             bot { "Withdraw" }
             val calculate = user { calculate }
             bot { "Calculated payouts" }
@@ -60,9 +60,9 @@ class CashGameScenario : GameScenario() {
         Given {
             user { "nickname1".createGame(GameType.CASH, buyin) }
             bot { "Game created" }
-            user { "nickname2".entry() }
+            user("nickname2") { entry }
             bot { "Entry stored" }
-            user { "nickname1".withdrawal(20) }
+            user("nickname1") { withdrawal(20) }
             bot { "Withdraw" }
             user { calculate }
             bot { "Calculated payouts" }
@@ -94,7 +94,7 @@ class CashGameScenario : GameScenario() {
         Given {
             user { players.createGame(GameType.CASH, buyin) }
             bot { "Game created" }
-            user { "nickname1".withdrawal(40) }
+            user("nickname1") { withdrawal(40) }
             bot { "Exception" }
         } When {
             updatesReceived()

@@ -27,12 +27,24 @@ bot:
         description: Bot conversation to start a game
         details: |
           You will be asked to input parameters of the game you want to start.
-          There also will be a 'cancel' keyword to finish input chain without game creation
+          
+          There are three types of games that are supported: Tournament, Cash and Bounty tournament.
+          
+          In order to start a game you should specify a type, buy in, bounty if applicable and players.
+          Also if you are aware of automatic poll creation feature `/create_poll` then you can have poll as a reply message when bot will ask about players so all the people that answered `participant` option will be added to game automatically. 
+          
+          For the re-entries and new players `/entry @me` could be used, for tournaments buy in will be game buy in as default, for cash games you could specify the number in this message which will be used instead of default.
+          
+          For all tournaments in order to calculate payouts finale places and prize pool should be specified.
+          
+          And after all set you can call `/calculate` command to see game summary and all the calculations.
       - name: bounty_game
         enabled: true
         alias: bg
-        description: Starts bounty tournament game
+        description: Deprecated place use `/game` instead
         details: |
+          Deprecated place use `/game` instead
+          
           You could create a bounty tournament game using /bounty_game command with list of players nicknames that separated with a space.
           Also you should specify buy-in, stack and bounty amount.
           There should be at least two players for the game
@@ -46,8 +58,10 @@ bot:
       - name: tournament_game
         enabled: true
         alias: tg
-        description: Starts a tournament game
+        description: Deprecated place use `/game` instead
         details: |
+          Deprecated place use `/game` instead
+          
           You could create a tournament game using /tournament_game command with list of players nicknames that separated with a space.
           Also you should specify buy-in, stack amount.
           There should be at least two players for the game
@@ -60,8 +74,10 @@ bot:
       - name: cash_game
         enabled: true
         alias: cg
-        description: Starts a cash game
+        description: Deprecated place use `/game` instead
         details: |
+          Deprecated place use `/game` instead
+          
           You could create a cash game using /cash_game command with list of players nicknames that separated with a space.
           Also you should specify buy-in and stack amounts.
           There should be at least two players for the game
@@ -94,7 +110,6 @@ bot:
           /bounty @nickname kicked @nickname
       - name: withdrawal
         enabled: true
-        alias: wdrl
         description: Player withdrawal from a cash game
         details: |
           For players withdrawals use /withdrawal command with nickname and amount to save it against the last started game.
@@ -105,8 +120,10 @@ bot:
           /withdrawal @nickname @nickname 20
       - name: prize_pool
         enabled: true
-        description: Stores a prize pool for a tournament
+        description: Deprecated place use `/pp` instead
         details: |
+          Deprecated place use `/pp` instead
+          
           When you ready to specify prize pool for tournament game use /prize_pool command to store position and percentage map.
           Should contain at least one position.
           Total percentage should be equal to 100%.
@@ -124,9 +141,10 @@ bot:
           You will asked about details for game's prize pool
       - name: finale_places
         enabled: true
-        alias: fp
-        description: Stores a finale places for a tournament
+        description: Deprecated place use `/fp` instead
         details: |
+          Deprecated place use `/fp` instead
+          
           When tournament is finished you could specify places for players who won the pot with /finale_places command.
           Should contain at least one position with player nickname.
           You could forward game message in case there are multiple games happen in parallel to store against it.
@@ -134,6 +152,11 @@ bot:
           /finale_places 
           1. @nickname
           /finale_places 1 @nickname, 2 @nickname
+      - name: fp
+        enabled: true
+        description: Stores a finale places for a tournament
+        details: |
+          You will asked about details for game's winners
       - name: calculate
         enabled: true
         description: Calculate game payouts
@@ -176,9 +199,13 @@ bot:
           Examples: 
           /my_stats
       - name: help
-        alias: start
         enabled: true
         description: Post it with a command name for command details
+        details: |
+          You could use `/help` command to get details about supported commands.
+          And you can try start a poker manager for game with `/game` command or type `/help game` to get details about it
+      - name: start
+        enabled: true
         details: |
           Hey nice to see you. 
           This bot is designed to manage offline poker games in an easy manner and payouts calculation for each player.
@@ -188,8 +215,6 @@ bot:
           
           You could use `/help` command to get details about supported commands.
           And you can try start a poker manager for game with `/game` command or type `/help game` to get details about it
-      - name: start
-        enabled: true
       - name: create_poll
         enabled: true
         description: Created a scheduled poll with specific message and repeat time for chat

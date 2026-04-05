@@ -4,7 +4,6 @@ group = "by.mrrockka"
 version = "1.5.5"
 
 plugins {
-    java
     idea
     application
     `maven-publish`
@@ -18,6 +17,11 @@ plugins {
 }
 
 val jvmVersion = 21
+
+ktGram {
+    forceVersion = "dev-260325~e4c725b"
+    addSnapshotRepo = true
+}
 
 java {
     toolchain {

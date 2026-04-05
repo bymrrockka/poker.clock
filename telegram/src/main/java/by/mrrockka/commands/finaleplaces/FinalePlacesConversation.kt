@@ -2,6 +2,7 @@ package by.mrrockka.commands.finaleplaces
 
 import by.mrrockka.commands.CancelStep
 import by.mrrockka.commands.CancelableStep
+import by.mrrockka.commands.ExcludeBotGuard
 import by.mrrockka.commands.MessageLogConversation
 import by.mrrockka.commands.PositionMentionState
 import by.mrrockka.commands.digitValidation
@@ -11,6 +12,7 @@ import by.mrrockka.domain.toMessageMetadata
 import by.mrrockka.repo.PinType
 import by.mrrockka.service.FinalePlacesTelegramService
 import by.mrrockka.service.PinMessageService
+import eu.vendeli.tgbot.annotations.Guard
 import eu.vendeli.tgbot.annotations.WizardHandler
 import eu.vendeli.tgbot.api.message.SendMessageAction
 import eu.vendeli.tgbot.api.message.message
@@ -26,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap
         trigger = ["/fp"],
         stateManagers = [MapIntStateManager::class, PositionMentionState::class],
 )
+@Guard(ExcludeBotGuard::class)
 object FinalePlacesConversation : MessageLogConversation() {
     lateinit var finalePlacesService: FinalePlacesTelegramService
     lateinit var pinMessageService: PinMessageService

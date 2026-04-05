@@ -43,7 +43,7 @@ ___
 
 ```
 Processed message id: 3
-/withdrawal @nickname1 20 
+/withdrawal 20 
 ```
 ___
 
@@ -63,7 +63,7 @@ ___
 
 ```
 Processed message id: 5
-/withdrawal @nickname2 30 
+/withdrawal 30 
 ```
 ___
 
@@ -83,7 +83,7 @@ ___
 
 ```
 Processed message id: 7
-/entry @nickname4 20 
+/entry 20 
 ```
 ___
 
@@ -92,7 +92,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 8 
-Entry stored 
+Re-entry stored for @nickname4, buy in amount is 20 
 ``` 
 ___
 
@@ -102,7 +102,7 @@ ___
 
 ```
 Processed message id: 9
-/withdrawal @nickname3 30 
+/withdrawal 30 
 ```
 ___
 

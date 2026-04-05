@@ -31,7 +31,7 @@ ___
 
 ```
 Processed message id: 3
-/entry @nickname2  
+/entry 
 ```
 ___
 
@@ -54,7 +54,7 @@ ___
 
 ```
 Processed message id: 5
-/withdrawal @nickname1 20 
+/withdrawal 20 
 ```
 ___
 

@@ -1,9 +1,11 @@
 package by.mrrockka.repo
 
-import by.mrrockka.domain.Game
+import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
-import org.jetbrains.exposed.v1.jdbc.batchInsert
+import org.jetbrains.exposed.v1.core.neq
+import org.jetbrains.exposed.v1.jdbc.insertReturning
 import org.jetbrains.exposed.v1.jdbc.selectAll
+import org.jetbrains.exposed.v1.jdbc.update
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
@@ -13,7 +15,9 @@ import java.util.*
 
 interface EntriesRepo {
     fun findByGame(gameId: UUID): Map<UUID, List<BigDecimal>>
-    fun store(personIds: List<UUID>, amount: BigDecimal, game: Game, createdAt: Instant)
+    fun store(gameId: UUID, personIds: List<UUID>, amount: BigDecimal, createdAt: Instant)
+    fun store(gameId: UUID, personId: UUID, amount: BigDecimal, createdAt: Instant): Int
+    fun update(operationId: Int, updatedAt: Instant, isDeleted: Boolean)
 }
 
 @Repository
@@ -22,17 +26,30 @@ open class EntriesRepoImpl : EntriesRepo {
 
     override fun findByGame(gameId: UUID): Map<UUID, List<BigDecimal>> {
         return EntriesTable.selectAll()
-                .where { EntriesTable.gameId eq gameId }
+                .where { (EntriesTable.gameId eq gameId) and (EntriesTable.isDeleted neq true) }
                 .map { it[EntriesTable.personId] to it[EntriesTable.amount] }
                 .groupBy({ it.first }, { it.second })
     }
 
-    override fun store(personIds: List<UUID>, amount: BigDecimal, game: Game, createdAt: Instant) {
-        EntriesTable.batchInsert(personIds) { id ->
-            this[EntriesTable.gameId] = game.id
-            this[EntriesTable.personId] = id
-            this[EntriesTable.amount] = amount
-            this[EntriesTable.createdAt] = createdAt
+    override fun store(gameId: UUID, personIds: List<UUID>, amount: BigDecimal, createdAt: Instant) {
+        personIds.map { id -> store(gameId, id, amount, createdAt) }
+    }
+
+    override fun store(gameId: UUID, personId: UUID, amount: BigDecimal, createdAt: Instant): Int =
+            EntriesTable.insertReturning {
+                it[EntriesTable.gameId] = gameId
+                it[EntriesTable.personId] = personId
+                it[EntriesTable.amount] = amount
+                it[EntriesTable.createdAt] = createdAt
+            }.single()[EntriesTable.operationId]
+
+    override fun update(operationId: Int, updatedAt: Instant, isDeleted: Boolean) {
+        EntriesTable.update(
+                where = { EntriesTable.operationId eq operationId },
+        ) {
+            it[EntriesTable.isDeleted] = isDeleted
+            it[EntriesTable.updatedAt] = updatedAt
         }
     }
+
 }
