@@ -244,3 +244,12 @@ bot:
           You should reply to poll creation message in order to do that.
           Examples: 
           /stop_poll
+      - name: cancel
+        enabled: true
+        description: Cancel players actions by message
+        details: |
+          You should reply to message you want to cancel with this command to process it.
+          Actions that could be canceled:
+          - entry
+          - withdrawal
+          - bounty
