@@ -41,7 +41,7 @@ open class TestConfig(
                 restrictSpacesInCommands = true
             }
             updatesListener {
-                val disp = Dispatchers.Default.limitedParallelism(2)
+                val disp = Dispatchers.IO.limitedParallelism(2)
                 dispatcher = disp
                 processingDispatcher = disp
                 if (githubPipeline) {
