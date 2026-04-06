@@ -44,7 +44,7 @@ open class BotConfig(
             classManager = SpringClassManager(appContext, classManager)
             identifier = botProps.name
             rateLimiter {
-                limits = RateLimits(period = 1000L, rate = 1)
+                limits = RateLimits(period = 100L, rate = 10)
             }
             commandParsing {
                 commandDelimiter = '\n'
