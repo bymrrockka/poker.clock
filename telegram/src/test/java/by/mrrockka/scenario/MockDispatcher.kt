@@ -72,7 +72,7 @@ class MockDispatcher(
         private val mapper: ObjectMapper,
         private val clock: TestClock,
 ) : Dispatcher() {
-    private val delay = 10L
+    private val delay = 5L
     private var lastPush: Instant? = null
     var requests = mutableMapOf<Int, String>()
     private var interactions = ConcurrentLinkedDeque<Interaction>()
