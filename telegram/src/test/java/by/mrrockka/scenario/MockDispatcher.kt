@@ -21,6 +21,8 @@ import eu.vendeli.tgbot.types.msg.Message
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
@@ -35,6 +37,7 @@ import tools.jackson.databind.JsonNode
 import tools.jackson.databind.ObjectMapper
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedDeque
+import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
@@ -69,6 +72,8 @@ class MockDispatcher(
         private val mapper: ObjectMapper,
         private val clock: TestClock,
 ) : Dispatcher() {
+    private val delay = 5L
+    private var lastPush: Instant? = null
     var requests = mutableMapOf<Int, String>()
     private var interactions = ConcurrentLinkedDeque<Interaction>()
     private var members = ConcurrentHashMap<Long, ChatMember>()
@@ -83,120 +88,155 @@ class MockDispatcher(
 
     private fun ConcurrentLinkedDeque<Interaction>.retrieve(): Interaction {
         return synchronized(this) {
-            when {
+            val interaction = when {
                 isEmpty() -> empty
-                first().isNotEmpty() -> interactions.first()
+                first().isNotEmpty() -> first()
                 else -> {
                     removeFirst()
                     retrieve()
                 }
             }
-        }
-    }
 
-    override fun dispatch(request: RecordedRequest): MockResponse {
-        return synchronized(this) {
-            val interaction = interactions.retrieve()
             if (interaction.time != null) {
                 clock.set(interaction.time)
             }
+            interaction
+        }
+    }
 
-            when (request.url.encodedPath) {
-                "${botProps.botpath}/$getUpdates" -> when {
-                    interaction.update.isNotEmpty() -> {
-                        logger.debug { "Sending updates. Interaction index: ${interaction.index}" }
+    /**
+     * Method should be used to make sure requests are coming in sequential way
+     * This one creates a little delay for server even with low resources environment (like github actions pipeline) to give time to process command
+     * Use for all requests that require processing time
+     */
+    private fun push(block: () -> MockResponse): MockResponse {
+        val sync = {
+            lastPush = Clock.System.now()
+            block()
+        }
+
+        if (lastPush == null) {
+            return sync()
+        }
+
+        while (Clock.System.now().toEpochMilliseconds() - lastPush!!.toEpochMilliseconds() < delay) {
+            runBlocking {
+                delay(delay)
+            }
+        }
+
+        return sync()
+    }
+
+    override fun dispatch(request: RecordedRequest): MockResponse {
+        return when (request.url.encodedPath) {
+            "${botProps.botpath}/$getUpdates" -> when {
+                interactions.retrieve().update.isNotEmpty() -> {
+                    val interaction = interactions.retrieve()
+                    logger.debug { "Sending updates. Interaction index: ${interaction.index}" }
+
+                    push {
                         requests += interaction.index to "Processed"
                         interaction.update.removeFirst()
                     }
-
-                    else -> MockResponse(body = serde.encodeToString(Response.Success(emptyList<Update>())))
                 }
 
-                "${botProps.botpath}/$sendMessage" ->
-                    when {
-                        interaction.message.isNotEmpty() -> {
+                else -> MockResponse(body = serde.encodeToString(Response.Success(emptyList<Update>())))
+            }
+
+            "${botProps.botpath}/$sendMessage" ->
+                when {
+                    interactions.retrieve().message.isNotEmpty() -> {
+                        val interaction = interactions.retrieve()
+                        logger.debug { "Send Message request sent. Interaction index: ${interaction.index}" }
+                        push {
                             requests += interaction.index to request.toJson().findPath("text").asString()
-                            logger.debug { "Send Message request sent. Interaction index: ${interaction.index}" }
                             interaction.message.removeFirst()
                         }
-
-                        else -> {
-                            logger.warn { "Send Message request was skipped" }
-                            MockResponse(code = 200, body = defaultMessageBody)
-                        }
-                    }
-
-                "${botProps.botpath}/$sendPoll" -> when {
-                    interaction.poll.isNotEmpty() -> {
-                        requests += interaction.index to request.toPollText()
-                        logger.debug { "Send Poll request sent. Interaction index: ${interaction.index}" }
-                        interaction.poll.removeFirst()
                     }
 
                     else -> {
-                        logger.warn { "Send Poll request was skipped" }
+                        logger.warn { "Send Message request was skipped" }
                         MockResponse(code = 200, body = defaultMessageBody)
                     }
                 }
 
-                "${botProps.botpath}/$pinMessage" -> when {
-                    interaction.pin.isNotEmpty() -> {
-                        requests += interaction.index to "pinned"
-                        logger.debug { "Pin Message request sent. Interaction index: ${interaction.index}" }
-                        interaction.pin.removeFirst()
-                    }
-
-                    else -> {
-                        logger.warn { "Pin Message request was skipped" }
-                        MockResponse(code = 200, body = defaultBooleanBody(true))
-                    }
-                }
-
-                "${botProps.botpath}/$unpinMessage" -> when {
-                    interaction.unpin.isNotEmpty() -> {
-                        requests += interaction.index to "unpinned"
-                        logger.debug { "Unpin Message request sent. Interaction index: ${interaction.index}" }
-                        interaction.unpin.removeFirst()
-                    }
-
-                    else -> {
-                        logger.warn { "Unpin Message request was skipped" }
-                        MockResponse(code = 200, body = defaultBooleanBody(true))
-                    }
-                }
-
-                "${botProps.botpath}/$deleteMessages" -> when {
-                    interaction.delete.isNotEmpty() -> {
-                        requests += interaction.index to "deleted"
-                        logger.debug { "Delete Messages request sent. Interaction index: ${interaction.index}" }
-                        interaction.delete.removeFirst()
-                    }
-
-                    else -> {
-                        logger.warn { "Delete Messages request was skipped" }
-                        MockResponse(code = 200, body = defaultBooleanBody(true))
-                    }
-                }
-
-                "${botProps.botpath}/$getMember" -> {
-                    val member = members[request.userId()]
-                    when {
-                        member != null -> {
-                            logger.debug { "Requested member details for ${member.user.username}. Role is ${member.status}." }
-                            MockResponse(code = 200, body = serde.encodeToString<Response.Success<ChatMember>>(Response.Success(member)))
-                        }
-
-                        else -> {
-                            logger.warn { "Member detail request was skipped" }
-                            MockResponse(code = 200, body = serde.encodeToString<Response.Success<ChatMember>>(Response.Success(member())))
-                        }
+            "${botProps.botpath}/$sendPoll" -> when {
+                interactions.retrieve().poll.isNotEmpty() -> {
+                    val interaction = interactions.retrieve()
+                    requests += interaction.index to request.toPollText()
+                    push {
+                        logger.debug { "Send Poll request sent. Interaction index: ${interaction.index}" }
+                        interaction.poll.removeFirst()
                     }
                 }
 
                 else -> {
-                    logger.error { "Unknown request type ${request.url.encodedPath}. Interaction index: ${interaction.index}" }
-                    MockResponse(code = 404, body = defaultBooleanBody(false))
+                    logger.warn { "Send Poll request was skipped" }
+                    MockResponse(code = 200, body = defaultMessageBody)
                 }
+            }
+
+            "${botProps.botpath}/$pinMessage" -> when {
+                interactions.retrieve().pin.isNotEmpty() -> {
+                    val interaction = interactions.retrieve()
+                    logger.debug { "Pin Message request sent. Interaction index: ${interaction.index}" }
+                    requests += interaction.index to "pinned"
+                    interaction.pin.removeFirst()
+                }
+
+                else -> {
+                    logger.warn { "Pin Message request was skipped" }
+                    MockResponse(code = 200, body = defaultBooleanBody(true))
+                }
+            }
+
+            "${botProps.botpath}/$unpinMessage" -> when {
+                interactions.retrieve().unpin.isNotEmpty() -> {
+                    val interaction = interactions.retrieve()
+                    requests += interaction.index to "unpinned"
+                    logger.debug { "Unpin Message request sent. Interaction index: ${interaction.index}" }
+                    interaction.unpin.removeFirst()
+                }
+
+                else -> {
+                    logger.warn { "Unpin Message request was skipped" }
+                    MockResponse(code = 200, body = defaultBooleanBody(true))
+                }
+            }
+
+            "${botProps.botpath}/$deleteMessages" -> when {
+                interactions.retrieve().delete.isNotEmpty() -> {
+                    val interaction = interactions.retrieve()
+                    logger.debug { "Delete Messages request sent. Interaction index: ${interaction.index}" }
+                    requests += interaction.index to "deleted"
+                    interaction.delete.removeFirst()
+                }
+
+                else -> {
+                    logger.warn { "Delete Messages request was skipped" }
+                    MockResponse(code = 200, body = defaultBooleanBody(true))
+                }
+            }
+
+            "${botProps.botpath}/$getMember" -> {
+                val member = members[request.userId()]
+                when {
+                    member != null -> {
+                        logger.debug { "Requested member details for ${member.user.username}. Role is ${member.status}." }
+                        MockResponse(code = 200, body = serde.encodeToString<Response.Success<ChatMember>>(Response.Success(member)))
+                    }
+
+                    else -> {
+                        logger.warn { "Member detail request was skipped" }
+                        MockResponse(code = 200, body = serde.encodeToString<Response.Success<ChatMember>>(Response.Success(member())))
+                    }
+                }
+            }
+
+            else -> {
+                logger.error { "Unknown request type ${request.url.encodedPath}." }
+                MockResponse(code = 404, body = defaultBooleanBody(false))
             }
         }
     }

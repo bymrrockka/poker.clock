@@ -24,7 +24,6 @@ import kotlin.time.Instant
 open class TestConfig(
         private val botProps: BotProperties,
 ) {
-
     @Value("\${github.pipeline}")
     var githubPipeline: Boolean = false
 
@@ -41,7 +40,8 @@ open class TestConfig(
             }
             updatesListener {
                 if (githubPipeline) {
-                    pullingDelay = 20
+                    //Required for github pipeline as it has one core
+                    pullingDelay = 10
                 } else pullingDelay = 5
             }
             exceptionHandlingStrategy = ExceptionHandlingStrategy.Handle(PokerClockExceptionHandler)

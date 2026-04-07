@@ -14,7 +14,6 @@ import eu.vendeli.tgbot.interfaces.ctx.ClassManager
 import eu.vendeli.tgbot.types.bot.BotCommand
 import eu.vendeli.tgbot.types.component.ExceptionHandlingStrategy
 import eu.vendeli.tgbot.types.component.UpdateType
-import eu.vendeli.tgbot.types.configuration.RateLimits
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -43,9 +42,6 @@ open class BotConfig(
         val bot = TelegramBot(botProps.token) {
             classManager = SpringClassManager(appContext, classManager)
             identifier = botProps.name
-            rateLimiter {
-                limits = RateLimits(period = 100L, rate = 10)
-            }
             commandParsing {
                 commandDelimiter = '\n'
                 restrictSpacesInCommands = true
