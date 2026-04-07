@@ -40,6 +40,7 @@ open class TestConfig(
             }
             updatesListener {
                 if (githubPipeline) {
+                    //Required for github pipeline as it has one core
                     pullingDelay = 10
                 } else pullingDelay = 5
             }

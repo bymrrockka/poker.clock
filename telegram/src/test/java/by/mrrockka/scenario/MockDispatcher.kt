@@ -104,6 +104,11 @@ class MockDispatcher(
         }
     }
 
+    /**
+     * Method should be used to make sure requests are coming in sequential way
+     * This one creates a little delay for server even with low resources environment (like github actions pipeline) to give time to process command
+     * Use for all requests that require processing time
+     */
     private fun push(block: () -> MockResponse): MockResponse {
         val sync = {
             lastPush = Clock.System.now()
