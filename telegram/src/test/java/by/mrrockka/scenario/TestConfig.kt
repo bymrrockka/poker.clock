@@ -8,6 +8,7 @@ import eu.vendeli.tgbot.types.component.ExceptionHandlingStrategy
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
@@ -23,6 +24,9 @@ import kotlin.time.Instant
 open class TestConfig(
         private val botProps: BotProperties,
 ) {
+    @Value("\${github.pipeline}")
+    var githubPipeline: Boolean = false
+
     @Bean
     @Primary
     @OptIn(DelicateCoroutinesApi::class)
@@ -33,6 +37,11 @@ open class TestConfig(
             commandParsing {
                 commandDelimiter = '\n'
                 restrictSpacesInCommands = true
+            }
+            updatesListener {
+                if (githubPipeline) {
+                    pullingDelay = 10
+                } else pullingDelay = 5
             }
             exceptionHandlingStrategy = ExceptionHandlingStrategy.Handle(PokerClockExceptionHandler)
         }
