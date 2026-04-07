@@ -72,7 +72,7 @@ class MockDispatcher(
         private val mapper: ObjectMapper,
         private val clock: TestClock,
 ) : Dispatcher() {
-    private val delay = 5L
+    private val delay = 10L
     private var lastPush: Instant? = null
     var requests = mutableMapOf<Int, String>()
     private var interactions = ConcurrentLinkedDeque<Interaction>()
@@ -90,7 +90,7 @@ class MockDispatcher(
         return synchronized(this) {
             val interaction = when {
                 isEmpty() -> empty
-                first().isNotEmpty() -> interactions.first()
+                first().isNotEmpty() -> first()
                 else -> {
                     removeFirst()
                     retrieve()
@@ -116,7 +116,7 @@ class MockDispatcher(
 
         while (Clock.System.now().toEpochMilliseconds() - lastPush!!.toEpochMilliseconds() < delay) {
             runBlocking {
-                delay(10L)
+                delay(delay)
             }
         }
 
