@@ -1,0 +1,54 @@
+Game details: 
+ - total money: 480.0
+ - buy-in: 30.0
+ - players size: 8
+ - entries size: 16
+
+Prize summary:
+Position 1
+  Prize 264
+  Buy-ins: -30
+  Nickname jackie_rau
+  Total: 234
+Position 2
+  Prize 144
+  Buy-ins: -30
+  Nickname terisa_johnston
+  Total: 114
+Position 3
+  Prize 72.0
+  Buy-ins: -60
+  Nickname stanton_boyer
+  Total: 12
+
+Payout to: jackie_rau 
+Total: 218 (234 - 16)
+Debtors:
+  - Debtor: deb_becker
+    Debt: 150
+  - Debtor: hope_wehner
+    Debt: 60
+  - Debtor: ashlee_lang
+    Debt: 8
+______________________________
+Payout to: terisa_johnston 
+Total: 106 (114 - 8)
+Debtors:
+  - Debtor: perry_hessel
+    Debt: 90
+  - Debtor: ashlee_lang
+    Debt: 16
+______________________________
+Description: Service Fee
+URL: https://www.mrrockka.by
+Total: 24
+Debtors:
+  - Debtor: ashlee_lang
+    Debt: 24
+______________________________
+Payout to: stanton_boyer 
+Total: 12 
+Debtors:
+  - Debtor: ashlee_lang
+    Debt: 12
+______________________________

@@ -121,11 +121,11 @@ open class GameCalculator(
     }
 
     private fun List<ComputedAmount>.findDebtors(amount: BigDecimal): List<Debtor> {
-        val playerTotal = find { it.total <= amount }
-        val payer = playerTotal?.let { Debtor(it.person, it.total) }
+        val computedAmount = find { it.total <= amount }
+        val payer = computedAmount?.let { Debtor(it.person, it.total) }
         return when {
             payer == null -> emptyList()
-            payer.debt < amount -> this.minus(playerTotal).findDebtors(amount - payer.debt) + payer
+            payer.debt < amount -> this.minus(computedAmount).findDebtors(amount - payer.debt) + payer
             else -> listOf(payer)
         }
     }

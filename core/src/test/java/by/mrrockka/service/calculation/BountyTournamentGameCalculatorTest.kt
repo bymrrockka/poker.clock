@@ -14,15 +14,13 @@ import by.mrrockka.extension.textApprover
 import com.oneeyedmen.okeydoke.Approver
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.Arguments
-import org.junit.jupiter.params.provider.MethodSource
+import org.junit.jupiter.params.provider.CsvSource
 import java.math.BigDecimal
-import java.util.stream.Stream
 
 class BountyTournamentGameCalculatorTest : ServiceFeeFeatureTest() {
 
     @ParameterizedTest
-    @MethodSource("playerSize")
+    @CsvSource("2", "4", "10", "20", "100")
     fun `given equal entries and one prize place should calculate`(size: Int) {
         val buyin = BigDecimal("10.0")
         val bounty = BigDecimal("10.0")
@@ -201,19 +199,6 @@ class BountyTournamentGameCalculatorTest : ServiceFeeFeatureTest() {
         }
 
         game.calculateAndAssert(approver)
-    }
-
-    companion object {
-        @JvmStatic
-        private fun playerSize(): Stream<Arguments?> {
-            return Stream.of(
-                    Arguments.of(2),
-                    Arguments.of(4),
-                    Arguments.of(10),
-                    Arguments.of(20),
-                    Arguments.of(100),
-            )
-        }
     }
 
     fun BountyPlayer.bountyToWinner(winner: BountyPlayer, bounty: BigDecimal, entries: Int = -1): Pair<BountyPlayer, List<BountyPlayer>> = listOf(this).bountyToWinner(winner, bounty, entries)

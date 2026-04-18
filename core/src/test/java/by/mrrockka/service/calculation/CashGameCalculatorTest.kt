@@ -12,15 +12,13 @@ import by.mrrockka.service.halfDown
 import com.oneeyedmen.okeydoke.Approver
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.Arguments
-import org.junit.jupiter.params.provider.MethodSource
+import org.junit.jupiter.params.provider.CsvSource
 import java.math.BigDecimal
-import java.util.stream.Stream
 
 class CashGameCalculatorTest : ServiceFeeFeatureTest() {
 
     @ParameterizedTest
-    @MethodSource("playerSize")
+    @CsvSource("2", "4", "10", "20", "100")
     fun `given equal entries and one player wins pot should calculate`(size: Int) {
         val buyin = BigDecimal("10.0")
         val withdrawal = BigDecimal("10.0")
@@ -85,19 +83,6 @@ class CashGameCalculatorTest : ServiceFeeFeatureTest() {
         }
 
         game.calculateAndAssert(approver)
-    }
-
-    companion object {
-        @JvmStatic
-        private fun playerSize(): Stream<Arguments?> {
-            return Stream.of(
-                    Arguments.of(2),
-                    Arguments.of(4),
-                    Arguments.of(10),
-                    Arguments.of(20),
-                    Arguments.of(100),
-            )
-        }
     }
 
     fun CashPlayer.addWithdrawals(withdrawal: BigDecimal, size: Int): CashPlayer = this.copy(withdrawals = (0..<size).map { withdrawal })

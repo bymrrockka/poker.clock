@@ -16,6 +16,7 @@ import by.mrrockka.service.CashPlayerSummary
 import by.mrrockka.service.GameCalculator
 import by.mrrockka.service.PlayerSummaryService
 import com.oneeyedmen.okeydoke.Approver
+import org.assertj.core.api.AssertionsForInterfaceTypes.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
@@ -37,11 +38,18 @@ abstract class AbstractCalculatorTest {
     }
 
     fun Game.calculateAndAssert(approver: Approver) {
+        val payouts = calculator.calculate(this)
+        val persons = payouts
+                .flatMap { it.debtors.map { it.person } + it.creditor }
+                .distinct()
+                .filter { it !is ServiceFee }
+        players.map { it.person }
+                .forEach { person -> assertThat(persons).contains(person) }
         approver.assertApproved(
                 """
                     |${text()}
                     |
-                    |${calculator.calculate(this).text()}
+                    |${payouts.text()}
                 """.trimMargin(),
         )
     }
