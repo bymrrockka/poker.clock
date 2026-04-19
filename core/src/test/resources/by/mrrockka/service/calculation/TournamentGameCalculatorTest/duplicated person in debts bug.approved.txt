@@ -24,31 +24,33 @@ Position 3
 Payout to: jackie_rau 
 Total: 218 (234 - 16)
 Debtors:
-  - Debtor: deb_becker
-    Debt: 150
+  - Debtor: perry_hessel
+    Debt: 90
   - Debtor: hope_wehner
     Debt: 60
   - Debtor: ashlee_lang
+    Debt: 30
+  - Debtor: santo_welch
+    Debt: 30
+  - Debtor: deb_becker
     Debt: 8
 ______________________________
 Payout to: terisa_johnston 
 Total: 106 (114 - 8)
 Debtors:
-  - Debtor: perry_hessel
-    Debt: 90
-  - Debtor: ashlee_lang
-    Debt: 16
+  - Debtor: deb_becker
+    Debt: 106
 ______________________________
 Description: Service Fee
 URL: https://www.mrrockka.by
 Total: 24
 Debtors:
-  - Debtor: ashlee_lang
+  - Debtor: deb_becker
     Debt: 24
 ______________________________
 Payout to: stanton_boyer 
 Total: 12 
 Debtors:
-  - Debtor: ashlee_lang
+  - Debtor: deb_becker
     Debt: 12
 ______________________________
