@@ -254,21 +254,22 @@ Payout to: @nickname2
   Entries: 10
   Total: 55 (won 65 - entries 10 - 6 fee)
 From:
-  @nickname3 -> 30
+  @sergio_cartwright -> 10
+  @nickname5 -> 10
   @nickname4 -> 10
-  @sergio_cartwright -> 9
+  @nickname3 -> 19
 ------------------------------
 Payout to: @nickname1
   Entries: 60
   Total: 5 (won 65 - entries 60)
 From:
-  @sergio_cartwright -> 5
+  @nickname3 -> 5
 ------------------------------
 Game calculation fee
   URL: https://buymeacoffee.com/mrrockka
   Total: 6
 From:
-  @sergio_cartwright -> 6 
+  @nickname3 -> 6 
 ``` 
 ___
 

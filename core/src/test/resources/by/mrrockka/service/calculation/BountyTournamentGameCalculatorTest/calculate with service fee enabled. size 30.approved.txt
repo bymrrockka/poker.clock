@@ -58,7 +58,7 @@ Debtors:
     Debt: 20
   - Debtor: santo_welch
     Debt: 20
-  - Debtor: francisco_nolan
+  - Debtor: darryl_hane
     Debt: 9
 ______________________________
 Payout to: terisa_johnston 
@@ -74,8 +74,10 @@ Debtors:
     Debt: 20
   - Debtor: lena_howe
     Debt: 20
+  - Debtor: darryl_hane
+    Debt: 11
   - Debtor: francisco_nolan
-    Debt: 13
+    Debt: 2
 ______________________________
 Description: Service Fee
 URL: https://www.mrrockka.by

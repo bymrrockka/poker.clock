@@ -25,7 +25,7 @@ Debtors:
     Debt: 10
   - Debtor: santo_welch
     Debt: 10
-  - Debtor: donya_willms
+  - Debtor: ronnie_schuppe
     Debt: 8
 ______________________________
 Payout to: terisa_johnston 
@@ -37,8 +37,10 @@ Debtors:
     Debt: 10
   - Debtor: hope_wehner
     Debt: 10
+  - Debtor: ronnie_schuppe
+    Debt: 2
   - Debtor: donya_willms
-    Debt: 8
+    Debt: 6
 ______________________________
 Description: Service Fee
 URL: https://www.mrrockka.by

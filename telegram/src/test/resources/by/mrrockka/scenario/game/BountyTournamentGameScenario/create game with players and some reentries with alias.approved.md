@@ -407,15 +407,16 @@ Payout to: @nickname2
   Bounties: 20 (taken 3 - given 1) 
   Total: 56 (won 55 - entries 10 + bounties 20 - 9 fee)
 From:
-  @nickname3 -> 40
-  @nickname5 -> 16
+  @nickname5 -> 20
+  @nickname4 -> 20
+  @nickname3 -> 16
 ------------------------------
 Payout to: @nickname1
   Entries: 40
   Bounties: 0 (taken 3 - given 3) 
   Total: 13 (won 55 - entries 40 + bounties 0 - 2 fee)
 From:
-  @nickname5 -> 13
+  @nickname3 -> 13
 ------------------------------
 Players played equally
   @sergio_cartwright
@@ -424,7 +425,7 @@ Game calculation fee
   URL: https://buymeacoffee.com/mrrockka
   Total: 11
 From:
-  @nickname5 -> 11 
+  @nickname3 -> 11 
 ``` 
 ___
 

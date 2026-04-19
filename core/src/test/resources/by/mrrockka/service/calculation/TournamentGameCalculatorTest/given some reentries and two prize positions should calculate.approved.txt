@@ -19,22 +19,8 @@ Position 2
 Payout to: jackie_rau 
 Total: 109 
 Debtors:
-  - Debtor: erich_mayer
-    Debt: 40
-  - Debtor: donya_willms
-    Debt: 30
-  - Debtor: stanton_boyer
-    Debt: 10
-  - Debtor: ashlee_lang
-    Debt: 10
-  - Debtor: santo_welch
-    Debt: 10
   - Debtor: ronnie_schuppe
-    Debt: 9
-______________________________
-Payout to: terisa_johnston 
-Total: 41 
-Debtors:
+    Debt: 10
   - Debtor: refugia_koss
     Debt: 10
   - Debtor: deb_becker
@@ -43,6 +29,20 @@ Debtors:
     Debt: 10
   - Debtor: hope_wehner
     Debt: 10
-  - Debtor: ronnie_schuppe
-    Debt: 1
+  - Debtor: stanton_boyer
+    Debt: 10
+  - Debtor: ashlee_lang
+    Debt: 10
+  - Debtor: santo_welch
+    Debt: 10
+  - Debtor: erich_mayer
+    Debt: 29
+______________________________
+Payout to: terisa_johnston 
+Total: 41 
+Debtors:
+  - Debtor: donya_willms
+    Debt: 30
+  - Debtor: erich_mayer
+    Debt: 11
 ______________________________
