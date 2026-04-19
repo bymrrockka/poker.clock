@@ -9,17 +9,16 @@ import by.mrrockka.domain.FinalPlace
 import by.mrrockka.domain.Game
 import by.mrrockka.domain.PositionPrize
 import by.mrrockka.extension.textApprover
+import by.mrrockka.feature.ServiceFeeFeature
 import com.oneeyedmen.okeydoke.Approver
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.Arguments
-import org.junit.jupiter.params.provider.MethodSource
+import org.junit.jupiter.params.provider.CsvSource
 import java.math.BigDecimal
-import java.util.stream.Stream
 
 class TournamentGameCalculatorTest : ServiceFeeFeatureTest() {
     @ParameterizedTest
-    @MethodSource("playerSize")
+    @CsvSource("2", "4", "10", "20", "100")
     fun `given equal entries and one prize place should calculate`(size: Int) {
         val buyin = BigDecimal("10.0")
         val players = tournamentPlayers(size) {
@@ -186,17 +185,51 @@ class TournamentGameCalculatorTest : ServiceFeeFeatureTest() {
         game.calculateAndAssert(approver)
     }
 
-    companion object {
-        @JvmStatic
-        private fun playerSize(): Stream<Arguments?> {
-            return Stream.of(
-                    Arguments.of(2),
-                    Arguments.of(4),
-                    Arguments.of(10),
-                    Arguments.of(20),
-                    Arguments.of(100),
+    @Test
+    fun `duplicated person in debts bug`(approver: Approver) {
+        val feature = ServiceFeeFeature(
+                enabled = true,
+                percent = BigDecimal("5"),
+                threshold = BigDecimal("2"),
+                description = "Service Fee",
+                url = "https://www.mrrockka.by",
+        )
+        changeFeeTo(feature)
+        val buyin = BigDecimal("30.0")
+        val players = tournamentPlayers(4) { buyin(buyin) } +
+                tournamentPlayer {
+                    buyin(buyin)
+                    entries(2)
+                } +
+                tournamentPlayer {
+                    buyin(buyin)
+                    entries(2)
+                } +
+                tournamentPlayer {
+                    buyin(buyin)
+                    entries(3)
+                } +
+                tournamentPlayer {
+                    buyin(buyin)
+                    entries(5)
+                }
+
+        val game = tournamentGame {
+            buyIn(buyin)
+            players(players)
+            prizePool(
+                    PositionPrize(1, BigDecimal("55")),
+                    PositionPrize(2, BigDecimal("30")),
+                    PositionPrize(3, BigDecimal("15")),
+            )
+            finalePlaces(
+                    FinalPlace(1, players[0].person),
+                    FinalPlace(2, players[1].person),
+                    FinalPlace(3, players[4].person),
             )
         }
+
+        game.calculateAndAssert(approver)
     }
 
     override fun game(buyin: BigDecimal, playersSize: Int, prizeSize: Int): Game {

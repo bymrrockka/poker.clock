@@ -76,7 +76,7 @@ open class GameCalculator(
     private fun List<ComputedAmount>.toPayouts(): List<Payout> {
         val transfersToComputedAmounts = groupBy({ it.transferType }, { it })
         val creditors = transfersToComputedAmounts[TransferType.CREDIT]?.sortedByDescending { it.total } ?: emptyList()
-        val debtors = transfersToComputedAmounts[TransferType.DEBIT]?.sortedByDescending { it.total } ?: emptyList()
+        val debtors = transfersToComputedAmounts[TransferType.DEBIT]?.sortedBy { it.total } ?: emptyList()
         val equals = transfersToComputedAmounts[TransferType.EQUAL] ?: emptyList()
         validate(creditors, debtors, equals)
         return creditors.calculatePayouts(debtors) + equals.toEqualPayouts()
@@ -105,12 +105,13 @@ open class GameCalculator(
             var filled = prefilled
             debtorsLeft.map { debtor ->
                 var debt = debtor.total
-                filled = prefilled
+                filled = filled
                         .map { payout ->
                             val leftToPay = payout.total - payout.debtors.sumOf { it.debt }
-                            if (leftToPay > ZERO) {
-                                debt -= leftToPay
-                                payout.copy(debtors = payout.debtors + Debtor(debtor.person, leftToPay))
+                            if (leftToPay > ZERO && debt > ZERO) {
+                                val amount = if (debt >= leftToPay) leftToPay else debt
+                                debt -= amount
+                                payout.copy(debtors = payout.debtors + Debtor(debtor.person, amount))
                             } else payout
                         }
             }
@@ -121,11 +122,11 @@ open class GameCalculator(
     }
 
     private fun List<ComputedAmount>.findDebtors(amount: BigDecimal): List<Debtor> {
-        val playerTotal = find { it.total <= amount }
-        val payer = playerTotal?.let { Debtor(it.person, it.total) }
+        val computedAmount = find { it.total <= amount }
+        val payer = computedAmount?.let { Debtor(it.person, it.total) }
         return when {
             payer == null -> emptyList()
-            payer.debt < amount -> this.minus(playerTotal).findDebtors(amount - payer.debt) + payer
+            payer.debt < amount -> this.minus(computedAmount).findDebtors(amount - payer.debt) + payer
             else -> listOf(payer)
         }
     }

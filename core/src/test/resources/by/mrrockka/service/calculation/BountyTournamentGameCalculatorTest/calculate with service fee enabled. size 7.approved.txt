@@ -28,15 +28,17 @@ Debtors:
     Debt: 20
   - Debtor: santo_welch
     Debt: 20
-  - Debtor: perry_hessel
+  - Debtor: hope_wehner
     Debt: 9
 ______________________________
 Description: Service Fee
 URL: https://www.mrrockka.by
 Total: 18
 Debtors:
+  - Debtor: hope_wehner
+    Debt: 11
   - Debtor: perry_hessel
-    Debt: 18
+    Debt: 7
 ______________________________
 Payout to: terisa_johnston 
 Total: 13 (15 - 2)
