@@ -34,6 +34,7 @@ class PollBuilder(init: (PollBuilder.() -> Unit) = {}) : AbstractBuilder<Telegra
                 isAnonymous = false,
                 type = PollType.Regular,
                 allowsMultipleAnswers = false,
+                allowsRevoting = true
         )
     }
 }

@@ -34,6 +34,7 @@ class PollAnswerBuilder(init: (PollAnswerBuilder.() -> Unit) = {}) : AbstractBui
                 pollId = pollId ?: error("Must have poll id"),
                 user = user ?: user(),
                 optionIds = options,
+                optionPersistentIds = emptyList(),
         )
     }
 }
