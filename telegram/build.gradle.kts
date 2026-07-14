@@ -61,7 +61,8 @@ dependencies {
 
 configurations.all {
     resolutionStrategy.eachDependency {
-        val serdeVer = "1.8.1"
+        val serdeVer = "1.11.0"
+        val coroutinesVer = "1.11.0"
         when (requested.module.toString()) {
             // json serialization
             "org.jetbrains.kotlinx:kotlinx-serialization-json" -> useVersion(serdeVer)
@@ -69,6 +70,10 @@ configurations.all {
             "org.jetbrains.kotlinx:kotlinx-serialization-core" -> useVersion(serdeVer)
             "org.jetbrains.kotlinx:kotlinx-serialization-core-jvm" -> useVersion(serdeVer)
             "org.jetbrains.kotlinx:kotlinx-serialization-bom" -> useVersion(serdeVer)
+            // coroutines (telegram-bot 9.5.0 is compiled against 1.11.0; Spring BOM pins 1.10.2)
+            "org.jetbrains.kotlinx:kotlinx-coroutines-core" -> useVersion(coroutinesVer)
+            "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm" -> useVersion(coroutinesVer)
+            "org.jetbrains.kotlinx:kotlinx-coroutines-bom" -> useVersion(coroutinesVer)
         }
     }
 }
