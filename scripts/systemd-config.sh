@@ -3,7 +3,8 @@ set -Eeuo pipefail
 
 SERVICE_NAME="poker-app.service"
 SERVICE_PATH="/etc/systemd/system/${SERVICE_NAME}"
-SUDOERS_PATH="/etc/sudoers.d/${SERVICE_NAME}"
+SUDOERS_NAME="poker-app-service"
+SUDOERS_PATH="/etc/sudoers.d/${SUDOERS_NAME}"
 
 SYSTEMCTL_BIN="$(command -v systemctl)"
 
