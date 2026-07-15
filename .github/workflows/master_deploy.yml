@@ -70,4 +70,4 @@ jobs:
             echo DB_URL=$DB_URL >> .env
             echo DB_USER=$DB_USER >> .env
             echo PROFILES=$PROFILES >> .env
-            sudo systemctl restart poker-app.service
+            systemctl restart poker-app.service
