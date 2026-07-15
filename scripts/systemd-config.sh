@@ -82,6 +82,11 @@ ${APP_USER} ALL=(root) NOPASSWD: ${SYSTEMCTL_BIN} restart ${SERVICE_NAME}
 ${APP_USER} ALL=(root) NOPASSWD: ${SYSTEMCTL_BIN} status ${SERVICE_NAME}
 EOF
 
+if [ ! -s "${SUDOERS_TEMP_FILE}" ]; then
+  echo "Exception: generated sudoers file is empty."
+  exit 1
+fi
+
 sudo visudo -cf "${SUDOERS_TEMP_FILE}"
 
 sudo install -o root -g root -m 0644 "${SERVICE_TEMP_FILE}" "${SERVICE_PATH}"
