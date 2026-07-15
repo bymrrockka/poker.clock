@@ -3,6 +3,9 @@ set -Eeuo pipefail
 
 SERVICE_NAME="poker-app.service"
 SERVICE_PATH="/etc/systemd/system/${SERVICE_NAME}"
+SUDOERS_PATH="/etc/sudoers.d/${SERVICE_NAME}"
+
+SYSTEMCTL_BIN="$(command -v systemctl)"
 
 if [ "${EUID}" -eq 0 ]; then
   echo "Exception: do not run this script with sudo/root."
@@ -12,6 +15,11 @@ fi
 
 if [ -z "${USER:-}" ]; then
   echo "Exception: USER environment variable is not set."
+  exit 1
+fi
+
+if [ -z "${SYSTEMCTL_BIN}" ]; then
+  echo "Exception: systemctl was not found."
   exit 1
 fi
 
@@ -25,7 +33,23 @@ if sudo test -e "${SERVICE_PATH}"; then
   exit 1
 fi
 
-sudo tee "${SERVICE_PATH}" > /dev/null <<EOF
+if sudo test -e "${SUDOERS_PATH}"; then
+  echo "Exception: sudoers file already exists: ${SUDOERS_PATH}"
+  echo "Remove it manually if you want to recreate it:"
+  echo "sudo rm ${SUDOERS_PATH}"
+  exit 1
+fi
+
+SERVICE_TEMP_FILE="$(mktemp)"
+SUDOERS_TEMP_FILE="$(mktemp)"
+
+cleanup() {
+  rm -f "${SERVICE_TEMP_FILE}" "${SUDOERS_TEMP_FILE}"
+}
+
+trap cleanup EXIT
+
+cat > "${SERVICE_TEMP_FILE}" <<EOF
 [Unit]
 Description=Poker App Java Application
 Wants=network-online.target
@@ -51,14 +75,31 @@ SuccessExitStatus=143
 WantedBy=multi-user.target
 EOF
 
+cat > "${SUDOERS_TEMP_FILE}" <<EOF
+${USER} ALL=(root) NOPASSWD: ${SYSTEMCTL_BIN} start ${SERVICE_NAME}
+${USER} ALL=(root) NOPASSWD: ${SYSTEMCTL_BIN} stop ${SERVICE_NAME}
+${USER} ALL=(root) NOPASSWD: ${SYSTEMCTL_BIN} restart ${SERVICE_NAME}
+${USER} ALL=(root) NOPASSWD: ${SYSTEMCTL_BIN} status ${SERVICE_NAME}
+EOF
+
+sudo visudo -cf "${SUDOERS_TEMP_FILE}"
+
+sudo install -o root -g root -m 0644 "${SERVICE_TEMP_FILE}" "${SERVICE_PATH}"
+sudo install -o root -g root -m 0440 "${SUDOERS_TEMP_FILE}" "${SUDOERS_PATH}"
+
 sudo systemctl daemon-reload
 sudo systemctl enable "${SERVICE_NAME}"
 
 echo "Systemd service was created successfully: ${SERVICE_PATH}"
+echo "Limited sudoers permissions were created successfully: ${SUDOERS_PATH}"
+echo ""
+echo "The user '${APP_USER}' can now manage only this service with:"
+echo "sudo systemctl start ${SERVICE_NAME}"
+echo "sudo systemctl stop ${SERVICE_NAME}"
+echo "sudo systemctl restart ${SERVICE_NAME}"
+echo "sudo systemctl status ${SERVICE_NAME}"
+echo ""
 echo "Service was enabled and will start automatically after system restart."
 echo ""
 echo "To start it now, run:"
 echo "sudo systemctl start ${SERVICE_NAME}"
-echo ""
-echo "To check status, run:"
-echo "sudo systemctl status ${SERVICE_NAME}"
