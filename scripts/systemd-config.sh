@@ -13,7 +13,7 @@ if [ "${EUID}" -eq 0 ]; then
   exit 1
 fi
 
-if [ -z "${USER:-}" ]; then
+if [ -z "${APP_USER:-}" ]; then
   echo "Exception: USER environment variable is not set."
   exit 1
 fi
@@ -23,7 +23,7 @@ if [ -z "${SYSTEMCTL_BIN}" ]; then
   exit 1
 fi
 
-APP_DIR="/home/${USER}/app"
+APP_DIR="/home/${APP_USER}/app"
 RUN_SCRIPT="${APP_DIR}/scripts/run.sh"
 
 if sudo test -e "${SERVICE_PATH}"; then
@@ -57,7 +57,7 @@ After=network-online.target
 
 [Service]
 Type=simple
-User=${USER}
+User=${APP_USER}
 WorkingDirectory=${APP_DIR}
 
 Environment="APP_DIR=${APP_DIR}"
@@ -76,10 +76,10 @@ WantedBy=multi-user.target
 EOF
 
 cat > "${SUDOERS_TEMP_FILE}" <<EOF
-${USER} ALL=(root) NOPASSWD: ${SYSTEMCTL_BIN} start ${SERVICE_NAME}
-${USER} ALL=(root) NOPASSWD: ${SYSTEMCTL_BIN} stop ${SERVICE_NAME}
-${USER} ALL=(root) NOPASSWD: ${SYSTEMCTL_BIN} restart ${SERVICE_NAME}
-${USER} ALL=(root) NOPASSWD: ${SYSTEMCTL_BIN} status ${SERVICE_NAME}
+${APP_USER} ALL=(root) NOPASSWD: ${SYSTEMCTL_BIN} start ${SERVICE_NAME}
+${APP_USER} ALL=(root) NOPASSWD: ${SYSTEMCTL_BIN} stop ${SERVICE_NAME}
+${APP_USER} ALL=(root) NOPASSWD: ${SYSTEMCTL_BIN} restart ${SERVICE_NAME}
+${APP_USER} ALL=(root) NOPASSWD: ${SYSTEMCTL_BIN} status ${SERVICE_NAME}
 EOF
 
 sudo visudo -cf "${SUDOERS_TEMP_FILE}"
