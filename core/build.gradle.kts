@@ -9,21 +9,10 @@ plugins {
     `maven-publish`
     `java-test-fixtures`
     alias(libs.plugins.springBootPlugin)
+    alias(libs.plugins.kotlinSpringPlugin)
     alias(libs.plugins.springDepManagementPlugin)
     alias(libs.plugins.kotlinJvm)
     alias(libs.plugins.kotlinSerializationPlugin)
-}
-
-val jvmVersion = 21
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(jvmVersion)
-    }
-}
-
-kotlin {
-    jvmToolchain(jvmVersion)
 }
 
 repositories {
@@ -33,13 +22,11 @@ repositories {
 
 dependencies {
     implementation(libs.bundles.db)
-    implementation(libs.kotlinStdLib)
     implementation(libs.bundles.exposed)
     implementation(libs.bundles.jackson)
     implementation(libs.hikariCP)
 
     testImplementation(libs.bundles.test)
-    testImplementation(libs.kotlinStdLib)
 
     testFixturesImplementation(libs.bundles.exposed)
     testFixturesApi(libs.bundles.test)

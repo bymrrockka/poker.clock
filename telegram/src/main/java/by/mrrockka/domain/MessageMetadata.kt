@@ -68,6 +68,10 @@ fun ProcessedUpdate.toMessageMetadata(): MessageMetadata =
         if (origin.message != null) origin.message!!.toMessageMetadata()
         else error("Update message not found")
 
+fun ProcessedUpdate.messageId(): Long =
+        if (origin.message != null) origin.message!!.messageId
+        else error("Update message not found")
+
 fun ProcessedUpdate.chat(): Chat =
         if (origin.message != null) origin.message!!.chat
         else error("Update message not found")

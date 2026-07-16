@@ -14,18 +14,10 @@ plugins {
     alias(libs.plugins.kotlinSerializationPlugin)
     alias(libs.plugins.googleDevtoolsKspPlugin)
     alias(libs.plugins.telegramBot)
-}
-
-val jvmVersion = 21
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(jvmVersion)
-    }
+    alias(libs.plugins.kotlinSpringPlugin)
 }
 
 kotlin {
-    jvmToolchain(jvmVersion)
     sourceSets.test {
         kotlin.srcDir("src/main/java/")
     }
@@ -57,6 +49,7 @@ dependencies {
     testFixturesImplementation(testFixtures(project(":core")))
     testFixturesImplementation(libs.bundles.exposed)
     testFixturesImplementation(libs.telegramBot)
+    implementation(kotlin("stdlib"))
 }
 
 configurations.all {

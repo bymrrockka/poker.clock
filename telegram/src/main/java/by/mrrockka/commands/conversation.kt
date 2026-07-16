@@ -2,6 +2,7 @@ package by.mrrockka.commands
 
 import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.domain.chat
+import by.mrrockka.domain.messageId
 import by.mrrockka.domain.toMessageMetadata
 import eu.vendeli.tgbot.api.message.SendMessageAction
 import eu.vendeli.tgbot.api.message.deleteMessages
@@ -11,6 +12,7 @@ import eu.vendeli.tgbot.types.chain.WizardContext
 import eu.vendeli.tgbot.types.chain.WizardStep
 import eu.vendeli.tgbot.types.component.onFailure
 import eu.vendeli.tgbot.utils.builders.ReplyKeyboardMarkupBuilder
+import org.springframework.beans.factory.DisposableBean
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
 
@@ -38,6 +40,7 @@ abstract class CancelableStep(isInitial: Boolean = false, val cancelStep: KClass
             options {
                 resizeKeyboard = true
                 oneTimeKeyboard = true
+                selective = true
             }
         }
     }
@@ -59,12 +62,14 @@ open class CancelStep(
 fun String.decimalValidation() = matches("^([\\d.]+)$".toRegex())
 fun String.digitValidation() = matches("^([\\d]+)$".toRegex())
 
-abstract class MessageLogConversation {
+abstract class MessageLogConversation : DisposableBean {
     private val messages = ConcurrentHashMap<Long, List<Long>>()
     private val initials = ConcurrentHashMap<Long, MessageMetadata>()
 
     protected suspend fun SendMessageAction.sendLogging(ctx: WizardContext) {
-        sendReturning(ctx.update.chat(), ctx.bot)
+        options {
+            replyParameters(messageId = ctx.update.messageId())
+        }.sendReturning(ctx.update.chat(), ctx.bot)
                 .onFailure { error("Failed to send message") }
                 ?.also { message -> ctx.user.id.message(message.messageId) }
     }
@@ -93,7 +98,7 @@ abstract class MessageLogConversation {
         messages.remove(user.id)?.also { list ->
             deleteMessages(list)
                     .sendReturning(update.chat(), bot)
-                    .onFailure { "Failed to clear messages" }
+                    .onFailure { error("Failed to clear messages") }
                     ?.also { messages.remove(user.id) }
         }
     }

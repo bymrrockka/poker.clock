@@ -2,7 +2,7 @@
 #plugins
 springBoot = "4.1.0"
 springDepManagement = "1.1.7"
-kotlin = "2.4.10"
+kotlin = "2.4.0"
 googleKsp = "2.3.8"
 telegramBot = "9.6.0"
 
@@ -24,6 +24,7 @@ mockwebserver = "5.4.0"
 
 [plugins]
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlinSpringPlugin = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
 springBootPlugin = { id = "org.springframework.boot", version.ref = "springBoot" }
 springDepManagementPlugin = { id = "io.spring.dependency-management", version.ref = "springDepManagement" }
 kotlinSerializationPlugin = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
@@ -32,7 +33,7 @@ telegramBot = { id = "eu.vendeli.telegram-bot", version.ref = "telegramBot" }
 
 [libraries]
 telegramBot = { module = "eu.vendeli:telegram-bot", version.ref = "telegramBot" }
-kotlinStdLib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8" }
+kotlinStdLib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 springBootJdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc" }
 aspectjWeaver = { module = "org.aspectj:aspectjweaver" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
