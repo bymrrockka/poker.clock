@@ -2,7 +2,9 @@ package by.mrrockka.repo
 
 import by.mrrockka.domain.Person
 import eu.vendeli.tgbot.types.common.PollAnswer
+import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.jdbc.deleteWhere
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.upsert
 import org.springframework.stereotype.Repository
@@ -12,6 +14,7 @@ import java.util.*
 
 interface PollAnswersRepo {
     fun store(pollAnswer: PollAnswer, person: Person)
+    fun delete(pollAnswer: PollAnswer, person: Person)
     fun find(pollId: String): Map<Int, List<UUID>>
 }
 
@@ -24,6 +27,12 @@ open class PollAnswersRepoImpl : PollAnswersRepo {
             it[PollAnswersTable.pollId] = pollAnswer.pollId
             it[PollAnswersTable.personId] = person.id
             it[PollAnswersTable.answer] = pollAnswer.optionIds.first()
+        }
+    }
+
+    override fun delete(pollAnswer: PollAnswer, person: Person) {
+        PollAnswersTable.deleteWhere {
+            (PollAnswersTable.pollId eq pollAnswer.pollId) and  (PollAnswersTable.personId eq person.id)
         }
     }
 

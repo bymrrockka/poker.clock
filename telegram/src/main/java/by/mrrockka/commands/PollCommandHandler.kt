@@ -72,7 +72,7 @@ class PollCommandHandlerImpl(
     override suspend fun answer(pollAnswer: PollAnswerUpdate) {
         if (pollAnswer.user != null) {
             //only user answers are counted
-            pollAnswersService.store(pollAnswer.pollAnswer, pollAnswer.user!!)
+            pollAnswersService.process(pollAnswer.pollAnswer, pollAnswer.user!!)
         } else {
             logger.info { "Poll answers was ignored as payload doesn't have user" }
         }

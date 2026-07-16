@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional
 private val logger = KotlinLogging.logger {}
 
 interface PollAnswersTelegramService {
-    fun store(pollAnswer: PollAnswer, user: User)
+    fun process(pollAnswer: PollAnswer, user: User)
 }
 
 @Service
@@ -23,7 +23,7 @@ open class PollAnswersTelegramServiceImpl(
         private val personRepo: PersonRepo,
 ) : PollAnswersTelegramService {
 
-    override fun store(pollAnswer: PollAnswer, user: User) {
+    override fun process(pollAnswer: PollAnswer, user: User) {
         if (user.username != null) {
             val person = personRepo.findByNickname(user.username!!)
                     .let { person ->
@@ -34,10 +34,11 @@ open class PollAnswersTelegramServiceImpl(
                         }.invoke()
                     }
 
-            pollAnswersRepo.store(pollAnswer, person)
+            if (pollAnswer.optionIds.isEmpty())
+                pollAnswersRepo.delete(pollAnswer, person)
+            else pollAnswersRepo.store(pollAnswer, person)
         } else {
-            logger.info { "poll answers skipped because user didn't had username $user" }
+            logger.warn { "Poll answer skipped because user didn't had username $user" }
         }
     }
-
 }
