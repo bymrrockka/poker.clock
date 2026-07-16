@@ -12,7 +12,6 @@ import eu.vendeli.tgbot.types.chain.WizardContext
 import eu.vendeli.tgbot.types.chain.WizardStep
 import eu.vendeli.tgbot.types.component.onFailure
 import eu.vendeli.tgbot.utils.builders.ReplyKeyboardMarkupBuilder
-import org.springframework.beans.factory.DisposableBean
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
 
@@ -62,7 +61,7 @@ open class CancelStep(
 fun String.decimalValidation() = matches("^([\\d.]+)$".toRegex())
 fun String.digitValidation() = matches("^([\\d]+)$".toRegex())
 
-abstract class MessageLogConversation : DisposableBean {
+abstract class MessageLogConversation {
     private val messages = ConcurrentHashMap<Long, List<Long>>()
     private val initials = ConcurrentHashMap<Long, MessageMetadata>()
 
