@@ -8,7 +8,7 @@ import by.mrrockka.repo.PollTaskTable.finishedAt
 import by.mrrockka.repo.PollTaskTable.id
 import by.mrrockka.repo.PollTaskTable.message
 import by.mrrockka.repo.PollTaskTable.messageId
-import by.mrrockka.repo.PollTaskTable.options
+import by.mrrockka.repo.PollTaskTable.polOptions
 import by.mrrockka.repo.PollTaskTable.updatedAt
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.eq
@@ -45,7 +45,7 @@ open class PollTaskRepoImpl : PollTaskRepo {
             it[finishedAt] = task.finishedAt
             it[message] = task.message
             it[cron] = task.cron.toString()
-            it[options] = task.options.toTypedArray()
+            it[polOptions] = task.options.toTypedArray()
         }
     }
 
@@ -65,7 +65,7 @@ open class PollTaskRepoImpl : PollTaskRepo {
             this[finishedAt] = task.finishedAt
             this[message] = task.message
             this[cron] = task.cron.toString()
-            this[options] = task.options.toTypedArray()
+            this[polOptions] = task.options.toTypedArray()
         }
     }
 
@@ -99,6 +99,6 @@ open class PollTaskRepoImpl : PollTaskRepo {
             updatedAt = this[updatedAt],
             finishedAt = this[finishedAt],
             message = this[message],
-            options = this[options].toList(),
+            options = this[polOptions].toList(),
     )
 }

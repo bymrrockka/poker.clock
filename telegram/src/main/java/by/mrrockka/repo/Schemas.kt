@@ -16,7 +16,7 @@ object PollTaskTable : Table("poll_task") {
     val updatedAt = timestamp("updated_at").nullable()
     val finishedAt = timestamp("finished_at").nullable()
     val message = varchar("message", 255)
-    val options = jsonb<Array<PollTask.Option>>("options", Json.Default)
+    val polOptions = jsonb<Array<PollTask.Option>>("options", Json.Default)
 
     override val primaryKey = PrimaryKey(id)
 }
