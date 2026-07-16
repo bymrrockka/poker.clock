@@ -61,6 +61,7 @@ Type=simple
 User=${APP_USER}
 WorkingDirectory=${APP_DIR}
 
+EnvironmentFile=${APP_DIR}/.env
 Environment="APP_DIR=${APP_DIR}"
 Environment="JAVA_BIN=/usr/bin/java"
 Environment="JAVA_OPTS=-Xmx512m -Djava.net.preferIPv6Addresses=true"
