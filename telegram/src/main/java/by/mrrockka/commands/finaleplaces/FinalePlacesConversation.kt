@@ -22,6 +22,7 @@ import eu.vendeli.tgbot.types.chain.Transition
 import eu.vendeli.tgbot.types.chain.WizardContext
 import eu.vendeli.tgbot.types.chain.WizardStep
 import eu.vendeli.tgbot.types.component.onFailure
+import eu.vendeli.tgbot.utils.common.send
 import java.util.concurrent.ConcurrentHashMap
 
 @WizardHandler(
@@ -42,18 +43,21 @@ object FinalePlacesConversation : MessageLogConversation() {
             +"4"
         }
 
-        override suspend fun onEntry(ctx: WizardContext) {
-            ctx.initialize()
+        override suspend fun onEntry(ctx: WizardContext) =
+                with(ctx.session!!) {
+                    initialize(ctx)
 
-            message { "How many places to account?" }
-                    .sizeReply()
-                    .sendLogging(ctx)
-        }
+                    message { "How many places to account?" }
+                            .sizeReply()
+                            .send(ctx.bot)
+                }
 
         override suspend fun onRetry(ctx: WizardContext, reason: String?) =
-                message { "Should be a number not less then 1" }
-                        .sizeReply()
-                        .sendLogging(ctx)
+                with(ctx.session!!) {
+                    message { "Should be a number not less then 1" }
+                            .sizeReply()
+                            .send(ctx.bot)
+                }
 
         override suspend fun navigate(ctx: WizardContext): Transition = when {
             ctx.update.text.digitValidation() -> Transition.Next
@@ -78,7 +82,11 @@ object FinalePlacesConversation : MessageLogConversation() {
             } else false
         }
 
-        override suspend fun onEntry(ctx: WizardContext) = message { "Who's on #1 place?" }.sendLogging(ctx)
+        override suspend fun onEntry(ctx: WizardContext) =
+                with(ctx.session!!) {
+                    message { "Who's on #1 place?" }
+                            .send(ctx.bot)
+                }
 
         override suspend fun navigate(ctx: WizardContext): Transition {
             val size = ctx.getState<Size>() ?: error("No size found")
@@ -93,11 +101,13 @@ object FinalePlacesConversation : MessageLogConversation() {
         }
 
         override suspend fun onRetry(ctx: WizardContext, reason: String?) =
-                when (reason) {
-                    nextPercentage -> message { "Who's on #${ctx.user.id.get().size + 1} place?" }
+                with(ctx.session!!) {
+                    when (reason) {
+                        nextPercentage -> message { "Who's on #${ctx.user.id.get().size + 1} place?" }
 
-                    else -> message { "Player mention should be specified" }
-                }.sendLogging(ctx)
+                        else -> message { "Player mention should be specified" }
+                    }.send(ctx.bot)
+                }
 
 
         override suspend fun store(ctx: WizardContext): Map<Int, String> = positionToMentions.remove(ctx.user.id)
@@ -112,7 +122,7 @@ object FinalePlacesConversation : MessageLogConversation() {
         override suspend fun onEntry(ctx: WizardContext) {
             val positionToMention = ctx.getState<FinalPlaces>()
                     ?: error("Finale Places not found for user ${ctx.user.id}")
-            finalePlacesService.store(ctx.user.id.initial(), positionToMention)
+            finalePlacesService.store(ctx.initial(), positionToMention)
                     .let { finalePlaces ->
                         message {
                             """
@@ -124,11 +134,11 @@ object FinalePlacesConversation : MessageLogConversation() {
                     .onFailure { error("Failed to send prize pool message") }
                     ?.also { message -> pinMessageService.pin(message, PinType.GAME) }
 
-            ctx.clearMessages()
+            ctx.clear()
         }
 
         override suspend fun validate(ctx: WizardContext): Transition = Transition.Finish
     }
 
-    object Cancel : CancelStep({ ctx -> ctx.clearMessages() })
+    object Cancel : CancelStep()
 }

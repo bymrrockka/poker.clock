@@ -28,6 +28,7 @@ import eu.vendeli.tgbot.types.chain.Transition
 import eu.vendeli.tgbot.types.chain.WizardContext
 import eu.vendeli.tgbot.types.chain.WizardStep
 import eu.vendeli.tgbot.types.component.onFailure
+import eu.vendeli.tgbot.utils.common.send
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import java.math.BigDecimal
 
@@ -48,25 +49,27 @@ object GameConversation : MessageLogConversation() {
             }
         }
 
-        override suspend fun onEntry(ctx: WizardContext) {
-            ctx.initialize()
+        override suspend fun onEntry(ctx: WizardContext) =
+                with(ctx.session!!) {
+                    initialize(ctx)
 
-            message { "What type of game you'd like to play?" }
-                    .gameTypeReply()
-                    .sendLogging(ctx)
-        }
+                    message { "What type of game you'd like to play?" }
+                            .gameTypeReply()
+                            .send(ctx.bot)
+                }
 
         override suspend fun onRetry(ctx: WizardContext, reason: String?) =
-                message { "Type should be one of ${GameType.entries.joinToString { it.name.lowercase() }}" }
-                        .gameTypeReply()
-                        .sendLogging(ctx)
+                with(ctx.session!!) {
+                    message { "Type should be one of ${GameType.entries.joinToString { it.name.lowercase() }}" }
+                            .gameTypeReply()
+                            .send(ctx.bot)
+                }
 
         override suspend fun store(ctx: WizardContext): GameType =
                 GameType.entries.find { it.name.equals(ctx.update.text, ignoreCase = true) }
                         ?: error("No game type found for ${ctx.update.text}")
 
         override suspend fun navigate(ctx: WizardContext): Transition {
-            ctx.user.id.message(ctx.update.origin.message!!.messageId)
             return when {
                 (GameType.entries.find { it.name.equals(ctx.update.text, ignoreCase = true) } != null) ->
                     Transition.Next
@@ -77,7 +80,7 @@ object GameConversation : MessageLogConversation() {
     }
 
     object Buyin : CancelableStep(cancelStep = Cancel::class) {
-        private fun lastGame(ctx: WizardContext) = ctx.user.id.initial().let { gameService.findLastGame(it) }
+        private fun lastGame(ctx: WizardContext) = ctx.initial().let { gameService.findLastGame(it) }
 
         private fun SendMessageAction.buyInReply(ctx: WizardContext): SendMessageAction = cancelableReplyMarkup {
             val lastGame = lastGame(ctx)
@@ -87,19 +90,22 @@ object GameConversation : MessageLogConversation() {
         }
 
         override suspend fun onEntry(ctx: WizardContext) =
-                message { "How much is for buy in?" }
-                        .buyInReply(ctx)
-                        .sendLogging(ctx)
+                with(ctx.session!!) {
+                    message { "How much is for buy in?" }
+                            .buyInReply(ctx)
+                            .send(ctx.bot)
+                }
 
         override suspend fun onRetry(ctx: WizardContext, reason: String?) =
-                message { "Buy in is necessary for calculations and it should be a number" }
-                        .buyInReply(ctx)
-                        .sendLogging(ctx)
+                with(ctx.session!!) {
+                    message { "Buy in is necessary for calculations and it should be a number" }
+                            .buyInReply(ctx)
+                            .send(ctx.bot)
+                }
 
         override suspend fun store(ctx: WizardContext): BigDecimal = BigDecimal(ctx.update.text)
 
         override suspend fun navigate(ctx: WizardContext): Transition {
-            ctx.user.id.message(ctx.update.origin.message!!.messageId)
             return when {
                 !ctx.update.text.decimalValidation() -> Transition.Retry()
                 ctx.getState<Type>() == GameType.BOUNTY -> Transition.JumpTo(Bounty::class)
@@ -110,22 +116,25 @@ object GameConversation : MessageLogConversation() {
 
     object Players : CancelableStep(cancelStep = Cancel::class) {
         override suspend fun onEntry(ctx: WizardContext) =
-                message { "Who's playing?" }
-                        .cancelableReplyMarkup()
-                        .sendLogging(ctx)
+                with(ctx.session!!) {
+                    message { "Who's playing?" }
+                            .cancelableReplyMarkup()
+                            .send(ctx.bot)
+                }
 
 
         override suspend fun onRetry(ctx: WizardContext, reason: String?) =
-                message { "Players mentions required to start a game. Like @mention" }
-                        .cancelableReplyMarkup()
-                        .sendLogging(ctx)
+                with(ctx.session!!) {
+                    message { "Players mentions required to start a game. Like @mention" }
+                            .cancelableReplyMarkup()
+                            .send(ctx.bot)
+                }
 
 
         override suspend fun store(ctx: WizardContext): MessageMetadata =
                 ctx.update.origin.message!!.toMessageMetadata()
 
         override suspend fun navigate(ctx: WizardContext): Transition {
-            ctx.user.id.message(ctx.update.origin.message!!.messageId)
             val message = ctx.update.toMessageMetadata()
             return when {
                 message.mentions.isNotEmpty() || message.replyTo?.poll != null -> Transition.Next
@@ -148,9 +157,9 @@ object GameConversation : MessageLogConversation() {
                                 type = type,
                                 bounty = bounty,
                                 buyin = buyin,
-                                createdAt = ctx.user.id.initial().createdAt,
+                                createdAt = ctx.initial().createdAt,
                         ),
-                        initial = ctx.user.id.initial(),
+                        initial = ctx.initial(),
                         playersMetadata = playersMessage,
                 ).let { game ->
                     """
@@ -178,8 +187,7 @@ object GameConversation : MessageLogConversation() {
                         .onFailure { error("Failed to send game message") }
                         ?.also { message -> pinMessageService.pin(message, PinType.GAME) }
             }
-
-            ctx.clearMessages()
+            ctx.clear()
         }
 
         override suspend fun validate(ctx: WizardContext): Transition {
@@ -188,7 +196,7 @@ object GameConversation : MessageLogConversation() {
     }
 
     object Bounty : CancelableStep(cancelStep = Cancel::class) {
-        private fun lastGame(ctx: WizardContext) = ctx.user.id.initial().let { gameService.findLastGame(it) }
+        private fun lastGame(ctx: WizardContext) = ctx.initial().let { gameService.findLastGame(it) }
 
         private fun SendMessageAction.bountyReply(ctx: WizardContext): SendMessageAction = cancelableReplyMarkup {
             val lastGame = lastGame(ctx)
@@ -198,19 +206,22 @@ object GameConversation : MessageLogConversation() {
         }
 
         override suspend fun onEntry(ctx: WizardContext) =
-                message { "How much is for bounty?" }
-                        .bountyReply(ctx)
-                        .sendLogging(ctx)
+                with(ctx.session!!) {
+                    message { "How much is for bounty?" }
+                            .bountyReply(ctx)
+                            .send(ctx.bot)
+                }
 
         override suspend fun onRetry(ctx: WizardContext, reason: String?) =
-                message { "Bounty is necessary for Bounty tournament and it should be a number" }
-                        .bountyReply(ctx)
-                        .sendLogging(ctx)
+                with(ctx.session!!) {
+                    message { "Bounty is necessary for Bounty tournament and it should be a number" }
+                            .bountyReply(ctx)
+                            .send(ctx.bot)
+                }
 
         override suspend fun store(ctx: WizardContext): BigDecimal = BigDecimal(ctx.update.text)
 
         override suspend fun navigate(ctx: WizardContext): Transition {
-            ctx.user.id.message(ctx.update.origin.message!!.messageId)
             return when {
                 ctx.update.text.decimalValidation() -> Transition.JumpTo(Players::class)
                 else -> Transition.Retry()
@@ -218,5 +229,5 @@ object GameConversation : MessageLogConversation() {
         }
     }
 
-    object Cancel : CancelStep({ ctx -> ctx.clearMessages() })
+    object Cancel : CancelStep()
 }

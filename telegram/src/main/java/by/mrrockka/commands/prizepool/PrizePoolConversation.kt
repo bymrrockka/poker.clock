@@ -23,6 +23,7 @@ import eu.vendeli.tgbot.types.chain.Transition
 import eu.vendeli.tgbot.types.chain.WizardContext
 import eu.vendeli.tgbot.types.chain.WizardStep
 import eu.vendeli.tgbot.types.component.onFailure
+import eu.vendeli.tgbot.utils.common.send
 import java.math.BigDecimal
 import java.util.concurrent.ConcurrentHashMap
 
@@ -43,18 +44,21 @@ object PrizePoolConversation : MessageLogConversation() {
             +"4"
         }
 
-        override suspend fun onEntry(ctx: WizardContext) {
-            ctx.initialize()
+        override suspend fun onEntry(ctx: WizardContext) =
+                with(ctx.session!!) {
+                    initialize(ctx)
 
-            message { "How many places to account?" }
-                    .sizeReply()
-                    .sendLogging(ctx)
-        }
+                    message { "How many places to account?" }
+                            .sizeReply()
+                            .send(ctx.bot)
+                }
 
         override suspend fun onRetry(ctx: WizardContext, reason: String?) =
-                message { "Should be a number not less then 1" }
-                        .sizeReply()
-                        .sendLogging(ctx)
+                with(ctx.session!!) {
+                    message { "Should be a number not less then 1" }
+                            .sizeReply()
+                            .send(ctx.bot)
+                }
 
         override suspend fun navigate(ctx: WizardContext): Transition = when {
             ctx.update.text.digitValidation() -> Transition.Next
@@ -81,7 +85,11 @@ object PrizePoolConversation : MessageLogConversation() {
             } else false
         }
 
-        override suspend fun onEntry(ctx: WizardContext) = message { "What percentage for #1 place?" }.sendLogging(ctx)
+        override suspend fun onEntry(ctx: WizardContext) =
+                with(ctx.session!!) {
+                    message { "What percentage for #1 place?" }
+                            .send(ctx.bot)
+                }
 
         override suspend fun navigate(ctx: WizardContext): Transition {
             val size = ctx.getState<Size>() ?: error("No size found")
@@ -97,20 +105,22 @@ object PrizePoolConversation : MessageLogConversation() {
             }
         }
 
-        override suspend fun onRetry(ctx: WizardContext, reason: String?) {
-            when (reason) {
-                Navigate.PLACE.name -> message { "What percentage for #${ctx.user.id.get().size + 1} place?" }.sendLogging(ctx)
+        override suspend fun onRetry(ctx: WizardContext, reason: String?) =
+                with(ctx.session!!) {
+                    when (reason) {
+                        Navigate.PLACE.name -> message { "What percentage for #${ctx.user.id.get().size + 1} place?" }.send(ctx.bot)
 
-                Navigate.TOTAL_INVALID.name -> {
-                    message { "Position percentage should equal 100% but was ${positionPrizes.remove(ctx.user.id)?.sumOf { it.percentage } ?: 0}%" }
-                            .sendLogging(ctx)
-                    message { "What percentage for #${ctx.user.id.get().size + 1} place?" }
-                            .sendLogging(ctx)
+                        Navigate.TOTAL_INVALID.name -> {
+                            message { "Position percentage should equal 100% but was ${positionPrizes.remove(ctx.user.id)?.sumOf { it.percentage } ?: 0}%" }
+                                    .send(ctx.bot)
+                            message { "What percentage for #${ctx.user.id.get().size + 1} place?" }
+                                    .send(ctx.bot)
+                        }
+
+                        else -> message { "Percentage should not be negative" }.send(ctx.bot)
+                    }
                 }
 
-                else -> message { "Percentage should not be negative" }.sendLogging(ctx)
-            }
-        }
 
         override suspend fun store(ctx: WizardContext): List<PositionPrize> = positionPrizes.remove(ctx.user.id)
                 ?: error("No position prizes found for user ${ctx.user.id}")
@@ -124,7 +134,7 @@ object PrizePoolConversation : MessageLogConversation() {
         override suspend fun onEntry(ctx: WizardContext) {
             val prizePool = ctx.getState<PositionPercentage>()
                     ?: error("Prize pool not found for user ${ctx.user.id}")
-            prizePoolService.store(ctx.user.id.initial(), prizePool)
+            prizePoolService.store(ctx.initial(), prizePool)
                     .let { prizePool ->
                         message {
                             """
@@ -136,11 +146,11 @@ object PrizePoolConversation : MessageLogConversation() {
                     .onFailure { error("Failed to send prize pool message") }
                     ?.also { message -> pinMessageService.pin(message, PinType.GAME) }
 
-            ctx.clearMessages()
+            ctx.clear()
         }
 
         override suspend fun validate(ctx: WizardContext): Transition = Transition.Finish
     }
 
-    object Cancel : CancelStep({ ctx -> ctx.clearMessages() })
+    object Cancel : CancelStep()
 }
