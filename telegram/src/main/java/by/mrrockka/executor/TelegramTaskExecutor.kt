@@ -11,7 +11,6 @@ import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.types.component.onFailure
 import eu.vendeli.tgbot.types.msg.Message
 import jakarta.annotation.PostConstruct
-import jakarta.annotation.PreDestroy
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
@@ -40,16 +39,7 @@ class TelegramTaskExecutor(
 
     @PostConstruct
     fun init() {
-        synchronized(tasks) {
-            tasks = pollService.selectActive().asMap()
-        }
-    }
-
-    @PreDestroy
-    fun preDestroy() {
-        synchronized(tasks) {
-            pollService.batchUpdate(tasks.polls())
-        }
+        tasks = pollService.selectActive().asMap()
     }
 
     @Scheduled(cron = "\${bot.scheduler.cron}")
@@ -57,7 +47,8 @@ class TelegramTaskExecutor(
         val now = clock.now().toJavaInstant()
         synchronized(tasks) {
             runBlocking {
-                tasks.toExecute(now).forEach { task ->
+                val toExecute = tasks.toExecute(now)
+                toExecute.forEach { task ->
                     transaction {
                         async {
                             task.toAction()
@@ -77,6 +68,9 @@ class TelegramTaskExecutor(
                                     }
                         }
                     }
+                }
+                if (toExecute.polls().isNotEmpty()) {
+                    pollService.batchUpdate(toExecute.polls())
                 }
             }
         }
@@ -111,6 +105,9 @@ class TelegramTaskExecutor(
             .filter { it is PollTask }
             .map { it as PollTask }
             .toList()
+
+    private fun List<Task>.polls(): List<PollTask> = filter { it is PollTask }
+            .map { it as PollTask }
 
     private fun Task.updatedAt(time: Instant): Task {
         return when (this) {

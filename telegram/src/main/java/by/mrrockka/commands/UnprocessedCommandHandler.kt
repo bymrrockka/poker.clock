@@ -16,8 +16,8 @@ class UnprocessedCommandHandler(
     suspend fun unprocessed(message: MessageUpdate?) {
         message?.message?.entities
                 ?.find { it.type == EntityType.BotCommand }
-                ?.also { command ->
-                    message { "Can't process command $command" }
+                ?.also {
+                    message { "Can't process command" }
                             .send(message.message.chat.id, bot)
                 }
     }

@@ -1,11 +1,5 @@
-package by.mrrockka.commands.finaleplaces
+package by.mrrockka.commands
 
-import by.mrrockka.commands.CancelStep
-import by.mrrockka.commands.CancelableStep
-import by.mrrockka.commands.ExcludeBotGuard
-import by.mrrockka.commands.MessageLogConversation
-import by.mrrockka.commands.PositionMentionState
-import by.mrrockka.commands.digitValidation
 import by.mrrockka.domain.MessageMetadata
 import by.mrrockka.domain.chat
 import by.mrrockka.domain.toMessageMetadata
@@ -26,7 +20,7 @@ import eu.vendeli.tgbot.utils.common.send
 import java.util.concurrent.ConcurrentHashMap
 
 @WizardHandler(
-        trigger = ["/fp"],
+        trigger = ["/finale_places", "/fp"],
         stateManagers = [MapIntStateManager::class, PositionMentionState::class],
 )
 @Guard(ExcludeBotGuard::class)
@@ -85,6 +79,7 @@ object FinalePlacesConversation : MessageLogConversation() {
         override suspend fun onEntry(ctx: WizardContext) =
                 with(ctx.session!!) {
                     message { "Who's on #1 place?" }
+                            .cancelableReplyMarkup()
                             .send(ctx.bot)
                 }
 
@@ -106,7 +101,9 @@ object FinalePlacesConversation : MessageLogConversation() {
                         nextPercentage -> message { "Who's on #${ctx.user.id.get().size + 1} place?" }
 
                         else -> message { "Player mention should be specified" }
-                    }.send(ctx.bot)
+                    }
+                            .cancelableReplyMarkup()
+                            .send(ctx.bot)
                 }
 
 
@@ -122,6 +119,9 @@ object FinalePlacesConversation : MessageLogConversation() {
         override suspend fun onEntry(ctx: WizardContext) {
             val positionToMention = ctx.getState<FinalPlaces>()
                     ?: error("Finale Places not found for user ${ctx.user.id}")
+            check(positionToMention.values.distinct().size == positionToMention.size) {
+                "There are duplicates in finale places"
+            }
             finalePlacesService.store(ctx.initial(), positionToMention)
                     .let { finalePlaces ->
                         message {

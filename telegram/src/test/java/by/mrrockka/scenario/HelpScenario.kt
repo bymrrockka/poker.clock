@@ -21,7 +21,7 @@ class HelpScenario : AbstractScenarioTest() {
     @Test
     fun `send command description by command name`(approver: Approver) {
         Given {
-            user { help("tournament_game") }
+            user { help("game") }
             bot { "Help message"}
         } When {
             updatesReceived()
@@ -31,7 +31,7 @@ class HelpScenario : AbstractScenarioTest() {
     @Test
     fun `send command description by command alias`(approver: Approver) {
         Given {
-            user { help("pp") }
+            user { help("prize_pool") }
             bot { "Help message"}
         } When {
             updatesReceived()

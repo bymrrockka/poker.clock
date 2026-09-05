@@ -1,6 +1,7 @@
 package by.mrrockka.commands
 
 import by.mrrockka.domain.MessageMetadata
+import by.mrrockka.domain.chat
 import by.mrrockka.domain.toMessageMetadata
 import eu.vendeli.tgbot.api.message.SendMessageAction
 import eu.vendeli.tgbot.api.message.message
@@ -9,7 +10,6 @@ import eu.vendeli.tgbot.types.chain.Transition
 import eu.vendeli.tgbot.types.chain.WizardContext
 import eu.vendeli.tgbot.types.chain.WizardStep
 import eu.vendeli.tgbot.utils.builders.ReplyKeyboardMarkupBuilder
-import eu.vendeli.tgbot.utils.common.send
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
 
@@ -47,9 +47,9 @@ open class CancelStep : WizardStep() {
     override suspend fun onEntry(ctx: WizardContext) {
         with(ctx.session) {
             checkNotNull(this) { error("Session not found") }
-            message { "Game creation was cancelled" }.send(ctx.bot)
             clear(bot)
         }
+        message { "Command cancelled" }.send(ctx.update.chat(), ctx.bot)
     }
 
     override suspend fun validate(ctx: WizardContext): Transition {
@@ -63,8 +63,10 @@ fun String.digitValidation() = matches("^([\\d]+)$".toRegex())
 abstract class MessageLogConversation {
     private val initials = ConcurrentHashMap<Long, MessageMetadata>()
 
-    protected fun Session.initialize(ctx: WizardContext) {
-        initials += (userId ?: chatId) to ctx.update.toMessageMetadata()
+    protected suspend fun Session.initialize(ctx: WizardContext) {
+        val initial = ctx.update.toMessageMetadata()
+        initials += (userId ?: chatId) to initial
+        forget { message -> message.messageId == initial.id }
     }
 
     protected fun WizardContext.initial(): MessageMetadata = with(session!!) {

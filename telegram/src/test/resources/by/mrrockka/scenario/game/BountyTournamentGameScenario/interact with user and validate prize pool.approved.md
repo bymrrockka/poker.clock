@@ -4,10 +4,7 @@
 
 ```
 Processed message id: 1
-/bounty_game
-buyin: 10
-bounty: 10
-@me 
+/game 
 ```
 ___
 
@@ -16,12 +13,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 2 
-Bounty tournament game started.
-------------------------------
-Table 1
-Seats:
-  5. @sergio_cartwright
-                                 
+What type of game you'd like to play? 
 ``` 
 ___
 
@@ -31,7 +23,7 @@ ___
 
 ```
 Processed message id: 3
-/entry 
+Bounty 
 ```
 ___
 
@@ -40,11 +32,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 4 
-Entries: 
-------------------------------
-Table 1
-Seats:
-  @nickname3 seat 7 -> entry 10.00 
+How much is for buy in? 
 ``` 
 ___
 
@@ -54,7 +42,7 @@ ___
 
 ```
 Processed message id: 5
-/pp 
+10 
 ```
 ___
 
@@ -63,7 +51,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 6 
-How many places to account? 
+How much is for bounty? 
 ``` 
 ___
 
@@ -73,7 +61,7 @@ ___
 
 ```
 Processed message id: 7
-3 
+10 
 ```
 ___
 
@@ -82,7 +70,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 8 
-What percentage for #1 place? 
+Who's playing? 
 ``` 
 ___
 
@@ -92,7 +80,7 @@ ___
 
 ```
 Processed message id: 9
-10 
+@me 
 ```
 ___
 
@@ -101,26 +89,28 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 10 
-What percentage for #2 place? 
+Game type: BOUNTY
+Buy in: 10
+Bounty 10
+------------------------------
+Table 1
+Seats:
+  5. @sergio_cartwright
+                                 
 ``` 
 ___
 
-### 11. Message
+### 11. Pinned
 
-&rarr; <ins>User</ins>
-
-```
-Processed message id: 11
-20 
-```
+``` 
+message id 10 pinned
+``` 
 ___
 
-### 12. Message
+### 12. Deleted messages
 
-&rarr; <ins>Bot</ins>
 ``` 
-message id: 12 
-What percentage for #3 place? 
+message ids 2,3,4,5,6,7,8,9 deleted
 ``` 
 ___
 
@@ -129,8 +119,8 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 13
-30 
+Processed message id: 11
+/entry 
 ```
 ___
 
@@ -138,73 +128,172 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 14 
-Position percentage should equal 100% but was 60% 
+message id: 12 
+Entries: 
+------------------------------
+Table 1
+Seats:
+  @nickname3 seat 7 -> entry 10.00 
 ``` 
 ___
 
 ### 15. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 15 
-What percentage for #1 place? 
-``` 
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 13
+/prize_pool 
+```
 ___
 
 ### 16. Message
 
-&rarr; <ins>User</ins>
-
-```
-Processed message id: 16
-50 
-```
+&rarr; <ins>Bot</ins>
+``` 
+message id: 14 
+How many places to account? 
+``` 
 ___
 
 ### 17. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 17 
-What percentage for #2 place? 
-``` 
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 15
+3 
+```
 ___
 
 ### 18. Message
 
-&rarr; <ins>User</ins>
-
-```
-Processed message id: 18
-30 
-```
+&rarr; <ins>Bot</ins>
+``` 
+message id: 16 
+What percentage for #1 place? 
+``` 
 ___
 
 ### 19. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 19 
-What percentage for #3 place? 
-``` 
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 17
+10 
+```
 ___
 
 ### 20. Message
 
-&rarr; <ins>User</ins>
-
-```
-Processed message id: 20
-20 
-```
+&rarr; <ins>Bot</ins>
+``` 
+message id: 18 
+What percentage for #2 place? 
+``` 
 ___
 
 ### 21. Message
 
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 19
+20 
+```
+___
+
+### 22. Message
+
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 21 
+message id: 20 
+What percentage for #3 place? 
+``` 
+___
+
+### 23. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 21
+30 
+```
+___
+
+### 24. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 22 
+Position percentage should equal 100% but was 60% 
+``` 
+___
+
+### 25. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 23 
+What percentage for #1 place? 
+``` 
+___
+
+### 26. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 24
+50 
+```
+___
+
+### 27. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 25 
+What percentage for #2 place? 
+``` 
+___
+
+### 28. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 26
+30 
+```
+___
+
+### 29. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 27 
+What percentage for #3 place? 
+``` 
+___
+
+### 30. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 28
+20 
+```
+___
+
+### 31. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 29 
 Prize pool stored:
 1. 50%
 2. 30%
@@ -212,16 +301,16 @@ Prize pool stored:
 ``` 
 ___
 
-### 22. Pinned
+### 32. Pinned
 
 ``` 
-message id 21 pinned
+message id 29 pinned
 ``` 
 ___
 
-### 23. Deleted messages
+### 33. Deleted messages
 
 ``` 
-message ids 6,7,8,9,10,11,12,13,14,15,16,17,18,19,20 deleted
+message ids 14,15,16,17,18,19,20,21,22,23,24,25,26,27,28 deleted
 ``` 
 ___

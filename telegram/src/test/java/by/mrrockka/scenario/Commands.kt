@@ -28,7 +28,6 @@ class Commands private constructor() {
         val finalePlaces = "/finale_places"
         val createPoll = "/create_poll"
         val stopPoll = "/stop_poll"
-        val chatPoll = "chatPoll"
         val cancel = "/cancel"
 
         fun List<String>.entries(): String = joinToString(" ") { "@$it" }

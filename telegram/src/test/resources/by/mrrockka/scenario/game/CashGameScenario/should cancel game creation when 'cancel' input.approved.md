@@ -65,18 +65,18 @@ cancel
 ```
 ___
 
-### 8. Message
+### 8. Deleted messages
+
+``` 
+message ids 2,3,4,5,6,7,8 deleted
+``` 
+___
+
+### 9. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 8 
-Game creation was cancelled 
-``` 
-___
-
-### 9. Deleted messages
-
-``` 
-message ids 2,3,4,5,6,7,8 deleted
+Command cancelled 
 ``` 
 ___

@@ -103,7 +103,21 @@ Seats:
 ``` 
 ___
 
-### 11. Message
+### 11. Pinned
+
+``` 
+message id 10 pinned
+``` 
+___
+
+### 12. Deleted messages
+
+``` 
+message ids 2,3,4,5,6,7,8,9 deleted
+``` 
+___
+
+### 13. Message
 
 &rarr; <ins>User</ins>
 
@@ -113,30 +127,11 @@ Processed message id: 11
 ```
 ___
 
-### 12. Message
-
-&rarr; <ins>Bot</ins>
-``` 
-message id: 12 
-Re-entry stored for @nickname1, buy in amount is 10 
-``` 
-___
-
-### 13. Message
-
-&rarr; <ins>User</ins>
-
-```
-Processed message id: 13
-/entry 
-```
-___
-
 ### 14. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 14 
+message id: 12 
 Re-entry stored for @nickname1, buy in amount is 10 
 ``` 
 ___
@@ -146,12 +141,31 @@ ___
 &rarr; <ins>User</ins>
 
 ```
+Processed message id: 13
+/entry 
+```
+___
+
+### 16. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 14 
+Re-entry stored for @nickname1, buy in amount is 10 
+``` 
+___
+
+### 17. Message
+
+&rarr; <ins>User</ins>
+
+```
 Processed message id: 15
 /game_stats 
 ```
 ___
 
-### 16. Message
+### 18. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
@@ -164,7 +178,7 @@ Bounty game statistics:
 ``` 
 ___
 
-### 17. Message
+### 19. Message
 
 &rarr; <ins>User</ins>
 
@@ -175,7 +189,7 @@ message id: 17
 ```
 ___
 
-### 18. Message
+### 20. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
@@ -184,10 +198,10 @@ Only administrators allowed to user this command.
 ``` 
 ___
 
-### 19. Member requested
+### 21. Member requested
 ___
 
-### 20. Message
+### 22. Message
 
 &rarr; <ins>User</ins>
 
@@ -198,7 +212,7 @@ message id: 19
 ```
 ___
 
-### 21. Message
+### 23. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
@@ -207,7 +221,7 @@ Entry canceled
 ``` 
 ___
 
-### 22. Message
+### 24. Message
 
 &rarr; <ins>User</ins>
 
@@ -217,7 +231,7 @@ Processed message id: 21
 ```
 ___
 
-### 23. Message
+### 25. Message
 
 &rarr; <ins>Bot</ins>
 ``` 

@@ -4,7 +4,7 @@
 
 ```
 Processed message id: 1
-/help tournament_game 
+/help game 
 ```
 ___
 
@@ -13,15 +13,18 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 2 
-You could create a tournament game using /tournament_game command with list of players nicknames that separated with a space.
-Also you should specify buy-in, stack amount.
-There should be at least two players for the game
-Example: 
-/tournament_game
-buyin: 10
-stack: 10
-@nickname 
-@nickname
+You will be asked to input parameters of the game you want to start.
+
+There are three types of games that are supported: Tournament, Cash and Bounty tournament.
+
+In order to start a game you should specify a type, buy in, bounty if applicable and players.
+Also if you are aware of automatic poll creation feature `/create_poll` then you can have poll as a reply message when bot will ask about players so all the people that answered `participant` option will be added to game automatically. 
+
+For the re-entries and new players `/entry @me` could be used, for tournaments buy in will be game buy in as default, for cash games you could specify the number in this message which will be used instead of default.
+
+For all tournaments in order to calculate payouts finale places and prize pool should be specified.
+
+And after all set you can call `/calculate` command to see game summary and all the calculations.
  
 ``` 
 ___
