@@ -60,7 +60,7 @@ abstract class PrizeGameScenario : GameScenario() {
                 )
             }
             user { calculate }
-            bot { "Calculated payouts" }
+            bot { "failure" }
         } When {
             updatesReceived()
         } ThenApproveWith mdApprover("should fail when $missed is missed")
@@ -167,8 +167,8 @@ abstract class PrizeGameScenario : GameScenario() {
             toDelete += user { "30" }
             toDelete += bot { "3 Percentage" }
             toDelete += user { "cancel" }
-            bot { "Canceled" }
             toDelete.deleted()
+            bot { "Canceled" }
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -184,9 +184,9 @@ abstract class PrizeGameScenario : GameScenario() {
             user("nickname3") { entry }
             bot { "Entry stored" }
             finalePlacesFlow(
-                    1 to "@nickname1",
-                    2 to "@nickname2",
-                    3 to "@me",
+                    1 to "nickname1",
+                    2 to "nickname2",
+                    3 to "me",
             )
         } When {
             updatesReceived()
@@ -200,7 +200,6 @@ abstract class PrizeGameScenario : GameScenario() {
 
         Given {
             createGameFlow(buyin, players)
-            bot { "Game created" }
             user("nickname3") { entry }
             bot { "Entry stored" }
             val toDelete = mutableListOf<Command>()
@@ -213,8 +212,8 @@ abstract class PrizeGameScenario : GameScenario() {
             toDelete += user { "@nickname2" }
             toDelete += bot { "3 place" }
             toDelete += user { "cancel" }
-            bot { "Canceled" }
             toDelete.deleted()
+            bot { "Canceled" }
         } When {
             updatesReceived()
         } ThenApproveWith approver
@@ -233,7 +232,7 @@ abstract class PrizeGameScenario : GameScenario() {
             toDelete += user { "$size" }
             forEach { (place, nickname) ->
                 toDelete += bot { "$place place" }
-                toDelete += user { nickname }
+                toDelete += user { "@$nickname" }
             }
             val summary = bot { "Finale places stored" }
             summary.pinned()

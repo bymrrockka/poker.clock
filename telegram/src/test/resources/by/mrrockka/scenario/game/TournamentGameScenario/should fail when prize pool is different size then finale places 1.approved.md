@@ -106,8 +106,7 @@ ___
 
 ```
 Processed message id: 9
-/prize_pool
-1 100% 
+/prize_pool 
 ```
 ___
 
@@ -126,8 +125,7 @@ ___
 
 ```
 Processed message id: 11
-/finale_places
-1 @nickname1, 2 @nickname2 
+1 
 ```
 ___
 
@@ -136,7 +134,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 12 
-How many places to account? 
+What percentage for #1 place? 
 ``` 
 ___
 
@@ -146,7 +144,7 @@ ___
 
 ```
 Processed message id: 13
-/calculate 
+100 
 ```
 ___
 
@@ -155,6 +153,132 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 14 
-No finale places specified, can't calculate finale summary. 
+Prize pool stored:
+1. 100% 
+``` 
+___
+
+### 17. Pinned
+
+``` 
+message id 14 pinned
+``` 
+___
+
+### 18. Deleted messages
+
+``` 
+message ids 10,11,12,13 deleted
+``` 
+___
+
+### 19. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 15
+/finale_places 
+```
+___
+
+### 20. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 16 
+How many places to account? 
+``` 
+___
+
+### 21. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 17
+2 
+```
+___
+
+### 22. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 18 
+Who's on #1 place? 
+``` 
+___
+
+### 23. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 19
+@nickname1 
+```
+___
+
+### 24. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 20 
+Who's on #2 place? 
+``` 
+___
+
+### 25. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 21
+@nickname2 
+```
+___
+
+### 26. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 22 
+Finale places stored:
+1. @nickname1
+2. @nickname2 
+``` 
+___
+
+### 27. Pinned
+
+``` 
+message id 22 pinned
+``` 
+___
+
+### 28. Deleted messages
+
+``` 
+message ids 16,17,18,19,20,21 deleted
+``` 
+___
+
+### 29. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 23
+/calculate 
+```
+___
+
+### 30. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 24 
+Finale places and prize pool should be same size 
 ``` 
 ___

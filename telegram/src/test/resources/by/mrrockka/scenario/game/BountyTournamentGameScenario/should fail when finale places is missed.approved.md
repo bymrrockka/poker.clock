@@ -4,10 +4,7 @@
 
 ```
 Processed message id: 1
-/bounty_game
-buyin: 10
-bounty: 10
-@nickname1, @nickname2, @nickname3, @nickname4, @nickname5, @me 
+/game 
 ```
 ___
 
@@ -16,7 +13,85 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 2 
-Bounty tournament game started.
+What type of game you'd like to play? 
+``` 
+___
+
+### 3. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 3
+Bounty 
+```
+___
+
+### 4. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 4 
+How much is for buy in? 
+``` 
+___
+
+### 5. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 5
+10 
+```
+___
+
+### 6. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 6 
+How much is for bounty? 
+``` 
+___
+
+### 7. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 7
+10 
+```
+___
+
+### 8. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 8 
+Who's playing? 
+``` 
+___
+
+### 9. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 9
+@nickname1 @nickname2 @nickname3 @nickname4 @nickname5 @me 
+```
+___
+
+### 10. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 10 
+Game type: BOUNTY
+Buy in: 10
+Bounty 10
 ------------------------------
 Table 1
 Seats:
@@ -30,44 +105,127 @@ Seats:
 ``` 
 ___
 
-### 3. Message
+### 11. Pinned
+
+``` 
+message id 10 pinned
+``` 
+___
+
+### 12. Deleted messages
+
+``` 
+message ids 2,3,4,5,6,7,8,9 deleted
+``` 
+___
+
+### 13. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 3
-/prize_pool
-1 50%
-2 50% 
+Processed message id: 11
+/prize_pool 
 ```
 ___
 
-### 4. Message
+### 14. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 4 
+message id: 12 
+How many places to account? 
+``` 
+___
+
+### 15. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 13
+2 
+```
+___
+
+### 16. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 14 
+What percentage for #1 place? 
+``` 
+___
+
+### 17. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 15
+50 
+```
+___
+
+### 18. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 16 
+What percentage for #2 place? 
+``` 
+___
+
+### 19. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 17
+50 
+```
+___
+
+### 20. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 18 
 Prize pool stored:
 1. 50%
 2. 50% 
 ``` 
 ___
 
-### 5. Message
+### 21. Pinned
+
+``` 
+message id 18 pinned
+``` 
+___
+
+### 22. Deleted messages
+
+``` 
+message ids 12,13,14,15,16,17 deleted
+``` 
+___
+
+### 23. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 5
+Processed message id: 19
 /calculate 
 ```
 ___
 
-### 6. Message
+### 24. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 6 
+message id: 20 
 No finale places specified, can't calculate finale summary. 
 ``` 
 ___

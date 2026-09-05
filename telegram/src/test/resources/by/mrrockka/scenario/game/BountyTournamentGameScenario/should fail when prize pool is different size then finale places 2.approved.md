@@ -125,7 +125,7 @@ ___
 
 ```
 Processed message id: 11
-/entry 
+/prize_pool 
 ```
 ___
 
@@ -134,7 +134,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 12 
-Re-entry stored for @nickname3, buy in amount is 10 
+How many places to account? 
 ``` 
 ___
 
@@ -144,7 +144,7 @@ ___
 
 ```
 Processed message id: 13
-/finale_places 
+2 
 ```
 ___
 
@@ -153,7 +153,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 14 
-How many places to account? 
+What percentage for #1 place? 
 ``` 
 ___
 
@@ -163,7 +163,7 @@ ___
 
 ```
 Processed message id: 15
-3 
+50 
 ```
 ___
 
@@ -172,7 +172,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 16 
-Who's on #1 place? 
+What percentage for #2 place? 
 ``` 
 ___
 
@@ -182,7 +182,7 @@ ___
 
 ```
 Processed message id: 17
-@nickname1 
+50 
 ```
 ___
 
@@ -191,26 +191,23 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 18 
-Who's on #2 place? 
+Prize pool stored:
+1. 50%
+2. 50% 
 ``` 
 ___
 
-### 21. Message
+### 21. Pinned
 
-&rarr; <ins>User</ins>
-
-```
-Processed message id: 19
-@nickname2 
-```
+``` 
+message id 18 pinned
+``` 
 ___
 
-### 22. Message
+### 22. Deleted messages
 
-&rarr; <ins>Bot</ins>
 ``` 
-message id: 20 
-Who's on #3 place? 
+message ids 12,13,14,15,16,17 deleted
 ``` 
 ___
 
@@ -219,23 +216,128 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 21
-cancel 
+Processed message id: 19
+/finale_places 
 ```
 ___
 
-### 24. Deleted messages
+### 24. Message
 
+&rarr; <ins>Bot</ins>
 ``` 
-message ids 14,15,16,17,18,19,20,21 deleted
+message id: 20 
+How many places to account? 
 ``` 
 ___
 
 ### 25. Message
 
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 21
+3 
+```
+___
+
+### 26. Message
+
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 22 
-Command cancelled 
+Who's on #1 place? 
+``` 
+___
+
+### 27. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 23
+@nickname1 
+```
+___
+
+### 28. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 24 
+Who's on #2 place? 
+``` 
+___
+
+### 29. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 25
+@nickname2 
+```
+___
+
+### 30. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 26 
+Who's on #3 place? 
+``` 
+___
+
+### 31. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 27
+@nickname3 
+```
+___
+
+### 32. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 28 
+Finale places stored:
+1. @nickname1
+2. @nickname2
+3. @nickname3 
+``` 
+___
+
+### 33. Pinned
+
+``` 
+message id 28 pinned
+``` 
+___
+
+### 34. Deleted messages
+
+``` 
+message ids 20,21,22,23,24,25,26,27 deleted
+``` 
+___
+
+### 35. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 29
+/calculate 
+```
+___
+
+### 36. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 30 
+Finale places and prize pool should be same size 
 ``` 
 ___

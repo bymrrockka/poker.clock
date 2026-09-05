@@ -4,10 +4,7 @@
 
 ```
 Processed message id: 1
-/tournament_game
-buyin: 10
-
-@me 
+/game 
 ```
 ___
 
@@ -16,12 +13,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 2 
-Tournament game started.
-------------------------------
-Table 1
-Seats:
-  5. @sergio_cartwright
-                                 
+What type of game you'd like to play? 
 ``` 
 ___
 
@@ -31,7 +23,7 @@ ___
 
 ```
 Processed message id: 3
-/entry 
+Tournament 
 ```
 ___
 
@@ -40,11 +32,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 4 
-Entries: 
-------------------------------
-Table 1
-Seats:
-  @nickname3 seat 7 -> entry 10.00 
+How much is for buy in? 
 ``` 
 ___
 
@@ -54,7 +42,7 @@ ___
 
 ```
 Processed message id: 5
-/pp 
+10 
 ```
 ___
 
@@ -63,7 +51,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 6 
-How many places to account? 
+Who's playing? 
 ``` 
 ___
 
@@ -73,7 +61,7 @@ ___
 
 ```
 Processed message id: 7
-3 
+@me 
 ```
 ___
 
@@ -82,26 +70,28 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 8 
-What percentage for #1 place? 
+Game type: TOURNAMENT
+Buy in: 10
+                
+------------------------------
+Table 1
+Seats:
+  5. @sergio_cartwright
+                                 
 ``` 
 ___
 
-### 9. Message
+### 9. Pinned
 
-&rarr; <ins>User</ins>
-
-```
-Processed message id: 9
-50 
-```
+``` 
+message id 8 pinned
+``` 
 ___
 
-### 10. Message
+### 10. Deleted messages
 
-&rarr; <ins>Bot</ins>
 ``` 
-message id: 10 
-What percentage for #2 place? 
+message ids 2,3,4,5,6,7 deleted
 ``` 
 ___
 
@@ -110,8 +100,8 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 11
-30 
+Processed message id: 9
+/entry 
 ```
 ___
 
@@ -119,8 +109,12 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 12 
-What percentage for #3 place? 
+message id: 10 
+Entries: 
+------------------------------
+Table 1
+Seats:
+  @nickname3 seat 7 -> entry 10.00 
 ``` 
 ___
 
@@ -129,8 +123,8 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 13
-cancel 
+Processed message id: 11
+/prize_pool 
 ```
 ___
 
@@ -138,14 +132,90 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 14 
-Game creation was cancelled 
+message id: 12 
+How many places to account? 
 ``` 
 ___
 
-### 15. Deleted messages
+### 15. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 13
+3 
+```
+___
+
+### 16. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 14 
+What percentage for #1 place? 
+``` 
+___
+
+### 17. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 15
+50 
+```
+___
+
+### 18. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 16 
+What percentage for #2 place? 
+``` 
+___
+
+### 19. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 17
+30 
+```
+___
+
+### 20. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 18 
+What percentage for #3 place? 
+``` 
+___
+
+### 21. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 19
+cancel 
+```
+___
+
+### 22. Deleted messages
 
 ``` 
-message ids 6,7,8,9,10,11,12,13 deleted
+message ids 12,13,14,15,16,17,18,19 deleted
+``` 
+___
+
+### 23. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 20 
+Command cancelled 
 ``` 
 ___

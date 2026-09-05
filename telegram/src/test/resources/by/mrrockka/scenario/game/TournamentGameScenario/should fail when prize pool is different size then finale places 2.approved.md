@@ -106,7 +106,7 @@ ___
 
 ```
 Processed message id: 9
-/finale_places 
+/prize_pool 
 ```
 ___
 
@@ -134,7 +134,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 12 
-Who's on #1 place? 
+What percentage for #1 place? 
 ``` 
 ___
 
@@ -144,7 +144,7 @@ ___
 
 ```
 Processed message id: 13
-@nickname1 
+50 
 ```
 ___
 
@@ -153,7 +153,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 14 
-Who's on #2 place? 
+What percentage for #2 place? 
 ``` 
 ___
 
@@ -163,7 +163,7 @@ ___
 
 ```
 Processed message id: 15
-@nickname2 
+50 
 ```
 ___
 
@@ -172,9 +172,9 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 16 
-Finale places stored:
-1. @nickname1
-2. @nickname2 
+Prize pool stored:
+1. 50%
+2. 50% 
 ``` 
 ___
 
@@ -198,7 +198,7 @@ ___
 
 ```
 Processed message id: 17
-/calculate 
+/finale_places 
 ```
 ___
 
@@ -207,6 +207,118 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 18 
-No prize pool specified, can't calculate finale summary. 
+How many places to account? 
+``` 
+___
+
+### 23. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 19
+3 
+```
+___
+
+### 24. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 20 
+Who's on #1 place? 
+``` 
+___
+
+### 25. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 21
+@nickname1 
+```
+___
+
+### 26. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 22 
+Who's on #2 place? 
+``` 
+___
+
+### 27. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 23
+@nickname2 
+```
+___
+
+### 28. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 24 
+Who's on #3 place? 
+``` 
+___
+
+### 29. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 25
+@nickname3 
+```
+___
+
+### 30. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 26 
+Finale places stored:
+1. @nickname1
+2. @nickname2
+3. @nickname3 
+``` 
+___
+
+### 31. Pinned
+
+``` 
+message id 26 pinned
+``` 
+___
+
+### 32. Deleted messages
+
+``` 
+message ids 18,19,20,21,22,23,24,25 deleted
+``` 
+___
+
+### 33. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 27
+/calculate 
+```
+___
+
+### 34. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 28 
+Finale places and prize pool should be same size 
 ``` 
 ___
