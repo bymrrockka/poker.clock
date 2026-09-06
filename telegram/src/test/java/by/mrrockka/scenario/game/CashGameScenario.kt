@@ -3,39 +3,24 @@ package by.mrrockka.scenario.game
 import by.mrrockka.Given
 import by.mrrockka.When
 import by.mrrockka.domain.GameType
-import by.mrrockka.extension.mdApprover
 import by.mrrockka.scenario.Commands.Companion.calculate
-import by.mrrockka.scenario.Commands.Companion.createGame
 import by.mrrockka.scenario.Commands.Companion.entry
-import by.mrrockka.scenario.Commands.Companion.prizePool
 import by.mrrockka.scenario.Commands.Companion.withdrawal
 import com.oneeyedmen.okeydoke.Approver
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.ValueSource
 import java.math.BigDecimal
 
 
 class CashGameScenario : GameScenario() {
     override fun gameType(): GameType = GameType.CASH
 
-    @ParameterizedTest
-    @ValueSource(booleans = [false, true])
-    fun `should calculate when all money were withdraw`(withAlias: Boolean) {
+    @Test
+    fun `should calculate when all money were withdraw`(approver: Approver) {
         val buyin = BigDecimal(10)
-        val players = listOf(
-                "nickname1",
-                "nickname2",
-                "nickname3",
-                "nickname4",
-                "nickname5",
-                "me",
-        )
+        val players = (1..5).map { "nickname$it" } + "me"
 
         Given {
-            val game = user { players.createGame(GameType.CASH, buyin, withAlias) }
-            bot { "Game created" }
-            game.pinned()
+            val game = createGameFlow(buyin, players)
             user("nickname1") { withdrawal(20) }
             bot { "Withdraw" }
             user("nickname2") { withdrawal(30) }
@@ -50,19 +35,19 @@ class CashGameScenario : GameScenario() {
             game.unpinned()
         } When {
             updatesReceived()
-        } ThenApproveWith mdApprover("should calculate when all money were withdraw${if (withAlias) " with alias" else ""}")
+        } ThenApproveWith approver
     }
 
     @Test
     fun `should create game with one player and calculate when other entries`(approver: Approver) {
         val buyin = BigDecimal(10)
+        val player = "me"
 
         Given {
-            user { "nickname1".createGame(GameType.CASH, buyin) }
-            bot { "Game created" }
+            createGameFlow(buyin, listOf(player))
             user("nickname2") { entry }
             bot { "Entry stored" }
-            user("nickname1") { withdrawal(20) }
+            user { withdrawal(20) }
             bot { "Withdraw" }
             user { calculate }
             bot { "Calculated payouts" }
@@ -74,11 +59,10 @@ class CashGameScenario : GameScenario() {
     @Test
     fun `fail when calculation started but there are still money in game`(approver: Approver) {
         val buyin = BigDecimal(10)
-        val players = listOf("nickname1", "nickname2")
+        val players = (1..5).map { "nickname$it" } + "me"
 
         Given {
-            user { players.createGame(GameType.CASH, buyin) }
-            bot { "Game created" }
+            createGameFlow(buyin, players)
             user { calculate }
             bot { "Exception" }
         } When {
@@ -89,12 +73,11 @@ class CashGameScenario : GameScenario() {
     @Test
     fun `fail when withdrawal is more then money left in game`(approver: Approver) {
         val buyin = BigDecimal(10)
-        val players = listOf("nickname1", "nickname2")
+        val players = (1..5).map { "nickname$it" } + "me"
 
         Given {
-            user { players.createGame(GameType.CASH, buyin) }
-            bot { "Game created" }
-            user("nickname1") { withdrawal(40) }
+            createGameFlow(buyin, players)
+            user("nickname1") { withdrawal(players.size * 10 + 1) }
             bot { "Exception" }
         } When {
             updatesReceived()
@@ -104,12 +87,25 @@ class CashGameScenario : GameScenario() {
     @Test
     fun `fail when prize pool added`(approver: Approver) {
         val buyin = BigDecimal(10)
-        val players = listOf("nickname1", "nickname2")
+        val players = (1..5).map { "nickname$it" } + "me"
 
         Given {
-            user { players.createGame(GameType.CASH, buyin) }
-            bot { "Game created" }
-            user { prizePool(1) }
+            createGameFlow(buyin, players)
+            user { "/prize_pool" }
+            bot { "Exception" }
+        } When {
+            updatesReceived()
+        } ThenApproveWith approver
+    }
+
+    @Test
+    fun `fail when finale places added`(approver: Approver) {
+        val buyin = BigDecimal(10)
+        val players = (1..5).map { "nickname$it" } + "me"
+
+        Given {
+            createGameFlow(buyin, players)
+            user { "/finale_places" }
             bot { "Exception" }
         } When {
             updatesReceived()
