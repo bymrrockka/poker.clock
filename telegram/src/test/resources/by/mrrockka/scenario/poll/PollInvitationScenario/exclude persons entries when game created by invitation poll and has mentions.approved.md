@@ -77,12 +77,8 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed [reply to message id 3]
-message id: 4
-/tournament_game
-buyin: 10
-
-@terisa_johnston 
+Processed message id: 4
+/game 
 ```
 ___
 
@@ -91,12 +87,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 5 
-Tournament game started.
-------------------------------
-Table 1
-Seats:
-  5. @jackie_rau
-                                 
+What type of game you'd like to play? 
 ``` 
 ___
 
@@ -106,7 +97,7 @@ ___
 
 ```
 Processed message id: 6
-/game_stats 
+Tournament 
 ```
 ___
 
@@ -115,6 +106,85 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 7 
+How much is for buy in? 
+``` 
+___
+
+### 13. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 8
+10 
+```
+___
+
+### 14. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 9 
+Who's playing? 
+``` 
+___
+
+### 15. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed [reply to message id 3]
+message id: 10
+@terisa_johnston 
+```
+___
+
+### 16. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 11 
+Game type: TOURNAMENT
+Buy in: 10
+                
+------------------------------
+Table 1
+Seats:
+  5. @jackie_rau
+                                 
+``` 
+___
+
+### 17. Pinned
+
+``` 
+message id 11 pinned
+``` 
+___
+
+### 18. Deleted messages
+
+``` 
+message ids 5,6,7,8,9,10 deleted
+``` 
+___
+
+### 19. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 12
+/game_stats 
+```
+___
+
+### 20. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 13 
 Tournament game statistics:
   - players entered -> 1
   - number of entries -> 1

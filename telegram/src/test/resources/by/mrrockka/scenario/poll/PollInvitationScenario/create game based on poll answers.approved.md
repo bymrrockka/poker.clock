@@ -84,12 +84,8 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed [reply to message id 3]
-message id: 4
-/tournament_game
-buyin: 10
-
- 
+Processed message id: 4
+/game 
 ```
 ___
 
@@ -98,13 +94,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 5 
-Tournament game started.
-------------------------------
-Table 1
-Seats:
-  3. @jackie_rau
-  7. @terisa_johnston
-                                 
+What type of game you'd like to play? 
 ``` 
 ___
 
@@ -114,7 +104,7 @@ ___
 
 ```
 Processed message id: 6
-/game_stats 
+Tournament 
 ```
 ___
 
@@ -123,10 +113,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 7 
-Tournament game statistics:
-  - players entered -> 2
-  - number of entries -> 2
-  - total in game -> 20.00 
+How much is for buy in? 
 ``` 
 ___
 
@@ -135,9 +122,8 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed [reply to message id 1]
-message id: 8
-/stop_poll 
+Processed message id: 8
+10 
 ```
 ___
 
@@ -146,6 +132,90 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 9 
+Who's playing? 
+``` 
+___
+
+### 16. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed [reply to message id 3]
+message id: 10
+ 
+```
+___
+
+### 17. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 11 
+Game type: TOURNAMENT
+Buy in: 10
+                
+------------------------------
+Table 1
+Seats:
+  3. @jackie_rau
+  7. @terisa_johnston
+                                 
+``` 
+___
+
+### 18. Pinned
+
+``` 
+message id 11 pinned
+``` 
+___
+
+### 19. Deleted messages
+
+``` 
+message ids 5,6,7,8,9,10 deleted
+``` 
+___
+
+### 20. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 12
+/game_stats 
+```
+___
+
+### 21. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 13 
+Tournament game statistics:
+  - players entered -> 2
+  - number of entries -> 2
+  - total in game -> 20.00 
+``` 
+___
+
+### 22. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed [reply to message id 1]
+message id: 14
+/stop_poll 
+```
+___
+
+### 23. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 15 
 Poll stopped 
 ``` 
 ___

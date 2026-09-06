@@ -10,7 +10,7 @@ import by.mrrockka.scenario.common.Commands.Companion.prizePool
 import by.mrrockka.service.up
 import java.math.BigDecimal
 
-fun GivenSpecification.createGameFlow(gameType: GameType, buyin: BigDecimal, players: List<String>): Command.BotMessage {
+fun GivenSpecification.createGameFlow(gameType: GameType, buyin: BigDecimal, players: List<String> = emptyList(), replyTo: Command? = null): Command.BotMessage {
     val toDelete = mutableListOf<Command>()
     user { game }
     toDelete += bot { "Type of game?" }
@@ -22,11 +22,18 @@ fun GivenSpecification.createGameFlow(gameType: GameType, buyin: BigDecimal, pla
         toDelete += user { buyin.up().toString() }
     }
     toDelete += bot { "Players?" }
-    toDelete += user { players.entries() }
+    toDelete += user(replyTo = replyTo) { players.entries() }
     val game = bot { "Game created" }
     game.pinned()
     toDelete.deleted()
     return game
+}
+
+fun Command.ifPoll(): Command {
+    if (this is Command.Poll) {
+        this
+    }
+    return this
 }
 
 fun GivenSpecification.finalePlacesFlow(vararg places: Pair<Int, String>) = finalePlacesFlow { places.toMap() }

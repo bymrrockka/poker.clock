@@ -70,12 +70,8 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed [reply to message id 3]
-message id: 4
-/tournament_game
-buyin: 10
-
- 
+Processed message id: 5
+/game 
 ```
 ___
 
@@ -83,7 +79,65 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 5 
+message id: 6 
+What type of game you'd like to play? 
+``` 
+___
+
+### 10. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 7
+Tournament 
+```
+___
+
+### 11. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 8 
+How much is for buy in? 
+``` 
+___
+
+### 12. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 9
+10 
+```
+___
+
+### 13. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 10 
+Who's playing? 
+``` 
+___
+
+### 14. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed [reply to message id 3]
+message id: 11
+. 
+```
+___
+
+### 15. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 12 
 Game participants not found according to poll 
 ``` 
 ___
