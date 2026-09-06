@@ -10,6 +10,7 @@ import by.mrrockka.builder.toUser
 import by.mrrockka.builder.update
 import by.mrrockka.builder.user
 import by.mrrockka.extension.MdApproverExtension
+import by.mrrockka.scenario.interaction.MockDispatcher
 import by.mrrockka.service.GameTablesService
 import com.oneeyedmen.okeydoke.Approver
 import eu.vendeli.tgbot.types.User
