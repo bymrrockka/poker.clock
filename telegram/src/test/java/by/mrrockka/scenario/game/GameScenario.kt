@@ -90,7 +90,7 @@ abstract class GameScenario : AbstractScenarioTest() {
         } ThenApproveWith approver
     }
 
-    protected fun GivenSpecification.createGameFlow(buyin: BigDecimal, players: List<String>) {
+    protected fun GivenSpecification.createGameFlow(buyin: BigDecimal, players: List<String>): Command.BotMessage {
         val toDelete = mutableListOf<Command>()
         user { game }
         toDelete += bot { "Type of game?" }
@@ -106,5 +106,6 @@ abstract class GameScenario : AbstractScenarioTest() {
         val game = bot { "Game created" }
         game.pinned()
         toDelete.deleted()
+        return game
     }
 }

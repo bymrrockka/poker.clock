@@ -16,12 +16,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 2 
-Tournament game started.
-------------------------------
-Table 1
-Seats:
-  5. @sergio_cartwright
-                                 
+Can't process command 
 ``` 
 ___
 
@@ -40,11 +35,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 4 
-Entries: 
-------------------------------
-Table 1
-Seats:
-  @nickname3 seat 7 -> entry 10.00 
+Game was not found for the chat. 
 ``` 
 ___
 
@@ -64,8 +55,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 6 
-Prize pool stored:
-1. 100% 
+How many places to account? 
 ``` 
 ___
 
@@ -84,11 +74,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 8 
-Entries: 
-------------------------------
-Table 1
-Seats:
-  @nickname1 seat 9 -> entry 10.00 
+Game was not found for the chat. 
 ``` 
 ___
 
@@ -108,8 +94,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 10 
-Finale places stored:
-1. @sergio_cartwright 
+How many places to account? 
 ``` 
 ___
 
@@ -128,11 +113,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 12 
-Entries: 
-------------------------------
-Table 1
-Seats:
-  @nickname2 seat 3 -> entry 10.00 
+Game was not found for the chat. 
 ``` 
 ___
 
@@ -151,20 +132,6 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 14 
-------------------------------
-Finale summary:
-  1. @sergio_cartwright won 40
-Total: 40 (4 entries * 10 buy in)
-------------------------------
-Payout to: @sergio_cartwright
-  Entries: 10
-  Total: 30 (won 40 - entries 10)
-From:
-  @nickname3 -> 10
-  @nickname2 -> 10
-  @nickname1 -> 10
-------------------------------
-You can support me using this link. 
-https://buymeacoffee.com/mrrockka 
+Game was not found for the chat. 
 ``` 
 ___

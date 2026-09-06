@@ -4,10 +4,7 @@
 
 ```
 Processed message id: 1
-/bounty_game
-buyin: 10
-bounty: 10
-@me 
+/game 
 ```
 ___
 
@@ -16,12 +13,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 2 
-Bounty tournament game started.
-------------------------------
-Table 1
-Seats:
-  5. @sergio_cartwright
-                                 
+What type of game you'd like to play? 
 ``` 
 ___
 
@@ -31,7 +23,7 @@ ___
 
 ```
 Processed message id: 3
-/bounty @nickname kicked @me 
+Bounty 
 ```
 ___
 
@@ -40,7 +32,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 4 
-@nickname person hadn't enter game 
+How much is for buy in? 
 ``` 
 ___
 
@@ -50,7 +42,7 @@ ___
 
 ```
 Processed message id: 5
-/calculate 
+10 
 ```
 ___
 
@@ -59,6 +51,84 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 6 
-No finale places specified, can't calculate finale summary. 
+How much is for bounty? 
+``` 
+___
+
+### 7. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 7
+10 
+```
+___
+
+### 8. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 8 
+Who's playing? 
+``` 
+___
+
+### 9. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 9
+@me 
+```
+___
+
+### 10. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 10 
+Game type: BOUNTY
+Buy in: 10
+Bounty 10
+------------------------------
+Table 1
+Seats:
+  5. @sergio_cartwright
+                                 
+``` 
+___
+
+### 11. Pinned
+
+``` 
+message id 10 pinned
+``` 
+___
+
+### 12. Deleted messages
+
+``` 
+message ids 2,3,4,5,6,7,8,9 deleted
+``` 
+___
+
+### 13. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 11
+/bounty @nickname kicked @me 
+```
+___
+
+### 14. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 12 
+@nickname person hadn't enter game 
 ``` 
 ___

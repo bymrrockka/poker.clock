@@ -220,11 +220,9 @@ abstract class PrizeGameScenario : GameScenario() {
     }
 
 
-    protected fun GivenSpecification.finalePlacesFlow(vararg places: Pair<Int, String>) {
-        finalePlacesFlow { places.toMap() }
-    }
+    protected fun GivenSpecification.finalePlacesFlow(vararg places: Pair<Int, String>) = finalePlacesFlow { places.toMap() }
 
-    protected fun GivenSpecification.finalePlacesFlow(placesProvider: GivenSpecification.() -> Map<Int, String>) {
+    protected fun GivenSpecification.finalePlacesFlow(placesProvider: GivenSpecification.() -> Map<Int, String>): Command.BotMessage {
         with(placesProvider()) {
             val toDelete = mutableListOf<Command>()
             user { finalePlaces }
@@ -237,14 +235,13 @@ abstract class PrizeGameScenario : GameScenario() {
             val summary = bot { "Finale places stored" }
             summary.pinned()
             toDelete.deleted()
+            return summary
         }
     }
 
-    protected fun GivenSpecification.prizePoolFlow(vararg places: Pair<Int, Int>) {
-        prizePoolFlow { places.toMap() }
-    }
+    protected fun GivenSpecification.prizePoolFlow(vararg places: Pair<Int, Int>) = prizePoolFlow { places.toMap() }
 
-    protected fun GivenSpecification.prizePoolFlow(placesProvider: GivenSpecification.() -> Map<Int, Int>) {
+    protected fun GivenSpecification.prizePoolFlow(placesProvider: GivenSpecification.() -> Map<Int, Int>): Command.BotMessage {
         with(placesProvider()) {
             val toDelete = mutableListOf<Command>()
             user { prizePool }
@@ -257,6 +254,7 @@ abstract class PrizeGameScenario : GameScenario() {
             val summary = bot { "Prize pool stored" }
             summary.pinned()
             toDelete.deleted()
+            return summary
         }
     }
 }

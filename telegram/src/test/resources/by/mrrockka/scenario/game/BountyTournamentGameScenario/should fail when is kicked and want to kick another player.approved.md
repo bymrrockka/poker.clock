@@ -4,10 +4,7 @@
 
 ```
 Processed message id: 1
-/bounty_game
-buyin: 10
-bounty: 10
-@me, @nickname 
+/game 
 ```
 ___
 
@@ -16,13 +13,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 2 
-Bounty tournament game started.
-------------------------------
-Table 1
-Seats:
-  3. @nickname
-  7. @sergio_cartwright
-                                 
+What type of game you'd like to play? 
 ``` 
 ___
 
@@ -32,7 +23,7 @@ ___
 
 ```
 Processed message id: 3
-/bounty @nickname kicked @me 
+Bounty 
 ```
 ___
 
@@ -41,7 +32,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 4 
-Bounty amount 10.00 from @sergio_cartwright stored for @nickname 
+How much is for buy in? 
 ``` 
 ___
 
@@ -51,7 +42,7 @@ ___
 
 ```
 Processed message id: 5
-/bounty @me kicked @nickname 
+10 
 ```
 ___
 
@@ -60,7 +51,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 6 
-@sergio_cartwright knocked off from the game 
+How much is for bounty? 
 ``` 
 ___
 
@@ -70,7 +61,7 @@ ___
 
 ```
 Processed message id: 7
-/calculate 
+10 
 ```
 ___
 
@@ -79,6 +70,85 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 8 
-No finale places specified, can't calculate finale summary. 
+Who's playing? 
+``` 
+___
+
+### 9. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 9
+@me @nickname 
+```
+___
+
+### 10. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 10 
+Game type: BOUNTY
+Buy in: 10
+Bounty 10
+------------------------------
+Table 1
+Seats:
+  3. @nickname
+  7. @sergio_cartwright
+                                 
+``` 
+___
+
+### 11. Pinned
+
+``` 
+message id 10 pinned
+``` 
+___
+
+### 12. Deleted messages
+
+``` 
+message ids 2,3,4,5,6,7,8,9 deleted
+``` 
+___
+
+### 13. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 11
+/bounty @nickname kicked @me 
+```
+___
+
+### 14. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 12 
+Bounty amount 10.00 from @sergio_cartwright stored for @nickname 
+``` 
+___
+
+### 15. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 13
+/bounty @me kicked @nickname 
+```
+___
+
+### 16. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 14 
+@sergio_cartwright knocked off from the game 
 ``` 
 ___

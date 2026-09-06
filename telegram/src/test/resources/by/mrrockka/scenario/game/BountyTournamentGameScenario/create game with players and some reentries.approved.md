@@ -4,10 +4,7 @@
 
 ```
 Processed message id: 1
-/bounty_game
-buyin: 10
-bounty: 10
-@nickname1, @nickname2, @nickname3, @nickname4, @nickname5, @me 
+/game 
 ```
 ___
 
@@ -16,7 +13,85 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 2 
-Bounty tournament game started.
+What type of game you'd like to play? 
+``` 
+___
+
+### 3. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 3
+Bounty 
+```
+___
+
+### 4. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 4 
+How much is for buy in? 
+``` 
+___
+
+### 5. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 5
+10 
+```
+___
+
+### 6. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 6 
+How much is for bounty? 
+``` 
+___
+
+### 7. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 7
+10 
+```
+___
+
+### 8. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 8 
+Who's playing? 
+``` 
+___
+
+### 9. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 9
+@nickname1 @nickname2 @nickname3 @nickname4 @nickname5 @me 
+```
+___
+
+### 10. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 10 
+Game type: BOUNTY
+Buy in: 10
+Bounty 10
 ------------------------------
 Table 1
 Seats:
@@ -30,154 +105,74 @@ Seats:
 ``` 
 ___
 
-### 3. Pinned
+### 11. Pinned
 
 ``` 
-message id 1 pinned
-``` 
-___
-
-### 4. Message
-
-&rarr; <ins>User</ins>
-
-```
-Processed message id: 3
-/bounty @me kicked @nickname3 
-```
-___
-
-### 5. Message
-
-&rarr; <ins>Bot</ins>
-``` 
-message id: 4 
-Bounty amount 10.00 from @nickname3 stored for @sergio_cartwright 
+message id 10 pinned
 ``` 
 ___
 
-### 6. Message
+### 12. Deleted messages
 
-&rarr; <ins>User</ins>
-
-```
-Processed message id: 5
-/entry 
-```
-___
-
-### 7. Message
-
-&rarr; <ins>Bot</ins>
 ``` 
-message id: 6 
-Re-entry stored for @nickname3, buy in amount is 10 
+message ids 2,3,4,5,6,7,8,9 deleted
 ``` 
 ___
 
-### 8. Message
-
-&rarr; <ins>User</ins>
-
-```
-Processed message id: 7
-/bounty @me kicked @nickname3 
-```
-___
-
-### 9. Message
-
-&rarr; <ins>Bot</ins>
-``` 
-message id: 8 
-Bounty amount 10.00 from @nickname3 stored for @sergio_cartwright 
-``` 
-___
-
-### 10. Message
-
-&rarr; <ins>User</ins>
-
-```
-Processed message id: 9
-/entry 
-```
-___
-
-### 11. Message
-
-&rarr; <ins>Bot</ins>
-``` 
-message id: 10 
-Re-entry stored for @nickname3, buy in amount is 10 
-``` 
-___
-
-### 12. Message
+### 13. Message
 
 &rarr; <ins>User</ins>
 
 ```
 Processed message id: 11
-/bounty @nickname1 kicked @nickname4 
+/bounty @me kicked @nickname3 
 ```
 ___
 
-### 13. Message
+### 14. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 12 
-Bounty amount 10.00 from @nickname4 stored for @nickname1 
+Bounty amount 10.00 from @nickname3 stored for @sergio_cartwright 
 ``` 
 ___
 
-### 14. Message
+### 15. Message
 
 &rarr; <ins>User</ins>
 
 ```
 Processed message id: 13
-/bounty @nickname1 kicked @nickname5 
+/entry 
 ```
 ___
 
-### 15. Message
+### 16. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 14 
-Bounty amount 10.00 from @nickname5 stored for @nickname1 
+Re-entry stored for @nickname3, buy in amount is 10 
 ``` 
 ___
 
-### 16. Message
+### 17. Message
 
 &rarr; <ins>User</ins>
 
 ```
 Processed message id: 15
-/prize_pool
-1 50%
-2 50% 
+/bounty @me kicked @nickname3 
 ```
 ___
 
-### 17. Message
+### 18. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 16 
-Prize pool stored:
-1. 50%
-2. 50% 
-``` 
-___
-
-### 18. Pinned
-
-``` 
-message id 15 pinned
+Bounty amount 10.00 from @nickname3 stored for @sergio_cartwright 
 ``` 
 ___
 
@@ -187,7 +182,7 @@ ___
 
 ```
 Processed message id: 17
-/bounty @nickname3 kicked @nickname1 
+/entry 
 ```
 ___
 
@@ -196,7 +191,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 18 
-Bounty amount 10.00 from @nickname1 stored for @nickname3 
+Re-entry stored for @nickname3, buy in amount is 10 
 ``` 
 ___
 
@@ -206,7 +201,7 @@ ___
 
 ```
 Processed message id: 19
-/entry 
+/bounty @nickname1 kicked @nickname4 
 ```
 ___
 
@@ -215,7 +210,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 20 
-Re-entry stored for @nickname1, buy in amount is 10 
+Bounty amount 10.00 from @nickname4 stored for @nickname1 
 ``` 
 ___
 
@@ -225,7 +220,7 @@ ___
 
 ```
 Processed message id: 21
-/bounty @nickname3 kicked @nickname1 
+/bounty @nickname1 kicked @nickname5 
 ```
 ___
 
@@ -234,7 +229,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 22 
-Bounty amount 10.00 from @nickname1 stored for @nickname3 
+Bounty amount 10.00 from @nickname5 stored for @nickname1 
 ``` 
 ___
 
@@ -244,7 +239,7 @@ ___
 
 ```
 Processed message id: 23
-/entry 
+/prize_pool 
 ```
 ___
 
@@ -253,7 +248,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 24 
-Re-entry stored for @nickname1, buy in amount is 10 
+How many places to account? 
 ``` 
 ___
 
@@ -263,8 +258,7 @@ ___
 
 ```
 Processed message id: 25
-/finale_places
-1 @nickname1, 2 @nickname2 
+2 
 ```
 ___
 
@@ -273,129 +267,342 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 26 
+What percentage for #1 place? 
+``` 
+___
+
+### 29. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 27
+50 
+```
+___
+
+### 30. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 28 
+What percentage for #2 place? 
+``` 
+___
+
+### 31. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 29
+50 
+```
+___
+
+### 32. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 30 
+Prize pool stored:
+1. 50%
+2. 50% 
+``` 
+___
+
+### 33. Pinned
+
+``` 
+message id 30 pinned
+``` 
+___
+
+### 34. Deleted messages
+
+``` 
+message ids 24,25,26,27,28,29 deleted
+``` 
+___
+
+### 35. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 31
+/bounty @nickname3 kicked @nickname1 
+```
+___
+
+### 36. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 32 
+Bounty amount 10.00 from @nickname1 stored for @nickname3 
+``` 
+___
+
+### 37. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 33
+/entry 
+```
+___
+
+### 38. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 34 
+Re-entry stored for @nickname1, buy in amount is 10 
+``` 
+___
+
+### 39. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 35
+/bounty @nickname3 kicked @nickname1 
+```
+___
+
+### 40. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 36 
+Bounty amount 10.00 from @nickname1 stored for @nickname3 
+``` 
+___
+
+### 41. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 37
+/entry 
+```
+___
+
+### 42. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 38 
+Re-entry stored for @nickname1, buy in amount is 10 
+``` 
+___
+
+### 43. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 39
+/finale_places 
+```
+___
+
+### 44. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 40 
+How many places to account? 
+``` 
+___
+
+### 45. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 41
+2 
+```
+___
+
+### 46. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 42 
+Who's on #1 place? 
+``` 
+___
+
+### 47. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 43
+@nickname1 
+```
+___
+
+### 48. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 44 
+Who's on #2 place? 
+``` 
+___
+
+### 49. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 45
+@nickname2 
+```
+___
+
+### 50. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 46 
 Finale places stored:
 1. @nickname1
 2. @nickname2 
 ``` 
 ___
 
-### 29. Pinned
+### 51. Pinned
 
 ``` 
-message id 25 pinned
+message id 46 pinned
 ``` 
 ___
 
-### 30. Message
+### 52. Deleted messages
+
+``` 
+message ids 40,41,42,43,44,45 deleted
+``` 
+___
+
+### 53. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 27
+Processed message id: 47
 /bounty @nickname2 kicked @nickname1 
 ```
 ___
 
-### 31. Message
+### 54. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 28 
+message id: 48 
 Bounty amount 10.00 from @nickname1 stored for @nickname2 
 ``` 
 ___
 
-### 32. Message
+### 55. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 29
+Processed message id: 49
 /entry 
 ```
 ___
 
-### 33. Message
+### 56. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 30 
+message id: 50 
 Re-entry stored for @nickname1, buy in amount is 10 
 ``` 
 ___
 
-### 34. Message
+### 57. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 31
+Processed message id: 51
 /bounty @nickname2 kicked @nickname3 
 ```
 ___
 
-### 35. Message
+### 58. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 32 
+message id: 52 
 Bounty amount 10.00 from @nickname3 stored for @nickname2 
 ``` 
 ___
 
-### 36. Message
+### 59. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 33
+Processed message id: 53
 /bounty @nickname2 kicked @me 
 ```
 ___
 
-### 37. Message
+### 60. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 34 
+message id: 54 
 Bounty amount 10.00 from @sergio_cartwright stored for @nickname2 
 ``` 
 ___
 
-### 38. Message
+### 61. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 35
+Processed message id: 55
 /bounty @nickname1 kicked @nickname2 
 ```
 ___
 
-### 39. Message
+### 62. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 36 
+message id: 56 
 Bounty amount 10.00 from @nickname2 stored for @nickname1 
 ``` 
 ___
 
-### 40. Message
+### 63. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 37
+Processed message id: 57
 /calculate 
 ```
 ___
 
-### 41. Message
+### 64. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 38 
+message id: 58 
 ------------------------------
 Finale summary:
   1. @nickname1 won 55
@@ -429,30 +636,30 @@ From:
 ``` 
 ___
 
-### 42. Pinned
+### 65. Pinned
 
 ``` 
-message id 37 pinned
-``` 
-___
-
-### 43. Unpinned
-
-``` 
-message id 1 unpinned
+message id 57 pinned
 ``` 
 ___
 
-### 44. Unpinned
+### 66. Unpinned
 
 ``` 
-message id 15 unpinned
+message id 10 unpinned
 ``` 
 ___
 
-### 45. Unpinned
+### 67. Unpinned
 
 ``` 
-message id 25 unpinned
+message id 30 unpinned
+``` 
+___
+
+### 68. Unpinned
+
+``` 
+message id 46 unpinned
 ``` 
 ___
