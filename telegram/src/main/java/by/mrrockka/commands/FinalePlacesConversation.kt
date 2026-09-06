@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap
         trigger = ["/finale_places", "/fp"],
         stateManagers = [MapIntStateManager::class, PositionMentionState::class],
 )
-@Guard(ExcludeBotGuard::class)
+@Guard(TournamentGameGuard::class)
 object FinalePlacesConversation : MessageLogConversation() {
     lateinit var finalePlacesService: FinalePlacesTelegramService
     lateinit var pinMessageService: PinMessageService

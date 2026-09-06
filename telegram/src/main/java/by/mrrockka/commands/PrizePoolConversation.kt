@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap
         trigger = ["/prize_pool", "/pp"],
         stateManagers = [MapIntStateManager::class, BigDecimalState::class, PositionPrizeState::class],
 )
-@Guard(ExcludeBotGuard::class)
+@Guard(TournamentGameGuard::class)
 object PrizePoolConversation : MessageLogConversation() {
     lateinit var prizePoolService: PrizePoolTelegramService
     lateinit var pinMessageService: PinMessageService

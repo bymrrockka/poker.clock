@@ -100,7 +100,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 9
+Processed message id: 10
 /entry 
 ```
 ___
@@ -109,7 +109,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 10 
+message id: 11 
 Re-entry stored for @nickname1, buy in amount is 10 
 ``` 
 ___
@@ -119,7 +119,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 11
+Processed message id: 12
 /entry 
 ```
 ___
@@ -128,7 +128,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 12 
+message id: 13 
 Re-entry stored for @nickname1, buy in amount is 10 
 ``` 
 ___
@@ -138,7 +138,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 13
+Processed message id: 14
 /entry 
 ```
 ___
@@ -147,7 +147,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 14 
+message id: 15 
 Entries: 
 ------------------------------
 Table 1
@@ -161,7 +161,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 15
+Processed message id: 16
 /entry 
 ```
 ___
@@ -170,7 +170,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 16 
+message id: 17 
 Entries: 
 ------------------------------
 Table 1
@@ -184,7 +184,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 17
+Processed message id: 18
 /entry 
 ```
 ___
@@ -193,7 +193,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 18 
+message id: 19 
 Entries: 
 ------------------------------
 Table 1

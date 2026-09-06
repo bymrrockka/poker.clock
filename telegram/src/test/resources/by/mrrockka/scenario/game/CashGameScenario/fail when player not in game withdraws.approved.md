@@ -100,7 +100,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 10
+Processed message id: 9
 /withdrawal 10 
 ```
 ___
@@ -109,7 +109,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 11 
+message id: 10 
 Stored withdrawals: 
   - @sergio_cartwright -> 10 
 ``` 
@@ -120,7 +120,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 12
+Processed message id: 11
 /calculate 
 ```
 ___
@@ -129,7 +129,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 13 
+message id: 12 
 ------------------------------
 Payout to: @sergio_cartwright
   Entries: 10
@@ -150,7 +150,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 14
+Processed message id: 13
 /game 
 ```
 ___
@@ -159,7 +159,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 15 
+message id: 14 
 What type of game you'd like to play? 
 ``` 
 ___
@@ -169,7 +169,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 16
+Processed message id: 15
 Cash 
 ```
 ___
@@ -178,7 +178,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 17 
+message id: 16 
 How much is for buy in? 
 ``` 
 ___
@@ -188,7 +188,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 18
+Processed message id: 17
 10 
 ```
 ___
@@ -197,7 +197,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 19 
+message id: 18 
 Who's playing? 
 ``` 
 ___
@@ -207,7 +207,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 20
+Processed message id: 19
 @nickname1 @nickname2 @nickname3 @nickname4 @nickname5 
 ```
 ___
@@ -216,7 +216,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 21 
+message id: 20 
 Game type: CASH
 Buy in: 10
                 
@@ -235,14 +235,14 @@ ___
 ### 23. Pinned
 
 ``` 
-message id 21 pinned
+message id 20 pinned
 ``` 
 ___
 
 ### 24. Deleted messages
 
 ``` 
-message ids 15,16,17,18,19,20 deleted
+message ids 14,15,16,17,18,19 deleted
 ``` 
 ___
 
@@ -251,7 +251,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 22
+Processed message id: 21
 /withdrawal 10 
 ```
 ___
@@ -260,7 +260,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 23 
+message id: 22 
 Person is not in the game 
 ``` 
 ___
