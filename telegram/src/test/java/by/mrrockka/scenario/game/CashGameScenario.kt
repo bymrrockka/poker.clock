@@ -112,4 +112,18 @@ class CashGameScenario : GameScenario() {
         } ThenApproveWith approver
     }
 
+    @Test
+    fun `fail when player not in game withdraws`(approver: Approver) {
+        val buyin = BigDecimal(10)
+        val players = (1..5).map { "nickname$it" } + "me"
+
+        Given {
+            createGameFlow(buyin, players)
+            user("nickname101") { withdrawal(10) }
+            bot { "Exception" }
+        } When {
+            updatesReceived()
+        } ThenApproveWith approver
+    }
+
 }
