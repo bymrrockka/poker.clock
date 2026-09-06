@@ -3,19 +3,19 @@ package by.mrrockka.scenario.statistics
 import by.mrrockka.Given
 import by.mrrockka.When
 import by.mrrockka.domain.GameType
-import by.mrrockka.scenario.AbstractScenarioTest
-import by.mrrockka.scenario.Commands.Companion.calculate
-import by.mrrockka.scenario.Commands.Companion.createGame
-import by.mrrockka.scenario.Commands.Companion.finalePlaces
-import by.mrrockka.scenario.Commands.Companion.kicked
-import by.mrrockka.scenario.Commands.Companion.myStats
-import by.mrrockka.scenario.Commands.Companion.prizePool
-import by.mrrockka.scenario.Commands.Companion.withdrawal
+import by.mrrockka.scenario.common.Commands.Companion.calculate
+import by.mrrockka.scenario.common.Commands.Companion.createGame
+import by.mrrockka.scenario.common.Commands.Companion.finalePlaces
+import by.mrrockka.scenario.common.Commands.Companion.kicked
+import by.mrrockka.scenario.common.Commands.Companion.myStats
+import by.mrrockka.scenario.common.Commands.Companion.prizePool
+import by.mrrockka.scenario.common.Commands.Companion.withdrawal
+import by.mrrockka.scenario.common.ScenarioTest
 import com.oneeyedmen.okeydoke.Approver
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 
-class MyStatisticsScenario : AbstractScenarioTest() {
+class MyStatisticsScenario : ScenarioTest() {
 
     @Test
     fun `statistics for person in chat`(approver: Approver) {

@@ -3,9 +3,11 @@ package by.mrrockka.scenario.game
 import by.mrrockka.Given
 import by.mrrockka.When
 import by.mrrockka.domain.GameType
-import by.mrrockka.scenario.Commands.Companion.calculate
-import by.mrrockka.scenario.Commands.Companion.entry
-import by.mrrockka.scenario.Commands.Companion.kicked
+import by.mrrockka.scenario.common.Commands.Companion.calculate
+import by.mrrockka.scenario.common.Commands.Companion.entry
+import by.mrrockka.scenario.common.Commands.Companion.kicked
+import by.mrrockka.scenario.common.finalePlacesFlow
+import by.mrrockka.scenario.common.prizePoolFlow
 import com.oneeyedmen.okeydoke.Approver
 import org.junit.jupiter.api.Test
 

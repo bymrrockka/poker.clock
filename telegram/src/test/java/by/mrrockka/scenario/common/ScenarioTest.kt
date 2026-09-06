@@ -1,20 +1,11 @@
-package by.mrrockka.scenario
+package by.mrrockka.scenario.common
 
 import by.mrrockka.Command
-import by.mrrockka.CoreRandoms.Companion.coreRandoms
-import by.mrrockka.GivenSpecification
 import by.mrrockka.TelegramRandoms.Companion.telegramRandoms
 import by.mrrockka.WhenSpecification
-import by.mrrockka.builder.message
-import by.mrrockka.builder.toUser
-import by.mrrockka.builder.update
-import by.mrrockka.builder.user
 import by.mrrockka.extension.MdApproverExtension
-import by.mrrockka.scenario.interaction.MockDispatcher
 import by.mrrockka.service.GameTablesService
 import com.oneeyedmen.okeydoke.Approver
-import eu.vendeli.tgbot.types.User
-import eu.vendeli.tgbot.types.msg.Message
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.awaitility.core.ConditionTimeoutException
 import org.awaitility.kotlin.atMost
@@ -25,10 +16,8 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.DependsOn
 import org.springframework.test.context.ActiveProfiles
-import org.testcontainers.junit.jupiter.Testcontainers
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -41,33 +30,13 @@ private val logger = KotlinLogging.logger {}
 @ExtendWith(value = [MdApproverExtension::class])
 @ActiveProfiles(profiles = ["scenario"])
 @DependsOn("mockWebServer")
-@Testcontainers
-@SpringBootTest(classes = [TestConfig::class])
-abstract class AbstractScenarioTest {
-    private var chatid: Long = -1L
-    internal lateinit var mainUser: User
-    internal val users = mutableMapOf<String, User>()
-    private val messageLog = mutableMapOf<Command, Message>()
-
-    @Autowired
-    lateinit var dispatcher: MockDispatcher
-
-    @Autowired
-    lateinit var clock: TestClock
-
+abstract class ScenarioTest : StubTest() {
     @Autowired
     lateinit var gameSeatsService: GameTablesService
 
     @BeforeEach
     fun before() {
-        coreRandoms.reset()
-        telegramRandoms.reset()
         dispatcher.reset()
-        users.clear()
-        messageLog.clear()
-        chatid = telegramRandoms.chatid()
-        mainUser = user()
-        users[mainUser.username!!] = mainUser
         gameSeatsService.seed(telegramRandoms.seed.hashCode().toLong())
     }
 
@@ -76,11 +45,6 @@ abstract class AbstractScenarioTest {
         transaction {
             exec("TRUNCATE TABLE pin_messages, poll_task, person, game, chat_messages CASCADE")
         }
-    }
-
-    fun GivenSpecification.updatesReceived() {
-        check(commands.isNotEmpty()) { "Commands should be specified" }
-        commands.forEachIndexed { index, command -> command.stub(index) }
     }
 
     infix fun WhenSpecification.ThenApproveWith(approver: Approver) {
@@ -238,113 +202,5 @@ abstract class AbstractScenarioTest {
 
             else -> error("Command type does not found")
         }
-    }
-
-    private fun Command.stub(index: Int) {
-        when (this) {
-            is Command.Member -> {
-                dispatcher.member(member)
-            }
-
-            is Command.PollAnswer -> {
-                val update = update {
-                    pollAnswer {
-                        pollId(messageLog[this@stub.poll]!!.poll!!.id)
-                        option(option - 1)
-                        user(person.toUser())
-                    }
-                }
-
-                dispatcher.scenario {
-                    index(index)
-                    update(update)
-                }
-            }
-
-            is Command.UserMessage -> {
-                val message = message {
-                    text(message)
-                    chatId(chatid)
-                    from(username?.get() ?: mainUser)
-                    createdAt(clock.now())
-                    if (replyTo != null && messageLog[replyTo] != null) {
-                        replyTo(messageLog[replyTo]!!)
-                    }
-                }
-
-                messageLog += this to message
-
-                val update = update { message(message) }
-                dispatcher.scenario {
-                    index(index)
-                    update(update)
-                }
-            }
-
-            is Command.BotMessage -> {
-                val message = message {
-                    text(message)
-                    chatId(chatid)
-                    createdAt(clock.now())
-                    if (replyTo != null && messageLog[replyTo] != null) {
-                        replyTo(messageLog[replyTo]!!)
-                    }
-                }
-
-                messageLog += this to message
-
-                dispatcher.scenario {
-                    index(index)
-                    message(message)
-                }
-            }
-
-            is Command.Poll -> {
-                val message = message {
-                    chatId(chatid)
-                    poll()
-                }
-                messageLog += this to message
-
-                dispatcher.scenario {
-                    index(index)
-                    poll(message)
-                    time(time)
-                }
-            }
-
-            is Command.Pin -> {
-                dispatcher.scenario {
-                    index(index)
-                    pin()
-                }
-            }
-
-            is Command.Unpin -> {
-                dispatcher.scenario {
-                    index(index)
-                    unpin()
-                }
-            }
-
-            is Command.DeleteMessages -> {
-                dispatcher.scenario {
-                    index(index)
-                    delete()
-                }
-            }
-
-            else -> error("Command type haven't recognised")
-        }
-    }
-
-    private fun String.get(): User {
-        return users[this] ?: {
-            val user = user {
-                username(this@get)
-            }
-            users[this] = user
-            user
-        }.invoke()
     }
 }

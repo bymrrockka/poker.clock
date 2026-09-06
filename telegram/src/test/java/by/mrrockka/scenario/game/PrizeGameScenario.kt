@@ -2,13 +2,12 @@ package by.mrrockka.scenario.game
 
 import by.mrrockka.Command
 import by.mrrockka.Given
-import by.mrrockka.GivenSpecification
 import by.mrrockka.When
 import by.mrrockka.extension.mdApprover
-import by.mrrockka.scenario.Commands.Companion.calculate
-import by.mrrockka.scenario.Commands.Companion.entry
-import by.mrrockka.scenario.Commands.Companion.finalePlaces
-import by.mrrockka.scenario.Commands.Companion.prizePool
+import by.mrrockka.scenario.common.Commands.Companion.calculate
+import by.mrrockka.scenario.common.Commands.Companion.entry
+import by.mrrockka.scenario.common.finalePlacesFlow
+import by.mrrockka.scenario.common.prizePoolFlow
 import com.oneeyedmen.okeydoke.Approver
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -217,44 +216,5 @@ abstract class PrizeGameScenario : GameScenario() {
         } When {
             updatesReceived()
         } ThenApproveWith approver
-    }
-
-
-    protected fun GivenSpecification.finalePlacesFlow(vararg places: Pair<Int, String>) = finalePlacesFlow { places.toMap() }
-
-    protected fun GivenSpecification.finalePlacesFlow(placesProvider: GivenSpecification.() -> Map<Int, String>): Command.BotMessage {
-        with(placesProvider()) {
-            val toDelete = mutableListOf<Command>()
-            user { finalePlaces }
-            toDelete += bot { "Pool size?" }
-            toDelete += user { "$size" }
-            forEach { (place, nickname) ->
-                toDelete += bot { "$place place" }
-                toDelete += user { "@$nickname" }
-            }
-            val summary = bot { "Finale places stored" }
-            summary.pinned()
-            toDelete.deleted()
-            return summary
-        }
-    }
-
-    protected fun GivenSpecification.prizePoolFlow(vararg places: Pair<Int, Int>) = prizePoolFlow { places.toMap() }
-
-    protected fun GivenSpecification.prizePoolFlow(placesProvider: GivenSpecification.() -> Map<Int, Int>): Command.BotMessage {
-        with(placesProvider()) {
-            val toDelete = mutableListOf<Command>()
-            user { prizePool }
-            toDelete += bot { "Pool size?" }
-            toDelete += user { "$size" }
-            forEach { (place, percentage) ->
-                toDelete += bot { "$place place" }
-                toDelete += user { "$percentage" }
-            }
-            val summary = bot { "Prize pool stored" }
-            summary.pinned()
-            toDelete.deleted()
-            return summary
-        }
     }
 }

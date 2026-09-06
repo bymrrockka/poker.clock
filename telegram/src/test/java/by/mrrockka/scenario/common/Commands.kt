@@ -1,4 +1,4 @@
-package by.mrrockka.scenario
+package by.mrrockka.scenario.common
 
 import by.mrrockka.domain.BasicPerson
 import by.mrrockka.domain.GameType
@@ -10,7 +10,6 @@ class Commands private constructor() {
     companion object {
         val calculate = "/calculate"
         val game = "/game"
-        val start = "/start"
         val gameStats = "/game_stats"
         val playerStats = "/player_stats"
         val myStats = "/my_stats"
@@ -90,8 +89,6 @@ class Commands private constructor() {
                         .joinToString { (index, nickname) -> "${index + 1} @${nickname}" }
             }""".trimIndent()
         }
-
-        fun String.finalePlaces(): String = listOf(this).finalePlaces()
 
         fun String.withdrawal(amount: Int): String = "${withdrawal} @$this $amount"
         fun withdrawal(amount: Int): String = "${withdrawal} $amount"

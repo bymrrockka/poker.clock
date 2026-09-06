@@ -4,10 +4,10 @@ import by.mrrockka.Given
 import by.mrrockka.When
 import by.mrrockka.builder.person
 import by.mrrockka.domain.GameType
-import by.mrrockka.scenario.Commands.Companion.createGame
-import by.mrrockka.scenario.Commands.Companion.createPoll
-import by.mrrockka.scenario.Commands.Companion.gameStats
-import by.mrrockka.scenario.Commands.Companion.stopPoll
+import by.mrrockka.scenario.common.Commands.Companion.createGame
+import by.mrrockka.scenario.common.Commands.Companion.createPoll
+import by.mrrockka.scenario.common.Commands.Companion.gameStats
+import by.mrrockka.scenario.common.Commands.Companion.stopPoll
 import com.oneeyedmen.okeydoke.Approver
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
