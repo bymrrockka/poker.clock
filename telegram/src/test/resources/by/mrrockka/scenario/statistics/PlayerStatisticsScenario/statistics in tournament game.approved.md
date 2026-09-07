@@ -3,16 +3,14 @@
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 1
 /game 
 ```
 ___
 
 ### 2. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 2 
 What type of game you'd like to play? 
 ``` 
 ___
@@ -22,16 +20,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 3
 Tournament 
 ```
 ___
 
 ### 4. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 4 
 How much is for buy in? 
 ``` 
 ___
@@ -41,16 +37,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 5
 10 
 ```
 ___
 
 ### 6. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 6 
 Who's playing? 
 ``` 
 ___
@@ -60,16 +54,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 7
 @me @nickname1 
 ```
 ___
 
 ### 8. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 8 
 Game type: TOURNAMENT
 Buy in: 10
                 
@@ -101,16 +93,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 9
 /player_stats 
 ```
 ___
 
 ### 12. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 10 
 @sergio_cartwright game statistics:
 entries: 10.00
 entries number: 1 
@@ -122,16 +112,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 11
 /entry 
 ```
 ___
 
 ### 14. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 12 
 Re-entry stored for @sergio_cartwright, buy in amount is 10 
 ``` 
 ___
@@ -141,16 +129,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 13
 /player_stats 
 ```
 ___
 
 ### 16. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 14 
 @sergio_cartwright game statistics:
 entries: 20.00
 entries number: 2 

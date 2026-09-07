@@ -72,6 +72,7 @@ abstract class StubTest {
 
             is Command.UserMessage -> {
                 val message = message {
+                    id(index.toLong() + 1)
                     text(message)
                     chatId(chatid)
                     from(username?.get() ?: mainUser)
@@ -92,6 +93,7 @@ abstract class StubTest {
 
             is Command.BotMessage -> {
                 val message = message {
+                    id(index.toLong() + 1)
                     text(message)
                     chatId(chatid)
                     createdAt(clock.now())
@@ -110,6 +112,7 @@ abstract class StubTest {
 
             is Command.Poll -> {
                 val message = message {
+                    id(index.toLong() + 1)
                     chatId(chatid)
                     poll()
                 }

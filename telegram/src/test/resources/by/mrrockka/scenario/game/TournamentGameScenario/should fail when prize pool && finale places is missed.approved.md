@@ -3,16 +3,14 @@
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 1
 /game 
 ```
 ___
 
 ### 2. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 2 
 What type of game you'd like to play? 
 ``` 
 ___
@@ -22,16 +20,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 3
 Tournament 
 ```
 ___
 
 ### 4. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 4 
 How much is for buy in? 
 ``` 
 ___
@@ -41,16 +37,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 5
 10 
 ```
 ___
 
 ### 6. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 6 
 Who's playing? 
 ``` 
 ___
@@ -60,16 +54,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 7
 @nickname1 @nickname2 @nickname3 @nickname4 @nickname5 @me 
 ```
 ___
 
 ### 8. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 8 
 Game type: TOURNAMENT
 Buy in: 10
                 
@@ -105,16 +97,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 9
 /calculate 
 ```
 ___
 
 ### 12. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 10 
 No finale places specified, can't calculate finale summary. 
 ``` 
 ___

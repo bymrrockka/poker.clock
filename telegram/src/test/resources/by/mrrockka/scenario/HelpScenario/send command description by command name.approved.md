@@ -3,16 +3,14 @@
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 1
 /help game 
 ```
 ___
 
 ### 2. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 2 
 You will be asked to input parameters of the game you want to start.
 
 There are three types of games that are supported: Tournament, Cash and Bounty tournament.

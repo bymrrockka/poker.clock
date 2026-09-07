@@ -59,7 +59,7 @@ abstract class GameScenario : ScenarioTest() {
             toDelete += bot { "Question?" }
             toDelete += user { "cancel" }
             toDelete.deleted()
-            toDelete += bot { "Was canceled" }
+            bot { "Was canceled" }
         } When {
             updatesReceived()
         } ThenApproveWith approver

@@ -3,16 +3,14 @@
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 1
 /game 
 ```
 ___
 
 ### 2. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 2 
 What type of game you'd like to play? 
 ``` 
 ___
@@ -22,16 +20,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 3
 Tournament 
 ```
 ___
 
 ### 4. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 4 
 How much is for buy in? 
 ``` 
 ___
@@ -41,16 +37,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 5
 10 
 ```
 ___
 
 ### 6. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 6 
 Who's playing? 
 ``` 
 ___
@@ -60,16 +54,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 7
 @me 
 ```
 ___
 
 ### 8. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 8 
 Game type: TOURNAMENT
 Buy in: 10
                 
@@ -100,16 +92,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 9
 /entry 
 ```
 ___
 
 ### 12. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 10 
 Entries: 
 ------------------------------
 Table 1
@@ -123,16 +113,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 11
 /prize_pool 
 ```
 ___
 
 ### 14. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 12 
 How many places to account? 
 ``` 
 ___
@@ -142,16 +130,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 13
 3 
 ```
 ___
 
 ### 16. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 14 
 What percentage for #1 place? 
 ``` 
 ___
@@ -161,16 +147,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 15
 10 
 ```
 ___
 
 ### 18. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 16 
 What percentage for #2 place? 
 ``` 
 ___
@@ -180,16 +164,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 17
 20 
 ```
 ___
 
 ### 20. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 18 
 What percentage for #3 place? 
 ``` 
 ___
@@ -199,25 +181,22 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 19
 30 
 ```
 ___
 
 ### 22. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 20 
 Position percentage should equal 100% but was 60% 
 ``` 
 ___
 
 ### 23. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 21 
 What percentage for #1 place? 
 ``` 
 ___
@@ -227,16 +206,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 22
 50 
 ```
 ___
 
 ### 25. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 23 
 What percentage for #2 place? 
 ``` 
 ___
@@ -246,16 +223,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 24
 30 
 ```
 ___
 
 ### 27. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 25 
 What percentage for #3 place? 
 ``` 
 ___
@@ -265,16 +240,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 26
 20 
 ```
 ___
 
 ### 29. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 27 
 Prize pool stored:
 1. 50%
 2. 30%
@@ -285,13 +258,13 @@ ___
 ### 30. Pinned
 
 ``` 
-message id 27 pinned
+message id 29 pinned
 ``` 
 ___
 
 ### 31. Deleted messages
 
 ``` 
-message ids 12,13,14,15,16,17,18,19,20,21,22,23,24,25,26 deleted
+message ids 14,15,16,17,18,19,20,21,22,23,24,25,26,27,28 deleted
 ``` 
 ___

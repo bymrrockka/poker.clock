@@ -29,9 +29,9 @@ class CashGameScenario : GameScenario() {
             bot { "Entry stored" }
             user("nickname3") { withdrawal(30) }
             bot { "Withdraw" }
-            val calculate = user { calculate }
-            bot { "Calculated payouts" }
-            calculate.pinned()
+            user { calculate }
+            val calculation = bot { "Calculated payouts" }
+            calculation.pinned()
             game.unpinned()
         } When {
             updatesReceived()
@@ -120,9 +120,9 @@ class CashGameScenario : GameScenario() {
         Given {
             createGameFlow(buyin, listOf("me"))
             user { withdrawal(10) }
-            bot { "Withdrawal"}
+            bot { "Withdrawal" }
             user { calculate }
-            bot { "Calculations"}
+            bot { "Calculations" }
 
             createGameFlow(buyin, players)
             user { withdrawal(10) }

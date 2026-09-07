@@ -3,16 +3,14 @@
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 1
 /game 
 ```
 ___
 
 ### 2. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 2 
 What type of game you'd like to play? 
 ``` 
 ___
@@ -22,16 +20,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 3
 Tournament 
 ```
 ___
 
 ### 4. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 4 
 How much is for buy in? 
 ``` 
 ___
@@ -41,16 +37,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 5
 10 
 ```
 ___
 
 ### 6. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 6 
 Who's playing? 
 ``` 
 ___
@@ -60,16 +54,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 7
 @nickname1 @nickname2 @nickname3 @nickname4 @nickname5 @me 
 ```
 ___
 
 ### 8. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 8 
 Game type: TOURNAMENT
 Buy in: 10
                 
@@ -105,16 +97,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 9
 /prize_pool 
 ```
 ___
 
 ### 12. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 10 
 How many places to account? 
 ``` 
 ___
@@ -124,16 +114,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 11
 2 
 ```
 ___
 
 ### 14. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 12 
 What percentage for #1 place? 
 ``` 
 ___
@@ -143,16 +131,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 13
 50 
 ```
 ___
 
 ### 16. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 14 
 What percentage for #2 place? 
 ``` 
 ___
@@ -162,16 +148,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 15
 50 
 ```
 ___
 
 ### 18. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 16 
 Prize pool stored:
 1. 50%
 2. 50% 
@@ -181,14 +165,14 @@ ___
 ### 19. Pinned
 
 ``` 
-message id 16 pinned
+message id 18 pinned
 ``` 
 ___
 
 ### 20. Deleted messages
 
 ``` 
-message ids 10,11,12,13,14,15 deleted
+message ids 12,13,14,15,16,17 deleted
 ``` 
 ___
 
@@ -197,16 +181,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 17
 /finale_places 
 ```
 ___
 
 ### 22. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 18 
 How many places to account? 
 ``` 
 ___
@@ -216,16 +198,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 19
 3 
 ```
 ___
 
 ### 24. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 20 
 Who's on #1 place? 
 ``` 
 ___
@@ -235,16 +215,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 21
 @nickname1 
 ```
 ___
 
 ### 26. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 22 
 Who's on #2 place? 
 ``` 
 ___
@@ -254,16 +232,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 23
 @nickname2 
 ```
 ___
 
 ### 28. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 24 
 Who's on #3 place? 
 ``` 
 ___
@@ -273,16 +249,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 25
 @nickname3 
 ```
 ___
 
 ### 30. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 26 
 Finale places stored:
 1. @nickname1
 2. @nickname2
@@ -293,14 +267,14 @@ ___
 ### 31. Pinned
 
 ``` 
-message id 26 pinned
+message id 30 pinned
 ``` 
 ___
 
 ### 32. Deleted messages
 
 ``` 
-message ids 18,19,20,21,22,23,24,25 deleted
+message ids 22,23,24,25,26,27,28,29 deleted
 ``` 
 ___
 
@@ -309,16 +283,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 27
 /calculate 
 ```
 ___
 
 ### 34. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 28 
 Finale places and prize pool should be same size 
 ``` 
 ___

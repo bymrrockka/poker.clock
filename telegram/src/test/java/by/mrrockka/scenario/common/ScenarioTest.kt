@@ -78,7 +78,7 @@ abstract class ScenarioTest : StubTest() {
                    |&rarr; <ins>User</ins>
                    |
                    |```
-                   |${dispatcher.requests[index] ?: emptyMessage} ${command.toText()} 
+                   |${command.toText()} 
                    |```
                    |___
                    """.trimMargin()
@@ -87,9 +87,8 @@ abstract class ScenarioTest : StubTest() {
                     """
                    |### ${index + 1}. Message
                    |
-                   |&rarr; <ins>Bot</ins>
+                   |&larr; <ins>Bot</ins>
                    |``` 
-                   |${command.toText()} 
                    |${dispatcher.requests[index] ?: emptyMessage} 
                    |``` 
                    |___
@@ -173,22 +172,18 @@ abstract class ScenarioTest : StubTest() {
             is Command.UserMessage -> {
                 val replyMessage = if (replyTo != null && messageLog[replyTo] != null) "[reply to message id ${messageLog[replyTo]!!.messageId}]\n" else ""
                 replyMessage + """
-                            |message id: ${messageLog[this]!!.messageId}
                             |$message
                         """.trimMargin()
             }
 
             is Command.BotMessage -> {
-                val replyMessage = if (replyTo != null && messageLog[replyTo] != null) "[reply to message id ${messageLog[replyTo]!!.messageId}]\n" else ""
-                replyMessage + """
-                            |message id: ${messageLog[this]!!.messageId}
-                        """.trimMargin()
+                if (replyTo != null && messageLog[replyTo] != null) "[reply to message id ${messageLog[replyTo]!!.messageId}]\n" else ""
             }
 
             is Command.PollAnswer -> "${person.nickname} chosen ${option}"
             is Command.Pin -> "message id ${messageLog[command]?.messageId ?: error("Command was not found in log")}"
             is Command.Unpin -> "message id ${messageLog[command]?.messageId ?: error("Command was not found in log")}"
-            is Command.Poll -> "message id ${messageLog[this]?.messageId ?: error("Command was not found in log")}"
+            is Command.Poll -> ""
             is Command.DeleteMessages -> messageLog
                     .filter { (key, _) -> toDelete.contains(key) }
                     .values

@@ -3,16 +3,14 @@
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 1
 /game 
 ```
 ___
 
 ### 2. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 2 
 What type of game you'd like to play? 
 ``` 
 ___
@@ -22,16 +20,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 3
 Cash 
 ```
 ___
 
 ### 4. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 4 
 How much is for buy in? 
 ``` 
 ___
@@ -41,16 +37,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 5
 10 
 ```
 ___
 
 ### 6. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 6 
 Who's playing? 
 ``` 
 ___
@@ -60,16 +54,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 7
 @nickname1 @nickname2 @nickname3 @nickname4 @nickname5 @me 
 ```
 ___
 
 ### 8. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 8 
 Game type: CASH
 Buy in: 10
                 
@@ -105,16 +97,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 9
 /withdrawal 20 
 ```
 ___
 
 ### 12. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 10 
 Stored withdrawals: 
   - @nickname1 -> 20 
 ``` 
@@ -125,16 +115,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 11
 /withdrawal 30 
 ```
 ___
 
 ### 14. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 12 
 Stored withdrawals: 
   - @nickname2 -> 30 
 ``` 
@@ -145,16 +133,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 13
 /entry 20 
 ```
 ___
 
 ### 16. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 14 
 Re-entry stored for @nickname4, buy in amount is 20 
 ``` 
 ___
@@ -164,16 +150,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 15
 /withdrawal 30 
 ```
 ___
 
 ### 18. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 16 
 Stored withdrawals: 
   - @nickname3 -> 30 
 ``` 
@@ -184,16 +168,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 17
 /calculate 
 ```
 ___
 
 ### 20. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 18 
 ------------------------------
 Payout to: @nickname2
   Entries: 10
@@ -225,7 +207,7 @@ ___
 ### 21. Pinned
 
 ``` 
-message id 17 pinned
+message id 20 pinned
 ``` 
 ___
 

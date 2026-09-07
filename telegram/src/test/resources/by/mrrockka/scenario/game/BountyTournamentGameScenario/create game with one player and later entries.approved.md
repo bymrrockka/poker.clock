@@ -3,16 +3,14 @@
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 1
 /game 
 ```
 ___
 
 ### 2. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 2 
 What type of game you'd like to play? 
 ``` 
 ___
@@ -22,16 +20,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 3
 Bounty 
 ```
 ___
 
 ### 4. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 4 
 How much is for buy in? 
 ``` 
 ___
@@ -41,16 +37,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 5
 10 
 ```
 ___
 
 ### 6. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 6 
 How much is for bounty? 
 ``` 
 ___
@@ -60,16 +54,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 7
 10 
 ```
 ___
 
 ### 8. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 8 
 Who's playing? 
 ``` 
 ___
@@ -79,16 +71,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 9
 @me 
 ```
 ___
 
 ### 10. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 10 
 Game type: BOUNTY
 Buy in: 10
 Bounty 10
@@ -119,16 +109,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 11
 /entry 
 ```
 ___
 
 ### 14. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 12 
 Entries: 
 ------------------------------
 Table 1
@@ -142,16 +130,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 13
 /bounty @me kicked @nickname3 
 ```
 ___
 
 ### 16. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 14 
 Bounty amount 10.00 from @nickname3 stored for @sergio_cartwright 
 ``` 
 ___
@@ -161,16 +147,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 15
 /entry 
 ```
 ___
 
 ### 18. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 16 
 Re-entry stored for @nickname3, buy in amount is 10 
 ``` 
 ___
@@ -180,16 +164,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 17
 /prize_pool 
 ```
 ___
 
 ### 20. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 18 
 How many places to account? 
 ``` 
 ___
@@ -199,16 +181,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 19
 1 
 ```
 ___
 
 ### 22. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 20 
 What percentage for #1 place? 
 ``` 
 ___
@@ -218,16 +198,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 21
 100 
 ```
 ___
 
 ### 24. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 22 
 Prize pool stored:
 1. 100% 
 ``` 
@@ -236,14 +214,14 @@ ___
 ### 25. Pinned
 
 ``` 
-message id 22 pinned
+message id 24 pinned
 ``` 
 ___
 
 ### 26. Deleted messages
 
 ``` 
-message ids 18,19,20,21 deleted
+message ids 20,21,22,23 deleted
 ``` 
 ___
 
@@ -252,16 +230,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 23
 /entry 
 ```
 ___
 
 ### 28. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 24 
 Entries: 
 ------------------------------
 Table 1
@@ -275,16 +251,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 25
 /bounty @nickname2 kicked @nickname3 
 ```
 ___
 
 ### 30. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 26 
 Bounty amount 10.00 from @nickname3 stored for @nickname2 
 ``` 
 ___
@@ -294,16 +268,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 27
 /entry 
 ```
 ___
 
 ### 32. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 28 
 Entries: 
 ------------------------------
 Table 1
@@ -317,16 +289,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 29
 /bounty @nickname2 kicked @nickname1 
 ```
 ___
 
 ### 34. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 30 
 Bounty amount 10.00 from @nickname1 stored for @nickname2 
 ``` 
 ___
@@ -336,16 +306,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 31
 /finale_places 
 ```
 ___
 
 ### 36. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 32 
 How many places to account? 
 ``` 
 ___
@@ -355,16 +323,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 33
 1 
 ```
 ___
 
 ### 38. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 34 
 Who's on #1 place? 
 ``` 
 ___
@@ -374,16 +340,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 35
 @me 
 ```
 ___
 
 ### 40. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 36 
 Finale places stored:
 1. @sergio_cartwright 
 ``` 
@@ -392,14 +356,14 @@ ___
 ### 41. Pinned
 
 ``` 
-message id 36 pinned
+message id 40 pinned
 ``` 
 ___
 
 ### 42. Deleted messages
 
 ``` 
-message ids 32,33,34,35 deleted
+message ids 36,37,38,39 deleted
 ``` 
 ___
 
@@ -408,16 +372,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 37
 /bounty @me kicked @nickname2 
 ```
 ___
 
 ### 44. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 38 
 Bounty amount 10.00 from @nickname2 stored for @sergio_cartwright 
 ``` 
 ___
@@ -427,16 +389,14 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 39
 /calculate 
 ```
 ___
 
 ### 46. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 40 
 ------------------------------
 Finale summary:
   1. @sergio_cartwright won 50
