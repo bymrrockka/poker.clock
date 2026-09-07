@@ -29,7 +29,7 @@ ___
 &rarr; <ins>2025-09-24 - WEDNESDAY</ins>
 
 ``` 
-message id 3
+message id 4
 Test poll
 1. 'Yes'
 2. 'No'
@@ -40,7 +40,7 @@ ___
 ### 4. Pinned
 
 ``` 
-message id 3 pinned
+message id 4 pinned
 ``` 
 ___
 
@@ -127,7 +127,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed [reply to message id 3]
+Processed [reply to message id 4]
 message id: 11
 . 
 ```
