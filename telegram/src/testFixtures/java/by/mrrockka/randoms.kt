@@ -13,7 +13,6 @@ class TelegramRandoms(
         override val seed: String? = null,
 ) : CoreRandoms(random, faker, seed) {
     @OptIn(ExperimentalAtomicApi::class)
-    @Volatile
     private var messageId = AtomicLong(0L)
 
     fun updateid(): Int = faker.number().numberBetween(1, 100)
