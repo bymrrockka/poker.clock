@@ -4,10 +4,7 @@
 
 ```
 Processed message id: 1
-/tournament_game
-buyin: 10
-
-@me, @nickname1 
+/game 
 ```
 ___
 
@@ -16,13 +13,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 2 
-Tournament game started.
-------------------------------
-Table 1
-Seats:
-  3. @nickname1
-  7. @sergio_cartwright
-                                 
+What type of game you'd like to play? 
 ``` 
 ___
 
@@ -32,7 +23,7 @@ ___
 
 ```
 Processed message id: 3
-/player_stats 
+Tournament 
 ```
 ___
 
@@ -41,9 +32,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 4 
-@sergio_cartwright game statistics:
-entries: 10.00
-entries number: 1 
+How much is for buy in? 
 ``` 
 ___
 
@@ -53,7 +42,7 @@ ___
 
 ```
 Processed message id: 5
-/entry 
+10 
 ```
 ___
 
@@ -62,7 +51,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 6 
-Re-entry stored for @sergio_cartwright, buy in amount is 10 
+Who's playing? 
 ``` 
 ___
 
@@ -72,7 +61,7 @@ ___
 
 ```
 Processed message id: 7
-/player_stats 
+@me @nickname1 
 ```
 ___
 
@@ -81,6 +70,87 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 8 
+Game type: TOURNAMENT
+Buy in: 10
+                
+------------------------------
+Table 1
+Seats:
+  3. @nickname1
+  7. @sergio_cartwright
+                                 
+``` 
+___
+
+### 9. Pinned
+
+``` 
+message id 8 pinned
+``` 
+___
+
+### 10. Deleted messages
+
+``` 
+message ids 2,3,4,5,6,7 deleted
+``` 
+___
+
+### 11. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 9
+/player_stats 
+```
+___
+
+### 12. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 10 
+@sergio_cartwright game statistics:
+entries: 10.00
+entries number: 1 
+``` 
+___
+
+### 13. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 11
+/entry 
+```
+___
+
+### 14. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 12 
+Re-entry stored for @sergio_cartwright, buy in amount is 10 
+``` 
+___
+
+### 15. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 13
+/player_stats 
+```
+___
+
+### 16. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 14 
 @sergio_cartwright game statistics:
 entries: 20.00
 entries number: 2 

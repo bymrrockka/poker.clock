@@ -29,13 +29,6 @@ fun GivenSpecification.createGameFlow(gameType: GameType, buyin: BigDecimal, pla
     return game
 }
 
-fun Command.ifPoll(): Command {
-    if (this is Command.Poll) {
-        this
-    }
-    return this
-}
-
 fun GivenSpecification.finalePlacesFlow(vararg places: Pair<Int, String>) = finalePlacesFlow { places.toMap() }
 
 fun GivenSpecification.finalePlacesFlow(placesProvider: GivenSpecification.() -> Map<Int, String>): Command.BotMessage {

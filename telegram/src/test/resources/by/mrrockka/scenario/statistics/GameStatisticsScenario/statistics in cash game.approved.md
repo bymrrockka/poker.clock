@@ -4,10 +4,7 @@
 
 ```
 Processed message id: 1
-/cash_game
-buyin: 10
-
-@me, @nickname1 
+/game 
 ```
 ___
 
@@ -16,13 +13,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 2 
-Cash game started.
-------------------------------
-Table 1
-Seats:
-  3. @nickname1
-  7. @sergio_cartwright
-                                 
+What type of game you'd like to play? 
 ``` 
 ___
 
@@ -32,7 +23,7 @@ ___
 
 ```
 Processed message id: 3
-/game_stats 
+Cash 
 ```
 ___
 
@@ -41,11 +32,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 4 
-Cash game statistics:
-  - players entered -> 2
-  - total buy-in amount -> 20.00
-  - total withdrawal amount -> 0
-  - total in game -> 20.00 
+How much is for buy in? 
 ``` 
 ___
 
@@ -55,7 +42,7 @@ ___
 
 ```
 Processed message id: 5
-/entry 30 
+10 
 ```
 ___
 
@@ -64,7 +51,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 6 
-Re-entry stored for @sergio_cartwright, buy in amount is 30 
+Who's playing? 
 ``` 
 ___
 
@@ -74,7 +61,7 @@ ___
 
 ```
 Processed message id: 7
-/game_stats 
+@me @nickname1 
 ```
 ___
 
@@ -83,31 +70,29 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 8 
-Cash game statistics:
-  - players entered -> 2
-  - total buy-in amount -> 50.00
-  - total withdrawal amount -> 0
-  - total in game -> 50.00 
+Game type: CASH
+Buy in: 10
+                
+------------------------------
+Table 1
+Seats:
+  3. @nickname1
+  7. @sergio_cartwright
+                                 
 ``` 
 ___
 
-### 9. Message
+### 9. Pinned
 
-&rarr; <ins>User</ins>
-
-```
-Processed message id: 9
-/withdrawal 30 
-```
+``` 
+message id 8 pinned
+``` 
 ___
 
-### 10. Message
+### 10. Deleted messages
 
-&rarr; <ins>Bot</ins>
 ``` 
-message id: 10 
-Stored withdrawals: 
-  - @sergio_cartwright -> 30 
+message ids 2,3,4,5,6,7 deleted
 ``` 
 ___
 
@@ -116,7 +101,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 11
+Processed message id: 10
 /game_stats 
 ```
 ___
@@ -125,11 +110,11 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 12 
+message id: 11 
 Cash game statistics:
   - players entered -> 2
-  - total buy-in amount -> 50.00
-  - total withdrawal amount -> 30.00
+  - total buy-in amount -> 20.00
+  - total withdrawal amount -> 0
   - total in game -> 20.00 
 ``` 
 ___
@@ -139,8 +124,8 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 13
-/withdrawal 20 
+Processed message id: 12
+/entry 30 
 ```
 ___
 
@@ -148,9 +133,8 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 14 
-Stored withdrawals: 
-  - @sergio_cartwright -> 20 
+message id: 13 
+Re-entry stored for @sergio_cartwright, buy in amount is 30 
 ``` 
 ___
 
@@ -159,7 +143,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 15
+Processed message id: 14
 /game_stats 
 ```
 ___
@@ -168,7 +152,93 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 16 
+message id: 15 
+Cash game statistics:
+  - players entered -> 2
+  - total buy-in amount -> 50.00
+  - total withdrawal amount -> 0
+  - total in game -> 50.00 
+``` 
+___
+
+### 17. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 16
+/withdrawal 30 
+```
+___
+
+### 18. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 17 
+Stored withdrawals: 
+  - @sergio_cartwright -> 30 
+``` 
+___
+
+### 19. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 18
+/game_stats 
+```
+___
+
+### 20. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 19 
+Cash game statistics:
+  - players entered -> 2
+  - total buy-in amount -> 50.00
+  - total withdrawal amount -> 30.00
+  - total in game -> 20.00 
+``` 
+___
+
+### 21. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 20
+/withdrawal 20 
+```
+___
+
+### 22. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 21 
+Stored withdrawals: 
+  - @sergio_cartwright -> 20 
+``` 
+___
+
+### 23. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 22
+/game_stats 
+```
+___
+
+### 24. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 23 
 Cash game statistics:
   - players entered -> 2
   - total buy-in amount -> 50.00

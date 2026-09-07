@@ -4,10 +4,7 @@
 
 ```
 Processed message id: 1
-/bounty_game
-buyin: 10
-bounty: 10
-@me, @nickname1 
+/game 
 ```
 ___
 
@@ -16,13 +13,7 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 2 
-Bounty tournament game started.
-------------------------------
-Table 1
-Seats:
-  3. @nickname1
-  7. @sergio_cartwright
-                                 
+What type of game you'd like to play? 
 ``` 
 ___
 
@@ -32,7 +23,7 @@ ___
 
 ```
 Processed message id: 3
-/player_stats 
+Bounty 
 ```
 ___
 
@@ -41,6 +32,104 @@ ___
 &rarr; <ins>Bot</ins>
 ``` 
 message id: 4 
+How much is for buy in? 
+``` 
+___
+
+### 5. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 5
+10 
+```
+___
+
+### 6. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 6 
+How much is for bounty? 
+``` 
+___
+
+### 7. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 7
+10 
+```
+___
+
+### 8. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 8 
+Who's playing? 
+``` 
+___
+
+### 9. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 9
+@me @nickname1 
+```
+___
+
+### 10. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 10 
+Game type: BOUNTY
+Buy in: 10
+Bounty 10
+------------------------------
+Table 1
+Seats:
+  3. @nickname1
+  7. @sergio_cartwright
+                                 
+``` 
+___
+
+### 11. Pinned
+
+``` 
+message id 10 pinned
+``` 
+___
+
+### 12. Deleted messages
+
+``` 
+message ids 2,3,4,5,6,7,8,9 deleted
+``` 
+___
+
+### 13. Message
+
+&rarr; <ins>User</ins>
+
+```
+Processed message id: 11
+/player_stats 
+```
+___
+
+### 14. Message
+
+&rarr; <ins>Bot</ins>
+``` 
+message id: 12 
 @sergio_cartwright game statistics:
 entries: 10.00
 entries number: 1
@@ -51,40 +140,40 @@ game total: -10.00
 ``` 
 ___
 
-### 5. Message
+### 15. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 5
+Processed message id: 13
 /bounty @me kicked @nickname1 
 ```
 ___
 
-### 6. Message
+### 16. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 6 
+message id: 14 
 Bounty amount 10.00 from @nickname1 stored for @sergio_cartwright 
 ``` 
 ___
 
-### 7. Message
+### 17. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 7
+Processed message id: 15
 /player_stats 
 ```
 ___
 
-### 8. Message
+### 18. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 8 
+message id: 16 
 @sergio_cartwright game statistics:
 entries: 10.00
 entries number: 1
@@ -95,59 +184,59 @@ game total: 0.00
 ``` 
 ___
 
-### 9. Message
+### 19. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 9
+Processed message id: 17
 /entry 
 ```
 ___
 
-### 10. Message
+### 20. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 10 
+message id: 18 
 Re-entry stored for @nickname1, buy in amount is 10 
 ``` 
 ___
 
-### 11. Message
+### 21. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 11
+Processed message id: 19
 /bounty @nickname1 kicked @me 
 ```
 ___
 
-### 12. Message
+### 22. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 12 
+message id: 20 
 Bounty amount 10.00 from @sergio_cartwright stored for @nickname1 
 ``` 
 ___
 
-### 13. Message
+### 23. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 13
+Processed message id: 21
 /player_stats 
 ```
 ___
 
-### 14. Message
+### 24. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 14 
+message id: 22 
 @sergio_cartwright game statistics:
 entries: 10.00
 entries number: 1
@@ -158,40 +247,40 @@ game total: -10.00
 ``` 
 ___
 
-### 15. Message
+### 25. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 15
+Processed message id: 23
 /entry 
 ```
 ___
 
-### 16. Message
+### 26. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 16 
+message id: 24 
 Re-entry stored for @sergio_cartwright, buy in amount is 10 
 ``` 
 ___
 
-### 17. Message
+### 27. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 17
+Processed message id: 25
 /player_stats 
 ```
 ___
 
-### 18. Message
+### 28. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 18 
+message id: 26 
 @sergio_cartwright game statistics:
 entries: 20.00
 entries number: 2
@@ -202,40 +291,40 @@ game total: -20.00
 ``` 
 ___
 
-### 19. Message
+### 29. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 19
+Processed message id: 27
 /bounty @nickname1 kicked @me 
 ```
 ___
 
-### 20. Message
+### 30. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 20 
+message id: 28 
 Bounty amount 10.00 from @sergio_cartwright stored for @nickname1 
 ``` 
 ___
 
-### 21. Message
+### 31. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 21
+Processed message id: 29
 /player_stats 
 ```
 ___
 
-### 22. Message
+### 32. Message
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 22 
+message id: 30 
 @sergio_cartwright game statistics:
 entries: 20.00
 entries number: 2
