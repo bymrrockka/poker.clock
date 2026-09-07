@@ -1,13 +1,5 @@
-package by.mrrockka.commands.game
+package by.mrrockka.commands
 
-import by.mrrockka.commands.BigDecimalState
-import by.mrrockka.commands.CancelStep
-import by.mrrockka.commands.CancelableStep
-import by.mrrockka.commands.ExcludeBotGuard
-import by.mrrockka.commands.GameTypeState
-import by.mrrockka.commands.MessageLogConversation
-import by.mrrockka.commands.MessageMetadataState
-import by.mrrockka.commands.decimalValidation
 import by.mrrockka.domain.BountyTournamentGame
 import by.mrrockka.domain.GameType
 import by.mrrockka.domain.MessageMetadata

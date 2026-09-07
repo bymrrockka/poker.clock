@@ -3,20 +3,68 @@
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 1
-/tournament_game
-buyin: 10
-
-@nickname2, @nickname1 
+/game 
 ```
 ___
 
 ### 2. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 2 
-Tournament game started.
+What type of game you'd like to play? 
+``` 
+___
+
+### 3. Message
+
+&rarr; <ins>User</ins>
+
+```
+Tournament 
+```
+___
+
+### 4. Message
+
+&larr; <ins>Bot</ins>
+``` 
+How much is for buy in? 
+``` 
+___
+
+### 5. Message
+
+&rarr; <ins>User</ins>
+
+```
+10 
+```
+___
+
+### 6. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Who's playing? 
+``` 
+___
+
+### 7. Message
+
+&rarr; <ins>User</ins>
+
+```
+@nickname2 @nickname1 
+```
+___
+
+### 8. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Game type: TOURNAMENT
+Buy in: 10
+                
 ------------------------------
 Table 1
 Seats:
@@ -26,21 +74,33 @@ Seats:
 ``` 
 ___
 
-### 3. Message
+### 9. Pinned
+
+``` 
+message id 8 pinned
+``` 
+___
+
+### 10. Deleted messages
+
+``` 
+message ids 2,3,4,5,6,7 deleted
+``` 
+___
+
+### 11. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 3
 /player_stats 
 ```
 ___
 
-### 4. Message
+### 12. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 4 
 User sergio_cartwright hasn't enter the game 
 ``` 
 ___

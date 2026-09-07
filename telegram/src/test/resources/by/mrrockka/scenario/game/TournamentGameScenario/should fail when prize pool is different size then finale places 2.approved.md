@@ -97,7 +97,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-/finale_places 
+/prize_pool 
 ```
 ___
 
@@ -122,7 +122,7 @@ ___
 
 &larr; <ins>Bot</ins>
 ``` 
-Who's on #1 place? 
+What percentage for #1 place? 
 ``` 
 ___
 
@@ -131,7 +131,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-@nickname1 
+50 
 ```
 ___
 
@@ -139,7 +139,7 @@ ___
 
 &larr; <ins>Bot</ins>
 ``` 
-Who's on #2 place? 
+What percentage for #2 place? 
 ``` 
 ___
 
@@ -148,7 +148,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-@nickname2 
+50 
 ```
 ___
 
@@ -156,9 +156,9 @@ ___
 
 &larr; <ins>Bot</ins>
 ``` 
-Finale places stored:
-1. @nickname1
-2. @nickname2 
+Prize pool stored:
+1. 50%
+2. 50% 
 ``` 
 ___
 
@@ -181,7 +181,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-/calculate 
+/finale_places 
 ```
 ___
 
@@ -189,6 +189,108 @@ ___
 
 &larr; <ins>Bot</ins>
 ``` 
-No prize pool specified, can't calculate finale summary. 
+How many places to account? 
+``` 
+___
+
+### 23. Message
+
+&rarr; <ins>User</ins>
+
+```
+3 
+```
+___
+
+### 24. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Who's on #1 place? 
+``` 
+___
+
+### 25. Message
+
+&rarr; <ins>User</ins>
+
+```
+@nickname1 
+```
+___
+
+### 26. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Who's on #2 place? 
+``` 
+___
+
+### 27. Message
+
+&rarr; <ins>User</ins>
+
+```
+@nickname2 
+```
+___
+
+### 28. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Who's on #3 place? 
+``` 
+___
+
+### 29. Message
+
+&rarr; <ins>User</ins>
+
+```
+@nickname3 
+```
+___
+
+### 30. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Finale places stored:
+1. @nickname1
+2. @nickname2
+3. @nickname3 
+``` 
+___
+
+### 31. Pinned
+
+``` 
+message id 30 pinned
+``` 
+___
+
+### 32. Deleted messages
+
+``` 
+message ids 22,23,24,25,26,27,28,29 deleted
+``` 
+___
+
+### 33. Message
+
+&rarr; <ins>User</ins>
+
+```
+/calculate 
+```
+___
+
+### 34. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Finale places and prize pool should be same size 
 ``` 
 ___

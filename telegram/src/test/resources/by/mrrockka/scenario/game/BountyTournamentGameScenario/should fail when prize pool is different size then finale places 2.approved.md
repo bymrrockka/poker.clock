@@ -71,7 +71,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-@me 
+@nickname1 @nickname2 @nickname3 @nickname4 @nickname5 @me 
 ```
 ___
 
@@ -85,7 +85,12 @@ Bounty 10
 ------------------------------
 Table 1
 Seats:
-  5. @sergio_cartwright
+  2. @sergio_cartwright
+  3. @nickname1
+  5. @nickname3
+  6. @nickname4
+  8. @nickname5
+  10. @nickname2
                                  
 ``` 
 ___
@@ -109,7 +114,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-/entry 
+/prize_pool 
 ```
 ___
 
@@ -117,11 +122,7 @@ ___
 
 &larr; <ins>Bot</ins>
 ``` 
-Entries: 
-------------------------------
-Table 1
-Seats:
-  @nickname3 seat 7 -> entry 10.00 
+How many places to account? 
 ``` 
 ___
 
@@ -130,7 +131,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-/prize_pool 
+2 
 ```
 ___
 
@@ -138,7 +139,7 @@ ___
 
 &larr; <ins>Bot</ins>
 ``` 
-How many places to account? 
+What percentage for #1 place? 
 ``` 
 ___
 
@@ -147,7 +148,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-3 
+50 
 ```
 ___
 
@@ -155,7 +156,7 @@ ___
 
 &larr; <ins>Bot</ins>
 ``` 
-What percentage for #1 place? 
+What percentage for #2 place? 
 ``` 
 ___
 
@@ -164,7 +165,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-10 
+50 
 ```
 ___
 
@@ -172,24 +173,23 @@ ___
 
 &larr; <ins>Bot</ins>
 ``` 
-What percentage for #2 place? 
+Prize pool stored:
+1. 50%
+2. 50% 
 ``` 
 ___
 
-### 21. Message
+### 21. Pinned
 
-&rarr; <ins>User</ins>
-
-```
-20 
-```
+``` 
+message id 20 pinned
+``` 
 ___
 
-### 22. Message
+### 22. Deleted messages
 
-&larr; <ins>Bot</ins>
 ``` 
-What percentage for #3 place? 
+message ids 14,15,16,17,18,19 deleted
 ``` 
 ___
 
@@ -198,7 +198,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-30 
+/finale_places 
 ```
 ___
 
@@ -206,82 +206,108 @@ ___
 
 &larr; <ins>Bot</ins>
 ``` 
-Position percentage should equal 100% but was 60% 
+How many places to account? 
 ``` 
 ___
 
 ### 25. Message
 
-&larr; <ins>Bot</ins>
-``` 
-What percentage for #1 place? 
-``` 
+&rarr; <ins>User</ins>
+
+```
+3 
+```
 ___
 
 ### 26. Message
 
-&rarr; <ins>User</ins>
-
-```
-50 
-```
+&larr; <ins>Bot</ins>
+``` 
+Who's on #1 place? 
+``` 
 ___
 
 ### 27. Message
 
-&larr; <ins>Bot</ins>
-``` 
-What percentage for #2 place? 
-``` 
+&rarr; <ins>User</ins>
+
+```
+@nickname1 
+```
 ___
 
 ### 28. Message
 
-&rarr; <ins>User</ins>
-
-```
-30 
-```
+&larr; <ins>Bot</ins>
+``` 
+Who's on #2 place? 
+``` 
 ___
 
 ### 29. Message
 
-&larr; <ins>Bot</ins>
-``` 
-What percentage for #3 place? 
-``` 
+&rarr; <ins>User</ins>
+
+```
+@nickname2 
+```
 ___
 
 ### 30. Message
 
-&rarr; <ins>User</ins>
-
-```
-20 
-```
+&larr; <ins>Bot</ins>
+``` 
+Who's on #3 place? 
+``` 
 ___
 
 ### 31. Message
 
+&rarr; <ins>User</ins>
+
+```
+@nickname3 
+```
+___
+
+### 32. Message
+
 &larr; <ins>Bot</ins>
 ``` 
-Prize pool stored:
-1. 50%
-2. 30%
-3. 20% 
+Finale places stored:
+1. @nickname1
+2. @nickname2
+3. @nickname3 
 ``` 
 ___
 
-### 32. Pinned
+### 33. Pinned
 
 ``` 
-message id 31 pinned
+message id 32 pinned
 ``` 
 ___
 
-### 33. Deleted messages
+### 34. Deleted messages
 
 ``` 
-message ids 16,17,18,19,20,21,22,23,24,25,26,27,28,29,30 deleted
+message ids 24,25,26,27,28,29,30,31 deleted
+``` 
+___
+
+### 35. Message
+
+&rarr; <ins>User</ins>
+
+```
+/calculate 
+```
+___
+
+### 36. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Finale places and prize pool should be same size 
 ``` 
 ___

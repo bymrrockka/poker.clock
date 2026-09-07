@@ -20,7 +20,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Tournament 
+Cash 
 ```
 ___
 
@@ -54,7 +54,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-@nickname1 @nickname2 @nickname3 @nickname4 @nickname5 @me 
+@me 
 ```
 ___
 
@@ -62,18 +62,13 @@ ___
 
 &larr; <ins>Bot</ins>
 ``` 
-Game type: TOURNAMENT
+Game type: CASH
 Buy in: 10
                 
 ------------------------------
 Table 1
 Seats:
-  2. @sergio_cartwright
-  3. @nickname1
-  5. @nickname3
-  6. @nickname4
-  8. @nickname5
-  10. @nickname2
+  5. @sergio_cartwright
                                  
 ``` 
 ___
@@ -97,7 +92,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-/finale_places 
+/withdrawal 10 
 ```
 ___
 
@@ -105,7 +100,8 @@ ___
 
 &larr; <ins>Bot</ins>
 ``` 
-How many places to account? 
+Stored withdrawals: 
+  - @sergio_cartwright -> 10 
 ``` 
 ___
 
@@ -114,7 +110,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-2 
+/calculate 
 ```
 ___
 
@@ -122,7 +118,18 @@ ___
 
 &larr; <ins>Bot</ins>
 ``` 
-Who's on #1 place? 
+------------------------------
+Payout to: @sergio_cartwright
+  Entries: 10
+  Withdrawals: 10
+  Total: 0 (withdrawals 10 - entries 10)
+
+------------------------------
+Players played equally
+  @sergio_cartwright
+------------------------------
+You can support me using this link. 
+https://buymeacoffee.com/mrrockka 
 ``` 
 ___
 
@@ -131,7 +138,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-@nickname1 
+/game 
 ```
 ___
 
@@ -139,7 +146,7 @@ ___
 
 &larr; <ins>Bot</ins>
 ``` 
-Who's on #2 place? 
+What type of game you'd like to play? 
 ``` 
 ___
 
@@ -148,7 +155,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-@nickname2 
+Cash 
 ```
 ___
 
@@ -156,23 +163,24 @@ ___
 
 &larr; <ins>Bot</ins>
 ``` 
-Finale places stored:
-1. @nickname1
-2. @nickname2 
+How much is for buy in? 
 ``` 
 ___
 
-### 19. Pinned
+### 19. Message
 
-``` 
-message id 18 pinned
-``` 
+&rarr; <ins>User</ins>
+
+```
+10 
+```
 ___
 
-### 20. Deleted messages
+### 20. Message
 
+&larr; <ins>Bot</ins>
 ``` 
-message ids 12,13,14,15,16,17 deleted
+Who's playing? 
 ``` 
 ___
 
@@ -181,7 +189,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-/calculate 
+@nickname1 @nickname2 @nickname3 @nickname4 @nickname5 
 ```
 ___
 
@@ -189,6 +197,48 @@ ___
 
 &larr; <ins>Bot</ins>
 ``` 
-No prize pool specified, can't calculate finale summary. 
+Game type: CASH
+Buy in: 10
+                
+------------------------------
+Table 1
+Seats:
+  1. @nickname2
+  2. @nickname5
+  5. @nickname3
+  6. @nickname1
+  10. @nickname4
+                                 
+``` 
+___
+
+### 23. Pinned
+
+``` 
+message id 22 pinned
+``` 
+___
+
+### 24. Deleted messages
+
+``` 
+message ids 16,17,18,19,20,21 deleted
+``` 
+___
+
+### 25. Message
+
+&rarr; <ins>User</ins>
+
+```
+/withdrawal 10 
+```
+___
+
+### 26. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Person is not in the game 
 ``` 
 ___

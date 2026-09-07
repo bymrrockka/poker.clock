@@ -3,26 +3,15 @@
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 1
-/cash_game
-buyin: 10
-
-@nickname1, @nickname2 
+/game 
 ```
 ___
 
 ### 2. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 2 
-Cash game started.
-------------------------------
-Table 1
-Seats:
-  3. @nickname1
-  7. @nickname2
-                                 
+What type of game you'd like to play? 
 ``` 
 ___
 
@@ -31,17 +20,91 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 3
-/prize_pool
-1 100% 
+Cash 
 ```
 ___
 
 ### 4. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 4 
-Prize pool is not allowed for cash game 
+How much is for buy in? 
+``` 
+___
+
+### 5. Message
+
+&rarr; <ins>User</ins>
+
+```
+10 
+```
+___
+
+### 6. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Who's playing? 
+``` 
+___
+
+### 7. Message
+
+&rarr; <ins>User</ins>
+
+```
+@nickname1 @nickname2 @nickname3 @nickname4 @nickname5 @me 
+```
+___
+
+### 8. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Game type: CASH
+Buy in: 10
+                
+------------------------------
+Table 1
+Seats:
+  2. @sergio_cartwright
+  3. @nickname1
+  5. @nickname3
+  6. @nickname4
+  8. @nickname5
+  10. @nickname2
+                                 
+``` 
+___
+
+### 9. Pinned
+
+``` 
+message id 8 pinned
+``` 
+___
+
+### 10. Deleted messages
+
+``` 
+message ids 2,3,4,5,6,7 deleted
+``` 
+___
+
+### 11. Message
+
+&rarr; <ins>User</ins>
+
+```
+/prize_pool 
+```
+___
+
+### 12. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Command can be used only for tournament games. 
 ``` 
 ___

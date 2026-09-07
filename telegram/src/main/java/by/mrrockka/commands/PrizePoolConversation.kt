@@ -1,13 +1,5 @@
-package by.mrrockka.commands.prizepool
+package by.mrrockka.commands
 
-import by.mrrockka.commands.BigDecimalState
-import by.mrrockka.commands.CancelStep
-import by.mrrockka.commands.CancelableStep
-import by.mrrockka.commands.ExcludeBotGuard
-import by.mrrockka.commands.MessageLogConversation
-import by.mrrockka.commands.PositionPrizeState
-import by.mrrockka.commands.decimalValidation
-import by.mrrockka.commands.digitValidation
 import by.mrrockka.domain.PositionPrize
 import by.mrrockka.domain.chat
 import by.mrrockka.repo.PinType
@@ -28,10 +20,10 @@ import java.math.BigDecimal
 import java.util.concurrent.ConcurrentHashMap
 
 @WizardHandler(
-        trigger = ["/pp"],
+        trigger = ["/prize_pool", "/pp"],
         stateManagers = [MapIntStateManager::class, BigDecimalState::class, PositionPrizeState::class],
 )
-@Guard(ExcludeBotGuard::class)
+@Guard(TournamentGameGuard::class)
 object PrizePoolConversation : MessageLogConversation() {
     lateinit var prizePoolService: PrizePoolTelegramService
     lateinit var pinMessageService: PinMessageService
@@ -88,6 +80,7 @@ object PrizePoolConversation : MessageLogConversation() {
         override suspend fun onEntry(ctx: WizardContext) =
                 with(ctx.session!!) {
                     message { "What percentage for #1 place?" }
+                            .cancelableReplyMarkup()
                             .send(ctx.bot)
                 }
 
@@ -108,16 +101,21 @@ object PrizePoolConversation : MessageLogConversation() {
         override suspend fun onRetry(ctx: WizardContext, reason: String?) =
                 with(ctx.session!!) {
                     when (reason) {
-                        Navigate.PLACE.name -> message { "What percentage for #${ctx.user.id.get().size + 1} place?" }.send(ctx.bot)
+                        Navigate.PLACE.name -> message { "What percentage for #${ctx.user.id.get().size + 1} place?" }
+                                .cancelableReplyMarkup()
+                                .send(ctx.bot)
 
                         Navigate.TOTAL_INVALID.name -> {
                             message { "Position percentage should equal 100% but was ${positionPrizes.remove(ctx.user.id)?.sumOf { it.percentage } ?: 0}%" }
                                     .send(ctx.bot)
                             message { "What percentage for #${ctx.user.id.get().size + 1} place?" }
+                                    .cancelableReplyMarkup()
                                     .send(ctx.bot)
                         }
 
-                        else -> message { "Percentage should not be negative" }.send(ctx.bot)
+                        else -> message { "Percentage should not be negative" }
+                                .cancelableReplyMarkup()
+                                .send(ctx.bot)
                     }
                 }
 

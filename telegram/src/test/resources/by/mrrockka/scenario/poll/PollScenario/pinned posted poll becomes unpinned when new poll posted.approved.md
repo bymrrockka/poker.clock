@@ -3,7 +3,6 @@
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 1
 /create_poll
 cron: 0 0 0 * * *
 message: Test poll
@@ -18,9 +17,8 @@ ___
 
 ### 2. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 2 
 Poll created.
 Will be triggered next WEDNESDAY 00:00 
 ``` 
@@ -31,7 +29,7 @@ ___
 &rarr; <ins>2025-09-17 - WEDNESDAY</ins>
 
 ``` 
-message id 3
+
 Test poll
 1. 'Yes'
 2. 'Noooooo'
@@ -53,7 +51,7 @@ ___
 &rarr; <ins>2025-09-18 - THURSDAY</ins>
 
 ``` 
-message id 4
+
 Test poll
 1. 'Yes'
 2. 'Noooooo'
@@ -73,6 +71,6 @@ ___
 ### 7. Pinned
 
 ``` 
-message id 4 pinned
+message id 5 pinned
 ``` 
 ___

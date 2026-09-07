@@ -1,11 +1,11 @@
 @file:OptIn(ExperimentalTime::class)
 
-package by.mrrockka.scenario
+package by.mrrockka.scenario.interaction
 
 import by.mrrockka.BotProperties
-import by.mrrockka.builder.BuilderDsl
 import by.mrrockka.builder.MessageBuilder
 import by.mrrockka.builder.member
+import by.mrrockka.scenario.TestClock
 import eu.vendeli.tgbot.annotations.internal.KtGramInternal
 import eu.vendeli.tgbot.api.botactions.GetUpdatesAction
 import eu.vendeli.tgbot.api.chat.getChatMember
@@ -17,20 +17,15 @@ import eu.vendeli.tgbot.api.message.message
 import eu.vendeli.tgbot.types.chat.ChatMember
 import eu.vendeli.tgbot.types.common.Update
 import eu.vendeli.tgbot.types.component.Response
-import eu.vendeli.tgbot.types.msg.Message
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonNamingStrategy
 import mockwebserver3.Dispatcher
 import mockwebserver3.MockResponse
 import mockwebserver3.MockWebServer
 import mockwebserver3.RecordedRequest
-import okhttp3.Headers.Companion.headersOf
 import okhttp3.internal.closeQuietly
 import org.springframework.stereotype.Component
 import tools.jackson.databind.JsonNode
@@ -38,22 +33,12 @@ import tools.jackson.databind.ObjectMapper
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedDeque
 import kotlin.time.Clock
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
-@OptIn(ExperimentalSerializationApi::class)
-private val serde = Json {
-    namingStrategy = JsonNamingStrategy.SnakeCase
-    encodeDefaults = true
-    ignoreUnknownKeys = true
-    explicitNulls = false
-    isLenient = true
-    classDiscriminator = "status"
-}
-
-private val scenarioHeader = "Scenario"
 private val defaultMessageBody = serde.encodeToString(Response.Success(MessageBuilder { text("SKIPPED") }.message()))
-private fun defaultBooleanBody(success: Boolean = true) = if (success) {
+internal fun defaultBooleanBody(success: Boolean = true) = if (success) {
     serde.encodeToString(Response.Success(success))
 } else {
     serde.encodeToString(
@@ -106,7 +91,7 @@ class MockDispatcher(
 
     /**
      * Method should be used to make sure requests are coming in sequential way
-     * This one creates a little delay for server even with low resources environment (like github actions pipeline) to give time to process command
+     * This one creates a little delay for server event with low resources environment (like github actions pipeline) to give time to process command
      * Use for all requests that require processing time
      */
     private fun push(block: () -> MockResponse): MockResponse {
@@ -121,7 +106,7 @@ class MockDispatcher(
 
         while (Clock.System.now().toEpochMilliseconds() - lastPush!!.toEpochMilliseconds() < delay) {
             runBlocking {
-                delay(delay)
+                delay(delay.milliseconds)
             }
         }
 
@@ -129,10 +114,10 @@ class MockDispatcher(
     }
 
     override fun dispatch(request: RecordedRequest): MockResponse {
+        val interaction = interactions.retrieve()
         return when (request.url.encodedPath) {
             "${botProps.botpath}/$getUpdates" -> when {
-                interactions.retrieve().update.isNotEmpty() -> {
-                    val interaction = interactions.retrieve()
+                interaction.update.isNotEmpty() -> {
                     logger.debug { "Sending updates. Interaction index: ${interaction.index}" }
 
                     push {
@@ -146,8 +131,7 @@ class MockDispatcher(
 
             "${botProps.botpath}/$sendMessage" ->
                 when {
-                    interactions.retrieve().message.isNotEmpty() -> {
-                        val interaction = interactions.retrieve()
+                    interaction.message.isNotEmpty() -> {
                         logger.debug { "Send Message request sent. Interaction index: ${interaction.index}" }
                         push {
                             requests += interaction.index to request.toJson().findPath("text").asString()
@@ -298,6 +282,14 @@ class MockDispatcher(
     }
 }
 
+private fun <T> ArrayDeque<T>.execAndPop(exec: ArrayDeque<T>.() -> Unit): T =
+        synchronized(this) {
+            val first = removeFirst()
+            exec()
+            return first
+        }
+
+
 @Component
 class MockServer(
         private val dispatcher: Dispatcher,
@@ -315,110 +307,5 @@ class MockServer(
     @PreDestroy
     fun destroy() {
         server.closeQuietly()
-    }
-}
-
-data class Interaction(
-        val index: Int,
-        val update: ArrayDeque<MockResponse>,
-        val message: ArrayDeque<MockResponse>,
-        val poll: ArrayDeque<MockResponse>,
-        val pin: ArrayDeque<MockResponse>,
-        val unpin: ArrayDeque<MockResponse>,
-        val delete: ArrayDeque<MockResponse>,
-        val time: Instant? = null,
-) {
-
-    fun isEmpty(): Boolean {
-        return update.isEmpty() &&
-                message.isEmpty() &&
-                poll.isEmpty() &&
-                pin.isEmpty() &&
-                unpin.isEmpty() &&
-                delete.isEmpty()
-    }
-
-    fun isNotEmpty(): Boolean = !isEmpty()
-
-    @BuilderDsl
-    class Builder(init: Builder.() -> Unit) {
-        private var index = -1
-        private val update = ArrayDeque<MockResponse>()
-        private val message = ArrayDeque<MockResponse>()
-        private val poll = ArrayDeque<MockResponse>()
-        private val pin = ArrayDeque<MockResponse>()
-        private val unpin = ArrayDeque<MockResponse>()
-        private val delete = ArrayDeque<MockResponse>()
-        private var time: Instant? = null
-
-        init {
-            init()
-        }
-
-        fun index(index: Int) {
-            this.index = index
-        }
-
-        fun update(update: Update) {
-            check(index > -1) { "Scenario index should be specified and positive" }
-            this@Builder.update += MockResponse(body = serde.encodeToString(Response.Success(listOf(update))))
-        }
-
-        fun message(message: Message) {
-            check(index > -1) { "Scenario index should be specified and positive" }
-            this@Builder.message += MockResponse(
-                    body = serde.encodeToString(Response.Success(message)),
-                    headers = headersOf(scenarioHeader, "$index"),
-            )
-        }
-
-        fun poll(message: Message) {
-            check(index > -1) { "Scenario index should be specified and positive" }
-            poll += MockResponse(
-                    body = serde.encodeToString(Response.Success(message)),
-                    headers = headersOf(scenarioHeader, "$index"),
-            )
-        }
-
-        fun pin() {
-            check(index > -1) { "Scenario index should be specified and positive" }
-            pin += MockResponse(
-                    body = defaultBooleanBody(),
-                    headers = headersOf(scenarioHeader, "$index"),
-            )
-        }
-
-        fun unpin() {
-            check(index > -1) { "Scenario index should be specified and positive" }
-            unpin += MockResponse(
-                    body = defaultBooleanBody(),
-                    headers = headersOf(scenarioHeader, "$index"),
-            )
-        }
-
-        fun time(time: Instant) {
-            this.time = time
-        }
-
-        fun delete() {
-            check(index > -1) { "Scenario index should be specified and positive" }
-            delete += MockResponse(
-                    body = defaultBooleanBody(),
-                    headers = headersOf(scenarioHeader, "$index"),
-            )
-        }
-
-        fun build(): Interaction {
-            return Interaction(
-                    index = index,
-                    update = update,
-                    message = message,
-                    poll = poll,
-                    pin = pin,
-                    unpin = unpin,
-                    delete = delete,
-                    time = time,
-            )
-        }
     }
 }

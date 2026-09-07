@@ -20,7 +20,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Bounty 
+Cash 
 ```
 ___
 
@@ -45,7 +45,7 @@ ___
 
 &larr; <ins>Bot</ins>
 ``` 
-How much is for bounty? 
+Who's playing? 
 ``` 
 ___
 
@@ -54,7 +54,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-10 
+@nickname1 @nickname2 @nickname3 @nickname4 @nickname5 @me 
 ```
 ___
 
@@ -62,61 +62,49 @@ ___
 
 &larr; <ins>Bot</ins>
 ``` 
-Who's playing? 
-``` 
-___
-
-### 9. Message
-
-&rarr; <ins>User</ins>
-
-```
-@me 
-```
-___
-
-### 10. Message
-
-&larr; <ins>Bot</ins>
-``` 
-Game type: BOUNTY
+Game type: CASH
 Buy in: 10
-Bounty 10
+                
 ------------------------------
 Table 1
 Seats:
-  5. @sergio_cartwright
+  2. @sergio_cartwright
+  3. @nickname1
+  5. @nickname3
+  6. @nickname4
+  8. @nickname5
+  10. @nickname2
                                  
 ``` 
 ___
 
-### 11. Pinned
+### 9. Pinned
 
 ``` 
-message id 10 pinned
-``` 
-___
-
-### 12. Deleted messages
-
-``` 
-message ids 2,3,4,5,6,7,8,9 deleted
+message id 8 pinned
 ``` 
 ___
 
-### 13. Message
+### 10. Deleted messages
+
+``` 
+message ids 2,3,4,5,6,7 deleted
+``` 
+___
+
+### 11. Message
 
 &rarr; <ins>User</ins>
 
 ```
-/bounty @me kicked @nickname3 
+/finale_places 
 ```
 ___
 
-### 14. Message
+### 12. Message
 
 &larr; <ins>Bot</ins>
 ``` 
-@nickname3 person hadn't enter game 
+Command can be used only for tournament games. 
 ``` 
 ___

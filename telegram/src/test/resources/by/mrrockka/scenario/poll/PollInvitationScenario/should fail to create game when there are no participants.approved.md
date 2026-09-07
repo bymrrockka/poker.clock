@@ -3,7 +3,6 @@
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 1
 /create_poll
 cron: 0 0 0 * * WED
 message: Test poll
@@ -16,9 +15,8 @@ ___
 
 ### 2. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 2 
 Poll created.
 Will be triggered next WEDNESDAY 00:00 
 ``` 
@@ -29,7 +27,7 @@ ___
 &rarr; <ins>2025-09-24 - WEDNESDAY</ins>
 
 ``` 
-message id 3
+
 Test poll
 1. 'Yes'
 2. 'No'
@@ -70,20 +68,66 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed [reply to message id 3]
-message id: 4
-/tournament_game
-buyin: 10
-
- 
+/game 
 ```
 ___
 
 ### 9. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 5 
+What type of game you'd like to play? 
+``` 
+___
+
+### 10. Message
+
+&rarr; <ins>User</ins>
+
+```
+Tournament 
+```
+___
+
+### 11. Message
+
+&larr; <ins>Bot</ins>
+``` 
+How much is for buy in? 
+``` 
+___
+
+### 12. Message
+
+&rarr; <ins>User</ins>
+
+```
+10 
+```
+___
+
+### 13. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Who's playing? 
+``` 
+___
+
+### 14. Message
+
+&rarr; <ins>User</ins>
+
+```
+[reply to message id 3]
+. 
+```
+___
+
+### 15. Message
+
+&larr; <ins>Bot</ins>
+``` 
 Game participants not found according to poll 
 ``` 
 ___

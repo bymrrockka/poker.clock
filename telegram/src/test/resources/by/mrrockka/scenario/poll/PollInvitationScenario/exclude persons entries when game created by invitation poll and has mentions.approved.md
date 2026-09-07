@@ -3,7 +3,6 @@
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 1
 /create_poll
 cron: 0 0 0 * * WED
 message: Test poll
@@ -16,9 +15,8 @@ ___
 
 ### 2. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 2 
 Poll created.
 Will be triggered next WEDNESDAY 00:00 
 ``` 
@@ -29,7 +27,7 @@ ___
 &rarr; <ins>2025-09-24 - WEDNESDAY</ins>
 
 ``` 
-message id 3
+
 Test poll
 1. 'Yes'
 2. 'No'
@@ -77,26 +75,15 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed [reply to message id 3]
-message id: 4
-/tournament_game
-buyin: 10
-
-@terisa_johnston 
+/game 
 ```
 ___
 
 ### 10. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 5 
-Tournament game started.
-------------------------------
-Table 1
-Seats:
-  5. @jackie_rau
-                                 
+What type of game you'd like to play? 
 ``` 
 ___
 
@@ -105,16 +92,87 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 6
-/game_stats 
+Tournament 
 ```
 ___
 
 ### 12. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 7 
+How much is for buy in? 
+``` 
+___
+
+### 13. Message
+
+&rarr; <ins>User</ins>
+
+```
+10 
+```
+___
+
+### 14. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Who's playing? 
+``` 
+___
+
+### 15. Message
+
+&rarr; <ins>User</ins>
+
+```
+[reply to message id 3]
+@terisa_johnston 
+```
+___
+
+### 16. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Game type: TOURNAMENT
+Buy in: 10
+                
+------------------------------
+Table 1
+Seats:
+  5. @jackie_rau
+                                 
+``` 
+___
+
+### 17. Pinned
+
+``` 
+message id 16 pinned
+``` 
+___
+
+### 18. Deleted messages
+
+``` 
+message ids 10,11,12,13,14,15 deleted
+``` 
+___
+
+### 19. Message
+
+&rarr; <ins>User</ins>
+
+```
+/game_stats 
+```
+___
+
+### 20. Message
+
+&larr; <ins>Bot</ins>
+``` 
 Tournament game statistics:
   - players entered -> 1
   - number of entries -> 1

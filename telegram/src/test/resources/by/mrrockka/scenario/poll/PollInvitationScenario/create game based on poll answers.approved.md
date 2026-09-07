@@ -3,7 +3,6 @@
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 1
 /create_poll
 cron: 0 0 0 * * WED
 message: Test poll
@@ -16,9 +15,8 @@ ___
 
 ### 2. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 2 
 Poll created.
 Will be triggered next WEDNESDAY 00:00 
 ``` 
@@ -29,7 +27,7 @@ ___
 &rarr; <ins>2025-09-24 - WEDNESDAY</ins>
 
 ``` 
-message id 3
+
 Test poll
 1. 'Yes'
 2. 'No'
@@ -84,21 +82,69 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed [reply to message id 3]
-message id: 4
-/tournament_game
-buyin: 10
-
- 
+/game 
 ```
 ___
 
 ### 11. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 5 
-Tournament game started.
+What type of game you'd like to play? 
+``` 
+___
+
+### 12. Message
+
+&rarr; <ins>User</ins>
+
+```
+Tournament 
+```
+___
+
+### 13. Message
+
+&larr; <ins>Bot</ins>
+``` 
+How much is for buy in? 
+``` 
+___
+
+### 14. Message
+
+&rarr; <ins>User</ins>
+
+```
+10 
+```
+___
+
+### 15. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Who's playing? 
+``` 
+___
+
+### 16. Message
+
+&rarr; <ins>User</ins>
+
+```
+[reply to message id 3]
+ 
+```
+___
+
+### 17. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Game type: TOURNAMENT
+Buy in: 10
+                
 ------------------------------
 Table 1
 Seats:
@@ -108,21 +154,33 @@ Seats:
 ``` 
 ___
 
-### 12. Message
+### 18. Pinned
+
+``` 
+message id 17 pinned
+``` 
+___
+
+### 19. Deleted messages
+
+``` 
+message ids 11,12,13,14,15,16 deleted
+``` 
+___
+
+### 20. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 6
 /game_stats 
 ```
 ___
 
-### 13. Message
+### 21. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 7 
 Tournament game statistics:
   - players entered -> 2
   - number of entries -> 2
@@ -130,22 +188,20 @@ Tournament game statistics:
 ``` 
 ___
 
-### 14. Message
+### 22. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed [reply to message id 1]
-message id: 8
+[reply to message id 1]
 /stop_poll 
 ```
 ___
 
-### 15. Message
+### 23. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 9 
 Poll stopped 
 ``` 
 ___

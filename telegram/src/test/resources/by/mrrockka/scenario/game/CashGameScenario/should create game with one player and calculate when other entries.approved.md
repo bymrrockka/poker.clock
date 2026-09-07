@@ -3,25 +3,15 @@
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 1
-/cash_game
-buyin: 10
-
-@nickname1 
+/game 
 ```
 ___
 
 ### 2. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 2 
-Cash game started.
-------------------------------
-Table 1
-Seats:
-  5. @nickname1
-                                 
+What type of game you'd like to play? 
 ``` 
 ___
 
@@ -30,21 +20,15 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 3
-/entry 
+Cash 
 ```
 ___
 
 ### 4. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 4 
-Entries: 
-------------------------------
-Table 1
-Seats:
-  @nickname2 seat 7 -> entry 10.00 
+How much is for buy in? 
 ``` 
 ___
 
@@ -53,18 +37,15 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 5
-/withdrawal 20 
+10 
 ```
 ___
 
 ### 6. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 6 
-Stored withdrawals: 
-  - @nickname1 -> 20 
+Who's playing? 
 ``` 
 ___
 
@@ -73,18 +54,93 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 7
-/calculate 
+@me 
 ```
 ___
 
 ### 8. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 8 
+Game type: CASH
+Buy in: 10
+                
 ------------------------------
-Payout to: @nickname1
+Table 1
+Seats:
+  5. @sergio_cartwright
+                                 
+``` 
+___
+
+### 9. Pinned
+
+``` 
+message id 8 pinned
+``` 
+___
+
+### 10. Deleted messages
+
+``` 
+message ids 2,3,4,5,6,7 deleted
+``` 
+___
+
+### 11. Message
+
+&rarr; <ins>User</ins>
+
+```
+/entry 
+```
+___
+
+### 12. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Entries: 
+------------------------------
+Table 1
+Seats:
+  @nickname2 seat 7 -> entry 10.00 
+``` 
+___
+
+### 13. Message
+
+&rarr; <ins>User</ins>
+
+```
+/withdrawal 20 
+```
+___
+
+### 14. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Stored withdrawals: 
+  - @sergio_cartwright -> 20 
+``` 
+___
+
+### 15. Message
+
+&rarr; <ins>User</ins>
+
+```
+/calculate 
+```
+___
+
+### 16. Message
+
+&larr; <ins>Bot</ins>
+``` 
+------------------------------
+Payout to: @sergio_cartwright
   Entries: 10
   Withdrawals: 20
   Total: 10 (withdrawals 20 - entries 10)

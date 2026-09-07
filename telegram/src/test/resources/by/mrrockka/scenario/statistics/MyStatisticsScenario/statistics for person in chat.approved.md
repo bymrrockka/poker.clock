@@ -3,20 +3,68 @@
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 1
-/tournament_game
-buyin: 10
-
-@me, @nickname1, @nickname2 
+/game 
 ```
 ___
 
 ### 2. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 2 
-Tournament game started.
+What type of game you'd like to play? 
+``` 
+___
+
+### 3. Message
+
+&rarr; <ins>User</ins>
+
+```
+Tournament 
+```
+___
+
+### 4. Message
+
+&larr; <ins>Bot</ins>
+``` 
+How much is for buy in? 
+``` 
+___
+
+### 5. Message
+
+&rarr; <ins>User</ins>
+
+```
+10 
+```
+___
+
+### 6. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Who's playing? 
+``` 
+___
+
+### 7. Message
+
+&rarr; <ins>User</ins>
+
+```
+@me @nickname1 @nickname2 
+```
+___
+
+### 8. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Game type: TOURNAMENT
+Buy in: 10
+                
 ------------------------------
 Table 1
 Seats:
@@ -27,66 +75,201 @@ Seats:
 ``` 
 ___
 
-### 3. Message
+### 9. Pinned
+
+``` 
+message id 8 pinned
+``` 
+___
+
+### 10. Deleted messages
+
+``` 
+message ids 2,3,4,5,6,7 deleted
+``` 
+___
+
+### 11. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 3
-/prize_pool
-1 50%
-2 50% 
+/prize_pool 
 ```
 ___
 
-### 4. Message
+### 12. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 4 
+How many places to account? 
+``` 
+___
+
+### 13. Message
+
+&rarr; <ins>User</ins>
+
+```
+2 
+```
+___
+
+### 14. Message
+
+&larr; <ins>Bot</ins>
+``` 
+What percentage for #1 place? 
+``` 
+___
+
+### 15. Message
+
+&rarr; <ins>User</ins>
+
+```
+50 
+```
+___
+
+### 16. Message
+
+&larr; <ins>Bot</ins>
+``` 
+What percentage for #2 place? 
+``` 
+___
+
+### 17. Message
+
+&rarr; <ins>User</ins>
+
+```
+50 
+```
+___
+
+### 18. Message
+
+&larr; <ins>Bot</ins>
+``` 
 Prize pool stored:
 1. 50%
 2. 50% 
 ``` 
 ___
 
-### 5. Message
+### 19. Pinned
+
+``` 
+message id 18 pinned
+``` 
+___
+
+### 20. Deleted messages
+
+``` 
+message ids 12,13,14,15,16,17 deleted
+``` 
+___
+
+### 21. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 5
-/finale_places
-1 @me, 2 @nickname1 
+/finale_places 
 ```
 ___
 
-### 6. Message
+### 22. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 6 
+How many places to account? 
+``` 
+___
+
+### 23. Message
+
+&rarr; <ins>User</ins>
+
+```
+2 
+```
+___
+
+### 24. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Who's on #1 place? 
+``` 
+___
+
+### 25. Message
+
+&rarr; <ins>User</ins>
+
+```
+@me 
+```
+___
+
+### 26. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Who's on #2 place? 
+``` 
+___
+
+### 27. Message
+
+&rarr; <ins>User</ins>
+
+```
+@nickname1 
+```
+___
+
+### 28. Message
+
+&larr; <ins>Bot</ins>
+``` 
 Finale places stored:
 1. @sergio_cartwright
 2. @nickname1 
 ``` 
 ___
 
-### 7. Message
+### 29. Pinned
+
+``` 
+message id 28 pinned
+``` 
+___
+
+### 30. Deleted messages
+
+``` 
+message ids 22,23,24,25,26,27 deleted
+``` 
+___
+
+### 31. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 7
 /calculate 
 ```
 ___
 
-### 8. Message
+### 32. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 8 
 ------------------------------
 Finale summary:
   1. @sergio_cartwright won 15
@@ -110,21 +293,19 @@ https://buymeacoffee.com/mrrockka
 ``` 
 ___
 
-### 9. Message
+### 33. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 9
 /my_stats 
 ```
 ___
 
-### 10. Message
+### 34. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 10 
 nickname: @sergio_cartwright
 games played: 1 (1 tournament)
 times in prizes: 1
@@ -135,25 +316,73 @@ correlation: 5.00
 ``` 
 ___
 
-### 11. Message
+### 35. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 11
-/cash_game
-buyin: 10
-
-@me, @nickname1, @nickname2 
+/game 
 ```
 ___
 
-### 12. Message
+### 36. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 12 
-Cash game started.
+What type of game you'd like to play? 
+``` 
+___
+
+### 37. Message
+
+&rarr; <ins>User</ins>
+
+```
+Cash 
+```
+___
+
+### 38. Message
+
+&larr; <ins>Bot</ins>
+``` 
+How much is for buy in? 
+``` 
+___
+
+### 39. Message
+
+&rarr; <ins>User</ins>
+
+```
+10 
+```
+___
+
+### 40. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Who's playing? 
+``` 
+___
+
+### 41. Message
+
+&rarr; <ins>User</ins>
+
+```
+@me @nickname1 @nickname2 
+```
+___
+
+### 42. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Game type: CASH
+Buy in: 10
+                
 ------------------------------
 Table 1
 Seats:
@@ -164,41 +393,51 @@ Seats:
 ``` 
 ___
 
-### 13. Message
+### 43. Pinned
+
+``` 
+message id 42 pinned
+``` 
+___
+
+### 44. Deleted messages
+
+``` 
+message ids 36,37,38,39,40,41 deleted
+``` 
+___
+
+### 45. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 13
 /withdrawal 30 
 ```
 ___
 
-### 14. Message
+### 46. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 14 
 Stored withdrawals: 
   - @nickname2 -> 30 
 ``` 
 ___
 
-### 15. Message
+### 47. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 15
 /calculate 
 ```
 ___
 
-### 16. Message
+### 48. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 16 
 ------------------------------
 Payout to: @nickname2
   Entries: 10
@@ -213,21 +452,19 @@ https://buymeacoffee.com/mrrockka
 ``` 
 ___
 
-### 17. Message
+### 49. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 17
 /my_stats 
 ```
 ___
 
-### 18. Message
+### 50. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 18 
 nickname: @sergio_cartwright
 games played: 2 (1 tournament)
 times in prizes: 1
@@ -238,25 +475,90 @@ correlation: -5.00
 ``` 
 ___
 
-### 19. Message
+### 51. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 19
-/bounty_game
-buyin: 10
-bounty: 10
-@me, @nickname1, @nickname2 
+/game 
 ```
 ___
 
-### 20. Message
+### 52. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 20 
-Bounty tournament game started.
+What type of game you'd like to play? 
+``` 
+___
+
+### 53. Message
+
+&rarr; <ins>User</ins>
+
+```
+Bounty 
+```
+___
+
+### 54. Message
+
+&larr; <ins>Bot</ins>
+``` 
+How much is for buy in? 
+``` 
+___
+
+### 55. Message
+
+&rarr; <ins>User</ins>
+
+```
+10 
+```
+___
+
+### 56. Message
+
+&larr; <ins>Bot</ins>
+``` 
+How much is for bounty? 
+``` 
+___
+
+### 57. Message
+
+&rarr; <ins>User</ins>
+
+```
+10 
+```
+___
+
+### 58. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Who's playing? 
+``` 
+___
+
+### 59. Message
+
+&rarr; <ins>User</ins>
+
+```
+@me @nickname1 @nickname2 
+```
+___
+
+### 60. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Game type: BOUNTY
+Buy in: 10
+Bounty 10
 ------------------------------
 Table 1
 Seats:
@@ -267,104 +569,235 @@ Seats:
 ``` 
 ___
 
-### 21. Message
+### 61. Pinned
+
+``` 
+message id 60 pinned
+``` 
+___
+
+### 62. Deleted messages
+
+``` 
+message ids 52,53,54,55,56,57,58,59 deleted
+``` 
+___
+
+### 63. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 21
 /bounty @nickname1 kicked @nickname2 
 ```
 ___
 
-### 22. Message
+### 64. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 22 
 Bounty amount 10.00 from @nickname2 stored for @nickname1 
 ``` 
 ___
 
-### 23. Message
+### 65. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 23
 /bounty @nickname1 kicked @me 
 ```
 ___
 
-### 24. Message
+### 66. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 24 
 Bounty amount 10.00 from @sergio_cartwright stored for @nickname1 
 ``` 
 ___
 
-### 25. Message
+### 67. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 25
-/prize_pool
-1 50%
-2 50% 
+/prize_pool 
 ```
 ___
 
-### 26. Message
+### 68. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 26 
+How many places to account? 
+``` 
+___
+
+### 69. Message
+
+&rarr; <ins>User</ins>
+
+```
+2 
+```
+___
+
+### 70. Message
+
+&larr; <ins>Bot</ins>
+``` 
+What percentage for #1 place? 
+``` 
+___
+
+### 71. Message
+
+&rarr; <ins>User</ins>
+
+```
+50 
+```
+___
+
+### 72. Message
+
+&larr; <ins>Bot</ins>
+``` 
+What percentage for #2 place? 
+``` 
+___
+
+### 73. Message
+
+&rarr; <ins>User</ins>
+
+```
+50 
+```
+___
+
+### 74. Message
+
+&larr; <ins>Bot</ins>
+``` 
 Prize pool stored:
 1. 50%
 2. 50% 
 ``` 
 ___
 
-### 27. Message
+### 75. Pinned
+
+``` 
+message id 74 pinned
+``` 
+___
+
+### 76. Deleted messages
+
+``` 
+message ids 68,69,70,71,72,73 deleted
+``` 
+___
+
+### 77. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 27
-/finale_places
-1 @nickname1, 2 @me 
+/finale_places 
 ```
 ___
 
-### 28. Message
+### 78. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 28 
+How many places to account? 
+``` 
+___
+
+### 79. Message
+
+&rarr; <ins>User</ins>
+
+```
+2 
+```
+___
+
+### 80. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Who's on #1 place? 
+``` 
+___
+
+### 81. Message
+
+&rarr; <ins>User</ins>
+
+```
+@nickname1 
+```
+___
+
+### 82. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Who's on #2 place? 
+``` 
+___
+
+### 83. Message
+
+&rarr; <ins>User</ins>
+
+```
+@me 
+```
+___
+
+### 84. Message
+
+&larr; <ins>Bot</ins>
+``` 
 Finale places stored:
 1. @nickname1
 2. @sergio_cartwright 
 ``` 
 ___
 
-### 29. Message
+### 85. Pinned
+
+``` 
+message id 84 pinned
+``` 
+___
+
+### 86. Deleted messages
+
+``` 
+message ids 78,79,80,81,82,83 deleted
+``` 
+___
+
+### 87. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 29
 /calculate 
 ```
 ___
 
-### 30. Message
+### 88. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 30 
 ------------------------------
 Finale summary:
   1. @nickname1 won 15
@@ -384,21 +817,19 @@ https://buymeacoffee.com/mrrockka
 ``` 
 ___
 
-### 31. Message
+### 89. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 31
 /my_stats 
 ```
 ___
 
-### 32. Message
+### 90. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 32 
 nickname: @sergio_cartwright
 games played: 3 (2 tournaments)
 times in prizes: 2
@@ -409,25 +840,73 @@ correlation: 0.00
 ``` 
 ___
 
-### 33. Message
+### 91. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 33
-/tournament_game
-buyin: 10
-
-@me, @nickname1, @nickname2 
+/game 
 ```
 ___
 
-### 34. Message
+### 92. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 34 
-Tournament game started.
+What type of game you'd like to play? 
+``` 
+___
+
+### 93. Message
+
+&rarr; <ins>User</ins>
+
+```
+Tournament 
+```
+___
+
+### 94. Message
+
+&larr; <ins>Bot</ins>
+``` 
+How much is for buy in? 
+``` 
+___
+
+### 95. Message
+
+&rarr; <ins>User</ins>
+
+```
+10 
+```
+___
+
+### 96. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Who's playing? 
+``` 
+___
+
+### 97. Message
+
+&rarr; <ins>User</ins>
+
+```
+@me @nickname1 @nickname2 
+```
+___
+
+### 98. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Game type: TOURNAMENT
+Buy in: 10
+                
 ------------------------------
 Table 1
 Seats:
@@ -438,66 +917,201 @@ Seats:
 ``` 
 ___
 
-### 35. Message
+### 99. Pinned
+
+``` 
+message id 98 pinned
+``` 
+___
+
+### 100. Deleted messages
+
+``` 
+message ids 92,93,94,95,96,97 deleted
+``` 
+___
+
+### 101. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 35
-/prize_pool
-1 50%
-2 50% 
+/prize_pool 
 ```
 ___
 
-### 36. Message
+### 102. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 36 
+How many places to account? 
+``` 
+___
+
+### 103. Message
+
+&rarr; <ins>User</ins>
+
+```
+2 
+```
+___
+
+### 104. Message
+
+&larr; <ins>Bot</ins>
+``` 
+What percentage for #1 place? 
+``` 
+___
+
+### 105. Message
+
+&rarr; <ins>User</ins>
+
+```
+50 
+```
+___
+
+### 106. Message
+
+&larr; <ins>Bot</ins>
+``` 
+What percentage for #2 place? 
+``` 
+___
+
+### 107. Message
+
+&rarr; <ins>User</ins>
+
+```
+50 
+```
+___
+
+### 108. Message
+
+&larr; <ins>Bot</ins>
+``` 
 Prize pool stored:
 1. 50%
 2. 50% 
 ``` 
 ___
 
-### 37. Message
+### 109. Pinned
+
+``` 
+message id 108 pinned
+``` 
+___
+
+### 110. Deleted messages
+
+``` 
+message ids 102,103,104,105,106,107 deleted
+``` 
+___
+
+### 111. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 37
-/finale_places
-1 @nickname1, 2 @nickname2 
+/finale_places 
 ```
 ___
 
-### 38. Message
+### 112. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 38 
+How many places to account? 
+``` 
+___
+
+### 113. Message
+
+&rarr; <ins>User</ins>
+
+```
+2 
+```
+___
+
+### 114. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Who's on #1 place? 
+``` 
+___
+
+### 115. Message
+
+&rarr; <ins>User</ins>
+
+```
+@nickname1 
+```
+___
+
+### 116. Message
+
+&larr; <ins>Bot</ins>
+``` 
+Who's on #2 place? 
+``` 
+___
+
+### 117. Message
+
+&rarr; <ins>User</ins>
+
+```
+@nickname2 
+```
+___
+
+### 118. Message
+
+&larr; <ins>Bot</ins>
+``` 
 Finale places stored:
 1. @nickname1
 2. @nickname2 
 ``` 
 ___
 
-### 39. Message
+### 119. Pinned
+
+``` 
+message id 118 pinned
+``` 
+___
+
+### 120. Deleted messages
+
+``` 
+message ids 112,113,114,115,116,117 deleted
+``` 
+___
+
+### 121. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 39
 /calculate 
 ```
 ___
 
-### 40. Message
+### 122. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 40 
 ------------------------------
 Finale summary:
   1. @nickname1 won 15
@@ -521,21 +1135,19 @@ https://buymeacoffee.com/mrrockka
 ``` 
 ___
 
-### 41. Message
+### 123. Message
 
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 41
 /my_stats 
 ```
 ___
 
-### 42. Message
+### 124. Message
 
-&rarr; <ins>Bot</ins>
+&larr; <ins>Bot</ins>
 ``` 
-message id: 42 
 nickname: @sergio_cartwright
 games played: 4 (3 tournaments)
 times in prizes: 2
