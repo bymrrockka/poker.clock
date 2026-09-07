@@ -29,7 +29,7 @@ ___
 &rarr; <ins>2025-09-24 - WEDNESDAY</ins>
 
 ``` 
-message id 4
+message id 3
 Test poll
 1. 'Yes'
 2. 'No'
@@ -40,7 +40,7 @@ ___
 ### 4. Pinned
 
 ``` 
-message id 4 pinned
+message id 3 pinned
 ``` 
 ___
 
@@ -70,7 +70,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 5
+Processed message id: 4
 /game 
 ```
 ___
@@ -79,7 +79,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 6 
+message id: 5 
 What type of game you'd like to play? 
 ``` 
 ___
@@ -89,7 +89,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 7
+Processed message id: 6
 Tournament 
 ```
 ___
@@ -98,7 +98,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 8 
+message id: 7 
 How much is for buy in? 
 ``` 
 ___
@@ -108,7 +108,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 9
+Processed message id: 8
 10 
 ```
 ___
@@ -117,7 +117,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 10 
+message id: 9 
 Who's playing? 
 ``` 
 ___
@@ -127,8 +127,8 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed [reply to message id 4]
-message id: 11
+Processed [reply to message id 3]
+message id: 10
 . 
 ```
 ___
@@ -137,7 +137,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 12 
+message id: 11 
 Game participants not found according to poll 
 ``` 
 ___

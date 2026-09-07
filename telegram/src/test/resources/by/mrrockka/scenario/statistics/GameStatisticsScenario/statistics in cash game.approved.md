@@ -101,7 +101,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 10
+Processed message id: 9
 /game_stats 
 ```
 ___
@@ -110,7 +110,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 11 
+message id: 10 
 Cash game statistics:
   - players entered -> 2
   - total buy-in amount -> 20.00
@@ -124,7 +124,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 12
+Processed message id: 11
 /entry 30 
 ```
 ___
@@ -133,7 +133,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 13 
+message id: 12 
 Re-entry stored for @sergio_cartwright, buy in amount is 30 
 ``` 
 ___
@@ -143,7 +143,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 14
+Processed message id: 13
 /game_stats 
 ```
 ___
@@ -152,7 +152,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 15 
+message id: 14 
 Cash game statistics:
   - players entered -> 2
   - total buy-in amount -> 50.00
@@ -166,7 +166,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 16
+Processed message id: 15
 /withdrawal 30 
 ```
 ___
@@ -175,7 +175,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 17 
+message id: 16 
 Stored withdrawals: 
   - @sergio_cartwright -> 30 
 ``` 
@@ -186,7 +186,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 18
+Processed message id: 17
 /game_stats 
 ```
 ___
@@ -195,7 +195,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 19 
+message id: 18 
 Cash game statistics:
   - players entered -> 2
   - total buy-in amount -> 50.00
@@ -209,7 +209,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 20
+Processed message id: 19
 /withdrawal 20 
 ```
 ___
@@ -218,7 +218,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 21 
+message id: 20 
 Stored withdrawals: 
   - @sergio_cartwright -> 20 
 ``` 
@@ -229,7 +229,7 @@ ___
 &rarr; <ins>User</ins>
 
 ```
-Processed message id: 22
+Processed message id: 21
 /game_stats 
 ```
 ___
@@ -238,7 +238,7 @@ ___
 
 &rarr; <ins>Bot</ins>
 ``` 
-message id: 23 
+message id: 22 
 Cash game statistics:
   - players entered -> 2
   - total buy-in amount -> 50.00
