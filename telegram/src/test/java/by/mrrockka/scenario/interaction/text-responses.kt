@@ -102,20 +102,12 @@ internal fun RecordedRequest.toText(interaction: Interaction<*>): String {
         is Interaction.Delete -> {
             val ids = json.findPath("message_ids")
             check(ids != null && ids.values().isNotEmpty()) { "Delete ids are not found." }
-            val values = ids.values()
-                    .map { it.asLong() }
-                    .distinct()
-                    .sorted()
-            val inMessage = values.containsAll(interaction.data)
             """|
                |### Delete 
                |&larr; Delete from <ins>Bot</ins>
                |>Deleted messages: 
-               |${
-                if (inMessage)
-                    interaction.data.map { " - [message id $it](#message-$it)" }.joinToString("\n")
-                else "Delete command does not contain message ids"
-            }""".trimMargin()
+               |${interaction.data.map { " - [message id $it](#message-$it)" }.joinToString("\n")}
+            """.trimMargin()
         }
 
         else -> error("Interaction type is not recognized")
