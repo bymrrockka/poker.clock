@@ -59,7 +59,7 @@ abstract class ScenarioTest : StubTest() {
                 |
                 |${"=".repeat(20)}
                 |Wanted but not executed:
-                |${unhandled.joinToString("\n-------")}
+                |${unhandled.joinToString("\n-------\n")}
                 |${"=".repeat(20)}
                 |
                 |Await timeout
