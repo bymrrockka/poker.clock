@@ -57,12 +57,10 @@ abstract class ScenarioTest : StubTest() {
             val message = """
                 |$actual
                 |
-                |!!!
-                |
+                |${"=".repeat(20)}
                 |Wanted but not executed:
                 |${unhandled.joinToString("\n-------")}
-                |
-                |!!!
+                |${"=".repeat(20)}
                 |
                 |Await timeout
                 |Dispatcher requests size is ${dispatcher.requests.size}
