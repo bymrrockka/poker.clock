@@ -96,7 +96,7 @@ abstract class ScenarioTest : StubTest() {
             is Command.BotMessage ->
                 """
                 |# Interaction $index
-                |Bot -> 
+                |Bot 
                 |```
                 |$message
                 |```
@@ -116,19 +116,13 @@ abstract class ScenarioTest : StubTest() {
             is Command.Pin ->
                 """
                 |# Interaction $index
-                |Pin -> 
-                |```
-                |${messageLog[command]?.messageId ?: "No message found"}
-                |```
+                |Pin -> ${messageLog[command]?.messageId ?: "No message found"}
                 """.trimMargin()
 
             is Command.Unpin ->
                 """
                 |# Interaction $index
-                |Unpin -> 
-                |```
-                |${messageLog[command]?.messageId ?: "No message found"}
-                |```
+                |Unpin -> ${messageLog[command]?.messageId ?: "No message found"}
                 """.trimMargin()
 
             is Command.DeleteMessages ->
