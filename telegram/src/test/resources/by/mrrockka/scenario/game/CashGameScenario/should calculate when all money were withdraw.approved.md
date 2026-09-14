@@ -1,22 +1,69 @@
-### 1. Message
 
-&rarr; <ins>User</ins>
-
+### Message 0
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 1
-/cash_game
-buyin: 10
-
-@nickname1, @nickname2, @nickname3, @nickname4, @nickname5, @me 
+/game 
 ```
 ___
 
-### 2. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 2 
-Cash game started.
+### Message 1
+&larr; Message from <ins>Bot</ins>
+```
+What type of game you'd like to play?
+(Cash) | (Tournament) | (Bounty) | (Cancel)
+```
+___
+
+
+### Message 2
+&rarr; Message from <ins>@sergio_cartwright</ins>
+```
+Cash 
+```
+___
+
+
+### Message 3
+&larr; Message from <ins>Bot</ins>
+```
+How much is for buy in?
+(Cancel)
+```
+___
+
+
+### Message 4
+&rarr; Message from <ins>@sergio_cartwright</ins>
+```
+10 
+```
+___
+
+
+### Message 5
+&larr; Message from <ins>Bot</ins>
+```
+Who's playing?
+(Cancel)
+```
+___
+
+
+### Message 6
+&rarr; Message from <ins>@sergio_cartwright</ins>
+```
+@nickname1 @nickname2 @nickname3 @nickname4 @nickname5 @me 
+```
+___
+
+
+### Message 7
+&larr; Message from <ins>Bot</ins>
+```
+Game type: CASH
+Buy in: 10
+                
 ------------------------------
 Table 1
 Seats:
@@ -26,111 +73,105 @@ Seats:
   6. @nickname4
   8. @nickname5
   10. @nickname2
-                                 
-``` 
-___
-
-### 3. Pinned
-
-``` 
-message id 1 pinned
-``` 
-___
-
-### 4. Message
-
-&rarr; <ins>User</ins>
-
+                                
 ```
-Processed message id: 3
+___
+
+
+### Pin 
+&larr; Pin from <ins>Bot</ins>
+[Pinned message 7](#message-7)
+
+
+### Delete 
+&larr; Delete from <ins>Bot</ins>
+>Deleted messages: 
+ - [message id 1](#message-1)
+ - [message id 2](#message-2)
+ - [message id 3](#message-3)
+ - [message id 4](#message-4)
+ - [message id 5](#message-5)
+ - [message id 6](#message-6)
+
+
+### Message 10
+&rarr; Message from <ins>@nickname1</ins>
+```
 /withdrawal 20 
 ```
 ___
 
-### 5. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 4 
+### Message 11
+&larr; Message from <ins>Bot</ins>
+```
 Stored withdrawals: 
-  - @nickname1 -> 20 
-``` 
+  - @nickname1 -> 20
+```
 ___
 
-### 6. Message
 
-&rarr; <ins>User</ins>
-
+### Message 12
+&rarr; Message from <ins>@nickname2</ins>
 ```
-Processed message id: 5
 /withdrawal 30 
 ```
 ___
 
-### 7. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 6 
+### Message 13
+&larr; Message from <ins>Bot</ins>
+```
 Stored withdrawals: 
-  - @nickname2 -> 30 
-``` 
+  - @nickname2 -> 30
+```
 ___
 
-### 8. Message
 
-&rarr; <ins>User</ins>
-
+### Message 14
+&rarr; Message from <ins>@nickname4</ins>
 ```
-Processed message id: 7
 /entry 20 
 ```
 ___
 
-### 9. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 8 
-Re-entry stored for @nickname4, buy in amount is 20 
-``` 
+### Message 15
+&larr; Message from <ins>Bot</ins>
+```
+Re-entry stored for @nickname4, buy in amount is 20
+```
 ___
 
-### 10. Message
 
-&rarr; <ins>User</ins>
-
+### Message 16
+&rarr; Message from <ins>@nickname3</ins>
 ```
-Processed message id: 9
 /withdrawal 30 
 ```
 ___
 
-### 11. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 10 
+### Message 17
+&larr; Message from <ins>Bot</ins>
+```
 Stored withdrawals: 
-  - @nickname3 -> 30 
-``` 
+  - @nickname3 -> 30
+```
 ___
 
-### 12. Message
 
-&rarr; <ins>User</ins>
-
+### Message 18
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 11
 /calculate 
 ```
 ___
 
-### 13. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 12 
+### Message 19
+&larr; Message from <ins>Bot</ins>
+```
 ------------------------------
 Payout to: @nickname2
   Entries: 10
@@ -155,20 +196,16 @@ From:
   @nickname4 -> 10
 ------------------------------
 You can support me using this link. 
-https://buymeacoffee.com/mrrockka 
-``` 
+https://buymeacoffee.com/mrrockka
+```
 ___
 
-### 14. Pinned
 
-``` 
-message id 11 pinned
-``` 
-___
+### Pin 
+&larr; Pin from <ins>Bot</ins>
+[Pinned message 19](#message-19)
 
-### 15. Unpinned
 
-``` 
-message id 1 unpinned
-``` 
-___
+### Unpin 
+&larr; Unpin from <ins>Bot</ins>
+[Unpinned message 7](#message-7)

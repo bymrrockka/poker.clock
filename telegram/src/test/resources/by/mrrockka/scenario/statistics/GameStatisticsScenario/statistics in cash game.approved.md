@@ -1,178 +1,220 @@
-### 1. Message
 
-&rarr; <ins>User</ins>
-
+### Message 0
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 1
-/cash_game
-buyin: 10
-
-@me, @nickname1 
+/game 
 ```
 ___
 
-### 2. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 2 
-Cash game started.
+### Message 1
+&larr; Message from <ins>Bot</ins>
+```
+What type of game you'd like to play?
+(Cash) | (Tournament) | (Bounty) | (Cancel)
+```
+___
+
+
+### Message 2
+&rarr; Message from <ins>@sergio_cartwright</ins>
+```
+Cash 
+```
+___
+
+
+### Message 3
+&larr; Message from <ins>Bot</ins>
+```
+How much is for buy in?
+(Cancel)
+```
+___
+
+
+### Message 4
+&rarr; Message from <ins>@sergio_cartwright</ins>
+```
+10 
+```
+___
+
+
+### Message 5
+&larr; Message from <ins>Bot</ins>
+```
+Who's playing?
+(Cancel)
+```
+___
+
+
+### Message 6
+&rarr; Message from <ins>@sergio_cartwright</ins>
+```
+@me @nickname1 
+```
+___
+
+
+### Message 7
+&larr; Message from <ins>Bot</ins>
+```
+Game type: CASH
+Buy in: 10
+                
 ------------------------------
 Table 1
 Seats:
   3. @nickname1
   7. @sergio_cartwright
-                                 
-``` 
+                                
+```
 ___
 
-### 3. Message
 
-&rarr; <ins>User</ins>
+### Pin 
+&larr; Pin from <ins>Bot</ins>
+[Pinned message 7](#message-7)
 
+
+### Delete 
+&larr; Delete from <ins>Bot</ins>
+>Deleted messages: 
+ - [message id 1](#message-1)
+ - [message id 2](#message-2)
+ - [message id 3](#message-3)
+ - [message id 4](#message-4)
+ - [message id 5](#message-5)
+ - [message id 6](#message-6)
+
+
+### Message 10
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 3
 /game_stats 
 ```
 ___
 
-### 4. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 4 
+### Message 11
+&larr; Message from <ins>Bot</ins>
+```
 Cash game statistics:
   - players entered -> 2
   - total buy-in amount -> 20.00
   - total withdrawal amount -> 0
-  - total in game -> 20.00 
-``` 
+  - total in game -> 20.00
+```
 ___
 
-### 5. Message
 
-&rarr; <ins>User</ins>
-
+### Message 12
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 5
 /entry 30 
 ```
 ___
 
-### 6. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 6 
-Re-entry stored for @sergio_cartwright, buy in amount is 30 
-``` 
+### Message 13
+&larr; Message from <ins>Bot</ins>
+```
+Re-entry stored for @sergio_cartwright, buy in amount is 30
+```
 ___
 
-### 7. Message
 
-&rarr; <ins>User</ins>
-
+### Message 14
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 7
 /game_stats 
 ```
 ___
 
-### 8. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 8 
+### Message 15
+&larr; Message from <ins>Bot</ins>
+```
 Cash game statistics:
   - players entered -> 2
   - total buy-in amount -> 50.00
   - total withdrawal amount -> 0
-  - total in game -> 50.00 
-``` 
+  - total in game -> 50.00
+```
 ___
 
-### 9. Message
 
-&rarr; <ins>User</ins>
-
+### Message 16
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 9
 /withdrawal 30 
 ```
 ___
 
-### 10. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 10 
+### Message 17
+&larr; Message from <ins>Bot</ins>
+```
 Stored withdrawals: 
-  - @sergio_cartwright -> 30 
-``` 
+  - @sergio_cartwright -> 30
+```
 ___
 
-### 11. Message
 
-&rarr; <ins>User</ins>
-
+### Message 18
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 11
 /game_stats 
 ```
 ___
 
-### 12. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 12 
+### Message 19
+&larr; Message from <ins>Bot</ins>
+```
 Cash game statistics:
   - players entered -> 2
   - total buy-in amount -> 50.00
   - total withdrawal amount -> 30.00
-  - total in game -> 20.00 
-``` 
+  - total in game -> 20.00
+```
 ___
 
-### 13. Message
 
-&rarr; <ins>User</ins>
-
+### Message 20
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 13
 /withdrawal 20 
 ```
 ___
 
-### 14. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 14 
+### Message 21
+&larr; Message from <ins>Bot</ins>
+```
 Stored withdrawals: 
-  - @sergio_cartwright -> 20 
-``` 
+  - @sergio_cartwright -> 20
+```
 ___
 
-### 15. Message
 
-&rarr; <ins>User</ins>
-
+### Message 22
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 15
 /game_stats 
 ```
 ___
 
-### 16. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 16 
+### Message 23
+&larr; Message from <ins>Bot</ins>
+```
 Cash game statistics:
   - players entered -> 2
   - total buy-in amount -> 50.00
   - total withdrawal amount -> 50.00
-  - total in game -> 0.00 
-``` 
+  - total in game -> 0.00
+```
 ___

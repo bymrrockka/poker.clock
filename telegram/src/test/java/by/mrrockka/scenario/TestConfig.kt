@@ -3,6 +3,7 @@ package by.mrrockka.scenario
 import by.mrrockka.BotProperties
 import by.mrrockka.PokerClockExceptionHandler
 import by.mrrockka.SpringClassManager
+import by.mrrockka.scenario.interaction.MockServer
 import eu.vendeli.tgbot.TelegramBot
 import eu.vendeli.tgbot.types.component.ExceptionHandlingStrategy
 import kotlinx.coroutines.DelicateCoroutinesApi

@@ -4,14 +4,15 @@ import by.mrrockka.Given
 import by.mrrockka.When
 import by.mrrockka.domain.GameType
 import by.mrrockka.extension.mdApprover
-import by.mrrockka.scenario.Commands.Companion.createGame
-import by.mrrockka.scenario.Commands.Companion.createPoll
-import by.mrrockka.scenario.Commands.Companion.stopPoll
+import by.mrrockka.scenario.common.Commands.Companion.createPoll
+import by.mrrockka.scenario.common.Commands.Companion.stopPoll
+import by.mrrockka.scenario.common.createGameFlow
 import com.oneeyedmen.okeydoke.Approver
 import org.junit.Ignore
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
+import java.math.BigDecimal
 import kotlin.time.Duration.Companion.days
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
@@ -109,8 +110,7 @@ class PollScenario : AbstractPollScenario() {
                 """.trimMargin()
             }
             bot { "Poll will be triggered" }
-            val game = user { "me".createGame(GameType.TOURNAMENT, 30.toBigDecimal()) }
-            bot { "Game created"}
+            val game = createGameFlow(GameType.TOURNAMENT, BigDecimal(30), listOf("nickname1"))
             user(replyTo = game) { stopPoll } // should fail
             bot { "Exception" }
         } When {

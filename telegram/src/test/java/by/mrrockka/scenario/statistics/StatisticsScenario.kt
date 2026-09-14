@@ -3,18 +3,18 @@ package by.mrrockka.scenario.statistics
 import by.mrrockka.Given
 import by.mrrockka.When
 import by.mrrockka.domain.GameType
-import by.mrrockka.scenario.AbstractScenarioTest
-import by.mrrockka.scenario.Commands.Companion.createGame
-import by.mrrockka.scenario.Commands.Companion.entry
-import by.mrrockka.scenario.Commands.Companion.gameStats
-import by.mrrockka.scenario.Commands.Companion.kicked
-import by.mrrockka.scenario.Commands.Companion.playerStats
-import by.mrrockka.scenario.Commands.Companion.withdrawal
+import by.mrrockka.scenario.common.Commands.Companion.entry
+import by.mrrockka.scenario.common.Commands.Companion.gameStats
+import by.mrrockka.scenario.common.Commands.Companion.kicked
+import by.mrrockka.scenario.common.Commands.Companion.playerStats
+import by.mrrockka.scenario.common.Commands.Companion.withdrawal
+import by.mrrockka.scenario.common.ScenarioTest
+import by.mrrockka.scenario.common.createGameFlow
 import com.oneeyedmen.okeydoke.Approver
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 
-abstract class StatisticsScenario : AbstractScenarioTest() {
+abstract class StatisticsScenario : ScenarioTest() {
     abstract val statisticsCommand: String
 
     @Test
@@ -24,8 +24,7 @@ abstract class StatisticsScenario : AbstractScenarioTest() {
                 "me", "nickname1",
         )
         Given {
-            user { players.createGame(GameType.TOURNAMENT, buyin) }
-            bot { "Game created" }
+            createGameFlow(GameType.TOURNAMENT, buyin, players)
             user { statisticsCommand }
             bot { "Players stats" }
             user { entry }
@@ -44,8 +43,7 @@ abstract class StatisticsScenario : AbstractScenarioTest() {
                 "me", "nickname1",
         )
         Given {
-            user { players.createGame(GameType.CASH, buyin) }
-            bot { "Players stats" }
+            createGameFlow(GameType.CASH, buyin, players)
             user { statisticsCommand }
             bot { "Players stats" }
             user { entry(30) }
@@ -72,8 +70,7 @@ abstract class StatisticsScenario : AbstractScenarioTest() {
                 "me", "nickname1",
         )
         Given {
-            user { players.createGame(GameType.BOUNTY, buyin) }
-            bot { "Game created" }
+            createGameFlow(GameType.BOUNTY, buyin, players)
             user { statisticsCommand }
             bot { "Players stats" }
             user { "me" kicked "nickname1" }
@@ -114,8 +111,7 @@ class PlayerStatisticsScenario : StatisticsScenario() {
                 "nickname2", "nickname1",
         )
         Given {
-            user { players.createGame(GameType.TOURNAMENT, buyin) }
-            bot { "Game created" }
+            createGameFlow(GameType.TOURNAMENT, buyin, players)
             user { playerStats }
             bot { "Players stats" }
         } When {

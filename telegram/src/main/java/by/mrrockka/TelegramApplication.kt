@@ -16,4 +16,3 @@ open class TelegramApplication
 fun main(args: Array<String>) {
     runApplication<TelegramApplication>(*args)
 }
-

@@ -1,8 +1,8 @@
 package by.mrrockka
 
-import by.mrrockka.commands.finaleplaces.FinalePlacesConversation
-import by.mrrockka.commands.game.GameConversation
-import by.mrrockka.commands.prizepool.PrizePoolConversation
+import by.mrrockka.commands.FinalePlacesConversation
+import by.mrrockka.commands.GameConversation
+import by.mrrockka.commands.PrizePoolConversation
 import by.mrrockka.service.FinalePlacesTelegramService
 import by.mrrockka.service.GameTablesService
 import by.mrrockka.service.GameTelegramService

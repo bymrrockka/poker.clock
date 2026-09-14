@@ -1,227 +1,299 @@
-### 1. Message
 
-&rarr; <ins>User</ins>
-
+### Message 0
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 1
-/bounty_game
-buyin: 10
-bounty: 10
-@me 
+/game 
 ```
 ___
 
-### 2. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 2 
-Bounty tournament game started.
-------------------------------
-Table 1
-Seats:
-  5. @sergio_cartwright
-                                 
-``` 
-___
-
-### 3. Message
-
-&rarr; <ins>User</ins>
-
+### Message 1
+&larr; Message from <ins>Bot</ins>
 ```
-Processed message id: 3
-/entry 
+What type of game you'd like to play?
+(Cash) | (Tournament) | (Bounty) | (Cancel)
 ```
 ___
 
-### 4. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 4 
-Entries: 
-------------------------------
-Table 1
-Seats:
-  @nickname3 seat 7 -> entry 10.00 
-``` 
-___
-
-### 5. Message
-
-&rarr; <ins>User</ins>
-
+### Message 2
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 5
-/pp 
+Bounty 
 ```
 ___
 
-### 6. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 6 
-How many places to account? 
-``` 
-___
-
-### 7. Message
-
-&rarr; <ins>User</ins>
-
+### Message 3
+&larr; Message from <ins>Bot</ins>
 ```
-Processed message id: 7
-3 
+How much is for buy in?
+(Cancel)
 ```
 ___
 
-### 8. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 8 
-What percentage for #1 place? 
-``` 
-___
-
-### 9. Message
-
-&rarr; <ins>User</ins>
-
+### Message 4
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 9
 10 
 ```
 ___
 
-### 10. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 10 
-What percentage for #2 place? 
-``` 
+### Message 5
+&larr; Message from <ins>Bot</ins>
+```
+How much is for bounty?
+(Cancel)
+```
 ___
 
-### 11. Message
 
-&rarr; <ins>User</ins>
-
+### Message 6
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 11
+10 
+```
+___
+
+
+### Message 7
+&larr; Message from <ins>Bot</ins>
+```
+Who's playing?
+(Cancel)
+```
+___
+
+
+### Message 8
+&rarr; Message from <ins>@sergio_cartwright</ins>
+```
+@me 
+```
+___
+
+
+### Message 9
+&larr; Message from <ins>Bot</ins>
+```
+Game type: BOUNTY
+Buy in: 10
+Bounty 10
+------------------------------
+Table 1
+Seats:
+  5. @sergio_cartwright
+                                
+```
+___
+
+
+### Pin 
+&larr; Pin from <ins>Bot</ins>
+[Pinned message 9](#message-9)
+
+
+### Delete 
+&larr; Delete from <ins>Bot</ins>
+>Deleted messages: 
+ - [message id 1](#message-1)
+ - [message id 2](#message-2)
+ - [message id 3](#message-3)
+ - [message id 4](#message-4)
+ - [message id 5](#message-5)
+ - [message id 6](#message-6)
+ - [message id 7](#message-7)
+ - [message id 8](#message-8)
+
+
+### Message 12
+&rarr; Message from <ins>@nickname3</ins>
+```
+/entry 
+```
+___
+
+
+### Message 13
+&larr; Message from <ins>Bot</ins>
+```
+Entries: 
+------------------------------
+Table 1
+Seats:
+  @nickname3 seat 7 -> entry 10.00
+```
+___
+
+
+### Message 14
+&rarr; Message from <ins>@sergio_cartwright</ins>
+```
+/prize_pool 
+```
+___
+
+
+### Message 15
+&larr; Message from <ins>Bot</ins>
+```
+How many places to account?
+(1) | (2) | (3) | (4) | (Cancel)
+```
+___
+
+
+### Message 16
+&rarr; Message from <ins>@sergio_cartwright</ins>
+```
+3 
+```
+___
+
+
+### Message 17
+&larr; Message from <ins>Bot</ins>
+```
+What percentage for #1 place?
+(Cancel)
+```
+___
+
+
+### Message 18
+&rarr; Message from <ins>@sergio_cartwright</ins>
+```
+10 
+```
+___
+
+
+### Message 19
+&larr; Message from <ins>Bot</ins>
+```
+What percentage for #2 place?
+(Cancel)
+```
+___
+
+
+### Message 20
+&rarr; Message from <ins>@sergio_cartwright</ins>
+```
 20 
 ```
 ___
 
-### 12. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 12 
-What percentage for #3 place? 
-``` 
+### Message 21
+&larr; Message from <ins>Bot</ins>
+```
+What percentage for #3 place?
+(Cancel)
+```
 ___
 
-### 13. Message
 
-&rarr; <ins>User</ins>
-
+### Message 22
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 13
 30 
 ```
 ___
 
-### 14. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 14 
-Position percentage should equal 100% but was 60% 
-``` 
-___
-
-### 15. Message
-
-&rarr; <ins>Bot</ins>
-``` 
-message id: 15 
-What percentage for #1 place? 
-``` 
-___
-
-### 16. Message
-
-&rarr; <ins>User</ins>
-
+### Message 23
+&larr; Message from <ins>Bot</ins>
 ```
-Processed message id: 16
+Position percentage should equal 100% but was 60%
+```
+___
+
+
+### Message 24
+&larr; Message from <ins>Bot</ins>
+```
+What percentage for #1 place?
+(Cancel)
+```
+___
+
+
+### Message 25
+&rarr; Message from <ins>@sergio_cartwright</ins>
+```
 50 
 ```
 ___
 
-### 17. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 17 
-What percentage for #2 place? 
-``` 
+### Message 26
+&larr; Message from <ins>Bot</ins>
+```
+What percentage for #2 place?
+(Cancel)
+```
 ___
 
-### 18. Message
 
-&rarr; <ins>User</ins>
-
+### Message 27
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 18
 30 
 ```
 ___
 
-### 19. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 19 
-What percentage for #3 place? 
-``` 
+### Message 28
+&larr; Message from <ins>Bot</ins>
+```
+What percentage for #3 place?
+(Cancel)
+```
 ___
 
-### 20. Message
 
-&rarr; <ins>User</ins>
-
+### Message 29
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 20
 20 
 ```
 ___
 
-### 21. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 21 
+### Message 30
+&larr; Message from <ins>Bot</ins>
+```
 Prize pool stored:
 1. 50%
 2. 30%
-3. 20% 
-``` 
+3. 20%
+```
 ___
 
-### 22. Pinned
 
-``` 
-message id 21 pinned
-``` 
-___
+### Pin 
+&larr; Pin from <ins>Bot</ins>
+[Pinned message 30](#message-30)
 
-### 23. Deleted messages
 
-``` 
-message ids 6,7,8,9,10,11,12,13,14,15,16,17,18,19,20 deleted
-``` 
-___
+### Delete 
+&larr; Delete from <ins>Bot</ins>
+>Deleted messages: 
+ - [message id 15](#message-15)
+ - [message id 16](#message-16)
+ - [message id 17](#message-17)
+ - [message id 18](#message-18)
+ - [message id 19](#message-19)
+ - [message id 20](#message-20)
+ - [message id 21](#message-21)
+ - [message id 22](#message-22)
+ - [message id 23](#message-23)
+ - [message id 24](#message-24)
+ - [message id 25](#message-25)
+ - [message id 26](#message-26)
+ - [message id 27](#message-27)
+ - [message id 28](#message-28)
+ - [message id 29](#message-29)

@@ -1,9 +1,7 @@
-### 1. Message
 
-&rarr; <ins>User</ins>
-
+### Message 0
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 1
 /create_poll
 message: Test poll
 cron: * * * * * *
@@ -12,11 +10,10 @@ Yes - participant
 ```
 ___
 
-### 2. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 2 
-Options block should be specified 
-``` 
+### Message 1
+&larr; Message from <ins>Bot</ins>
+```
+Options block should be specified
+```
 ___

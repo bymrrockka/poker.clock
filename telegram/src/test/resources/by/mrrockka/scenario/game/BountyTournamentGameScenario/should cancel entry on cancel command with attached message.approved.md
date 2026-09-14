@@ -1,94 +1,83 @@
-### 1. Message
 
-&rarr; <ins>User</ins>
-
+### Message 0
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 1
 /game 
 ```
 ___
 
-### 2. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 2 
-What type of game you'd like to play? 
-``` 
+### Message 1
+&larr; Message from <ins>Bot</ins>
+```
+What type of game you'd like to play?
+(Cash) | (Tournament) | (Bounty) | (Cancel)
+```
 ___
 
-### 3. Message
 
-&rarr; <ins>User</ins>
-
+### Message 2
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 3
 Bounty 
 ```
 ___
 
-### 4. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 4 
-How much is for buy in? 
-``` 
+### Message 3
+&larr; Message from <ins>Bot</ins>
+```
+How much is for buy in?
+(Cancel)
+```
 ___
 
-### 5. Message
 
-&rarr; <ins>User</ins>
-
+### Message 4
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 5
 10 
 ```
 ___
 
-### 6. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 6 
-How much is for bounty? 
-``` 
+### Message 5
+&larr; Message from <ins>Bot</ins>
+```
+How much is for bounty?
+(Cancel)
+```
 ___
 
-### 7. Message
 
-&rarr; <ins>User</ins>
-
+### Message 6
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 7
 10 
 ```
 ___
 
-### 8. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 8 
-Who's playing? 
-``` 
+### Message 7
+&larr; Message from <ins>Bot</ins>
+```
+Who's playing?
+(Cancel)
+```
 ___
 
-### 9. Message
 
-&rarr; <ins>User</ins>
-
+### Message 8
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 9
 @nickname1 @nickname2 @nickname3 @nickname4 
 ```
 ___
 
-### 10. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 10 
+### Message 9
+&larr; Message from <ins>Bot</ins>
+```
 Game type: BOUNTY
 Buy in: 10
 Bounty 10
@@ -99,133 +88,128 @@ Seats:
   2. @nickname4
   6. @nickname3
   7. @nickname2
-                                 
-``` 
+                                
+```
 ___
 
-### 11. Message
 
-&rarr; <ins>User</ins>
+### Pin 
+&larr; Pin from <ins>Bot</ins>
+[Pinned message 9](#message-9)
 
+
+### Delete 
+&larr; Delete from <ins>Bot</ins>
+>Deleted messages: 
+ - [message id 1](#message-1)
+ - [message id 2](#message-2)
+ - [message id 3](#message-3)
+ - [message id 4](#message-4)
+ - [message id 5](#message-5)
+ - [message id 6](#message-6)
+ - [message id 7](#message-7)
+ - [message id 8](#message-8)
+
+
+### Message 12
+&rarr; Message from <ins>@nickname1</ins>
 ```
-Processed message id: 11
 /entry 
 ```
 ___
 
-### 12. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 12 
-Re-entry stored for @nickname1, buy in amount is 10 
-``` 
+### Message 13
+&larr; Message from <ins>Bot</ins>
+```
+Re-entry stored for @nickname1, buy in amount is 10
+```
 ___
 
-### 13. Message
 
-&rarr; <ins>User</ins>
-
+### Message 14
+&rarr; Message from <ins>@nickname1</ins>
 ```
-Processed message id: 13
 /entry 
 ```
 ___
 
-### 14. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 14 
-Re-entry stored for @nickname1, buy in amount is 10 
-``` 
+### Message 15
+&larr; Message from <ins>Bot</ins>
+```
+Re-entry stored for @nickname1, buy in amount is 10
+```
 ___
 
-### 15. Message
 
-&rarr; <ins>User</ins>
-
+### Message 16
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 15
 /game_stats 
 ```
 ___
 
-### 16. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 16 
+### Message 17
+&larr; Message from <ins>Bot</ins>
+```
 Bounty game statistics:
   - players entered -> 4
   - number of entries -> 6
   - bounties out of game -> 0
-  - total in game -> 120.00 
-``` 
+  - total in game -> 120.00
+```
 ___
 
-### 17. Message
-
-&rarr; <ins>User</ins>
-
+>[/entry](#message-14)
+### Message 18
+&rarr; Message from <ins>@nickname1</ins>
 ```
-Processed [reply to message id 13]
-message id: 17
 /cancel 
 ```
 ___
 
-### 18. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 18 
-Only administrators allowed to user this command. 
-``` 
-___
-
-### 19. Member requested
-___
-
-### 20. Message
-
-&rarr; <ins>User</ins>
-
+### Message 19
+&larr; Message from <ins>Bot</ins>
 ```
-Processed [reply to message id 13]
-message id: 19
+Only administrators allowed to user this command.
+```
+___
+
+>[/entry](#message-14)
+### Message 21
+&rarr; Message from <ins>@sergio_cartwright</ins>
+```
 /cancel 
 ```
 ___
 
-### 21. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 20 
-Entry canceled 
-``` 
+### Message 22
+&larr; Message from <ins>Bot</ins>
+```
+Entry canceled
+```
 ___
 
-### 22. Message
 
-&rarr; <ins>User</ins>
-
+### Message 23
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 21
 /game_stats 
 ```
 ___
 
-### 23. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 22 
+### Message 24
+&larr; Message from <ins>Bot</ins>
+```
 Bounty game statistics:
   - players entered -> 4
   - number of entries -> 5
   - bounties out of game -> 0
-  - total in game -> 100.00 
-``` 
+  - total in game -> 100.00
+```
 ___

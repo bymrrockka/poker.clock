@@ -1,9 +1,7 @@
-### 1. Message
 
-&rarr; <ins>User</ins>
-
+### Message 0
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 1
 /create_poll
 cron: 0 0 0 * * WED
 message: Test poll
@@ -14,22 +12,18 @@ options:
 ```
 ___
 
-### 2. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 2 
+### Message 1
+&larr; Message from <ins>Bot</ins>
+```
 Poll created.
-Will be triggered next WEDNESDAY 00:00 
-``` 
+Will be triggered next WEDNESDAY 00:00
+```
 ___
 
-### 3. Posted
-
-&rarr; <ins>2025-09-24 - WEDNESDAY</ins>
-
+### Message 2
+&larr; Poll from <ins>Bot</ins>
 ``` 
-message id 3
 Test poll
 1. 'Yes'
 2. 'No'
@@ -37,53 +31,92 @@ Test poll
 ``` 
 ___
 
-### 4. Pinned
 
-``` 
-message id 3 pinned
-``` 
-___
+### Pin 
+&larr; Pin from <ins>Bot</ins>
+[Pinned message 2](#message-2)
 
-### 5. Poll answer
-
-``` 
-jackie_rau chosen 2
-``` 
-___
-
-### 6. Poll answer
-
-``` 
-terisa_johnston chosen 2
-``` 
-___
-
-### 7. Poll answer
-
-``` 
-santo_welch chosen 3
-``` 
-___
-
-### 8. Message
-
-&rarr; <ins>User</ins>
-
+### Poll answer
+&rarr; Message from <ins>@jackie_rau</ins>
 ```
-Processed [reply to message id 3]
-message id: 4
-/tournament_game
-buyin: 10
+ - 1
+```
 
- 
+### Poll answer
+&rarr; Message from <ins>@terisa_johnston</ins>
+```
+ - 1
+```
+
+### Poll answer
+&rarr; Message from <ins>@santo_welch</ins>
+```
+ - 2
+```
+
+
+### Message 7
+&rarr; Message from <ins>@sergio_cartwright</ins>
+```
+/game 
 ```
 ___
 
-### 9. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 5 
-Game participants not found according to poll 
-``` 
+### Message 8
+&larr; Message from <ins>Bot</ins>
+```
+What type of game you'd like to play?
+(Cash) | (Tournament) | (Bounty) | (Cancel)
+```
+___
+
+
+### Message 9
+&rarr; Message from <ins>@sergio_cartwright</ins>
+```
+Tournament 
+```
+___
+
+
+### Message 10
+&larr; Message from <ins>Bot</ins>
+```
+How much is for buy in?
+(Cancel)
+```
+___
+
+
+### Message 11
+&rarr; Message from <ins>@sergio_cartwright</ins>
+```
+10 
+```
+___
+
+
+### Message 12
+&larr; Message from <ins>Bot</ins>
+```
+Who's playing?
+(Cancel)
+```
+___
+
+>[The class object inherits from Chuck Norris.](#message-2)
+### Message 13
+&rarr; Message from <ins>@sergio_cartwright</ins>
+```
+. 
+```
+___
+
+
+### Message 14
+&larr; Message from <ins>Bot</ins>
+```
+Game participants not found according to poll
+```
 ___

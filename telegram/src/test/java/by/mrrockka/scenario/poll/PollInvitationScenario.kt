@@ -4,10 +4,11 @@ import by.mrrockka.Given
 import by.mrrockka.When
 import by.mrrockka.builder.person
 import by.mrrockka.domain.GameType
-import by.mrrockka.scenario.Commands.Companion.createGame
-import by.mrrockka.scenario.Commands.Companion.createPoll
-import by.mrrockka.scenario.Commands.Companion.gameStats
-import by.mrrockka.scenario.Commands.Companion.stopPoll
+import by.mrrockka.scenario.common.Commands.Companion.createPoll
+import by.mrrockka.scenario.common.Commands.Companion.game
+import by.mrrockka.scenario.common.Commands.Companion.gameStats
+import by.mrrockka.scenario.common.Commands.Companion.stopPoll
+import by.mrrockka.scenario.common.createGameFlow
 import com.oneeyedmen.okeydoke.Approver
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
@@ -50,10 +51,7 @@ class PollInvitationScenario : AbstractPollScenario() {
             //maybe
             poll.pollAnswer(person(), 3)
 
-            user(replyTo = poll) {
-                createGame(type = GameType.TOURNAMENT, BigDecimal(10))
-            }
-            bot { "Game created" }
+            createGameFlow(GameType.TOURNAMENT, BigDecimal(10), replyTo = poll)
             user { gameStats }
             bot { "Game stats" }
             user(replyTo = createPoll) { stopPoll }
@@ -92,11 +90,7 @@ class PollInvitationScenario : AbstractPollScenario() {
             }
             //maybe
             poll.pollAnswer(person(), 3)
-
-            user(replyTo = poll) {
-                createGame(type = GameType.TOURNAMENT, buyin = BigDecimal(10), excludes = participants.drop(1))
-            }
-            bot { "Game created" }
+            createGameFlow(GameType.TOURNAMENT, BigDecimal(10), players = participants.drop(1).map { it.nickname!! }, replyTo = poll)
             user { gameStats }
             bot { "Game stats" }
         } When {
@@ -130,10 +124,14 @@ class PollInvitationScenario : AbstractPollScenario() {
             }
             poll.pollAnswer(person(), 3)
 
-            user(replyTo = poll) {
-                createGame(type = GameType.TOURNAMENT, BigDecimal(10))
-            }
-            bot { "Game created" }
+            user { game }
+            bot { "Type of game?" }
+            user { GameType.TOURNAMENT.title }
+            bot { "Buyin?" }
+            user { BigDecimal(10).toString() }
+            bot { "Players?" }
+            user(replyTo = poll) { "." }
+            bot { "Exception" }
         } When {
             updatesReceived()
         } ThenApproveWith approver

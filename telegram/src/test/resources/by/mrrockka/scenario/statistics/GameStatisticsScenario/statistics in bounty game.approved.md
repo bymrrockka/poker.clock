@@ -1,237 +1,289 @@
-### 1. Message
 
-&rarr; <ins>User</ins>
-
+### Message 0
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 1
-/bounty_game
-buyin: 10
-bounty: 10
-@me, @nickname1 
+/game 
 ```
 ___
 
-### 2. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 2 
-Bounty tournament game started.
+### Message 1
+&larr; Message from <ins>Bot</ins>
+```
+What type of game you'd like to play?
+(Cash) | (Tournament) | (Bounty) | (Cancel)
+```
+___
+
+
+### Message 2
+&rarr; Message from <ins>@sergio_cartwright</ins>
+```
+Bounty 
+```
+___
+
+
+### Message 3
+&larr; Message from <ins>Bot</ins>
+```
+How much is for buy in?
+(Cancel)
+```
+___
+
+
+### Message 4
+&rarr; Message from <ins>@sergio_cartwright</ins>
+```
+10 
+```
+___
+
+
+### Message 5
+&larr; Message from <ins>Bot</ins>
+```
+How much is for bounty?
+(Cancel)
+```
+___
+
+
+### Message 6
+&rarr; Message from <ins>@sergio_cartwright</ins>
+```
+10 
+```
+___
+
+
+### Message 7
+&larr; Message from <ins>Bot</ins>
+```
+Who's playing?
+(Cancel)
+```
+___
+
+
+### Message 8
+&rarr; Message from <ins>@sergio_cartwright</ins>
+```
+@me @nickname1 
+```
+___
+
+
+### Message 9
+&larr; Message from <ins>Bot</ins>
+```
+Game type: BOUNTY
+Buy in: 10
+Bounty 10
 ------------------------------
 Table 1
 Seats:
   3. @nickname1
   7. @sergio_cartwright
-                                 
-``` 
+                                
+```
 ___
 
-### 3. Message
 
-&rarr; <ins>User</ins>
+### Pin 
+&larr; Pin from <ins>Bot</ins>
+[Pinned message 9](#message-9)
 
+
+### Delete 
+&larr; Delete from <ins>Bot</ins>
+>Deleted messages: 
+ - [message id 1](#message-1)
+ - [message id 2](#message-2)
+ - [message id 3](#message-3)
+ - [message id 4](#message-4)
+ - [message id 5](#message-5)
+ - [message id 6](#message-6)
+ - [message id 7](#message-7)
+ - [message id 8](#message-8)
+
+
+### Message 12
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 3
 /game_stats 
 ```
 ___
 
-### 4. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 4 
+### Message 13
+&larr; Message from <ins>Bot</ins>
+```
 Bounty game statistics:
   - players entered -> 2
   - number of entries -> 2
   - bounties out of game -> 0
-  - total in game -> 40.00 
-``` 
+  - total in game -> 40.00
+```
 ___
 
-### 5. Message
 
-&rarr; <ins>User</ins>
-
+### Message 14
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 5
 /bounty @me kicked @nickname1 
 ```
 ___
 
-### 6. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 6 
-Bounty amount 10.00 from @nickname1 stored for @sergio_cartwright 
-``` 
+### Message 15
+&larr; Message from <ins>Bot</ins>
+```
+Bounty amount 10.00 from @nickname1 stored for @sergio_cartwright
+```
 ___
 
-### 7. Message
 
-&rarr; <ins>User</ins>
-
+### Message 16
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 7
 /game_stats 
 ```
 ___
 
-### 8. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 8 
+### Message 17
+&larr; Message from <ins>Bot</ins>
+```
 Bounty game statistics:
   - players entered -> 2
   - number of entries -> 2
   - bounties out of game -> 1
-  - total in game -> 40.00 
-``` 
+  - total in game -> 40.00
+```
 ___
 
-### 9. Message
 
-&rarr; <ins>User</ins>
-
+### Message 18
+&rarr; Message from <ins>@nickname1</ins>
 ```
-Processed message id: 9
 /entry 
 ```
 ___
 
-### 10. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 10 
-Re-entry stored for @nickname1, buy in amount is 10 
-``` 
+### Message 19
+&larr; Message from <ins>Bot</ins>
+```
+Re-entry stored for @nickname1, buy in amount is 10
+```
 ___
 
-### 11. Message
 
-&rarr; <ins>User</ins>
-
+### Message 20
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 11
 /bounty @nickname1 kicked @me 
 ```
 ___
 
-### 12. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 12 
-Bounty amount 10.00 from @sergio_cartwright stored for @nickname1 
-``` 
+### Message 21
+&larr; Message from <ins>Bot</ins>
+```
+Bounty amount 10.00 from @sergio_cartwright stored for @nickname1
+```
 ___
 
-### 13. Message
 
-&rarr; <ins>User</ins>
-
+### Message 22
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 13
 /game_stats 
 ```
 ___
 
-### 14. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 14 
+### Message 23
+&larr; Message from <ins>Bot</ins>
+```
 Bounty game statistics:
   - players entered -> 2
   - number of entries -> 3
   - bounties out of game -> 2
-  - total in game -> 60.00 
-``` 
+  - total in game -> 60.00
+```
 ___
 
-### 15. Message
 
-&rarr; <ins>User</ins>
-
+### Message 24
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 15
 /entry 
 ```
 ___
 
-### 16. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 16 
-Re-entry stored for @sergio_cartwright, buy in amount is 10 
-``` 
+### Message 25
+&larr; Message from <ins>Bot</ins>
+```
+Re-entry stored for @sergio_cartwright, buy in amount is 10
+```
 ___
 
-### 17. Message
 
-&rarr; <ins>User</ins>
-
+### Message 26
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 17
 /game_stats 
 ```
 ___
 
-### 18. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 18 
+### Message 27
+&larr; Message from <ins>Bot</ins>
+```
 Bounty game statistics:
   - players entered -> 2
   - number of entries -> 4
   - bounties out of game -> 2
-  - total in game -> 80.00 
-``` 
+  - total in game -> 80.00
+```
 ___
 
-### 19. Message
 
-&rarr; <ins>User</ins>
-
+### Message 28
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 19
 /bounty @nickname1 kicked @me 
 ```
 ___
 
-### 20. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 20 
-Bounty amount 10.00 from @sergio_cartwright stored for @nickname1 
-``` 
+### Message 29
+&larr; Message from <ins>Bot</ins>
+```
+Bounty amount 10.00 from @sergio_cartwright stored for @nickname1
+```
 ___
 
-### 21. Message
 
-&rarr; <ins>User</ins>
-
+### Message 30
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 21
 /game_stats 
 ```
 ___
 
-### 22. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 22 
+### Message 31
+&larr; Message from <ins>Bot</ins>
+```
 Bounty game statistics:
   - players entered -> 2
   - number of entries -> 4
   - bounties out of game -> 3
-  - total in game -> 80.00 
-``` 
+  - total in game -> 80.00
+```
 ___

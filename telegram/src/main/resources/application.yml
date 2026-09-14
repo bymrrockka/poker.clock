@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: ${PROFILES:postgres}
+    active: ${PROFILES:}
 
 feature:
   service-fee:
@@ -16,7 +16,7 @@ bot:
   properties:
     name: ${BOT_NAME:Poker calculator bot}
     nickname: ${BOT_NICKNAME:bot}
-    enabled: ${BOT_ENABLED:true}
+    enabled: ${BOT_ENABLED:false}
     token: ${BOT_TOKEN:}
   scheduler:
     cron: "0 * * * * *"
@@ -38,55 +38,6 @@ bot:
           For all tournaments in order to calculate payouts finale places and prize pool should be specified.
           
           And after all set you can call `/calculate` command to see game summary and all the calculations.
-      - name: bounty_game
-        enabled: true
-        alias: bg
-        description: Deprecated place use `/game` instead
-        details: |
-          Deprecated place use `/game` instead
-          
-          You could create a bounty tournament game using /bounty_game command with list of players nicknames that separated with a space.
-          Also you should specify buy-in, stack and bounty amount.
-          There should be at least two players for the game
-          Example: 
-          /bounty_game
-          buyin: 10
-          stack: 10
-          bounty: 10
-          @nickname 
-          @nickname
-      - name: tournament_game
-        enabled: true
-        alias: tg
-        description: Deprecated place use `/game` instead
-        details: |
-          Deprecated place use `/game` instead
-          
-          You could create a tournament game using /tournament_game command with list of players nicknames that separated with a space.
-          Also you should specify buy-in, stack amount.
-          There should be at least two players for the game
-          Example: 
-          /tournament_game
-          buyin: 10
-          stack: 10
-          @nickname 
-          @nickname
-      - name: cash_game
-        enabled: true
-        alias: cg
-        description: Deprecated place use `/game` instead
-        details: |
-          Deprecated place use `/game` instead
-          
-          You could create a cash game using /cash_game command with list of players nicknames that separated with a space.
-          Also you should specify buy-in and stack amounts.
-          There should be at least two players for the game
-          Example: 
-          /cash_game
-          buyin: 10
-          stack: 10
-          @nickname 
-          @nickname
       - name: entry
         enabled: true
         description: Player entry to game
@@ -120,39 +71,9 @@ bot:
           /withdrawal @nickname @nickname 20
       - name: prize_pool
         enabled: true
-        description: Deprecated place use `/pp` instead
         details: |
-          Deprecated place use `/pp` instead
-          
-          When you ready to specify prize pool for tournament game use /prize_pool command to store position and percentage map.
-          Should contain at least one position.
-          Total percentage should be equal to 100%.
-          You could forward game message in case there are multiple games happen in parallel to store against it.
-          Examples: 
-          /prize_pool 
-          1. 100
-          /prize_pool 
-          1 70%
-          2 30%
-      - name: pp
-        enabled: true
-        description: Stores a prize pool for a tournament
-        details: |
-          You will asked about details for game's prize pool
+          You will be asked about details for game's prize pool
       - name: finale_places
-        enabled: true
-        description: Deprecated place use `/fp` instead
-        details: |
-          Deprecated place use `/fp` instead
-          
-          When tournament is finished you could specify places for players who won the pot with /finale_places command.
-          Should contain at least one position with player nickname.
-          You could forward game message in case there are multiple games happen in parallel to store against it.
-          Examples: 
-          /finale_places 
-          1. @nickname
-          /finale_places 1 @nickname, 2 @nickname
-      - name: fp
         enabled: true
         description: Stores a finale places for a tournament
         details: |
@@ -246,7 +167,7 @@ bot:
           /stop_poll
       - name: cancel
         enabled: true
-        description: Cancel players actions by message
+        description: Cancel players in game actions by message
         details: |
           You should reply to message you want to cancel with this command to process it.
           Actions that could be canceled:

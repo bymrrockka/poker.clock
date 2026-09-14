@@ -1,94 +1,83 @@
-### 1. Message
 
-&rarr; <ins>User</ins>
-
+### Message 0
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 1
 /game 
 ```
 ___
 
-### 2. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 2 
-What type of game you'd like to play? 
-``` 
+### Message 1
+&larr; Message from <ins>Bot</ins>
+```
+What type of game you'd like to play?
+(Cash) | (Tournament) | (Bounty) | (Cancel)
+```
 ___
 
-### 3. Message
 
-&rarr; <ins>User</ins>
-
+### Message 2
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 3
 Bounty 
 ```
 ___
 
-### 4. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 4 
-How much is for buy in? 
-``` 
+### Message 3
+&larr; Message from <ins>Bot</ins>
+```
+How much is for buy in?
+(Cancel)
+```
 ___
 
-### 5. Message
 
-&rarr; <ins>User</ins>
-
+### Message 4
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 5
 10 
 ```
 ___
 
-### 6. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 6 
-How much is for bounty? 
-``` 
+### Message 5
+&larr; Message from <ins>Bot</ins>
+```
+How much is for bounty?
+(Cancel)
+```
 ___
 
-### 7. Message
 
-&rarr; <ins>User</ins>
-
+### Message 6
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 7
 10 
 ```
 ___
 
-### 8. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 8 
-Who's playing? 
-``` 
+### Message 7
+&larr; Message from <ins>Bot</ins>
+```
+Who's playing?
+(Cancel)
+```
 ___
 
-### 9. Message
 
-&rarr; <ins>User</ins>
-
+### Message 8
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-Processed message id: 9
 @nickname1 
 ```
 ___
 
-### 10. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 10 
+### Message 9
+&larr; Message from <ins>Bot</ins>
+```
 Game type: BOUNTY
 Buy in: 10
 Bounty 10
@@ -96,127 +85,116 @@ Bounty 10
 Table 1
 Seats:
   5. @nickname1
-                                 
-``` 
-___
-
-### 11. Pinned
-
-``` 
-message id 10 pinned
-``` 
-___
-
-### 12. Deleted messages
-
-``` 
-message ids 2,3,4,5,6,7,8,9 deleted
-``` 
-___
-
-### 13. Message
-
-&rarr; <ins>User</ins>
-
+                                
 ```
-Processed message id: 11
+___
+
+
+### Pin 
+&larr; Pin from <ins>Bot</ins>
+[Pinned message 9](#message-9)
+
+
+### Delete 
+&larr; Delete from <ins>Bot</ins>
+>Deleted messages: 
+ - [message id 1](#message-1)
+ - [message id 2](#message-2)
+ - [message id 3](#message-3)
+ - [message id 4](#message-4)
+ - [message id 5](#message-5)
+ - [message id 6](#message-6)
+ - [message id 7](#message-7)
+ - [message id 8](#message-8)
+
+
+### Message 12
+&rarr; Message from <ins>@nickname1</ins>
+```
 /entry 
 ```
 ___
 
-### 14. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 12 
-Re-entry stored for @nickname1, buy in amount is 10 
-``` 
+### Message 13
+&larr; Message from <ins>Bot</ins>
+```
+Re-entry stored for @nickname1, buy in amount is 10
+```
 ___
 
-### 15. Message
 
-&rarr; <ins>User</ins>
-
+### Message 14
+&rarr; Message from <ins>@nickname1</ins>
 ```
-Processed message id: 13
 /entry 
 ```
 ___
 
-### 16. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 14 
-Re-entry stored for @nickname1, buy in amount is 10 
-``` 
+### Message 15
+&larr; Message from <ins>Bot</ins>
+```
+Re-entry stored for @nickname1, buy in amount is 10
+```
 ___
 
-### 17. Message
 
-&rarr; <ins>User</ins>
-
+### Message 16
+&rarr; Message from <ins>@nickname2</ins>
 ```
-Processed message id: 15
 /entry 
 ```
 ___
 
-### 18. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 16 
+### Message 17
+&larr; Message from <ins>Bot</ins>
+```
 Entries: 
 ------------------------------
 Table 1
 Seats:
-  @nickname2 seat 7 -> entry 10.00 
-``` 
+  @nickname2 seat 7 -> entry 10.00
+```
 ___
 
-### 19. Message
 
-&rarr; <ins>User</ins>
-
+### Message 18
+&rarr; Message from <ins>@nickname3</ins>
 ```
-Processed message id: 17
 /entry 
 ```
 ___
 
-### 20. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 18 
+### Message 19
+&larr; Message from <ins>Bot</ins>
+```
 Entries: 
 ------------------------------
 Table 1
 Seats:
-  @nickname3 seat 9 -> entry 10.00 
-``` 
+  @nickname3 seat 9 -> entry 10.00
+```
 ___
 
-### 21. Message
 
-&rarr; <ins>User</ins>
-
+### Message 20
+&rarr; Message from <ins>@nickname4</ins>
 ```
-Processed message id: 19
 /entry 
 ```
 ___
 
-### 22. Message
 
-&rarr; <ins>Bot</ins>
-``` 
-message id: 20 
+### Message 21
+&larr; Message from <ins>Bot</ins>
+```
 Entries: 
 ------------------------------
 Table 1
 Seats:
-  @nickname4 seat 3 -> entry 10.00 
-``` 
+  @nickname4 seat 3 -> entry 10.00
+```
 ___

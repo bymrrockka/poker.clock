@@ -11,22 +11,22 @@ import kotlin.time.Instant
 interface Command {
     val unique: String
 
-    data class UserMessage(var message: String, val username: String? = null, val replyTo: Command? = null, override val unique: String = unique()) : Command
+    interface Message : Command
+
+    data class UserMessage(var message: String, val username: String? = null, val replyTo: Message? = null, override val unique: String = unique()) : Message
+    data class BotMessage(var message: String, val replyTo: Message? = null, override val unique: String = unique()) : Message
     data class Member(var member: ChatMember, override val unique: String = unique()) : Command
 
-    //no assertions for bot message
-    data class BotMessage(var message: String, val replyTo: Command? = null, override val unique: String = unique()) : Command
-
     @OptIn(ExperimentalTime::class)
-    data class Poll(val time: Instant, override val unique: String = unique()) : Command
+    data class Poll(val time: Instant, override val unique: String = unique()) : Message
 
     data class PollAnswer(val poll: Poll, val person: BasicPerson, val optionName: String? = null, val option: Int, override val unique: String = unique()) : Command
 
-    data class Pin(val command: Command, override val unique: String = unique()) : Command
+    data class Pin(val command: Message, override val unique: String = unique()) : Command
 
-    data class Unpin(val command: Command, override val unique: String = unique()) : Command
+    data class Unpin(val command: Message, override val unique: String = unique()) : Command
 
-    data class DeleteMessages(val toDelete: List<Command>, override val unique: String = unique()) : Command
+    data class DeleteMessages(val toDelete: List<Message>, override val unique: String = unique()) : Command
 
     companion object {
         fun unique(): String = telegramRandoms.faker.regexify("\\w{10,12}")
@@ -40,13 +40,13 @@ class GivenSpecification {
         commands += Command.Member(member<ChatMember.Administrator> { user(this@isAdmin) })
     }
 
-    fun user(username: String? = null, replyTo: Command? = null, init: () -> String): Command.UserMessage {
+    fun user(username: String? = null, replyTo: Command.Message? = null, init: () -> String): Command.UserMessage {
         val command = Command.UserMessage(replyTo = replyTo, username = username, message = init())
         this.commands += command
         return command
     }
 
-    fun bot(replyTo: Command? = null, init: () -> String): Command.BotMessage {
+    fun bot(replyTo: Command.Message? = null, init: () -> String): Command.BotMessage {
         val command = Command.BotMessage(replyTo = replyTo, message = init())
         this.commands += command
         return command
@@ -63,21 +63,21 @@ class GivenSpecification {
         this@GivenSpecification.commands += Command.PollAnswer(this, person, option = option)
     }
 
-    fun Command.pinned() {
+    fun Command.Message.pinned() {
         this@GivenSpecification.commands += Command.Pin(this)
     }
 
-    fun Command.unpinned() {
+    fun Command.Message.unpinned() {
         this@GivenSpecification.commands += Command.Unpin(this)
     }
 
-    fun unpinned(vararg commands: Command) {
+    fun unpinned(vararg commands: Command.Message) {
         commands.forEach { command ->
             this@GivenSpecification.commands += Command.Unpin(command)
         }
     }
 
-    fun List<Command>.deleted() {
+    fun List<Command.Message>.deleted() {
         commands += Command.DeleteMessages(this)
     }
 }

@@ -3,66 +3,53 @@ package by.mrrockka.scenario.game
 import by.mrrockka.Given
 import by.mrrockka.When
 import by.mrrockka.domain.GameType
-import by.mrrockka.extension.mdApprover
-import by.mrrockka.scenario.Commands.Companion.calculate
-import by.mrrockka.scenario.Commands.Companion.createGame
-import by.mrrockka.scenario.Commands.Companion.entry
-import by.mrrockka.scenario.Commands.Companion.finalePlaces
-import by.mrrockka.scenario.Commands.Companion.prizePool
+import by.mrrockka.scenario.common.Commands.Companion.calculate
+import by.mrrockka.scenario.common.Commands.Companion.entry
+import by.mrrockka.scenario.common.finalePlacesFlow
+import by.mrrockka.scenario.common.prizePoolFlow
 import com.oneeyedmen.okeydoke.Approver
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.ValueSource
 import java.math.BigDecimal
 
 class TournamentGameScenario : PrizeGameScenario() {
     override fun gameType(): GameType = GameType.TOURNAMENT
 
-    @ParameterizedTest
-    @ValueSource(booleans = [false, true])
-    fun `create game with players and some reentries`(withAlias: Boolean) {
+    @Test
+    fun `create game with players and some reentries`(approver: Approver) {
         val buyin = BigDecimal(10)
-        val players = listOf(
-                "nickname1",
-                "nickname2",
-                "nickname3",
-                "nickname4",
-                "nickname5",
-                "me",
-        )
-        val winners = players.take(2);
+        val players = (1..5).map { "nickname$it" } + "me"
 
         Given {
-            val game = user { players.createGame(GameType.TOURNAMENT, buyin, withAlias) }
-            bot { "Game created" }
-            game.pinned()
+            val game = createGameFlow(buyin, players)
             user("nickname3") { entry }
             bot { "Entry stored" }
             user("nickname3") { entry }
             bot { "Entry stored" }
-            val prizePool = user { prizePool(2) }
-            bot { "Prize pool stored" }
-            prizePool.pinned()
+            val prizePool = prizePoolFlow(
+                    1 to 50,
+                    2 to 50,
+            )
             user("nickname1") { entry }
             bot { "Entry stored" }
             user("nickname1") { entry }
             bot { "Entry stored" }
-            val finalePlaces = user { winners.finalePlaces() }
-            bot { "Finale places stored" }
-            finalePlaces.pinned()
+            val finalePlaces = finalePlacesFlow(
+                    1 to "nickname1",
+                    2 to "nickname2",
+            )
             user("nickname1") { entry }
             bot { "Entry stored" }
             user("nickname1") { entry }
             bot { "Entry stored" }
             user("nickname1") { entry }
             bot { "Entry stored" }
-            val calculate = user { calculate }
-            bot { "Calculated payouts" }
+            user { calculate }
+            val calculate = bot { "Calculated payouts" }
             calculate.pinned()
             unpinned(game, prizePool, finalePlaces)
         } When {
             updatesReceived()
-        } ThenApproveWith mdApprover("create game with players and some reentries${if (withAlias) " with alias" else ""}")
+        } ThenApproveWith approver
     }
 
     @Test
@@ -71,16 +58,13 @@ class TournamentGameScenario : PrizeGameScenario() {
         val player = "me"
 
         Given {
-            user { player.createGame(GameType.TOURNAMENT, buyin) }
-            bot { "Game created" }
+            createGameFlow(buyin, listOf(player))
             user("nickname3") { entry }
             bot { "Entry stored" }
-            user { prizePool(1) }
-            bot { "Prize pool stored" }
+            prizePoolFlow(1 to 100)
             user("nickname1") { entry }
             bot { "Entry stored" }
-            user { player.finalePlaces() }
-            bot { "Finale places stored" }
+            finalePlacesFlow(1 to player)
             user("nickname2") { entry }
             bot { "Entry stored" }
             user { calculate }
