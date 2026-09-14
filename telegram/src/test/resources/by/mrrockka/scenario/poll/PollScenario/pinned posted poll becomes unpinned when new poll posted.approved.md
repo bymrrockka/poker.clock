@@ -1,7 +1,6 @@
-### 1. Message
 
-&rarr; <ins>User</ins>
-
+### Message 0
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 /create_poll
 cron: 0 0 0 * * *
@@ -15,21 +14,18 @@ options:
 ```
 ___
 
-### 2. Message
 
-&larr; <ins>Bot</ins>
-``` 
+### Message 1
+&larr; Message from <ins>Bot</ins>
+```
 Poll created.
-Will be triggered next WEDNESDAY 00:00 
-``` 
+Will be triggered next WEDNESDAY 00:00
+```
 ___
 
-### 3. Posted
-
-&rarr; <ins>2025-09-17 - WEDNESDAY</ins>
-
+### Message 2
+&larr; Poll from <ins>Bot</ins>
 ``` 
-
 Test poll
 1. 'Yes'
 2. 'Noooooo'
@@ -39,19 +35,14 @@ Test poll
 ``` 
 ___
 
-### 4. Pinned
 
+### Pin 
+&larr; Pin from <ins>Bot</ins>
+[Pinned message 2](#message-2)
+
+### Message 4
+&larr; Poll from <ins>Bot</ins>
 ``` 
-message id 3 pinned
-``` 
-___
-
-### 5. Posted
-
-&rarr; <ins>2025-09-18 - THURSDAY</ins>
-
-``` 
-
 Test poll
 1. 'Yes'
 2. 'Noooooo'
@@ -61,16 +52,12 @@ Test poll
 ``` 
 ___
 
-### 6. Unpinned
 
-``` 
-message id 3 unpinned
-``` 
-___
+### Unpin 
+&larr; Unpin from <ins>Bot</ins>
+[Unpinned message 2](#message-2)
 
-### 7. Pinned
 
-``` 
-message id 5 pinned
-``` 
-___
+### Pin 
+&larr; Pin from <ins>Bot</ins>
+[Pinned message 4](#message-4)

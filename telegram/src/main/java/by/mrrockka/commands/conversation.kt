@@ -14,8 +14,8 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
 
 abstract class CancelableStep(isInitial: Boolean = false, val cancelStep: KClass<out WizardStep>) : WizardStep(isInitial) {
-    private val cancel = "cancel"
-    private fun String.canceled() = matches("^${cancel}$".toRegex())
+    private val cancel = "Cancel"
+    private fun String.canceled() = matches("^${cancel}$".toRegex(RegexOption.IGNORE_CASE))
 
     open fun beforeCancelAction(ctx: WizardContext) {}
     abstract suspend fun navigate(ctx: WizardContext): Transition

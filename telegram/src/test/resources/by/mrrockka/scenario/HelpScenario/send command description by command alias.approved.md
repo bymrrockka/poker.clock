@@ -1,17 +1,16 @@
-### 1. Message
 
-&rarr; <ins>User</ins>
-
+### Message 0
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 /help prize_pool 
 ```
 ___
 
-### 2. Message
 
-&larr; <ins>Bot</ins>
-``` 
+### Message 1
+&larr; Message from <ins>Bot</ins>
+```
 You will be asked about details for game's prize pool
- 
-``` 
+
+```
 ___

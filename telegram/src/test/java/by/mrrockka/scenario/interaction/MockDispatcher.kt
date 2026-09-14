@@ -28,8 +28,6 @@ import mockwebserver3.MockWebServer
 import mockwebserver3.RecordedRequest
 import okhttp3.internal.closeQuietly
 import org.springframework.stereotype.Component
-import tools.jackson.databind.JsonNode
-import tools.jackson.databind.ObjectMapper
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedDeque
 import kotlin.time.Clock
@@ -37,30 +35,18 @@ import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
-private val defaultMessageBody = serde.encodeToString(Response.Success(MessageBuilder { text("SKIPPED") }.message()))
-internal fun defaultBooleanBody(success: Boolean = true) = if (success) {
-    serde.encodeToString(Response.Success(success))
-} else {
-    serde.encodeToString(
-            Response.Failure(
-                    errorCode = 401,
-                    description = "No mock found",
-            ),
-    )
-}
-
+private val defaultMessage = MockResponse(200, body = serde.encodeToString(Response.Success(MessageBuilder { text("SKIPPED") }.message())))
 private val logger = KotlinLogging.logger {}
 
 @Component
 class MockDispatcher(
         private val botProps: BotProperties,
-        private val mapper: ObjectMapper,
         private val clock: TestClock,
 ) : Dispatcher() {
     private val delay = 5L
     private var lastPush: Instant? = null
     var requests = mutableMapOf<Int, String>()
-    private var interactions = ConcurrentLinkedDeque<Interaction>()
+    private var interactions = ConcurrentLinkedDeque<Interaction<*>>()
     private var members = ConcurrentHashMap<Long, ChatMember>()
 
     fun scenario(init: Interaction.Builder.() -> Unit) {
@@ -71,11 +57,11 @@ class MockDispatcher(
         members += member.user.id to member
     }
 
-    private fun ConcurrentLinkedDeque<Interaction>.retrieve(): Interaction {
+    private fun ConcurrentLinkedDeque<Interaction<*>>.retrieve(): Interaction<*> {
         return synchronized(this) {
             val interaction = when {
                 isEmpty() -> empty
-                first().isNotEmpty() -> first()
+                !first().completed -> first()
                 else -> {
                     removeFirst()
                     retrieve()
@@ -83,7 +69,7 @@ class MockDispatcher(
             }
 
             if (interaction.time != null) {
-                clock.set(interaction.time)
+                clock.set(interaction.time!!)
             }
             interaction
         }
@@ -113,95 +99,63 @@ class MockDispatcher(
         return sync()
     }
 
+    private fun Interaction<*>.process(request: RecordedRequest? = null): MockResponse =
+            push {
+                val text = when (this) {
+                    is Interaction.UpdateResponse -> data.toText()
+
+                    is Interaction.MessageResponse -> {
+                        checkNotNull(request) { "Request required" }
+                        request.toText(this)
+                    }
+
+                    is Interaction.BooleanResponse -> {
+                        checkNotNull(request) { "Request required" }
+                        request.toText(this)
+                    }
+
+                    else -> error("Unknown interaction type")
+                }
+
+                requests += index to text
+                complete()
+                toResponse()
+            }
+
     override fun dispatch(request: RecordedRequest): MockResponse {
         val interaction = interactions.retrieve()
         return when (request.url.encodedPath) {
-            "${botProps.botpath}/$getUpdates" -> when {
-                interaction.update.isNotEmpty() -> {
-                    logger.debug { "Sending updates. Interaction index: ${interaction.index}" }
-
-                    push {
-                        requests += interaction.index to "Processed"
-                        interaction.update.removeFirst()
-                    }
-                }
+            "${botProps.botpath}/$getUpdates" -> when (interaction) {
+                is Interaction.UpdateResponse -> interaction.process()
 
                 else -> MockResponse(body = serde.encodeToString(Response.Success(emptyList<Update>())))
             }
 
-            "${botProps.botpath}/$sendMessage" ->
-                when {
-                    interaction.message.isNotEmpty() -> {
-                        logger.debug { "Send Message request sent. Interaction index: ${interaction.index}" }
-                        push {
-                            requests += interaction.index to request.toJson().findPath("text").asString()
-                            interaction.message.removeFirst()
-                        }
-                    }
+            "${botProps.botpath}/$sendMessage",
+            "${botProps.botpath}/$sendPoll",
+                ->
+                when (interaction) {
+                    is Interaction.MessageResponse -> interaction.process(request)
 
                     else -> {
-                        logger.warn { "Send Message request was skipped" }
-                        MockResponse(code = 200, body = defaultMessageBody)
+                        logger.warn { "${request.url.encodedPath} was skipped" }
+                        defaultMessage
                     }
                 }
 
-            "${botProps.botpath}/$sendPoll" -> when {
-                interactions.retrieve().poll.isNotEmpty() -> {
-                    val interaction = interactions.retrieve()
-                    requests += interaction.index to request.toPollText()
-                    push {
-                        logger.debug { "Send Poll request sent. Interaction index: ${interaction.index}" }
-                        interaction.poll.removeFirst()
+            "${botProps.botpath}/$pinMessage",
+            "${botProps.botpath}/$unpinMessage",
+            "${botProps.botpath}/$deleteMessages",
+                ->
+                when (interaction) {
+                    is Interaction.BooleanResponse -> interaction.process(request)
+
+                    else -> {
+                        logger.warn { "${request.url.encodedPath} was skipped" }
+                        Interaction.Empty().toResponse()
                     }
                 }
 
-                else -> {
-                    logger.warn { "Send Poll request was skipped" }
-                    MockResponse(code = 200, body = defaultMessageBody)
-                }
-            }
-
-            "${botProps.botpath}/$pinMessage" -> when {
-                interactions.retrieve().pin.isNotEmpty() -> {
-                    val interaction = interactions.retrieve()
-                    logger.debug { "Pin Message request sent. Interaction index: ${interaction.index}" }
-                    requests += interaction.index to "pinned"
-                    interaction.pin.removeFirst()
-                }
-
-                else -> {
-                    logger.warn { "Pin Message request was skipped" }
-                    MockResponse(code = 200, body = defaultBooleanBody(true))
-                }
-            }
-
-            "${botProps.botpath}/$unpinMessage" -> when {
-                interactions.retrieve().unpin.isNotEmpty() -> {
-                    val interaction = interactions.retrieve()
-                    requests += interaction.index to "unpinned"
-                    logger.debug { "Unpin Message request sent. Interaction index: ${interaction.index}" }
-                    interaction.unpin.removeFirst()
-                }
-
-                else -> {
-                    logger.warn { "Unpin Message request was skipped" }
-                    MockResponse(code = 200, body = defaultBooleanBody(true))
-                }
-            }
-
-            "${botProps.botpath}/$deleteMessages" -> when {
-                interactions.retrieve().delete.isNotEmpty() -> {
-                    val interaction = interactions.retrieve()
-                    logger.debug { "Delete Messages request sent. Interaction index: ${interaction.index}" }
-                    requests += interaction.index to "deleted"
-                    interaction.delete.removeFirst()
-                }
-
-                else -> {
-                    logger.warn { "Delete Messages request was skipped" }
-                    MockResponse(code = 200, body = defaultBooleanBody(true))
-                }
-            }
 
             "${botProps.botpath}/$getMember" -> {
                 val member = members[request.userId()]
@@ -220,7 +174,10 @@ class MockDispatcher(
 
             else -> {
                 logger.error { "Unknown request type ${request.url.encodedPath}." }
-                MockResponse(code = 404, body = defaultBooleanBody(false))
+                MockResponse(
+                        code = 404,
+                        body = serde.encodeToString(Response.Failure(errorCode = 404, description = "No stub found")),
+                )
             }
         }
     }
@@ -229,22 +186,6 @@ class MockDispatcher(
         requests.clear()
         interactions.clear()
         members.clear()
-    }
-
-    private fun RecordedRequest.toJson(): JsonNode = mapper.readTree(this.body?.toByteArray())
-    private fun RecordedRequest.userId(): Long = toJson().findPath("user_id").asLong()
-
-    private fun RecordedRequest.toPollText(): String {
-        val json = this.toJson()
-        val question = json.findPath("question").asString()
-        val options = json.findPath("options")
-                .mapIndexed { index, option -> "${index + 1}. '${option.findPath("text").asString()}'" }
-                .joinToString("\n")
-
-        return """
-                |$question
-                |$options
-            """.trimMargin()
     }
 
     companion object {
@@ -278,17 +219,9 @@ class MockDispatcher(
 
         @JvmStatic
         @OptIn(KtGramInternal::class)
-        private val empty = Interaction.Builder {}.build()
+        private val empty = Interaction.Empty(0)
     }
 }
-
-private fun <T> ArrayDeque<T>.execAndPop(exec: ArrayDeque<T>.() -> Unit): T =
-        synchronized(this) {
-            val first = removeFirst()
-            exec()
-            return first
-        }
-
 
 @Component
 class MockServer(

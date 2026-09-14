@@ -1,7 +1,6 @@
-### 1. Message
 
-&rarr; <ins>User</ins>
-
+### Message 0
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 /create_poll
 cron: 0 0 0 * * 3
@@ -11,79 +10,78 @@ options:
 ```
 ___
 
-### 2. Message
 
-&larr; <ins>Bot</ins>
-``` 
+### Message 1
+&larr; Message from <ins>Bot</ins>
+```
 Poll created.
-Will be triggered next WEDNESDAY 00:00 
-``` 
+Will be triggered next WEDNESDAY 00:00
+```
 ___
 
-### 3. Message
 
-&rarr; <ins>User</ins>
-
+### Message 2
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 /game 
 ```
 ___
 
-### 4. Message
 
-&larr; <ins>Bot</ins>
-``` 
-What type of game you'd like to play? 
-``` 
+### Message 3
+&larr; Message from <ins>Bot</ins>
+```
+What type of game you'd like to play?
+(Cash) | (Tournament) | (Bounty) | (Cancel)
+```
 ___
 
-### 5. Message
 
-&rarr; <ins>User</ins>
-
+### Message 4
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 Tournament 
 ```
 ___
 
-### 6. Message
 
-&larr; <ins>Bot</ins>
-``` 
-How much is for buy in? 
-``` 
+### Message 5
+&larr; Message from <ins>Bot</ins>
+```
+How much is for buy in?
+(Cancel)
+```
 ___
 
-### 7. Message
 
-&rarr; <ins>User</ins>
-
+### Message 6
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 30 
 ```
 ___
 
-### 8. Message
 
-&larr; <ins>Bot</ins>
-``` 
-Who's playing? 
-``` 
+### Message 7
+&larr; Message from <ins>Bot</ins>
+```
+Who's playing?
+(Cancel)
+```
 ___
 
-### 9. Message
 
-&rarr; <ins>User</ins>
-
+### Message 8
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 @nickname1 
 ```
 ___
 
-### 10. Message
 
-&larr; <ins>Bot</ins>
-``` 
+### Message 9
+&larr; Message from <ins>Bot</ins>
+```
 Game type: TOURNAMENT
 Buy in: 30
                 
@@ -91,38 +89,38 @@ Buy in: 30
 Table 1
 Seats:
   5. @nickname1
-                                 
-``` 
-___
-
-### 11. Pinned
-
-``` 
-message id 10 pinned
-``` 
-___
-
-### 12. Deleted messages
-
-``` 
-message ids 4,5,6,7,8,9 deleted
-``` 
-___
-
-### 13. Message
-
-&rarr; <ins>User</ins>
-
+                                
 ```
-[reply to message id 10]
+___
+
+
+### Pin 
+&larr; Pin from <ins>Bot</ins>
+[Pinned message 9](#message-9)
+
+
+### Delete 
+&larr; Delete from <ins>Bot</ins>
+>Deleted messages: 
+ - [message id 3](#message-3)
+ - [message id 4](#message-4)
+ - [message id 5](#message-5)
+ - [message id 6](#message-6)
+ - [message id 7](#message-7)
+ - [message id 8](#message-8)
+
+>[Game created](#message-9)
+### Message 12
+&rarr; Message from <ins>@sergio_cartwright</ins>
+```
 /stop_poll 
 ```
 ___
 
-### 14. Message
 
-&larr; <ins>Bot</ins>
-``` 
-Poll was not found 
-``` 
+### Message 13
+&larr; Message from <ins>Bot</ins>
+```
+Poll was not found
+```
 ___

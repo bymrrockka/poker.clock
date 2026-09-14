@@ -1,7 +1,6 @@
-### 1. Message
 
-&rarr; <ins>User</ins>
-
+### Message 0
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 /create_poll
 cron: 0 0 0 * * WED
@@ -13,21 +12,18 @@ options:
 ```
 ___
 
-### 2. Message
 
-&larr; <ins>Bot</ins>
-``` 
+### Message 1
+&larr; Message from <ins>Bot</ins>
+```
 Poll created.
-Will be triggered next WEDNESDAY 00:00 
-``` 
+Will be triggered next WEDNESDAY 00:00
+```
 ___
 
-### 3. Posted
-
-&rarr; <ins>2025-09-24 - WEDNESDAY</ins>
-
+### Message 2
+&larr; Poll from <ins>Bot</ins>
 ``` 
-
 Test poll
 1. 'Yes'
 2. 'No'
@@ -35,99 +31,92 @@ Test poll
 ``` 
 ___
 
-### 4. Pinned
 
-``` 
-message id 3 pinned
-``` 
-___
+### Pin 
+&larr; Pin from <ins>Bot</ins>
+[Pinned message 2](#message-2)
 
-### 5. Poll answer
+### Poll answer
+&rarr; Message from <ins>@jackie_rau</ins>
+```
+ - 1
+```
 
-``` 
-jackie_rau chosen 2
-``` 
-___
+### Poll answer
+&rarr; Message from <ins>@terisa_johnston</ins>
+```
+ - 1
+```
 
-### 6. Poll answer
+### Poll answer
+&rarr; Message from <ins>@santo_welch</ins>
+```
+ - 2
+```
 
-``` 
-terisa_johnston chosen 2
-``` 
-___
 
-### 7. Poll answer
-
-``` 
-santo_welch chosen 3
-``` 
-___
-
-### 8. Message
-
-&rarr; <ins>User</ins>
-
+### Message 7
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 /game 
 ```
 ___
 
-### 9. Message
 
-&larr; <ins>Bot</ins>
-``` 
-What type of game you'd like to play? 
-``` 
+### Message 8
+&larr; Message from <ins>Bot</ins>
+```
+What type of game you'd like to play?
+(Cash) | (Tournament) | (Bounty) | (Cancel)
+```
 ___
 
-### 10. Message
 
-&rarr; <ins>User</ins>
-
+### Message 9
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 Tournament 
 ```
 ___
 
-### 11. Message
 
-&larr; <ins>Bot</ins>
-``` 
-How much is for buy in? 
-``` 
+### Message 10
+&larr; Message from <ins>Bot</ins>
+```
+How much is for buy in?
+(Cancel)
+```
 ___
 
-### 12. Message
 
-&rarr; <ins>User</ins>
-
+### Message 11
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 10 
 ```
 ___
 
-### 13. Message
 
-&larr; <ins>Bot</ins>
-``` 
-Who's playing? 
-``` 
+### Message 12
+&larr; Message from <ins>Bot</ins>
+```
+Who's playing?
+(Cancel)
+```
 ___
 
-### 14. Message
-
-&rarr; <ins>User</ins>
-
+>[The class object inherits from Chuck Norris.](#message-2)
+### Message 13
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
-[reply to message id 3]
 . 
 ```
 ___
 
-### 15. Message
 
-&larr; <ins>Bot</ins>
-``` 
-Game participants not found according to poll 
-``` 
+### Message 14
+&larr; Message from <ins>Bot</ins>
+```
+Game participants not found according to poll
+```
 ___

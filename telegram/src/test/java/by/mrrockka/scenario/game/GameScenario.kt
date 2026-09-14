@@ -48,7 +48,7 @@ abstract class GameScenario : ScenarioTest() {
     @Test
     fun `should cancel game creation when 'cancel' input`(approver: Approver) {
         val buyin = BigDecimal(10)
-        val toDelete = mutableListOf<Command>()
+        val toDelete = mutableListOf<Command.Message>()
 
         Given {
             user { game }

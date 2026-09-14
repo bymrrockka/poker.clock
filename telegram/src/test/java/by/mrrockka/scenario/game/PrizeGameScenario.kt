@@ -122,7 +122,7 @@ abstract class PrizeGameScenario : GameScenario() {
             createGameFlow(buyin, listOf(player))
             user("nickname3") { entry }
             bot { "Entry stored" }
-            val toDelete = mutableListOf<Command>()
+            val toDelete = mutableListOf<Command.Message>()
             user { "/prize_pool" }
             toDelete += bot { "Pool size?" }
             toDelete += user { "3" }
@@ -156,7 +156,7 @@ abstract class PrizeGameScenario : GameScenario() {
             createGameFlow(buyin, listOf(player))
             user("nickname3") { entry }
             bot { "Entry stored" }
-            val toDelete = mutableListOf<Command>()
+            val toDelete = mutableListOf<Command.Message>()
             user { "/prize_pool" }
             toDelete += bot { "Pool size?" }
             toDelete += user { "3" }
@@ -201,7 +201,7 @@ abstract class PrizeGameScenario : GameScenario() {
             createGameFlow(buyin, players)
             user("nickname3") { entry }
             bot { "Entry stored" }
-            val toDelete = mutableListOf<Command>()
+            val toDelete = mutableListOf<Command.Message>()
             user { "/finale_places" }
             toDelete += bot { "Pool size?" }
             toDelete += user { "3" }

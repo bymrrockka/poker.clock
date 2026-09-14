@@ -10,8 +10,8 @@ import by.mrrockka.scenario.common.Commands.Companion.prizePool
 import by.mrrockka.service.up
 import java.math.BigDecimal
 
-fun GivenSpecification.createGameFlow(gameType: GameType, buyin: BigDecimal, players: List<String> = emptyList(), replyTo: Command? = null): Command.BotMessage {
-    val toDelete = mutableListOf<Command>()
+fun GivenSpecification.createGameFlow(gameType: GameType, buyin: BigDecimal, players: List<String> = emptyList(), replyTo: Command.Message? = null): Command.BotMessage {
+    val toDelete = mutableListOf<Command.Message>()
     user { game }
     toDelete += bot { "Type of game?" }
     toDelete += user { gameType.title }
@@ -33,7 +33,7 @@ fun GivenSpecification.finalePlacesFlow(vararg places: Pair<Int, String>) = fina
 
 fun GivenSpecification.finalePlacesFlow(placesProvider: GivenSpecification.() -> Map<Int, String>): Command.BotMessage {
     with(placesProvider()) {
-        val toDelete = mutableListOf<Command>()
+        val toDelete = mutableListOf<Command.Message>()
         user { finalePlaces }
         toDelete += bot { "Pool size?" }
         toDelete += user { "$size" }
@@ -52,7 +52,7 @@ fun GivenSpecification.prizePoolFlow(vararg places: Pair<Int, Int>) = prizePoolF
 
 fun GivenSpecification.prizePoolFlow(placesProvider: GivenSpecification.() -> Map<Int, Int>): Command.BotMessage {
     with(placesProvider()) {
-        val toDelete = mutableListOf<Command>()
+        val toDelete = mutableListOf<Command.Message>()
         user { prizePool }
         toDelete += bot { "Pool size?" }
         toDelete += user { "$size" }

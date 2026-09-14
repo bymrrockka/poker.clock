@@ -13,10 +13,13 @@ import by.mrrockka.scenario.TestConfig
 import by.mrrockka.scenario.interaction.MockDispatcher
 import eu.vendeli.tgbot.types.User
 import eu.vendeli.tgbot.types.msg.Message
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.testcontainers.junit.jupiter.Testcontainers
+
+private val logger = KotlinLogging.logger {}
 
 @Testcontainers
 @SpringBootTest(classes = [TestConfig::class])
@@ -50,7 +53,7 @@ abstract class StubTest {
     }
 
     private fun Command.stub(index: Int) {
-        when (this) {
+        when (val command = this) {
             is Command.Member -> {
                 dispatcher.member(member)
             }
@@ -58,7 +61,7 @@ abstract class StubTest {
             is Command.PollAnswer -> {
                 val update = update {
                     pollAnswer {
-                        pollId(messageLog[this@stub.poll]!!.poll!!.id)
+                        pollId(messageLog[command.poll]!!.poll!!.id)
                         option(option - 1)
                         user(person.toUser())
                     }
@@ -66,13 +69,13 @@ abstract class StubTest {
 
                 dispatcher.scenario {
                     index(index)
-                    update(update)
+                    pollAnswer(update)
                 }
             }
 
             is Command.UserMessage -> {
                 val message = message {
-                    id(index.toLong() + 1)
+                    id(index.toLong())
                     text(message)
                     chatId(chatid)
                     from(username?.get() ?: mainUser)
@@ -87,13 +90,13 @@ abstract class StubTest {
                 val update = update { message(message) }
                 dispatcher.scenario {
                     index(index)
-                    update(update)
+                    user(update)
                 }
             }
 
             is Command.BotMessage -> {
                 val message = message {
-                    id(index.toLong() + 1)
+                    id(index.toLong())
                     text(message)
                     chatId(chatid)
                     createdAt(clock.now())
@@ -106,13 +109,13 @@ abstract class StubTest {
 
                 dispatcher.scenario {
                     index(index)
-                    message(message)
+                    bot(message)
                 }
             }
 
             is Command.Poll -> {
                 val message = message {
-                    id(index.toLong() + 1)
+                    id(index.toLong())
                     chatId(chatid)
                     poll()
                 }
@@ -120,29 +123,35 @@ abstract class StubTest {
 
                 dispatcher.scenario {
                     index(index)
-                    poll(message)
                     time(time)
+                    poll(message)
                 }
             }
 
             is Command.Pin -> {
                 dispatcher.scenario {
                     index(index)
-                    pin()
+                    pin(messageLog[command.command]?.messageId ?: error("Command was not found in log"))
                 }
             }
 
             is Command.Unpin -> {
                 dispatcher.scenario {
                     index(index)
-                    unpin()
+                    unpin(messageLog[command.command]?.messageId ?: error("Command was not found in log"))
                 }
             }
 
             is Command.DeleteMessages -> {
                 dispatcher.scenario {
                     index(index)
-                    delete()
+                    command.toDelete
+                            .mapNotNull {
+                                val message = messageLog[it]
+                                if (message == null) logger.warn { "Command $it was not found in log" }
+                                message
+                            }.map { it.messageId }
+                            .also { delete(it) }
                 }
             }
 

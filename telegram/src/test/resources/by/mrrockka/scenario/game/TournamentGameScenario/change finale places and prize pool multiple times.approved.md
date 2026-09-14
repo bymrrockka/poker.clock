@@ -1,67 +1,66 @@
-### 1. Message
 
-&rarr; <ins>User</ins>
-
+### Message 0
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 /game 
 ```
 ___
 
-### 2. Message
 
-&larr; <ins>Bot</ins>
-``` 
-What type of game you'd like to play? 
-``` 
+### Message 1
+&larr; Message from <ins>Bot</ins>
+```
+What type of game you'd like to play?
+(Cash) | (Tournament) | (Bounty) | (Cancel)
+```
 ___
 
-### 3. Message
 
-&rarr; <ins>User</ins>
-
+### Message 2
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 Tournament 
 ```
 ___
 
-### 4. Message
 
-&larr; <ins>Bot</ins>
-``` 
-How much is for buy in? 
-``` 
+### Message 3
+&larr; Message from <ins>Bot</ins>
+```
+How much is for buy in?
+(Cancel)
+```
 ___
 
-### 5. Message
 
-&rarr; <ins>User</ins>
-
+### Message 4
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 10 
 ```
 ___
 
-### 6. Message
 
-&larr; <ins>Bot</ins>
-``` 
-Who's playing? 
-``` 
+### Message 5
+&larr; Message from <ins>Bot</ins>
+```
+Who's playing?
+(Cancel)
+```
 ___
 
-### 7. Message
 
-&rarr; <ins>User</ins>
-
+### Message 6
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 @me 
 ```
 ___
 
-### 8. Message
 
-&larr; <ins>Bot</ins>
-``` 
+### Message 7
+&larr; Message from <ins>Bot</ins>
+```
 Game type: TOURNAMENT
 Buy in: 10
                 
@@ -69,383 +68,382 @@ Buy in: 10
 Table 1
 Seats:
   5. @sergio_cartwright
-                                 
-``` 
+                                
+```
 ___
 
-### 9. Pinned
 
-``` 
-message id 8 pinned
-``` 
-___
+### Pin 
+&larr; Pin from <ins>Bot</ins>
+[Pinned message 7](#message-7)
 
-### 10. Deleted messages
 
-``` 
-message ids 2,3,4,5,6,7 deleted
-``` 
-___
+### Delete 
+&larr; Delete from <ins>Bot</ins>
+>Deleted messages: 
+ - [message id 1](#message-1)
+ - [message id 2](#message-2)
+ - [message id 3](#message-3)
+ - [message id 4](#message-4)
+ - [message id 5](#message-5)
+ - [message id 6](#message-6)
 
-### 11. Message
 
-&rarr; <ins>User</ins>
-
+### Message 10
+&rarr; Message from <ins>@nickname3</ins>
 ```
 /entry 
 ```
 ___
 
-### 12. Message
 
-&larr; <ins>Bot</ins>
-``` 
+### Message 11
+&larr; Message from <ins>Bot</ins>
+```
 Entries: 
 ------------------------------
 Table 1
 Seats:
-  @nickname3 seat 7 -> entry 10.00 
-``` 
+  @nickname3 seat 7 -> entry 10.00
+```
 ___
 
-### 13. Message
 
-&rarr; <ins>User</ins>
-
+### Message 12
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 /prize_pool 
 ```
 ___
 
-### 14. Message
 
-&larr; <ins>Bot</ins>
-``` 
-How many places to account? 
-``` 
+### Message 13
+&larr; Message from <ins>Bot</ins>
+```
+How many places to account?
+(1) | (2) | (3) | (4) | (Cancel)
+```
 ___
 
-### 15. Message
 
-&rarr; <ins>User</ins>
-
+### Message 14
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 1 
 ```
 ___
 
-### 16. Message
 
-&larr; <ins>Bot</ins>
-``` 
-What percentage for #1 place? 
-``` 
+### Message 15
+&larr; Message from <ins>Bot</ins>
+```
+What percentage for #1 place?
+(Cancel)
+```
 ___
 
-### 17. Message
 
-&rarr; <ins>User</ins>
-
+### Message 16
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 100 
 ```
 ___
 
-### 18. Message
 
-&larr; <ins>Bot</ins>
-``` 
+### Message 17
+&larr; Message from <ins>Bot</ins>
+```
 Prize pool stored:
-1. 100% 
-``` 
+1. 100%
+```
 ___
 
-### 19. Pinned
 
-``` 
-message id 18 pinned
-``` 
-___
+### Pin 
+&larr; Pin from <ins>Bot</ins>
+[Pinned message 17](#message-17)
 
-### 20. Deleted messages
 
-``` 
-message ids 14,15,16,17 deleted
-``` 
-___
+### Delete 
+&larr; Delete from <ins>Bot</ins>
+>Deleted messages: 
+ - [message id 13](#message-13)
+ - [message id 14](#message-14)
+ - [message id 15](#message-15)
+ - [message id 16](#message-16)
 
-### 21. Message
 
-&rarr; <ins>User</ins>
-
+### Message 20
+&rarr; Message from <ins>@nickname1</ins>
 ```
 /entry 
 ```
 ___
 
-### 22. Message
 
-&larr; <ins>Bot</ins>
-``` 
+### Message 21
+&larr; Message from <ins>Bot</ins>
+```
 Entries: 
 ------------------------------
 Table 1
 Seats:
-  @nickname1 seat 9 -> entry 10.00 
-``` 
+  @nickname1 seat 9 -> entry 10.00
+```
 ___
 
-### 23. Message
 
-&rarr; <ins>User</ins>
-
+### Message 22
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 /finale_places 
 ```
 ___
 
-### 24. Message
 
-&larr; <ins>Bot</ins>
-``` 
-How many places to account? 
-``` 
+### Message 23
+&larr; Message from <ins>Bot</ins>
+```
+How many places to account?
+(1) | (2) | (3) | (4) | (Cancel)
+```
 ___
 
-### 25. Message
 
-&rarr; <ins>User</ins>
-
+### Message 24
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 1 
 ```
 ___
 
-### 26. Message
 
-&larr; <ins>Bot</ins>
-``` 
-Who's on #1 place? 
-``` 
+### Message 25
+&larr; Message from <ins>Bot</ins>
+```
+Who's on #1 place?
+(Cancel)
+```
 ___
 
-### 27. Message
 
-&rarr; <ins>User</ins>
-
+### Message 26
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 @me 
 ```
 ___
 
-### 28. Message
 
-&larr; <ins>Bot</ins>
-``` 
+### Message 27
+&larr; Message from <ins>Bot</ins>
+```
 Finale places stored:
-1. @sergio_cartwright 
-``` 
+1. @sergio_cartwright
+```
 ___
 
-### 29. Pinned
 
-``` 
-message id 28 pinned
-``` 
-___
+### Pin 
+&larr; Pin from <ins>Bot</ins>
+[Pinned message 27](#message-27)
 
-### 30. Deleted messages
 
-``` 
-message ids 24,25,26,27 deleted
-``` 
-___
+### Delete 
+&larr; Delete from <ins>Bot</ins>
+>Deleted messages: 
+ - [message id 23](#message-23)
+ - [message id 24](#message-24)
+ - [message id 25](#message-25)
+ - [message id 26](#message-26)
 
-### 31. Message
 
-&rarr; <ins>User</ins>
-
+### Message 30
+&rarr; Message from <ins>@nickname2</ins>
 ```
 /entry 
 ```
 ___
 
-### 32. Message
 
-&larr; <ins>Bot</ins>
-``` 
+### Message 31
+&larr; Message from <ins>Bot</ins>
+```
 Entries: 
 ------------------------------
 Table 1
 Seats:
-  @nickname2 seat 3 -> entry 10.00 
-``` 
+  @nickname2 seat 3 -> entry 10.00
+```
 ___
 
-### 33. Message
 
-&rarr; <ins>User</ins>
-
+### Message 32
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 /prize_pool 
 ```
 ___
 
-### 34. Message
 
-&larr; <ins>Bot</ins>
-``` 
-How many places to account? 
-``` 
+### Message 33
+&larr; Message from <ins>Bot</ins>
+```
+How many places to account?
+(1) | (2) | (3) | (4) | (Cancel)
+```
 ___
 
-### 35. Message
 
-&rarr; <ins>User</ins>
-
+### Message 34
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 2 
 ```
 ___
 
-### 36. Message
 
-&larr; <ins>Bot</ins>
-``` 
-What percentage for #1 place? 
-``` 
+### Message 35
+&larr; Message from <ins>Bot</ins>
+```
+What percentage for #1 place?
+(Cancel)
+```
 ___
 
-### 37. Message
 
-&rarr; <ins>User</ins>
-
+### Message 36
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 50 
 ```
 ___
 
-### 38. Message
 
-&larr; <ins>Bot</ins>
-``` 
-What percentage for #2 place? 
-``` 
+### Message 37
+&larr; Message from <ins>Bot</ins>
+```
+What percentage for #2 place?
+(Cancel)
+```
 ___
 
-### 39. Message
 
-&rarr; <ins>User</ins>
-
+### Message 38
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 50 
 ```
 ___
 
-### 40. Message
 
-&larr; <ins>Bot</ins>
-``` 
+### Message 39
+&larr; Message from <ins>Bot</ins>
+```
 Prize pool stored:
 1. 50%
-2. 50% 
-``` 
+2. 50%
+```
 ___
 
-### 41. Pinned
 
-``` 
-message id 40 pinned
-``` 
-___
+### Pin 
+&larr; Pin from <ins>Bot</ins>
+[Pinned message 39](#message-39)
 
-### 42. Deleted messages
 
-``` 
-message ids 34,35,36,37,38,39 deleted
-``` 
-___
+### Delete 
+&larr; Delete from <ins>Bot</ins>
+>Deleted messages: 
+ - [message id 33](#message-33)
+ - [message id 34](#message-34)
+ - [message id 35](#message-35)
+ - [message id 36](#message-36)
+ - [message id 37](#message-37)
+ - [message id 38](#message-38)
 
-### 43. Message
 
-&rarr; <ins>User</ins>
-
+### Message 42
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 /finale_places 
 ```
 ___
 
-### 44. Message
 
-&larr; <ins>Bot</ins>
-``` 
-How many places to account? 
-``` 
+### Message 43
+&larr; Message from <ins>Bot</ins>
+```
+How many places to account?
+(1) | (2) | (3) | (4) | (Cancel)
+```
 ___
 
-### 45. Message
 
-&rarr; <ins>User</ins>
-
+### Message 44
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 2 
 ```
 ___
 
-### 46. Message
 
-&larr; <ins>Bot</ins>
-``` 
-Who's on #1 place? 
-``` 
+### Message 45
+&larr; Message from <ins>Bot</ins>
+```
+Who's on #1 place?
+(Cancel)
+```
 ___
 
-### 47. Message
 
-&rarr; <ins>User</ins>
-
+### Message 46
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 @me 
 ```
 ___
 
-### 48. Message
 
-&larr; <ins>Bot</ins>
-``` 
-Who's on #2 place? 
-``` 
+### Message 47
+&larr; Message from <ins>Bot</ins>
+```
+Who's on #2 place?
+(Cancel)
+```
 ___
 
-### 49. Message
 
-&rarr; <ins>User</ins>
-
+### Message 48
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 @nickname2 
 ```
 ___
 
-### 50. Message
 
-&larr; <ins>Bot</ins>
-``` 
+### Message 49
+&larr; Message from <ins>Bot</ins>
+```
 Finale places stored:
 1. @sergio_cartwright
-2. @nickname2 
-``` 
+2. @nickname2
+```
 ___
 
-### 51. Pinned
 
-``` 
-message id 50 pinned
-``` 
-___
+### Pin 
+&larr; Pin from <ins>Bot</ins>
+[Pinned message 49](#message-49)
 
-### 52. Deleted messages
 
-``` 
-message ids 44,45,46,47,48,49 deleted
-``` 
-___
+### Delete 
+&larr; Delete from <ins>Bot</ins>
+>Deleted messages: 
+ - [message id 43](#message-43)
+ - [message id 44](#message-44)
+ - [message id 45](#message-45)
+ - [message id 46](#message-46)
+ - [message id 47](#message-47)
+ - [message id 48](#message-48)

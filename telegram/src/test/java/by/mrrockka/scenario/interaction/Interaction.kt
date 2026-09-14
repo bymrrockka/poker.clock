@@ -5,43 +5,110 @@ import eu.vendeli.tgbot.types.common.Update
 import eu.vendeli.tgbot.types.component.Response
 import eu.vendeli.tgbot.types.msg.Message
 import mockwebserver3.MockResponse
-import okhttp3.Headers.Companion.headersOf
 import kotlin.time.Instant
 
-private val scenarioHeader = "Scenario"
 
-data class Interaction(
-        val index: Int,
-        val update: ArrayDeque<MockResponse>,
-        val message: ArrayDeque<MockResponse>,
-        val poll: ArrayDeque<MockResponse>,
-        val pin: ArrayDeque<MockResponse>,
-        val unpin: ArrayDeque<MockResponse>,
-        val delete: ArrayDeque<MockResponse>,
-        val time: Instant? = null,
-) {
+sealed interface Interaction<T> {
+    val index: Int
+    val data: T
+    val time: Instant?
+    var completed: Boolean
 
-    fun isEmpty(): Boolean {
-        return update.isEmpty() &&
-                message.isEmpty() &&
-                poll.isEmpty() &&
-                pin.isEmpty() &&
-                unpin.isEmpty() &&
-                delete.isEmpty()
+    fun complete() {
+        completed = true
     }
 
-    fun isNotEmpty(): Boolean = !isEmpty()
+    fun toResponse(): MockResponse
+
+    abstract class UpdateResponse : Interaction<Update> {
+        override fun toResponse(): MockResponse = MockResponse(code = 200, body = serde.encodeToString(Response.Success(listOf(data))))
+    }
+
+    abstract class MessageResponse : Interaction<Message> {
+        override fun toResponse(): MockResponse = MockResponse(
+                body = serde.encodeToString(Response.Success(data)),
+        )
+    }
+
+    abstract class BooleanResponse<T> : Interaction<T> {
+        override fun toResponse(): MockResponse = MockResponse(
+                body = serde.encodeToString(Response.Success(true)),
+        )
+    }
+
+    data class User(
+            override val index: Int,
+            override val time: Instant? = null,
+            override val data: Update,
+            @Volatile
+            override var completed: Boolean = false,
+    ) : UpdateResponse()
+
+    data class Bot(
+            override val index: Int,
+            override val time: Instant? = null,
+            override val data: Message,
+            @Volatile
+            override var completed: Boolean = false,
+    ) : MessageResponse()
+
+    data class Poll(
+            override val index: Int,
+            override val time: Instant? = null,
+            override val data: Message,
+            @Volatile
+            override var completed: Boolean = false,
+    ) : MessageResponse()
+
+    data class PollAnswer(
+            override val index: Int,
+            override val time: Instant? = null,
+            override val data: Update,
+            @Volatile
+            override var completed: Boolean = false,
+    ) : UpdateResponse()
+
+    data class Pin(
+            override val index: Int,
+            override val time: Instant? = null,
+            override val data: Long,
+            @Volatile
+            override var completed: Boolean = false,
+    ) : BooleanResponse<Long>()
+
+    data class Unpin(
+            override val index: Int,
+            override val time: Instant? = null,
+            override val data: Long,
+            @Volatile
+            override var completed: Boolean = false,
+    ) : BooleanResponse<Long>()
+
+    data class Delete(
+            override val index: Int,
+            override val time: Instant? = null,
+            override val data: List<Long>,
+            @Volatile
+            override var completed: Boolean = false,
+    ) : BooleanResponse<List<Long>>()
+
+    data class Empty(
+            override val index: Int = -1,
+            override val time: Instant? = null,
+            override val data: Unit = Unit,
+            @Volatile
+            override var completed: Boolean = false,
+    ) : Interaction<Unit> {
+        override fun toResponse(): MockResponse =
+                MockResponse(code = 200, body = serde.encodeToString(Response.Success(true)))
+
+    }
 
     @BuilderDsl
     class Builder(init: Builder.() -> Unit) {
         private var index = -1
-        private val update = ArrayDeque<MockResponse>()
-        private val message = ArrayDeque<MockResponse>()
-        private val poll = ArrayDeque<MockResponse>()
-        private val pin = ArrayDeque<MockResponse>()
-        private val unpin = ArrayDeque<MockResponse>()
-        private val delete = ArrayDeque<MockResponse>()
         private var time: Instant? = null
+        private var interaction: Interaction<*>? = null
 
         init {
             init()
@@ -51,66 +118,42 @@ data class Interaction(
             this.index = index
         }
 
-        fun update(update: Update) {
-            check(index > -1) { "Scenario index should be specified and positive" }
-            this@Builder.update += MockResponse(body = serde.encodeToString(Response.Success(listOf(update))))
-        }
-
-        fun message(message: Message) {
-            check(index > -1) { "Scenario index should be specified and positive" }
-            this@Builder.message += MockResponse(
-                    body = serde.encodeToString(Response.Success(message)),
-                    headers = headersOf(scenarioHeader, "$index"),
-            )
-        }
-
         fun poll(message: Message) {
-            check(index > -1) { "Scenario index should be specified and positive" }
-            poll += MockResponse(
-                    body = serde.encodeToString(Response.Success(message)),
-                    headers = headersOf(scenarioHeader, "$index"),
-            )
+            interaction = Poll(index, time, message)
         }
 
-        fun pin() {
-            check(index > -1) { "Scenario index should be specified and positive" }
-            pin += MockResponse(
-                    body = defaultBooleanBody(),
-                    headers = headersOf(scenarioHeader, "$index"),
-            )
+        fun pollAnswer(update: Update) {
+            interaction = PollAnswer(index, time, update)
         }
 
-        fun unpin() {
-            check(index > -1) { "Scenario index should be specified and positive" }
-            unpin += MockResponse(
-                    body = defaultBooleanBody(),
-                    headers = headersOf(scenarioHeader, "$index"),
-            )
+        fun user(update: Update) {
+            interaction = User(index, time, update)
+        }
+
+        fun bot(message: Message) {
+            interaction = Bot(index, time, message)
         }
 
         fun time(time: Instant) {
             this.time = time
         }
 
-        fun delete() {
-            check(index > -1) { "Scenario index should be specified and positive" }
-            delete += MockResponse(
-                    body = defaultBooleanBody(),
-                    headers = headersOf(scenarioHeader, "$index"),
-            )
+        fun pin(messageId: Long) {
+            interaction = Pin(index, time, messageId)
         }
 
-        fun build(): Interaction {
-            return Interaction(
-                    index = index,
-                    update = update,
-                    message = message,
-                    poll = poll,
-                    pin = pin,
-                    unpin = unpin,
-                    delete = delete,
-                    time = time,
-            )
+        fun unpin(messageId: Long) {
+            interaction = Unpin(index, time, messageId)
+        }
+
+        fun delete(messageIds: List<Long>) {
+            interaction = Delete(index, time, messageIds)
+        }
+
+        fun build(): Interaction<*> {
+            check(index > -1) { "Scenario index should be specified and positive" }
+            check(interaction != null) { "Interaction should be specified" }
+            return interaction!!
         }
     }
 }

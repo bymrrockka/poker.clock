@@ -1,16 +1,15 @@
-### 1. Message
 
-&rarr; <ins>User</ins>
-
+### Message 0
+&rarr; Message from <ins>@sergio_cartwright</ins>
 ```
 /help game 
 ```
 ___
 
-### 2. Message
 
-&larr; <ins>Bot</ins>
-``` 
+### Message 1
+&larr; Message from <ins>Bot</ins>
+```
 You will be asked to input parameters of the game you want to start.
 
 There are three types of games that are supported: Tournament, Cash and Bounty tournament.
@@ -23,6 +22,6 @@ For the re-entries and new players `/entry @me` could be used, for tournaments b
 For all tournaments in order to calculate payouts finale places and prize pool should be specified.
 
 And after all set you can call `/calculate` command to see game summary and all the calculations.
- 
-``` 
+
+```
 ___
