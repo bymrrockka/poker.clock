@@ -24,7 +24,7 @@ private val logger = KotlinLogging.logger {}
 @Testcontainers
 @SpringBootTest(classes = [TestConfig::class])
 abstract class StubTest {
-    private var chatid: Long = -1L
+    protected var chatid: Long = -1L
     protected lateinit var mainUser: User
     protected val messageLog = mutableMapOf<Command, Message>()
     protected val users = mutableMapOf<String, User>()

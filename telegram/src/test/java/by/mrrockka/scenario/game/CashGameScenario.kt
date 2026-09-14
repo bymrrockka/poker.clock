@@ -6,12 +6,17 @@ import by.mrrockka.domain.GameType
 import by.mrrockka.scenario.common.Commands.Companion.calculate
 import by.mrrockka.scenario.common.Commands.Companion.entry
 import by.mrrockka.scenario.common.Commands.Companion.withdrawal
+import by.mrrockka.service.TelegramPersonService
 import com.oneeyedmen.okeydoke.Approver
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import java.math.BigDecimal
 
 
 class CashGameScenario : GameScenario() {
+    @Autowired
+    private lateinit var personService: TelegramPersonService
+
     override fun gameType(): GameType = GameType.CASH
 
     @Test
@@ -116,14 +121,9 @@ class CashGameScenario : GameScenario() {
     fun `fail when player not in game withdraws`(approver: Approver) {
         val buyin = BigDecimal(10)
         val players = (1..5).map { "nickname$it" }
+        personService.findOrAdd(mainUser.username!!, chatid)
 
         Given {
-            createGameFlow(buyin, listOf("me"))
-            user { withdrawal(10) }
-            bot { "Withdrawal" }
-            user { calculate }
-            bot { "Calculations" }
-
             createGameFlow(buyin, players)
             user { withdrawal(10) }
             bot { "Exception" }
