@@ -87,7 +87,7 @@ abstract class ScenarioTest : StubTest() {
             is Command.UserMessage ->
                 """
                 |# Interaction $index
-                |User @${username ?: mainUser.username} -> 
+                |User @${username ?: mainUser.username}
                 |```
                 |$message
                 |```
@@ -96,7 +96,7 @@ abstract class ScenarioTest : StubTest() {
             is Command.BotMessage ->
                 """
                 |# Interaction $index
-                |Bot 
+                |Bot
                 |```
                 |$message
                 |```
