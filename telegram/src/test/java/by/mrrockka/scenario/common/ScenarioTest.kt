@@ -57,8 +57,12 @@ abstract class ScenarioTest : StubTest() {
             val message = """
                 |$actual
                 |
+                |!!!
+                |
                 |Wanted but not executed:
-                |${unhandled.joinToString("___\n")}
+                |${unhandled.joinToString("\n-------")}
+                |
+                |!!!
                 |
                 |Await timeout
                 |Dispatcher requests size is ${dispatcher.requests.size}
@@ -116,7 +120,7 @@ abstract class ScenarioTest : StubTest() {
                 |# Interaction $index
                 |Pin -> 
                 |```
-                |${command.toText(index)}
+                |${messageLog[command]?.messageId ?: "No message found"}
                 |```
                 """.trimMargin()
 
@@ -125,7 +129,7 @@ abstract class ScenarioTest : StubTest() {
                 |# Interaction $index
                 |Unpin -> 
                 |```
-                |${command.toText(index)}
+                |${messageLog[command]?.messageId ?: "No message found"}
                 |```
                 """.trimMargin()
 
