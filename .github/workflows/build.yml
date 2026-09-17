@@ -6,6 +6,11 @@ on:
       - "master"
   workflow_call:
   workflow_dispatch:
+    inputs:
+      bypass-tests:
+        description: 'Bypass tests'
+        required: false
+        default: 'false'
 
 permissions:
   checks: write
@@ -40,7 +45,7 @@ jobs:
       - name: Run build with Gradle Wrapper
         env:
           GITHUB_PIPELINE: 'true'
-        run: ./gradlew build
+        run: ./gradlew build {{ case(inputs.bypass-tests, '-x test') }}
 
       - name: Test report
         uses: mikepenz/action-junit-report@v5
