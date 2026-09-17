@@ -45,7 +45,7 @@ jobs:
       - name: Run build with Gradle Wrapper
         env:
           GITHUB_PIPELINE: 'true'
-        run: ./gradlew build ${{ case(inputs.bypass-tests, '-x test') }}
+        run: ./gradlew build ${{ case(inputs.bypass-tests == 'true', '-x test') }}
 
       - name: Test report
         uses: mikepenz/action-junit-report@v5
