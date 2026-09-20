@@ -19,7 +19,7 @@ jobs:
   build:
     uses: ./.github/workflows/build.yml
     with:
-      bypass-tests: ${{ github.event.inputs.bypass-tests }}
+      bypass-tests: ${{ inputs.bypass-tests }}
   deploy:
     needs: [ build ]
     runs-on: ubuntu-22.04
