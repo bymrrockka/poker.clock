@@ -6,7 +6,8 @@ on:
       bypass-tests:
         description: 'Bypass tests'
         required: false
-        default: 'false'
+        default: false
+        type: boolean
   push:
     branches:
       - master
