@@ -5,12 +5,13 @@ on:
     branches-ignore:
       - "master"
   workflow_call:
-  workflow_dispatch:
     inputs:
       bypass-tests:
         description: 'Bypass tests'
         required: false
-        default: 'false'
+        default: false
+        type: boolean
+  workflow_dispatch:
 
 permissions:
   checks: write
