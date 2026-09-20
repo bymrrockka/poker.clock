@@ -43,10 +43,17 @@ jobs:
           cache-disabled: true
           gradle-version: '9.6.1'
 
-      - name: Run build with Gradle Wrapper
+      - name: Run build
+        if: inputs.bypass-tests == false
         env:
           GITHUB_PIPELINE: 'true'
-        run: './gradlew build ${{ case(inputs.bypass-tests == true, ''-x test'', '''') }}'
+        run: ./gradlew build
+
+      - name: Run build without tests
+        if: inputs.bypass-tests == true
+        env:
+          GITHUB_PIPELINE: 'true'
+        run: ./gradlew build -x test
 
       - name: Test report
         uses: mikepenz/action-junit-report@v5
